@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{4be9c4fb-a198-44ee-9012-2b24014beb42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="d3d11">
+      <UniqueIdentifier>{8b9c15b3-5db9-4a77-8acc-932bcb87c2d5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graphics\Material.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="d3d11\D3D11Material.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="d3d11\D3D11ShaderFactory.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="d3d11\D3D11Renderer.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Renderer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\VertexBuffer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Camera.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="d3d11\D3D11Material.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="d3d11\D3D11ShaderFactory.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
