@@ -1,9 +1,10 @@
 #ifndef _CAMERA_HPP_
 #define _CAMERA_HPP_
 
-#include <DirectXMath.h>
+//#include "Utils\"
+#include "Utils\Transform.hpp"
 
-using namespace DirectX;
+using namespace Eternal::Utils;
 
 namespace Eternal
 {
@@ -12,9 +13,7 @@ namespace Eternal
 		class Camera
 		{
 		private:
-			XMVECTOR up;
-			XMVECTOR pos;
-			XMVECTOR look;
+			Transform transform;
 
 		public:
 			Camera();
