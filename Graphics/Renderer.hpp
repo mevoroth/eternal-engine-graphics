@@ -3,14 +3,19 @@
 
 #include "Material.hpp"
 #include "VertexBuffer.hpp"
+#include "Camera.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		class Renderer
+		template <typename Matrix> class Renderer
 		{
 		public:
+			/**
+			 * Attach Camera
+			 */
+			virtual void AttachCamera(_In_ const Camera<Matrix>& camera) = 0;
 			/**
 			 * Set VBO
 			 */
