@@ -7,7 +7,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		typedef Camera<XMFLOAT3, XMMATRIX> D3D11Camera;
+		typedef Camera<XMVECTOR, XMMATRIX> D3D11Camera;
 	}
 }
 

@@ -22,5 +22,8 @@ void D3D11OrthographicCamera::GetProjectionMatrix(_Out_ XMMATRIX* matrix)
 void D3D11OrthographicCamera::GetViewMatrix(_Out_ XMMATRIX* matrix)
 {
 	*matrix = XMMatrixLookAtLH(
+		GetPosition(),
+		GetFocus(),
+		GetUp()
 	);
 }

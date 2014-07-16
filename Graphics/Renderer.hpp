@@ -9,13 +9,13 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		template <typename Matrix> class Renderer
+		template <typename Vector4, typename Matrix4x4> class Renderer
 		{
 		public:
 			/**
 			 * Attach Camera
 			 */
-			virtual void AttachCamera(_In_ const Camera<Matrix>& camera) = 0;
+			virtual void AttachCamera(_In_ const Camera<Vector4, Matrix4x4>& camera) = 0;
 			/**
 			 * Set VBO
 			 */
