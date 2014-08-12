@@ -30,12 +30,39 @@
     <ClInclude Include="Graphics\Camera.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="d3d11\D3D11Camera.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="d3d11\D3D11OrthographicCamera.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="d3d11\D3D11PerspectiveCamera.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Device.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="d3d11\D3D11Device.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3d11\D3D11Material.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
     <ClCompile Include="d3d11\D3D11ShaderFactory.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="d3d11\D3D11PerspectiveCamera.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="d3d11\D3D11OrthographicCamera.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Device.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="d3d11\D3D11Device.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
   </ItemGroup>

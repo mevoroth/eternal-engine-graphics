@@ -11,17 +11,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="d3d11\D3D11Camera.hpp" />
+    <ClInclude Include="d3d11\D3D11Device.hpp" />
     <ClInclude Include="d3d11\D3D11Material.hpp" />
+    <ClInclude Include="d3d11\D3D11OrthographicCamera.hpp" />
+    <ClInclude Include="d3d11\D3D11PerspectiveCamera.hpp" />
     <ClInclude Include="d3d11\D3D11Renderer.hpp" />
     <ClInclude Include="d3d11\D3D11ShaderFactory.hpp" />
     <ClInclude Include="Graphics\Camera.hpp" />
+    <ClInclude Include="Graphics\Device.hpp" />
     <ClInclude Include="Graphics\Material.hpp" />
     <ClInclude Include="Graphics\Renderer.hpp" />
     <ClInclude Include="Graphics\VertexBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="d3d11\D3D11Device.cpp" />
     <ClCompile Include="d3d11\D3D11Material.cpp" />
+    <ClCompile Include="d3d11\D3D11OrthographicCamera.cpp" />
+    <ClCompile Include="d3d11\D3D11PerspectiveCamera.cpp" />
     <ClCompile Include="d3d11\D3D11ShaderFactory.cpp" />
+    <ClCompile Include="Graphics\Device.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>

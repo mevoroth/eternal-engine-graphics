@@ -5,16 +5,19 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class Device
+		template <class DeviceType> class Device
 		{
 		private:
-			static Device* _inst;
-			Device();
+			static DeviceType* _inst;
 
 		public:
-			const int WIDTH = 1280;
-			const int HEIGHT = 720;
-			static Device* get();
+			enum
+			{
+				WIDTH	= 1280,
+				HEIGHT	= 720
+			};
+			Device(DeviceType* device);
+			static DeviceType* get();
 		};
 	}
 }

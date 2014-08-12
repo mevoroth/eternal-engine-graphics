@@ -1,8 +1,6 @@
 #ifndef _CAMERA_HPP_
 #define _CAMERA_HPP_
 
-using namespace Eternal::Utils;
-
 namespace Eternal
 {
 	namespace Graphics
