@@ -16,12 +16,16 @@ namespace Eternal
 		{
 		private:
 			HWND _windowHandle;
+			HINSTANCE _hInstance;
+			int _nCmdShow;
+			string _className;
 			string _windowName;
 
+			inline LPCTSTR _getClassName() const;
 			inline LPCTSTR _getWindowName() const;
 		public:
-			D3D11Device(const string& name);
-			void create();
+			D3D11Device(HINSTANCE hInstance, int nCmdShow, const string& name, const string& className);
+			__declspec(dllexport) void create();
 		};
 		typedef Device<D3D11Device> D3D11DeviceType;
 	}
