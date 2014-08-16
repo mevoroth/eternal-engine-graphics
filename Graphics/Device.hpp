@@ -1,6 +1,8 @@
 #ifndef _DEVICE_HPP_
 #define _DEVICE_HPP_
 
+#include <cassert>
+
 namespace Eternal
 {
 	namespace Graphics
@@ -16,9 +18,22 @@ namespace Eternal
 				WIDTH	= 1280,
 				HEIGHT	= 720
 			};
-			Device(DeviceType* device);
+			Device(_In_ DeviceType* device);
 			static DeviceType* get();
 		};
+
+		template <class DeviceType> DeviceType* Device<DeviceType>::_inst = 0;
+
+		template <class DeviceType> Device<DeviceType>::Device(_In_ DeviceType* device)
+		{
+			assert(!_inst);
+			_inst = device;
+		}
+
+		template <class DeviceType> DeviceType* Device<DeviceType>::get()
+		{
+			return _inst;
+		}
 	}
 }
 

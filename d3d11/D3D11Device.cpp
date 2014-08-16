@@ -19,7 +19,7 @@ void D3D11Device::create()
 
 	windowClass.cbSize = sizeof(WNDCLASSEX);
 	windowClass.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-	//windowClass.lpfnWndProc = 
+	windowClass.lpfnWndProc = D3D11Device::WindowProc;
 	windowClass.cbClsExtra = 0;
 	windowClass.cbWndExtra = 0;
 	windowClass.hInstance = _hInstance;
@@ -45,6 +45,12 @@ void D3D11Device::create()
 		_hInstance,
 		0
 	);
+
+	if (!_windowHandle)
+	{
+		DWORD err = GetLastError();
+		// LOG
+	}
 	
 	ShowWindow(_windowHandle, _nCmdShow);
 }
@@ -57,4 +63,17 @@ inline LPCTSTR D3D11Device::_getClassName() const
 inline LPCTSTR D3D11Device::_getWindowName() const
 {
 	return _windowName.c_str();
+}
+
+LRESULT D3D11Device::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
+	{
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+		break;
+	}
+
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }

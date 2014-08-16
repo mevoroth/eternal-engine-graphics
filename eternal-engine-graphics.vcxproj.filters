@@ -59,10 +59,10 @@
     <ClCompile Include="d3d11\D3D11OrthographicCamera.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Device.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="d3d11\D3D11Device.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="d3d11\D3D11Renderer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
   </ItemGroup>

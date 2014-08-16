@@ -12,6 +12,15 @@ namespace Eternal
 		template <typename Vector4, typename Matrix4x4> class Renderer
 		{
 		public:
+			enum RenderMode
+			{
+				HARDWARE,
+				SOFTWARE
+			};
+		private:
+			RenderMode _mode;
+		public:
+			Renderer(_In_ const RenderMode& mode = HARDWARE);
 			/**
 			 * Attach Camera
 			 */
@@ -28,7 +37,25 @@ namespace Eternal
 			 * Draw
 			 */
 			virtual void Draw() = 0;
+			/**
+			 * Get Render Mode (HW or SW)
+			 */
+			inline RenderMode GetRenderMode() const;
 		};
+
+#pragma region Renderer Implementation
+		template <typename Vector4, typename Matrix4x4>
+		Renderer<Vector4, Matrix4x4>::Renderer(_In_ const RenderMode& mode)
+			: _mode(mode)
+		{
+		}
+
+		template <typename Vector4, typename Matrix4x4>
+		inline Renderer<Vector4, Matrix4x4>::RenderMode Renderer<Vector4, Matrix4x4>::GetRenderMode() const
+		{
+			return _mode;
+		}
+#pragma endregion
 	}
 }
 
