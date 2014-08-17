@@ -33,7 +33,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 		| D3D11_CREATE_DEVICE_DEBUGGABLE
 #endif
 #ifdef __D3D11_SINGLETHREAD__
-		D3D11_CREATE_DEVICE_SINGLETHREADED
+		| D3D11_CREATE_DEVICE_SINGLETHREADED
 #endif
 		,
 		&featureLevel,
