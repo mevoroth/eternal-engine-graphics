@@ -2,13 +2,12 @@
 
 using namespace Eternal::Graphics;
 
-D3D11Device::D3D11Device(HINSTANCE hInstance, int nCmdShow, const string& name, const string& className)
+D3D11Device::D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& name, _In_ const string& className)
 	: _windowName(name)
 	, _className(className)
 	, _hInstance(hInstance)
 	, _nCmdShow(nCmdShow)
 {
-	create();
 }
 
 void D3D11Device::create()
@@ -76,4 +75,9 @@ LRESULT D3D11Device::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+HWND D3D11Device::getWindow() const
+{
+	return _windowHandle;
 }

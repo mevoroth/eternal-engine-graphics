@@ -17,11 +17,17 @@ namespace Eternal
 			static D3D11Renderer* _inst;
 			ID3D11Device* _device;
 			ID3D11DeviceContext* _deviceContext;
+			IDXGISwapChain* _swapChain;
 
 		public:
-			D3D11Renderer(_In_ RenderMode mode);
+			D3D11Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
 			static D3D11Renderer* get();
 			ID3D11Device* getDevice();
+
+			virtual void AttachCamera(_In_ const Camera<XMVECTOR, XMMATRIX>& camera){};
+			virtual void SetVBO(_In_ const VertexBuffer& buffer){};
+			virtual void AttachMaterial(_In_ const Material& material){};
+			virtual void Draw(){};
 		};
 	}
 }
