@@ -1,6 +1,6 @@
-#include "D3D11PerspectiveCamera.hpp"
+#include "d3d11/D3D11PerspectiveCamera.hpp"
 
-#include "Graphics\Device.hpp"
+#include "Graphics/Device.hpp"
 
 using namespace Eternal::Graphics;
 

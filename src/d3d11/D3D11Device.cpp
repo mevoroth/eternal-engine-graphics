@@ -1,4 +1,4 @@
-#include "D3D11Device.hpp"
+#include "d3d11/D3D11Device.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -10,7 +10,7 @@ D3D11Device::D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const
 {
 }
 
-void D3D11Device::create()
+void D3D11Device::Create()
 {
 	WNDCLASSEX windowClass;
 	
@@ -77,7 +77,7 @@ LRESULT D3D11Device::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-HWND D3D11Device::getWindow() const
+HWND D3D11Device::GetWindow() const
 {
 	return _windowHandle;
 }

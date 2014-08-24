@@ -9,61 +9,76 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graphics\Material.hpp">
+    <ClInclude Include="include\d3d11\D3D11Camera.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Device.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Material.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11OrthographicCamera.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11PerspectiveCamera.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Renderer.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Camera.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="d3d11\D3D11Material.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="d3d11\D3D11ShaderFactory.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="d3d11\D3D11Renderer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Renderer.hpp">
+    <ClInclude Include="include\Graphics\Device.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\VertexBuffer.hpp">
+    <ClInclude Include="include\Graphics\Material.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Camera.hpp">
+    <ClInclude Include="include\Graphics\Renderer.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="d3d11\D3D11Camera.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="d3d11\D3D11OrthographicCamera.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="d3d11\D3D11PerspectiveCamera.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Device.hpp">
+    <ClInclude Include="include\Graphics\RenderTarget.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="d3d11\D3D11Device.hpp">
-      <Filter>d3d11</Filter>
+    <ClInclude Include="include\Graphics\VertexBuffer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Texture.hpp">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="d3d11\D3D11Material.cpp">
+    <ClCompile Include="src\d3d11\D3D11Device.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="d3d11\D3D11ShaderFactory.cpp">
+    <ClCompile Include="src\d3d11\D3D11Material.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="d3d11\D3D11PerspectiveCamera.cpp">
+    <ClCompile Include="src\d3d11\D3D11OrthographicCamera.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="d3d11\D3D11OrthographicCamera.cpp">
+    <ClCompile Include="src\d3d11\D3D11PerspectiveCamera.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="d3d11\D3D11Device.cpp">
+    <ClCompile Include="src\d3d11\D3D11Renderer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="d3d11\D3D11Renderer.cpp">
+    <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp">
       <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Texture.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

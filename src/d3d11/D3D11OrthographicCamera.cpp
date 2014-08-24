@@ -1,7 +1,7 @@
-#include "D3D11OrthographicCamera.hpp"
+#include "d3d11/D3D11OrthographicCamera.hpp"
 
-#include "D3D11Device.hpp"
-#include "Graphics\Device.hpp"
+#include "d3d11/D3D11Device.hpp"
+#include "Graphics/Device.hpp"
 
 using namespace Eternal::Graphics;
 

@@ -1,4 +1,4 @@
-#include "D3D11Renderer.hpp"
+#include "d3d11/D3D11Renderer.hpp"
 
 #include <cassert>
 #include <dxgi.h>
@@ -6,14 +6,15 @@
 #include <WinBase.h>
 
 #include "d3d11/D3D11Device.hpp"
+#include "d3d11/D3D11RenderTarget.hpp"
 
 using namespace Eternal::Graphics;
 
 D3D11Renderer* D3D11Renderer::_inst = 0;
 
 D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
-	: Renderer(mode, aa)
-	, _device(0)
+: Renderer(mode, aa)
+, _device(0)
 {
 	assert(mode != SOFTWARE); // NOT IMPLEMENTED YET
 
@@ -42,7 +43,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 		&_device,
 		&out,
 		&_deviceContext
-	);
+		);
 
 	if (out == 0)
 	{
@@ -127,7 +128,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = 1;
-	swapChainDesc.OutputWindow = D3D11DeviceType::get()->getWindow();
+	swapChainDesc.OutputWindow = D3D11DeviceType::get()->GetWindow();
 	swapChainDesc.Windowed = TRUE;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
@@ -136,7 +137,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 		_device,
 		&swapChainDesc,
 		&_swapChain
-	);
+		);
 
 	if (hr != S_OK)
 	{
@@ -146,6 +147,12 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 		sprintf_s(str, "ERROR: %d:%x\n", err, err);
 		OutputDebugString(str);
 	}
+
+	ID3D11Texture2D* backBufferTex = 0;
+
+	_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferTex);
+
+	new D3D11RenderTarget(backBufferTex);
 }
 
 D3D11Renderer* D3D11Renderer::get()

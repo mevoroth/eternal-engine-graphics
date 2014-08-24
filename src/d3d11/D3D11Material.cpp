@@ -1,10 +1,10 @@
-#include "D3D11Material.hpp"
+#include "d3d11/D3D11Material.hpp"
 
 #include <cassert>
 #include <numeric>
 
-#include "D3D11ShaderFactory.hpp"
-#include "D3D11Renderer.hpp"
+#include "d3d11/D3D11ShaderFactory.hpp"
+#include "d3d11/D3D11Renderer.hpp"
 
 using namespace std;
 using namespace Eternal::Graphics;

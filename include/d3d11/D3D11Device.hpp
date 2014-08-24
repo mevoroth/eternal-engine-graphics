@@ -26,8 +26,8 @@ namespace Eternal
 		public:
 			static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 			D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& name, _In_ const string& className);
-			void create();
-			HWND getWindow() const;
+			void Create();
+			HWND GetWindow() const;
 		};
 		typedef Device<D3D11Device> D3D11DeviceType;
 	}

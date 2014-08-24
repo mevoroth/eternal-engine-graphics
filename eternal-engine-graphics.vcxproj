@@ -11,28 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="d3d11\D3D11Camera.hpp" />
-    <ClInclude Include="d3d11\D3D11Device.hpp" />
-    <ClInclude Include="d3d11\D3D11Material.hpp" />
-    <ClInclude Include="d3d11\D3D11OrthographicCamera.hpp" />
-    <ClInclude Include="d3d11\D3D11PerspectiveCamera.hpp" />
-    <ClInclude Include="d3d11\D3D11Renderer.hpp" />
-    <ClInclude Include="d3d11\D3D11ShaderFactory.hpp" />
-    <ClInclude Include="Graphics\Camera.hpp" />
-    <ClInclude Include="Graphics\Device.hpp" />
-    <ClInclude Include="Graphics\Material.hpp" />
-    <ClInclude Include="Graphics\Renderer.hpp" />
-    <ClInclude Include="Graphics\VertexBuffer.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Camera.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Device.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Material.hpp" />
+    <ClInclude Include="include\d3d11\D3D11OrthographicCamera.hpp" />
+    <ClInclude Include="include\d3d11\D3D11PerspectiveCamera.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Renderer.hpp" />
+    <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp" />
+    <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp" />
+    <ClInclude Include="include\Graphics\Camera.hpp" />
+    <ClInclude Include="include\Graphics\Device.hpp" />
+    <ClInclude Include="include\Graphics\Material.hpp" />
+    <ClInclude Include="include\Graphics\Renderer.hpp" />
+    <ClInclude Include="include\Graphics\RenderTarget.hpp" />
+    <ClInclude Include="include\Graphics\Texture.hpp" />
+    <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="d3d11\D3D11Device.cpp" />
-    <ClCompile Include="d3d11\D3D11Material.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="d3d11\D3D11OrthographicCamera.cpp" />
-    <ClCompile Include="d3d11\D3D11PerspectiveCamera.cpp" />
-    <ClCompile Include="d3d11\D3D11Renderer.cpp" />
-    <ClCompile Include="d3d11\D3D11ShaderFactory.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Device.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Material.cpp" />
+    <ClCompile Include="src\d3d11\D3D11OrthographicCamera.cpp" />
+    <ClCompile Include="src\d3d11\D3D11PerspectiveCamera.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
+    <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
+    <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp" />
+    <ClCompile Include="src\Graphics\Texture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>
@@ -63,7 +66,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);..\eternal-engine-utils;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);..\eternal-engine-utils;$(ProjectDir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -71,6 +74,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>ETERNAL_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
+      <ForcedIncludeFiles>sal.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
