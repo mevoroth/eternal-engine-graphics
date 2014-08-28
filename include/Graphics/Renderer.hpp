@@ -4,6 +4,7 @@
 #include "Material.hpp"
 #include "VertexBuffer.hpp"
 #include "Camera.hpp"
+#include "RenderTarget.hpp"
 
 namespace Eternal
 {
@@ -33,6 +34,9 @@ namespace Eternal
 		private:
 			RenderMode _mode;
 			AntiAliasing _aa;
+			RenderTarget _backBuffer;
+		protected:
+			virtual void _SetBackBuffer(const RenderTarget& backBuffer);
 		public:
 			Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
 			/**
@@ -47,6 +51,7 @@ namespace Eternal
 			 * Attach Material for Rendering
 			 */
 			virtual void AttachMaterial(_In_ const Material& material) = 0;
+			virtual void AttachRenderTargets(_In_ RenderTarget* renderTarget) = 0;
 			/**
 			 * Draw
 			 */
@@ -59,6 +64,7 @@ namespace Eternal
 			 * Get AntiAliasing
 			 */
 			inline AntiAliasing GetAntiAliasing() const;
+			virtual RenderTarget GetBackBuffer() const;
 		};
 
 #pragma region Renderer Implementation
@@ -79,6 +85,16 @@ namespace Eternal
 		inline typename Renderer<Vector4, Matrix4x4>::AntiAliasing Renderer<Vector4, Matrix4x4>::GetAntiAliasing() const
 		{
 			return _aa;
+		}
+		template <typename Vector4, typename Matrix4x4>
+		void Renderer<Vector4, Matrix4x4>::_SetBackBuffer(const RenderTarget& backBuffer)
+		{
+			_backBuffer = backBuffer;
+		}
+		template <typename Vector4, typename Matrix4x4>
+		RenderTarget Renderer<Vector4, Matrix4x4>::GetBackBuffer() const
+		{
+			return _backBuffer;
 		}
 #pragma endregion
 	}

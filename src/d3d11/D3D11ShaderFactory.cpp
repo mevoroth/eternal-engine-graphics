@@ -8,7 +8,7 @@ using namespace Eternal::Graphics;
 D3D11ShaderFactory* D3D11ShaderFactory::_inst = 0;
 
 D3D11ShaderFactory::D3D11ShaderFactory() {}
-D3D11ShaderFactory* D3D11ShaderFactory::get()
+D3D11ShaderFactory* D3D11ShaderFactory::Get()
 {
 	if (!_inst)
 	{

@@ -16,7 +16,7 @@ static UINT accSize(const D3D11_INPUT_ELEMENT_DESC& a, const D3D11_INPUT_ELEMENT
 
 D3D11Material::D3D11Material()
 {
-	HRESULT hr = D3D11Renderer::get()->getDevice()->CreateClassLinkage(&_dynamicParams);
+	HRESULT hr = D3D11Renderer::Get()->GetDevice()->CreateClassLinkage(&_dynamicParams);
 	assert(hr);
 }
 
@@ -40,24 +40,24 @@ void D3D11Material::SetVertexShader(_In_ const string& shader)
 {
 	HRESULT hr;
 	ID3DBlob* program = 0;
-	D3D11ShaderFactory::get()->loadVertex(shader, &program);
-	hr = D3D11Renderer::get()->getDevice()->CreateVertexShader(program, sizeof(_vertex), _dynamicParams, &_vertex);
+	D3D11ShaderFactory::Get()->loadVertex(shader, &program);
+	hr = D3D11Renderer::Get()->GetDevice()->CreateVertexShader(program, sizeof(_vertex), _dynamicParams, &_vertex);
 	assert(hr);
 }
 void D3D11Material::SetGeometryShader(_In_ const string& shader)
 {
 	HRESULT hr;
 	ID3DBlob* program = 0;
-	D3D11ShaderFactory::get()->loadGeometry(shader, &program);
-	hr = D3D11Renderer::get()->getDevice()->CreateGeometryShader(program, sizeof(_geometry), _dynamicParams, &_geometry);
+	D3D11ShaderFactory::Get()->loadGeometry(shader, &program);
+	hr = D3D11Renderer::Get()->GetDevice()->CreateGeometryShader(program, sizeof(_geometry), _dynamicParams, &_geometry);
 	assert(hr);
 }
 void D3D11Material::SetPixelShader(_In_ const string& shader)
 {
 	HRESULT hr;
 	ID3DBlob* program = 0;
-	D3D11ShaderFactory::get()->loadPixel(shader, &program);
-	hr = D3D11Renderer::get()->getDevice()->CreatePixelShader(program, sizeof(_pixel), _dynamicParams, &_pixel);
+	D3D11ShaderFactory::Get()->loadPixel(shader, &program);
+	hr = D3D11Renderer::Get()->GetDevice()->CreatePixelShader(program, sizeof(_pixel), _dynamicParams, &_pixel);
 	assert(hr);
 }
 

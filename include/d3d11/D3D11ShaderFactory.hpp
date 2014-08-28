@@ -21,7 +21,7 @@ namespace Eternal
 			D3D11ShaderFactory();
 
 		public:
-			static D3D11ShaderFactory* get();
+			static D3D11ShaderFactory* Get();
 			void loadVertex(_In_ const string& shader, _Out_ ID3DBlob** blob);
 			void loadGeometry(_In_ const string& shader, _Out_ ID3DBlob** blob);
 			void loadPixel(_In_ const string& shader, _Out_ ID3DBlob** blob);

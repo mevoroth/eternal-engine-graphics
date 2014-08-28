@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include "Graphics/Renderer.hpp"
+#include "D3D11Camera.hpp"
 
 using namespace DirectX;
 
@@ -18,16 +19,20 @@ namespace Eternal
 			ID3D11Device* _device;
 			ID3D11DeviceContext* _deviceContext;
 			IDXGISwapChain* _swapChain;
-
+			D3D11Camera _camera;
+			
+			HRESULT _CreateDevice();
+			HRESULT _CreateSwapChain();
 		public:
 			D3D11Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
-			static D3D11Renderer* get();
-			ID3D11Device* getDevice();
+			static D3D11Renderer* Get();
+			ID3D11Device* GetDevice();
 
-			virtual void AttachCamera(_In_ const Camera<XMVECTOR, XMMATRIX>& camera){};
-			virtual void SetVBO(_In_ const VertexBuffer& buffer){};
-			virtual void AttachMaterial(_In_ const Material& material){};
-			virtual void Draw(){};
+			virtual void AttachCamera(_In_ const Camera<XMVECTOR, XMMATRIX>& camera) { assert(false); };
+			virtual void SetVBO(_In_ const VertexBuffer& buffer) { assert(false); };
+			virtual void AttachMaterial(_In_ const Material& material) { assert(false); };
+			virtual void Draw() { assert(false); };
+			virtual void AttachRenderTargets(_In_ RenderTarget* renderTarget) { assert(false); };
 		};
 	}
 }

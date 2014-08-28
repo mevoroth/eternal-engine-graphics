@@ -19,7 +19,7 @@ namespace Eternal
 				HEIGHT	= 720
 			};
 			Device(_In_ DeviceType* device);
-			static DeviceType* get();
+			static DeviceType* Get();
 		};
 
 		template <class DeviceType> DeviceType* Device<DeviceType>::_inst = 0;
@@ -30,7 +30,7 @@ namespace Eternal
 			_inst = device;
 		}
 
-		template <class DeviceType> DeviceType* Device<DeviceType>::get()
+		template <class DeviceType> DeviceType* Device<DeviceType>::Get()
 		{
 			return _inst;
 		}

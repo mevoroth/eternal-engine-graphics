@@ -13,14 +13,36 @@ using namespace Eternal::Graphics;
 D3D11Renderer* D3D11Renderer::_inst = 0;
 
 D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
-: Renderer(mode, aa)
-, _device(0)
+	: Renderer(mode, aa)
+	, _device(0)
 {
 	assert(mode != SOFTWARE); // NOT IMPLEMENTED YET
 
 	assert(!_inst);
 	_inst = this;
 
+	HRESULT hr;
+
+	hr = _CreateDevice();
+	if (hr != S_OK)
+	{
+		// ERROR
+	}
+
+	hr = _CreateSwapChain();
+	if (hr != S_OK)
+	{
+		// ERROR
+	}
+
+	// Get Back Buffer
+	ID3D11Texture2D* backBufferTex = 0;
+	_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferTex);
+	_SetBackBuffer(D3D11RenderTarget(backBufferTex));
+}
+
+HRESULT D3D11Renderer::_CreateDevice()
+{
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 	D3D_FEATURE_LEVEL out;
 
@@ -57,38 +79,12 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 		DWORD err = GetLastError();
 		printf("ERROR %d:%x\n", err, err);
 	}
+}
 
-	//for (UINT sampleCount = 1; sampleCount <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; sampleCount++)
-	//{
-	//	UINT maxQualityLevel;
-	//	hr = _device->CheckMultisampleQualityLevels(
-	//		DXGI_FORMAT_R8G8B8A8_UNORM, sampleCount, &maxQualityLevel);
-
-	//	if (maxQualityLevel > 0)
-	//	{
-	//		maxQualityLevel--;
-	//	}
-
-	//	if (hr != S_OK)
-	//	{
-	//		printf("CheckMultisampleQualityLevels failed.\n");
-	//	}
-
-	//	if (maxQualityLevel > 0)
-	//	{
-	//		char str[256];
-	//		sprintf_s(str, "MSAA %dX supported with %d quality levels.\n", sampleCount, maxQualityLevel);
-	//		OutputDebugString(str);
-	//	}
-	//}
-
-	if (hr != S_OK)
-	{
-		// ERROR
-	}
-
+HRESULT D3D11Renderer::_CreateSwapChain()
+{
 	IDXGIDevice* dxgiDevice;
-	hr = _device->QueryInterface<IDXGIDevice>(&dxgiDevice);
+	HRESULT hr = _device->QueryInterface<IDXGIDevice>(&dxgiDevice);
 
 	IDXGIAdapter* dxgiAdapter;
 	hr = dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
@@ -113,7 +109,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 		DXGI_FORMAT_R8G8B8A8_UNORM,
 		(UINT)((GetAntiAliasing() & 0xffff0000) >> 16),
 		&quality
-		);
+	);
 
 	if ((GetAntiAliasing() & 0xffff) < quality)
 	{
@@ -128,7 +124,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = 1;
-	swapChainDesc.OutputWindow = D3D11DeviceType::get()->GetWindow();
+	swapChainDesc.OutputWindow = D3D11DeviceType::Get()->GetWindow();
 	swapChainDesc.Windowed = TRUE;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
@@ -137,7 +133,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 		_device,
 		&swapChainDesc,
 		&_swapChain
-		);
+	);
 
 	if (hr != S_OK)
 	{
@@ -147,21 +143,16 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 		sprintf_s(str, "ERROR: %d:%x\n", err, err);
 		OutputDebugString(str);
 	}
-
-	ID3D11Texture2D* backBufferTex = 0;
-
-	_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferTex);
-
-	new D3D11RenderTarget(backBufferTex);
+	return hr;
 }
 
-D3D11Renderer* D3D11Renderer::get()
+D3D11Renderer* D3D11Renderer::Get()
 {
 	assert(_inst);
 	return _inst;
 }
 
-ID3D11Device* D3D11Renderer::getDevice()
+ID3D11Device* D3D11Renderer::GetDevice()
 {
 	assert(!_device);
 	return _device;
