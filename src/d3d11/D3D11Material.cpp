@@ -9,9 +9,27 @@
 using namespace std;
 using namespace Eternal::Graphics;
 
-static UINT accSize(const D3D11_INPUT_ELEMENT_DESC& a, const D3D11_INPUT_ELEMENT_DESC& b)
+static UINT accSize(UINT acc, const D3D11_INPUT_ELEMENT_DESC& obj)
 {
-	return 0;
+	int size = 0;
+	switch (obj.Format)
+	{
+	case DXGI_FORMAT_R32_FLOAT:
+	case DXGI_FORMAT_R8G8B8A8_SNORM:
+		size = 4;
+		break;
+	case DXGI_FORMAT_R32G32_FLOAT:
+		size = 8;
+		break;
+	case DXGI_FORMAT_R32G32B32_FLOAT:
+		size = 12;
+		break;
+	case DXGI_FORMAT_R32G32B32A32_FLOAT:
+	case DXGI_FORMAT_BC3_UNORM:
+		size = 16;
+		break;
+	}
+	return acc + size;
 }
 
 D3D11Material::D3D11Material()
@@ -29,7 +47,7 @@ void D3D11Material::SetMaterialDesc(_In_ const string& paramName, _In_ const Par
 	desc.SemanticIndex = 0;
 	desc.Format = _GetD3DParam(format);
 	desc.InputSlot = _matInput.size();
-	desc.AlignedByteOffset = (UINT)accumulate(_matInput.cbegin(), _matInput.cend(), accSize);
+	desc.AlignedByteOffset = (UINT)accumulate(_matInput.cbegin(), _matInput.cend(), 0, accSize);
 	desc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	desc.InstanceDataStepRate = 0;
 
@@ -40,7 +58,7 @@ void D3D11Material::SetVertexShader(_In_ const string& shader)
 {
 	HRESULT hr;
 	ID3DBlob* program = 0;
-	D3D11ShaderFactory::Get()->loadVertex(shader, &program);
+	D3D11ShaderFactory::Get()->LoadVertex(shader, &program);
 	hr = D3D11Renderer::Get()->GetDevice()->CreateVertexShader(program, sizeof(_vertex), _dynamicParams, &_vertex);
 	assert(hr);
 }
@@ -48,7 +66,7 @@ void D3D11Material::SetGeometryShader(_In_ const string& shader)
 {
 	HRESULT hr;
 	ID3DBlob* program = 0;
-	D3D11ShaderFactory::Get()->loadGeometry(shader, &program);
+	D3D11ShaderFactory::Get()->LoadGeometry(shader, &program);
 	hr = D3D11Renderer::Get()->GetDevice()->CreateGeometryShader(program, sizeof(_geometry), _dynamicParams, &_geometry);
 	assert(hr);
 }
@@ -56,7 +74,7 @@ void D3D11Material::SetPixelShader(_In_ const string& shader)
 {
 	HRESULT hr;
 	ID3DBlob* program = 0;
-	D3D11ShaderFactory::Get()->loadPixel(shader, &program);
+	D3D11ShaderFactory::Get()->LoadPixel(shader, &program);
 	hr = D3D11Renderer::Get()->GetDevice()->CreatePixelShader(program, sizeof(_pixel), _dynamicParams, &_pixel);
 	assert(hr);
 }

@@ -34,15 +34,15 @@ namespace Eternal
 		private:
 			RenderMode _mode;
 			AntiAliasing _aa;
-			RenderTarget _backBuffer;
+			RenderTarget* _backBuffer;
 		protected:
-			virtual void _SetBackBuffer(const RenderTarget& backBuffer);
+			virtual void _SetBackBuffer(_In_ RenderTarget* backBuffer);
 		public:
 			Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
 			/**
 			 * Attach Camera
 			 */
-			virtual void AttachCamera(_In_ const Camera<Vector4, Matrix4x4>& camera) = 0;
+			virtual void AttachCamera(_In_ Camera<Vector4, Matrix4x4>* camera) = 0;
 			/**
 			 * Set VBO
 			 */
@@ -51,7 +51,7 @@ namespace Eternal
 			 * Attach Material for Rendering
 			 */
 			virtual void AttachMaterial(_In_ const Material& material) = 0;
-			virtual void AttachRenderTargets(_In_ RenderTarget* renderTarget) = 0;
+			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count) = 0;
 			/**
 			 * Draw
 			 */
@@ -64,7 +64,7 @@ namespace Eternal
 			 * Get AntiAliasing
 			 */
 			inline AntiAliasing GetAntiAliasing() const;
-			virtual RenderTarget GetBackBuffer() const;
+			virtual RenderTarget* GetBackBuffer() const;
 		};
 
 #pragma region Renderer Implementation
@@ -87,12 +87,12 @@ namespace Eternal
 			return _aa;
 		}
 		template <typename Vector4, typename Matrix4x4>
-		void Renderer<Vector4, Matrix4x4>::_SetBackBuffer(const RenderTarget& backBuffer)
+		void Renderer<Vector4, Matrix4x4>::_SetBackBuffer(RenderTarget* backBuffer)
 		{
 			_backBuffer = backBuffer;
 		}
 		template <typename Vector4, typename Matrix4x4>
-		RenderTarget Renderer<Vector4, Matrix4x4>::GetBackBuffer() const
+		RenderTarget* Renderer<Vector4, Matrix4x4>::GetBackBuffer() const
 		{
 			return _backBuffer;
 		}

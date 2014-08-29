@@ -11,6 +11,7 @@ namespace Eternal
 		{
 		private:
 		public:
+			virtual void Clear() = 0;
 		};
 	}
 }

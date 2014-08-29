@@ -14,12 +14,7 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ ID3D11Texture2D* tex)
 	SetWidth(desc.Width);
 	SetHeight(desc.Height);
 
-	D3D11_RENDER_TARGET_VIEW_DESC renderTargetDesc;
-	renderTargetDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	renderTargetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	renderTargetDesc.Texture2D.MipSlice = 1;
-
-	D3D11Renderer::Get()->GetDevice()->CreateRenderTargetView(_tex2D, &renderTargetDesc, &_renderTarget);
+	D3D11Renderer::Get()->GetDevice()->CreateRenderTargetView(_tex2D, 0, &_renderTarget);
 }
 D3D11RenderTarget::D3D11RenderTarget(_In_ int width, _In_ int height)
 	: _renderTarget(0)
@@ -56,4 +51,9 @@ D3D11RenderTarget::~D3D11RenderTarget()
 	_tex2D = 0;
 	_renderTarget->Release();
 	_renderTarget = 0;
+}
+
+void D3D11RenderTarget::Clear()
+{
+
 }

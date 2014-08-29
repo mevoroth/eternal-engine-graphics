@@ -17,20 +17,20 @@ D3D11ShaderFactory* D3D11ShaderFactory::Get()
 	return _inst;
 }
 
-void D3D11ShaderFactory::loadVertex(_In_ const string& shader, _Out_ ID3DBlob** blob)
+void D3D11ShaderFactory::LoadVertex(_In_ const string& shader, _Out_ ID3DBlob** blob)
 {
-	_loadShaderFile(shader, "vs_5_0", blob);
+	_LoadShaderFile(shader, "vs_5_0", blob);
 }
-void D3D11ShaderFactory::loadGeometry(_In_ const string& shader, _Out_ ID3DBlob** blob)
+void D3D11ShaderFactory::LoadGeometry(_In_ const string& shader, _Out_ ID3DBlob** blob)
 {
-	_loadShaderFile(shader, "gs_5_0", blob);
+	_LoadShaderFile(shader, "gs_5_0", blob);
 }
-void D3D11ShaderFactory::loadPixel(_In_ const string& shader, _Out_ ID3DBlob** blob)
+void D3D11ShaderFactory::LoadPixel(_In_ const string& shader, _Out_ ID3DBlob** blob)
 {
-	_loadShaderFile(shader, "ps_5_0", blob);
+	_LoadShaderFile(shader, "ps_5_0", blob);
 }
 
-void D3D11ShaderFactory::_compileFile(_In_ const string& shader, _In_ const string& profile, _Out_ ID3DBlob** blob)
+void D3D11ShaderFactory::_CompileFile(_In_ const string& shader, _In_ const string& profile, _Out_ ID3DBlob** blob)
 {
 	ID3DBlob* errors;
 
@@ -52,16 +52,16 @@ void D3D11ShaderFactory::_compileFile(_In_ const string& shader, _In_ const stri
 	}
 }
 
-inline void D3D11ShaderFactory::_loadShaderFile(_In_ const string& shader, _In_ const string& profile, _Out_ ID3DBlob** blob)
+inline void D3D11ShaderFactory::_LoadShaderFile(_In_ const string& shader, _In_ const string& profile, _Out_ ID3DBlob** blob)
 {
 #ifdef ETERNAL_DEBUG
-	_compileFile(shader, profile, blob);
+	_CompileFile(shader, profile, blob);
 #else
-	_loadFile(shader + ".cso", blob);
+	_LoadFile(shader + ".cso", blob);
 #endif
 }
 
-void D3D11ShaderFactory::_loadFile(_In_ const string& shader, _Out_ ID3DBlob** blob)
+void D3D11ShaderFactory::_LoadFile(_In_ const string& shader, _Out_ ID3DBlob** blob)
 {
 	HRESULT hr = D3DReadFileToBlob(wstring(shader.cbegin(), shader.cend()).c_str(), blob);
 	if (hr != S_OK)

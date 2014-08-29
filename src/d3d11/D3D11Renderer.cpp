@@ -15,6 +15,11 @@ D3D11Renderer* D3D11Renderer::_inst = 0;
 D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
 	: Renderer(mode, aa)
 	, _device(0)
+	, _deviceContext(0)
+	, _swapChain(0)
+	, _camera(0)
+	, _renderTargets(0)
+	, _renderTargetsCount(0)
 {
 	assert(mode != SOFTWARE); // NOT IMPLEMENTED YET
 
@@ -38,7 +43,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	// Get Back Buffer
 	ID3D11Texture2D* backBufferTex = 0;
 	_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferTex);
-	_SetBackBuffer(D3D11RenderTarget(backBufferTex));
+	_SetBackBuffer(new D3D11RenderTarget(backBufferTex));
 }
 
 HRESULT D3D11Renderer::_CreateDevice()
@@ -79,6 +84,8 @@ HRESULT D3D11Renderer::_CreateDevice()
 		DWORD err = GetLastError();
 		printf("ERROR %d:%x\n", err, err);
 	}
+
+	return hr;
 }
 
 HRESULT D3D11Renderer::_CreateSwapChain()
@@ -154,6 +161,40 @@ D3D11Renderer* D3D11Renderer::Get()
 
 ID3D11Device* D3D11Renderer::GetDevice()
 {
-	assert(!_device);
+	assert(_device);
 	return _device;
+}
+
+ID3D11DeviceContext* D3D11Renderer::GetDeviceContext()
+{
+	assert(_deviceContext);
+	return _deviceContext;
+}
+
+void D3D11Renderer::Begin()
+{
+	assert(_renderTargets);
+	assert(_renderTargetsCount > 0);
+	for (int i = 0; i < _renderTargetsCount; ++i)
+	{
+		_renderTargets[i]->Clear();
+	}
+}
+
+void D3D11Renderer::End()
+{
+	_swapChain->Present(0, 0);
+}
+
+void D3D11Renderer::AttachCamera(_In_ Camera<XMVECTOR, XMMATRIX>* camera)
+{
+	_camera = camera;
+}
+
+void D3D11Renderer::AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count)
+{
+	assert(renderTargets);
+	assert(count > 0);
+	_renderTargets = renderTargets;
+	_renderTargetsCount = count;
 }

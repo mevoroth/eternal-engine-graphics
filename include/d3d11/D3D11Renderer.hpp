@@ -19,7 +19,9 @@ namespace Eternal
 			ID3D11Device* _device;
 			ID3D11DeviceContext* _deviceContext;
 			IDXGISwapChain* _swapChain;
-			D3D11Camera _camera;
+			D3D11Camera* _camera;
+			RenderTarget** _renderTargets;
+			int _renderTargetsCount;
 			
 			HRESULT _CreateDevice();
 			HRESULT _CreateSwapChain();
@@ -27,12 +29,15 @@ namespace Eternal
 			D3D11Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
 			static D3D11Renderer* Get();
 			ID3D11Device* GetDevice();
+			ID3D11DeviceContext* GetDeviceContext();
 
-			virtual void AttachCamera(_In_ const Camera<XMVECTOR, XMMATRIX>& camera) { assert(false); };
+			virtual void AttachCamera(_In_ Camera<XMVECTOR, XMMATRIX>* camera);
 			virtual void SetVBO(_In_ const VertexBuffer& buffer) { assert(false); };
 			virtual void AttachMaterial(_In_ const Material& material) { assert(false); };
 			virtual void Draw() { assert(false); };
-			virtual void AttachRenderTargets(_In_ RenderTarget* renderTarget) { assert(false); };
+			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
+			virtual void Begin();
+			virtual void End();
 		};
 	}
 }
