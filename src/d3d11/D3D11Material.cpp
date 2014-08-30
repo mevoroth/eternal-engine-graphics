@@ -5,97 +5,64 @@
 
 #include "d3d11/D3D11ShaderFactory.hpp"
 #include "d3d11/D3D11Renderer.hpp"
+#include "d3d11/D3D11Shader.hpp"
+#include "d3d11/D3D11VertexShader.hpp"
 
 using namespace std;
 using namespace Eternal::Graphics;
 
-static UINT accSize(UINT acc, const D3D11_INPUT_ELEMENT_DESC& obj)
-{
-	int size = 0;
-	switch (obj.Format)
-	{
-	case DXGI_FORMAT_R32_FLOAT:
-	case DXGI_FORMAT_R8G8B8A8_SNORM:
-		size = 4;
-		break;
-	case DXGI_FORMAT_R32G32_FLOAT:
-		size = 8;
-		break;
-	case DXGI_FORMAT_R32G32B32_FLOAT:
-		size = 12;
-		break;
-	case DXGI_FORMAT_R32G32B32A32_FLOAT:
-	case DXGI_FORMAT_BC3_UNORM:
-		size = 16;
-		break;
-	}
-	return acc + size;
-}
-
 D3D11Material::D3D11Material()
+	: _dynamicParams(0)
+	, _vertex(0)
+	, _geometry(0)
+	, _pixel(0)
 {
-	HRESULT hr = D3D11Renderer::Get()->GetDevice()->CreateClassLinkage(&_dynamicParams);
-	assert(hr);
+	D3D11Renderer::Get()->GetDevice()->CreateClassLinkage(&_dynamicParams);
 }
 
-void D3D11Material::SetMaterialDesc(_In_ const string& paramName, _In_ const ParamType& format)
+void D3D11Material::SetMaterialDesc(_In_ const MaterialProperty& matProperty)
 {
-	D3D11_INPUT_ELEMENT_DESC desc;
-	memset(&desc, 0x0, sizeof(D3D11_INPUT_ELEMENT_DESC));
-
-	desc.SemanticName = paramName.c_str();
-	desc.SemanticIndex = 0;
-	desc.Format = _GetD3DParam(format);
-	desc.InputSlot = _matInput.size();
-	desc.AlignedByteOffset = (UINT)accumulate(_matInput.cbegin(), _matInput.cend(), 0, accSize);
-	desc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	desc.InstanceDataStepRate = 0;
-
-	_matInput.push_back(desc);
+	assert(matProperty.Name.size() > 0);
+	_matInput.push_back(matProperty);
 }
 
-void D3D11Material::SetVertexShader(_In_ const string& shader)
+void D3D11Material::AttachInputLayout(_In_ D3D11InputLayout* inputLayout)
 {
-	HRESULT hr;
-	ID3DBlob* program = 0;
-	D3D11ShaderFactory::Get()->LoadVertex(shader, &program);
-	hr = D3D11Renderer::Get()->GetDevice()->CreateVertexShader(program, sizeof(_vertex), _dynamicParams, &_vertex);
-	assert(hr);
-}
-void D3D11Material::SetGeometryShader(_In_ const string& shader)
-{
-	HRESULT hr;
-	ID3DBlob* program = 0;
-	D3D11ShaderFactory::Get()->LoadGeometry(shader, &program);
-	hr = D3D11Renderer::Get()->GetDevice()->CreateGeometryShader(program, sizeof(_geometry), _dynamicParams, &_geometry);
-	assert(hr);
-}
-void D3D11Material::SetPixelShader(_In_ const string& shader)
-{
-	HRESULT hr;
-	ID3DBlob* program = 0;
-	D3D11ShaderFactory::Get()->LoadPixel(shader, &program);
-	hr = D3D11Renderer::Get()->GetDevice()->CreatePixelShader(program, sizeof(_pixel), _dynamicParams, &_pixel);
-	assert(hr);
+	_inputLayout = inputLayout;
 }
 
-inline DXGI_FORMAT D3D11Material::_GetD3DParam(const ParamType& paramType) const
+void D3D11Material::Apply()
 {
-	switch (paramType)
+	ID3D11DeviceContext* ctx = D3D11Renderer::Get()->GetDeviceContext();
+	ctx->IASetInputLayout(_inputLayout->GetD3D11InputLayout());
+	//ctx->VSSetShader(_vertex, )
+
+}
+
+void D3D11Material::AttachVertexShader(_Inout_ Shader* shader)
+{
+	if (_vertex)
 	{
-	case ParamType::FLOAT_T:
-		return DXGI_FORMAT_R32_FLOAT;
-	case ParamType::TEX_T:
-		return DXGI_FORMAT_BC3_UNORM;
-	case ParamType::VEC2_T:
-		return DXGI_FORMAT_R32G32_FLOAT;
-	case ParamType::VEC3_T:
-		return DXGI_FORMAT_R32G32B32_FLOAT;
-	case ParamType::VEC4_T:
-		return DXGI_FORMAT_R32G32B32A32_FLOAT;
-	case ParamType::COLOR_T:
-		return DXGI_FORMAT_R8G8B8A8_SNORM;
-	default:
-		return (DXGI_FORMAT)-1;
+		_vertex->Release();
+		_vertex = 0;
 	}
+	((D3D11Shader*)shader)->InstantiateShader(_dynamicParams, (void**)&_vertex);
+}
+void D3D11Material::AttachGeometryShader(_Inout_ Shader* shader)
+{
+	if (_geometry)
+	{
+		_geometry->Release();
+		_geometry = 0;
+	}
+	((D3D11Shader*)shader)->InstantiateShader(_dynamicParams, (void**)&_geometry);
+}
+void D3D11Material::AttachPixelShader(_Inout_ Shader* shader)
+{
+	if (_pixel)
+	{
+		_pixel->Release();
+		_pixel = 0;
+	}
+	((D3D11Shader*)shader)->InstantiateShader(_dynamicParams, (void**)&_pixel);
 }

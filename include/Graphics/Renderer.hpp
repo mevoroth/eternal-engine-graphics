@@ -52,6 +52,7 @@ namespace Eternal
 			 */
 			virtual void AttachMaterial(_In_ const Material& material) = 0;
 			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count) = 0;
+			virtual void ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count) = 0;
 			/**
 			 * Draw
 			 */

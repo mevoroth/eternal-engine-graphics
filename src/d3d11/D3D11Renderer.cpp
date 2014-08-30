@@ -70,7 +70,7 @@ HRESULT D3D11Renderer::_CreateDevice()
 		&_device,
 		&out,
 		&_deviceContext
-		);
+	);
 
 	if (out == 0)
 	{
@@ -171,17 +171,7 @@ ID3D11DeviceContext* D3D11Renderer::GetDeviceContext()
 	return _deviceContext;
 }
 
-void D3D11Renderer::Begin()
-{
-	assert(_renderTargets);
-	assert(_renderTargetsCount > 0);
-	for (int i = 0; i < _renderTargetsCount; ++i)
-	{
-		_renderTargets[i]->Clear();
-	}
-}
-
-void D3D11Renderer::End()
+void D3D11Renderer::Flush()
 {
 	_swapChain->Present(0, 0);
 }
@@ -197,4 +187,14 @@ void D3D11Renderer::AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ 
 	assert(count > 0);
 	_renderTargets = renderTargets;
 	_renderTargetsCount = count;
+}
+
+void D3D11Renderer::ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count)
+{
+	assert(renderTargets);
+	assert(count > 0);
+	for (int i = 0; i < count; ++i)
+	{
+		renderTargets[i]->Clear();
+	}
 }

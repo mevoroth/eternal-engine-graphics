@@ -36,8 +36,8 @@ namespace Eternal
 			virtual void AttachMaterial(_In_ const Material& material) { assert(false); };
 			virtual void Draw() { assert(false); };
 			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
-			virtual void Begin();
-			virtual void End();
+			virtual void ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
+			virtual void Flush();
 		};
 	}
 }
