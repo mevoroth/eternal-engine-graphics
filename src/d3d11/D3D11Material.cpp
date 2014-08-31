@@ -35,8 +35,12 @@ void D3D11Material::Apply()
 {
 	ID3D11DeviceContext* ctx = D3D11Renderer::Get()->GetDeviceContext();
 	ctx->IASetInputLayout(_inputLayout->GetD3D11InputLayout());
-	//ctx->VSSetShader(_vertex, )
-
+	ctx->VSSetShader(_vertex, 0, 0);
+	if (_geometry)
+	{
+		ctx->GSSetShader(_geometry, 0, 0);
+	}
+	ctx->PSSetShader(_pixel, 0, 0);
 }
 
 void D3D11Material::AttachVertexShader(_Inout_ Shader* shader)

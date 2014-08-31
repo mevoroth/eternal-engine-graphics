@@ -11,30 +11,48 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\d3d11\D3D11BlendState.hpp" />
     <ClInclude Include="include\d3d11\D3D11Camera.hpp" />
     <ClInclude Include="include\d3d11\D3D11Device.hpp" />
+    <ClInclude Include="include\d3d11\D3D11GeometryShader.hpp" />
+    <ClInclude Include="include\d3d11\D3D11InputLayout.hpp" />
     <ClInclude Include="include\d3d11\D3D11Material.hpp" />
     <ClInclude Include="include\d3d11\D3D11OrthographicCamera.hpp" />
     <ClInclude Include="include\d3d11\D3D11PerspectiveCamera.hpp" />
+    <ClInclude Include="include\d3d11\D3D11PixelShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Renderer.hpp" />
     <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Shader.hpp" />
     <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp" />
+    <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
+    <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\Camera.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
     <ClInclude Include="include\Graphics\Material.hpp" />
+    <ClInclude Include="include\Graphics\MaterialProperty.hpp" />
     <ClInclude Include="include\Graphics\Renderer.hpp" />
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
+    <ClInclude Include="include\Graphics\Shader.hpp" />
     <ClInclude Include="include\Graphics\Texture.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
     <ClCompile Include="src\d3d11\D3D11Device.cpp" />
+    <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp" />
+    <ClCompile Include="src\d3d11\D3D11InputLayout.cpp" />
     <ClCompile Include="src\d3d11\D3D11Material.cpp" />
     <ClCompile Include="src\d3d11\D3D11OrthographicCamera.cpp" />
     <ClCompile Include="src\d3d11\D3D11PerspectiveCamera.cpp" />
+    <ClCompile Include="src\d3d11\D3D11PixelShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Shader.cpp" />
     <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp" />
+    <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
+    <ClCompile Include="src\Graphics\BlendState.cpp" />
+    <ClCompile Include="src\Graphics\MaterialProperty.cpp" />
+    <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

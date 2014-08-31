@@ -189,6 +189,11 @@ void D3D11Renderer::AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ 
 	_renderTargetsCount = count;
 }
 
+void D3D11Renderer::AttachMaterial(_In_ Material* material)
+{
+	_material = material;
+}
+
 void D3D11Renderer::ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count)
 {
 	assert(renderTargets);
@@ -197,4 +202,8 @@ void D3D11Renderer::ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ i
 	{
 		renderTargets[i]->Clear();
 	}
+}
+void D3D11Renderer::SetBlendMode(_In_ BlendState* blendMode)
+{
+	
 }

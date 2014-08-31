@@ -22,6 +22,7 @@ namespace Eternal
 			D3D11Camera* _camera;
 			RenderTarget** _renderTargets;
 			int _renderTargetsCount;
+			Material* _material;
 			
 			HRESULT _CreateDevice();
 			HRESULT _CreateSwapChain();
@@ -33,10 +34,11 @@ namespace Eternal
 
 			virtual void AttachCamera(_In_ Camera<XMVECTOR, XMMATRIX>* camera);
 			virtual void SetVBO(_In_ const VertexBuffer& buffer) { assert(false); };
-			virtual void AttachMaterial(_In_ const Material& material) { assert(false); };
+			virtual void AttachMaterial(_In_ Material* material);
 			virtual void Draw() { assert(false); };
 			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
 			virtual void ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
+			virtual void SetBlendMode(_In_ const BlendState& blendMode);
 			virtual void Flush();
 		};
 	}

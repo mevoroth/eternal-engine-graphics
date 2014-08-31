@@ -1,8 +1,5 @@
 #include "d3d11/D3D11ShaderFactory.hpp"
 
-#include <d3dcompiler.h>
-#pragma comment(lib, "d3dcompiler.lib")
-
 using namespace Eternal::Graphics;
 
 D3D11ShaderFactory* D3D11ShaderFactory::_inst = 0;

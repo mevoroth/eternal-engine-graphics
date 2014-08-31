@@ -54,6 +54,33 @@
     <ClInclude Include="include\Graphics\Texture.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\MaterialProperty.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11InputLayout.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Shader.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Shader.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11VertexShader.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11PixelShader.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11GeometryShader.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\BlendState.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11BlendState.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -79,6 +106,33 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\Texture.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\MaterialProperty.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11InputLayout.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Shader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11VertexShader.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Shader.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11PixelShader.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\BlendState.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
+      <Filter>d3d11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
