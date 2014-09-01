@@ -47,7 +47,7 @@ namespace Eternal
 			/**
 			 * Set VBO
 			 */
-			virtual void SetVBO(_In_ const VertexBuffer& buffer) = 0;
+			virtual void SetVBO(_In_ VertexBuffer* buffer) = 0;
 			/**
 			 * Attach Material for Rendering
 			 */

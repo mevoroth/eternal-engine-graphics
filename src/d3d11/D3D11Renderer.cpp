@@ -205,5 +205,13 @@ void D3D11Renderer::ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ i
 }
 void D3D11Renderer::SetBlendMode(_In_ BlendState* blendMode)
 {
-	
+	_blendMode = blendMode;
+	_blendMode->Apply();
 }
+
+void D3D11Renderer::SetVBO(_In_ VertexBuffer* vbo)
+{
+	_vertexBuffer = vbo;
+}
+
+void D3D11Renderer::DrawIndexed(_In_ const )

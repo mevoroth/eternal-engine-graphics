@@ -23,6 +23,8 @@ namespace Eternal
 			RenderTarget** _renderTargets;
 			int _renderTargetsCount;
 			Material* _material;
+			BlendState* _blendMode;
+			VertexBuffer* _vertexBuffer;
 			
 			HRESULT _CreateDevice();
 			HRESULT _CreateSwapChain();
@@ -33,12 +35,12 @@ namespace Eternal
 			ID3D11DeviceContext* GetDeviceContext();
 
 			virtual void AttachCamera(_In_ Camera<XMVECTOR, XMMATRIX>* camera);
-			virtual void SetVBO(_In_ const VertexBuffer& buffer) { assert(false); };
+			virtual void SetVBO(_In_ VertexBuffer* vbo);
 			virtual void AttachMaterial(_In_ Material* material);
 			virtual void Draw() { assert(false); };
 			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
 			virtual void ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
-			virtual void SetBlendMode(_In_ const BlendState& blendMode);
+			virtual void SetBlendMode(_In_ BlendState* blendMode);
 			virtual void Flush();
 		};
 	}

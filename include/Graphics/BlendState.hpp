@@ -13,19 +13,23 @@ namespace Eternal
 				ZERO			= 0,
 				ONE				= 1,
 
-				/*SRC*/
+				// SRC
 				SRC_COLOR		= 2,
 				INV_SRC_COLOR	= 3,
 				SRC_ALPHA		= 4,
 				INV_SRC_ALPHA	= 5,
 
-				/*DEST*/
+				// DEST
 				DEST_ALPHA		= 6,
 				INV_DEST_ALPHA	= 7,
 				DEST_COLOR		= 8,
 				INV_DEST_COLOR	= 9,
 
-				SRC_ALPHA_SAT	= 10
+				SRC_ALPHA_SAT	= 10,
+
+				// COLOR
+				COLOR			= 11,
+				COLOR_ALPHA		= 12
 			};
 			enum BlendOp
 			{
