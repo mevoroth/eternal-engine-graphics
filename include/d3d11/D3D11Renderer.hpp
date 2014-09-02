@@ -37,7 +37,9 @@ namespace Eternal
 			virtual void AttachCamera(_In_ Camera<XMVECTOR, XMMATRIX>* camera);
 			virtual void SetVBO(_In_ VertexBuffer* vbo);
 			virtual void AttachMaterial(_In_ Material* material);
-			virtual void Draw() { assert(false); };
+			//virtual void Draw() { assert(false); };
+			virtual void DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesCount, _In_ size_t vertexSize,
+				_In_ const uint16_t indices[], _In_ int indicesCount);
 			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
 			virtual void ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
 			virtual void SetBlendMode(_In_ BlendState* blendMode);

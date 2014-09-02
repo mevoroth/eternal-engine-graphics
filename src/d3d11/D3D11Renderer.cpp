@@ -214,4 +214,50 @@ void D3D11Renderer::SetVBO(_In_ VertexBuffer* vbo)
 	_vertexBuffer = vbo;
 }
 
-void D3D11Renderer::DrawIndexed(_In_ const )
+void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesCount, _In_ size_t vertexSize,
+	_In_ const uint16_t indices[], _In_ int indicesCount)
+{
+	_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	UINT stride = vertexSize;
+	UINT offset = 0;
+
+	ID3D11Buffer* vertexBuffer = 0;
+
+	D3D11_BUFFER_DESC verticesBufferDesc;
+	verticesBufferDesc.ByteWidth = vertexSize * verticesCount;
+	verticesBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	verticesBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	verticesBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	verticesBufferDesc.MiscFlags = 0;
+	verticesBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA verticesData;
+	verticesData.pSysMem = vertices;
+	verticesData.SysMemPitch = 0;
+	verticesData.SysMemSlicePitch = 0;
+
+	HRESULT hr = _device->CreateBuffer(&verticesBufferDesc, &verticesData, &vertexBuffer);
+	assert(hr);
+
+	ID3D11Buffer* indicesBuffer = 0;
+
+	D3D11_BUFFER_DESC indicesBufferDesc;
+	indicesBufferDesc.ByteWidth = sizeof(uint16_t)* indicesCount;
+	indicesBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	indicesBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indicesBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	indicesBufferDesc.MiscFlags = 0;
+	indicesBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA indicesData;
+	indicesData.pSysMem = vertices;
+	indicesData.SysMemPitch = 0;
+	indicesData.SysMemSlicePitch = 0;
+
+	hr = _device->CreateBuffer(&indicesBufferDesc, &indicesData, &indicesBuffer);
+
+	_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	_deviceContext->IASetIndexBuffer(indicesBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+	_deviceContext->DrawIndexed(indicesCount, 0, vertexSize);
+}

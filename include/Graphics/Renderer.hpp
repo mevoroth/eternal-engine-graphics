@@ -6,6 +6,7 @@
 #include "Camera.hpp"
 #include "RenderTarget.hpp"
 #include "BlendState.hpp"
+#include "Vertex.hpp"
 
 namespace Eternal
 {
@@ -58,7 +59,9 @@ namespace Eternal
 			/**
 			 * Draw
 			 */
-			virtual void Draw() = 0;
+			//virtual void Draw() = 0;
+			virtual void DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesCount, _In_ size_t vertexSize,
+				_In_ const uint16_t indices[], _In_ int indicesCount) = 0;
 			/**
 			 * Get Render Mode (HW or SW)
 			 */
