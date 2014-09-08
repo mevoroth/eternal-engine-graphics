@@ -15,6 +15,13 @@ namespace Eternal
 		class D3D11Renderer : public Renderer<XMVECTOR, XMMATRIX>
 		{
 		private:
+			struct MatrixBuffer
+			{
+				XMMATRIX model;
+				XMMATRIX view;
+				XMMATRIX projection;
+			};
+
 			static D3D11Renderer* _inst;
 			ID3D11Device* _device;
 			ID3D11DeviceContext* _deviceContext;

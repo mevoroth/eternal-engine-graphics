@@ -5,12 +5,12 @@
 using namespace Eternal::Graphics;
 
 D3D11GeometryShader::D3D11GeometryShader(_In_ const string& name, _In_ const string& src)
-	: D3D11Shader(name, src, "main", "gs_5_0")
+	: D3D11Shader(name, src, "GS", "gs_5_0")
 {
 	assert(_program);
 }
 
-void D3D11VertexShader::InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage, _Out_ void** code)
+void D3D11GeometryShader::InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage, _Out_ void** code)
 {
 	HRESULT hr = D3D11Renderer::Get()->GetDevice()->CreateGeometryShader(
 		_program->GetBufferPointer(),
@@ -18,5 +18,5 @@ void D3D11VertexShader::InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage,
 		classLinkage,
 		(ID3D11GeometryShader**)code
 	);
-	assert(hr);
+	assert(hr == S_OK);
 }

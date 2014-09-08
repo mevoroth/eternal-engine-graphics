@@ -39,11 +39,6 @@ void D3D11Shader::_CompileFile(_In_ const string& src, _In_ const string& entry,
 	}
 }
 
-void D3D11Shader::InstantiateShader(ID3D11ClassLinkage* dynamicParams)
-{
-	_dynamicParams = dynamicParams;
-}
-
 void D3D11Shader::_LoadFile(_In_ const string& shader)
 {
 	assert(false);

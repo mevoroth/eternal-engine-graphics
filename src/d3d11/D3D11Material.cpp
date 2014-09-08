@@ -3,7 +3,6 @@
 #include <cassert>
 #include <numeric>
 
-#include "d3d11/D3D11ShaderFactory.hpp"
 #include "d3d11/D3D11Renderer.hpp"
 #include "d3d11/D3D11Shader.hpp"
 #include "d3d11/D3D11VertexShader.hpp"

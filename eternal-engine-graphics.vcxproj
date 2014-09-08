@@ -24,7 +24,7 @@
     <ClInclude Include="include\d3d11\D3D11Renderer.hpp" />
     <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp" />
     <ClInclude Include="include\d3d11\D3D11Shader.hpp" />
-    <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp" />
+    <ClInclude Include="include\d3d11\D3D11VertexPosNormTex.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\Camera.hpp" />
@@ -50,7 +50,6 @@
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
     <ClCompile Include="src\d3d11\D3D11Shader.cpp" />
-    <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />

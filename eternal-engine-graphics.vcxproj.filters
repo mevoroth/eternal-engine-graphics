@@ -30,9 +30,6 @@
     <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\Camera.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -87,6 +84,9 @@
     <ClInclude Include="include\d3d11\D3D11VertexPosColNormTex.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11VertexPosNormTex.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -102,9 +102,6 @@
       <Filter>d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp">

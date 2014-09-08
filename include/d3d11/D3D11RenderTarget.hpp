@@ -17,6 +17,7 @@ namespace Eternal
 			D3D11RenderTarget(_In_ int width, _In_ int height);
 			D3D11RenderTarget(_In_ ID3D11Texture2D* tex);
 			~D3D11RenderTarget();
+			ID3D11RenderTargetView* GetD3D11RenderTarget();
 			void Clear();
 		};
 	}

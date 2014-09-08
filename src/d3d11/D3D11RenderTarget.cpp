@@ -55,6 +55,12 @@ D3D11RenderTarget::~D3D11RenderTarget()
 
 void D3D11RenderTarget::Clear()
 {
-	FLOAT clear[4] = { 1.f, 0.f, 0.f, 1.f };
+	FLOAT clear[4] = { 0.f, 0.f, 0.f, 1.f };
 	D3D11Renderer::Get()->GetDeviceContext()->ClearRenderTargetView(_renderTarget, clear);
 }
+
+ID3D11RenderTargetView* D3D11RenderTarget::GetD3D11RenderTarget()
+{
+	return _renderTarget;
+}
+

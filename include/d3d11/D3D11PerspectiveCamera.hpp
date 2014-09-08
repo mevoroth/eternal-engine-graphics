@@ -10,6 +10,7 @@ namespace Eternal
 		class D3D11PerspectiveCamera : public D3D11Camera
 		{
 		public:
+			D3D11PerspectiveCamera();
 			virtual void GetProjectionMatrix(_Out_ XMMATRIX* matrix);
 			virtual void GetViewMatrix(_Out_ XMMATRIX* matrix);
 		};

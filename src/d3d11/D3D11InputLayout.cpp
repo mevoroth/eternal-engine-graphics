@@ -30,18 +30,18 @@ D3D11InputLayout::D3D11InputLayout(_In_ const VertexDataType& dataType)
 	
 	for (int i = 0; i < VERTEX_DATA_TYPE_COUNT; ++i)
 	{
-		if (dataType | (1 << i))
+		if (dataType & (1 << i))
 		{
 			_AddInputDesc(D3D11_INPUT_SEMANTICS[i], D3D11_INPUT_FORMATS[i]);
 		}
 	}
 }
 
-void D3D11InputLayout::_AddInputDesc(_In_ const string& semantics, _In_ const DXGI_FORMAT& format)
+void D3D11InputLayout::_AddInputDesc(_In_ const char* semantic, _In_ const DXGI_FORMAT& format)
 {
 	D3D11_INPUT_ELEMENT_DESC inputTemp;
 	memset(&inputTemp, 0x0, sizeof(D3D11_INPUT_ELEMENT_DESC));
-	inputTemp.SemanticName = semantics.c_str();
+	inputTemp.SemanticName = semantic;
 	inputTemp.SemanticIndex = 0;
 	inputTemp.Format = format;
 	inputTemp.InputSlot = 0;

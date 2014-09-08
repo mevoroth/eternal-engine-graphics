@@ -45,9 +45,9 @@ namespace Eternal
 			BlendOp _blendOp;
 			Blend _srcAlpha;
 			Blend _destAlpha;
-			Blend _blendAlphaOp;
+			BlendOp _blendAlphaOp;
 		public:
-			BlendState(_In_ const Blend& src, _In_ const Blend& dest, _In_ const BlendOp& blendOp, _In_ const Blend& srcAlpha, _In_ const Blend& destAlpha, _In_ const Blend& blendAlphaOp);
+			BlendState(_In_ const Blend& src, _In_ const Blend& dest, _In_ const BlendOp& blendOp, _In_ const Blend& srcAlpha, _In_ const Blend& destAlpha, _In_ const BlendOp& blendAlphaOp);
 			virtual void Apply() = 0;
 		};
 	}

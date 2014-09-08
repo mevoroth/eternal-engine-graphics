@@ -7,10 +7,10 @@ using namespace std;
 using namespace Eternal::Graphics;
 
 D3D11VertexShader::D3D11VertexShader(_In_ const string& name, _In_ const string& src, _Inout_ D3D11InputLayout& inputLayout)
-	: D3D11Shader(name, src, "main", "vs_5_0")
+	: D3D11Shader(name, src, "VS", "vs_5_0")
 {
 	assert(_program);
-	vector<D3D11_INPUT_ELEMENT_DESC> input = inputLayout.GetD3D11InputElement();
+	vector<D3D11_INPUT_ELEMENT_DESC> input = inputLayout._input;
 	D3D11Renderer::Get()->GetDevice()->CreateInputLayout(
 		&input[0],
 		input.size(),
@@ -29,5 +29,5 @@ void D3D11VertexShader::InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage,
 		classLinkage,
 		(ID3D11VertexShader**)code
 	);
-	assert(hr);
+	assert(hr == S_OK);
 }

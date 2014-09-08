@@ -30,7 +30,7 @@ static D3D11_BLEND_OP BLENDOPS[] =
 	D3D11_BLEND_OP_MAX
 };
 
-D3D11BlendState::D3D11BlendState(_In_ const Blend& src, _In_ const Blend& dest, _In_ const BlendOp& blendOp, _In_ const Blend& srcAlpha, _In_ const Blend& destAlpha, _In_ const Blend& blendAlphaOp)
+D3D11BlendState::D3D11BlendState(_In_ const Blend& src, _In_ const Blend& dest, _In_ const BlendOp& blendOp, _In_ const Blend& srcAlpha, _In_ const Blend& destAlpha, _In_ const BlendOp& blendAlphaOp)
 	: BlendState(src, dest, blendOp, srcAlpha, destAlpha, blendAlphaOp)
 	, _blendState(0)
 {

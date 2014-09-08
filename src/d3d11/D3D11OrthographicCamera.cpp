@@ -7,24 +7,42 @@ using namespace Eternal::Graphics;
 
 D3D11OrthographicCamera::D3D11OrthographicCamera()
 {
-
+	SetFocus(XMVectorSet(0.f, 1.f, 0.f, 1.f));
+	SetUp(XMVectorSet(0.f, 0.f, 1.f, 1.f));
+	SetPosition(XMVectorSet(0.f, 0.f, 0.f, 1.f));
+	assert(!XMVector3Equal(GetFocus(), XMVectorZero()));
+	assert(!XMVector3Equal(GetUp(), XMVectorZero()));
 }
 
 void D3D11OrthographicCamera::GetProjectionMatrix(_Out_ XMMATRIX* matrix)
 {
-	*matrix = XMMatrixOrthographicLH(
-		D3D11DeviceType::WIDTH,
-		D3D11DeviceType::HEIGHT,
-		0.f,
-		1000.f
+	//*matrix = XMMatrixOrthographicOffCenterLH(
+	//	0.f, D3D11DeviceType::WIDTH,
+	//	D3D11DeviceType::HEIGHT, 0.f,
+	//	0.f, 1000.f
+	//);
+	*matrix = XMMatrixTranspose(
+		XMMatrixOrthographicOffCenterLH(
+			0.f, D3D11DeviceType::WIDTH,
+			D3D11DeviceType::HEIGHT, 0.f,
+			0.f, 1000.f
+		)
+		//XMMatrixOrthographicLH(
+		//	D3D11DeviceType::WIDTH,
+		//	D3D11DeviceType::HEIGHT,
+		//	0.f,
+		//	1000.f
+		//)
 	);
 }
 
 void D3D11OrthographicCamera::GetViewMatrix(_Out_ XMMATRIX* matrix)
 {
-	*matrix = XMMatrixLookAtLH(
-		GetPosition(),
-		GetFocus(),
-		GetUp()
+	*matrix = XMMatrixTranspose(
+		XMMatrixLookToLH(
+			GetPosition(),
+			GetFocus(),
+			GetUp()
+		)
 	);
 }

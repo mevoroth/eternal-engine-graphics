@@ -7,6 +7,7 @@
 
 #include "d3d11/D3D11Device.hpp"
 #include "d3d11/D3D11RenderTarget.hpp"
+#include "d3d11/D3D11VertexPosNormTex.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -150,6 +151,7 @@ HRESULT D3D11Renderer::_CreateSwapChain()
 		sprintf_s(str, "ERROR: %d:%x\n", err, err);
 		OutputDebugString(str);
 	}
+
 	return hr;
 }
 
@@ -237,12 +239,12 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	verticesData.SysMemSlicePitch = 0;
 
 	HRESULT hr = _device->CreateBuffer(&verticesBufferDesc, &verticesData, &vertexBuffer);
-	assert(hr);
+	assert(hr == S_OK);
 
 	ID3D11Buffer* indicesBuffer = 0;
 
 	D3D11_BUFFER_DESC indicesBufferDesc;
-	indicesBufferDesc.ByteWidth = sizeof(uint16_t)* indicesCount;
+	indicesBufferDesc.ByteWidth = sizeof(uint16_t) * indicesCount;
 	indicesBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	indicesBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indicesBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -250,14 +252,122 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	indicesBufferDesc.StructureByteStride = 0;
 
 	D3D11_SUBRESOURCE_DATA indicesData;
-	indicesData.pSysMem = vertices;
+	indicesData.pSysMem = indices;
 	indicesData.SysMemPitch = 0;
 	indicesData.SysMemSlicePitch = 0;
 
 	hr = _device->CreateBuffer(&indicesBufferDesc, &indicesData, &indicesBuffer);
+	assert(hr == S_OK);
+
+	ID3D11Buffer* matrixBuffer = 0;
+
+	D3D11_BUFFER_DESC matrixBufferDesc;
+	matrixBufferDesc.ByteWidth = sizeof(MatrixBuffer);
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA matrixData;
+	MatrixBuffer matrixStruct;
+	matrixStruct.model = XMMatrixIdentity();//XMLoadFloat4x4();
+	_camera->GetProjectionMatrix(&matrixStruct.projection);
+	_camera->GetViewMatrix(&matrixStruct.view);
+	matrixData.pSysMem = &matrixStruct;
+	matrixData.SysMemPitch = 0;
+	matrixData.SysMemSlicePitch = 0;
+	hr = _device->CreateBuffer(&matrixBufferDesc, &matrixData, &matrixBuffer);
+	assert(hr == S_OK);
+
+	/*FOR TESTING PURPOSE*/
+
+	//if (verticesCount == 4)
+	//{
+	//	// DEBUG
+	//	D3D11VertexPosNormTex* transformeds = (D3D11VertexPosNormTex*)vertices;
+	//	XMVECTOR tverts[4];
+	//	for (int i = 0; i < 4; ++i)
+	//	{
+	//		tverts[i] = XMVector4Transform(transformeds[i].Pos, matrixStruct.model);
+	//		tverts[i] = XMVector4Transform(tverts[i], matrixStruct.view);
+	//		tverts[i] = XMVector4Transform(tverts[i], matrixStruct.projection);
+	//		char str[256];
+	//		sprintf_s(str, "V%d : { %f, %f, %f }\n", i, tverts[i].m128_f32[0], tverts[i].m128_f32[1], tverts[i].m128_f32[2]);
+	//		OutputDebugString(str);
+	//	}
+	//}
+
+	//D3D11_RASTERIZER_DESC rasterizerDesc;
+	//rasterizerDesc.AntialiasedLineEnable = FALSE;
+	//rasterizerDesc.CullMode = D3D11_CULL_NONE; // D3D11_CULL_FRONT or D3D11_CULL_NONE D3D11_CULL_BACK
+	//rasterizerDesc.FillMode = D3D11_FILL_SOLID; // D3D11_FILL_SOLID  D3D11_FILL_WIREFRAME
+	//rasterizerDesc.DepthBias = 0;
+	//rasterizerDesc.DepthBiasClamp = 0.0f;
+	//rasterizerDesc.DepthClipEnable = TRUE;
+	//rasterizerDesc.FrontCounterClockwise = TRUE;
+	//rasterizerDesc.MultisampleEnable = TRUE;
+	//rasterizerDesc.ScissorEnable = FALSE;
+	//rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+
+	//ID3D11RasterizerState* rasterizerState;
+	//_device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+	//_deviceContext->RSSetState(rasterizerState);
+
+	//D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+	//depthStencilDesc.DepthEnable = FALSE;
+	//depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	//depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	//depthStencilDesc.StencilEnable = FALSE;
+	//depthStencilDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+	//depthStencilDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+	//depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	//depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	//depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	//depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	//depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	//depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	//depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	//depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+
+	//ID3D11DepthStencilState* depthStencilState;
+	//_device->CreateDepthStencilState(&depthStencilDesc, &depthStencilState);
+
+	//_deviceContext->OMSetDepthStencilState(depthStencilState, 1);
+	/*END FOR TESTING PURPOSE*/
+
+	D3D11_VIEWPORT viewport;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Height = 1.f;
+	viewport.Width = 1.f;
+	viewport.MinDepth = 0.f;
+	viewport.MaxDepth = 1.f;
+	_deviceContext->RSSetViewports(1, &viewport);
+
+	ID3D11RenderTargetView** renderTargetsBuffer = new ID3D11RenderTargetView*[_renderTargetsCount];
+	for (int i = 0; i < _renderTargetsCount; ++i)
+	{
+		renderTargetsBuffer[i] = ((D3D11RenderTarget*)_renderTargets[i])->GetD3D11RenderTarget();
+	}
+	_deviceContext->OMSetRenderTargets(_renderTargetsCount, renderTargetsBuffer, 0);
 
 	_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	_deviceContext->IASetIndexBuffer(indicesBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-	_deviceContext->DrawIndexed(indicesCount, 0, vertexSize);
+	_deviceContext->VSSetConstantBuffers(0, 1, &matrixBuffer);
+
+	_deviceContext->DrawIndexed(indicesCount, 0, 0);
+	//_deviceContext->Draw(verticesCount, 0);
+
+	vertexBuffer->Release();
+	vertexBuffer = 0;
+
+	indicesBuffer->Release();
+	indicesBuffer = 0;
+
+	matrixBuffer->Release();
+	matrixBuffer = 0;
+
+	delete[] renderTargetsBuffer;
 }
