@@ -339,8 +339,8 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
-	viewport.Height = 1.f;
-	viewport.Width = 1.f;
+	viewport.Height = D3D11DeviceType::HEIGHT;
+	viewport.Width = D3D11DeviceType::WIDTH;
 	viewport.MinDepth = 0.f;
 	viewport.MaxDepth = 1.f;
 	_deviceContext->RSSetViewports(1, &viewport);
