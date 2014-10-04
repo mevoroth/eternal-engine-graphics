@@ -9,10 +9,18 @@ namespace Eternal
 	{
 		class D3D11OrthographicCamera : public D3D11Camera
 		{
+		private:
+			XMMATRIX _model;
+			XMMATRIX _view;
+			XMMATRIX _proj;
 		public:
 			D3D11OrthographicCamera();
-			virtual void GetProjectionMatrix(_Out_ XMMATRIX* matrix);
-			virtual void GetViewMatrix(_Out_ XMMATRIX* matrix);
+			virtual void GetProjectionMatrix(_Out_ Matrix4x4* matrix);
+			virtual void GetViewMatrix(_Out_ Matrix4x4* matrix);
+			void translate(float x, float y, float z)
+			{
+				//_model
+			}
 		};
 	}
 }

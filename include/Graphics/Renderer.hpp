@@ -1,6 +1,8 @@
 #ifndef _RENDERER_HPP_
 #define _RENDERER_HPP_
 
+#include <cstdint>
+
 #include "Material.hpp"
 #include "VertexBuffer.hpp"
 #include "Camera.hpp"
@@ -12,7 +14,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		template <typename Vector4, typename Matrix4x4> class Renderer
+		class Renderer
 		{
 		public:
 			enum RenderMode
@@ -44,7 +46,7 @@ namespace Eternal
 			/**
 			 * Attach Camera
 			 */
-			virtual void AttachCamera(_In_ Camera<Vector4, Matrix4x4>* camera) = 0;
+			virtual void AttachCamera(_In_ Camera* camera) = 0;
 			/**
 			 * Set VBO
 			 */
@@ -65,44 +67,19 @@ namespace Eternal
 			/**
 			 * Get Render Mode (HW or SW)
 			 */
-			inline RenderMode GetRenderMode() const;
+			inline RenderMode GetRenderMode() const
+			{
+				return _mode;
+			}
 			/**
 			 * Get AntiAliasing
 			 */
-			inline AntiAliasing GetAntiAliasing() const;
+			inline AntiAliasing GetAntiAliasing() const
+			{
+				return _aa;
+			}
 			virtual RenderTarget* GetBackBuffer() const;
 		};
-
-#pragma region Renderer Implementation
-		template <typename Vector4, typename Matrix4x4>
-		Renderer<Vector4, Matrix4x4>::Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
-			: _mode(mode)
-			, _aa(aa)
-		{
-		}
-
-		template <typename Vector4, typename Matrix4x4>
-		inline typename Renderer<Vector4, Matrix4x4>::RenderMode Renderer<Vector4, Matrix4x4>::GetRenderMode() const
-		{
-			return _mode;
-		}
-
-		template <typename Vector4, typename Matrix4x4>
-		inline typename Renderer<Vector4, Matrix4x4>::AntiAliasing Renderer<Vector4, Matrix4x4>::GetAntiAliasing() const
-		{
-			return _aa;
-		}
-		template <typename Vector4, typename Matrix4x4>
-		void Renderer<Vector4, Matrix4x4>::_SetBackBuffer(RenderTarget* backBuffer)
-		{
-			_backBuffer = backBuffer;
-		}
-		template <typename Vector4, typename Matrix4x4>
-		RenderTarget* Renderer<Vector4, Matrix4x4>::GetBackBuffer() const
-		{
-			return _backBuffer;
-		}
-#pragma endregion
 	}
 }
 

@@ -7,6 +7,7 @@
 
 #include "d3d11/D3D11Device.hpp"
 #include "d3d11/D3D11RenderTarget.hpp"
+#include "d3d11/D3D11Camera.hpp"
 #include "d3d11/D3D11VertexPosNormTex.hpp"
 
 using namespace Eternal::Graphics;
@@ -178,7 +179,7 @@ void D3D11Renderer::Flush()
 	_swapChain->Present(0, 0);
 }
 
-void D3D11Renderer::AttachCamera(_In_ Camera<XMVECTOR, XMMATRIX>* camera)
+void D3D11Renderer::AttachCamera(_In_ Camera* camera)
 {
 	_camera = camera;
 }
@@ -272,8 +273,11 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	D3D11_SUBRESOURCE_DATA matrixData;
 	MatrixBuffer matrixStruct;
 	matrixStruct.model = XMMatrixIdentity();//XMLoadFloat4x4();
-	_camera->GetProjectionMatrix(&matrixStruct.projection);
-	_camera->GetViewMatrix(&matrixStruct.view);
+	Matrix4x4 m;
+	_camera->GetProjectionMatrix(&m);
+	matrixStruct.projection = m.mat;
+	_camera->GetViewMatrix(&m);
+	matrixStruct.view = m.mat;
 	matrixData.pSysMem = &matrixStruct;
 	matrixData.SysMemPitch = 0;
 	matrixData.SysMemSlicePitch = 0;

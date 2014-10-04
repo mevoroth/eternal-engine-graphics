@@ -137,5 +137,8 @@
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Renderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

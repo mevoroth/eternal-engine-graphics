@@ -6,43 +6,26 @@
 using namespace Eternal::Graphics;
 
 D3D11OrthographicCamera::D3D11OrthographicCamera()
+	: _model(XMMatrixIdentity())
+	, _view(XMMatrixLookAtLH(
+		XMVectorSet(0.f, 0.f, 0.f, 1.f),
+		XMVectorSet(0.f, 1.f, 0.f, 1.f),
+		XMVectorSet(0.f, 0.f, 1.f, 1.f)
+	))
+	, _proj(XMMatrixOrthographicOffCenterLH(
+		-D3D11DeviceType::WIDTH / 2, D3D11DeviceType::WIDTH / 2,
+		D3D11DeviceType::HEIGHT / 2, -D3D11DeviceType::HEIGHT / 2,
+		0.f, 1000.f
+	))
 {
-	SetFocus(XMVectorSet(0.f, 1.f, 0.f, 1.f));
-	SetUp(XMVectorSet(0.f, 0.f, 1.f, 1.f));
-	SetPosition(XMVectorSet(0.f, 0.f, 0.f, 1.f));
-	assert(!XMVector3Equal(GetFocus(), XMVectorZero()));
-	assert(!XMVector3Equal(GetUp(), XMVectorZero()));
 }
 
-void D3D11OrthographicCamera::GetProjectionMatrix(_Out_ XMMATRIX* matrix)
+void D3D11OrthographicCamera::GetProjectionMatrix(_Out_ Matrix4x4* matrix)
 {
-	//*matrix = XMMatrixOrthographicOffCenterLH(
-	//	0.f, D3D11DeviceType::WIDTH,
-	//	D3D11DeviceType::HEIGHT, 0.f,
-	//	0.f, 1000.f
-	//);
-	*matrix = XMMatrixTranspose(
-		XMMatrixOrthographicOffCenterLH(
-			0.f, D3D11DeviceType::WIDTH,
-			D3D11DeviceType::HEIGHT, 0.f,
-			0.f, 1000.f
-		)
-		//XMMatrixOrthographicLH(
-		//	D3D11DeviceType::WIDTH,
-		//	D3D11DeviceType::HEIGHT,
-		//	0.f,
-		//	1000.f
-		//)
-	);
+	matrix->mat = XMMatrixTranspose(_proj);
 }
 
-void D3D11OrthographicCamera::GetViewMatrix(_Out_ XMMATRIX* matrix)
+void D3D11OrthographicCamera::GetViewMatrix(_Out_ Matrix4x4* matrix)
 {
-	*matrix = XMMatrixTranspose(
-		XMMatrixLookToLH(
-			GetPosition(),
-			GetFocus(),
-			GetUp()
-		)
-	);
+	matrix->mat = XMMatrixTranspose(_view * _model);
 }

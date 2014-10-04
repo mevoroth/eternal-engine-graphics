@@ -10,7 +10,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		typedef Camera<XMVECTOR, XMMATRIX> D3D11Camera;
+		class Matrix4x4
+		{
+		public:
+			XMMATRIX mat;
+		};
+		typedef Camera D3D11Camera;
 	}
 }
 

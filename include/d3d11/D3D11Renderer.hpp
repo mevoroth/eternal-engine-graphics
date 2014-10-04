@@ -12,7 +12,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class D3D11Renderer : public Renderer<XMVECTOR, XMMATRIX>
+		class D3D11Renderer : public Renderer
 		{
 		private:
 			struct MatrixBuffer
@@ -41,7 +41,7 @@ namespace Eternal
 			ID3D11Device* GetDevice();
 			ID3D11DeviceContext* GetDeviceContext();
 
-			virtual void AttachCamera(_In_ Camera<XMVECTOR, XMMATRIX>* camera);
+			virtual void AttachCamera(_In_ Camera* camera);
 			virtual void SetVBO(_In_ VertexBuffer* vbo);
 			virtual void AttachMaterial(_In_ Material* material);
 			//virtual void Draw() { assert(false); };
