@@ -15,12 +15,9 @@ namespace Eternal
 			XMMATRIX _proj;
 		public:
 			D3D11OrthographicCamera();
-			virtual void GetProjectionMatrix(_Out_ Matrix4x4* matrix);
-			virtual void GetViewMatrix(_Out_ Matrix4x4* matrix);
-			void translate(float x, float y, float z)
-			{
-				//_model
-			}
+			virtual Matrix4x4 GetProjectionMatrix();
+			virtual Matrix4x4 GetViewMatrix();
+			virtual void SetModelMatrix(_In_ const Matrix4x4& model);
 		};
 	}
 }

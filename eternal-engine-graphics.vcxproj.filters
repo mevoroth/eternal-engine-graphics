@@ -87,6 +87,12 @@
     <ClInclude Include="include\d3d11\D3D11VertexPosNormTex.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Viewport.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Viewport.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -138,6 +144,12 @@
       <Filter>d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Renderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Viewport.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Viewport.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

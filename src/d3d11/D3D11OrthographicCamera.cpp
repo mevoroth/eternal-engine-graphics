@@ -20,12 +20,17 @@ D3D11OrthographicCamera::D3D11OrthographicCamera()
 {
 }
 
-void D3D11OrthographicCamera::GetProjectionMatrix(_Out_ Matrix4x4* matrix)
+Matrix4x4 D3D11OrthographicCamera::GetProjectionMatrix()
 {
-	matrix->mat = XMMatrixTranspose(_proj);
+	return XMMatrixTranspose(_proj);
 }
 
-void D3D11OrthographicCamera::GetViewMatrix(_Out_ Matrix4x4* matrix)
+Matrix4x4 D3D11OrthographicCamera::GetViewMatrix()
 {
-	matrix->mat = XMMatrixTranspose(_view * _model);
+	return XMMatrixTranspose(_view * _model);
+}
+
+void D3D11OrthographicCamera::SetModelMatrix(_In_ const Matrix4x4& model)
+{
+	_model = model;
 }

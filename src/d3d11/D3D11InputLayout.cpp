@@ -4,7 +4,7 @@
 
 using namespace Eternal::Graphics;
 
-static const char const* D3D11_INPUT_SEMANTICS[]
+static const char* D3D11_INPUT_SEMANTICS[]
 {
 	"SV_Position",
 	"COLOR",

@@ -17,3 +17,8 @@ RenderTarget* Renderer::GetBackBuffer() const
 {
 	return _backBuffer;
 }
+
+void Renderer::SetViewport(_In_ Viewport* viewport)
+{
+	viewport->Apply();
+}

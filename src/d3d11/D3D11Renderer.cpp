@@ -273,11 +273,9 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	D3D11_SUBRESOURCE_DATA matrixData;
 	MatrixBuffer matrixStruct;
 	matrixStruct.model = XMMatrixIdentity();//XMLoadFloat4x4();
-	Matrix4x4 m;
-	_camera->GetProjectionMatrix(&m);
-	matrixStruct.projection = m.mat;
-	_camera->GetViewMatrix(&m);
-	matrixStruct.view = m.mat;
+	matrixStruct.projection = _camera->GetProjectionMatrix();
+	matrixStruct.view = _camera->GetViewMatrix();
+
 	matrixData.pSysMem = &matrixStruct;
 	matrixData.SysMemPitch = 0;
 	matrixData.SysMemSlicePitch = 0;
@@ -339,15 +337,6 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 
 	//_deviceContext->OMSetDepthStencilState(depthStencilState, 1);
 	/*END FOR TESTING PURPOSE*/
-
-	D3D11_VIEWPORT viewport;
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.Height = D3D11DeviceType::HEIGHT;
-	viewport.Width = D3D11DeviceType::WIDTH;
-	viewport.MinDepth = 0.f;
-	viewport.MaxDepth = 1.f;
-	_deviceContext->RSSetViewports(1, &viewport);
 
 	ID3D11RenderTargetView** renderTargetsBuffer = new ID3D11RenderTargetView*[_renderTargetsCount];
 	for (int i = 0; i < _renderTargetsCount; ++i)

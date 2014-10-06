@@ -9,6 +9,7 @@
 #include "RenderTarget.hpp"
 #include "BlendState.hpp"
 #include "Vertex.hpp"
+#include "Viewport.hpp"
 
 namespace Eternal
 {
@@ -58,6 +59,7 @@ namespace Eternal
 			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count) = 0;
 			virtual void ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count) = 0;
 			virtual void SetBlendMode(_In_ BlendState* blendMode) = 0;
+			void SetViewport(_In_ Viewport* viewport);
 			/**
 			 * Draw
 			 */

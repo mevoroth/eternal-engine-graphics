@@ -1,11 +1,15 @@
 #include "Graphics/Texture.hpp"
 
+#include <cassert>
+
 using namespace Eternal::Graphics;
 
 Texture::Texture(int width, int height)
 	: _width(width)
 	, _height(height)
 {
+	assert(width > 0);
+	assert(height > 0);
 }
 
 inline int Texture::GetWidth() const
