@@ -93,6 +93,7 @@
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\GraphicsSettings.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">

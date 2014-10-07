@@ -35,6 +35,7 @@
     <ClInclude Include="include\d3d11\D3D11VertexPosNormTex.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
+    <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\Camera.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
@@ -117,7 +118,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);..\eternal-engine-utils\include;..\eternal-engine-components\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)\eternal-engine-utils\include;$(SolutionDir)\eternal-engine-components\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);..\eternal-engine-utils\include;$(ProjectDir)\include;$(IncludePath)</IncludePath>

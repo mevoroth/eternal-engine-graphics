@@ -1,7 +1,8 @@
 #ifndef _CAMERA_HPP_
 #define _CAMERA_HPP_
 
-#include "Types.hpp"
+#include "GraphicsSettings.hpp"
+#include "Types/Types.hpp"
 
 namespace Eternal
 {
