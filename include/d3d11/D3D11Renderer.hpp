@@ -22,7 +22,6 @@ namespace Eternal
 				XMMATRIX projection;
 			};
 
-			static D3D11Renderer* _inst;
 			ID3D11Device* _device;
 			ID3D11DeviceContext* _deviceContext;
 			IDXGISwapChain* _swapChain;
@@ -37,7 +36,6 @@ namespace Eternal
 			HRESULT _CreateSwapChain();
 		public:
 			D3D11Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
-			static D3D11Renderer* Get();
 			ID3D11Device* GetDevice();
 			ID3D11DeviceContext* GetDeviceContext();
 

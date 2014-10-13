@@ -11,7 +11,7 @@ D3D11VertexShader::D3D11VertexShader(_In_ const string& name, _In_ const string&
 {
 	assert(_program);
 	vector<D3D11_INPUT_ELEMENT_DESC> input = inputLayout._input;
-	D3D11Renderer::Get()->GetDevice()->CreateInputLayout(
+	dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice()->CreateInputLayout(
 		&input[0],
 		input.size(),
 		_program->GetBufferPointer(),
@@ -23,7 +23,7 @@ D3D11VertexShader::D3D11VertexShader(_In_ const string& name, _In_ const string&
 
 void D3D11VertexShader::InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage, _Out_ void** code)
 {
-	HRESULT hr = D3D11Renderer::Get()->GetDevice()->CreateVertexShader(
+	HRESULT hr = dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice()->CreateVertexShader(
 		_program->GetBufferPointer(),
 		_program->GetBufferSize(),
 		classLinkage,

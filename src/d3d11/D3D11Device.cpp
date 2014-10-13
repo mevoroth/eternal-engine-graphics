@@ -26,14 +26,14 @@ void D3D11Device::Create()
 	windowClass.hCursor = 0;
 	windowClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
 	windowClass.lpszMenuName = 0;
-	windowClass.lpszClassName = _getClassName();
+	windowClass.lpszClassName = _GetClassName();
 
 	RegisterClassEx(&windowClass);
 
 	_windowHandle = CreateWindowEx(
 		WS_EX_APPWINDOW,
-		_getClassName(),
-		_getWindowName(),
+		_GetClassName(),
+		_GetWindowName(),
 		WS_OVERLAPPED,
 		0,
 		0,
@@ -54,12 +54,12 @@ void D3D11Device::Create()
 	ShowWindow(_windowHandle, _nCmdShow);
 }
 
-inline LPCTSTR D3D11Device::_getClassName() const
+inline LPCTSTR D3D11Device::_GetClassName() const
 {
 	return _className.c_str();
 }
 
-inline LPCTSTR D3D11Device::_getWindowName() const
+inline LPCTSTR D3D11Device::_GetWindowName() const
 {
 	return _windowName.c_str();
 }

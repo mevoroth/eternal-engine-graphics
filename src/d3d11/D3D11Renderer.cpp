@@ -12,8 +12,6 @@
 
 using namespace Eternal::Graphics;
 
-D3D11Renderer* D3D11Renderer::_inst = 0;
-
 D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
 	: Renderer(mode, aa)
 	, _device(0)
@@ -24,9 +22,6 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	, _renderTargetsCount(0)
 {
 	assert(mode != SOFTWARE); // NOT IMPLEMENTED YET
-
-	assert(!_inst);
-	_inst = this;
 
 	HRESULT hr;
 
@@ -154,12 +149,6 @@ HRESULT D3D11Renderer::_CreateSwapChain()
 	}
 
 	return hr;
-}
-
-D3D11Renderer* D3D11Renderer::Get()
-{
-	assert(_inst);
-	return _inst;
 }
 
 ID3D11Device* D3D11Renderer::GetDevice()

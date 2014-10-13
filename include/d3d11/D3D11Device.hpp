@@ -21,8 +21,8 @@ namespace Eternal
 			string _className;
 			string _windowName;
 
-			inline LPCTSTR _getClassName() const;
-			inline LPCTSTR _getWindowName() const;
+			inline LPCTSTR _GetClassName() const;
+			inline LPCTSTR _GetWindowName() const;
 		public:
 			static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 			D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& name, _In_ const string& className);

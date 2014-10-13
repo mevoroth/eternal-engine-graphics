@@ -26,7 +26,7 @@ D3D11InputLayout::D3D11InputLayout(_In_ const VertexDataType& dataType)
 	: _inputLayout(0)
 {
 	assert(D3D11Renderer::Get());
-	assert(D3D11Renderer::Get()->GetDevice());
+	assert(dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice());
 	
 	for (int i = 0; i < VERTEX_DATA_TYPE_COUNT; ++i)
 	{

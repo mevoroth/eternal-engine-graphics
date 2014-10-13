@@ -37,6 +37,7 @@ namespace Eternal
 				CSAA_32XQ = 0x80000 | 0x20
 			};
 		private:
+			static Renderer* _inst;
 			RenderMode _mode;
 			AntiAliasing _aa;
 			RenderTarget* _backBuffer;
@@ -44,6 +45,7 @@ namespace Eternal
 			virtual void _SetBackBuffer(_In_ RenderTarget* backBuffer);
 		public:
 			Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
+			static Renderer* Get();
 			/**
 			 * Attach Camera
 			 */
