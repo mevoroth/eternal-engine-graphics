@@ -28,11 +28,9 @@
     <ClInclude Include="include\d3d11\D3D11OrthographicCamera.hpp" />
     <ClInclude Include="include\d3d11\D3D11PerspectiveCamera.hpp" />
     <ClInclude Include="include\d3d11\D3D11PixelShader.hpp" />
-    <ClInclude Include="include\d3d11\D3D11VertexPosColNormTex.hpp" />
     <ClInclude Include="include\d3d11\D3D11Renderer.hpp" />
     <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp" />
     <ClInclude Include="include\d3d11\D3D11Shader.hpp" />
-    <ClInclude Include="include\d3d11\D3D11VertexPosNormTex.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />

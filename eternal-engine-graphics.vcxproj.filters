@@ -81,12 +81,6 @@
     <ClInclude Include="include\Graphics\Vertex.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11VertexPosColNormTex.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11VertexPosNormTex.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\Viewport.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>

@@ -8,7 +8,6 @@
 #include "d3d11/D3D11Device.hpp"
 #include "d3d11/D3D11RenderTarget.hpp"
 #include "d3d11/D3D11Camera.hpp"
-#include "d3d11/D3D11VertexPosNormTex.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -142,10 +141,10 @@ HRESULT D3D11Renderer::_CreateSwapChain()
 	if (hr != S_OK)
 	{
 		// ERROR
-		char str[256];
-		DWORD err = GetLastError();
-		sprintf_s(str, "ERROR: %d:%x\n", err, err);
-		OutputDebugString(str);
+		//char str[256];
+		//DWORD err = GetLastError();
+		//sprintf_s(str, "ERROR: %d:%x\n", err, err);
+		//OutputDebugString(str);
 	}
 
 	return hr;
