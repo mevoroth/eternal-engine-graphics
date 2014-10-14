@@ -1,14 +1,8 @@
 #ifndef _MATERIAL_HPP_
 #define _MATERIAL_HPP_
 
-#include <vector>
-#include <string>
-#include <d3d11.h>
-
 #include "MaterialProperty.hpp"
 #include "Shader.hpp"
-
-using namespace std;
 
 namespace Eternal
 {

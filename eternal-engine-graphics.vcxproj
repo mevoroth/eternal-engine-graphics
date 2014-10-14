@@ -133,6 +133,7 @@
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
       <ForcedIncludeFiles>sal.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2015.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
