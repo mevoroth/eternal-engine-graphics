@@ -19,6 +19,45 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\d3d10\D3D10RenderTarget.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10BlendState.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Camera.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Device.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10GeometryShader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10InputLayout.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Material.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10OrthographicCamera.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10PixelShader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Renderer.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Shader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10VertexShader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Viewport.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11BlendState.hpp" />
     <ClInclude Include="include\d3d11\D3D11Camera.hpp" />
     <ClInclude Include="include\d3d11\D3D11Device.hpp" />
@@ -48,6 +87,25 @@
     <ClInclude Include="include\Graphics\Viewport.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\d3d10\D3D10BlendState.cpp" />
+    <ClCompile Include="src\d3d10\D3D10Device.cpp" />
+    <ClCompile Include="src\d3d10\D3D10GeometryShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10InputLayout.cpp" />
+    <ClCompile Include="src\d3d10\D3D10Material.cpp" />
+    <ClCompile Include="src\d3d10\D3D10PixelShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10Renderer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10RenderTarget.cpp" />
+    <ClCompile Include="src\d3d10\D3D10Shader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10VertexShader.cpp" />
+    <ClCompile Include="src\d3d10\D3D10Viewport.cpp" />
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
     <ClCompile Include="src\d3d11\D3D11Device.cpp" />
     <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp" />
@@ -62,6 +120,7 @@
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
+    <ClCompile Include="src\Graphics\Device.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />

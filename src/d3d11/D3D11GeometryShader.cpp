@@ -12,7 +12,7 @@ D3D11GeometryShader::D3D11GeometryShader(_In_ const string& name, _In_ const str
 
 void D3D11GeometryShader::InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage, _Out_ void** code)
 {
-	HRESULT hr = dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice()->CreateGeometryShader(
+	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateGeometryShader(
 		_program->GetBufferPointer(),
 		_program->GetBufferSize(),
 		classLinkage,

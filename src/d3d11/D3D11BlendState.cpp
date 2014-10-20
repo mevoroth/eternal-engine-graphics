@@ -50,9 +50,9 @@ D3D11BlendState::D3D11BlendState(_In_ const Blend& src, _In_ const Blend& dest, 
 	_blendDesc.RenderTarget[0].BlendOpAlpha = BLENDOPS[blendAlphaOp];
 	_blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	HRESULT hr = dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice()->CreateBlendState(&_blendDesc, &_blendState);
+	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBlendState(&_blendDesc, &_blendState);
 }
 void D3D11BlendState::Apply()
 {
-	dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDeviceContext()->OMSetBlendState(_blendState, _color, 0xffffffff);
+	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext()->OMSetBlendState(_blendState, _color, 0xffffffff);
 }

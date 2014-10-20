@@ -21,5 +21,5 @@ void D3D11Viewport::Apply()
 	viewport.MinDepth = 0.f;
 	viewport.MaxDepth = 1.f;
 	
-	dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDeviceContext()->RSSetViewports(1, &viewport);
+	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext()->RSSetViewports(1, &viewport);
 }

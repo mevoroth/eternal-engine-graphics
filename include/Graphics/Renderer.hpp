@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+#include "GraphicsSettings.hpp"
 #include "Material.hpp"
 #include "VertexBuffer.hpp"
 #include "Camera.hpp"
@@ -10,14 +11,20 @@
 #include "BlendState.hpp"
 #include "Vertex.hpp"
 #include "Viewport.hpp"
+#include "Types/Types.hpp"
+#include "Container/Stack.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace Eternal::Types;
+		using namespace Eternal::Container;
+
 		class Renderer
 		{
 		public:
+			static const int MAX_CONTEXTS;
 			enum RenderMode
 			{
 				HARDWARE,
@@ -41,6 +48,9 @@ namespace Eternal
 			RenderMode _mode;
 			AntiAliasing _aa;
 			RenderTarget* _backBuffer;
+
+			Stack<Matrix4x4> _contexts;
+			Matrix4x4 _matrix;
 		protected:
 			virtual void _SetBackBuffer(_In_ RenderTarget* backBuffer);
 		public:
@@ -83,6 +93,15 @@ namespace Eternal
 				return _aa;
 			}
 			virtual RenderTarget* GetBackBuffer() const;
+			/**
+			 * Push matrix
+			 */
+			void PushContext();
+			/**
+			 * PopMatrix
+			 */
+			void PopContext();
+			void LoadMatrix(const Matrix4x4& mat);
 		};
 	}
 }

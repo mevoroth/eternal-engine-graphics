@@ -16,7 +16,7 @@ D3D11Material::D3D11Material()
 	, _geometry(0)
 	, _pixel(0)
 {
-	dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice()->CreateClassLinkage(&_dynamicParams);
+	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateClassLinkage(&_dynamicParams);
 }
 
 void D3D11Material::SetMaterialDesc(_In_ const MaterialProperty& matProperty)
@@ -32,7 +32,7 @@ void D3D11Material::AttachInputLayout(_In_ D3D11InputLayout* inputLayout)
 
 void D3D11Material::Apply()
 {
-	ID3D11DeviceContext* ctx = dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDeviceContext();
+	ID3D11DeviceContext* ctx = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext();
 	ctx->IASetInputLayout(_inputLayout->GetD3D11InputLayout());
 	ctx->VSSetShader(_vertex, 0, 0);
 	if (_geometry)

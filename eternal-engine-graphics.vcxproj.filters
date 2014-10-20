@@ -7,6 +7,9 @@
     <Filter Include="d3d11">
       <UniqueIdentifier>{8b9c15b3-5db9-4a77-8acc-932bcb87c2d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="d3d10">
+      <UniqueIdentifier>{015fb133-e049-4630-9b11-25bfbccbf082}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\d3d11\D3D11Camera.hpp">
@@ -88,6 +91,45 @@
       <Filter>d3d11</Filter>
     </ClInclude>
     <ClInclude Include="include\GraphicsSettings.hpp" />
+    <ClInclude Include="include\d3d10\D3D10BlendState.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Camera.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Device.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10GeometryShader.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10InputLayout.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Material.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10OrthographicCamera.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10PixelShader.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Renderer.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10RenderTarget.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Shader.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10VertexShader.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Viewport.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -146,6 +188,42 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\Viewport.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Device.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10Renderer.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10Shader.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10GeometryShader.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10PixelShader.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10VertexShader.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10Viewport.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10RenderTarget.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10Material.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10InputLayout.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10Device.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10BlendState.cpp">
+      <Filter>d3d10</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@ D3D11PixelShader::D3D11PixelShader(_In_ const string& name, _In_ const string& s
 
 void D3D11PixelShader::InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage, _Out_ void** code)
 {
-	HRESULT hr = dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice()->CreatePixelShader(
+	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreatePixelShader(
 		_program->GetBufferPointer(),
 		_program->GetBufferSize(),
 		classLinkage,
