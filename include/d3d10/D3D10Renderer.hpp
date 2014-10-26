@@ -4,7 +4,6 @@
 #include <DirectXMath.h>
 #include <d3d10.h>
 #include "Graphics/Renderer.hpp"
-#include "D3D10Camera.hpp"
 
 using namespace DirectX;
 
@@ -24,7 +23,7 @@ namespace Eternal
 
 			ID3D10Device* _device;
 			IDXGISwapChain* _swapChain;
-			D3D10Camera* _camera;
+			Camera* _camera;
 			RenderTarget** _renderTargets;
 			int _renderTargetsCount;
 			Material* _material;

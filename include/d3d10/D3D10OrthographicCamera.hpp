@@ -10,14 +10,14 @@ namespace Eternal
 	namespace Graphics
 	{
 		using namespace Types;
-		class D3D11OrthographicCamera : public D3D10Camera
+		class D3D10OrthographicCamera : public D3D10Camera
 		{
 		private:
 			Matrix4x4 _model;
 			Matrix4x4 _view;
 			Matrix4x4 _proj;
 		public:
-			D3D11OrthographicCamera();
+			D3D10OrthographicCamera();
 			virtual Matrix4x4 GetProjectionMatrix();
 			virtual Matrix4x4 GetViewMatrix();
 			virtual void SetModelMatrix(_In_ const Matrix4x4& model);

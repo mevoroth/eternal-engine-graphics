@@ -85,6 +85,8 @@
     <ClInclude Include="include\Graphics\Vertex.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
+    <ClInclude Include="include\opengl\OGLDevice.hpp" />
+    <ClInclude Include="include\opengl\OGLRenderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d10\D3D10BlendState.cpp" />
@@ -94,6 +96,7 @@
     </ClCompile>
     <ClCompile Include="src\d3d10\D3D10InputLayout.cpp" />
     <ClCompile Include="src\d3d10\D3D10Material.cpp" />
+    <ClCompile Include="src\d3d10\D3D10OrthographicCamera.cpp" />
     <ClCompile Include="src\d3d10\D3D10PixelShader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -126,6 +129,8 @@
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
+    <ClCompile Include="src\opengl\OGLDevice.cpp" />
+    <ClCompile Include="src\opengl\OGLRenderer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>

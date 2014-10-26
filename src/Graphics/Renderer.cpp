@@ -9,6 +9,7 @@ Renderer::Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
 	: _mode(mode)
 	, _aa(aa)
 	, _contexts(MAX_CONTEXTS)
+	, _matrix(NewIdentity())
 {
 	_inst = this;
 }

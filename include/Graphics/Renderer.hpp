@@ -53,6 +53,10 @@ namespace Eternal
 			Matrix4x4 _matrix;
 		protected:
 			virtual void _SetBackBuffer(_In_ RenderTarget* backBuffer);
+			inline Matrix4x4 _GetMatrix() const
+			{
+				return _matrix;
+			}
 		public:
 			Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
 			static Renderer* Get();

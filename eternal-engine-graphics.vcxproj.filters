@@ -10,6 +10,9 @@
     <Filter Include="d3d10">
       <UniqueIdentifier>{015fb133-e049-4630-9b11-25bfbccbf082}</UniqueIdentifier>
     </Filter>
+    <Filter Include="opengl">
+      <UniqueIdentifier>{81f3790e-b4f2-4078-ad1a-977643733d86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\d3d11\D3D11Camera.hpp">
@@ -130,6 +133,12 @@
     <ClInclude Include="include\d3d10\D3D10Viewport.hpp">
       <Filter>d3d10</Filter>
     </ClInclude>
+    <ClInclude Include="include\opengl\OGLDevice.hpp">
+      <Filter>opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\opengl\OGLRenderer.hpp">
+      <Filter>opengl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -223,6 +232,15 @@
       <Filter>d3d10</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d10\D3D10BlendState.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\opengl\OGLDevice.cpp">
+      <Filter>opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\opengl\OGLRenderer.cpp">
+      <Filter>opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10OrthographicCamera.cpp">
       <Filter>d3d10</Filter>
     </ClCompile>
   </ItemGroup>

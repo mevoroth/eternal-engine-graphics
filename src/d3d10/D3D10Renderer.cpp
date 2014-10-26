@@ -236,7 +236,8 @@ void D3D10Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 
 	D3D10_SUBRESOURCE_DATA matrixData;
 	MatrixBuffer matrixStruct;
-	matrixStruct.model = XMMatrixIdentity();//XMLoadFloat4x4();
+	//matrixStruct.model = XMMatrixIdentity();//XMLoadFloat4x4();
+	matrixStruct.model = _GetMatrix();
 	matrixStruct.projection = _camera->GetProjectionMatrix();
 	matrixStruct.view = _camera->GetViewMatrix();
 
