@@ -24,7 +24,7 @@ namespace Eternal
 		class Renderer
 		{
 		public:
-			static const int MAX_CONTEXTS;
+			static const int MAX_CONTEXTS = 50;
 			enum RenderMode
 			{
 				HARDWARE,
@@ -49,7 +49,7 @@ namespace Eternal
 			AntiAliasing _aa;
 			RenderTarget* _backBuffer;
 
-			Stack<Matrix4x4> _contexts;
+			Stack<Matrix4x4, MAX_CONTEXTS> _contexts;
 			Matrix4x4 _matrix;
 		protected:
 			virtual void _SetBackBuffer(_In_ RenderTarget* backBuffer);
@@ -106,6 +106,7 @@ namespace Eternal
 			 */
 			void PopContext();
 			void LoadMatrix(const Matrix4x4& mat);
+			void MulMatrix(const Matrix4x4& mat);
 		};
 	}
 }

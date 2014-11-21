@@ -139,6 +139,9 @@
     <ClInclude Include="include\opengl\OGLRenderer.hpp">
       <Filter>opengl</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10PerspectiveCamera.hpp">
+      <Filter>d3d10</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -241,6 +244,9 @@
       <Filter>opengl</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d10\D3D10OrthographicCamera.cpp">
+      <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10PerspectiveCamera.cpp">
       <Filter>d3d10</Filter>
     </ClCompile>
   </ItemGroup>

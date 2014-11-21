@@ -15,8 +15,8 @@ namespace Eternal
 		public:
 			enum
 			{
-				WIDTH	= 1280,
-				HEIGHT	= 720
+				WIDTH	= 640,//1280,
+				HEIGHT	= 480//720
 			};
 			Device();
 			static Device* Get();

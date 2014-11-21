@@ -281,6 +281,21 @@ void D3D10Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	//_device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
 	//_deviceContext->RSSetState(rasterizerState);
 
+	D3D10_RASTERIZER_DESC rasterizerDesc;
+	rasterizerDesc.AntialiasedLineEnable = FALSE;
+	rasterizerDesc.CullMode = D3D10_CULL_NONE;
+	rasterizerDesc.FillMode = D3D10_FILL_SOLID;
+	rasterizerDesc.DepthBias = 0;
+	rasterizerDesc.DepthBiasClamp = 0.0f;
+	rasterizerDesc.DepthClipEnable = TRUE;
+	rasterizerDesc.FrontCounterClockwise = TRUE;
+	rasterizerDesc.MultisampleEnable = TRUE;
+	rasterizerDesc.ScissorEnable = FALSE;
+	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	ID3D10RasterizerState* rasterizerState;
+	_device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+	_device->RSSetState(rasterizerState);
+
 	//D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	//depthStencilDesc.DepthEnable = FALSE;
 	//depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;

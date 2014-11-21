@@ -3,12 +3,10 @@
 using namespace Eternal::Graphics;
 
 Renderer* Renderer::_inst = 0;
-const int Renderer::MAX_CONTEXTS = 50;
 
 Renderer::Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
 	: _mode(mode)
 	, _aa(aa)
-	, _contexts(MAX_CONTEXTS)
 	, _matrix(NewIdentity())
 {
 	_inst = this;
@@ -43,6 +41,11 @@ void Renderer::PopContext()
 void Renderer::LoadMatrix(const Matrix4x4& mat)
 {
 	_matrix = mat;
+}
+
+void Renderer::MulMatrix(const Matrix4x4& mat)
+{
+	_matrix = mat * _matrix;
 }
 
 Renderer* Renderer::Get()
