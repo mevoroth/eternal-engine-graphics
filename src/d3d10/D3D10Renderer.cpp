@@ -237,7 +237,7 @@ void D3D10Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	D3D10_SUBRESOURCE_DATA matrixData;
 	MatrixBuffer matrixStruct;
 	//matrixStruct.model = XMMatrixIdentity();//XMLoadFloat4x4();
-	matrixStruct.model = _GetMatrix();
+	matrixStruct.model = XMMatrixTranspose(_GetMatrix());
 	matrixStruct.projection = _camera->GetProjectionMatrix();
 	matrixStruct.view = _camera->GetViewMatrix();
 
@@ -249,21 +249,21 @@ void D3D10Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 
 	/*FOR TESTING PURPOSE*/
 
-	//if (verticesCount == 4)
-	//{
-	//	// DEBUG
-	//	D3D11VertexPosNormTex* transformeds = (D3D11VertexPosNormTex*)vertices;
-	//	XMVECTOR tverts[4];
-	//	for (int i = 0; i < 4; ++i)
-	//	{
-	//		tverts[i] = XMVector4Transform(transformeds[i].Pos, matrixStruct.model);
-	//		tverts[i] = XMVector4Transform(tverts[i], matrixStruct.view);
-	//		tverts[i] = XMVector4Transform(tverts[i], matrixStruct.projection);
-	//		char str[256];
-	//		sprintf_s(str, "V%d : { %f, %f, %f }\n", i, tverts[i].m128_f32[0], tverts[i].m128_f32[1], tverts[i].m128_f32[2]);
-	//		OutputDebugString(str);
-	//	}
-	//}
+	if (verticesCount == 4)
+	{
+		// DEBUG
+		//D3D11VertexPosNormTex* transformeds = (D3D11VertexPosNormTex*)vertices;
+		XMVECTOR tverts[4];
+		for (int i = 0; i < 4; ++i)
+		{
+			tverts[i] = XMVector4Transform(vertices[i].Pos, matrixStruct.model);
+			tverts[i] = XMVector4Transform(tverts[i], matrixStruct.view);
+			tverts[i] = XMVector4Transform(tverts[i], matrixStruct.projection);
+			char str[256];
+			sprintf_s(str, "V%d : { %f, %f, %f }\n", i, tverts[i].m128_f32[0], tverts[i].m128_f32[1], tverts[i].m128_f32[2]);
+			OutputDebugString(str);
+		}
+	}
 
 	//D3D11_RASTERIZER_DESC rasterizerDesc;
 	//rasterizerDesc.AntialiasedLineEnable = FALSE;

@@ -35,6 +35,11 @@ void D3D10Shader::_CompileFile(_In_ const string& src, _In_ const string& entry,
 
 	if (hr != S_OK)
 	{
+		char buffer[MAX_PATH];
+		GetCurrentDirectory(MAX_PATH, buffer);
+		//GetModuleFileName(NULL, buffer, MAX_PATH);
+		//string::size_type pos = string(buffer).find_last_of("\\/");
+		string str = string(buffer);// .substr(0, pos);
 		_program = 0;
 	}
 }
