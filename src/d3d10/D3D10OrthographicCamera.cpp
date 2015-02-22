@@ -7,7 +7,7 @@ using namespace Eternal::Graphics;
 D3D10OrthographicCamera::D3D10OrthographicCamera()
 	: _model(NewIdentity())
 	, _view(XMMatrixLookToLH(
-		XMVectorSet(0.f, 0.f, 0.f, 0.f),
+		XMVectorSet(0.f, 0.f, 0.f, 1.f),
 		XMVectorSet(0.f, 0.f, 1.f, 0.f),
 		XMVectorSet(0.f, 1.f, 0.f, 0.f)
 	))
