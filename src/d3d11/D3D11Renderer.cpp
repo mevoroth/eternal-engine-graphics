@@ -8,17 +8,18 @@
 #include "d3d11/D3D11Device.hpp"
 #include "d3d11/D3D11RenderTarget.hpp"
 #include "d3d11/D3D11Camera.hpp"
+#include "d3d11/D3D11Material.hpp"
+#include "d3d11/D3D11VertexShader.hpp"
+#include "d3d11/D3D11PixelShader.hpp"
 
 using namespace Eternal::Graphics;
 
 D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
 	: Renderer(mode, aa)
-	, _device(0)
-	, _deviceContext(0)
-	, _swapChain(0)
-	, _camera(0)
-	, _renderTargets(0)
-	, _renderTargetsCount(0)
+	, _Device(0)
+	, _DeviceContext(0)
+	, _SwapChain(0)
+	, _Camera(0)
 {
 	assert(mode != SOFTWARE); // NOT IMPLEMENTED YET
 
@@ -37,9 +38,16 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	}
 
 	// Get Back Buffer
-	ID3D11Texture2D* backBufferTex = 0;
-	_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferTex);
-	_SetBackBuffer(new D3D11RenderTarget(backBufferTex));
+	ID3D11Texture2D* BackBufferTex = 0;
+	_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBufferTex);
+	_SetBackBuffer(new D3D11RenderTarget(BackBufferTex));
+	_DeferredMaterial = new D3D11Material();
+	D3D11InputLayout InputLayout((D3D11InputLayout::VertexDataType)(D3D11InputLayout::POSITION_T /*| D3D11InputLayout::NORMAL_T*/ | D3D11InputLayout::TEXCOORD_T));
+	D3D11VertexShader VS("default", "default.vs.hlsl", InputLayout);
+	D3D11PixelShader PS("default", "default.ps.hlsl");
+	_DeferredMaterial->AttachInputLayout(&InputLayout);
+	_DeferredMaterial->AttachVertexShader(&VS);
+	_DeferredMaterial->AttachPixelShader(&PS);
 }
 
 HRESULT D3D11Renderer::_CreateDevice()
@@ -63,9 +71,9 @@ HRESULT D3D11Renderer::_CreateDevice()
 		&featureLevel,
 		1,
 		D3D11_SDK_VERSION,
-		&_device,
+		&_Device,
 		&out,
-		&_deviceContext
+		&_DeviceContext
 	);
 
 	if (out == 0)
@@ -86,56 +94,56 @@ HRESULT D3D11Renderer::_CreateDevice()
 
 HRESULT D3D11Renderer::_CreateSwapChain()
 {
-	IDXGIDevice* dxgiDevice;
-	HRESULT hr = _device->QueryInterface<IDXGIDevice>(&dxgiDevice);
+	IDXGIDevice* DxgiDevice;
+	HRESULT hr = _Device->QueryInterface<IDXGIDevice>(&DxgiDevice);
 
-	IDXGIAdapter* dxgiAdapter;
-	hr = dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
+	IDXGIAdapter* DxgiAdapter;
+	hr = DxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&DxgiAdapter);
 
-	IDXGIFactory* dxgiFactory;
-	hr = dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
-
-
-	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	swapChainDesc.BufferDesc.Width = 0;
-	swapChainDesc.BufferDesc.Height = 0;
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60; // 60Hz
-	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;
-	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
+	IDXGIFactory* DxgiFactory;
+	hr = DxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&DxgiFactory);
 
 
-	UINT quality = 0;
+	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
+	SwapChainDesc.BufferDesc.Width = 0;
+	SwapChainDesc.BufferDesc.Height = 0;
+	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60; // 60Hz
+	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;
+	SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
 
-	hr = _device->CheckMultisampleQualityLevels(
+
+	UINT Quality = 0;
+
+	hr = _Device->CheckMultisampleQualityLevels(
 		DXGI_FORMAT_R8G8B8A8_UNORM,
 		(UINT)((GetAntiAliasing() & 0xffff0000) >> 16),
-		&quality
+		&Quality
 	);
 
-	if ((GetAntiAliasing() & 0xffff) < quality)
+	if ((GetAntiAliasing() & 0xffff) < Quality)
 	{
-		swapChainDesc.SampleDesc.Count = ((GetAntiAliasing() & 0xffff0000) >> 16);
-		swapChainDesc.SampleDesc.Quality = (GetAntiAliasing() & 0xffff);
+		SwapChainDesc.SampleDesc.Count = ((GetAntiAliasing() & 0xffff0000) >> 16);
+		SwapChainDesc.SampleDesc.Quality = (GetAntiAliasing() & 0xffff);
 	}
 	else
 	{
-		swapChainDesc.SampleDesc.Count = 1;
-		swapChainDesc.SampleDesc.Quality = 0;
+		SwapChainDesc.SampleDesc.Count = 1;
+		SwapChainDesc.SampleDesc.Quality = 0;
 	}
 
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount = 1;
-	swapChainDesc.OutputWindow = static_cast<D3D11Device*>(Device::Get())->GetWindow();
-	swapChainDesc.Windowed = TRUE;
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	SwapChainDesc.BufferCount = 1;
+	SwapChainDesc.OutputWindow = static_cast<D3D11Device*>(Device::Get())->GetWindow();
+	SwapChainDesc.Windowed = TRUE;
+	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-	hr = dxgiFactory->CreateSwapChain(
-		_device,
-		&swapChainDesc,
-		&_swapChain
+	hr = DxgiFactory->CreateSwapChain(
+		_Device,
+		&SwapChainDesc,
+		&_SwapChain
 	);
 
 	if (hr != S_OK)
@@ -150,54 +158,64 @@ HRESULT D3D11Renderer::_CreateSwapChain()
 	return hr;
 }
 
+void D3D11Renderer::_Settings()
+{
+	// Always draw triangles
+	_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
 ID3D11Device* D3D11Renderer::GetDevice()
 {
-	assert(_device);
-	return _device;
+	assert(_Device);
+	return _Device;
 }
 
 ID3D11DeviceContext* D3D11Renderer::GetDeviceContext()
 {
-	assert(_deviceContext);
-	return _deviceContext;
+	assert(_DeviceContext);
+	return _DeviceContext;
 }
 
 void D3D11Renderer::Flush()
 {
-	_swapChain->Present(0, 0);
+	_SwapChain->Present(0, 0);
 }
 
 void D3D11Renderer::AttachCamera(_In_ Camera* camera)
 {
-	_camera = camera;
+	_Camera = camera;
 }
 
-void D3D11Renderer::AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count)
+void D3D11Renderer::AttachRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int Count)
 {
-	assert(renderTargets);
-	assert(count > 0);
-	_renderTargets = renderTargets;
-	_renderTargetsCount = count;
+	assert(RenderTargets);
+	assert(Count > 0);
+	_RenderTargets = RenderTargets;
+	_RenderTargetsCount = Count;
 }
 
-void D3D11Renderer::AttachMaterial(_In_ Material* material)
+void D3D11Renderer::AttachMaterial(_In_ Material* Material)
 {
-	_material = material;
-}
-
-void D3D11Renderer::ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count)
-{
-	assert(renderTargets);
-	assert(count > 0);
-	for (int i = 0; i < count; ++i)
+	if (_Material != Material)
 	{
-		renderTargets[i]->Clear();
+		dynamic_cast<D3D11Material*>(_Material)->Unbind();
+		_Material = Material;
+	}
+}
+
+void D3D11Renderer::ClearRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int Count)
+{
+	assert(RenderTargets);
+	assert(Count > 0);
+	for (int i = 0; i < Count; ++i)
+	{
+		RenderTargets[i]->Clear();
 	}
 }
 void D3D11Renderer::SetBlendMode(_In_ BlendState* blendMode)
 {
-	_blendMode = blendMode;
-	_blendMode->Apply();
+	_BlendMode = blendMode;
+	_BlendMode->Apply();
 }
 
 void D3D11Renderer::SetVBO(_In_ VertexBuffer* vbo)
@@ -208,7 +226,7 @@ void D3D11Renderer::SetVBO(_In_ VertexBuffer* vbo)
 void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesCount, _In_ size_t vertexSize,
 	_In_ const uint16_t indices[], _In_ int indicesCount)
 {
-	_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	UINT stride = vertexSize;
 	UINT offset = 0;
 
@@ -227,7 +245,7 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	verticesData.SysMemPitch = 0;
 	verticesData.SysMemSlicePitch = 0;
 
-	HRESULT hr = _device->CreateBuffer(&verticesBufferDesc, &verticesData, &vertexBuffer);
+	HRESULT hr = _Device->CreateBuffer(&verticesBufferDesc, &verticesData, &vertexBuffer);
 	assert(hr == S_OK);
 
 	ID3D11Buffer* indicesBuffer = 0;
@@ -245,7 +263,7 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	indicesData.SysMemPitch = 0;
 	indicesData.SysMemSlicePitch = 0;
 
-	hr = _device->CreateBuffer(&indicesBufferDesc, &indicesData, &indicesBuffer);
+	hr = _Device->CreateBuffer(&indicesBufferDesc, &indicesData, &indicesBuffer);
 	assert(hr == S_OK);
 
 	ID3D11Buffer* matrixBuffer = 0;
@@ -261,13 +279,13 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	D3D11_SUBRESOURCE_DATA matrixData;
 	MatrixBuffer matrixStruct;
 	matrixStruct.model = XMMatrixIdentity();//XMLoadFloat4x4();
-	matrixStruct.projection = _camera->GetProjectionMatrix();
-	matrixStruct.view = _camera->GetViewMatrix();
+	matrixStruct.projection = _Camera->GetProjectionMatrix();
+	matrixStruct.view = _Camera->GetViewMatrix();
 
 	matrixData.pSysMem = &matrixStruct;
 	matrixData.SysMemPitch = 0;
 	matrixData.SysMemSlicePitch = 0;
-	hr = _device->CreateBuffer(&matrixBufferDesc, &matrixData, &matrixBuffer);
+	hr = _Device->CreateBuffer(&matrixBufferDesc, &matrixData, &matrixBuffer);
 	assert(hr == S_OK);
 
 	/*FOR TESTING PURPOSE*/
@@ -326,19 +344,19 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	//_deviceContext->OMSetDepthStencilState(depthStencilState, 1);
 	/*END FOR TESTING PURPOSE*/
 
-	ID3D11RenderTargetView** renderTargetsBuffer = new ID3D11RenderTargetView*[_renderTargetsCount];
-	for (int i = 0; i < _renderTargetsCount; ++i)
+	ID3D11RenderTargetView** renderTargetsBuffer = new ID3D11RenderTargetView*[_RenderTargetsCount];
+	for (int i = 0; i < _RenderTargetsCount; ++i)
 	{
-		renderTargetsBuffer[i] = ((D3D11RenderTarget*)_renderTargets[i])->GetD3D11RenderTarget();
+		renderTargetsBuffer[i] = ((D3D11RenderTarget*)_RenderTargets[i])->GetD3D11RenderTarget();
 	}
-	_deviceContext->OMSetRenderTargets(_renderTargetsCount, renderTargetsBuffer, 0);
+	_DeviceContext->OMSetRenderTargets(_RenderTargetsCount, renderTargetsBuffer, 0);
 
-	_deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	_deviceContext->IASetIndexBuffer(indicesBuffer, DXGI_FORMAT_R16_UINT, 0);
+	_DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	_DeviceContext->IASetIndexBuffer(indicesBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-	_deviceContext->VSSetConstantBuffers(0, 1, &matrixBuffer);
+	_DeviceContext->VSSetConstantBuffers(0, 1, &matrixBuffer);
 
-	_deviceContext->DrawIndexed(indicesCount, 0, 0);
+	_DeviceContext->DrawIndexed(indicesCount, 0, 0);
 	//_deviceContext->Draw(verticesCount, 0);
 
 	vertexBuffer->Release();
@@ -351,4 +369,127 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 	matrixBuffer = 0;
 
 	delete[] renderTargetsBuffer;
+}
+
+void D3D11Renderer::DrawDeferred(_In_ const Vertex Vertices[], _In_ int VerticesCount, _In_ size_t VertexSize,
+	_In_ const uint16_t Indices[], _In_ int IndicesCount)
+{
+	UINT Stride = VertexSize;
+	UINT Offset = 0;
+
+	ID3D11Buffer* VertexBuffer = 0;
+
+	D3D11_BUFFER_DESC VerticesBufferDesc;
+	VerticesBufferDesc.ByteWidth = VertexSize * VerticesCount;
+	VerticesBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	VerticesBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	VerticesBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	VerticesBufferDesc.MiscFlags = 0;
+	VerticesBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA VerticesData;
+	VerticesData.pSysMem = Vertices;
+	VerticesData.SysMemPitch = 0;
+	VerticesData.SysMemSlicePitch = 0;
+
+	HRESULT hr = _Device->CreateBuffer(&VerticesBufferDesc, &VerticesData, &VertexBuffer);
+	assert(hr == S_OK);
+
+	ID3D11Buffer* IndicesBuffer = 0;
+
+	D3D11_BUFFER_DESC IndicesBufferDesc;
+	IndicesBufferDesc.ByteWidth = sizeof(uint16_t)* IndicesCount;
+	IndicesBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	IndicesBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	IndicesBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	IndicesBufferDesc.MiscFlags = 0;
+	IndicesBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA IndicesData;
+	IndicesData.pSysMem = Indices;
+	IndicesData.SysMemPitch = 0;
+	IndicesData.SysMemSlicePitch = 0;
+
+	hr = _Device->CreateBuffer(&IndicesBufferDesc, &IndicesData, &IndicesBuffer);
+	assert(hr == S_OK);
+
+	ID3D11Buffer* MatrixBuffer = 0;
+
+	D3D11_BUFFER_DESC MatrixBufferDesc;
+	MatrixBufferDesc.ByteWidth = sizeof(MatrixBuffer);
+	MatrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	MatrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	MatrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	MatrixBufferDesc.MiscFlags = 0;
+	MatrixBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA MatrixData;
+	D3D11Renderer::MatrixBuffer MatrixStruct;
+	MatrixStruct.model = _GetMatrix();
+	MatrixStruct.projection = _Camera->GetProjectionMatrix();
+	MatrixStruct.view = _Camera->GetViewMatrix();
+
+	MatrixData.pSysMem = &MatrixStruct;
+	MatrixData.SysMemPitch = 0;
+	MatrixData.SysMemSlicePitch = 0;
+	hr = _Device->CreateBuffer(&MatrixBufferDesc, &MatrixData, &MatrixBuffer);
+	assert(hr == S_OK);
+
+	_DeviceContext->IASetVertexBuffers(0, 1, &VertexBuffer, &Stride, &Offset);
+	_DeviceContext->IASetIndexBuffer(IndicesBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+	_DeviceContext->VSSetConstantBuffers(0, 1, &MatrixBuffer);
+
+	_Material->Apply();
+
+	_DeviceContext->DrawIndexed(IndicesCount, 0, 0);
+	//_deviceContext->Draw(verticesCount, 0);
+
+	VertexBuffer->Release();
+	VertexBuffer = 0;
+
+	IndicesBuffer->Release();
+	IndicesBuffer = 0;
+
+	MatrixBuffer->Release();
+	MatrixBuffer = 0;
+}
+
+void D3D11Renderer::BeginDeferred()
+{
+	// Rendertarget0 : col/opacity
+	// Rendertarget1 : metallic/specular/roughness
+	// Rendertarget2 : emissive
+	// Rendertarget3 : normal
+	// Rendertarget4 : AO
+
+	assert(_RenderTargets);
+	assert(_RenderTargetsCount >= 5);
+
+	ID3D11RenderTargetView** RenderTargetsBuffer = new ID3D11RenderTargetView*[_RenderTargetsCount];
+	for (int i = 0; i < _RenderTargetsCount; ++i)
+	{
+		RenderTargetsBuffer[i] = ((D3D11RenderTarget*)_RenderTargets[i])->GetD3D11RenderTarget();
+	}
+	_DeviceContext->OMSetRenderTargets(_RenderTargetsCount, RenderTargetsBuffer, 0);
+}
+
+void D3D11Renderer::EndDeferred()
+{
+	Vertex Screen[4];
+	Screen[0].Pos = NewVector4(0.f, 0.f, 1.f, 1.f);
+	Screen[0].Tex = NewVector2(0.f, 0.f);
+	Screen[1].Pos = NewVector4(1.f, 0.f, 1.f, 1.f);
+	Screen[1].Tex = NewVector2(1.f, 0.f);
+	Screen[2].Pos = NewVector4(1.f, 1.f, 1.f, 1.f);
+	Screen[2].Tex = NewVector2(1.f, 1.f);
+	Screen[3].Pos = NewVector4(0.f, 1.f, 1.f, 1.f);
+	Screen[3].Tex = NewVector2(0.f, 1.f);
+	
+	uint16_t Indices[6] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+	AttachMaterial(_DeferredMaterial);
+	DrawIndexed(Screen, 4, sizeof(Vertex), Indices, 6);
 }

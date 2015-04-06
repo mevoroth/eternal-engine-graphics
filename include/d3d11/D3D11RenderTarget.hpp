@@ -11,10 +11,10 @@ namespace Eternal
 		class D3D11RenderTarget : public RenderTarget
 		{
 		private:
-			ID3D11RenderTargetView* _renderTarget;
-			ID3D11Texture2D* _tex2D;
+			ID3D11RenderTargetView* _RenderTarget;
+			ID3D11Texture2D* _Tex2D;
 		public:
-			D3D11RenderTarget(_In_ int width, _In_ int height);
+			D3D11RenderTarget(_In_ int Width, _In_ int Height);
 			D3D11RenderTarget(_In_ ID3D11Texture2D* tex);
 			~D3D11RenderTarget();
 			ID3D11RenderTargetView* GetD3D11RenderTarget();

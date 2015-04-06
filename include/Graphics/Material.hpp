@@ -14,7 +14,7 @@ namespace Eternal
 			/**
 			 * Set Material Params
 			 */
-			virtual void SetMaterialDesc(_In_ const MaterialProperty& matProperty) = 0;
+			virtual void SetMaterialDesc(_In_ const MaterialProperty& MatProperty) = 0;
 			/**
 			 * Apply Material Params
 			 */
@@ -22,15 +22,16 @@ namespace Eternal
 			/**
 			 * Set vertex shader
 			 */
-			virtual void AttachVertexShader(_Inout_ Shader* shader) = 0;
+			virtual void AttachVertexShader(_Inout_ Shader* Shader) = 0;
 			/**
 			 * Set geometry shader
 			 */
-			virtual void AttachGeometryShader(_Inout_ Shader* shader) = 0;
+			virtual void AttachGeometryShader(_Inout_ Shader* Shader) = 0;
 			/**
 			 * Set pixel shader
 			 */
-			virtual void AttachPixelShader(_Inout_ Shader* shader) = 0;
+			virtual void AttachPixelShader(_Inout_ Shader* Shader) = 0;
+			virtual MaterialInstance CreateMaterialInstance()
 		};
 	}
 }

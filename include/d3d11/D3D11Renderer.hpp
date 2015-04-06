@@ -21,18 +21,25 @@ namespace Eternal
 				XMMATRIX projection;
 			};
 
-			ID3D11Device* _device;
-			ID3D11DeviceContext* _deviceContext;
-			IDXGISwapChain* _swapChain;
-			Camera* _camera;
-			RenderTarget** _renderTargets;
-			int _renderTargetsCount;
-			Material* _material;
-			BlendState* _blendMode;
+			ID3D11Device* _Device;
+			ID3D11DeviceContext* _DeviceContext;
+			IDXGISwapChain* _SwapChain;
+			Camera* _Camera;
+			RenderTarget** _RenderTargets = nullptr;
+			int _RenderTargetsCount = 0;
+			Material* _Material = nullptr;
+			D3D11Material* _DeferredMaterial = nullptr;
+			BlendState* _BlendMode = nullptr;
 			VertexBuffer* _vertexBuffer;
 
 			HRESULT _CreateDevice();
 			HRESULT _CreateSwapChain();
+			void _Settings();
+		protected:
+			virtual inline Matrix4x4 _GetMatrix() const override
+			{
+				return XMMatrixTranspose(Renderer::_GetMatrix());
+			}
 		public:
 			D3D11Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
 			ID3D11Device* GetDevice();
@@ -48,6 +55,10 @@ namespace Eternal
 			virtual void ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count);
 			virtual void SetBlendMode(_In_ BlendState* blendMode);
 			virtual void Flush();
+			virtual void BeginDeferred();
+			virtual void DrawDeferred(_In_ const Vertex vertices[], _In_ int verticesCount, _In_ size_t vertexSize,
+				_In_ const uint16_t indices[], _In_ int indicesCount);
+			virtual void EndDeferred();
 		};
 	}
 }

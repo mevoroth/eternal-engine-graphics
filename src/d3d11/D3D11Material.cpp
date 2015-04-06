@@ -11,61 +11,84 @@ using namespace std;
 using namespace Eternal::Graphics;
 
 D3D11Material::D3D11Material()
-	: _dynamicParams(0)
-	, _vertex(0)
-	, _geometry(0)
-	, _pixel(0)
+	: _DynamicParams(0)
+	, _Vertex(0)
+	, _Geometry(0)
+	, _Pixel(0)
 {
-	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateClassLinkage(&_dynamicParams);
+	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateClassLinkage(&_DynamicParams);
 }
 
-void D3D11Material::SetMaterialDesc(_In_ const MaterialProperty& matProperty)
+void D3D11Material::SetMaterialDesc(_In_ const MaterialProperty& MatProperty)
 {
-	assert(matProperty.Name.size() > 0);
-	_matInput.push_back(matProperty);
+	assert(MatProperty.Name.size() > 0);
+	_MatInput.push_back(MatProperty);
 }
 
-void D3D11Material::AttachInputLayout(_In_ D3D11InputLayout* inputLayout)
+void D3D11Material::AttachInputLayout(_In_ D3D11InputLayout* InputLayout)
 {
-	_inputLayout = inputLayout;
+	_InputLayout = InputLayout;
 }
 
 void D3D11Material::Apply()
 {
-	ID3D11DeviceContext* ctx = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext();
-	ctx->IASetInputLayout(_inputLayout->GetD3D11InputLayout());
-	ctx->VSSetShader(_vertex, 0, 0);
-	if (_geometry)
+	if (_Applied)
 	{
-		ctx->GSSetShader(_geometry, 0, 0);
+		return;
 	}
-	ctx->PSSetShader(_pixel, 0, 0);
+
+	ID3D11DeviceContext* Ctx = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext();
+	Ctx->IASetInputLayout(_InputLayout->GetD3D11InputLayout());
+	Ctx->VSSetShader(_Vertex, 0, 0);
+	if (_Geometry)
+	{
+		Ctx->GSSetShader(_Geometry, 0, 0);
+	}
+	Ctx->PSSetShader(_Pixel, 0, 0);
+	
+	D3D11_BUFFER_DESC BufferDesc;
+	unsigned int Size = 0;
+	for (int InputIndice = 0; InputIndice < _MatInput.size(); ++InputIndice)
+	{
+		Size += MaterialProperty::GetSize(_MatInput[InputIndice].Type);
+	}
+	BufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	BufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	BufferDesc.MiscFlags = 0;
+	BufferDesc.StructureByteStride = 0;
+
+	_Applied = true;
 }
 
-void D3D11Material::AttachVertexShader(_Inout_ Shader* shader)
+void D3D11Material::AttachVertexShader(_Inout_ Shader* Shader)
 {
-	if (_vertex)
+	if (_Vertex)
 	{
-		_vertex->Release();
-		_vertex = 0;
+		_Vertex->Release();
+		_Vertex = 0;
 	}
-	((D3D11Shader*)shader)->InstantiateShader(_dynamicParams, (void**)&_vertex);
+	((D3D11Shader*)Shader)->InstantiateShader(_DynamicParams, (void**)&_Vertex);
 }
-void D3D11Material::AttachGeometryShader(_Inout_ Shader* shader)
+void D3D11Material::AttachGeometryShader(_Inout_ Shader* Shader)
 {
-	if (_geometry)
+	if (_Geometry)
 	{
-		_geometry->Release();
-		_geometry = 0;
+		_Geometry->Release();
+		_Geometry = 0;
 	}
-	((D3D11Shader*)shader)->InstantiateShader(_dynamicParams, (void**)&_geometry);
+	((D3D11Shader*)Shader)->InstantiateShader(_DynamicParams, (void**)&_Geometry);
 }
-void D3D11Material::AttachPixelShader(_Inout_ Shader* shader)
+void D3D11Material::AttachPixelShader(_Inout_ Shader* Shader)
 {
-	if (_pixel)
+	if (_Pixel)
 	{
-		_pixel->Release();
-		_pixel = 0;
+		_Pixel->Release();
+		_Pixel = 0;
 	}
-	((D3D11Shader*)shader)->InstantiateShader(_dynamicParams, (void**)&_pixel);
+	((D3D11Shader*)Shader)->InstantiateShader(_DynamicParams, (void**)&_Pixel);
+}
+void D3D11Material::Unbind()
+{
+	_Applied = false;
 }

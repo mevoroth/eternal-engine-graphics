@@ -142,6 +142,12 @@
     <ClInclude Include="include\d3d10\D3D10PerspectiveCamera.hpp">
       <Filter>d3d10</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\MaterialInstance.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11MaterialInstance.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -248,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="src\d3d10\D3D10PerspectiveCamera.cpp">
       <Filter>d3d10</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11MaterialInstance.cpp">
+      <Filter>d3d11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

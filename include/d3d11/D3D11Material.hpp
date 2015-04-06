@@ -12,23 +12,22 @@ namespace Eternal
 		{
 		public:
 			D3D11Material();
-			void AttachVertexShader(_Inout_ Shader* shader);
-			void AttachGeometryShader(_Inout_ Shader* shader);
-			void AttachPixelShader(_Inout_ Shader* shader);
-			void SetMaterialDesc(_In_ const MaterialProperty& matProperty);
-			void AttachInputLayout(_In_ D3D11InputLayout* inputLayout);
+			void AttachVertexShader(_Inout_ Shader* Shader);
+			void AttachGeometryShader(_Inout_ Shader* Shader);
+			void AttachPixelShader(_Inout_ Shader* Shader);
+			void SetMaterialDesc(_In_ const MaterialProperty& MatProperty);
+			void AttachInputLayout(_In_ D3D11InputLayout* InputLayout);
 			void Apply();
+			void Unbind();
 
 		private:
-			vector<MaterialProperty> _matInput;
-			//Shader* _vertex;
-			//Shader* _geometry;
-			//Shader* _pixel;
-			D3D11InputLayout* _inputLayout;
-			ID3D11ClassLinkage* _dynamicParams;
-			ID3D11VertexShader* _vertex;
-			ID3D11GeometryShader* _geometry;
-			ID3D11PixelShader* _pixel;
+			vector<MaterialProperty> _MatInput;
+			D3D11InputLayout* _InputLayout = 0;
+			ID3D11ClassLinkage* _DynamicParams = 0;
+			ID3D11VertexShader* _Vertex = 0;
+			ID3D11GeometryShader* _Geometry = 0;
+			ID3D11PixelShader* _Pixel = 0;
+			bool _Applied = false;
 			//ID3DBlob* _vertexSrc;
 			//ID3DBlob* _geometrySrc;
 			//ID3DBlob* _PixelSrc;

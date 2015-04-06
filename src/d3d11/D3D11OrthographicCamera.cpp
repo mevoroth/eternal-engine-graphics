@@ -5,15 +5,15 @@
 using namespace Eternal::Graphics;
 
 D3D11OrthographicCamera::D3D11OrthographicCamera()
-	: _model(XMMatrixIdentity())
-	, _view(XMMatrixLookAtLH(
+	: _model(NewIdentity())
+	, _view(XMMatrixLookToLH(
 		XMVectorSet(0.f, 0.f, 0.f, 1.f),
-		XMVectorSet(0.f, 1.f, 0.f, 1.f),
-		XMVectorSet(0.f, 0.f, 1.f, 1.f)
+		XMVectorSet(0.f, 0.f, 1.f, 0.f),
+		XMVectorSet(0.f, 1.f, 0.f, 0.f)
 	))
 	, _proj(XMMatrixOrthographicOffCenterLH(
-		-Device::WIDTH / 2, Device::WIDTH / 2,
-		Device::HEIGHT / 2, -Device::HEIGHT / 2,
+		0.f, 1.f,
+		0.f, 1.f,
 		0.f, 1000.f
 	))
 {

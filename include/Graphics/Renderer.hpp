@@ -53,7 +53,7 @@ namespace Eternal
 			Matrix4x4 _matrix;
 		protected:
 			virtual void _SetBackBuffer(_In_ RenderTarget* backBuffer);
-			inline Matrix4x4 _GetMatrix() const
+			virtual inline Matrix4x4 _GetMatrix() const
 			{
 				return _matrix;
 			}

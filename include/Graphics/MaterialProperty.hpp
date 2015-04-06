@@ -14,15 +14,17 @@ namespace Eternal
 		public:
 			enum ParamType
 			{
-				TEXTURE_T,
-				FLOAT_T,
-				VEC2_T,
-				VEC3_T,
-				VEC4_T,
-				COLOR_T
+				TEXTURE_T = 0,
+				FLOAT_T = 1,
+				VEC2_T = 2,
+				VEC3_T = 3,
+				VEC4_T = 4,
+				COLOR_T = 5,
+				PARAMTYPE_COUNT = 6
 			};
+			static unsigned int GetSize(const ParamType& Type);
 		public:
-			MaterialProperty(const string& name, const ParamType& type);
+			MaterialProperty(const string& Name, const ParamType& Type);
 			string Name;
 			ParamType Type;
 		};
