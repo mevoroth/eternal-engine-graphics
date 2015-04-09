@@ -64,3 +64,8 @@ ID3D11RenderTargetView* D3D11RenderTarget::GetD3D11RenderTarget()
 	return _RenderTarget;
 }
 
+ID3D11SamplerState* Graphics::D3D11RenderTarget::CreateSamplerState()
+{
+
+}
+

@@ -1,6 +1,8 @@
 #ifndef _MATERIAL_HPP_
 #define _MATERIAL_HPP_
 
+#include "GraphicsSettings.hpp"
+#include "Types/Types.hpp"
 #include "MaterialProperty.hpp"
 #include "Shader.hpp"
 
@@ -8,6 +10,10 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace Eternal::Types;
+
+		class Texture;
+
 		class Material
 		{
 		public:
@@ -31,7 +37,12 @@ namespace Eternal
 			 * Set pixel shader
 			 */
 			virtual void AttachPixelShader(_Inout_ Shader* Shader) = 0;
-			virtual MaterialInstance CreateMaterialInstance()
+			virtual void SetFloat(_In_ const string& Name, _In_ float Value) = 0;
+			virtual void SetVector2(_In_ const string& Name, _In_ const Vector2& Value) = 0;
+			virtual void SetVector3(_In_ const string& Name, _In_ const Vector3& Value) = 0;
+			virtual void SetVector4(_In_ const string& Name, _In_ const Vector4& Value) = 0;
+			virtual void SetTexture(_In_ const string& Name, _In_ const Texture& Value) = 0;
+			virtual void SetColor(_In_ const string& Name, _In_ const Vector4& Value) = 0;
 		};
 	}
 }

@@ -22,7 +22,14 @@ D3D11Material::D3D11Material()
 void D3D11Material::SetMaterialDesc(_In_ const MaterialProperty& MatProperty)
 {
 	assert(MatProperty.Name.size() > 0);
-	_MatInput.push_back(MatProperty);
+	if (MatProperty.Type == MaterialProperty::TEXTURE_T)
+	{
+		_TexturesInput.push_back(MatProperty.Name);
+	}
+	else
+	{
+		_MatInput.push_back(MatProperty);
+	}
 }
 
 void D3D11Material::AttachInputLayout(_In_ D3D11InputLayout* InputLayout)
@@ -47,8 +54,8 @@ void D3D11Material::Apply()
 	Ctx->PSSetShader(_Pixel, 0, 0);
 	
 	D3D11_BUFFER_DESC BufferDesc;
-	unsigned int Size = 0;
-	for (int InputIndice = 0; InputIndice < _MatInput.size(); ++InputIndice)
+	uint32_t Size = 0;
+	for (uint32_t InputIndice = 0; InputIndice < _MatInput.size(); ++InputIndice)
 	{
 		Size += MaterialProperty::GetSize(_MatInput[InputIndice].Type);
 	}
@@ -91,4 +98,34 @@ void D3D11Material::AttachPixelShader(_Inout_ Shader* Shader)
 void D3D11Material::Unbind()
 {
 	_Applied = false;
+}
+
+void Eternal::Graphics::D3D11Material::SetFloat(_In_ const string& Name, _In_ float Value)
+{
+	throw std::logic_error("The method or operation is not implemented.");
+}
+
+void Eternal::Graphics::D3D11Material::SetVector2(_In_ const string& Name, _In_ const Vector2& Value)
+{
+	throw std::logic_error("The method or operation is not implemented.");
+}
+
+void Eternal::Graphics::D3D11Material::SetVector3(_In_ const string& Name, _In_ const Vector3& Value)
+{
+	throw std::logic_error("The method or operation is not implemented.");
+}
+
+void Eternal::Graphics::D3D11Material::SetVector4(_In_ const string& Name, _In_ const Vector4& Value)
+{
+	throw std::logic_error("The method or operation is not implemented.");
+}
+
+void Eternal::Graphics::D3D11Material::SetTexture(_In_ const string& Name, _In_ const Texture& Value)
+{
+	throw std::logic_error("The method or operation is not implemented.");
+}
+
+void Eternal::Graphics::D3D11Material::SetColor(_In_ const string& Name, _In_ const Vector4& Value)
+{
+	throw std::logic_error("The method or operation is not implemented.");
 }

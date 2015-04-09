@@ -461,7 +461,8 @@ void D3D11Renderer::BeginDeferred()
 	// Rendertarget1 : metallic/specular/roughness
 	// Rendertarget2 : emissive
 	// Rendertarget3 : normal
-	// Rendertarget4 : AO
+	// Rendertarget4 : worldposition
+	// Rendertarget5 : AO
 
 	assert(_RenderTargets);
 	assert(_RenderTargetsCount >= 5);
@@ -491,5 +492,12 @@ void D3D11Renderer::EndDeferred()
 		0, 2, 3
 	};
 	AttachMaterial(_DeferredMaterial);
+	_Material->SetTexture("BaseColorBuffer", *_RenderTargets[0]);
+	_Material->SetTexture("MetallicSpecularRoughnessBuffer", *_RenderTargets[1]);
+	_Material->SetTexture("EmissiveBuffer", *_RenderTargets[2]);
+	_Material->SetTexture("NormalBuffer", *_RenderTargets[3]);
+	_Material->SetTexture("WorldPositionBuffer", *_RenderTargets[4]);
+	_Material->SetTexture("AmbientOcclusionBuffer", *_RenderTargets[5]);
+	
 	DrawIndexed(Screen, 4, sizeof(Vertex), Indices, 6);
 }

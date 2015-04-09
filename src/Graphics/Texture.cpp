@@ -4,28 +4,28 @@
 
 using namespace Eternal::Graphics;
 
-Texture::Texture(int width, int height)
-	: _width(width)
-	, _height(height)
+Texture::Texture(int Width, int Height)
+	: _Width(Width)
+	, _Height(Height)
 {
-	assert(width > 0);
-	assert(height > 0);
+	assert(Width > 0);
+	assert(Height > 0);
 }
 
 inline int Texture::GetWidth() const
 {
-	return _width;
+	return _Width;
 }
 inline int Texture::GetHeight() const
 {
-	return _height;
+	return _Height;
 }
 
-void Texture::SetWidth(_In_ int width)
+void Texture::SetWidth(_In_ int Width)
 {
-	_width = width;
+	_Width = Width;
 }
-void Texture::SetHeight(_In_ int height)
+void Texture::SetHeight(_In_ int Height)
 {
-	_height = height;
+	_Height = Height;
 }

@@ -7,15 +7,32 @@ namespace Eternal
 	{
 		class Texture
 		{
-		private:
-			int _width;
-			int _height;
 		public:
-			Texture(_In_ int width = 1, _In_ int height = 1);
+			enum FilterMode
+			{
+				POINT,
+
+			};
+			enum AddressMode
+			{
+				WRAP,
+				MIRROR,
+				CLAMP
+			};
+		private:
+			int _Width;
+			int _Height;
+			AddressMode U;
+			AddressMode V;
+
+		public:
+			Texture(_In_ int Width = 1, _In_ int Height = 1);
 			inline int GetWidth() const;
 			inline int GetHeight() const;
-			void SetWidth(_In_ int width);
-			void SetHeight(_In_ int height);
+			void SetWidth(_In_ int Width);
+			void SetHeight(_In_ int Height);
+
+
 		};
 	}
 }

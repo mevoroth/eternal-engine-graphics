@@ -65,13 +65,13 @@
     <ClInclude Include="include\d3d11\D3D11GeometryShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11InputLayout.hpp" />
     <ClInclude Include="include\d3d11\D3D11Material.hpp" />
-    <ClInclude Include="include\d3d11\D3D11MaterialInstance.hpp" />
     <ClInclude Include="include\d3d11\D3D11OrthographicCamera.hpp" />
     <ClInclude Include="include\d3d11\D3D11PerspectiveCamera.hpp" />
     <ClInclude Include="include\d3d11\D3D11PixelShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Renderer.hpp" />
     <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp" />
     <ClInclude Include="include\d3d11\D3D11Shader.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Texture.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
@@ -79,7 +79,6 @@
     <ClInclude Include="include\Graphics\Camera.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
     <ClInclude Include="include\Graphics\Material.hpp" />
-    <ClInclude Include="include\Graphics\MaterialInstance.hpp" />
     <ClInclude Include="include\Graphics\MaterialProperty.hpp" />
     <ClInclude Include="include\Graphics\Renderer.hpp" />
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
@@ -118,7 +117,6 @@
     <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11InputLayout.cpp" />
     <ClCompile Include="src\d3d11\D3D11Material.cpp" />
-    <ClCompile Include="src\d3d11\D3D11MaterialInstance.cpp" />
     <ClCompile Include="src\d3d11\D3D11OrthographicCamera.cpp" />
     <ClCompile Include="src\d3d11\D3D11PerspectiveCamera.cpp" />
     <ClCompile Include="src\d3d11\D3D11PixelShader.cpp" />

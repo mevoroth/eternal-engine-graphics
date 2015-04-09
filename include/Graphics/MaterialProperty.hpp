@@ -22,7 +22,7 @@ namespace Eternal
 				COLOR_T = 5,
 				PARAMTYPE_COUNT = 6
 			};
-			static unsigned int GetSize(const ParamType& Type);
+			static uint32_t GetSize(const ParamType& Type);
 		public:
 			MaterialProperty(const string& Name, const ParamType& Type);
 			string Name;

@@ -6,7 +6,7 @@
 using namespace Eternal::Graphics;
 using namespace Eternal::Types;
 
-static const unsigned int PARAM_SIZE[MaterialProperty::ParamType::PARAMTYPE_COUNT] = {
+static const uint32_t PARAM_SIZE[MaterialProperty::ParamType::PARAMTYPE_COUNT] = {
 	sizeof(void*),
 	sizeof(float),
 	sizeof(Vector2),
@@ -15,7 +15,7 @@ static const unsigned int PARAM_SIZE[MaterialProperty::ParamType::PARAMTYPE_COUN
 	sizeof(Vector4)
 };
 
-unsigned int MaterialProperty::GetSize(const ParamType& Type)
+uint32_t MaterialProperty::GetSize(const ParamType& Type)
 {
 	return PARAM_SIZE[Type];
 }

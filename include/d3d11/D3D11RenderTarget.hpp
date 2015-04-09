@@ -3,12 +3,15 @@
 
 #include <d3d11.h>
 #include "Graphics/RenderTarget.hpp"
+#include "d3d11/D3D11Texture.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		class D3D11RenderTarget : public RenderTarget
+		class D3D11RenderTarget
+			: public RenderTarget
+			, public D3D11Texture
 		{
 		private:
 			ID3D11RenderTargetView* _RenderTarget;
@@ -19,6 +22,11 @@ namespace Eternal
 			~D3D11RenderTarget();
 			ID3D11RenderTargetView* GetD3D11RenderTarget();
 			void Clear();
+
+#pragma region D3D11Texture
+			virtual ID3D11SamplerState* CreateSamplerState() override;
+#pragma endregion D3D11Texture
+
 		};
 	}
 }

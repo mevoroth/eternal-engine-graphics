@@ -12,22 +12,31 @@ namespace Eternal
 		{
 		public:
 			D3D11Material();
-			void AttachVertexShader(_Inout_ Shader* Shader);
-			void AttachGeometryShader(_Inout_ Shader* Shader);
-			void AttachPixelShader(_Inout_ Shader* Shader);
-			void SetMaterialDesc(_In_ const MaterialProperty& MatProperty);
+			virtual void AttachVertexShader(_Inout_ Shader* Shader) override;
+			virtual void AttachGeometryShader(_Inout_ Shader* Shader) override;
+			virtual void AttachPixelShader(_Inout_ Shader* Shader) override;
+			virtual void SetMaterialDesc(_In_ const MaterialProperty& MatProperty) override;
 			void AttachInputLayout(_In_ D3D11InputLayout* InputLayout);
-			void Apply();
+			virtual void Apply() override;
 			void Unbind();
+
+			virtual void SetFloat(_In_ const string& Name, _In_ float Value) override;
+			virtual void SetVector2(_In_ const string& Name, _In_ const Vector2& Value) override;
+			virtual void SetVector3(_In_ const string& Name, _In_ const Vector3& Value) override;
+			virtual void SetVector4(_In_ const string& Name, _In_ const Vector4& Value) override;
+			virtual void SetTexture(_In_ const string& Name, _In_ const Texture& Value) override;
+			virtual void SetColor(_In_ const string& Name, _In_ const Vector4& Value) override;
 
 		private:
 			vector<MaterialProperty> _MatInput;
+			vector<string> _TexturesInput;
 			D3D11InputLayout* _InputLayout = 0;
 			ID3D11ClassLinkage* _DynamicParams = 0;
 			ID3D11VertexShader* _Vertex = 0;
 			ID3D11GeometryShader* _Geometry = 0;
 			ID3D11PixelShader* _Pixel = 0;
 			bool _Applied = false;
+			uint8_t _Buffer[1024];
 			//ID3DBlob* _vertexSrc;
 			//ID3DBlob* _geometrySrc;
 			//ID3DBlob* _PixelSrc;
