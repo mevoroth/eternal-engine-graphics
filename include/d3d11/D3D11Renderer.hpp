@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include "Graphics/Renderer.hpp"
+#include "Graphics/Material.hpp"
 
 using namespace DirectX;
 
@@ -28,7 +29,7 @@ namespace Eternal
 			RenderTarget** _RenderTargets = nullptr;
 			int _RenderTargetsCount = 0;
 			Material* _Material = nullptr;
-			D3D11Material* _DeferredMaterial = nullptr;
+			Material* _DeferredMaterial = nullptr;
 			BlendState* _BlendMode = nullptr;
 			VertexBuffer* _vertexBuffer;
 

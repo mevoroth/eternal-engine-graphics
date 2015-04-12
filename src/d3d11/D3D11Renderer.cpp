@@ -45,7 +45,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	D3D11InputLayout InputLayout((D3D11InputLayout::VertexDataType)(D3D11InputLayout::POSITION_T /*| D3D11InputLayout::NORMAL_T*/ | D3D11InputLayout::TEXCOORD_T));
 	D3D11VertexShader VS("default", "default.vs.hlsl", InputLayout);
 	D3D11PixelShader PS("default", "default.ps.hlsl");
-	_DeferredMaterial->AttachInputLayout(&InputLayout);
+	dynamic_cast<D3D11Material*>(_DeferredMaterial)->AttachInputLayout(&InputLayout);
 	_DeferredMaterial->AttachVertexShader(&VS);
 	_DeferredMaterial->AttachPixelShader(&PS);
 }
@@ -61,8 +61,8 @@ HRESULT D3D11Renderer::_CreateDevice()
 		0, // SOFTWARE NOT IMPLEMENTED
 		0
 #ifdef ETERNAL_DEBUG
-		| D3D11_CREATE_DEVICE_DEBUG
-		| D3D11_CREATE_DEVICE_DEBUGGABLE
+		//| D3D11_CREATE_DEVICE_DEBUG
+		//| D3D11_CREATE_DEVICE_DEBUGGABLE
 #endif
 #ifdef ETERNAL_D3D_DEBUG
 		| D3D11_CREATE_DEVICE_SINGLETHREADED
@@ -492,12 +492,12 @@ void D3D11Renderer::EndDeferred()
 		0, 2, 3
 	};
 	AttachMaterial(_DeferredMaterial);
-	_Material->SetTexture("BaseColorBuffer", *_RenderTargets[0]);
-	_Material->SetTexture("MetallicSpecularRoughnessBuffer", *_RenderTargets[1]);
-	_Material->SetTexture("EmissiveBuffer", *_RenderTargets[2]);
-	_Material->SetTexture("NormalBuffer", *_RenderTargets[3]);
-	_Material->SetTexture("WorldPositionBuffer", *_RenderTargets[4]);
-	_Material->SetTexture("AmbientOcclusionBuffer", *_RenderTargets[5]);
+	_Material->SetTexture("BaseColorBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[0]));
+	_Material->SetTexture("MetallicSpecularRoughnessBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[1]));
+	_Material->SetTexture("EmissiveBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[2]));
+	_Material->SetTexture("NormalBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[3]));
+	_Material->SetTexture("WorldPositionBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[4]));
+	_Material->SetTexture("AmbientOcclusionBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[5]));
 	
 	DrawIndexed(Screen, 4, sizeof(Vertex), Indices, 6);
 }

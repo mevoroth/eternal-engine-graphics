@@ -1,6 +1,7 @@
 #ifndef _MATERIAL_PROPERTY_HPP_
 #define _MATERIAL_PROPERTY_HPP_
 
+#include <cstdint>
 #include <string>
 
 using namespace std;
@@ -22,9 +23,9 @@ namespace Eternal
 				COLOR_T = 5,
 				PARAMTYPE_COUNT = 6
 			};
-			static uint32_t GetSize(const ParamType& Type);
+			static uint32_t GetSize(_In_ const ParamType& Type);
 		public:
-			MaterialProperty(const string& Name, const ParamType& Type);
+			MaterialProperty(_In_ const string& Name, _In_ const ParamType& Type);
 			string Name;
 			ParamType Type;
 		};

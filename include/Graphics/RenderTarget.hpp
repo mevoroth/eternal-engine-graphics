@@ -7,9 +7,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class RenderTarget : public Texture
+		class RenderTarget
 		{
-		private:
 		public:
 			virtual void Clear() = 0;
 		};

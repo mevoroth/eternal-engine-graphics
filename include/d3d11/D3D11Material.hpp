@@ -21,13 +21,11 @@ namespace Eternal
 			void Unbind();
 
 			virtual void SetFloat(_In_ const string& Name, _In_ float Value) override;
-			virtual void SetVector2(_In_ const string& Name, _In_ const Vector2& Value) override;
-			virtual void SetVector3(_In_ const string& Name, _In_ const Vector3& Value) override;
 			virtual void SetVector4(_In_ const string& Name, _In_ const Vector4& Value) override;
-			virtual void SetTexture(_In_ const string& Name, _In_ const Texture& Value) override;
-			virtual void SetColor(_In_ const string& Name, _In_ const Vector4& Value) override;
+			virtual void SetTexture(_In_ const string& Name, _In_ Texture* Value) override;
 
 		private:
+			static ID3D11ShaderResourceView* SHADER_RESOURCE_VIEWS[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
 			vector<MaterialProperty> _MatInput;
 			vector<string> _TexturesInput;
 			D3D11InputLayout* _InputLayout = 0;

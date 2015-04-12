@@ -3,12 +3,15 @@
 
 #include <d3d10.h>
 #include "Graphics/RenderTarget.hpp"
+#include "d3d10/D3D10Texture.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		class D3D10RenderTarget : public RenderTarget
+		class D3D10RenderTarget
+			: public RenderTarget
+			, public D3D10Texture
 		{
 		private:
 			ID3D10RenderTargetView* _renderTarget;

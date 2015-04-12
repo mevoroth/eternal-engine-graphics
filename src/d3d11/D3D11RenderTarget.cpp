@@ -64,8 +64,44 @@ ID3D11RenderTargetView* D3D11RenderTarget::GetD3D11RenderTarget()
 	return _RenderTarget;
 }
 
-ID3D11SamplerState* Graphics::D3D11RenderTarget::CreateSamplerState()
+ID3D11SamplerState* D3D11RenderTarget::CreateSamplerState()
 {
+	D3D11_SAMPLER_DESC SamplerDesc;
+	SamplerDesc.AddressU = GetD3D11UAddressMode();
+	SamplerDesc.AddressV = GetD3D11VAddressMode();
+	SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; // TODO: Support W mapping
+	SamplerDesc.MipLODBias = 0.f;
+	SamplerDesc.MaxAnisotropy = 16; // TODO: Support MaxAnisotropy
+	SamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	//SamplerDesc.BorderColor[0] = 1.f;
+	//SamplerDesc.BorderColor[1] = 1.f;
+	//SamplerDesc.BorderColor[2] = 1.f;
+	//SamplerDesc.BorderColor[3] = 1.f;
+	SamplerDesc.MinLOD = 0;
+	SamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
+	ID3D11SamplerState* SamplerState = 0;
+
+	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateSamplerState(&SamplerDesc, &SamplerState);
+
+	return SamplerState;
+}
+
+ID3D11ShaderResourceView* D3D11RenderTarget::CreateShaderResourceView()
+{
+	D3D11_TEXTURE2D_DESC Tex2DDesc;
+	_Tex2D->GetDesc(&Tex2DDesc);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
+	ShaderResourceViewDesc.Format = Tex2DDesc.Format;
+	ShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	ShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+	ShaderResourceViewDesc.Texture2D.MipLevels = -1;
+	
+	ID3D11ShaderResourceView* ShaderResourceView = 0;
+
+	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateShaderResourceView(_Tex2D, &ShaderResourceViewDesc, &ShaderResourceView);
+
+	return ShaderResourceView;
 }
 

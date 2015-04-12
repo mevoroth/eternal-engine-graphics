@@ -6,6 +6,7 @@
 #include "d3d11/D3D11Renderer.hpp"
 #include "d3d11/D3D11Shader.hpp"
 #include "d3d11/D3D11VertexShader.hpp"
+#include "d3d11/D3D11Texture.hpp"
 
 using namespace std;
 using namespace Eternal::Graphics;
@@ -65,6 +66,20 @@ void D3D11Material::Apply()
 	BufferDesc.MiscFlags = 0;
 	BufferDesc.StructureByteStride = 0;
 
+	//D3D11_SUBRESOURCE_DATA SubResData;
+	//SubResData.pSysMem = 
+	ID3D11Buffer* ConstantBuffer;
+
+	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBuffer(&BufferDesc, 0, &ConstantBuffer);
+
+	uint32_t TextureCount = _TexturesInput.size();
+	Ctx->VSSetShaderResources(0, TextureCount, 0);
+	if (_Geometry)
+	{
+		Ctx->GSSetShaderResources(0, TextureCount, 0);
+	}
+	Ctx->PSSetShaderResources(0, TextureCount, 0);
+
 	_Applied = true;
 }
 
@@ -105,27 +120,27 @@ void Eternal::Graphics::D3D11Material::SetFloat(_In_ const string& Name, _In_ fl
 	throw std::logic_error("The method or operation is not implemented.");
 }
 
-void Eternal::Graphics::D3D11Material::SetVector2(_In_ const string& Name, _In_ const Vector2& Value)
-{
-	throw std::logic_error("The method or operation is not implemented.");
-}
-
-void Eternal::Graphics::D3D11Material::SetVector3(_In_ const string& Name, _In_ const Vector3& Value)
-{
-	throw std::logic_error("The method or operation is not implemented.");
-}
-
 void Eternal::Graphics::D3D11Material::SetVector4(_In_ const string& Name, _In_ const Vector4& Value)
 {
 	throw std::logic_error("The method or operation is not implemented.");
 }
 
-void Eternal::Graphics::D3D11Material::SetTexture(_In_ const string& Name, _In_ const Texture& Value)
+void Eternal::Graphics::D3D11Material::SetTexture(_In_ const string& Name, _In_ Texture* Value)
 {
-	throw std::logic_error("The method or operation is not implemented.");
-}
+	ID3D11DeviceContext* Ctx = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext();
 
-void Eternal::Graphics::D3D11Material::SetColor(_In_ const string& Name, _In_ const Vector4& Value)
-{
-	throw std::logic_error("The method or operation is not implemented.");
+	ID3D11ShaderResourceView* ShaderResourceView = static_cast<D3D11Texture*>(Value)->CreateShaderResourceView();
+
+	for (uint32_t TextureIndex = 0, TextureCount = _TexturesInput.size(); TextureIndex < TextureCount; ++TextureIndex)
+	{
+		if (Name == _TexturesInput[TextureIndex])
+		{
+			Ctx->VSSetShaderResources(TextureIndex, 1, 0);
+			if (_Geometry)
+			{
+				Ctx->GSSetShaderResources(0, TextureCount, 0);
+			}
+			Ctx->PSSetShaderResources(0, TextureCount, 0);
+		}
+	}
 }

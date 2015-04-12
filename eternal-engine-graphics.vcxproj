@@ -53,6 +53,7 @@
     <ClInclude Include="include\d3d10\D3D10Shader.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="include\d3d10\D3D10Texture.hpp" />
     <ClInclude Include="include\d3d10\D3D10VertexShader.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
@@ -87,8 +88,6 @@
     <ClInclude Include="include\Graphics\Vertex.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
-    <ClInclude Include="include\opengl\OGLDevice.hpp" />
-    <ClInclude Include="include\opengl\OGLRenderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d10\D3D10BlendState.cpp" />
@@ -123,6 +122,7 @@
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
     <ClCompile Include="src\d3d11\D3D11Shader.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
@@ -132,8 +132,6 @@
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
-    <ClCompile Include="src\opengl\OGLDevice.cpp" />
-    <ClCompile Include="src\opengl\OGLRenderer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>
