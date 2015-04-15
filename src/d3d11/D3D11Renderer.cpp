@@ -467,6 +467,10 @@ void D3D11Renderer::BeginDeferred()
 	assert(_RenderTargets);
 	assert(_RenderTargetsCount >= 5);
 
+	RenderTarget* BackBuffer = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetBackBuffer();
+	ClearRenderTargets(&BackBuffer, 1);
+	ClearRenderTargets(_RenderTargets, _RenderTargetsCount);
+
 	ID3D11RenderTargetView** RenderTargetsBuffer = new ID3D11RenderTargetView*[_RenderTargetsCount];
 	for (int i = 0; i < _RenderTargetsCount; ++i)
 	{
@@ -491,6 +495,10 @@ void D3D11Renderer::EndDeferred()
 		0, 1, 2,
 		0, 2, 3
 	};
+
+	D3D11Renderer* MainRenderer = dynamic_cast<D3D11Renderer*>(Renderer::Get());
+	RenderTarget* BackBuffer = MainRenderer->GetBackBuffer();
+
 	AttachMaterial(_DeferredMaterial);
 	_Material->SetTexture("BaseColorBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[0]));
 	_Material->SetTexture("MetallicSpecularRoughnessBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[1]));
@@ -498,6 +506,10 @@ void D3D11Renderer::EndDeferred()
 	_Material->SetTexture("NormalBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[3]));
 	_Material->SetTexture("WorldPositionBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[4]));
 	_Material->SetTexture("AmbientOcclusionBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[5]));
-	
+
+	MainRenderer->AttachRenderTargets(&BackBuffer, 1);
+
 	DrawIndexed(Screen, 4, sizeof(Vertex), Indices, 6);
+
+	Flush();
 }
