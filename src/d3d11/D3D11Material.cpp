@@ -47,38 +47,49 @@ void D3D11Material::Apply()
 
 	ID3D11DeviceContext* Ctx = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext();
 	Ctx->IASetInputLayout(_InputLayout->GetD3D11InputLayout());
-	Ctx->VSSetShader(_Vertex, 0, 0);
+	Ctx->VSSetShader(_Vertex, nullptr, 0);
 	if (_Geometry)
 	{
-		Ctx->GSSetShader(_Geometry, 0, 0);
+		Ctx->GSSetShader(_Geometry, nullptr, 0);
 	}
-	Ctx->PSSetShader(_Pixel, 0, 0);
+	else
+	{
+		Ctx->GSSetShader(nullptr, nullptr, 0);
+	}
+	Ctx->PSSetShader(_Pixel, nullptr, 0);
 	
-	D3D11_BUFFER_DESC BufferDesc;
 	uint32_t Size = 0;
 	for (uint32_t InputIndice = 0; InputIndice < _MatInput.size(); ++InputIndice)
 	{
 		Size += MaterialProperty::GetSize(_MatInput[InputIndice].Type);
 	}
-	BufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	BufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	BufferDesc.MiscFlags = 0;
-	BufferDesc.StructureByteStride = 0;
-
-	//D3D11_SUBRESOURCE_DATA SubResData;
-	//SubResData.pSysMem = 
-	ID3D11Buffer* ConstantBuffer;
-
-	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBuffer(&BufferDesc, 0, &ConstantBuffer);
-
-	uint32_t TextureCount = _TexturesInput.size();
-	Ctx->VSSetShaderResources(0, TextureCount, 0);
-	if (_Geometry)
+	if (Size > 0)
 	{
-		Ctx->GSSetShaderResources(0, TextureCount, 0);
+		D3D11_BUFFER_DESC BufferDesc;
+		BufferDesc.ByteWidth = Size;
+		BufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		BufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		BufferDesc.MiscFlags = 0;
+		BufferDesc.StructureByteStride = 0;
+
+		//D3D11_SUBRESOURCE_DATA SubResData;
+		//SubResData.pSysMem = 
+		ID3D11Buffer* ConstantBuffer = 0;
+
+		dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBuffer(&BufferDesc, 0, &ConstantBuffer);
 	}
-	Ctx->PSSetShaderResources(0, TextureCount, 0);
+
+	//uint32_t TextureCount = _TexturesInput.size();
+	//if (TextureCount > 0)
+	//{
+	//	Ctx->VSSetShaderResources(0, TextureCount, 0);
+	//	if (_Geometry)
+	//	{
+	//		Ctx->GSSetShaderResources(0, TextureCount, 0);
+	//	}
+	//	Ctx->PSSetShaderResources(0, TextureCount, 0);
+	//}
 
 	_Applied = true;
 }
@@ -113,6 +124,18 @@ void D3D11Material::AttachPixelShader(_Inout_ Shader* Shader)
 void D3D11Material::Unbind()
 {
 	_Applied = false;
+
+	ID3D11DeviceContext* Ctx = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext();
+	ID3D11ShaderResourceView* NullShaderResourceView = 0;
+	for (uint32_t TextureIndex = 0, TextureCount = _TexturesInput.size(); TextureIndex < TextureCount; ++TextureIndex)
+	{
+		Ctx->VSSetShaderResources(TextureIndex, 1, &NullShaderResourceView);
+		if (_Geometry)
+		{
+			Ctx->GSSetShaderResources(TextureIndex, 1, &NullShaderResourceView);
+		}
+		Ctx->PSSetShaderResources(TextureIndex, 1, &NullShaderResourceView);
+	}
 }
 
 void Eternal::Graphics::D3D11Material::SetFloat(_In_ const string& Name, _In_ float Value)
@@ -135,12 +158,12 @@ void Eternal::Graphics::D3D11Material::SetTexture(_In_ const string& Name, _In_ 
 	{
 		if (Name == _TexturesInput[TextureIndex])
 		{
-			Ctx->VSSetShaderResources(TextureIndex, 1, 0);
+			Ctx->VSSetShaderResources(TextureIndex, 1, &ShaderResourceView);
 			if (_Geometry)
 			{
-				Ctx->GSSetShaderResources(0, TextureCount, 0);
+				Ctx->GSSetShaderResources(TextureIndex, 1, &ShaderResourceView);
 			}
-			Ctx->PSSetShaderResources(0, TextureCount, 0);
+			Ctx->PSSetShaderResources(TextureIndex, 1, &ShaderResourceView);
 		}
 	}
 }

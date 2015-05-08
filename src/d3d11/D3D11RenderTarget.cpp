@@ -27,20 +27,20 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ int width, _In_ int height)
 	Tex2DDesc.Height = height;
 	Tex2DDesc.MipLevels = 1;
 	Tex2DDesc.ArraySize = 1;
-	Tex2DDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	Tex2DDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	Tex2DDesc.SampleDesc.Count = 1;
 	Tex2DDesc.SampleDesc.Quality = 0;
 	Tex2DDesc.Usage = D3D11_USAGE_DEFAULT;
-	Tex2DDesc.BindFlags = D3D11_BIND_RENDER_TARGET;
+	Tex2DDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	Tex2DDesc.CPUAccessFlags = 0;
 	Tex2DDesc.MiscFlags = 0;
 
 	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateTexture2D(&Tex2DDesc, 0, &_Tex2D);
 
 	D3D11_RENDER_TARGET_VIEW_DESC RenderTargetDesc;
-	RenderTargetDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	RenderTargetDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	RenderTargetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	RenderTargetDesc.Texture2D.MipSlice = 1;
+	RenderTargetDesc.Texture2D.MipSlice = 0;
 
 	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(_Tex2D, &RenderTargetDesc, &_RenderTarget);
 }
@@ -105,3 +105,19 @@ ID3D11ShaderResourceView* D3D11RenderTarget::CreateShaderResourceView()
 	return ShaderResourceView;
 }
 
+ID3D11UnorderedAccessView* D3D11RenderTarget::CreateUnorderedAccessView()
+{
+	D3D11_TEXTURE2D_DESC Tex2DDesc;
+	_Tex2D->GetDesc(&Tex2DDesc);
+	
+	D3D11_UNORDERED_ACCESS_VIEW_DESC UnorderedAccessViewDesc;
+	UnorderedAccessViewDesc.Format = Tex2DDesc.Format;
+	UnorderedAccessViewDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+	UnorderedAccessViewDesc.Texture2D.MipSlice = 0;
+
+	ID3D11UnorderedAccessView* UnorderedAccessView;
+
+	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateUnorderedAccessView(_Tex2D, &UnorderedAccessViewDesc, &UnorderedAccessView);
+
+	return UnorderedAccessView;
+}

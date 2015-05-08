@@ -26,6 +26,7 @@ namespace Eternal
 #pragma region D3D11Texture
 			virtual ID3D11SamplerState* CreateSamplerState() override;
 			virtual ID3D11ShaderResourceView* CreateShaderResourceView() override;
+			ID3D11UnorderedAccessView* CreateUnorderedAccessView();
 #pragma endregion D3D11Texture
 
 		};

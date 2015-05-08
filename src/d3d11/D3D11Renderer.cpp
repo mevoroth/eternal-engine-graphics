@@ -11,6 +11,8 @@
 #include "d3d11/D3D11Material.hpp"
 #include "d3d11/D3D11VertexShader.hpp"
 #include "d3d11/D3D11PixelShader.hpp"
+#include "d3d11/D3D11OrthographicCamera.hpp"
+#include "d3d11/D3D11PerspectiveCamera.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -28,12 +30,14 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	hr = _CreateDevice();
 	if (hr != S_OK)
 	{
+		assert(false);
 		// ERROR
 	}
 
 	hr = _CreateSwapChain();
 	if (hr != S_OK)
 	{
+		assert(false);
 		// ERROR
 	}
 
@@ -42,12 +46,22 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBufferTex);
 	_SetBackBuffer(new D3D11RenderTarget(BackBufferTex));
 	_DeferredMaterial = new D3D11Material();
-	D3D11InputLayout InputLayout((D3D11InputLayout::VertexDataType)(D3D11InputLayout::POSITION_T /*| D3D11InputLayout::NORMAL_T*/ | D3D11InputLayout::TEXCOORD_T));
-	D3D11VertexShader VS("default", "default.vs.hlsl", InputLayout);
-	D3D11PixelShader PS("default", "default.ps.hlsl");
-	dynamic_cast<D3D11Material*>(_DeferredMaterial)->AttachInputLayout(&InputLayout);
-	_DeferredMaterial->AttachVertexShader(&VS);
-	_DeferredMaterial->AttachPixelShader(&PS);
+
+	_DeferredMaterial->SetMaterialDesc(MaterialProperty("DiffuseTexture", MaterialProperty::TEXTURE_T));
+	_DeferredMaterial->SetMaterialDesc(MaterialProperty("MetallicSpecularRoughnessTexture", MaterialProperty::TEXTURE_T));
+	_DeferredMaterial->SetMaterialDesc(MaterialProperty("EmissiveTexture", MaterialProperty::TEXTURE_T));
+	_DeferredMaterial->SetMaterialDesc(MaterialProperty("NormalTexture", MaterialProperty::TEXTURE_T));
+	_DeferredMaterial->SetMaterialDesc(MaterialProperty("WorldPosTexture", MaterialProperty::TEXTURE_T));
+	_DeferredMaterial->SetMaterialDesc(MaterialProperty("AmbientOcclusionTexture", MaterialProperty::TEXTURE_T));
+
+	_DeferredInputLayout = new D3D11InputLayout((D3D11InputLayout::VertexDataType)(D3D11InputLayout::POSITION_T /*| D3D11InputLayout::NORMAL_T*/ | D3D11InputLayout::TEXCOORD_T));
+	_DeferredVS = new D3D11VertexShader("default", "deferred.vs.hlsl", *_DeferredInputLayout);
+	_DeferredPS = new D3D11PixelShader("default", "deferred.ps.hlsl");
+	dynamic_cast<D3D11Material*>(_DeferredMaterial)->AttachInputLayout(_DeferredInputLayout);
+	_DeferredMaterial->AttachVertexShader(_DeferredVS);
+	_DeferredMaterial->AttachPixelShader(_DeferredPS);
+
+	_PostProcessCam = new D3D11OrthographicCamera();
 }
 
 HRESULT D3D11Renderer::_CreateDevice()
@@ -80,6 +94,7 @@ HRESULT D3D11Renderer::_CreateDevice()
 	{
 		// ERROR
 		printf("ERROR\n");
+		assert(false);
 	}
 
 	if (hr != S_OK)
@@ -87,6 +102,7 @@ HRESULT D3D11Renderer::_CreateDevice()
 		// ERROR
 		DWORD err = GetLastError();
 		printf("ERROR %d:%x\n", err, err);
+		assert(false);
 	}
 
 	return hr;
@@ -148,6 +164,7 @@ HRESULT D3D11Renderer::_CreateSwapChain()
 
 	if (hr != S_OK)
 	{
+		assert(false);
 		// ERROR
 		//char str[256];
 		//DWORD err = GetLastError();
@@ -181,9 +198,9 @@ void D3D11Renderer::Flush()
 	_SwapChain->Present(0, 0);
 }
 
-void D3D11Renderer::AttachCamera(_In_ Camera* camera)
+void D3D11Renderer::AttachCamera(_In_ Camera* Camera)
 {
-	_Camera = camera;
+	_Camera = Camera;
 }
 
 void D3D11Renderer::AttachRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int Count)
@@ -198,7 +215,10 @@ void D3D11Renderer::AttachMaterial(_In_ Material* Material)
 {
 	if (_Material != Material)
 	{
-		dynamic_cast<D3D11Material*>(_Material)->Unbind();
+		if (_Material)
+		{
+			dynamic_cast<D3D11Material*>(_Material)->Unbind();
+		}
 		_Material = Material;
 	}
 }
@@ -212,6 +232,12 @@ void D3D11Renderer::ClearRenderTargets(_In_ RenderTarget** RenderTargets, _In_ i
 		RenderTargets[i]->Clear();
 	}
 }
+
+void D3D11Renderer::UnbindRenderTargets()
+{
+	_DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+}
+
 void D3D11Renderer::SetBlendMode(_In_ BlendState* blendMode)
 {
 	_BlendMode = blendMode;
@@ -278,7 +304,7 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 
 	D3D11_SUBRESOURCE_DATA matrixData;
 	MatrixBuffer matrixStruct;
-	matrixStruct.model = XMMatrixIdentity();//XMLoadFloat4x4();
+	matrixStruct.model = NewIdentity();//XMLoadFloat4x4();
 	matrixStruct.projection = _Camera->GetProjectionMatrix();
 	matrixStruct.view = _Camera->GetViewMatrix();
 
@@ -356,6 +382,8 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 
 	_DeviceContext->VSSetConstantBuffers(0, 1, &matrixBuffer);
 
+	_Material->Apply();
+
 	_DeviceContext->DrawIndexed(indicesCount, 0, 0);
 	//_deviceContext->Draw(verticesCount, 0);
 
@@ -374,6 +402,8 @@ void D3D11Renderer::DrawIndexed(_In_ const Vertex vertices[], _In_ int verticesC
 void D3D11Renderer::DrawDeferred(_In_ const Vertex Vertices[], _In_ int VerticesCount, _In_ size_t VertexSize,
 	_In_ const uint16_t Indices[], _In_ int IndicesCount)
 {
+	_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	UINT Stride = VertexSize;
 	UINT Offset = 0;
 
@@ -413,32 +443,33 @@ void D3D11Renderer::DrawDeferred(_In_ const Vertex Vertices[], _In_ int Vertices
 	hr = _Device->CreateBuffer(&IndicesBufferDesc, &IndicesData, &IndicesBuffer);
 	assert(hr == S_OK);
 
-	ID3D11Buffer* MatrixBuffer = 0;
+	ID3D11Buffer* MatrixBufferObj = 0;
 
 	D3D11_BUFFER_DESC MatrixBufferDesc;
 	MatrixBufferDesc.ByteWidth = sizeof(MatrixBuffer);
-	MatrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	MatrixBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	MatrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	MatrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	MatrixBufferDesc.CPUAccessFlags = 0;
 	MatrixBufferDesc.MiscFlags = 0;
 	MatrixBufferDesc.StructureByteStride = 0;
 
 	D3D11_SUBRESOURCE_DATA MatrixData;
 	D3D11Renderer::MatrixBuffer MatrixStruct;
 	MatrixStruct.model = _GetMatrix();
-	MatrixStruct.projection = _Camera->GetProjectionMatrix();
+	_Camera->GetViewMatrix();
 	MatrixStruct.view = _Camera->GetViewMatrix();
+	MatrixStruct.projection = _Camera->GetProjectionMatrix();
 
 	MatrixData.pSysMem = &MatrixStruct;
 	MatrixData.SysMemPitch = 0;
 	MatrixData.SysMemSlicePitch = 0;
-	hr = _Device->CreateBuffer(&MatrixBufferDesc, &MatrixData, &MatrixBuffer);
+	hr = _Device->CreateBuffer(&MatrixBufferDesc, &MatrixData, &MatrixBufferObj);
 	assert(hr == S_OK);
 
 	_DeviceContext->IASetVertexBuffers(0, 1, &VertexBuffer, &Stride, &Offset);
 	_DeviceContext->IASetIndexBuffer(IndicesBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-	_DeviceContext->VSSetConstantBuffers(0, 1, &MatrixBuffer);
+	_DeviceContext->VSSetConstantBuffers(0, 1, &MatrixBufferObj);
 
 	_Material->Apply();
 
@@ -451,8 +482,8 @@ void D3D11Renderer::DrawDeferred(_In_ const Vertex Vertices[], _In_ int Vertices
 	IndicesBuffer->Release();
 	IndicesBuffer = 0;
 
-	MatrixBuffer->Release();
-	MatrixBuffer = 0;
+	MatrixBufferObj->Release();
+	MatrixBufferObj = 0;
 }
 
 void D3D11Renderer::BeginDeferred()
@@ -467,7 +498,7 @@ void D3D11Renderer::BeginDeferred()
 	assert(_RenderTargets);
 	assert(_RenderTargetsCount >= 5);
 
-	RenderTarget* BackBuffer = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetBackBuffer();
+	RenderTarget* BackBuffer = GetBackBuffer();
 	ClearRenderTargets(&BackBuffer, 1);
 	ClearRenderTargets(_RenderTargets, _RenderTargetsCount);
 
@@ -477,6 +508,7 @@ void D3D11Renderer::BeginDeferred()
 		RenderTargetsBuffer[i] = ((D3D11RenderTarget*)_RenderTargets[i])->GetD3D11RenderTarget();
 	}
 	_DeviceContext->OMSetRenderTargets(_RenderTargetsCount, RenderTargetsBuffer, 0);
+	delete[] RenderTargetsBuffer;
 }
 
 void D3D11Renderer::EndDeferred()
@@ -496,20 +528,29 @@ void D3D11Renderer::EndDeferred()
 		0, 2, 3
 	};
 
-	D3D11Renderer* MainRenderer = dynamic_cast<D3D11Renderer*>(Renderer::Get());
-	RenderTarget* BackBuffer = MainRenderer->GetBackBuffer();
+	RenderTarget* BackBuffer = GetBackBuffer();
 
-	AttachMaterial(_DeferredMaterial);
-	_Material->SetTexture("BaseColorBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[0]));
-	_Material->SetTexture("MetallicSpecularRoughnessBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[1]));
-	_Material->SetTexture("EmissiveBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[2]));
-	_Material->SetTexture("NormalBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[3]));
-	_Material->SetTexture("WorldPositionBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[4]));
-	_Material->SetTexture("AmbientOcclusionBuffer", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[5]));
+	UnbindRenderTargets();
+	PushContext();
+	{
+		LoadMatrix(NewIdentity());
+		AttachMaterial(_DeferredMaterial);
+		_Material->SetTexture("DiffuseTexture", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[0]));
+		_Material->SetTexture("MetallicSpecularRoughnessTexture", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[1]));
+		_Material->SetTexture("EmissiveTexture", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[2]));
+		_Material->SetTexture("NormalTexture", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[3]));
+		_Material->SetTexture("WorldPositionTexture", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[4]));
+		_Material->SetTexture("AmbientOcclusionTexture", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[5]));
 
-	MainRenderer->AttachRenderTargets(&BackBuffer, 1);
+		AttachRenderTargets(&BackBuffer, 1);
+		D3D11OrthographicCamera cam;
+		AttachCamera(_PostProcessCam);
+		DrawIndexed(Screen, 4, sizeof(Vertex), Indices, 6);
 
-	DrawIndexed(Screen, 4, sizeof(Vertex), Indices, 6);
+		dynamic_cast<D3D11Material*>(_Material)->Unbind();
+	}
+	PopContext();
+
 
 	Flush();
 }

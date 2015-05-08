@@ -2,24 +2,24 @@
 
 using namespace Eternal::Graphics;
 
-Renderer* Renderer::_inst = 0;
+Renderer* Renderer::_Inst = 0;
 
 Renderer::Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
-	: _mode(mode)
-	, _aa(aa)
-	, _matrix(NewIdentity())
+	: _Mode(mode)
+	, _AA(aa)
+	, _Matrix(NewIdentity())
 {
-	_inst = this;
+	_Inst = this;
 }
 
-void Renderer::_SetBackBuffer(RenderTarget* backBuffer)
+void Renderer::_SetBackBuffer(RenderTarget* BackBuffer)
 {
-	_backBuffer = backBuffer;
+	_BackBuffer = BackBuffer;
 }
 
 RenderTarget* Renderer::GetBackBuffer() const
 {
-	return _backBuffer;
+	return _BackBuffer;
 }
 
 void Renderer::SetViewport(_In_ Viewport* viewport)
@@ -29,27 +29,28 @@ void Renderer::SetViewport(_In_ Viewport* viewport)
 
 void Renderer::PushContext()
 {
-	_contexts.Push(_matrix);
+	_Contexts.Push(_Matrix);
 }
 
 void Renderer::PopContext()
 {
-	_matrix = _contexts.Head();
-	_contexts.Pop();
+	_Matrix = _Contexts.Head();
+	_Contexts.Pop();
 }
 
 void Renderer::LoadMatrix(const Matrix4x4& mat)
 {
-	_matrix = mat;
+	_Matrix = mat;
 }
 
-void Renderer::MulMatrix(const Matrix4x4& mat)
+void Renderer::MulMatrix(const Matrix4x4& Mat)
 {
-	_matrix = mat * _matrix;
+	XMMATRIX TempMatrix = XMLoadFloat4x4(&Mat) * XMLoadFloat4x4(&_Matrix);
+	XMStoreFloat4x4(&_Matrix, TempMatrix);
 }
 
 Renderer* Renderer::Get()
 {
-	assert(_inst);
-	return _inst;
+	assert(_Inst);
+	return _Inst;
 }

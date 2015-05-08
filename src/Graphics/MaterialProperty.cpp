@@ -9,9 +9,6 @@ using namespace Eternal::Types;
 static const uint32_t PARAM_SIZE[MaterialProperty::ParamType::PARAMTYPE_COUNT] = {
 	sizeof(void*),
 	sizeof(float),
-	sizeof(Vector2),
-	sizeof(Vector3),
-	sizeof(Vector4),
 	sizeof(Vector4)
 };
 

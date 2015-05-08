@@ -16,9 +16,9 @@ namespace Eternal
 		private:
 			struct MatrixBuffer
 			{
-				XMMATRIX model;
-				XMMATRIX view;
-				XMMATRIX projection;
+				Matrix4x4 model;
+				Matrix4x4 view;
+				Matrix4x4 projection;
 			};
 
 			ID3D10Device* _device;

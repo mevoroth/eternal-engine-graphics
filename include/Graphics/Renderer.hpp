@@ -14,6 +14,8 @@
 #include "Types/Types.hpp"
 #include "Container/Stack.hpp"
 
+#define RENDER_MAX_CONTEXTS 64
+
 namespace Eternal
 {
 	namespace Graphics
@@ -24,7 +26,6 @@ namespace Eternal
 		class Renderer
 		{
 		public:
-			static const int MAX_CONTEXTS = 50;
 			enum RenderMode
 			{
 				HARDWARE,
@@ -44,18 +45,18 @@ namespace Eternal
 				CSAA_32XQ = 0x80000 | 0x20
 			};
 		private:
-			static Renderer* _inst;
-			RenderMode _mode;
-			AntiAliasing _aa;
-			RenderTarget* _backBuffer;
+			static Renderer* _Inst;
+			RenderMode _Mode;
+			AntiAliasing _AA;
+			RenderTarget* _BackBuffer;
 
-			Stack<Matrix4x4, MAX_CONTEXTS> _contexts;
-			Matrix4x4 _matrix;
+			Stack<Matrix4x4, RENDER_MAX_CONTEXTS> _Contexts;
+			Matrix4x4 _Matrix;
 		protected:
 			virtual void _SetBackBuffer(_In_ RenderTarget* backBuffer);
 			virtual inline Matrix4x4 _GetMatrix() const
 			{
-				return _matrix;
+				return _Matrix;
 			}
 		public:
 			Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
@@ -74,6 +75,7 @@ namespace Eternal
 			virtual void AttachMaterial(_In_ Material* material) = 0;
 			virtual void AttachRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count) = 0;
 			virtual void ClearRenderTargets(_In_ RenderTarget** renderTargets, _In_ int count) = 0;
+			virtual void UnbindRenderTargets() = 0;
 			virtual void SetBlendMode(_In_ BlendState* blendMode) = 0;
 			void SetViewport(_In_ Viewport* viewport);
 			/**
@@ -87,22 +89,22 @@ namespace Eternal
 			 */
 			inline RenderMode GetRenderMode() const
 			{
-				return _mode;
+				return _Mode;
 			}
 			/**
 			 * Get AntiAliasing
 			 */
 			inline AntiAliasing GetAntiAliasing() const
 			{
-				return _aa;
+				return _AA;
 			}
 			virtual RenderTarget* GetBackBuffer() const;
 			/**
-			 * Push matrix
+			 * Push context
 			 */
 			void PushContext();
 			/**
-			 * PopMatrix
+			 * Pop context
 			 */
 			void PopContext();
 			void LoadMatrix(const Matrix4x4& mat);

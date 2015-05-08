@@ -13,14 +13,14 @@ namespace Eternal
 		class D3D11OrthographicCamera : public D3D11Camera
 		{
 		private:
-			Matrix4x4 _model;
-			Matrix4x4 _view;
-			Matrix4x4 _proj;
+			Matrix4x4 _Model;
+			Matrix4x4 _View;
+			Matrix4x4 _Proj;
 		public:
 			D3D11OrthographicCamera();
-			virtual Matrix4x4 GetProjectionMatrix();
-			virtual Matrix4x4 GetViewMatrix();
-			virtual void SetModelMatrix(_In_ const Matrix4x4& model);
+			virtual Matrix4x4 GetProjectionMatrix() override;
+			virtual Matrix4x4 GetViewMatrix() override;
+			virtual void SetModelMatrix(_In_ const Matrix4x4& model) override;
 		};
 	}
 }

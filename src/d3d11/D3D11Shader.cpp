@@ -36,6 +36,8 @@ void D3D11Shader::_CompileFile(_In_ const string& src, _In_ const string& entry,
 	if (hr != S_OK)
 	{
 		_program = 0;
+		OutputDebugString((LPCSTR)errors->GetBufferPointer());
+		assert(false);
 	}
 }
 

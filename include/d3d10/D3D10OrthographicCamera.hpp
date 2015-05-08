@@ -13,9 +13,9 @@ namespace Eternal
 		class D3D10OrthographicCamera : public D3D10Camera
 		{
 		private:
-			Matrix4x4 _model;
-			Matrix4x4 _view;
-			Matrix4x4 _proj;
+			Matrix4x4 _Model;
+			Matrix4x4 _View;
+			Matrix4x4 _Proj;
 		public:
 			D3D10OrthographicCamera();
 			virtual Matrix4x4 GetProjectionMatrix();
