@@ -51,7 +51,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	_DeferredMaterial->SetMaterialDesc(MaterialProperty("MetallicSpecularRoughnessTexture", MaterialProperty::TEXTURE_T));
 	_DeferredMaterial->SetMaterialDesc(MaterialProperty("EmissiveTexture", MaterialProperty::TEXTURE_T));
 	_DeferredMaterial->SetMaterialDesc(MaterialProperty("NormalTexture", MaterialProperty::TEXTURE_T));
-	_DeferredMaterial->SetMaterialDesc(MaterialProperty("WorldPosTexture", MaterialProperty::TEXTURE_T));
+	_DeferredMaterial->SetMaterialDesc(MaterialProperty("WorldPositionTexture", MaterialProperty::TEXTURE_T));
 	_DeferredMaterial->SetMaterialDesc(MaterialProperty("AmbientOcclusionTexture", MaterialProperty::TEXTURE_T));
 
 	_DeferredInputLayout = new D3D11InputLayout((D3D11InputLayout::VertexDataType)(D3D11InputLayout::POSITION_T /*| D3D11InputLayout::NORMAL_T*/ | D3D11InputLayout::TEXCOORD_T));
@@ -456,7 +456,6 @@ void D3D11Renderer::DrawDeferred(_In_ const Vertex Vertices[], _In_ int Vertices
 	D3D11_SUBRESOURCE_DATA MatrixData;
 	D3D11Renderer::MatrixBuffer MatrixStruct;
 	MatrixStruct.model = _GetMatrix();
-	_Camera->GetViewMatrix();
 	MatrixStruct.view = _Camera->GetViewMatrix();
 	MatrixStruct.projection = _Camera->GetProjectionMatrix();
 
@@ -516,12 +515,12 @@ void D3D11Renderer::EndDeferred()
 	Vertex Screen[4];
 	Screen[0].Pos = NewVector4(0.f, 0.f, 1.f, 1.f);
 	Screen[0].Tex = NewVector2(0.f, 0.f);
-	Screen[1].Pos = NewVector4(1.f, 0.f, 1.f, 1.f);
-	Screen[1].Tex = NewVector2(1.f, 0.f);
+	Screen[1].Pos = NewVector4(0.f, 1.f, 1.f, 1.f);
+	Screen[1].Tex = NewVector2(0.f, 1.f);
 	Screen[2].Pos = NewVector4(1.f, 1.f, 1.f, 1.f);
 	Screen[2].Tex = NewVector2(1.f, 1.f);
-	Screen[3].Pos = NewVector4(0.f, 1.f, 1.f, 1.f);
-	Screen[3].Tex = NewVector2(0.f, 1.f);
+	Screen[3].Pos = NewVector4(1.f, 0.f, 1.f, 1.f);
+	Screen[3].Tex = NewVector2(1.f, 0.f);
 	
 	uint16_t Indices[6] = {
 		0, 1, 2,
@@ -543,7 +542,6 @@ void D3D11Renderer::EndDeferred()
 		_Material->SetTexture("AmbientOcclusionTexture", dynamic_cast<D3D11RenderTarget*>(_RenderTargets[5]));
 
 		AttachRenderTargets(&BackBuffer, 1);
-		D3D11OrthographicCamera cam;
 		AttachCamera(_PostProcessCam);
 		DrawIndexed(Screen, 4, sizeof(Vertex), Indices, 6);
 

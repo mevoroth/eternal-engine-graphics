@@ -51,8 +51,8 @@ namespace Eternal
 		protected:
 			virtual inline Matrix4x4 _GetMatrix() const override
 			{
-				XMMATRIX TempMatrix = XMMatrixTranspose(XMLoadFloat4x4(&Renderer::_GetMatrix()));
-				Matrix4x4 ReturnMatrix;
+				Matrix4x4 ReturnMatrix = Renderer::_GetMatrix();
+				XMMATRIX TempMatrix = XMMatrixTranspose(XMLoadFloat4x4(&ReturnMatrix));
 				XMStoreFloat4x4(&ReturnMatrix, TempMatrix);
 				return ReturnMatrix;
 			}
