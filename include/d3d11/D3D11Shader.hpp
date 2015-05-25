@@ -11,7 +11,14 @@ namespace Eternal
 	{
 		class D3D11Shader : public Shader
 		{
+			class D3D11Include : public ID3DInclude
+			{
+			public:
+				virtual STDMETHODIMP Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes) override;
+				virtual STDMETHODIMP Close(THIS_ LPCVOID pData) override;
+			};
 		protected:
+			static ID3DInclude* _IncludeHandler;
 			ID3DBlob* _program;
 			ID3D11ClassLinkage* _dynamicParams;
 			void _CompileFile(_In_ const string& src, _In_ const string& entry, _In_ const string& profile);
