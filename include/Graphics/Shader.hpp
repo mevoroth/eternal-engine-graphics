@@ -12,9 +12,9 @@ namespace Eternal
 		class Shader
 		{
 		private:
-			string _name;
+			string _Name;
 		public:
-			Shader(const string& name);
+			Shader(const string& Name);
 		};
 	}
 }

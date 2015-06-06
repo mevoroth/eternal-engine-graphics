@@ -11,7 +11,7 @@ namespace Eternal
 		{
 		public:
 			D3D11Viewport(_In_ int x, _In_ int y, _In_ int width, _In_ int height);
-			void Apply();
+			virtual void Apply(Context* DrawContext) override;
 		};
 	}
 }

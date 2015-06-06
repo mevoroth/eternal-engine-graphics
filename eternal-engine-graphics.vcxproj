@@ -19,117 +19,150 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\d3d10\D3D10PerspectiveCamera.hpp" />
+    <ClInclude Include="include\d3d10\D3D10PerspectiveCamera.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\d3d10\D3D10RenderTarget.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10BlendState.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10Camera.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10Device.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10GeometryShader.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10InputLayout.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10Material.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10OrthographicCamera.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10PixelShader.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10Renderer.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10Shader.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10Texture.hpp" />
+    <ClInclude Include="include\d3d10\D3D10Texture.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\d3d10\D3D10VertexShader.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d10\D3D10Viewport.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11BlendState.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Camera.hpp" />
+    <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Resource.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Constant.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Context.hpp" />
     <ClInclude Include="include\d3d11\D3D11Device.hpp" />
     <ClInclude Include="include\d3d11\D3D11GeometryShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11InputLayout.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Material.hpp" />
-    <ClInclude Include="include\d3d11\D3D11OrthographicCamera.hpp" />
-    <ClInclude Include="include\d3d11\D3D11PerspectiveCamera.hpp" />
     <ClInclude Include="include\d3d11\D3D11PixelShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Renderer.hpp" />
     <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Sampler.hpp" />
     <ClInclude Include="include\d3d11\D3D11Shader.hpp" />
+    <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp" />
     <ClInclude Include="include\d3d11\D3D11Texture.hpp" />
+    <ClInclude Include="include\d3d11\D3D11VertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
-    <ClInclude Include="include\Graphics\Camera.hpp" />
+    <ClInclude Include="include\Graphics\Constant.hpp" />
+    <ClInclude Include="include\Graphics\Context.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
-    <ClInclude Include="include\Graphics\Material.hpp" />
+    <ClInclude Include="include\Graphics\IndexBuffer.hpp" />
+    <ClInclude Include="include\Graphics\InputLayout.hpp" />
     <ClInclude Include="include\Graphics\MaterialProperty.hpp" />
     <ClInclude Include="include\Graphics\Renderer.hpp" />
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
+    <ClInclude Include="include\Graphics\Resource.hpp" />
     <ClInclude Include="include\Graphics\Shader.hpp" />
+    <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
     <ClInclude Include="include\Graphics\Texture.hpp" />
     <ClInclude Include="include\Graphics\Vertex.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\d3d10\D3D10BlendState.cpp" />
-    <ClCompile Include="src\d3d10\D3D10Device.cpp" />
-    <ClCompile Include="src\d3d10\D3D10GeometryShader.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    <ClCompile Include="src\d3d10\D3D10BlendState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10InputLayout.cpp" />
-    <ClCompile Include="src\d3d10\D3D10Material.cpp" />
-    <ClCompile Include="src\d3d10\D3D10OrthographicCamera.cpp" />
-    <ClCompile Include="src\d3d10\D3D10PerspectiveCamera.cpp" />
+    <ClCompile Include="src\d3d10\D3D10Device.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10GeometryShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10InputLayout.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10Material.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10OrthographicCamera.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10PerspectiveCamera.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\d3d10\D3D10PixelShader.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\d3d10\D3D10Renderer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10RenderTarget.cpp" />
+    <ClCompile Include="src\d3d10\D3D10RenderTarget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\d3d10\D3D10Shader.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10VertexShader.cpp" />
-    <ClCompile Include="src\d3d10\D3D10Viewport.cpp" />
+    <ClCompile Include="src\d3d10\D3D10VertexShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d10\D3D10Viewport.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Context.cpp" />
     <ClCompile Include="src\d3d11\D3D11Device.cpp" />
     <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp" />
+    <ClCompile Include="src\d3d11\D3D11IndexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11InputLayout.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Material.cpp" />
-    <ClCompile Include="src\d3d11\D3D11OrthographicCamera.cpp" />
-    <ClCompile Include="src\d3d11\D3D11PerspectiveCamera.cpp" />
     <ClCompile Include="src\d3d11\D3D11PixelShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Resource.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Sampler.cpp" />
     <ClCompile Include="src\d3d11\D3D11Shader.cpp" />
+    <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp" />
     <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
+    <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
   </ItemGroup>

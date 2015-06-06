@@ -11,8 +11,14 @@ namespace Eternal
 		class D3D11VertexShader : public D3D11Shader
 		{
 		public:
-			D3D11VertexShader(_In_ const string& name, _In_ const string& src, _Inout_ D3D11InputLayout& inputLayout);
-			void InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage, _Out_ void** code);
+			D3D11VertexShader(_In_ const string& Name, _In_ const string& Src, _In_ ID3D11ClassLinkage* ClassLinkage, _Inout_ D3D11InputLayout* InputLayout);
+			~D3D11VertexShader();
+
+			virtual void* GetD3D11Shader() override;
+
+		private:
+			ID3D11VertexShader* _Shader = nullptr;
+			D3D11InputLayout* _InputLayout = nullptr;
 		};
 	}
 }

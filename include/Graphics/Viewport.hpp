@@ -5,6 +5,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Context;
+
 		class Viewport
 		{
 		private:
@@ -31,7 +33,7 @@ namespace Eternal
 			}
 		public:
 			Viewport(_In_ int x, _In_ int y, _In_ int width, _In_ int height);
-			virtual void Apply() = 0;
+			virtual void Apply(Context* DrawContext) = 0;
 		};
 	}
 }

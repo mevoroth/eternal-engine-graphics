@@ -2,7 +2,7 @@
 
 using namespace Eternal::Graphics;
 
-Shader::Shader(const string& name)
-	: _name(name)
+Shader::Shader(const string& Name)
+	: _Name(Name)
 {
 }

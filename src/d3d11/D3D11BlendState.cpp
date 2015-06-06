@@ -30,29 +30,30 @@ static D3D11_BLEND_OP BLENDOPS[] =
 	D3D11_BLEND_OP_MAX
 };
 
-D3D11BlendState::D3D11BlendState(_In_ const Blend& src, _In_ const Blend& dest, _In_ const BlendOp& blendOp, _In_ const Blend& srcAlpha, _In_ const Blend& destAlpha, _In_ const BlendOp& blendAlphaOp)
-	: BlendState(src, dest, blendOp, srcAlpha, destAlpha, blendAlphaOp)
-	, _blendState(0)
+D3D11BlendState::D3D11BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendOpCol, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp)
+	: BlendState(Src, Dest, BlendOpCol, SrcAlpha, DestAlpha, BlendAlphaOp)
+	, _BlendState(0)
 {
-	_color[0] = 1.f; // R
-	_color[1] = 1.f; // G
-	_color[2] = 1.f; // B
-	_color[3] = 1.f; // A
+	_Color[0] = 1.f; // R
+	_Color[1] = 1.f; // G
+	_Color[2] = 1.f; // B
+	_Color[3] = 1.f; // A
 
-	_blendDesc.AlphaToCoverageEnable = FALSE;
-	_blendDesc.IndependentBlendEnable = FALSE;
-	_blendDesc.RenderTarget[0].BlendEnable = TRUE;
-	_blendDesc.RenderTarget[0].SrcBlend = BLENDS[src];
-	_blendDesc.RenderTarget[0].DestBlend = BLENDS[dest];
-	_blendDesc.RenderTarget[0].BlendOp = BLENDOPS[blendOp];
-	_blendDesc.RenderTarget[0].SrcBlendAlpha = BLENDS[srcAlpha];
-	_blendDesc.RenderTarget[0].DestBlendAlpha = BLENDS[destAlpha];
-	_blendDesc.RenderTarget[0].BlendOpAlpha = BLENDOPS[blendAlphaOp];
-	_blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	_BlendDesc.AlphaToCoverageEnable = FALSE;
+	_BlendDesc.IndependentBlendEnable = FALSE;
+	_BlendDesc.RenderTarget[0].BlendEnable = TRUE;
+	_BlendDesc.RenderTarget[0].SrcBlend = BLENDS[Src];
+	_BlendDesc.RenderTarget[0].DestBlend = BLENDS[Dest];
+	_BlendDesc.RenderTarget[0].BlendOp = BLENDOPS[BlendOpCol];
+	_BlendDesc.RenderTarget[0].SrcBlendAlpha = BLENDS[SrcAlpha];
+	_BlendDesc.RenderTarget[0].DestBlendAlpha = BLENDS[DestAlpha];
+	_BlendDesc.RenderTarget[0].BlendOpAlpha = BLENDOPS[BlendAlphaOp];
+	_BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBlendState(&_blendDesc, &_blendState);
+	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBlendState(&_BlendDesc, &_BlendState);
+	assert(hr == S_OK);
 }
-void D3D11BlendState::Apply()
+void D3D11BlendState::Apply(Context* DrawContext)
 {
-	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDeviceContext()->OMSetBlendState(_blendState, _color, 0xffffffff);
+	static_cast<D3D11Context*>(DrawContext)->GetD3D11Context()->OMSetBlendState(_BlendState, _Color, 0xffffffff);
 }

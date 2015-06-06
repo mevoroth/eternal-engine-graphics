@@ -5,6 +5,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Context;
+
 		class BlendState
 		{
 		public:
@@ -40,15 +42,16 @@ namespace Eternal
 				OP_MAX		= 4
 			};
 		private:
-			Blend _src;
-			Blend _dest;
-			BlendOp _blendOp;
-			Blend _srcAlpha;
-			Blend _destAlpha;
-			BlendOp _blendAlphaOp;
+			Blend _Src;
+			Blend _Dest;
+			BlendOp _BlendOp;
+			Blend _SrcAlpha;
+			Blend _DestAlpha;
+			BlendOp _BlendAlphaOp;
+
 		public:
-			BlendState(_In_ const Blend& src, _In_ const Blend& dest, _In_ const BlendOp& blendOp, _In_ const Blend& srcAlpha, _In_ const Blend& destAlpha, _In_ const BlendOp& blendAlphaOp);
-			virtual void Apply() = 0;
+			BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendOpCol, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp);
+			virtual void Apply(Context* DrawContext) = 0;
 		};
 	}
 }

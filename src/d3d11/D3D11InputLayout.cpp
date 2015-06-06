@@ -22,32 +22,30 @@ static const DXGI_FORMAT D3D11_INPUT_FORMATS[]
 	DXGI_FORMAT_R32G32_FLOAT,
 };
 
-D3D11InputLayout::D3D11InputLayout(_In_ const VertexDataType& DataType)
+D3D11InputLayout::D3D11InputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t Size)
 	: _InputLayout(0)
 {
 	assert(D3D11Renderer::Get());
 	assert(dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice());
 	
-	for (int i = 0; i < VERTEX_DATA_TYPE_COUNT; ++i)
+	for (uint32_t DataTypeIndex = 0; DataTypeIndex < Size; ++DataTypeIndex)
 	{
-		if (DataType & (1 << i))
-		{
-			_AddInputDesc(D3D11_INPUT_SEMANTICS[i], D3D11_INPUT_FORMATS[i]);
-		}
+		_AddInputDesc(D3D11_INPUT_SEMANTICS[DataType[DataTypeIndex]], D3D11_INPUT_FORMATS[DataType[DataTypeIndex]]);
 	}
 }
 
-void D3D11InputLayout::_AddInputDesc(_In_ const char* semantic, _In_ const DXGI_FORMAT& format)
+void D3D11InputLayout::_AddInputDesc(_In_ const char* Semantic, _In_ const DXGI_FORMAT& Format)
 {
 	D3D11_INPUT_ELEMENT_DESC InputTemp;
-	memset(&InputTemp, 0x0, sizeof(D3D11_INPUT_ELEMENT_DESC));
-	InputTemp.SemanticName = semantic;
+
+	InputTemp.SemanticName = Semantic;
 	InputTemp.SemanticIndex = 0;
-	InputTemp.Format = format;
+	InputTemp.Format = Format;
 	InputTemp.InputSlot = 0;
 	InputTemp.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	InputTemp.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	InputTemp.InstanceDataStepRate = 0;
+	
 	_Input.push_back(InputTemp);
 }
 

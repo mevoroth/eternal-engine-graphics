@@ -7,10 +7,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Context;
+
 		class RenderTarget
 		{
 		public:
-			virtual void Clear() = 0;
+			virtual void Clear(Context* ContextObj) = 0;
 		};
 	}
 }

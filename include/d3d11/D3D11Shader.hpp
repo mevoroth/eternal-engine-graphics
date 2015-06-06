@@ -3,7 +3,6 @@
 
 #include <d3d11.h>
 #include "Graphics/Shader.hpp"
-#include "D3D11Material.hpp"
 
 namespace Eternal
 {
@@ -19,13 +18,13 @@ namespace Eternal
 			};
 		protected:
 			static ID3DInclude* _IncludeHandler;
-			ID3DBlob* _program;
-			ID3D11ClassLinkage* _dynamicParams;
-			void _CompileFile(_In_ const string& src, _In_ const string& entry, _In_ const string& profile);
-			void _LoadFile(const string& src);
+			ID3DBlob* _Program;
+			ID3D11ClassLinkage* _DynamicParams;
+			void _CompileFile(_In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile);
+			void _LoadFile(const string& Src);
 		public:
-			D3D11Shader(const string& name, _In_ const string& src, _In_ const string& entry, _In_ const string& profile);
-			virtual void InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage, _Out_ void** code) = 0;
+			D3D11Shader(_In_ const string& Name, _In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile);
+			virtual void* GetD3D11Shader() = 0;
 		};
 	}
 }

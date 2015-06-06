@@ -10,8 +10,12 @@ namespace Eternal
 		class D3D11PixelShader : public D3D11Shader
 		{
 		public:
-			D3D11PixelShader(_In_ const string& name, _In_ const string& src);
-			void InstantiateShader(_In_ ID3D11ClassLinkage* classLinkage, _Out_ void** code);
+			D3D11PixelShader(_In_ const string& Name, _In_ const string& Src, _In_ ID3D11ClassLinkage* ClassLinkage);
+
+			virtual void* GetD3D11Shader() override;
+
+		private:
+			ID3D11PixelShader* _Shader = nullptr;
 		};
 	}
 }

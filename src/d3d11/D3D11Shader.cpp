@@ -10,39 +10,39 @@ using namespace std;
 
 ID3DInclude* D3D11Shader::_IncludeHandler = new D3D11Include();
 
-D3D11Shader::D3D11Shader(_In_ const string& name, _In_ const string& src, _In_ const string& entry, _In_ const string& profile)
-	: Shader(name)
-	, _program(0)
+D3D11Shader::D3D11Shader(_In_ const string& Name, _In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile)
+	: Shader(Name)
+	, _Program(0)
 {
 	assert(_IncludeHandler);
 #ifdef ETERNAL_DEBUG
-	_CompileFile(src, entry, profile);
+	_CompileFile(Src, Entry, Profile);
 #else
-	_LoadFile(shader + ".cso");
+	_LoadFile(Src + ".cso");
 #endif
 }
 
-void D3D11Shader::_CompileFile(_In_ const string& src, _In_ const string& entry, _In_ const string& profile)
+void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile)
 {
-	ID3DBlob* errors;
+	ID3DBlob* Errors;
 
 	HRESULT hr = D3DCompileFromFile(
-		wstring(src.cbegin(), src.cend()).c_str(),
+		wstring(Src.cbegin(), Src.cend()).c_str(),
 		0,
 		_IncludeHandler,
-		entry.c_str(),
-		profile.c_str(),
+		Entry.c_str(),
+		Profile.c_str(),
 		D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG,
 		0,
-		&_program,
-		&errors
+		&_Program,
+		&Errors
 	);
 
 	if (hr != S_OK)
 	{
-		_program = 0;
-		const char* error = (LPCSTR)errors->GetBufferPointer();
-		OutputDebugString(error);
+		_Program = 0;
+		const char* Error = (LPCSTR)Errors->GetBufferPointer();
+		OutputDebugString(Error);
 		assert(false);
 	}
 }
