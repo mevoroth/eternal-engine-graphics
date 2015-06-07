@@ -66,6 +66,7 @@
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11BlendState.hpp" />
     <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp" />
+    <ClInclude Include="include\d3d11\D3D11PosUVVertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11Resource.hpp" />
     <ClInclude Include="include\d3d11\D3D11Constant.hpp" />
     <ClInclude Include="include\d3d11\D3D11Context.hpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="include\d3d11\D3D11Shader.hpp" />
     <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp" />
     <ClInclude Include="include\d3d11\D3D11Texture.hpp" />
+    <ClInclude Include="include\d3d11\D3D11UInt32IndexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
@@ -96,7 +98,6 @@
     <ClInclude Include="include\Graphics\Shader.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
     <ClInclude Include="include\Graphics\Texture.hpp" />
-    <ClInclude Include="include\Graphics\Vertex.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
   </ItemGroup>
@@ -147,6 +148,7 @@
     <ClCompile Include="src\d3d11\D3D11IndexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11InputLayout.cpp" />
     <ClCompile Include="src\d3d11\D3D11PixelShader.cpp" />
+    <ClCompile Include="src\d3d11\D3D11PosUVVertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
     <ClCompile Include="src\d3d11\D3D11Resource.cpp" />
@@ -154,11 +156,11 @@
     <ClCompile Include="src\d3d11\D3D11Shader.cpp" />
     <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp" />
     <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
+    <ClCompile Include="src\d3d11\D3D11UInt32IndexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
-    <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />

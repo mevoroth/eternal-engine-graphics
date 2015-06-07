@@ -60,9 +60,6 @@
     <ClInclude Include="include\d3d11\D3D11BlendState.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Vertex.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\Viewport.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -158,6 +155,12 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Sampler.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11UInt32IndexBuffer.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11PosUVVertexBuffer.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
   </ItemGroup>
@@ -273,8 +276,11 @@
     <ClCompile Include="src\d3d11\D3D11IndexBuffer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\IndexBuffer.cpp">
-      <Filter>Graphics</Filter>
+    <ClCompile Include="src\d3d11\D3D11UInt32IndexBuffer.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11PosUVVertexBuffer.cpp">
+      <Filter>d3d11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

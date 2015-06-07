@@ -10,7 +10,7 @@ namespace Eternal
 		class IndexBuffer
 		{
 		public:
-			uint32_t GetCount() const;
+			virtual uint32_t GetCount() const = 0;
 		};
 	}
 }

@@ -1,24 +1,10 @@
 #ifndef _RENDERER_HPP_
 #define _RENDERER_HPP_
 
-#include <cstdint>
-
-#include "GraphicsSettings.hpp"
-#include "BlendState.hpp"
-#include "Vertex.hpp"
-#include "Viewport.hpp"
-#include "Types/Types.hpp"
-#include "Container/Stack.hpp"
-
-#define RENDER_MAX_CONTEXTS 64
-
 namespace Eternal
 {
 	namespace Graphics
 	{
-		using namespace Eternal::Types;
-		using namespace Eternal::Container;
-
 		class RenderTarget;
 
 		class Renderer
