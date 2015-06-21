@@ -8,6 +8,12 @@ ShaderFactory* ShaderFactory::_Inst = nullptr;
 
 ShaderFactory::ShaderFactory()
 {
-	assert(_Inst);
+	assert(!_Inst);
 	_Inst = this;
+}
+
+ShaderFactory* ShaderFactory::Get()
+{
+	assert(_Inst);
+	return _Inst;
 }

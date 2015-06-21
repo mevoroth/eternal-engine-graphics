@@ -160,7 +160,7 @@ ID3D11Device* D3D11Renderer::GetDevice()
 	return _Device;
 }
 
-D3D11Context* D3D11Renderer::GetMainContext()
+Context* D3D11Renderer::GetMainContext()
 {
 	assert(_MainContext);
 	return _MainContext;
@@ -171,7 +171,7 @@ void D3D11Renderer::Flush()
 	_SwapChain->Present(0, 0);
 }
 
-D3D11Context* D3D11Renderer::CreateDeferredContext()
+Context* D3D11Renderer::CreateDeferredContext()
 {
 	ID3D11DeviceContext* DeviceContext;
 	_Device->CreateDeferredContext(0, &DeviceContext);

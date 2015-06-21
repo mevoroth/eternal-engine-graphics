@@ -11,19 +11,15 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class Material;
-		class Camera;
-		class D3D11VertexShader;
-		class D3D11PixelShader;
-		class D3D11InputLayout;
+		class Context;
 
 		class D3D11Renderer : public Renderer
 		{
 		public:
 			D3D11Renderer(_In_ const RenderMode& Mode = HARDWARE, _In_ const AntiAliasing& AA = MSAA_4X);
 			ID3D11Device* GetDevice();
-			D3D11Context* GetMainContext();
-			D3D11Context* CreateDeferredContext();
+			virtual Context* GetMainContext() override;
+			virtual Context* CreateDeferredContext() override;
 
 			virtual void Flush();
 		private:

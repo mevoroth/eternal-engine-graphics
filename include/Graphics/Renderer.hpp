@@ -5,6 +5,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Context;
 		class RenderTarget;
 
 		class Renderer
@@ -55,6 +56,8 @@ namespace Eternal
 				return _AA;
 			}
 			virtual RenderTarget* GetBackBuffer() const;
+			virtual Context* GetMainContext() = 0;
+			virtual Context* CreateDeferredContext() = 0;
 		};
 	}
 }

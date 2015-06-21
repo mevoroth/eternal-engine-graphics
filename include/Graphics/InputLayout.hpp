@@ -14,7 +14,7 @@ namespace Eternal
 				COLOR_T,
 				NORMAL_T,
 				TANGENT_T,
-				TEXCOORD_T,
+				UV_T,
 
 				VERTEX_DATA_TYPE_COUNT = 5
 			};

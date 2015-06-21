@@ -32,18 +32,30 @@ namespace Eternal
 			}
 
 		protected:
-			virtual void _SetVertexShader(_In_ Shader* ShaderObj) override;
-			virtual void _SetGeometryShader(_In_ Shader* ShaderObj) override;
-			virtual void _SetPixelShader(_In_ Shader* ShaderObj) override;
-			virtual void _SetVSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj) override;
-			virtual void _SetGSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj) override;
-			virtual void _SetPSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj) override;
-			virtual void _SetVSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj) override;
-			virtual void _SetGSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj) override;
-			virtual void _SetPSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj) override;
-			virtual void _SetVSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj) override;
-			virtual void _SetGSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj) override;
-			virtual void _SetPSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj) override;
+			virtual void _BindVertexShader(_In_ Shader* ShaderObj) override;
+			virtual void _BindGeometryShader(_In_ Shader* ShaderObj) override;
+			virtual void _BindPixelShader(_In_ Shader* ShaderObj) override;
+			virtual void _UnbindVertexShader() override;
+			virtual void _UnbindGeometryShader() override;
+			virtual void _UnbindPixelShader() override;
+			virtual void _BindVSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj) override;
+			virtual void _BindGSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj) override;
+			virtual void _BindPSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj) override;
+			virtual void _UnbindVSConstant(_In_ uint32_t Slot) override;
+			virtual void _UnbindGSConstant(_In_ uint32_t Slot) override;
+			virtual void _UnbindPSConstant(_In_ uint32_t Slot) override;
+			virtual void _BindVSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj) override;
+			virtual void _BindGSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj) override;
+			virtual void _BindPSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj) override;
+			virtual void _UnbindVSBuffer(_In_ uint32_t Slot) override;
+			virtual void _UnbindGSBuffer(_In_ uint32_t Slot) override;
+			virtual void _UnbindPSBuffer(_In_ uint32_t Slot) override;
+			virtual void _BindVSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj) override;
+			virtual void _BindGSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj) override;
+			virtual void _BindPSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj) override;
+			virtual void _UnbindVSSampler(_In_ uint32_t Slot) override;
+			virtual void _UnbindGSSampler(_In_ uint32_t Slot) override;
+			virtual void _UnbindPSSampler(_In_ uint32_t Slot) override;
 
 		private:
 			Viewport* _Viewport = nullptr;

@@ -48,60 +48,108 @@ void D3D11Context::SetBlendMode(_In_ BlendState* BlendStateObj)
 	_BlendState->Apply(this);
 }
 
-void D3D11Context::_SetVertexShader(_In_ Shader* ShaderObj)
+void D3D11Context::_BindVertexShader(_In_ Shader* ShaderObj)
 {
 	_DeviceContext->VSSetShader((ID3D11VertexShader*)static_cast<D3D11Shader*>(ShaderObj)->GetD3D11Shader(), nullptr, 0);
 }
-void D3D11Context::_SetGeometryShader(_In_ Shader* ShaderObj)
+void D3D11Context::_BindGeometryShader(_In_ Shader* ShaderObj)
 {
 	_DeviceContext->GSSetShader((ID3D11GeometryShader*)static_cast<D3D11Shader*>(ShaderObj)->GetD3D11Shader(), nullptr, 0);
 }
-void D3D11Context::_SetPixelShader(_In_ Shader* ShaderObj)
+void D3D11Context::_BindPixelShader(_In_ Shader* ShaderObj)
 {
 	_DeviceContext->PSSetShader((ID3D11PixelShader*)static_cast<D3D11Shader*>(ShaderObj)->GetD3D11Shader(), nullptr, 0);
 }
-void D3D11Context::_SetVSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj)
+void Eternal::Graphics::D3D11Context::_UnbindVertexShader()
+{
+	_DeviceContext->VSSetShader(nullptr, nullptr, 0);
+}
+void Eternal::Graphics::D3D11Context::_UnbindGeometryShader()
+{
+	_DeviceContext->GSSetShader(nullptr, nullptr, 0);
+}
+void Eternal::Graphics::D3D11Context::_UnbindPixelShader()
+{
+	_DeviceContext->PSSetShader(nullptr, nullptr, 0);
+}
+void D3D11Context::_BindVSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj)
 {
 	ID3D11Buffer* buffer = static_cast<D3D11Constant*>(ConstantObj)->GetD3D11Buffer();
 	_DeviceContext->VSSetConstantBuffers(Slot, 1, &buffer);
 }
-void D3D11Context::_SetGSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj)
+void D3D11Context::_BindGSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj)
 {
 	ID3D11Buffer* buffer = static_cast<D3D11Constant*>(ConstantObj)->GetD3D11Buffer();
 	_DeviceContext->GSSetConstantBuffers(Slot, 1, &buffer);
 }
-void D3D11Context::_SetPSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj)
+void D3D11Context::_BindPSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj)
 {
 	ID3D11Buffer* buffer = static_cast<D3D11Constant*>(ConstantObj)->GetD3D11Buffer();
 	_DeviceContext->PSSetConstantBuffers(Slot, 1, &buffer);
 }
-void D3D11Context::_SetVSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
+void Eternal::Graphics::D3D11Context::_UnbindVSConstant(_In_ uint32_t Slot)
+{
+	_DeviceContext->VSSetConstantBuffers(Slot, 1, nullptr);
+}
+void Eternal::Graphics::D3D11Context::_UnbindGSConstant(_In_ uint32_t Slot)
+{
+	_DeviceContext->GSSetConstantBuffers(Slot, 1, nullptr);
+}
+void Eternal::Graphics::D3D11Context::_UnbindPSConstant(_In_ uint32_t Slot)
+{
+	_DeviceContext->PSSetConstantBuffers(Slot, 1, nullptr);
+}
+void D3D11Context::_BindVSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
 {
 	ID3D11ShaderResourceView* ShaderResourceView = static_cast<D3D11Resource*>(BufferObj)->GetD3D11ShaderResourceView();
 	_DeviceContext->VSSetShaderResources(Slot, 1, &ShaderResourceView);
 }
-void D3D11Context::_SetGSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
+void D3D11Context::_BindGSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
 {
 	ID3D11ShaderResourceView* ShaderResourceView = static_cast<D3D11Resource*>(BufferObj)->GetD3D11ShaderResourceView();
 	_DeviceContext->GSSetShaderResources(Slot, 1, &ShaderResourceView);
 }
-void D3D11Context::_SetPSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
+void D3D11Context::_BindPSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
 {
 	ID3D11ShaderResourceView* ShaderResourceView = static_cast<D3D11Resource*>(BufferObj)->GetD3D11ShaderResourceView();
 	_DeviceContext->PSSetShaderResources(Slot, 1, &ShaderResourceView);
 }
-void D3D11Context::_SetVSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj)
+void Eternal::Graphics::D3D11Context::_UnbindVSBuffer(_In_ uint32_t Slot)
+{
+	_DeviceContext->VSSetShaderResources(Slot, 1, nullptr);
+}
+void Eternal::Graphics::D3D11Context::_UnbindGSBuffer(_In_ uint32_t Slot)
+{
+	_DeviceContext->GSSetShaderResources(Slot, 1, nullptr);
+}
+void Eternal::Graphics::D3D11Context::_UnbindPSBuffer(_In_ uint32_t Slot)
+{
+	_DeviceContext->PSSetShaderResources(Slot, 1, nullptr);
+}
+void D3D11Context::_BindVSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj)
 {
 	ID3D11SamplerState* SamplerState = static_cast<D3D11Sampler*>(SamplerObj)->GetD3D11SamplerState();
 	_DeviceContext->VSSetSamplers(Slot, 1, &SamplerState);
 }
-void D3D11Context::_SetGSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj)
+void D3D11Context::_BindGSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj)
 {
 	ID3D11SamplerState* SamplerState = static_cast<D3D11Sampler*>(SamplerObj)->GetD3D11SamplerState();
 	_DeviceContext->GSSetSamplers(Slot, 1, &SamplerState);
 }
-void D3D11Context::_SetPSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj)
+void D3D11Context::_BindPSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj)
 {
 	ID3D11SamplerState* SamplerState = static_cast<D3D11Sampler*>(SamplerObj)->GetD3D11SamplerState();
 	_DeviceContext->PSSetSamplers(Slot, 1, &SamplerState);
+}
+void Eternal::Graphics::D3D11Context::_UnbindVSSampler(_In_ uint32_t Slot)
+{
+	_DeviceContext->VSSetSamplers(Slot, 1, nullptr);
+}
+void Eternal::Graphics::D3D11Context::_UnbindGSSampler(_In_ uint32_t Slot)
+{
+	_DeviceContext->GSSetSamplers(Slot, 1, nullptr);
+}
+void Eternal::Graphics::D3D11Context::_UnbindPSSampler(_In_ uint32_t Slot)
+{
+	_DeviceContext->PSSetSamplers(Slot, 1, nullptr);
 }
