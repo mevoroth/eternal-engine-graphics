@@ -12,6 +12,8 @@ namespace Eternal
 			: public D3D11Resource
 			, public VertexBuffer
 		{
+		public:
+			D3D11VertexBuffer(size_t BufferSize, void* Data);
 		};
 	}
 }

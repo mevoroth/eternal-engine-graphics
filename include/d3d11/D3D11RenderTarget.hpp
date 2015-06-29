@@ -26,7 +26,7 @@ namespace Eternal
 #pragma endregion RenderTarget
 #pragma region D3D11Resource
 			virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() override;
-			virtual ID3D11Buffer* GetD3D11Buffer() override;
+			//virtual ID3D11Buffer* GetD3D11Buffer() override;
 #pragma endregion D3D11Resource
 #pragma region D3D11Texture
 			//virtual ID3D11SamplerState* CreateSamplerState() override;

@@ -61,10 +61,10 @@ ID3D11RenderTargetView* D3D11RenderTarget::GetD3D11RenderTarget()
 	return _RenderTarget;
 }
 
-ID3D11Buffer* D3D11RenderTarget::GetD3D11Buffer()
-{
-	return nullptr;
-}
+//ID3D11Buffer* D3D11RenderTarget::GetD3D11Buffer()
+//{
+//	return nullptr;
+//}
 
 ID3D11ShaderResourceView* D3D11RenderTarget::GetD3D11ShaderResourceView()
 {

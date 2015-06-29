@@ -282,5 +282,11 @@
     <ClCompile Include="src\d3d11\D3D11PosUVVertexBuffer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Constant.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11VertexBuffer.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

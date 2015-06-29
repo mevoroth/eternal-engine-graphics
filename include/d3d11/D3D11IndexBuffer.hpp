@@ -15,6 +15,7 @@ namespace Eternal
 			, public IndexBuffer
 		{
 		public:
+			D3D11IndexBuffer(size_t BufferSize, void* Data);
 			DXGI_FORMAT GetD3D11Format() const;
 		};
 	}

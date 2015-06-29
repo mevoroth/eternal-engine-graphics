@@ -27,12 +27,19 @@ void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuff
 	_DeviceContext->DrawIndexed(IndicesBuffer->GetCount(), 0, 0);
 }
 
-void D3D11Context::AttachRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount)
+void D3D11Context::SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount)
 {
 	ID3D11RenderTargetView* RenderTargetViews[D3D11_MAX_RENDERTARGETS];
 	for (int RenderTargetIndex = 0; RenderTargetIndex < RenderTargetsCount; ++RenderTargetIndex)
 	{
-		RenderTargetViews[RenderTargetIndex] = static_cast<D3D11RenderTarget*>(RenderTargets[RenderTargetIndex])->GetD3D11RenderTarget();
+		if (RenderTargets[RenderTargetIndex])
+		{
+			RenderTargetViews[RenderTargetIndex] = static_cast<D3D11RenderTarget*>(RenderTargets[RenderTargetIndex])->GetD3D11RenderTarget();
+		}
+		else
+		{
+			RenderTargetViews[RenderTargetIndex] = nullptr;
+		}
 	}
 	_DeviceContext->OMSetRenderTargets(RenderTargetsCount, RenderTargetViews, nullptr);
 }

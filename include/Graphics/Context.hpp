@@ -27,11 +27,11 @@ namespace Eternal
 				GEOMETRY,
 				PIXEL
 			};
-			virtual void AttachRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) = 0;
 			virtual void SetViewport(_In_ Viewport* ViewportObj) = 0;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) = 0;
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) = 0;
 			//template<class Vertex> virtual void DrawIndexInstanced()
+			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) = 0;
 			template<ShaderStage Stage> void BindShader(_In_ Shader* ShaderObj)
 			{
 				switch (Stage)
@@ -56,9 +56,9 @@ namespace Eternal
 			{
 				switch (Stage)
 				{
-				case VERTEX: _BindVSConstant(Slot, ShaderObj); break;
-				case GEOMETRY: _BindGSConstant(Slot, ShaderObj); break;
-				case PIXEL: _BindPSConstant(Slot, ShaderObj); break;
+				case VERTEX: _BindVSConstant(Slot, ConstantObj); break;
+				case GEOMETRY: _BindGSConstant(Slot, ConstantObj); break;
+				case PIXEL: _BindPSConstant(Slot, ConstantObj); break;
 				default: ETERNAL_ASSERT(false); break;
 				}
 			}
@@ -76,9 +76,9 @@ namespace Eternal
 			{
 				switch (Stage)
 				{
-				case VERTEX: _BindVSBuffer(Slot, ShaderObj); break;
-				case GEOMETRY: _BindGSBuffer(Slot, ShaderObj); break;
-				case PIXEL: _BindPSBuffer(Slot, ShaderObj); break;
+				case VERTEX: _BindVSBuffer(Slot, BufferObj); break;
+				case GEOMETRY: _BindGSBuffer(Slot, BufferObj); break;
+				case PIXEL: _BindPSBuffer(Slot, BufferObj); break;
 				default: ETERNAL_ASSERT(false); break;
 				}
 			}
@@ -87,8 +87,8 @@ namespace Eternal
 				switch (Stage)
 				{
 				case VERTEX: _UnbindVSBuffer(Slot); break;
-				case GEOMETRY: _BindGSBuffer(Slot, ShaderObj); break;
-				case PIXEL: _BindPSBuffer(Slot, ShaderObj); break;
+				case GEOMETRY: _UnbindGSBuffer(Slot); break;
+				case PIXEL: _BindPSBuffer(Slot); break;
 				default: ETERNAL_ASSERT(false); break;
 				}
 			}

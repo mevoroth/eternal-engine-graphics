@@ -22,7 +22,7 @@ namespace Eternal
 			D3D11Context(ID3D11DeviceContext* D3D11ContextObj);
 
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) override;
-			virtual void AttachRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) override;
+			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) override;
 			virtual void SetViewport(_In_ Viewport* ViewportObj) override;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) override;
 

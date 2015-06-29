@@ -12,8 +12,8 @@ namespace Eternal
 			: public Constant
 			, public D3D11Resource
 		{
-		public:
-			virtual ID3D11Buffer* GetD3D11Buffer() override;
+			D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode);
+			D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, void* Data);
 		};
 	}
 }

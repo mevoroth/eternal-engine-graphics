@@ -7,7 +7,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class Constant : public Resource
+		class Constant
 		{
 		};
 	}

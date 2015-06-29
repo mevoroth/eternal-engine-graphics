@@ -8,12 +8,12 @@ namespace Eternal
 		class Resource
 		{
 		public:
-			enum LockMode
+			enum CPUAccess
 			{
 				READ	= 0x1,
 				WRITE	= 0x2
 			};
-			virtual void* Lock(const LockMode& LockingMode) = 0;
+			virtual void* Lock(const CPUAccess& LockingMode) = 0;
 			virtual void Unlock() = 0;
 			void Resize(const size_t& Size);
 			inline size_t GetSize()

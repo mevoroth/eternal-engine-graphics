@@ -142,6 +142,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Constant.cpp" />
     <ClCompile Include="src\d3d11\D3D11Context.cpp" />
     <ClCompile Include="src\d3d11\D3D11Device.cpp" />
     <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp" />
     <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
     <ClCompile Include="src\d3d11\D3D11UInt32IndexBuffer.cpp" />
+    <ClCompile Include="src\d3d11\D3D11VertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
