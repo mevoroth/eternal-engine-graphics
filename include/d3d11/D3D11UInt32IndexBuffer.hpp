@@ -21,11 +21,6 @@ namespace Eternal
 				return nullptr;
 			}
 
-			virtual ID3D11Buffer* GetD3D11Buffer()
-			{
-				return nullptr;
-			}
-
 			virtual uint32_t GetCount() const override;
 
 		private:

@@ -2,7 +2,7 @@
 #define _D3D11_INDEX_BUFFER_HPP_
 
 #include "Graphics/IndexBuffer.hpp"
-#include "D3D11Resource.hpp"
+#include "D3D11Buffer.hpp"
 
 enum DXGI_FORMAT;
 
@@ -11,7 +11,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		class D3D11IndexBuffer
-			: public D3D11Resource
+			: public D3D11Buffer
 			, public IndexBuffer
 		{
 		public:

@@ -14,10 +14,14 @@ namespace Eternal
 			, public D3D11Resource
 		{
 		public:
+			D3D11Texture(ID3D11Texture2D* TextureObj);
 			//virtual ID3D11SamplerState* CreateSamplerState() = 0;
 			//virtual ID3D11ShaderResourceView* CreateShaderResourceView() = 0;
 			D3D11_TEXTURE_ADDRESS_MODE GetD3D11UAddressMode() const;
 			D3D11_TEXTURE_ADDRESS_MODE GetD3D11VAddressMode() const;
+
+		protected:
+			D3D11Texture();
 		};
 	}
 }

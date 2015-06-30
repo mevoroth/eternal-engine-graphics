@@ -13,9 +13,6 @@ namespace Eternal
 			: public RenderTarget
 			, public D3D11Texture
 		{
-		private:
-			ID3D11RenderTargetView* _RenderTarget = nullptr;
-			ID3D11Texture2D* _Tex2D = nullptr;
 		public:
 			D3D11RenderTarget(_In_ int Width, _In_ int Height);
 			D3D11RenderTarget(_In_ ID3D11Texture2D* Tex);
@@ -26,14 +23,9 @@ namespace Eternal
 #pragma endregion RenderTarget
 #pragma region D3D11Resource
 			virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() override;
-			//virtual ID3D11Buffer* GetD3D11Buffer() override;
 #pragma endregion D3D11Resource
-#pragma region D3D11Texture
-			//virtual ID3D11SamplerState* CreateSamplerState() override;
-			//virtual ID3D11ShaderResourceView* CreateShaderResourceView() override;
-			//ID3D11UnorderedAccessView* CreateUnorderedAccessView();
-#pragma endregion D3D11Texture
-
+		private:
+			ID3D11RenderTargetView* _RenderTarget = nullptr;
 		};
 	}
 }

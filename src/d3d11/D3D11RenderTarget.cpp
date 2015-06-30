@@ -6,17 +6,21 @@ using namespace Eternal::Graphics;
 using namespace DirectX;
 
 D3D11RenderTarget::D3D11RenderTarget(_In_ ID3D11Texture2D* Tex)
-	: _Tex2D(Tex)
+	: D3D11Texture(Tex)
 {
 	D3D11_TEXTURE2D_DESC desc;
 	Tex->GetDesc(&desc);
 	SetWidth(desc.Width);
 	SetHeight(desc.Height);
 
-	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(_Tex2D, nullptr, &_RenderTarget);
+	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(Tex, nullptr, &_RenderTarget);
 }
 D3D11RenderTarget::D3D11RenderTarget(_In_ int Width, _In_ int Height)
+	: D3D11Texture()
 {
+	ID3D11Texture2D* Texture2D;
+	HRESULT hr;
+
 	SetWidth(Width);
 	SetHeight(Height);
 	D3D11_TEXTURE2D_DESC Tex2DDesc;
@@ -32,20 +36,20 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ int Width, _In_ int Height)
 	Tex2DDesc.CPUAccessFlags = 0;
 	Tex2DDesc.MiscFlags = 0;
 
-	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateTexture2D(&Tex2DDesc, 0, &_Tex2D);
+	hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateTexture2D(&Tex2DDesc, 0, &Texture2D);
+	ETERNAL_ASSERT(hr == S_OK);
 
 	D3D11_RENDER_TARGET_VIEW_DESC RenderTargetDesc;
 	RenderTargetDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	RenderTargetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	RenderTargetDesc.Texture2D.MipSlice = 0;
 
-	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(_Tex2D, &RenderTargetDesc, &_RenderTarget);
+	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(Texture2D, &RenderTargetDesc, &_RenderTarget);
+	ETERNAL_ASSERT(hr == S_OK);
 }
 
 D3D11RenderTarget::~D3D11RenderTarget()
 {
-	_Tex2D->Release();
-	_Tex2D = nullptr;
 	_RenderTarget->Release();
 	_RenderTarget = nullptr;
 }

@@ -65,6 +65,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11BlendState.hpp" />
+    <ClInclude Include="include\d3d11\D3D11Buffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11PosUVVertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11Resource.hpp" />
@@ -142,6 +143,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
+    <ClCompile Include="src\d3d11\D3D11Buffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11Constant.cpp" />
     <ClCompile Include="src\d3d11\D3D11Context.cpp" />
     <ClCompile Include="src\d3d11\D3D11Device.cpp" />

@@ -13,7 +13,6 @@ D3D11Resource::D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPU
 {
 }
 
-
 D3D11Resource::D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, void* Data)
 {
 	ETERNAL_ASSERT(UsageObj != IMMUTABLE || Data);
@@ -29,6 +28,21 @@ D3D11Resource::D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPU
 	{
 		_CreateBuffer(BufferSize, UsageObj, CPUMode, BindMode, nullptr);
 	}
+}
+
+D3D11Resource::D3D11Resource(ID3D11Resource* ResourceObj)
+	: _D3D11Resource(ResourceObj)
+{
+}
+
+D3D11Resource::D3D11Resource()
+{
+}
+
+D3D11Resource::~D3D11Resource()
+{
+	_D3D11Resource->Release();
+	_D3D11Resource = nullptr;
 }
 
 void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, const D3D11_SUBRESOURCE_DATA* SubResourceData)
@@ -50,9 +64,11 @@ void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, cons
 	BufferDesc.StructureByteStride = 0;
 
 	HRESULT hr;
-	hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBuffer(&BufferDesc, SubResourceData, &_D3D11Buffer);
+	ID3D11Buffer* D3D11Buffer;
+	hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBuffer(&BufferDesc, SubResourceData, &D3D11Buffer);
 	ETERNAL_ASSERT(hr == S_OK);
 
+	_D3D11Resource = D3D11Buffer;
 	_CPUAccess = CPUMode;
 }
 
@@ -64,4 +80,14 @@ void* D3D11Resource::Lock(const CPUAccess& LockingMode)
 void D3D11Resource::Unlock()
 {
 
+}
+
+ID3D11Resource* D3D11Resource::GetD3D11Resource()
+{
+	return _D3D11Resource;
+}
+
+void D3D11Resource::_SetD3D11Resource(ID3D11Resource* D3D11ResourceObj)
+{
+	_D3D11Resource = D3D11ResourceObj;
 }

@@ -4,7 +4,7 @@
 #include "Graphics/Resource.hpp"
 
 struct ID3D11ShaderResourceView;
-struct ID3D11Buffer;
+struct ID3D11Resource;
 struct D3D11_SUBRESOURCE_DATA;
 
 namespace Eternal
@@ -34,22 +34,23 @@ namespace Eternal
 			};
 			D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode);
 			D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, void* Data);
+			virtual ~D3D11Resource();
 			virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() = 0;
-			inline ID3D11Buffer* GetD3D11Buffer()
-			{
-				return _D3D11Buffer;
-			}
 #pragma region Resource
 			virtual void* Lock(const CPUAccess& LockingMode) override;
 			virtual void Unlock() override;
 #pragma endregion Resource
+			ID3D11Resource* GetD3D11Resource();
 
 		protected:
+			D3D11Resource();
+			D3D11Resource(ID3D11Resource* ResourceObj);
 			void _CreateBuffer(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, const D3D11_SUBRESOURCE_DATA* SubResourceData);
+			void _SetD3D11Resource(ID3D11Resource* D3D11ResourceObj);
 
 		private:
 			CPUAccess _CPUAccess;
-			ID3D11Buffer* _D3D11Buffer = nullptr;
+			ID3D11Resource* _D3D11Resource = nullptr;
 		};
 	}
 }

@@ -2,7 +2,7 @@
 #define _D3D11_CONSTANT_HPP_
 
 #include "Graphics/Constant.hpp"
-#include "d3d11/D3D11Resource.hpp"
+#include "d3d11/D3D11Buffer.hpp"
 
 namespace Eternal
 {
@@ -10,7 +10,7 @@ namespace Eternal
 	{
 		class D3D11Constant
 			: public Constant
-			, public D3D11Resource
+			, public D3D11Buffer
 		{
 			D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode);
 			D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, void* Data);

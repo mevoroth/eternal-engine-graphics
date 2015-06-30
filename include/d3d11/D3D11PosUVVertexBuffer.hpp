@@ -33,11 +33,6 @@ namespace Eternal
 				throw std::exception("The method or operation is not implemented.");
 			}
 
-			virtual ID3D11Buffer* GetD3D11Buffer()
-			{
-				throw std::exception("The method or operation is not implemented.");
-			}
-
 			virtual size_t GetSize() const override;
 
 		private:
