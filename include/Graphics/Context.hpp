@@ -66,7 +66,7 @@ namespace Eternal
 			{
 				switch (Stage)
 				{
-				case VERTEX: _UnbindPSConstant(Slot); break;
+				case VERTEX: _UnbindVSConstant(Slot); break;
 				case GEOMETRY: _UnbindGSConstant(Slot); break;
 				case PIXEL: _UnbindPSConstant(Slot); break;
 				default: ETERNAL_ASSERT(false); break;
@@ -115,7 +115,7 @@ namespace Eternal
 				{
 				case VERTEX: _UnbindVSSampler(Slot); break;
 				case GEOMETRY: _UnbindGSSampler(Slot); break;
-				case PIXEL: _UnbindGSSampler(Slot); break;
+				case PIXEL: _UnbindPSSampler(Slot); break;
 				default: ETERNAL_ASSERT(false); break;
 				}
 			}

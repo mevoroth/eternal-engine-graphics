@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <WinBase.h>
 
+#include "Macros/Macros.hpp"
 #include "d3d11/D3D11Device.hpp"
 #include "d3d11/D3D11RenderTarget.hpp"
 #include "d3d11/D3D11VertexShader.hpp"
@@ -16,21 +17,21 @@ using namespace Eternal::Graphics;
 D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasing& aa)
 	: Renderer(mode, aa)
 {
-	assert(mode != SOFTWARE); // NOT IMPLEMENTED YET
+	ETERNAL_ASSERT(mode != SOFTWARE); // NOT IMPLEMENTED YET
 
 	HRESULT hr;
 
 	hr = _CreateDevice();
 	if (hr != S_OK)
 	{
-		assert(false);
+		ETERNAL_ASSERT(false);
 		// ERROR
 	}
 
 	hr = _CreateSwapChain();
 	if (hr != S_OK)
 	{
-		assert(false);
+		ETERNAL_ASSERT(false);
 		// ERROR
 	}
 
@@ -71,7 +72,7 @@ HRESULT D3D11Renderer::_CreateDevice()
 	{
 		// ERROR
 		printf("ERROR\n");
-		assert(false);
+		ETERNAL_ASSERT(false);
 	}
 
 	if (hr != S_OK)
@@ -79,7 +80,7 @@ HRESULT D3D11Renderer::_CreateDevice()
 		// ERROR
 		DWORD err = GetLastError();
 		printf("ERROR %d:%x\n", err, err);
-		assert(false);
+		ETERNAL_ASSERT(false);
 	}
 
 	_MainContext = new D3D11Context(DeviceContext);

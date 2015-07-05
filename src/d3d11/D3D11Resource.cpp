@@ -1,5 +1,9 @@
 #include "d3d11/D3D11Resource.hpp"
 
+#ifdef ETERNAL_DEBUG
+#include <cstdio>
+#endif
+
 #include <cstdint>
 #include <d3d11.h>
 
@@ -15,7 +19,7 @@ D3D11Resource::D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPU
 
 D3D11Resource::D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, void* Data)
 {
-	ETERNAL_ASSERT(UsageObj != IMMUTABLE || Data);
+	ETERNAL_ASSERT(UsageObj != IMMUTABLE || Data != nullptr);
 	if (Data)
 	{
 		D3D11_SUBRESOURCE_DATA SubResData;
@@ -47,11 +51,11 @@ D3D11Resource::~D3D11Resource()
 
 void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, const D3D11_SUBRESOURCE_DATA* SubResourceData)
 {
-	if (UsageObj < Usage::STAGING)
+	if (UsageObj < STAGING)
 	{
 		ETERNAL_ASSERT((CPUMode & READ) == 0);
 	}
-	if ((UsageObj & 0x1) == 0)
+	if (UsageObj < DYNAMIC)
 	{
 		ETERNAL_ASSERT((CPUMode & WRITE) == 0);
 	}
@@ -59,14 +63,23 @@ void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, cons
 	BufferDesc.ByteWidth = BufferSize;
 	BufferDesc.Usage = (D3D11_USAGE)UsageObj;
 	BufferDesc.BindFlags = BindMode;
-	BufferDesc.CPUAccessFlags = (CPUMode & READ != 0 ? D3D11_CPU_ACCESS_READ : 0) | (CPUMode & WRITE != 0 ? D3D11_CPU_ACCESS_WRITE : 0);
+	BufferDesc.CPUAccessFlags = ((CPUMode & READ) != 0 ? D3D11_CPU_ACCESS_READ : 0) | ((CPUMode & WRITE) != 0 ? D3D11_CPU_ACCESS_WRITE : 0);
 	BufferDesc.MiscFlags = 0;
 	BufferDesc.StructureByteStride = 0;
 
 	HRESULT hr;
 	ID3D11Buffer* D3D11Buffer;
 	hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBuffer(&BufferDesc, SubResourceData, &D3D11Buffer);
-	ETERNAL_ASSERT(hr == S_OK);
+#ifdef ETERNAL_DEBUG
+	if (hr != S_OK)
+	{
+		char errors[255];
+		DWORD err = GetLastError();
+		sprintf_s(errors, ETERNAL_ARRAYSIZE(errors), "ERROR %d:%x\n", err, err);
+		OutputDebugString(errors);
+		ETERNAL_ASSERT(false);
+	}
+#endif
 
 	_D3D11Resource = D3D11Buffer;
 	_CPUAccess = CPUMode;

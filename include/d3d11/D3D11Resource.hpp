@@ -16,10 +16,10 @@ namespace Eternal
 		public:
 			enum Usage
 			{
-				DEFAULT,
-				IMMUTABLE,
-				DYNAMIC,
-				STAGING
+				DEFAULT		= 0,
+				IMMUTABLE	= 1,
+				DYNAMIC		= 2,
+				STAGING		= 3
 			};
 			enum Bind
 			{
@@ -35,7 +35,6 @@ namespace Eternal
 			D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode);
 			D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, void* Data);
 			virtual ~D3D11Resource();
-			virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() = 0;
 #pragma region Resource
 			virtual void* Lock(const CPUAccess& LockingMode) override;
 			virtual void Unlock() override;

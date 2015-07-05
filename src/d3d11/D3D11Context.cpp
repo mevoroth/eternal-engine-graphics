@@ -3,6 +3,7 @@
 #include "d3d11/D3D11RenderTarget.hpp"
 #include "d3d11/D3D11Shader.hpp"
 #include "d3d11/D3D11Constant.hpp"
+#include "d3d11/ID3D11ShaderResource.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/BlendState.hpp"
 
@@ -96,29 +97,35 @@ void D3D11Context::_BindPSConstant(_In_ uint32_t Slot, _In_ Constant* ConstantOb
 }
 void Eternal::Graphics::D3D11Context::_UnbindVSConstant(_In_ uint32_t Slot)
 {
-	_DeviceContext->VSSetConstantBuffers(Slot, 1, nullptr);
+	ID3D11Buffer* NullConstant = nullptr;
+	_DeviceContext->VSSetConstantBuffers(Slot, 1, &NullConstant);
 }
 void Eternal::Graphics::D3D11Context::_UnbindGSConstant(_In_ uint32_t Slot)
 {
-	_DeviceContext->GSSetConstantBuffers(Slot, 1, nullptr);
+	ID3D11Buffer* NullConstant = nullptr;
+	_DeviceContext->GSSetConstantBuffers(Slot, 1, &NullConstant);
 }
 void Eternal::Graphics::D3D11Context::_UnbindPSConstant(_In_ uint32_t Slot)
 {
-	_DeviceContext->PSSetConstantBuffers(Slot, 1, nullptr);
+	ID3D11Buffer* NullConstant = nullptr;
+	_DeviceContext->PSSetConstantBuffers(Slot, 1, &NullConstant);
 }
 void D3D11Context::_BindVSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
 {
-	ID3D11ShaderResourceView* ShaderResourceView = static_cast<D3D11Resource*>(BufferObj)->GetD3D11ShaderResourceView();
+	ETERNAL_ASSERT(dynamic_cast<ID3D11ShaderResource*>(BufferObj));
+	ID3D11ShaderResourceView* ShaderResourceView = dynamic_cast<ID3D11ShaderResource*>(BufferObj)->GetD3D11ShaderResourceView();
 	_DeviceContext->VSSetShaderResources(Slot, 1, &ShaderResourceView);
 }
 void D3D11Context::_BindGSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
 {
-	ID3D11ShaderResourceView* ShaderResourceView = static_cast<D3D11Resource*>(BufferObj)->GetD3D11ShaderResourceView();
+	ETERNAL_ASSERT(dynamic_cast<ID3D11ShaderResource*>(BufferObj));
+	ID3D11ShaderResourceView* ShaderResourceView = dynamic_cast<ID3D11ShaderResource*>(BufferObj)->GetD3D11ShaderResourceView();
 	_DeviceContext->GSSetShaderResources(Slot, 1, &ShaderResourceView);
 }
 void D3D11Context::_BindPSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
 {
-	ID3D11ShaderResourceView* ShaderResourceView = static_cast<D3D11Resource*>(BufferObj)->GetD3D11ShaderResourceView();
+	ETERNAL_ASSERT(dynamic_cast<ID3D11ShaderResource*>(BufferObj));
+	ID3D11ShaderResourceView* ShaderResourceView = dynamic_cast<ID3D11ShaderResource*>(BufferObj)->GetD3D11ShaderResourceView();
 	_DeviceContext->PSSetShaderResources(Slot, 1, &ShaderResourceView);
 }
 void Eternal::Graphics::D3D11Context::_UnbindVSBuffer(_In_ uint32_t Slot)

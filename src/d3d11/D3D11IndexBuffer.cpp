@@ -5,7 +5,7 @@
 using namespace Eternal::Graphics;
 
 D3D11IndexBuffer::D3D11IndexBuffer(size_t BufferSize, void* Data)
-	: D3D11Buffer(BufferSize, DYNAMIC, (CPUAccess)0, INDEX_BUFFER, Data)
+	: D3D11Buffer(BufferSize, DYNAMIC, WRITE, INDEX_BUFFER, Data)
 {
 }
 

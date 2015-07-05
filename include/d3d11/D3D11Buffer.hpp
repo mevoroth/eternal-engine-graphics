@@ -15,6 +15,9 @@ namespace Eternal
 			D3D11Buffer(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode);
 			D3D11Buffer(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, void* Data);
 			ID3D11Buffer* GetD3D11Buffer();
+
+		protected:
+			D3D11Buffer(ID3D11Buffer* D3D11BufferObj);
 		};
 	}
 }

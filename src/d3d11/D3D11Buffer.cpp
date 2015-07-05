@@ -13,6 +13,11 @@ D3D11Buffer::D3D11Buffer(size_t BufferSize, const Usage& UsageObj, const CPUAcce
 {
 }
 
+D3D11Buffer::D3D11Buffer(ID3D11Buffer* D3D11BufferObj)
+	: D3D11Resource(D3D11BufferObj)
+{
+}
+
 ID3D11Buffer* D3D11Buffer::GetD3D11Buffer()
 {
 	return (ID3D11Buffer*)GetD3D11Resource();

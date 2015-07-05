@@ -166,6 +166,9 @@
     <ClInclude Include="include\d3d11\D3D11Buffer.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">

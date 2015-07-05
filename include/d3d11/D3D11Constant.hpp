@@ -12,6 +12,7 @@ namespace Eternal
 			: public Constant
 			, public D3D11Buffer
 		{
+		public:
 			D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode);
 			D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, void* Data);
 		};
