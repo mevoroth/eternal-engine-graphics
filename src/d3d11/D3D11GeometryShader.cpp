@@ -18,6 +18,12 @@ D3D11GeometryShader::D3D11GeometryShader(_In_ const string& Name, _In_ const str
 	assert(hr == S_OK);
 }
 
+D3D11GeometryShader::~D3D11GeometryShader()
+{
+	_Shader->Release();
+	_Shader = nullptr;
+}
+
 void* D3D11GeometryShader::GetD3D11Shader()
 {
 	assert(_Shader);

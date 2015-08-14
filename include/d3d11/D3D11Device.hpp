@@ -18,7 +18,7 @@ namespace Eternal
 			HWND _windowHandle;
 			HINSTANCE _hInstance;
 			int _nCmdShow;
-			string _className;
+			string _ClassName;
 			string _windowName;
 
 			inline LPCTSTR _GetClassName() const;

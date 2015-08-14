@@ -5,6 +5,8 @@
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
+#include "Macros/Macros.hpp"
+
 using namespace Eternal::Graphics;
 using namespace std;
 
@@ -14,12 +16,18 @@ D3D11Shader::D3D11Shader(_In_ const string& Name, _In_ const string& Src, _In_ c
 	: Shader(Name)
 	, _Program(0)
 {
-	assert(_IncludeHandler);
+	ETERNAL_ASSERT(_IncludeHandler);
 #ifdef ETERNAL_DEBUG
 	_CompileFile(Src, Entry, Profile);
 #else
 	_LoadFile(Src + ".cso");
 #endif
+}
+
+D3D11Shader::~D3D11Shader()
+{
+	_Program->Release();
+	_Program = nullptr;
 }
 
 void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile)

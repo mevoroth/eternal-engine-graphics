@@ -2,9 +2,9 @@
 
 using namespace Eternal::Graphics;
 
-D3D11Device::D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& name, _In_ const string& className)
-	: _windowName(name)
-	, _className(className)
+D3D11Device::D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& Name, _In_ const string& ClassName)
+	: _windowName(Name)
+	, _ClassName(ClassName)
 	, _hInstance(hInstance)
 	, _nCmdShow(nCmdShow)
 {
@@ -12,23 +12,23 @@ D3D11Device::D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const
 
 void D3D11Device::Create()
 {
-	WNDCLASSEX windowClass;
+	WNDCLASSEX WindowClass;
 	
-	ZeroMemory(&windowClass, sizeof(WNDCLASSEX));
+	ZeroMemory(&WindowClass, sizeof(WNDCLASSEX));
 
-	windowClass.cbSize = sizeof(WNDCLASSEX);
-	windowClass.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-	windowClass.lpfnWndProc = D3D11Device::WindowProc;
-	windowClass.cbClsExtra = 0;
-	windowClass.cbWndExtra = 0;
-	windowClass.hInstance = _hInstance;
-	windowClass.hIcon = 0;
-	windowClass.hCursor = 0;
-	windowClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
-	windowClass.lpszMenuName = 0;
-	windowClass.lpszClassName = _GetClassName();
+	WindowClass.cbSize = sizeof(WNDCLASSEX);
+	WindowClass.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
+	WindowClass.lpfnWndProc = D3D11Device::WindowProc;
+	WindowClass.cbClsExtra = 0;
+	WindowClass.cbWndExtra = 0;
+	WindowClass.hInstance = _hInstance;
+	WindowClass.hIcon = 0;
+	WindowClass.hCursor = 0;
+	WindowClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
+	WindowClass.lpszMenuName = 0;
+	WindowClass.lpszClassName = _GetClassName();
 
-	RegisterClassEx(&windowClass);
+	RegisterClassEx(&WindowClass);
 
 	_windowHandle = CreateWindowEx(
 		WS_EX_APPWINDOW,
@@ -56,7 +56,7 @@ void D3D11Device::Create()
 
 inline LPCTSTR D3D11Device::_GetClassName() const
 {
-	return _className.c_str();
+	return _ClassName.c_str();
 }
 
 inline LPCTSTR D3D11Device::_GetWindowName() const

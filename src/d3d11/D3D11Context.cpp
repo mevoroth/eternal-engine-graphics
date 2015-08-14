@@ -2,6 +2,7 @@
 
 #include "d3d11/D3D11RenderTarget.hpp"
 #include "d3d11/D3D11Shader.hpp"
+#include "d3d11/D3D11VertexShader.hpp"
 #include "d3d11/D3D11Constant.hpp"
 #include "d3d11/ID3D11ShaderResource.hpp"
 #include "Graphics/Viewport.hpp"
@@ -12,6 +13,7 @@ using namespace Eternal::Graphics;
 D3D11Context::D3D11Context(ID3D11DeviceContext* D3D11ContextObj)
 	: _DeviceContext(D3D11ContextObj)
 {
+	_DeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer)
@@ -58,6 +60,7 @@ void D3D11Context::SetBlendMode(_In_ BlendState* BlendStateObj)
 
 void D3D11Context::_BindVertexShader(_In_ Shader* ShaderObj)
 {
+	_DeviceContext->IASetInputLayout(static_cast<D3D11VertexShader*>(ShaderObj)->GetInputLayout()->GetD3D11InputLayout());
 	_DeviceContext->VSSetShader((ID3D11VertexShader*)static_cast<D3D11Shader*>(ShaderObj)->GetD3D11Shader(), nullptr, 0);
 }
 void D3D11Context::_BindGeometryShader(_In_ Shader* ShaderObj)

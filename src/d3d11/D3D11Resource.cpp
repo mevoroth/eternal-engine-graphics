@@ -12,6 +12,13 @@
 
 using namespace Eternal::Graphics;
 
+static const D3D11_MAP MAP_TYPES[] = {
+	D3D11_MAP_READ,
+	D3D11_MAP_WRITE,
+	D3D11_MAP_READ_WRITE,
+	D3D11_MAP_WRITE_DISCARD
+};
+
 D3D11Resource::D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode)
 	: D3D11Resource(BufferSize, UsageObj, CPUMode, BindMode, nullptr)
 {
@@ -75,7 +82,8 @@ void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, cons
 	{
 		char errors[255];
 		DWORD err = GetLastError();
-		sprintf_s(errors, ETERNAL_ARRAYSIZE(errors), "ERROR %d:%x\n", err, err);
+		DWORD removedReason = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->GetDeviceRemovedReason();
+		sprintf_s(errors, ETERNAL_ARRAYSIZE(errors), "ERROR %d:%x:%x\n", err, err, removedReason);
 		OutputDebugString(errors);
 		ETERNAL_ASSERT(false);
 	}
@@ -85,14 +93,37 @@ void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, cons
 	_CPUAccess = CPUMode;
 }
 
-void* D3D11Resource::Lock(const CPUAccess& LockingMode)
+D3D11Resource::LockedResource D3D11Resource::Lock(Context& ContextObj, const LockMode& LockingMode)
 {
-	ETERNAL_ASSERT((LockingMode & _CPUAccess) != 0);
-	return nullptr;
-}
-void D3D11Resource::Unlock()
-{
+#ifdef ETERNAL_DEBUG
+	switch (LockingMode)
+	{
+	case LockMode::LOCK_READ:
+		ETERNAL_ASSERT(_CPUAccess & Resource::READ);
+		break;
 
+	case LOCK_WRITE:
+	case LOCK_WRITE_DISCARD:
+		ETERNAL_ASSERT(_CPUAccess & Resource::WRITE);
+		break;
+
+	case LOCK_READ_WRITE:
+		ETERNAL_ASSERT(_CPUAccess & (Resource::READ | Resource::WRITE));
+		break;
+	}
+#endif
+
+	D3D11Context& D3D11ContexObj = static_cast<D3D11Context&>(ContextObj);
+	LockedResource Resource;
+
+	D3D11ContexObj.GetD3D11Context()->Map(_D3D11Resource, 0, MAP_TYPES[LockingMode], 0, (D3D11_MAPPED_SUBRESOURCE*)&Resource);
+
+	return Resource;
+}
+void D3D11Resource::Unlock(Context& ContextObj)
+{
+	D3D11Context& D3D11ContexObj = static_cast<D3D11Context&>(ContextObj);
+	D3D11ContexObj.GetD3D11Context()->Unmap(_D3D11Resource, 0);
 }
 
 ID3D11Resource* D3D11Resource::GetD3D11Resource()

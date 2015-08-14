@@ -36,8 +36,8 @@ namespace Eternal
 			D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, void* Data);
 			virtual ~D3D11Resource();
 #pragma region Resource
-			virtual void* Lock(const CPUAccess& LockingMode) override;
-			virtual void Unlock() override;
+			virtual LockedResource Lock(Context& ContextObj, const LockMode& LockingMode) override;
+			virtual void Unlock(Context& ContextObj) override;
 #pragma endregion Resource
 			ID3D11Resource* GetD3D11Resource();
 
