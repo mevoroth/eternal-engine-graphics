@@ -41,17 +41,20 @@ D3D11BlendState::D3D11BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, 
 
 	_BlendDesc.AlphaToCoverageEnable = FALSE;
 	_BlendDesc.IndependentBlendEnable = FALSE;
-	_BlendDesc.RenderTarget[0].BlendEnable = TRUE;
-	_BlendDesc.RenderTarget[0].SrcBlend = BLENDS[Src];
-	_BlendDesc.RenderTarget[0].DestBlend = BLENDS[Dest];
-	_BlendDesc.RenderTarget[0].BlendOp = BLENDOPS[BlendOpCol];
-	_BlendDesc.RenderTarget[0].SrcBlendAlpha = BLENDS[SrcAlpha];
-	_BlendDesc.RenderTarget[0].DestBlendAlpha = BLENDS[DestAlpha];
-	_BlendDesc.RenderTarget[0].BlendOpAlpha = BLENDOPS[BlendAlphaOp];
-	_BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	for (uint32_t renderTargetIndex = 0; renderTargetIndex < 8; ++renderTargetIndex)
+	{
+		_BlendDesc.RenderTarget[renderTargetIndex].BlendEnable = FALSE;
+		_BlendDesc.RenderTarget[renderTargetIndex].SrcBlend = BLENDS[Src];
+		_BlendDesc.RenderTarget[renderTargetIndex].DestBlend = BLENDS[Dest];
+		_BlendDesc.RenderTarget[renderTargetIndex].BlendOp = BLENDOPS[BlendOpCol];
+		_BlendDesc.RenderTarget[renderTargetIndex].SrcBlendAlpha = BLENDS[SrcAlpha];
+		_BlendDesc.RenderTarget[renderTargetIndex].DestBlendAlpha = BLENDS[DestAlpha];
+		_BlendDesc.RenderTarget[renderTargetIndex].BlendOpAlpha = BLENDOPS[BlendAlphaOp];
+		_BlendDesc.RenderTarget[renderTargetIndex].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	}
 
 	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBlendState(&_BlendDesc, &_BlendState);
-	assert(hr == S_OK);
+	ETERNAL_ASSERT(hr == S_OK);
 }
 void D3D11BlendState::Apply(Context* DrawContext)
 {

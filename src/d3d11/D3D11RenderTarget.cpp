@@ -44,8 +44,19 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ int Width, _In_ int Height)
 	RenderTargetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	RenderTargetDesc.Texture2D.MipSlice = 0;
 
-	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(Texture2D, &RenderTargetDesc, &_RenderTarget);
+	hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(Texture2D, &RenderTargetDesc, &_RenderTarget);
 	ETERNAL_ASSERT(hr == S_OK);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
+	ShaderResourceViewDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	ShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	ShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+	ShaderResourceViewDesc.Texture2D.MipLevels = -1;
+	
+	hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateShaderResourceView(Texture2D, &ShaderResourceViewDesc, &_ShaderResourceView);
+	ETERNAL_ASSERT(hr == S_OK);
+
+	_SetD3D11Resource(Texture2D);
 }
 
 D3D11RenderTarget::~D3D11RenderTarget()
@@ -72,7 +83,7 @@ ID3D11RenderTargetView* D3D11RenderTarget::GetD3D11RenderTarget()
 
 ID3D11ShaderResourceView* D3D11RenderTarget::GetD3D11ShaderResourceView()
 {
-	return nullptr;
+	return _ShaderResourceView;
 }
 
 //ID3D11SamplerState* D3D11RenderTarget::CreateSamplerState()
@@ -97,25 +108,6 @@ ID3D11ShaderResourceView* D3D11RenderTarget::GetD3D11ShaderResourceView()
 //
 //	return SamplerState;
 //}
-//
-//ID3D11ShaderResourceView* D3D11RenderTarget::CreateShaderResourceView()
-//{
-//	D3D11_TEXTURE2D_DESC Tex2DDesc;
-//	_Tex2D->GetDesc(&Tex2DDesc);
-//
-//	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
-//	ShaderResourceViewDesc.Format = Tex2DDesc.Format;
-//	ShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-//	ShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
-//	ShaderResourceViewDesc.Texture2D.MipLevels = -1;
-//	
-//	ID3D11ShaderResourceView* ShaderResourceView = 0;
-//
-//	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateShaderResourceView(_Tex2D, &ShaderResourceViewDesc, &ShaderResourceView);
-//
-//	return ShaderResourceView;
-//}
-//
 //ID3D11UnorderedAccessView* D3D11RenderTarget::CreateUnorderedAccessView()
 //{
 //	D3D11_TEXTURE2D_DESC Tex2DDesc;

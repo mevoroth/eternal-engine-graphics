@@ -133,15 +133,18 @@ void D3D11Context::_BindPSBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
 }
 void Eternal::Graphics::D3D11Context::_UnbindVSBuffer(_In_ uint32_t Slot)
 {
-	_DeviceContext->VSSetShaderResources(Slot, 1, nullptr);
+	ID3D11ShaderResourceView* NullResource = nullptr;
+	_DeviceContext->VSSetShaderResources(Slot, 1, &NullResource);
 }
 void Eternal::Graphics::D3D11Context::_UnbindGSBuffer(_In_ uint32_t Slot)
 {
-	_DeviceContext->GSSetShaderResources(Slot, 1, nullptr);
+	ID3D11ShaderResourceView* NullResource = nullptr;
+	_DeviceContext->GSSetShaderResources(Slot, 1, &NullResource);
 }
 void Eternal::Graphics::D3D11Context::_UnbindPSBuffer(_In_ uint32_t Slot)
 {
-	_DeviceContext->PSSetShaderResources(Slot, 1, nullptr);
+	ID3D11ShaderResourceView* NullResource = nullptr;
+	_DeviceContext->PSSetShaderResources(Slot, 1, &NullResource);
 }
 void D3D11Context::_BindVSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj)
 {

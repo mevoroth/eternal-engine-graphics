@@ -88,7 +88,7 @@ namespace Eternal
 				{
 				case VERTEX: _UnbindVSBuffer(Slot); break;
 				case GEOMETRY: _UnbindGSBuffer(Slot); break;
-				case PIXEL: _BindPSBuffer(Slot); break;
+				case PIXEL: _UnbindPSBuffer(Slot); break;
 				default: ETERNAL_ASSERT(false); break;
 				}
 			}

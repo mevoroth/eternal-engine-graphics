@@ -26,6 +26,7 @@ namespace Eternal
 
 		protected:
 			D3D11Texture();
+			ID3D11ShaderResourceView* _ShaderResourceView = nullptr;
 		};
 	}
 }
