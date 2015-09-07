@@ -32,7 +32,6 @@ static D3D11_BLEND_OP BLENDOPS[] =
 
 D3D11BlendState::D3D11BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendOpCol, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp)
 	: BlendState(Src, Dest, BlendOpCol, SrcAlpha, DestAlpha, BlendAlphaOp)
-	, _BlendState(0)
 {
 	_Color[0] = 1.f; // R
 	_Color[1] = 1.f; // G
@@ -40,7 +39,7 @@ D3D11BlendState::D3D11BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, 
 	_Color[3] = 1.f; // A
 
 	_BlendDesc.AlphaToCoverageEnable = FALSE;
-	_BlendDesc.IndependentBlendEnable = FALSE;
+	_BlendDesc.IndependentBlendEnable = TRUE;
 	for (uint32_t renderTargetIndex = 0; renderTargetIndex < 8; ++renderTargetIndex)
 	{
 		_BlendDesc.RenderTarget[renderTargetIndex].BlendEnable = FALSE;
