@@ -7,6 +7,14 @@ namespace Eternal
 	{
 		class Sampler
 		{
+		public:
+			enum AddressMode
+			{
+				WRAP = 1,
+				MIRROR = 2,
+				CLAMP = 3,
+				ADRESSMODE_COUNT
+			};
 		};
 	}
 }

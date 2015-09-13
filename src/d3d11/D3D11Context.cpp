@@ -163,13 +163,16 @@ void D3D11Context::_BindPSSampler(_In_ uint32_t Slot, _In_ Sampler* SamplerObj)
 }
 void Eternal::Graphics::D3D11Context::_UnbindVSSampler(_In_ uint32_t Slot)
 {
-	_DeviceContext->VSSetSamplers(Slot, 1, nullptr);
+	ID3D11SamplerState* SamplerState = nullptr;
+	_DeviceContext->VSSetSamplers(Slot, 1, &SamplerState);
 }
 void Eternal::Graphics::D3D11Context::_UnbindGSSampler(_In_ uint32_t Slot)
 {
-	_DeviceContext->GSSetSamplers(Slot, 1, nullptr);
+	ID3D11SamplerState* SamplerState = nullptr;
+	_DeviceContext->GSSetSamplers(Slot, 1, &SamplerState);
 }
 void Eternal::Graphics::D3D11Context::_UnbindPSSampler(_In_ uint32_t Slot)
 {
-	_DeviceContext->PSSetSamplers(Slot, 1, nullptr);
+	ID3D11SamplerState* SamplerState = nullptr;
+	_DeviceContext->PSSetSamplers(Slot, 1, &SamplerState);
 }

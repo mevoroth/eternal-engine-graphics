@@ -1,6 +1,7 @@
 #include "d3d11/D3D11InputLayout.hpp"
 
 #include "d3d11/D3D11Renderer.hpp"
+#include "Macros/Macros.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -17,16 +18,16 @@ static const DXGI_FORMAT D3D11_INPUT_FORMATS[]
 {
 	DXGI_FORMAT_R32G32B32A32_FLOAT,
 	DXGI_FORMAT_R8G8B8A8_UNORM,
-	DXGI_FORMAT_R32G32B32_FLOAT,
-	DXGI_FORMAT_R32G32B32_FLOAT,
+	DXGI_FORMAT_R32G32B32A32_FLOAT,
+	DXGI_FORMAT_R32G32B32A32_FLOAT,
 	DXGI_FORMAT_R32G32_FLOAT,
 };
 
 D3D11InputLayout::D3D11InputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t Size)
 	: _InputLayout(0)
 {
-	assert(D3D11Renderer::Get());
-	assert(dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice());
+	ETERNAL_ASSERT(D3D11Renderer::Get());
+	ETERNAL_ASSERT(dynamic_cast<D3D11Renderer*>(D3D11Renderer::Get())->GetDevice());
 	
 	for (uint32_t DataTypeIndex = 0; DataTypeIndex < Size; ++DataTypeIndex)
 	{

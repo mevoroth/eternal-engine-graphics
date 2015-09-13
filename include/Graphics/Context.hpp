@@ -103,9 +103,9 @@ namespace Eternal
 			{
 				switch (Stage)
 				{
-				case VERTEX: _BindVSSampler(Slot, ShaderObj); break;
-				case GEOMETRY: _BindGSSampler(Slot, ShaderObj); break;
-				case PIXEL: _BindPSSampler(Slot, ShaderObj); break;
+				case VERTEX: _BindVSSampler(Slot, SamplerObj); break;
+				case GEOMETRY: _BindGSSampler(Slot, SamplerObj); break;
+				case PIXEL: _BindPSSampler(Slot, SamplerObj); break;
 				default: ETERNAL_ASSERT(false); break;
 				}
 			}
