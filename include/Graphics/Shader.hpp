@@ -15,6 +15,7 @@ namespace Eternal
 			string _Name;
 		public:
 			Shader(const string& Name);
+			virtual ~Shader() {}
 			const string& GetName() const;
 		};
 	}

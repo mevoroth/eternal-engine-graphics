@@ -17,6 +17,9 @@ namespace Eternal
 		class BlendState;
 		class VertexBuffer;
 		class IndexBuffer;
+		class DepthTest;
+		class StencilTest;
+		class Clearable;
 
 		class Context
 		{
@@ -32,6 +35,7 @@ namespace Eternal
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) = 0;
 			//template<class Vertex> virtual void DrawIndexInstanced()
 			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) = 0;
+			virtual void SetDepthBuffer(_In_ Clearable* DepthBuffer) = 0;
 			template<ShaderStage Stage> void BindShader(_In_ Shader* ShaderObj)
 			{
 				switch (Stage)
@@ -94,7 +98,7 @@ namespace Eternal
 			}
 			template<ShaderStage Stage> void BindUAV()
 			{
-				assert(false);
+				ETERNAL_ASSERT(false);
 				//switch (Stage)
 				//{
 				//}

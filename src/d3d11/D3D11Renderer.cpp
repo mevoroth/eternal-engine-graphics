@@ -41,7 +41,7 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	_SetBackBuffer(new D3D11RenderTarget(BackBufferTex));
 }
 
-HRESULT D3D11Renderer::_CreateDevice()
+int D3D11Renderer::_CreateDevice()
 {
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 	D3D_FEATURE_LEVEL out;
@@ -88,7 +88,7 @@ HRESULT D3D11Renderer::_CreateDevice()
 	return hr;
 }
 
-HRESULT D3D11Renderer::_CreateSwapChain()
+int D3D11Renderer::_CreateSwapChain()
 {
 	IDXGIDevice* DxgiDevice;
 	HRESULT hr = _Device->QueryInterface<IDXGIDevice>(&DxgiDevice);

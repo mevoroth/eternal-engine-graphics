@@ -3,7 +3,6 @@
 #include "d3d11/D3D11Renderer.hpp"
 
 using namespace Eternal::Graphics;
-using namespace DirectX;
 
 D3D11RenderTarget::D3D11RenderTarget(_In_ ID3D11Texture2D* Tex)
 	: D3D11Texture(Tex)
@@ -75,52 +74,3 @@ ID3D11RenderTargetView* D3D11RenderTarget::GetD3D11RenderTarget()
 {
 	return _RenderTarget;
 }
-
-//ID3D11Buffer* D3D11RenderTarget::GetD3D11Buffer()
-//{
-//	return nullptr;
-//}
-
-ID3D11ShaderResourceView* D3D11RenderTarget::GetD3D11ShaderResourceView()
-{
-	return _ShaderResourceView;
-}
-
-//ID3D11SamplerState* D3D11RenderTarget::CreateSamplerState()
-//{
-//	D3D11_SAMPLER_DESC SamplerDesc;
-//	SamplerDesc.AddressU = GetD3D11UAddressMode();
-//	SamplerDesc.AddressV = GetD3D11VAddressMode();
-//	SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; // TODO: Support W mapping
-//	SamplerDesc.MipLODBias = 0.f;
-//	SamplerDesc.MaxAnisotropy = 16; // TODO: Support MaxAnisotropy
-//	SamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-//	//SamplerDesc.BorderColor[0] = 1.f;
-//	//SamplerDesc.BorderColor[1] = 1.f;
-//	//SamplerDesc.BorderColor[2] = 1.f;
-//	//SamplerDesc.BorderColor[3] = 1.f;
-//	SamplerDesc.MinLOD = 0;
-//	SamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-//
-//	ID3D11SamplerState* SamplerState = 0;
-//
-//	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateSamplerState(&SamplerDesc, &SamplerState);
-//
-//	return SamplerState;
-//}
-//ID3D11UnorderedAccessView* D3D11RenderTarget::CreateUnorderedAccessView()
-//{
-//	D3D11_TEXTURE2D_DESC Tex2DDesc;
-//	_Tex2D->GetDesc(&Tex2DDesc);
-//	
-//	D3D11_UNORDERED_ACCESS_VIEW_DESC UnorderedAccessViewDesc;
-//	UnorderedAccessViewDesc.Format = Tex2DDesc.Format;
-//	UnorderedAccessViewDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
-//	UnorderedAccessViewDesc.Texture2D.MipSlice = 0;
-//
-//	ID3D11UnorderedAccessView* UnorderedAccessView;
-//
-//	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateUnorderedAccessView(_Tex2D, &UnorderedAccessViewDesc, &UnorderedAccessView);
-//
-//	return UnorderedAccessView;
-//}

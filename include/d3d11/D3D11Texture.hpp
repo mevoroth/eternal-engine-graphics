@@ -19,8 +19,11 @@ namespace Eternal
 		{
 		public:
 			D3D11Texture(ID3D11Texture2D* TextureObj);
-
-			virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() override;
+			virtual ~D3D11Texture();
+			inline virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() override
+			{
+				return _ShaderResourceView;
+			}
 
 		protected:
 			D3D11Texture();

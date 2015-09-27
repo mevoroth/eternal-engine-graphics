@@ -172,6 +172,24 @@
     <ClInclude Include="include\d3d11\D3D11PosUVNormalVertexBuffer.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\DepthTest.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Clearable.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11DepthStencil.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11DepthStencilBuffer.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\StencilTest.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Comparison.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -302,6 +320,12 @@
     </ClCompile>
     <ClCompile Include="include\d3d11\D3D11PosUVNormalVertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11PosUVNormalVertexBuffer.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11DepthStencil.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11DepthStencilBuffer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
   </ItemGroup>

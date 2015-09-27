@@ -31,6 +31,7 @@ namespace Eternal
 				uint32_t RowPitch;
 				uint32_t DepthPitch;
 			};
+			virtual ~Resource() {}
 			virtual LockedResource Lock(Context& ContextObj, const LockMode& LockingMode) = 0;
 			virtual void Unlock(Context& ContextObj) = 0;
 			void Resize(const size_t& Size);

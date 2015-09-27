@@ -15,6 +15,7 @@ namespace Eternal
 				CLAMP = 3,
 				ADRESSMODE_COUNT
 			};
+			virtual ~Sampler() {}
 		};
 	}
 }

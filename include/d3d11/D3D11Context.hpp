@@ -3,19 +3,17 @@
 
 #include "Graphics/Context.hpp"
 
-#include "D3D11Sampler.hpp"
-#include "D3D11VertexBuffer.hpp"
-#include "D3D11IndexBuffer.hpp"
-
-#include <d3d11.h>
-
-#define D3D11_MAX_VERTICES_BUFFER D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT
 #define D3D11_MAX_RENDERTARGETS 8
+
+struct ID3D11DeviceContext;
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		class D3D11VertexBuffer;
+		class D3D11IndexBuffer;
+
 		class D3D11Context : public Context
 		{
 		public:
@@ -23,6 +21,7 @@ namespace Eternal
 
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) override;
 			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) override;
+			virtual void SetDepthBuffer(_In_ Clearable* DepthBuffer) override;
 			virtual void SetViewport(_In_ Viewport* ViewportObj) override;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) override;
 
@@ -58,8 +57,22 @@ namespace Eternal
 			virtual void _UnbindPSSampler(_In_ uint32_t Slot) override;
 
 		private:
+			inline void _MarkRenderStateAsDirty()
+			{
+				_RenderStateDirty = true;
+			}
+			inline bool _IsRenderStateDirty() const
+			{
+				return _RenderStateDirty;
+			}
+			void _CommitRenderState();
+
+			bool _RenderStateDirty = false;
+
 			Viewport* _Viewport = nullptr;
 			BlendState* _BlendState = nullptr;
+			Clearable* _DepthBuffer = nullptr;
+			RenderTarget* _RenderTargets[D3D11_MAX_RENDERTARGETS];
 
 			ID3D11DeviceContext* _DeviceContext = nullptr;
 			

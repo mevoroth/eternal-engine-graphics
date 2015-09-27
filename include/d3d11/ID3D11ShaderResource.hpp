@@ -10,7 +10,7 @@ namespace Eternal
 		class ID3D11ShaderResource
 		{
 		public:
-			virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() = 0;
+			inline virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() = 0;
 		};
 	}
 }

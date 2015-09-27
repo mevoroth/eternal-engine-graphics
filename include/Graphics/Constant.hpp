@@ -9,6 +9,8 @@ namespace Eternal
 	{
 		class Constant
 		{
+		public:
+			virtual ~Constant() {}
 		};
 	}
 }

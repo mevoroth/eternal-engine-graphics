@@ -1,5 +1,7 @@
 #include "d3d11/D3D11Texture.hpp"
 
+#include <d3d11.h>
+
 #include "Macros/Macros.hpp"
 
 using namespace Eternal::Graphics;
@@ -14,8 +16,8 @@ D3D11Texture::D3D11Texture()
 {
 }
 
-ID3D11ShaderResourceView* D3D11Texture::GetD3D11ShaderResourceView()
+D3D11Texture::~D3D11Texture()
 {
-	ETERNAL_ASSERT(false);
-	return nullptr;
+	_ShaderResourceView->Release();
+	_ShaderResourceView = nullptr;
 }

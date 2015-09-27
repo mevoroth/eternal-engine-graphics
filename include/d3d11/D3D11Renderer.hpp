@@ -1,11 +1,11 @@
 #ifndef _D3D11_RENDERER_HPP_
 #define _D3D11_RENDERER_HPP_
 
-#include <DirectXMath.h>
 #include "Graphics/Renderer.hpp"
 #include "D3D11Context.hpp"
 
-using namespace DirectX;
+struct ID3D11Device;
+struct IDXGISwapChain;
 
 namespace Eternal
 {
@@ -27,8 +27,8 @@ namespace Eternal
 			D3D11Context* _MainContext = nullptr;
 			IDXGISwapChain* _SwapChain = nullptr;
 
-			HRESULT _CreateDevice();
-			HRESULT _CreateSwapChain();
+			int _CreateDevice();
+			int _CreateSwapChain();
 			void _Settings();
 		};
 	}

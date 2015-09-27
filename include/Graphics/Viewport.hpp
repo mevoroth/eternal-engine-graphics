@@ -9,31 +9,33 @@ namespace Eternal
 
 		class Viewport
 		{
-		private:
-			int _x;
-			int _y;
-			int _width;
-			int _height;
+		public:
+			Viewport(_In_ int X, _In_ int Y, _In_ int Width, _In_ int Height);
+			virtual void Apply(Context* DrawContext) = 0;
+
 		protected:
 			inline int X() const
 			{
-				return _x;
+				return _X;
 			}
 			inline int Y() const
 			{
-				return _y;
+				return _Y;
 			}
 			inline int Width() const
 			{
-				return _width;
+				return _Width;
 			}
 			inline int Height() const
 			{
 				return _height;
 			}
-		public:
-			Viewport(_In_ int x, _In_ int y, _In_ int width, _In_ int height);
-			virtual void Apply(Context* DrawContext) = 0;
+
+		private:
+			int _X;
+			int _Y;
+			int _Width;
+			int _height;
 		};
 	}
 }

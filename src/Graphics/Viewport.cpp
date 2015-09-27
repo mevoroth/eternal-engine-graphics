@@ -2,10 +2,10 @@
 
 using namespace Eternal::Graphics;
 
-Viewport::Viewport(_In_ int x, _In_ int y, _In_ int width, _In_ int height)
-	: _x(x)
-	, _y(y)
-	, _width(width)
-	, _height(height)
+Viewport::Viewport(_In_ int X, _In_ int Y, _In_ int Width, _In_ int Height)
+	: _X(X)
+	, _Y(Y)
+	, _Width(Width)
+	, _height(Height)
 {
 }

@@ -14,6 +14,7 @@ namespace Eternal
 
 		public:
 			Texture(_In_ int Width = 1, _In_ int Height = 1);
+			~Texture() {}
 			inline int GetWidth() const
 			{
 				return _Width;

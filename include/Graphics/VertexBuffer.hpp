@@ -8,6 +8,7 @@ namespace Eternal
 		class VertexBuffer
 		{
 		public:
+			virtual ~VertexBuffer() {}
 			virtual size_t GetSize() const = 0;
 		};
 	}
