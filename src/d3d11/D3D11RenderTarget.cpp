@@ -14,7 +14,7 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ ID3D11Texture2D* Tex)
 
 	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(Tex, nullptr, &_RenderTarget);
 }
-D3D11RenderTarget::D3D11RenderTarget(_In_ int Width, _In_ int Height)
+D3D11RenderTarget::D3D11RenderTarget(_In_ uint32_t Width, _In_ uint32_t Height)
 	: D3D11Texture()
 {
 	ID3D11Texture2D* Texture2D;

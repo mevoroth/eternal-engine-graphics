@@ -14,7 +14,7 @@ namespace Eternal
 			, public D3D11Texture
 		{
 		public:
-			D3D11RenderTarget(_In_ int Width, _In_ int Height);
+			D3D11RenderTarget(_In_ uint32_t Width, _In_ uint32_t Height);
 			D3D11RenderTarget(_In_ ID3D11Texture2D* Tex);
 			~D3D11RenderTarget();
 			ID3D11RenderTargetView* GetD3D11RenderTarget();

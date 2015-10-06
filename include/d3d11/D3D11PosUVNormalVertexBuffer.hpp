@@ -29,11 +29,6 @@ namespace Eternal
 
 			D3D11PosUVNormalVertexBuffer(vector<D3D11PosUVNormalVertexBuffer::PosUVNormalVertex>& Vertex);
 
-			virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView()
-			{
-				throw std::exception("The method or operation is not implemented.");
-			}
-
 			virtual size_t GetSize() const override;
 
 		private:

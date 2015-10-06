@@ -1,8 +1,9 @@
 #ifndef _TEXTURE_HPP_
 #define _TEXTURE_HPP_
 
+#include <cstdint>
+
 #include "Macros/Macros.hpp"
-using namespace std;
 
 namespace Eternal
 {
@@ -11,32 +12,41 @@ namespace Eternal
 		class Texture
 		{
 		public:
+			enum Format
+			{
+				BGRA8888 = 0
+			};
 
-		public:
-			Texture(_In_ int Width = 1, _In_ int Height = 1);
-			~Texture() {}
-			inline int GetWidth() const
+			Texture(_In_ const Format& FormatObj = BGRA8888, _In_ uint32_t Width = 1, _In_ uint32_t Height = 1);
+			virtual ~Texture() {}
+			inline uint32_t GetWidth() const
 			{
 				return _Width;
 			}
-			inline int GetHeight() const
+			inline uint32_t GetHeight() const
 			{
 				return _Height;
 			}
-			inline void SetWidth(_In_ int Width)
+
+			inline Format GetFormat() const
+			{
+				return _Format;
+			}
+			inline void SetWidth(_In_ uint32_t Width)
 			{
 				ETERNAL_ASSERT(Width > 0);
 				_Width = Width;
 			}
-			inline void SetHeight(_In_ int Height)
+			inline void SetHeight(_In_ uint32_t Height)
 			{
 				ETERNAL_ASSERT(Height > 0);
 				_Height = Height;
 			}
 
 		private:
-			int _Width;
-			int _Height;
+			uint32_t _Width;
+			uint32_t _Height;
+			Format _Format;
 		};
 	}
 }

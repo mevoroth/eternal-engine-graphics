@@ -4,8 +4,9 @@
 
 using namespace Eternal::Graphics;
 
-Texture::Texture(int Width, int Height)
-	: _Width(Width)
+Texture::Texture(_In_ const Format& FormatObj, _In_ uint32_t Width /*= 1*/, _In_ uint32_t Height /*= 1*/)
+	: _Format(FormatObj)
+	, _Width(Width)
 	, _Height(Height)
 {
 	ETERNAL_ASSERT(Width > 0);

@@ -126,7 +126,6 @@
     <ClInclude Include="include\Graphics\Viewport.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\d3d11\D3D11PosUVNormalVertexBuffer.cpp" />
     <ClCompile Include="src\d3d10\D3D10BlendState.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -215,6 +214,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>
     <RootNamespace>eternalenginegraphics</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
