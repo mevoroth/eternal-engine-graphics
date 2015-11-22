@@ -18,7 +18,7 @@ namespace Eternal
 			, public ID3D11ShaderResource
 		{
 		public:
-			D3D11Texture(_In_ const Format& FormatObj, _In_ uint32_t Width, _In_ uint32_t Height, _In_ const void* Data);
+			D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& UsageObj, _In_ const CPUAccess& CPUMode, _In_ uint32_t Width, _In_ uint32_t Height, _In_ const void* Data);
 			D3D11Texture(_In_ ID3D11Texture2D* TextureObj);
 			virtual ~D3D11Texture();
 			inline virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() override

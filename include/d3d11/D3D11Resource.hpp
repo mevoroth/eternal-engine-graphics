@@ -42,6 +42,8 @@ namespace Eternal
 			ID3D11Resource* GetD3D11Resource();
 
 		protected:
+			static uint32_t CPUAccessToD3D11(_In_ const CPUAccess& CPUMode);
+
 			D3D11Resource();
 			D3D11Resource(ID3D11Resource* ResourceObj);
 			void _CreateBuffer(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, const D3D11_SUBRESOURCE_DATA* SubResourceData);

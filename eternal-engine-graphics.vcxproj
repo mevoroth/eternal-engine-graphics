@@ -292,6 +292,7 @@
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
       <ForcedIncludeFiles>sal.h</ForcedIncludeFiles>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

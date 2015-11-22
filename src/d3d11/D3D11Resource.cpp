@@ -56,6 +56,11 @@ D3D11Resource::~D3D11Resource()
 	_D3D11Resource = nullptr;
 }
 
+UINT D3D11Resource::CPUAccessToD3D11(_In_ const CPUAccess& CPUMode)
+{
+	return ((CPUMode & READ) != 0 ? D3D11_CPU_ACCESS_READ : 0) | ((CPUMode & WRITE) != 0 ? D3D11_CPU_ACCESS_WRITE : 0);
+}
+
 void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, const D3D11_SUBRESOURCE_DATA* SubResourceData)
 {
 	if (UsageObj < STAGING)
@@ -70,7 +75,7 @@ void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, cons
 	BufferDesc.ByteWidth = BufferSize;
 	BufferDesc.Usage = (D3D11_USAGE)UsageObj;
 	BufferDesc.BindFlags = BindMode;
-	BufferDesc.CPUAccessFlags = ((CPUMode & READ) != 0 ? D3D11_CPU_ACCESS_READ : 0) | ((CPUMode & WRITE) != 0 ? D3D11_CPU_ACCESS_WRITE : 0);
+	BufferDesc.CPUAccessFlags = CPUAccessToD3D11(CPUMode);
 	BufferDesc.MiscFlags = 0;
 	BufferDesc.StructureByteStride = 0;
 

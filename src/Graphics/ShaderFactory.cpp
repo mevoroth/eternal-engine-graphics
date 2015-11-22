@@ -1,6 +1,6 @@
 #include "Graphics/ShaderFactory.hpp"
 
-#include <cassert>
+#include "Macros/Macros.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -8,12 +8,12 @@ ShaderFactory* ShaderFactory::_Inst = nullptr;
 
 ShaderFactory::ShaderFactory()
 {
-	assert(!_Inst);
+	ETERNAL_ASSERT(!_Inst);
 	_Inst = this;
 }
 
 ShaderFactory* ShaderFactory::Get()
 {
-	assert(_Inst);
+	ETERNAL_ASSERT(_Inst);
 	return _Inst;
 }

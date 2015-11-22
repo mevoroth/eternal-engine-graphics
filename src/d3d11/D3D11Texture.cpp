@@ -22,7 +22,7 @@ D3D11Texture::D3D11Texture(ID3D11Texture2D* TextureObj)
 {
 }
 
-D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ uint32_t Width, _In_ uint32_t Height, _In_ const void* Data)
+D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& UsageObj, _In_ const CPUAccess& CPUMode, _In_ uint32_t Width, _In_ uint32_t Height, _In_ const void* Data)
 	: Texture(FormatObj, Width, Height)
 {
 	ID3D11Texture2D* Texture2D;
@@ -35,9 +35,9 @@ D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ uint32_t Width, _I
 	Tex2DDesc.Format = TEXTURE_FORMAT[FormatObj].D3D11Format;
 	Tex2DDesc.SampleDesc.Count = 1;
 	Tex2DDesc.SampleDesc.Quality = 0;
-	Tex2DDesc.Usage = D3D11_USAGE_DEFAULT;
+	Tex2DDesc.Usage = (D3D11_USAGE)UsageObj;
 	Tex2DDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	Tex2DDesc.CPUAccessFlags = 0;
+	Tex2DDesc.CPUAccessFlags = CPUAccessToD3D11(CPUMode);
 	Tex2DDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA SubResourceData;
