@@ -3,14 +3,14 @@
 using namespace Eternal::Graphics;
 
 D3D11Device::D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& Name, _In_ const string& ClassName)
-	: _windowName(Name)
+	: _WindowName(Name)
 	, _ClassName(ClassName)
 	, _hInstance(hInstance)
 	, _nCmdShow(nCmdShow)
 {
 }
 
-void D3D11Device::Create()
+void D3D11Device::Create(WNDPROC WindowEventsHandler)
 {
 	WNDCLASSEX WindowClass;
 	
@@ -18,7 +18,7 @@ void D3D11Device::Create()
 
 	WindowClass.cbSize = sizeof(WNDCLASSEX);
 	WindowClass.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-	WindowClass.lpfnWndProc = D3D11Device::WindowProc;
+	WindowClass.lpfnWndProc = WindowEventsHandler;
 	WindowClass.cbClsExtra = 0;
 	WindowClass.cbWndExtra = 0;
 	WindowClass.hInstance = _hInstance;
@@ -30,7 +30,7 @@ void D3D11Device::Create()
 
 	RegisterClassEx(&WindowClass);
 
-	_windowHandle = CreateWindowEx(
+	_WindowHandle = CreateWindowEx(
 		WS_EX_APPWINDOW,
 		_GetClassName(),
 		_GetWindowName(),
@@ -45,13 +45,13 @@ void D3D11Device::Create()
 		0
 	);
 
-	if (!_windowHandle)
+	if (!_WindowHandle)
 	{
 		DWORD err = GetLastError();
 		// LOG
 	}
 	
-	ShowWindow(_windowHandle, _nCmdShow);
+	ShowWindow(_WindowHandle, _nCmdShow);
 }
 
 inline LPCTSTR D3D11Device::_GetClassName() const
@@ -61,23 +61,10 @@ inline LPCTSTR D3D11Device::_GetClassName() const
 
 inline LPCTSTR D3D11Device::_GetWindowName() const
 {
-	return _windowName.c_str();
-}
-
-LRESULT D3D11Device::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-	{
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-		break;
-	}
-
-	return DefWindowProc(hWnd, message, wParam, lParam);
+	return _WindowName.c_str();
 }
 
 HWND D3D11Device::GetWindow() const
 {
-	return _windowHandle;
+	return _WindowHandle;
 }

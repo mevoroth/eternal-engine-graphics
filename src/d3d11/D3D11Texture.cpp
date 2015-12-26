@@ -41,11 +41,14 @@ D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& Usage
 	Tex2DDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA SubResourceData;
-	SubResourceData.pSysMem = Data;
-	SubResourceData.SysMemPitch = Width * TEXTURE_FORMAT[FormatObj].Size;
-	SubResourceData.SysMemSlicePitch = 0;
+	if (Data)
+	{
+		SubResourceData.pSysMem = Data;
+		SubResourceData.SysMemPitch = Width * TEXTURE_FORMAT[FormatObj].Size;
+		SubResourceData.SysMemSlicePitch = 0;
+	}
 
-	HRESULT hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateTexture2D(&Tex2DDesc, &SubResourceData, &Texture2D);
+	HRESULT hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateTexture2D(&Tex2DDesc, Data ? &SubResourceData : nullptr, &Texture2D);
 	ETERNAL_ASSERT(hr == S_OK);
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
@@ -58,6 +61,7 @@ D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& Usage
 	ETERNAL_ASSERT(hr == S_OK);
 
 	_SetD3D11Resource(Texture2D);
+	_SetCPUAccess(CPUMode);
 }
 
 D3D11Texture::D3D11Texture()

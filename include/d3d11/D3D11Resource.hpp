@@ -48,6 +48,7 @@ namespace Eternal
 			D3D11Resource(ID3D11Resource* ResourceObj);
 			void _CreateBuffer(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, const D3D11_SUBRESOURCE_DATA* SubResourceData);
 			void _SetD3D11Resource(ID3D11Resource* D3D11ResourceObj);
+			void _SetCPUAccess(const CPUAccess& CPUMode);
 
 		private:
 			CPUAccess _CPUAccess;

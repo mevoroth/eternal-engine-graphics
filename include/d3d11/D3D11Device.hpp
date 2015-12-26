@@ -2,6 +2,8 @@
 #define _D3D11_DEVICE_HPP_
 
 #include <string>
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
 #include <Windows.h>
 
 #include "Graphics\Device.hpp"
@@ -15,18 +17,17 @@ namespace Eternal
 		class D3D11Device : public Device
 		{
 		private:
-			HWND _windowHandle;
+			HWND _WindowHandle;
 			HINSTANCE _hInstance;
 			int _nCmdShow;
 			string _ClassName;
-			string _windowName;
+			string _WindowName;
 
 			inline LPCTSTR _GetClassName() const;
 			inline LPCTSTR _GetWindowName() const;
 		public:
-			static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 			D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& name, _In_ const string& className);
-			void Create();
+			void Create(WNDPROC WindowEventsHandler);
 			HWND GetWindow() const;
 		};
 	}

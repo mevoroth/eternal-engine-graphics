@@ -140,3 +140,8 @@ void D3D11Resource::_SetD3D11Resource(ID3D11Resource* D3D11ResourceObj)
 {
 	_D3D11Resource = D3D11ResourceObj;
 }
+
+void D3D11Resource::_SetCPUAccess(const CPUAccess& CPUMode)
+{
+	_CPUAccess = CPUMode;
+}
