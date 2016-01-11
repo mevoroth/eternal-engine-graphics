@@ -35,6 +35,18 @@ Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ con
 	return ShaderObj;
 }
 
+Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src)
+{
+	D3D11VertexShader* ShaderObj = _Find<D3D11VertexShader>(_VertexShaders, Name);
+	if (ShaderObj)
+	{
+		return ShaderObj;
+	}
+	ShaderObj = new D3D11VertexShader(Name, Src, _ClassLinkage);
+	_VertexShaders.push_back(ShaderObj);
+	return ShaderObj;
+}
+
 Shader* D3D11ShaderFactory::CreateGeometryShader(_In_ const string& Name, _In_ const string& Src)
 {
 	D3D11GeometryShader* ShaderObj = _Find<D3D11GeometryShader>(_GeometryShaders, Name);

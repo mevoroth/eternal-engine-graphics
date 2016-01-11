@@ -33,6 +33,7 @@ namespace Eternal
 			virtual void SetViewport(_In_ Viewport* ViewportObj) = 0;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) = 0;
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) = 0;
+			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) = 0;
 			//template<class Vertex> virtual void DrawIndexInstanced()
 			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) = 0;
 			virtual void SetDepthBuffer(_In_ Clearable* DepthBuffer) = 0;

@@ -21,6 +21,7 @@ namespace Eternal
 			~D3D11ShaderFactory();
 
 			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size) override;
+			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src) override;
 			virtual Shader* CreateGeometryShader(_In_ const string& Name, _In_ const string& Src) override;
 			virtual Shader* CreatePixelShader(_In_ const string& Name, _In_ const string& Src) override;
 

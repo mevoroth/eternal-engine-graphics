@@ -35,13 +35,32 @@ D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string&
 	ETERNAL_ASSERT(hr == S_OK);
 }
 
+D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string& Src, _In_ ID3D11ClassLinkage* ClassLinkage)
+	: D3D11Shader(Name, Src, "VS", "vs_5_0")
+{
+	ETERNAL_ASSERT(_Program);
+
+	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateVertexShader(
+		_Program->GetBufferPointer(),
+		_Program->GetBufferSize(),
+		ClassLinkage,
+		&_Shader
+	);
+	ETERNAL_ASSERT(hr == S_OK);
+}
+
 D3D11VertexShader::~D3D11VertexShader()
 {
 	ETERNAL_ASSERT(_Shader);
-	ETERNAL_ASSERT(_InputLayout);
+	if (_InputLayout)
+	{
+		delete _InputLayout;
+		_InputLayout = nullptr;
+	}
+	//ETERNAL_ASSERT(_InputLayout);
 
-	delete _InputLayout;
-	_InputLayout = nullptr;
+	//delete _InputLayout;
+	//_InputLayout = nullptr;
 
 	_Shader->Release();
 	_Shader = nullptr;

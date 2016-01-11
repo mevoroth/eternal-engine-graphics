@@ -43,6 +43,12 @@ void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuff
 	_DeviceContext->DrawIndexed(IndicesBuffer->GetCount(), 0, 0);
 }
 
+void D3D11Context::DrawPrimitive(_In_ uint32_t PrimitiveCount)
+{
+	ETERNAL_ASSERT(!(PrimitiveCount % 3));
+	_DeviceContext->Draw(PrimitiveCount, 0);
+}
+
 void D3D11Context::SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount)
 {
 	for (int RenderTargetIndex = 0; RenderTargetIndex < RenderTargetsCount; ++RenderTargetIndex)
