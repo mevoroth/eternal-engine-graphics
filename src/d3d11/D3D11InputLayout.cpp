@@ -35,6 +35,11 @@ D3D11InputLayout::D3D11InputLayout(_In_ const VertexDataType DataType[], _In_ ui
 	}
 }
 
+D3D11InputLayout::D3D11InputLayout()
+	: _InputLayout(nullptr)
+{
+}
+
 void D3D11InputLayout::_AddInputDesc(_In_ const char* Semantic, _In_ const DXGI_FORMAT& Format)
 {
 	D3D11_INPUT_ELEMENT_DESC InputTemp;

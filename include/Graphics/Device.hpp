@@ -1,8 +1,6 @@
 #ifndef _DEVICE_HPP_
 #define _DEVICE_HPP_
 
-#include <cassert>
-
 namespace Eternal
 {
 	namespace Graphics
@@ -10,7 +8,7 @@ namespace Eternal
 		class Device
 		{
 		private:
-			static Device* _inst;
+			static Device* _Inst;
 
 		public:
 			enum

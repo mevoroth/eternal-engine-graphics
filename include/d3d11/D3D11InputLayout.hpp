@@ -18,6 +18,7 @@ namespace Eternal
 			friend class D3D11VertexShader;
 		public:
 			D3D11InputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t Size);
+			D3D11InputLayout();
 			ID3D11InputLayout* GetD3D11InputLayout() const;
 
 		private:

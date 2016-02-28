@@ -1,16 +1,18 @@
 #include "Graphics/Device.hpp"
 
+#include "Macros/Macros.hpp"
+
 using namespace Eternal::Graphics;
 
-Device* Device::_inst = 0;
+Device* Device::_Inst = 0;
 
 Device::Device()
 {
-	assert(!_inst);
-	_inst = this;
+	ETERNAL_ASSERT(!_Inst);
+	_Inst = this;
 }
 Device* Device::Get()
 {
-	assert(_inst);
-	return _inst;
+	ETERNAL_ASSERT(_Inst);
+	return _Inst;
 }

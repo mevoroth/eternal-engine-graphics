@@ -10,6 +10,9 @@
     <Filter Include="d3d10">
       <UniqueIdentifier>{015fb133-e049-4630-9b11-25bfbccbf082}</UniqueIdentifier>
     </Filter>
+    <Filter Include="d3d12">
+      <UniqueIdentifier>{16e4b1e5-700a-4ebb-8d36-5aa4d71913e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\d3d11\D3D11Device.hpp">
@@ -190,6 +193,24 @@
     <ClInclude Include="include\Graphics\Comparison.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Renderer.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12CommandList.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Context.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12State.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\StructuredBuffer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11StructuredBuffer.hpp">
+      <Filter>d3d11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -325,6 +346,21 @@
       <Filter>d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11DepthStencilBuffer.cpp">
+      <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Renderer.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Context.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12CommandList.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12State.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11StructuredBuffer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
   </ItemGroup>

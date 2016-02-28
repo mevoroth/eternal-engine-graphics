@@ -42,7 +42,8 @@ Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ con
 	{
 		return ShaderObj;
 	}
-	ShaderObj = new D3D11VertexShader(Name, Src, _ClassLinkage);
+	D3D11InputLayout* InputLayoutObj = new D3D11InputLayout();
+	ShaderObj = new D3D11VertexShader(Name, Src, _ClassLinkage, InputLayoutObj);
 	_VertexShaders.push_back(ShaderObj);
 	return ShaderObj;
 }

@@ -29,7 +29,6 @@ namespace Eternal
 
 			int _CreateDevice();
 			int _CreateSwapChain();
-			void _Settings();
 		};
 	}
 }

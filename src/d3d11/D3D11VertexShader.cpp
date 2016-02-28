@@ -17,16 +17,24 @@ D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string&
 	_InputLayout = InputLayout;
 
 	vector<D3D11_INPUT_ELEMENT_DESC>& Input = InputLayout->_Input;
-	dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateInputLayout(
+
+	if (!Input.size())
+	{
+		D3D11_INPUT_ELEMENT_DESC InputDesc = { "SV_VertexID", 0, DXGI_FORMAT_R32_UINT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Input.push_back(InputDesc);
+	}
+
+	HRESULT hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateInputLayout(
 		&Input[0],
 		Input.size(),
 		_Program->GetBufferPointer(),
 		_Program->GetBufferSize(),
 		&InputLayout->_InputLayout
 	);
+	ETERNAL_ASSERT(hr == S_OK);
 	ETERNAL_ASSERT(InputLayout->_InputLayout);
 
-	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateVertexShader(
+	hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateVertexShader(
 		_Program->GetBufferPointer(),
 		_Program->GetBufferSize(),
 		ClassLinkage,
