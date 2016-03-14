@@ -105,18 +105,13 @@
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
     <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp" />
-    <ClInclude Include="include\d3d12\D3D12CommandList.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Context.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Renderer.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12State.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp" />
+    <ClInclude Include="include\d3d12\D3D12Device.hpp" />
+    <ClInclude Include="include\d3d12\D3D12InputLayout.hpp" />
+    <ClInclude Include="include\d3d12\D3D12RenderTarget.hpp" />
+    <ClInclude Include="include\d3d12\D3D12Resource.hpp" />
+    <ClInclude Include="include\d3d12\D3D12Shader.hpp" />
+    <ClInclude Include="include\d3d12\D3D12State.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\Clearable.hpp" />
@@ -138,8 +133,11 @@
     <ClInclude Include="include\Graphics\Texture.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
+    <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\d3d12\D3D12Shader.cpp" />
+    <ClCompile Include="include\Window\Window.cpp" />
     <ClCompile Include="src\d3d10\D3D10BlendState.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -217,18 +215,11 @@
     <ClCompile Include="src\d3d11\D3D11VertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
-    <ClCompile Include="src\d3d12\D3D12CommandList.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Context.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Renderer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12State.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp" />
+    <ClCompile Include="src\d3d12\D3D12Device.cpp" />
+    <ClCompile Include="src\d3d12\D3D12InputLayout.cpp" />
+    <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp" />
+    <ClCompile Include="src\d3d12\D3D12State.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />
