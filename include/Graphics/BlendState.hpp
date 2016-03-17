@@ -41,18 +41,29 @@ namespace Eternal
 				OP_MIN		= 3,
 				OP_MAX		= 4
 			};
-		private:
-			Blend _Src;
-			Blend _Dest;
-			BlendOp _BlendOp;
-			Blend _SrcAlpha;
-			Blend _DestAlpha;
-			BlendOp _BlendAlphaOp;
 
 		public:
+			BlendState() {}
 			BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendOpCol, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp);
 			virtual ~BlendState() {}
-			virtual void Apply(Context* DrawContext) = 0;
+			//virtual void Apply(Context* DrawContext) = 0;
+
+			inline bool IsEnabled() const { return _Enabled; }
+			inline const Blend& GetSrc() const { return _Src; }
+			inline const Blend& GetDest() const { return _Dest; }
+			inline const BlendOp& GetBlendOp() const { return _BlendOp; }
+			inline const Blend& GetSrcAlpha() const { return _SrcAlpha; }
+			inline const Blend& GetDestAlpha() const { return _DestAlpha; }
+			inline const BlendOp& GetBlendAlphaOp() const { return _BlendAlphaOp; }
+
+		private:
+			bool _Enabled			= false;
+			Blend _Src				= SRC_ALPHA;
+			Blend _Dest				= INV_SRC_ALPHA;
+			BlendOp _BlendOp		= OP_ADD;
+			Blend _SrcAlpha			= SRC_ALPHA;
+			Blend _DestAlpha		= INV_SRC_ALPHA;
+			BlendOp _BlendAlphaOp	= OP_ADD;
 		};
 	}
 }

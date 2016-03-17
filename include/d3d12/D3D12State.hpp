@@ -14,11 +14,22 @@ namespace Eternal
 		class DepthTest;
 		class StencilTest;
 		class BlendState;
+		class RenderTarget;
 
 		class D3D12State
 		{
 		public:
-			D3D12State(_In_ D3D12Device& Device, _In_ InputLayout& InputLayoutObj, _In_ Shader* VS, _In_ Shader* PS, _In_ const DepthTest& DepthTestObj, _In_ const StencilTest& StencilTestObj, _In_ const BlendState& BlendStateObj);
+			D3D12State(
+				_In_ D3D12Device& Device,
+				_In_ InputLayout& InputLayoutObj,
+				_In_ Shader* VS,
+				_In_ Shader* PS,
+				_In_ const DepthTest& DepthTestObj,
+				_In_ const StencilTest& StencilTestObj,
+				_In_ const BlendState BlendStates[],
+				_In_ const RenderTarget RenderTargets[],
+				_In_ uint32_t RenderTargetsCount
+			);
 
 		private:
 			ID3D12RootSignature* _RootSignature = nullptr;
