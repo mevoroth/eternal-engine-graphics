@@ -45,6 +45,7 @@ void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuff
 
 void D3D11Context::DrawPrimitive(_In_ uint32_t PrimitiveCount)
 {
+	ETERNAL_ASSERT(!PrimitiveCount);
 	ETERNAL_ASSERT(!(PrimitiveCount % 3));
 	_CommitRenderState();
 	

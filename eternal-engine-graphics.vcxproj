@@ -105,7 +105,10 @@
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
     <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp" />
+    <ClInclude Include="include\d3d12\D3D12BlendState.hpp" />
+    <ClInclude Include="include\d3d12\D3D12CommandList.hpp" />
     <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp" />
+    <ClInclude Include="include\d3d12\D3D12Constant.hpp" />
     <ClInclude Include="include\d3d12\D3D12Device.hpp" />
     <ClInclude Include="include\d3d12\D3D12InputLayout.hpp" />
     <ClInclude Include="include\d3d12\D3D12RenderTarget.hpp" />
@@ -216,7 +219,10 @@
     <ClCompile Include="src\d3d11\D3D11VertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
+    <ClCompile Include="src\d3d12\D3D12BlendState.cpp" />
+    <ClCompile Include="src\d3d12\D3D12CommandList.cpp" />
     <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp" />
+    <ClCompile Include="src\d3d12\D3D12Constant.cpp" />
     <ClCompile Include="src\d3d12\D3D12Device.cpp" />
     <ClCompile Include="src\d3d12\D3D12InputLayout.cpp" />
     <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp" />

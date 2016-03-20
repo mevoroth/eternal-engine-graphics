@@ -12,6 +12,7 @@ namespace Eternal
 		class D3D12BlendState : public BlendState
 		{
 		public:
+			D3D12BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendOpCol, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp);
 			D3D12_BLEND GetD3D12Src() const;
 			D3D12_BLEND GetD3D12Dest() const;
 			D3D12_BLEND_OP GetD3D12BlendOp() const;

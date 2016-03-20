@@ -11,9 +11,8 @@ namespace Eternal
 		{
 		public:
 			Viewport(_In_ int X, _In_ int Y, _In_ int Width, _In_ int Height);
-			virtual void Apply(Context* DrawContext) = 0;
+			//virtual void Apply(Context* DrawContext) = 0;
 
-		protected:
 			inline int X() const
 			{
 				return _X;
@@ -28,14 +27,14 @@ namespace Eternal
 			}
 			inline int Height() const
 			{
-				return _height;
+				return _Height;
 			}
 
 		private:
 			int _X;
 			int _Y;
 			int _Width;
-			int _height;
+			int _Height;
 		};
 	}
 }

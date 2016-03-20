@@ -21,7 +21,7 @@ D3D12State::D3D12State(
 	_In_ const DepthTest& DepthTestObj,
 	_In_ const StencilTest& StencilTestObj,
 	_In_ const BlendState BlendStates[],
-	_In_ const RenderTarget RenderTargets[],
+	_In_ const D3D12RenderTarget RenderTargets[],
 	_In_ uint32_t RenderTargetsCount
 )
 {

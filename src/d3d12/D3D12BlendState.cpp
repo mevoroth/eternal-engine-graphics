@@ -19,6 +19,11 @@ static D3D12_BLEND BLENDS[] =
 	D3D12_BLEND_INV_BLEND_FACTOR
 };
 
+D3D12BlendState::D3D12BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendOpCol, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp)
+	: BlendState(Src, Dest, BlendOpCol, SrcAlpha, DestAlpha, BlendAlphaOp)
+{
+}
+
 D3D12_BLEND D3D12BlendState::GetD3D12Src() const
 {
 	return BLENDS[GetSrc()];
