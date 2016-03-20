@@ -116,6 +116,7 @@
     <ClInclude Include="include\d3d12\D3D12Shader.hpp" />
     <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp" />
     <ClInclude Include="include\d3d12\D3D12State.hpp" />
+    <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\Clearable.hpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp" />
     <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp" />
     <ClCompile Include="src\d3d12\D3D12State.cpp" />
+    <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />

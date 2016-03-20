@@ -11,8 +11,8 @@
 #include "d3d11/D3D11IndexBuffer.hpp"
 #include "d3d11/D3D11DepthStencilBuffer.hpp"
 #include "d3d11/D3D11Sampler.hpp"
-#include "Graphics/Viewport.hpp"
-#include "Graphics/BlendState.hpp"
+#include "d3d11/D3D11Viewport.hpp"
+#include "d3d11/D3D11BlendState.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -75,12 +75,12 @@ void D3D11Context::SetDepthBuffer(Clearable * DepthBuffer)
 void D3D11Context::SetViewport(_In_ Viewport* ViewportObj)
 {
 	_Viewport = ViewportObj;
-	_Viewport->Apply(this);
+	static_cast<D3D11Viewport*>(_Viewport)->Apply(this);
 }
 void D3D11Context::SetBlendMode(_In_ BlendState* BlendStateObj)
 {
 	_BlendState = BlendStateObj;
-	_BlendState->Apply(this);
+	static_cast<D3D11BlendState*>(_BlendState)->Apply(this);
 }
 
 void D3D11Context::_BindVertexShader(_In_ Shader* ShaderObj)

@@ -1,6 +1,8 @@
 #ifndef _D3D12_COMMAND_LIST_HPP_
 #define _D3D12_COMMAND_LIST_HPP_
 
+#include <cstdint>
+
 struct ID3D12GraphicsCommandList;
 
 namespace Eternal

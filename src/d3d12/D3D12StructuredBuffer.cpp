@@ -1,12 +1,11 @@
-#include "d3d12/D3D12Constant.hpp"
+#include "d3d12/D3D12StructuredBuffer.hpp"
 
 #include "Macros/Macros.hpp"
-
 #include "d3d12/D3D12Device.hpp"
 
 using namespace Eternal::Graphics;
 
-D3D12Constant::D3D12Constant(_In_ D3D12Device& DeviceObj, _In_ uint32_t Size)
+D3D12StructuredBuffer::D3D12StructuredBuffer(_In_ D3D12Device& DeviceObj, _In_ uint32_t Stride, _In_ uint32_t Count)
 {
 	D3D12_HEAP_PROPERTIES HeapProperties;
 	HeapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
@@ -17,7 +16,7 @@ D3D12Constant::D3D12Constant(_In_ D3D12Device& DeviceObj, _In_ uint32_t Size)
 
 	D3D12_RESOURCE_DESC ResourceDesc;
 	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	ResourceDesc.Width = Size;
+	ResourceDesc.Width = Stride * Count;
 	ResourceDesc.Height = 1;
 	ResourceDesc.DepthOrArraySize = 1;
 	ResourceDesc.MipLevels = 1;
@@ -31,12 +30,10 @@ D3D12Constant::D3D12Constant(_In_ D3D12Device& DeviceObj, _In_ uint32_t Size)
 		&HeapProperties,
 		D3D12_HEAP_FLAG_NONE,
 		&ResourceDesc,
-		D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_COPY_SOURCE,
+		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_COPY_SOURCE,
 		nullptr,
 		__uuidof(ID3D12Resource),
 		(void**)&GetResource()
 	);
 	ETERNAL_ASSERT(hr == S_OK);
 }
-
-

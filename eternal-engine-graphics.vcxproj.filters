@@ -238,6 +238,9 @@
     <ClInclude Include="include\d3d12\D3D12Constant.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -409,6 +412,9 @@
       <Filter>d3d12</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Constant.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
   </ItemGroup>

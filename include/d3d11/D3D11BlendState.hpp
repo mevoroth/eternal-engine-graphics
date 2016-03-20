@@ -16,7 +16,7 @@ namespace Eternal
 		{
 		public:
 			D3D11BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendOpCol, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp);
-			virtual void Apply(Context* DrawContext) override;
+			virtual void Apply(Context* DrawContext) /*override*/;
 
 		private:
 			D3D11_BLEND_DESC _BlendDesc;

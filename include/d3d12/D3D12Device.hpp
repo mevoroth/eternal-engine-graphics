@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+struct IDXGISwapChain;
 struct IDXGIFactory4;
 struct IDXGIAdapter1;
 struct ID3D12Device;

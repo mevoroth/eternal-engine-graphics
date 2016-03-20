@@ -9,6 +9,7 @@ using namespace Eternal::Graphics;
 Shader* D3D12ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size)
 {
 	ETERNAL_ASSERT(false);
+	return nullptr;
 }
 
 Shader* D3D12ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src)

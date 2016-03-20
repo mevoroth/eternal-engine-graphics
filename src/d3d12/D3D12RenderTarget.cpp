@@ -20,7 +20,7 @@ D3D12RenderTarget::D3D12RenderTarget(D3D12Device& Device)
 	HRESULT hr = D3D12Device->CreateDescriptorHeap(&DescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void**)&GetDescriptorHeap());
 	ETERNAL_ASSERT(hr == S_OK);
 
-	HRESULT hr = Device.GetSwapChain()->GetBuffer(0, __uuidof(ID3D12Resource), (void**)GetResource());
+	hr = Device.GetSwapChain()->GetBuffer(0, __uuidof(ID3D12Resource), (void**)GetResource());
 	ETERNAL_ASSERT(hr == S_OK);
 
 	D3D12Device->CreateRenderTargetView(GetResource(), nullptr, GetCpuDescriptor());
