@@ -2,6 +2,9 @@
 #define _D3D10_DEVICE_HPP_
 
 #include <string>
+#define WIN32_LEAN_AND_MEAN
+#define WIN32_EXTRA_LEAN
+#define VC_EXTRALEAN
 #include <Windows.h>
 
 #include "Graphics\Device.hpp"

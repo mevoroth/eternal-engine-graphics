@@ -21,6 +21,7 @@ namespace Eternal
 
 			ShaderFactory();
 
+			virtual void RegisterShaderPath(const string& Path) = 0;
 			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size) = 0;
 			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src) = 0;
 			virtual Shader* CreateGeometryShader(_In_ const string& Name, _In_ const string& Src) = 0;

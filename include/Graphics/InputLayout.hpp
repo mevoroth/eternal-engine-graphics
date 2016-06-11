@@ -16,7 +16,14 @@ namespace Eternal
 				TANGENT_T,
 				UV_T,
 
-				VERTEX_DATA_TYPE_COUNT = 5
+				// Imgui Format
+				IMGUI_POSITION_T,
+
+				VERTEX_DATA_TYPE_COUNT,
+				
+				// Imgui Format
+				IMGUI_UV_T		= UV_T,
+				IMGUI_COLOR_T	= COLOR_T
 			};
 		};
 	}

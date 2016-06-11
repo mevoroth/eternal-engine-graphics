@@ -22,6 +22,13 @@ D3D11ShaderFactory::~D3D11ShaderFactory()
 	_Clear<D3D11PixelShader>(_PixelShaders);
 }
 
+void D3D11ShaderFactory::RegisterShaderPath(const string& Path)
+{
+	D3D11Shader::D3D11Include* IncludeHandler = D3D11Shader::GetIncludeHandler();
+	ETERNAL_ASSERT(IncludeHandler);
+	IncludeHandler->RegisterShaderPath(Path);
+}
+
 Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size)
 {
 	D3D11VertexShader* ShaderObj = _Find<D3D11VertexShader>(_VertexShaders, Name);

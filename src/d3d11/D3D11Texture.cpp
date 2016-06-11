@@ -14,7 +14,8 @@ struct TextureFormatInformation
 };
 
 static const TextureFormatInformation TEXTURE_FORMAT[] = {
-	{ DXGI_FORMAT_B8G8R8A8_UNORM, 4 }
+	{ DXGI_FORMAT_B8G8R8A8_UNORM, 4 },
+	{ DXGI_FORMAT_R8G8B8A8_UNORM, 4 }
 };
 
 D3D11Texture::D3D11Texture(ID3D11Texture2D* TextureObj)

@@ -2,6 +2,7 @@
 #define _RESOURCE_HPP_
 
 #include <cstdint>
+#include "Macros/Macros.hpp"
 
 namespace Eternal
 {
@@ -34,7 +35,7 @@ namespace Eternal
 			virtual ~Resource() {}
 			virtual LockedResource Lock(Context& ContextObj, const LockMode& LockingMode) = 0;
 			virtual void Unlock(Context& ContextObj) = 0;
-			void Resize(const size_t& Size);
+			void Resize(const size_t& Size) { ETERNAL_ASSERT(false); };
 			inline size_t GetSize()
 			{
 				return _Size;

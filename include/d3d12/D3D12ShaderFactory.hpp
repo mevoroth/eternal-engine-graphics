@@ -13,6 +13,7 @@ namespace Eternal
 		class D3D12ShaderFactory : public ShaderFactory
 		{
 		public:
+			virtual void RegisterShaderPath(const string& Path) { *((long*)2) = 2; }
 			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size) override;
 			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src) override;
 			virtual Shader* CreateGeometryShader(_In_ const string& Name, _In_ const string& Src) override;

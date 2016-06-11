@@ -14,7 +14,8 @@ namespace Eternal
 		public:
 			enum Format
 			{
-				BGRA8888 = 0
+				BGRA8888 = 0,
+				RGBA8888 = 1
 			};
 
 			Texture(_In_ const Format& FormatObj = BGRA8888, _In_ uint32_t Width = 1, _In_ uint32_t Height = 1);
