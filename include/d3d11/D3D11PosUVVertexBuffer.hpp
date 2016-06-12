@@ -26,14 +26,10 @@ namespace Eternal
 				Vector2 UV;
 			};
 
-			D3D11PosUVVertexBuffer(vector<D3D11PosUVVertexBuffer::PosUVVertex>& Vertex);
-
-			virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView()
-			{
-				throw std::exception("The method or operation is not implemented.");
-			}
+			D3D11PosUVVertexBuffer(_In_ vector<D3D11PosUVVertexBuffer::PosUVVertex>& Vertex);
 
 			virtual size_t GetSize() const override;
+			virtual size_t GetVerticesCount() const override;
 
 		private:
 			static size_t _Size;

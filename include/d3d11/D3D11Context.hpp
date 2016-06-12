@@ -20,11 +20,13 @@ namespace Eternal
 			D3D11Context(ID3D11DeviceContext* D3D11ContextObj);
 
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) override;
+			virtual void DrawDirect(_In_ VertexBuffer* VerticesBuffer) override;
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;
 			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) override;
 			virtual void SetDepthBuffer(_In_ Clearable* DepthBuffer) override;
 			virtual void SetViewport(_In_ Viewport* ViewportObj) override;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) override;
+			virtual void SetTopology(_In_ const Topology& TopologyObj) override;
 
 			inline ID3D11DeviceContext* GetD3D11Context()
 			{

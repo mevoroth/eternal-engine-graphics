@@ -27,9 +27,10 @@ namespace Eternal
 				Vector2 UV;
 			};
 
-			D3D11PosUVNormalVertexBuffer(vector<D3D11PosUVNormalVertexBuffer::PosUVNormalVertex>& Vertex);
+			D3D11PosUVNormalVertexBuffer(_In_ vector<D3D11PosUVNormalVertexBuffer::PosUVNormalVertex>& Vertex);
 
 			virtual size_t GetSize() const override;
+			virtual size_t GetVerticesCount() const override;
 
 		private:
 			static size_t _Size;

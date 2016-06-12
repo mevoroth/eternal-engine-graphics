@@ -4,7 +4,7 @@ using namespace Eternal::Graphics;
 
 size_t D3D11PosUVNormalVertexBuffer::_Size = sizeof(PosUVNormalVertex);
 
-D3D11PosUVNormalVertexBuffer::D3D11PosUVNormalVertexBuffer(vector<PosUVNormalVertex>& Vertex)
+Eternal::Graphics::D3D11PosUVNormalVertexBuffer::D3D11PosUVNormalVertexBuffer(_In_ vector<D3D11PosUVNormalVertexBuffer::PosUVNormalVertex>& Vertex)
 	: _Vertex(Vertex)
 	, D3D11VertexBuffer(Vertex.size() * sizeof(PosUVNormalVertex), (void*)&Vertex[0])
 {
@@ -13,4 +13,9 @@ D3D11PosUVNormalVertexBuffer::D3D11PosUVNormalVertexBuffer(vector<PosUVNormalVer
 size_t D3D11PosUVNormalVertexBuffer::GetSize() const
 {
 	return _Size;
+}
+
+size_t D3D11PosUVNormalVertexBuffer::GetVerticesCount() const
+{
+	return _Vertex.size();
 }

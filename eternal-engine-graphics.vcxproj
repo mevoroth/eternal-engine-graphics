@@ -84,6 +84,7 @@
     <ClInclude Include="include\d3d11\D3D11DepthStencil.hpp" />
     <ClInclude Include="include\d3d11\D3D11DepthStencilBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp" />
+    <ClInclude Include="include\d3d11\D3D11PosColorVertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11PosUVNormalVertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11PosUVVertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11Resource.hpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="src\d3d11\D3D11IndexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11InputLayout.cpp" />
     <ClCompile Include="src\d3d11\D3D11PixelShader.cpp" />
+    <ClCompile Include="src\d3d11\D3D11PosColorVertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11PosUVNormalVertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11PosUVVertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />

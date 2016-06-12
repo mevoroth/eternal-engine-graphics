@@ -16,6 +16,11 @@
 
 using namespace Eternal::Graphics;
 
+static const D3D11_PRIMITIVE_TOPOLOGY D3D11_PRIMITIVE_TYPE[] = {
+	D3D11_PRIMITIVE_TOPOLOGY_LINELIST,
+	D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+};
+
 D3D11Context::D3D11Context(ID3D11DeviceContext* D3D11ContextObj)
 	: _DeviceContext(D3D11ContextObj)
 {
@@ -25,6 +30,12 @@ D3D11Context::D3D11Context(ID3D11DeviceContext* D3D11ContextObj)
 	{
 		_RenderTargets[RenderTargetIndex] = nullptr;
 	}
+}
+
+void D3D11Context::SetTopology(_In_ const Topology& TopologyObj)
+{
+	ETERNAL_ASSERT(TopologyObj < TOPOLOGY_COUNT);
+	_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TYPE[TopologyObj]);
 }
 
 void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer)
@@ -41,6 +52,19 @@ void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuff
 	_DeviceContext->IASetIndexBuffer(Indices->GetD3D11Buffer(), Indices->GetD3D11Format(), 0);
 
 	_DeviceContext->DrawIndexed(IndicesBuffer->GetCount(), 0, 0);
+}
+
+void D3D11Context::DrawDirect(_In_ VertexBuffer* VerticesBuffer)
+{
+	_CommitRenderState();
+
+	uint32_t Stride = VerticesBuffer->GetSize();
+	uint32_t Offset = 0;
+	ID3D11Buffer* D3D11Buffer = static_cast<D3D11VertexBuffer*>(VerticesBuffer)->GetD3D11Buffer();
+
+	_DeviceContext->IASetVertexBuffers(0, 1, &D3D11Buffer, &Stride, &Offset);
+
+	_DeviceContext->Draw(VerticesBuffer->GetVerticesCount(), 0);
 }
 
 void D3D11Context::DrawPrimitive(_In_ uint32_t PrimitiveCount)
