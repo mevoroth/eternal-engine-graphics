@@ -42,7 +42,7 @@ void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 	vector<string>& ShaderPaths = ((D3D11Include*)_IncludeHandler)->_ShaderPaths;
 	bool FileExists = false;
 	string FilePath;
-	for (int ShaderPathIndex = 0; ShaderPathIndex < ShaderPaths.size(); ++ShaderPathIndex)
+	for (int ShaderPathIndex = 0; !FileExists && ShaderPathIndex < ShaderPaths.size(); ++ShaderPathIndex)
 	{
 		FileExists = File::FileExists(ShaderPaths[ShaderPathIndex] + Src);
 		if (FileExists)
@@ -104,7 +104,7 @@ STDMETHODIMP D3D11Shader::D3D11Include::Open(THIS_ D3D_INCLUDE_TYPE IncludeType,
 
 	bool FileExists = false;
 	string FilePath;
-	for (int ShaderPathIndex = 0; ShaderPathIndex < _ShaderPaths.size(); ++ShaderPathIndex)
+	for (int ShaderPathIndex = 0; !FileExists && ShaderPathIndex < _ShaderPaths.size(); ++ShaderPathIndex)
 	{
 		FileExists = File::FileExists(_ShaderPaths[ShaderPathIndex] + pFileName);
 		if (FileExists)

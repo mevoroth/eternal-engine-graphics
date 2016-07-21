@@ -1,6 +1,7 @@
 #ifndef _D3D11_POS_COLOR_VERTEX_BUFFER_HPP_
 #define _D3D11_POS_COLOR_VERTEX_BUFFER_HPP_
 
+#include <cstdint>
 #include <vector>
 #include "Types/Types.hpp"
 #include "d3d11/D3D11VertexBuffer.hpp"
@@ -20,7 +21,7 @@ namespace Eternal
 			{
 			public:
 				Vector4 Pos;
-				Vector4 Color;
+				uint32_t Color;
 			};
 
 			D3D11PosColorVertexBuffer(_In_ vector<D3D11PosColorVertexBuffer::PosColorVertex>& Vertex);
