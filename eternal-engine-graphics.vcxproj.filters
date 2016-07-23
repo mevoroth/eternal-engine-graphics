@@ -244,6 +244,15 @@
     <ClInclude Include="include\d3d11\D3D11PosColorVertexBuffer.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\DeviceFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\RendererFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -422,6 +431,15 @@
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11PosColorVertexBuffer.cpp">
       <Filter>d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\DeviceFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\RendererFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

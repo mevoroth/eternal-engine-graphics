@@ -29,7 +29,7 @@ namespace Eternal
 		public:
 			D3D11Device(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& name, _In_ const string& className);
 			void Create(WNDPROC WindowEventsHandler);
-			HWND GetWindow() const;
+			virtual HWND GetWindow() const override;
 		};
 	}
 }

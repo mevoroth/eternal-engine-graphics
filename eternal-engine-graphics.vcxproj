@@ -126,14 +126,17 @@
     <ClInclude Include="include\Graphics\Context.hpp" />
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
+    <ClInclude Include="include\Graphics\DeviceFactory.hpp" />
     <ClInclude Include="include\Graphics\IndexBuffer.hpp" />
     <ClInclude Include="include\Graphics\InputLayout.hpp" />
     <ClInclude Include="include\Graphics\MaterialProperty.hpp" />
     <ClInclude Include="include\Graphics\Renderer.hpp" />
+    <ClInclude Include="include\Graphics\RendererFactory.hpp" />
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
     <ClInclude Include="include\Graphics\Resource.hpp" />
     <ClInclude Include="include\Graphics\Shader.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
+    <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp" />
     <ClInclude Include="include\Graphics\StencilTest.hpp" />
     <ClInclude Include="include\Graphics\StructuredBuffer.hpp" />
     <ClInclude Include="include\Graphics\Texture.hpp" />
@@ -234,10 +237,13 @@
     <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
+    <ClCompile Include="src\Graphics\DeviceFactory.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Graphics\RendererFactory.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
+    <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
   </ItemGroup>

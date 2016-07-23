@@ -1,6 +1,11 @@
 #ifndef _DEVICE_HPP_
 #define _DEVICE_HPP_
 
+#define VC_EXTRALEAN
+#define WIN32_LEAN_AND_MEAN
+#define WIN32_EXTRA_LEAN
+#include <Windows.h>
+
 namespace Eternal
 {
 	namespace Graphics
@@ -18,6 +23,8 @@ namespace Eternal
 			};
 			Device();
 			static Device* Get();
+
+			virtual HWND GetWindow() const = 0;
 		};
 	}
 }
