@@ -41,6 +41,13 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	_SetBackBuffer(new D3D11RenderTarget(BackBufferTex));
 }
 
+D3D11Renderer::~D3D11Renderer()
+{
+	ID3D11Debug* _Debug;
+	HRESULT hr = _Device->QueryInterface(__uuidof(ID3D11Debug), (void**)&_Debug);
+	ETERNAL_ASSERT(hr == S_OK);
+}
+
 int D3D11Renderer::_CreateDevice()
 {
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
