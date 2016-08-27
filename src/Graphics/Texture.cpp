@@ -1,6 +1,7 @@
 #include "Graphics/Texture.hpp"
 
 #include "Macros/Macros.hpp"
+#include "Graphics/Format.hpp"
 
 using namespace Eternal::Graphics;
 

@@ -9,16 +9,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum Format;
+
 		class Texture
 		{
 		public:
-			enum Format
-			{
-				BGRA8888 = 0,
-				RGBA8888 = 1
-			};
-
-			Texture(_In_ const Format& FormatObj = BGRA8888, _In_ uint32_t Width = 1, _In_ uint32_t Height = 1);
+			Texture(_In_ const Format& FormatObj, _In_ uint32_t Width = 1, _In_ uint32_t Height = 1);
 			virtual ~Texture() {}
 			inline uint32_t GetWidth() const
 			{
@@ -29,7 +25,7 @@ namespace Eternal
 				return _Height;
 			}
 
-			inline Format GetFormat() const
+			inline const Format& GetFormat() const
 			{
 				return _Format;
 			}

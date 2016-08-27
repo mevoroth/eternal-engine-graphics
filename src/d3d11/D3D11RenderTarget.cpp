@@ -14,7 +14,7 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ ID3D11Texture2D* Tex)
 
 	static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateRenderTargetView(Tex, nullptr, &_RenderTarget);
 }
-D3D11RenderTarget::D3D11RenderTarget(_In_ uint32_t Width, _In_ uint32_t Height)
+D3D11RenderTarget::D3D11RenderTarget(_In_ const Format& FormatObj, _In_ uint32_t Width, _In_ uint32_t Height)
 	: D3D11Texture()
 {
 	ID3D11Texture2D* Texture2D;
@@ -27,7 +27,7 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ uint32_t Width, _In_ uint32_t Height)
 	Tex2DDesc.Height = Height;
 	Tex2DDesc.MipLevels = 1;
 	Tex2DDesc.ArraySize = 1;
-	Tex2DDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	Tex2DDesc.Format = D3D11Texture::GetD3D11TextureFormatInformation(FormatObj).D3D11Format;
 	Tex2DDesc.SampleDesc.Count = 1;
 	Tex2DDesc.SampleDesc.Quality = 0;
 	Tex2DDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -39,7 +39,7 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ uint32_t Width, _In_ uint32_t Height)
 	ETERNAL_ASSERT(hr == S_OK);
 
 	D3D11_RENDER_TARGET_VIEW_DESC RenderTargetDesc;
-	RenderTargetDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	RenderTargetDesc.Format = D3D11Texture::GetD3D11TextureFormatInformation(FormatObj).D3D11Format;
 	RenderTargetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	RenderTargetDesc.Texture2D.MipSlice = 0;
 
@@ -47,7 +47,7 @@ D3D11RenderTarget::D3D11RenderTarget(_In_ uint32_t Width, _In_ uint32_t Height)
 	ETERNAL_ASSERT(hr == S_OK);
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
-	ShaderResourceViewDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	ShaderResourceViewDesc.Format = D3D11Texture::GetD3D11TextureFormatInformation(FormatObj).D3D11Format;
 	ShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	ShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 	ShaderResourceViewDesc.Texture2D.MipLevels = -1;

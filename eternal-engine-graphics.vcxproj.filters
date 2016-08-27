@@ -88,9 +88,6 @@
     <ClInclude Include="include\d3d10\D3D10InputLayout.hpp">
       <Filter>d3d10</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10Material.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d10\D3D10OrthographicCamera.hpp">
       <Filter>d3d10</Filter>
     </ClInclude>
@@ -253,6 +250,12 @@
     <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Format.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\RenderTargetFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -325,9 +328,6 @@
       <Filter>d3d10</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d10\D3D10RenderTarget.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10Material.cpp">
       <Filter>d3d10</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d10\D3D10InputLayout.cpp">
@@ -439,6 +439,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\RenderTargetFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

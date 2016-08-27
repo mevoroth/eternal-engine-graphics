@@ -3,23 +3,25 @@
 #include <d3d11.h>
 
 #include "Macros/Macros.hpp"
+#include "Graphics/Format.hpp"
 #include "d3d11/D3D11Renderer.hpp"
 
 using namespace Eternal::Graphics;
 
-struct TextureFormatInformation
-{
-	DXGI_FORMAT D3D11Format;
-	size_t Size;
-};
-
-static const TextureFormatInformation TEXTURE_FORMAT[] = {
+static const D3D11TextureFormatInformation TEXTURE_FORMAT[] = {
 	{ DXGI_FORMAT_B8G8R8A8_UNORM, 4 },
 	{ DXGI_FORMAT_R8G8B8A8_UNORM, 4 }
 };
 
+const D3D11TextureFormatInformation& D3D11Texture::GetD3D11TextureFormatInformation(const Format& FormatObj)
+{
+	ETERNAL_ASSERT(FormatObj < ETERNAL_ARRAYSIZE(TEXTURE_FORMAT));
+	return TEXTURE_FORMAT[FormatObj];
+}
+
 D3D11Texture::D3D11Texture(ID3D11Texture2D* TextureObj)
-	: D3D11Resource((ID3D11Resource*)TextureObj)
+	: Texture(BGRA8888)
+	, D3D11Resource((ID3D11Resource*)TextureObj)
 {
 }
 
@@ -33,7 +35,7 @@ D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& Usage
 	Tex2DDesc.Height = Height;
 	Tex2DDesc.MipLevels = 1;
 	Tex2DDesc.ArraySize = 1;
-	Tex2DDesc.Format = TEXTURE_FORMAT[FormatObj].D3D11Format;
+	Tex2DDesc.Format = GetD3D11TextureFormatInformation(FormatObj).D3D11Format;
 	Tex2DDesc.SampleDesc.Count = 1;
 	Tex2DDesc.SampleDesc.Quality = 0;
 	Tex2DDesc.Usage = (D3D11_USAGE)UsageObj;
@@ -45,7 +47,7 @@ D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& Usage
 	if (Data)
 	{
 		SubResourceData.pSysMem = Data;
-		SubResourceData.SysMemPitch = Width * TEXTURE_FORMAT[FormatObj].Size;
+		SubResourceData.SysMemPitch = Width * GetD3D11TextureFormatInformation(FormatObj).Size;
 		SubResourceData.SysMemSlicePitch = 0;
 	}
 
@@ -66,7 +68,8 @@ D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& Usage
 }
 
 D3D11Texture::D3D11Texture()
-	: D3D11Resource()
+	: Texture(BGRA8888)
+	, D3D11Resource()
 {
 }
 
