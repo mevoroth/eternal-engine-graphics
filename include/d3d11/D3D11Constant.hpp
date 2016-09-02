@@ -13,8 +13,10 @@ namespace Eternal
 			, public D3D11Buffer
 		{
 		public:
-			D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode);
-			D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, void* Data);
+			D3D11Constant(_In_ size_t BufferSize, _In_ const Usage& UsageObj, _In_ const CPUAccess& CPUMode);
+			D3D11Constant(_In_ size_t BufferSize, _In_ const Usage& UsageObj, _In_ const CPUAccess& CPUMode, _In_ void* Data);
+
+			virtual Resource* GetAsResource() override;
 		};
 	}
 }

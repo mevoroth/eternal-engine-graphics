@@ -7,12 +7,17 @@
 
 using namespace Eternal::Graphics;
 
-D3D11Constant::D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode)
+D3D11Constant::D3D11Constant(_In_ size_t BufferSize, _In_ const Usage& UsageObj, _In_ const CPUAccess& CPUMode)
 	: D3D11Buffer(BufferSize, UsageObj, CPUMode, (Bind)D3D11_BIND_CONSTANT_BUFFER)
 {
 }
 
-D3D11Constant::D3D11Constant(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, void* Data)
+D3D11Constant::D3D11Constant(_In_ size_t BufferSize, _In_ const Usage& UsageObj, _In_ const CPUAccess& CPUMode, _In_ void* Data)
 	: D3D11Buffer(BufferSize, UsageObj, CPUMode, (Bind)D3D11_BIND_CONSTANT_BUFFER, Data)
 {
+}
+
+Resource* D3D11Constant::GetAsResource()
+{
+	return this;
 }

@@ -256,6 +256,9 @@
     <ClInclude Include="include\Graphics\RenderTargetFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\ConstantFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -442,6 +445,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\RenderTargetFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ConstantFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
