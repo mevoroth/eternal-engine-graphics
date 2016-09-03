@@ -7,10 +7,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Context;
+
 		class D3D11Viewport : public Viewport
 		{
 		public:
-			D3D11Viewport(_In_ int x, _In_ int y, _In_ int width, _In_ int height);
+			D3D11Viewport(_In_ int X, _In_ int Y, _In_ int Width, _In_ int Height);
 			virtual void Apply(Context* DrawContext) /*override*/;
 		};
 	}

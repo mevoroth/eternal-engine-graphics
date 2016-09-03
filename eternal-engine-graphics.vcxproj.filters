@@ -259,6 +259,12 @@
     <ClInclude Include="include\Graphics\ConstantFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\ViewportFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\SamplerFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -448,6 +454,12 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\ConstantFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ViewportFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SamplerFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

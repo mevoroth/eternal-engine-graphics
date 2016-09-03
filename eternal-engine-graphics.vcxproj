@@ -133,6 +133,7 @@
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
     <ClInclude Include="include\Graphics\RenderTargetFactory.hpp" />
     <ClInclude Include="include\Graphics\Resource.hpp" />
+    <ClInclude Include="include\Graphics\SamplerFactory.hpp" />
     <ClInclude Include="include\Graphics\Shader.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="include\Graphics\Texture.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
+    <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -238,11 +240,13 @@
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\RendererFactory.cpp" />
     <ClCompile Include="src\Graphics\RenderTargetFactory.cpp" />
+    <ClCompile Include="src\Graphics\SamplerFactory.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
+    <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>

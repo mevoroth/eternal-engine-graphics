@@ -3,11 +3,12 @@
 #include <d3d11.h>
 
 #include "d3d11/D3D11Renderer.hpp"
+#include "d3d11/D3D11Context.hpp"
 
 using namespace Eternal::Graphics;
 
-D3D11Viewport::D3D11Viewport(_In_ int x, _In_ int y, _In_ int width, _In_ int height)
-	: Viewport(x, y, width, height)
+D3D11Viewport::D3D11Viewport(_In_ int X, _In_ int Y, _In_ int Width, _In_ int Height)
+	: Viewport(X, Y, Width, Height)
 {
 }
 
