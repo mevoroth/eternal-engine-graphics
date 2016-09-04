@@ -11,18 +11,18 @@ D3D11StructuredBuffer::D3D11StructuredBuffer(_In_ const Usage& UsageObj, _In_ co
 	ID3D11Buffer* Buffer = nullptr;
 	
 	D3D11_BUFFER_DESC BufferDesc;
-	BufferDesc.ByteWidth = Stride * ElementsCount;
+	BufferDesc.ByteWidth = (UINT)(Stride * ElementsCount);
 	BufferDesc.Usage = (D3D11_USAGE)UsageObj;
 	BufferDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	BufferDesc.CPUAccessFlags = CPUAccessToD3D11(CPUMode);
 	BufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-	BufferDesc.StructureByteStride = Stride;
+	BufferDesc.StructureByteStride = (UINT)Stride;
 
 	D3D11_SUBRESOURCE_DATA SubResourceData;
 	if (Data)
 	{
 		SubResourceData.pSysMem = Data;
-		SubResourceData.SysMemPitch = Stride;
+		SubResourceData.SysMemPitch = (UINT)Stride;
 		SubResourceData.SysMemSlicePitch = 0;
 	}
 
@@ -33,7 +33,7 @@ D3D11StructuredBuffer::D3D11StructuredBuffer(_In_ const Usage& UsageObj, _In_ co
 	ShaderResourceViewDesc.Format = DXGI_FORMAT_UNKNOWN;
 	ShaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 	ShaderResourceViewDesc.Buffer.ElementOffset = 0;
-	ShaderResourceViewDesc.Buffer.ElementWidth = Stride;
+	ShaderResourceViewDesc.Buffer.ElementWidth = (UINT)Stride;
 
 	hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateShaderResourceView(Buffer, &ShaderResourceViewDesc, &_ShaderResourceView);
 	ETERNAL_ASSERT(hr == S_OK);

@@ -16,10 +16,10 @@ void D3D11Viewport::Apply(Context* DrawContext)
 {
 	D3D11_VIEWPORT ViewportDesc;
 	
-	ViewportDesc.TopLeftX = X();
-	ViewportDesc.TopLeftY = Y();
-	ViewportDesc.Height = Height();
-	ViewportDesc.Width = Width();
+	ViewportDesc.TopLeftX = (FLOAT)X();
+	ViewportDesc.TopLeftY = (FLOAT)Y();
+	ViewportDesc.Height = (FLOAT)Height();
+	ViewportDesc.Width = (FLOAT)Width();
 	ViewportDesc.MinDepth = 0.f;
 	ViewportDesc.MaxDepth = 1.f;
 

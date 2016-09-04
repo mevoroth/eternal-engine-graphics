@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "Graphics/Clearable.hpp"
+#include "Graphics/RenderTarget.hpp"
 #include "d3d11/D3D11Texture.hpp"
 
 struct ID3D11DepthStencilView;
@@ -13,7 +13,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		class D3D11DepthStencilBuffer
-			: public Clearable
+			: public RenderTarget
 			, public D3D11Texture
 		{
 		public:
@@ -24,6 +24,9 @@ namespace Eternal
 			{
 				return _DepthStencilView;
 			}
+#pragma region RenderTarget
+			virtual Resource* GetAsResource();
+#pragma endregion RenderTarget
 
 		private:
 			ID3D11DepthStencilView* _DepthStencilView = nullptr;

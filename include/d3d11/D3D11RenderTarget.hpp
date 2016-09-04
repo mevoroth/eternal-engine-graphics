@@ -21,6 +21,7 @@ namespace Eternal
 			~D3D11RenderTarget();
 			ID3D11RenderTargetView* GetD3D11RenderTarget();
 #pragma region RenderTarget
+			virtual Resource* GetAsResource() override;
 			virtual void Clear(Context* ContextObj) override;
 #pragma endregion RenderTarget
 

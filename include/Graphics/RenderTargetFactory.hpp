@@ -9,6 +9,7 @@ namespace Eternal
 		class RenderTarget;
 
 		RenderTarget* CreateRenderTarget(_In_ int Width, _In_ int Height, _In_ const Format& FormatObj);
+		RenderTarget* CreateDepthStencilRenderTarget(_In_ int Width, _In_ int Height);
 	}
 }
 

@@ -47,7 +47,7 @@ D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& Usage
 	if (Data)
 	{
 		SubResourceData.pSysMem = Data;
-		SubResourceData.SysMemPitch = Width * GetD3D11TextureFormatInformation(FormatObj).Size;
+		SubResourceData.SysMemPitch = (UINT)(Width * GetD3D11TextureFormatInformation(FormatObj).Size);
 		SubResourceData.SysMemSlicePitch = 0;
 	}
 

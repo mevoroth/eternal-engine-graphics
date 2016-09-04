@@ -64,3 +64,8 @@ void D3D11DepthStencilBuffer::Clear(Context* ContextObj)
 	ETERNAL_ASSERT(_DepthStencilView);
 	static_cast<D3D11Context*>(ContextObj)->GetD3D11Context()->ClearDepthStencilView(_DepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 }
+
+Resource* D3D11DepthStencilBuffer::GetAsResource()
+{
+	return this;
+}

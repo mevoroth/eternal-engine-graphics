@@ -21,8 +21,9 @@ static const D3D11_PRIMITIVE_TOPOLOGY D3D11_PRIMITIVE_TYPE[] = {
 	D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 };
 
-D3D11Context::D3D11Context(ID3D11DeviceContext* D3D11ContextObj)
-	: _DeviceContext(D3D11ContextObj)
+D3D11Context::D3D11Context(_In_ ID3D11DeviceContext* D3D11ContextObj, _In_ bool IsDeferred)
+	: Context(IsDeferred)
+	, _DeviceContext(D3D11ContextObj)
 {
 	_DeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -30,6 +31,12 @@ D3D11Context::D3D11Context(ID3D11DeviceContext* D3D11ContextObj)
 	{
 		_RenderTargets[RenderTargetIndex] = nullptr;
 	}
+}
+
+D3D11Context::~D3D11Context()
+{
+	_DeviceContext->Release();
+	_DeviceContext = nullptr;
 }
 
 void D3D11Context::SetTopology(_In_ const Topology& TopologyObj)
@@ -42,7 +49,7 @@ void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuff
 {
 	_CommitRenderState();
 
-	uint32_t Stride = VerticesBuffer->GetSize();
+	uint32_t Stride = (uint32_t)VerticesBuffer->GetSize();
 	uint32_t Offset = 0;
 
 	D3D11IndexBuffer* Indices = static_cast<D3D11IndexBuffer*>(IndicesBuffer);
@@ -58,13 +65,13 @@ void D3D11Context::DrawDirect(_In_ VertexBuffer* VerticesBuffer)
 {
 	_CommitRenderState();
 
-	uint32_t Stride = VerticesBuffer->GetSize();
+	uint32_t Stride = (uint32_t)VerticesBuffer->GetSize();
 	uint32_t Offset = 0;
 	ID3D11Buffer* D3D11Buffer = static_cast<D3D11VertexBuffer*>(VerticesBuffer)->GetD3D11Buffer();
 
 	_DeviceContext->IASetVertexBuffers(0, 1, &D3D11Buffer, &Stride, &Offset);
 
-	_DeviceContext->Draw(VerticesBuffer->GetVerticesCount(), 0);
+	_DeviceContext->Draw((UINT)VerticesBuffer->GetVerticesCount(), 0);
 }
 
 void D3D11Context::DrawPrimitive(_In_ uint32_t PrimitiveCount)
@@ -90,7 +97,7 @@ void D3D11Context::SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int 
 	_CommitRenderState();
 }
 
-void D3D11Context::SetDepthBuffer(Clearable * DepthBuffer)
+void D3D11Context::SetDepthBuffer(_In_ RenderTarget* DepthBuffer)
 {
 	_DepthBuffer = DepthBuffer;
 	_MarkRenderStateAsDirty();
@@ -245,4 +252,27 @@ void D3D11Context::_CommitRenderState()
 		
 		_DeviceContext->OMSetRenderTargets(D3D11_MAX_RENDERTARGETS, RenderTargetViews, (_DepthBuffer ? static_cast<D3D11DepthStencilBuffer*>(_DepthBuffer)->GetD3D11DepthStencilView() : nullptr));
 	}
+}
+
+void D3D11Context::BeginCommandList()
+{
+}
+
+void D3D11Context::EndCommandList()
+{
+	ID3D11CommandList* CommandList = nullptr;
+	HRESULT hr = GetD3D11Context()->FinishCommandList(FALSE, &CommandList);
+	ETERNAL_ASSERT(hr == S_OK);
+	_CommandLists.push_back(CommandList);
+}
+
+void D3D11Context::Flush(Context& ContextObj)
+{
+	ETERNAL_ASSERT(!ContextObj.IsDeferred());
+	for (int CommandListIndex = 0; CommandListIndex < _CommandLists.size(); ++CommandListIndex)
+	{
+		((D3D11Context&)ContextObj).GetD3D11Context()->ExecuteCommandList(_CommandLists[CommandListIndex], FALSE);
+		_CommandLists[CommandListIndex]->Release();
+	}
+	_CommandLists.clear();
 }

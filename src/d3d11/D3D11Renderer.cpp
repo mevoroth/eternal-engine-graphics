@@ -125,7 +125,7 @@ int D3D11Renderer::_CreateSwapChain()
 		&Quality
 	);
 
-	if ((GetAntiAliasing() & 0xffff) < Quality)
+	if ((UINT)(GetAntiAliasing() & 0xffff) < Quality)
 	{
 		SwapChainDesc.SampleDesc.Count = ((GetAntiAliasing() & 0xffff0000) >> 16);
 		SwapChainDesc.SampleDesc.Quality = (GetAntiAliasing() & 0xffff);
@@ -151,7 +151,7 @@ int D3D11Renderer::_CreateSwapChain()
 
 	if (hr != S_OK)
 	{
-		assert(false);
+		ETERNAL_ASSERT(false);
 		// ERROR
 		//char str[256];
 		//DWORD err = GetLastError();
@@ -164,13 +164,13 @@ int D3D11Renderer::_CreateSwapChain()
 
 ID3D11Device* D3D11Renderer::GetDevice()
 {
-	assert(_Device);
+	ETERNAL_ASSERT(_Device);
 	return _Device;
 }
 
 Context* D3D11Renderer::GetMainContext()
 {
-	assert(_MainContext);
+	ETERNAL_ASSERT(_MainContext);
 	return _MainContext;
 }
 
@@ -183,5 +183,5 @@ Context* D3D11Renderer::CreateDeferredContext()
 {
 	ID3D11DeviceContext* DeviceContext;
 	_Device->CreateDeferredContext(0, &DeviceContext);
-	return new D3D11Context(DeviceContext);
+	return new D3D11Context(DeviceContext, true);
 }

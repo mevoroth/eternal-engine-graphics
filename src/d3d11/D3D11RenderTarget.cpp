@@ -74,3 +74,8 @@ ID3D11RenderTargetView* D3D11RenderTarget::GetD3D11RenderTarget()
 {
 	return _RenderTarget;
 }
+
+Resource* D3D11RenderTarget::GetAsResource()
+{
+	return this;
+}
