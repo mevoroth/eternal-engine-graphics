@@ -85,9 +85,6 @@ namespace Eternal
 
 			ID3D11DeviceContext* _DeviceContext = nullptr;
 			
-			D3D11VertexBuffer* _VerticesBuffer = nullptr;
-			D3D11IndexBuffer* _IndicesBuffer = nullptr;
-
 			vector<ID3D11CommandList*> _CommandLists;
 		};
 	}
