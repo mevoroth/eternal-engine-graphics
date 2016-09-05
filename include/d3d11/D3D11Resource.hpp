@@ -14,23 +14,16 @@ namespace Eternal
 		class D3D11Resource : public Resource
 		{
 		public:
-			enum Usage
-			{
-				DEFAULT		= 0,
-				IMMUTABLE	= 1,
-				DYNAMIC		= 2,
-				STAGING		= 3
-			};
 			enum Bind
 			{
-				VERTEX_BUFFER = 0x1,
-				INDEX_BUFFER = 0x2,
-				CONSTANT_BUFFER = 0x4,
-				SHADER_RESOURCE = 0x8,
-				STREAM_OUTPUT = 0x10,
-				RENDER_TARGET = 0x20,
-				DEPTH_STENCIL = 0x40,
-				UNORDERED_ACCESS = 0x80
+				VERTEX_BUFFER		= 0x1,
+				INDEX_BUFFER		= 0x2,
+				CONSTANT_BUFFER		= 0x4,
+				SHADER_RESOURCE		= 0x8,
+				STREAM_OUTPUT		= 0x10,
+				RENDER_TARGET		= 0x20,
+				DEPTH_STENCIL		= 0x40,
+				UNORDERED_ACCESS	= 0x80
 			};
 			D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode);
 			D3D11Resource(size_t BufferSize, const Usage& UsageObj, const CPUAccess& CPUMode, const Bind& BindMode, void* Data);

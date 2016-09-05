@@ -40,6 +40,35 @@ namespace Eternal
 				TOPOLOGY_COUNT
 			};
 
+			Context(_In_ bool IsDeferred)
+				: _IsDeferred(IsDeferred)
+			{
+			}
+			virtual ~Context() {}
+
+			bool IsDeferred() const
+			{
+				return _IsDeferred;
+			}
+
+			void Begin()
+			{
+#ifdef ETERNAL_DEBUG
+				ETERNAL_ASSERT(_IsDeferred);
+				ETERNAL_ASSERT(!_Enqueueing);
+				_Enqueueing = true;
+#endif
+				BeginCommandList();
+			}
+			void End()
+			{
+				ETERNAL_ASSERT(_Enqueueing);
+				EndCommandList();
+#ifdef ETERNAL_DEBUG
+				_Enqueueing = false;
+#endif
+			}
+			virtual void Flush(Context& ContextObj) = 0;
 			virtual void SetTopology(_In_ const Topology& TopologyObj) = 0;
 			virtual void SetViewport(_In_ Viewport* ViewportObj) = 0;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) = 0;
@@ -48,7 +77,7 @@ namespace Eternal
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) = 0;
 			//template<class Vertex> virtual void DrawIndexInstanced()
 			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) = 0;
-			virtual void SetDepthBuffer(_In_ Clearable* DepthBuffer) = 0;
+			virtual void SetDepthBuffer(_In_ RenderTarget* DepthBuffer) = 0;
 			virtual void BindDepthStencilState(_In_ DepthStencil* DepthStencilState) = 0;
 			virtual void UnbindDepthStencilState() = 0;
 			template<ShaderStage Stage> void BindShader(_In_ Shader* ShaderObj)
@@ -163,6 +192,14 @@ namespace Eternal
 			virtual void _UnbindVSSampler(_In_ uint32_t Slot) = 0;
 			virtual void _UnbindGSSampler(_In_ uint32_t Slot) = 0;
 			virtual void _UnbindPSSampler(_In_ uint32_t Slot) = 0;
+			virtual void BeginCommandList() = 0;
+			virtual void EndCommandList() = 0;
+
+		private:
+			bool _IsDeferred = false;
+#ifdef ETERNAL_DEBUG
+			bool _Enqueueing = false;
+#endif
 		};
 	}
 }

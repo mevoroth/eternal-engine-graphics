@@ -1,26 +1,31 @@
 #ifndef _D3D11_CONTEXT_HPP_
 #define _D3D11_CONTEXT_HPP_
 
+#include <vector>
 #include "Graphics/Context.hpp"
 
 #define D3D11_MAX_RENDERTARGETS 8
 
 struct ID3D11DeviceContext;
+struct ID3D11CommandList;
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace std;
 		class D3D11Context : public Context
 		{
 		public:
-			D3D11Context(ID3D11DeviceContext* D3D11ContextObj);
+			D3D11Context(_In_ ID3D11DeviceContext* D3D11ContextObj, _In_ bool IsDeferred = false);
+			virtual ~D3D11Context() override;
 
+			virtual void Flush(Context& ContextObj) override;
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) override;
 			virtual void DrawDirect(_In_ VertexBuffer* VerticesBuffer) override;
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;
 			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) override;
-			virtual void SetDepthBuffer(_In_ Clearable* DepthBuffer) override;
+			virtual void SetDepthBuffer(_In_ RenderTarget* DepthBuffer) override;
 			virtual void SetViewport(_In_ Viewport* ViewportObj) override;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) override;
 			virtual void SetTopology(_In_ const Topology& TopologyObj) override;
@@ -57,6 +62,8 @@ namespace Eternal
 			virtual void _UnbindVSSampler(_In_ uint32_t Slot) override;
 			virtual void _UnbindGSSampler(_In_ uint32_t Slot) override;
 			virtual void _UnbindPSSampler(_In_ uint32_t Slot) override;
+			virtual void BeginCommandList() override;
+			virtual void EndCommandList() override;
 
 		private:
 			inline void _MarkRenderStateAsDirty()
@@ -73,10 +80,15 @@ namespace Eternal
 
 			Viewport* _Viewport = nullptr;
 			BlendState* _BlendState = nullptr;
-			Clearable* _DepthBuffer = nullptr;
+			RenderTarget* _DepthBuffer = nullptr;
 			RenderTarget* _RenderTargets[D3D11_MAX_RENDERTARGETS];
 
 			ID3D11DeviceContext* _DeviceContext = nullptr;
+			
+			D3D11VertexBuffer* _VerticesBuffer = nullptr;
+			D3D11IndexBuffer* _IndicesBuffer = nullptr;
+
+			vector<ID3D11CommandList*> _CommandLists;
 		};
 	}
 }

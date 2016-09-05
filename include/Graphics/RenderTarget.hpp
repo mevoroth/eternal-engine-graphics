@@ -7,8 +7,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Resource;
+
 		class RenderTarget : public Clearable
 		{
+		public:
+			virtual Resource* GetAsResource() = 0;
 		};
 	}
 }

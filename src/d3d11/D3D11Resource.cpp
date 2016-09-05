@@ -72,7 +72,7 @@ void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, cons
 		ETERNAL_ASSERT((CPUMode & WRITE) == 0);
 	}
 	D3D11_BUFFER_DESC BufferDesc;
-	BufferDesc.ByteWidth = BufferSize;
+	BufferDesc.ByteWidth = (UINT)BufferSize;
 	BufferDesc.Usage = (D3D11_USAGE)UsageObj;
 	BufferDesc.BindFlags = BindMode;
 	BufferDesc.CPUAccessFlags = CPUAccessToD3D11(CPUMode);
@@ -121,7 +121,8 @@ D3D11Resource::LockedResource D3D11Resource::Lock(Context& ContextObj, const Loc
 	D3D11Context& D3D11ContexObj = static_cast<D3D11Context&>(ContextObj);
 	LockedResource Resource;
 
-	D3D11ContexObj.GetD3D11Context()->Map(_D3D11Resource, 0, MAP_TYPES[LockingMode], 0, (D3D11_MAPPED_SUBRESOURCE*)&Resource);
+	HRESULT hr = D3D11ContexObj.GetD3D11Context()->Map(_D3D11Resource, 0, MAP_TYPES[LockingMode], 0, (D3D11_MAPPED_SUBRESOURCE*)&Resource);
+	ETERNAL_ASSERT(hr == S_OK);
 
 	return Resource;
 }

@@ -17,11 +17,12 @@ namespace Eternal
 		{
 		public:
 			D3D11Renderer(_In_ const RenderMode& Mode = HARDWARE, _In_ const AntiAliasing& AA = MSAA_4X);
+			virtual ~D3D11Renderer();
 			ID3D11Device* GetDevice();
 			virtual Context* GetMainContext() override;
 			virtual Context* CreateDeferredContext() override;
 
-			virtual void Flush();
+			virtual void Flush() override;
 		private:
 			ID3D11Device* _Device = nullptr;
 			D3D11Context* _MainContext = nullptr;

@@ -26,7 +26,7 @@ D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string&
 
 	HRESULT hr = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateInputLayout(
 		&Input[0],
-		Input.size(),
+		(UINT)Input.size(),
 		_Program->GetBufferPointer(),
 		_Program->GetBufferSize(),
 		&InputLayout->_InputLayout

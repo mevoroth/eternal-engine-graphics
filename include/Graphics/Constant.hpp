@@ -1,16 +1,17 @@
 #ifndef _CONSTANT_HPP_
 #define _CONSTANT_HPP_
 
-#include "Resource.hpp"
-
 namespace Eternal
 {
 	namespace Graphics
 	{
+		class Resource;
+		
 		class Constant
 		{
 		public:
 			virtual ~Constant() {}
+			virtual Resource* GetAsResource() = 0;
 		};
 	}
 }

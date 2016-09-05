@@ -41,6 +41,13 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	_SetBackBuffer(new D3D11RenderTarget(BackBufferTex));
 }
 
+D3D11Renderer::~D3D11Renderer()
+{
+	ID3D11Debug* _Debug;
+	HRESULT hr = _Device->QueryInterface(__uuidof(ID3D11Debug), (void**)&_Debug);
+	ETERNAL_ASSERT(hr == S_OK);
+}
+
 int D3D11Renderer::_CreateDevice()
 {
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
@@ -118,7 +125,7 @@ int D3D11Renderer::_CreateSwapChain()
 		&Quality
 	);
 
-	if ((GetAntiAliasing() & 0xffff) < Quality)
+	if ((UINT)(GetAntiAliasing() & 0xffff) < Quality)
 	{
 		SwapChainDesc.SampleDesc.Count = ((GetAntiAliasing() & 0xffff0000) >> 16);
 		SwapChainDesc.SampleDesc.Quality = (GetAntiAliasing() & 0xffff);
@@ -144,7 +151,7 @@ int D3D11Renderer::_CreateSwapChain()
 
 	if (hr != S_OK)
 	{
-		assert(false);
+		ETERNAL_ASSERT(false);
 		// ERROR
 		//char str[256];
 		//DWORD err = GetLastError();
@@ -157,13 +164,13 @@ int D3D11Renderer::_CreateSwapChain()
 
 ID3D11Device* D3D11Renderer::GetDevice()
 {
-	assert(_Device);
+	ETERNAL_ASSERT(_Device);
 	return _Device;
 }
 
 Context* D3D11Renderer::GetMainContext()
 {
-	assert(_MainContext);
+	ETERNAL_ASSERT(_MainContext);
 	return _MainContext;
 }
 
@@ -176,5 +183,5 @@ Context* D3D11Renderer::CreateDeferredContext()
 {
 	ID3D11DeviceContext* DeviceContext;
 	_Device->CreateDeferredContext(0, &DeviceContext);
-	return new D3D11Context(DeviceContext);
+	return new D3D11Context(DeviceContext, true);
 }

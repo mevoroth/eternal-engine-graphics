@@ -40,6 +40,7 @@ namespace Eternal
 
 		public:
 			Renderer(_In_ const RenderMode& mode = HARDWARE, _In_ const AntiAliasing& aa = MSAA_4X);
+			virtual ~Renderer() {}
 			static Renderer* Get();
 			/**
 			 * Get Render Mode (HW or SW)
@@ -58,6 +59,7 @@ namespace Eternal
 			virtual RenderTarget* GetBackBuffer() const;
 			virtual Context* GetMainContext() = 0;
 			virtual Context* CreateDeferredContext() = 0;
+			virtual void Flush() = 0;
 		};
 	}
 }

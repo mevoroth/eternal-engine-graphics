@@ -1,6 +1,7 @@
 #ifndef _D3D11_TEXTURE_HPP_
 #define _D3D11_TEXTURE_HPP_
 
+#include <d3d11.h>
 #include "Graphics/Texture.hpp"
 #include "d3d11/D3D11Resource.hpp"
 #include "d3d11/ID3D11ShaderResource.hpp"
@@ -12,6 +13,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		struct D3D11TextureFormatInformation
+		{
+			DXGI_FORMAT D3D11Format;
+			size_t Size;
+		};
+
 		class D3D11Texture
 			: public Texture
 			, public D3D11Resource
@@ -25,6 +32,8 @@ namespace Eternal
 			{
 				return _ShaderResourceView;
 			}
+
+			static const D3D11TextureFormatInformation& GetD3D11TextureFormatInformation(const Format& FormatObj);
 
 		protected:
 			D3D11Texture();

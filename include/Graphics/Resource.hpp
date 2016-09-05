@@ -13,6 +13,13 @@ namespace Eternal
 		class Resource
 		{
 		public:
+			enum Usage
+			{
+				DEFAULT		= 0,
+				IMMUTABLE	= 1,
+				DYNAMIC		= 2,
+				STAGING		= 3
+			};
 			enum CPUAccess
 			{
 				NONE	= 0x0,
