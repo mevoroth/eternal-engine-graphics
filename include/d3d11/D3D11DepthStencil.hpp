@@ -1,7 +1,7 @@
 #ifndef _D3D11_DEPTH_STENCIL_HPP_
 #define _D3D11_DEPTH_STENCIL_HPP_
 
-#include "Graphics/Clearable.hpp"
+#include "Graphics/DepthStencil.hpp"
 
 struct ID3D11DepthStencilState;
 
@@ -12,7 +12,7 @@ namespace Eternal
 		class DepthTest;
 		class StencilTest;
 
-		class D3D11DepthStencil
+		class D3D11DepthStencil : public DepthStencil
 		{
 		public:
 			D3D11DepthStencil(_In_ const DepthTest& DepthTestState, _In_ const StencilTest& StencilState);
@@ -23,7 +23,6 @@ namespace Eternal
 			}
 
 		private:
-			DepthTest* _DepthTestState;
 			ID3D11DepthStencilState* _DepthStencilState = nullptr;
 		};
 	}

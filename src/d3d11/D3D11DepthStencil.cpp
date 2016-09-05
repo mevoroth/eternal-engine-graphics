@@ -10,6 +10,7 @@
 using namespace Eternal::Graphics;
 
 D3D11DepthStencil::D3D11DepthStencil(_In_ const DepthTest& DepthTestState, _In_ const StencilTest& StencilState)
+	: DepthStencil(DepthTestState, StencilState)
 {
 	D3D11_DEPTH_STENCIL_DESC DepthStencilDesc;
 	

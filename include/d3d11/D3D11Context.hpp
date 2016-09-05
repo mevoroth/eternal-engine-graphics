@@ -11,9 +11,6 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class D3D11VertexBuffer;
-		class D3D11IndexBuffer;
-
 		class D3D11Context : public Context
 		{
 		public:
@@ -27,6 +24,8 @@ namespace Eternal
 			virtual void SetViewport(_In_ Viewport* ViewportObj) override;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) override;
 			virtual void SetTopology(_In_ const Topology& TopologyObj) override;
+			virtual void BindDepthStencilState(_In_ DepthStencil* DepthStencilState) override;
+			virtual void UnbindDepthStencilState() override;
 
 			inline ID3D11DeviceContext* GetD3D11Context()
 			{
@@ -78,9 +77,6 @@ namespace Eternal
 			RenderTarget* _RenderTargets[D3D11_MAX_RENDERTARGETS];
 
 			ID3D11DeviceContext* _DeviceContext = nullptr;
-			
-			D3D11VertexBuffer* _VerticesBuffer = nullptr;
-			D3D11IndexBuffer* _IndicesBuffer = nullptr;
 		};
 	}
 }

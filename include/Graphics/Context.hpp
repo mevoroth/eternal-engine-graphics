@@ -20,6 +20,7 @@ namespace Eternal
 		class DepthTest;
 		class StencilTest;
 		class Clearable;
+		class DepthStencil;
 
 		class Context
 		{
@@ -48,6 +49,8 @@ namespace Eternal
 			//template<class Vertex> virtual void DrawIndexInstanced()
 			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) = 0;
 			virtual void SetDepthBuffer(_In_ Clearable* DepthBuffer) = 0;
+			virtual void BindDepthStencilState(_In_ DepthStencil* DepthStencilState) = 0;
+			virtual void UnbindDepthStencilState() = 0;
 			template<ShaderStage Stage> void BindShader(_In_ Shader* ShaderObj)
 			{
 				switch (Stage)

@@ -9,6 +9,7 @@
 #include "d3d11/ID3D11ShaderResource.hpp"
 #include "d3d11/D3D11VertexBuffer.hpp"
 #include "d3d11/D3D11IndexBuffer.hpp"
+#include "d3d11/D3D11DepthStencil.hpp"
 #include "d3d11/D3D11DepthStencilBuffer.hpp"
 #include "d3d11/D3D11Sampler.hpp"
 #include "d3d11/D3D11Viewport.hpp"
@@ -105,6 +106,16 @@ void D3D11Context::SetBlendMode(_In_ BlendState* BlendStateObj)
 {
 	_BlendState = BlendStateObj;
 	static_cast<D3D11BlendState*>(_BlendState)->Apply(this);
+}
+
+void D3D11Context::BindDepthStencilState(_In_ DepthStencil* DepthStencilState)
+{
+	_DeviceContext->OMSetDepthStencilState(static_cast<D3D11DepthStencil*>(DepthStencilState)->GetD3D11DepthStencilState(), 0x0);
+}
+
+void D3D11Context::UnbindDepthStencilState()
+{
+	_DeviceContext->OMSetDepthStencilState(nullptr, 0x0);
 }
 
 void D3D11Context::_BindVertexShader(_In_ Shader* ShaderObj)
