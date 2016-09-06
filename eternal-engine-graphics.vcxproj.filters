@@ -265,6 +265,15 @@
     <ClInclude Include="include\Graphics\SamplerFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\DepthStencil.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\DepthStencilFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\BlendStateFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -460,6 +469,12 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\SamplerFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\DepthStencilFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

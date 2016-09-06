@@ -42,7 +42,7 @@ D3D11BlendState::D3D11BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, 
 	_BlendDesc.IndependentBlendEnable = TRUE;
 	for (uint32_t renderTargetIndex = 0; renderTargetIndex < 8; ++renderTargetIndex)
 	{
-		_BlendDesc.RenderTarget[renderTargetIndex].BlendEnable = FALSE;
+		_BlendDesc.RenderTarget[renderTargetIndex].BlendEnable = TRUE;
 		_BlendDesc.RenderTarget[renderTargetIndex].SrcBlend = BLENDS[Src];
 		_BlendDesc.RenderTarget[renderTargetIndex].DestBlend = BLENDS[Dest];
 		_BlendDesc.RenderTarget[renderTargetIndex].BlendOp = BLENDOPS[BlendOpCol];

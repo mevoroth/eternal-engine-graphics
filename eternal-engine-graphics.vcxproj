@@ -116,11 +116,14 @@
     <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
+    <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
     <ClInclude Include="include\Graphics\Clearable.hpp" />
     <ClInclude Include="include\Graphics\Comparison.hpp" />
     <ClInclude Include="include\Graphics\Constant.hpp" />
     <ClInclude Include="include\Graphics\ConstantFactory.hpp" />
     <ClInclude Include="include\Graphics\Context.hpp" />
+    <ClInclude Include="include\Graphics\DepthStencil.hpp" />
+    <ClInclude Include="include\Graphics\DepthStencilFactory.hpp" />
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
     <ClInclude Include="include\Graphics\DeviceFactory.hpp" />
@@ -233,7 +236,9 @@
     <ClCompile Include="src\d3d12\D3D12State.cpp" />
     <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
+    <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
     <ClCompile Include="src\Graphics\ConstantFactory.cpp" />
+    <ClCompile Include="src\Graphics\DepthStencilFactory.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
     <ClCompile Include="src\Graphics\DeviceFactory.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />

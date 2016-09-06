@@ -18,7 +18,7 @@ namespace Eternal
 				ALL		= 1
 			};
 			DepthTest() {};
-			DepthTest(Mask MaskValue, const Comparison& ComparisonOp)
+			DepthTest(const Mask& MaskValue, const Comparison& ComparisonOp)
 				: _Enabled(true)
 				, _Mask(MaskValue)
 				, _ComparisonOp(ComparisonOp)
