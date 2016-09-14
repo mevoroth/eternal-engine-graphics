@@ -1,5 +1,6 @@
 #include "Graphics/ShaderFactoryFactory.hpp"
 
+#include "Macros/Macros.hpp"
 #include "d3d11/D3D11ShaderFactory.hpp"
 
 namespace Eternal
@@ -10,6 +11,8 @@ namespace Eternal
 		{
 			if (ShaderFactoryTypeObj == ShaderFactoryType::SHADER_FACTORY_D3D11)
 				return new D3D11ShaderFactory();
+			ETERNAL_ASSERT(false);
+			return nullptr;
 		}
 	}
 }

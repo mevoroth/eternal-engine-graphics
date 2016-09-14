@@ -44,7 +44,7 @@ D3D12State::D3D12State(
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc;
 
 	PipelineStateDesc.InputLayout.pInputElementDescs = &static_cast<D3D12InputLayout&>(InputLayoutObj).GetInputElements()[0];
-	PipelineStateDesc.InputLayout.NumElements = static_cast<D3D12InputLayout&>(InputLayoutObj).GetInputElements().size();
+	PipelineStateDesc.InputLayout.NumElements = (UINT)static_cast<D3D12InputLayout&>(InputLayoutObj).GetInputElements().size();
 	PipelineStateDesc.pRootSignature = _RootSignature;
 	static_cast<D3D12Shader*>(VS)->GetD3D12Shader(PipelineStateDesc.VS);
 	static_cast<D3D12Shader*>(PS)->GetD3D12Shader(PipelineStateDesc.PS);

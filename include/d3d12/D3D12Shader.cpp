@@ -73,7 +73,7 @@ STDMETHODIMP D3D12Shader::D3D12Include::Open(THIS_ D3D_INCLUDE_TYPE IncludeType,
 		ETERNAL_ASSERT(false);
 	}
 
-	*pBytes = IncludedFile.tellg();
+	*pBytes = (UINT)IncludedFile.tellg();
 	*ppData = new char[*pBytes];
 	IncludedFile.seekg(0, ios::beg);
 	IncludedFile.read((char*)*ppData, *pBytes);

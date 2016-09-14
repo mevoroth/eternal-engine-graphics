@@ -44,10 +44,10 @@ void D3D12CommandList::DrawPrimitive(_In_ uint32_t PrimitiveCount)
 void D3D12CommandList::SetViewport(_In_ Viewport& ViewportObj)
 {
 	D3D12_VIEWPORT ViewportDesc;
-	ViewportDesc.TopLeftX = ViewportObj.X();
-	ViewportDesc.TopLeftY = ViewportObj.Y();
-	ViewportDesc.Width = ViewportObj.Width();
-	ViewportDesc.Height = ViewportObj.Height();
+	ViewportDesc.TopLeftX = (FLOAT)ViewportObj.X();
+	ViewportDesc.TopLeftY = (FLOAT)ViewportObj.Y();
+	ViewportDesc.Width = (FLOAT)ViewportObj.Width();
+	ViewportDesc.Height = (FLOAT)ViewportObj.Height();
 	ViewportDesc.MinDepth = 0.f;
 	ViewportDesc.MaxDepth = 1.f;
 	_CommandList->RSSetViewports(1, &ViewportDesc);

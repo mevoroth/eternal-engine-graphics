@@ -10,5 +10,5 @@ D3D11UInt32IndexBuffer::D3D11UInt32IndexBuffer(vector<uint32_t>& Indices)
 
 uint32_t D3D11UInt32IndexBuffer::GetCount() const
 {
-	return _Indices.size();
+	return (uint32_t)_Indices.size();
 }

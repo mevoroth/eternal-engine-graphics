@@ -48,7 +48,7 @@ void D3D11Context::SetTopology(_In_ const Topology& TopologyObj)
 
 void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer)
 {
-	_CommitRenderState();
+	//_CommitRenderState();
 
 	uint32_t Stride = (uint32_t)VerticesBuffer->GetSize();
 	uint32_t Offset = 0;
