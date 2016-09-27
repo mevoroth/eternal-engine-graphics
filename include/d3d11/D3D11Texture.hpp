@@ -32,7 +32,7 @@ namespace Eternal
 			{
 				return _ShaderResourceView;
 			}
-
+			virtual Resource* GetAsResource() override;
 			static const D3D11TextureFormatInformation& GetD3D11TextureFormatInformation(const Format& FormatObj);
 
 		protected:

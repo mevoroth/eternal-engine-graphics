@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Graphics/Context.hpp"
+#include "Time/Time.hpp"
 
 #define D3D11_MAX_RENDERTARGETS 8
 
@@ -13,6 +14,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace Eternal::Time;
 		using namespace std;
 		class D3D11Context : public Context
 		{
@@ -85,7 +87,12 @@ namespace Eternal
 
 			ID3D11DeviceContext* _DeviceContext = nullptr;
 			
-			vector<ID3D11CommandList*> _CommandLists;
+			struct CommandListRecord
+			{
+				TimeMicroSecondsT Time = 0ull;
+				ID3D11CommandList* CommandList = nullptr;
+			};
+			vector<CommandListRecord> _CommandLists;
 		};
 	}
 }

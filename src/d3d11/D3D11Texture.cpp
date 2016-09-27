@@ -78,3 +78,8 @@ D3D11Texture::~D3D11Texture()
 	_ShaderResourceView->Release();
 	_ShaderResourceView = nullptr;
 }
+
+Resource* D3D11Texture::GetAsResource()
+{
+	return this;
+}

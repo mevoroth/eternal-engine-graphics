@@ -10,6 +10,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		enum Format;
+		class Resource;
 
 		class Texture
 		{
@@ -39,6 +40,7 @@ namespace Eternal
 				ETERNAL_ASSERT(Height > 0);
 				_Height = Height;
 			}
+			virtual Resource* GetAsResource() = 0;
 
 		private:
 			uint32_t _Width;

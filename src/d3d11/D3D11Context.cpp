@@ -271,19 +271,21 @@ void D3D11Context::BeginCommandList()
 
 void D3D11Context::EndCommandList()
 {
-	ID3D11CommandList* CommandList = nullptr;
-	HRESULT hr = GetD3D11Context()->FinishCommandList(FALSE, &CommandList);
+	CommandListRecord Record;
+	HRESULT hr = GetD3D11Context()->FinishCommandList(FALSE, &Record.CommandList);
 	ETERNAL_ASSERT(hr == S_OK);
-	_CommandLists.push_back(CommandList);
+	Record.Time = Eternal::Time::Time::Get()->GetTimeMicroSeconds();
+	_CommandLists.push_back(Record);
 }
 
 void D3D11Context::Flush(Context& ContextObj)
 {
+#error "DEPRECATED"
 	ETERNAL_ASSERT(!ContextObj.IsDeferred());
 	for (int CommandListIndex = 0; CommandListIndex < _CommandLists.size(); ++CommandListIndex)
 	{
-		((D3D11Context&)ContextObj).GetD3D11Context()->ExecuteCommandList(_CommandLists[CommandListIndex], FALSE);
-		_CommandLists[CommandListIndex]->Release();
+		((D3D11Context&)ContextObj).GetD3D11Context()->ExecuteCommandList(_CommandLists[CommandListIndex].CommandList, FALSE);
+		_CommandLists[CommandListIndex].CommandList->Release();
 	}
 	_CommandLists.clear();
 }
