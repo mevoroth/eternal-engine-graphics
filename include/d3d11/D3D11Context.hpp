@@ -21,8 +21,9 @@ namespace Eternal
 		public:
 			D3D11Context(_In_ ID3D11DeviceContext* D3D11ContextObj, _In_ bool IsDeferred = false);
 			virtual ~D3D11Context() override;
-
-			virtual void Flush(Context& ContextObj) override;
+			
+			virtual void PrepareFlush(Context& ContextObj) override;
+			virtual void Flush() override;
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) override;
 			virtual void DrawDirect(_In_ VertexBuffer* VerticesBuffer) override;
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;

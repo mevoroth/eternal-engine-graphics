@@ -12,6 +12,8 @@ namespace Eternal
 		public:
 			virtual ~IndexBuffer() {}
 			virtual uint32_t GetCount() const = 0;
+			virtual void* GetNative() = 0;
+			virtual int GetNativeFormat() = 0;
 		};
 	}
 }

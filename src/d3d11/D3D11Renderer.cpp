@@ -8,6 +8,7 @@
 
 #include "Macros/Macros.hpp"
 #include "d3d11/D3D11Device.hpp"
+#include "d3d11/D3D11Context.hpp"
 #include "d3d11/D3D11RenderTarget.hpp"
 #include "d3d11/D3D11VertexShader.hpp"
 #include "d3d11/D3D11PixelShader.hpp"
@@ -36,22 +37,26 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	}
 
 	// Get Back Buffer
-	ID3D11Texture2D* BackBufferTex = 0;
+	ID3D11Texture2D* BackBufferTex = nullptr;
 	_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBufferTex);
 	_SetBackBuffer(new D3D11RenderTarget(BackBufferTex));
 }
 
 D3D11Renderer::~D3D11Renderer()
 {
-	ID3D11Debug* _Debug;
-	HRESULT hr = _Device->QueryInterface(__uuidof(ID3D11Debug), (void**)&_Debug);
-	ETERNAL_ASSERT(hr == S_OK);
+	delete _MainContext;
+	_MainContext = nullptr;
+
+	//ID3D11Device* _Device = nullptr;
+	//IDXGISwapChain* _SwapChain = nullptr;
+	//ID3D11Debug* _Debug = nullptr;
+	//ID3D11InfoQueue* _InfoQueue = nullptr;
 }
 
 int D3D11Renderer::_CreateDevice()
 {
-	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
-	D3D_FEATURE_LEVEL out;
+	D3D_FEATURE_LEVEL FeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL Out;
 	ID3D11DeviceContext* DeviceContext = nullptr;
 
 	HRESULT hr = D3D11CreateDevice(
@@ -67,15 +72,15 @@ int D3D11Renderer::_CreateDevice()
 		//| D3D11_CREATE_DEVICE_SINGLETHREADED
 #endif
 		,
-		&featureLevel,
+		&FeatureLevel,
 		1,
 		D3D11_SDK_VERSION,
 		&_Device,
-		&out,
+		&Out,
 		&DeviceContext
 	);
 
-	if (out == 0)
+	if (Out == 0)
 	{
 		// ERROR
 		printf("ERROR\n");
@@ -89,6 +94,32 @@ int D3D11Renderer::_CreateDevice()
 		printf("ERROR %d:%x\n", err, err);
 		ETERNAL_ASSERT(false);
 	}
+
+	//hr = _Device->QueryInterface(__uuidof(ID3D11Debug), (void**)&_Debug);
+	//ETERNAL_ASSERT(hr == S_OK);
+	//hr = _Debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+	//ETERNAL_ASSERT(hr == S_OK);
+
+	//hr = _Debug->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&_InfoQueue);
+	//ETERNAL_ASSERT(hr == S_OK);
+
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_APPLICATION_DEFINED, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_MISCELLANEOUS, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_INITIALIZATION, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_CLEANUP, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_COMPILATION, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_STATE_CREATION, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_STATE_SETTING, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_STATE_GETTING, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_RESOURCE_MANIPULATION, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_EXECUTION, TRUE);
+	//_InfoQueue->SetBreakOnCategory(D3D11_MESSAGE_CATEGORY_SHADER, TRUE);
+
+	//_InfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_CORRUPTION, TRUE);
+	//_InfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR, TRUE);
+	//_InfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_WARNING, TRUE);
+	//_InfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_INFO, TRUE);
+	//_InfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_MESSAGE, TRUE);
 
 	_MainContext = new D3D11Context(DeviceContext);
 

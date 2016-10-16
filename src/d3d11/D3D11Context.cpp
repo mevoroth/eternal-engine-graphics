@@ -53,24 +53,25 @@ void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuff
 	uint32_t Stride = (uint32_t)VerticesBuffer->GetSize();
 	uint32_t Offset = 0;
 
-	D3D11IndexBuffer* Indices = static_cast<D3D11IndexBuffer*>(IndicesBuffer);
+	ID3D11Buffer* D3D11Indices = (ID3D11Buffer*)IndicesBuffer->GetNative();
+	DXGI_FORMAT D3D11IndicesFormat = (DXGI_FORMAT)IndicesBuffer->GetNativeFormat();
+	ID3D11Buffer* D3D11Vertices = (ID3D11Buffer*)VerticesBuffer->GetNative();
 
-	ID3D11Buffer* D3D11Buffer = static_cast<D3D11VertexBuffer*>(VerticesBuffer)->GetD3D11Buffer();
-	_DeviceContext->IASetVertexBuffers(0, 1, &D3D11Buffer, &Stride, &Offset);
-	_DeviceContext->IASetIndexBuffer(Indices->GetD3D11Buffer(), Indices->GetD3D11Format(), 0);
+	_DeviceContext->IASetVertexBuffers(0, 1, &D3D11Vertices, &Stride, &Offset);
+	_DeviceContext->IASetIndexBuffer(D3D11Indices, D3D11IndicesFormat, 0);
 
 	_DeviceContext->DrawIndexed(IndicesBuffer->GetCount(), 0, 0);
 }
 
 void D3D11Context::DrawDirect(_In_ VertexBuffer* VerticesBuffer)
 {
-	_CommitRenderState();
+	//_CommitRenderState();
 
 	uint32_t Stride = (uint32_t)VerticesBuffer->GetSize();
 	uint32_t Offset = 0;
-	ID3D11Buffer* D3D11Buffer = static_cast<D3D11VertexBuffer*>(VerticesBuffer)->GetD3D11Buffer();
+	ID3D11Buffer* D3D11Vertices = (ID3D11Buffer*)VerticesBuffer->GetNative();
 
-	_DeviceContext->IASetVertexBuffers(0, 1, &D3D11Buffer, &Stride, &Offset);
+	_DeviceContext->IASetVertexBuffers(0, 1, &D3D11Vertices, &Stride, &Offset);
 
 	_DeviceContext->Draw((UINT)VerticesBuffer->GetVerticesCount(), 0);
 }
@@ -278,13 +279,40 @@ void D3D11Context::EndCommandList()
 	_CommandLists.push_back(Record);
 }
 
-void D3D11Context::Flush(Context& ContextObj)
+void D3D11Context::PrepareFlush(Context& ContextObj)
 {
-#error "DEPRECATED"
 	ETERNAL_ASSERT(!ContextObj.IsDeferred());
+	ETERNAL_ASSERT(IsDeferred());
+	D3D11Context& D3D11ContextObj = (D3D11Context&)ContextObj;
+
 	for (int CommandListIndex = 0; CommandListIndex < _CommandLists.size(); ++CommandListIndex)
 	{
-		((D3D11Context&)ContextObj).GetD3D11Context()->ExecuteCommandList(_CommandLists[CommandListIndex].CommandList, FALSE);
+		CommandListRecord& Record = _CommandLists[CommandListIndex];
+		vector<CommandListRecord>::iterator it = D3D11ContextObj._CommandLists.begin();
+		vector<CommandListRecord>::iterator end = D3D11ContextObj._CommandLists.end();
+		for (; it != end; ++it)
+		{
+			if ((*it).Time > Record.Time)
+				break;
+		}
+		D3D11ContextObj._CommandLists.insert(it, Record);
+	}
+
+	_CommandLists.clear();
+}
+
+void D3D11Context::Flush()
+{
+	ETERNAL_ASSERT(!IsDeferred());
+	for (int CommandListIndex = 0; CommandListIndex < _CommandLists.size(); ++CommandListIndex)
+	{
+#ifdef ETERNAL_DEBUG
+		if (CommandListIndex + 1 < _CommandLists.size())
+		{
+			ETERNAL_ASSERT(_CommandLists[CommandListIndex].Time <= _CommandLists[CommandListIndex + 1].Time);
+		}
+#endif
+		_DeviceContext->ExecuteCommandList(_CommandLists[CommandListIndex].CommandList, FALSE);
 		_CommandLists[CommandListIndex].CommandList->Release();
 	}
 	_CommandLists.clear();

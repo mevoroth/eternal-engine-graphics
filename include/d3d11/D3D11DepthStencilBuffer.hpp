@@ -19,7 +19,6 @@ namespace Eternal
 		public:
 			D3D11DepthStencilBuffer(uint32_t Width, uint32_t Height);
 			~D3D11DepthStencilBuffer();
-			virtual void Clear(Context* ContextObj) override;
 			inline ID3D11DepthStencilView* GetD3D11DepthStencilView()
 			{
 				return _DepthStencilView;
@@ -27,6 +26,10 @@ namespace Eternal
 #pragma region RenderTarget
 			virtual Resource* GetAsResource();
 #pragma endregion RenderTarget
+#pragma region Clearable
+			virtual void Clear(_In_ Context* ContextObj) override;
+			virtual void Clear(_In_ Context* ContextObj, _In_ float Value) override;
+#pragma endregion Clearable
 
 		private:
 			ID3D11DepthStencilView* _DepthStencilView = nullptr;

@@ -2,10 +2,11 @@
 #define _D3D11_RENDERER_HPP_
 
 #include "Graphics/Renderer.hpp"
-#include "D3D11Context.hpp"
 
 struct ID3D11Device;
 struct IDXGISwapChain;
+struct ID3D11Debug;
+struct ID3D11InfoQueue;
 
 namespace Eternal
 {
@@ -24,9 +25,12 @@ namespace Eternal
 
 			virtual void Flush() override;
 		private:
+			Context* _MainContext = nullptr;
+
 			ID3D11Device* _Device = nullptr;
-			D3D11Context* _MainContext = nullptr;
 			IDXGISwapChain* _SwapChain = nullptr;
+			ID3D11Debug* _Debug = nullptr;
+			ID3D11InfoQueue* _InfoQueue = nullptr;
 
 			int _CreateDevice();
 			int _CreateSwapChain();

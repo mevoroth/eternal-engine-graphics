@@ -11,6 +11,7 @@ namespace Eternal
 			virtual ~VertexBuffer() {}
 			virtual size_t GetSize() const = 0;
 			virtual size_t GetVerticesCount() const = 0;
+			virtual void* GetNative() = 0;
 		};
 	}
 }

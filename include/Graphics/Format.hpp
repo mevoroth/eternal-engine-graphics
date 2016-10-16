@@ -8,7 +8,8 @@ namespace Eternal
 		enum Format
 		{
 			BGRA8888 = 0,
-			RGBA8888 = 1
+			RGBA8888 = 1,
+			RGBA32323232 = 2
 		};
 	}
 }

@@ -1,6 +1,8 @@
 #include "d3d11/D3D11BlendState.hpp"
 
+#include "Macros/Macros.hpp"
 #include "d3d11/D3D11Renderer.hpp"
+#include "d3d11/D3D11Context.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -40,16 +42,16 @@ D3D11BlendState::D3D11BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, 
 
 	_BlendDesc.AlphaToCoverageEnable = FALSE;
 	_BlendDesc.IndependentBlendEnable = TRUE;
-	for (uint32_t renderTargetIndex = 0; renderTargetIndex < 8; ++renderTargetIndex)
+	for (int RenderTargetIndex = 0; RenderTargetIndex < 8; ++RenderTargetIndex)
 	{
-		_BlendDesc.RenderTarget[renderTargetIndex].BlendEnable = TRUE;
-		_BlendDesc.RenderTarget[renderTargetIndex].SrcBlend = BLENDS[Src];
-		_BlendDesc.RenderTarget[renderTargetIndex].DestBlend = BLENDS[Dest];
-		_BlendDesc.RenderTarget[renderTargetIndex].BlendOp = BLENDOPS[BlendOpCol];
-		_BlendDesc.RenderTarget[renderTargetIndex].SrcBlendAlpha = BLENDS[SrcAlpha];
-		_BlendDesc.RenderTarget[renderTargetIndex].DestBlendAlpha = BLENDS[DestAlpha];
-		_BlendDesc.RenderTarget[renderTargetIndex].BlendOpAlpha = BLENDOPS[BlendAlphaOp];
-		_BlendDesc.RenderTarget[renderTargetIndex].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		_BlendDesc.RenderTarget[RenderTargetIndex].BlendEnable = TRUE;
+		_BlendDesc.RenderTarget[RenderTargetIndex].SrcBlend = BLENDS[Src];
+		_BlendDesc.RenderTarget[RenderTargetIndex].DestBlend = BLENDS[Dest];
+		_BlendDesc.RenderTarget[RenderTargetIndex].BlendOp = BLENDOPS[BlendOpCol];
+		_BlendDesc.RenderTarget[RenderTargetIndex].SrcBlendAlpha = BLENDS[SrcAlpha];
+		_BlendDesc.RenderTarget[RenderTargetIndex].DestBlendAlpha = BLENDS[DestAlpha];
+		_BlendDesc.RenderTarget[RenderTargetIndex].BlendOpAlpha = BLENDOPS[BlendAlphaOp];
+		_BlendDesc.RenderTarget[RenderTargetIndex].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 	}
 
 	HRESULT hr = dynamic_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->CreateBlendState(&_BlendDesc, &_BlendState);

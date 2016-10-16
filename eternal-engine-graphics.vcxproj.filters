@@ -160,19 +160,10 @@
     <ClInclude Include="include\d3d11\D3D11Sampler.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11UInt32IndexBuffer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11PosUVVertexBuffer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Buffer.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11PosUVNormalVertexBuffer.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\DepthTest.hpp">
@@ -238,9 +229,6 @@
     <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11PosColorVertexBuffer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\DeviceFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -272,6 +260,15 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\TextureFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\VertexBufferFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\IndexBufferFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -381,25 +378,10 @@
     <ClCompile Include="src\d3d11\D3D11Sampler.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11IndexBuffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11UInt32IndexBuffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11PosUVVertexBuffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11Constant.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11VertexBuffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11Buffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11PosUVNormalVertexBuffer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11DepthStencil.cpp">
@@ -447,9 +429,6 @@
     <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11PosColorVertexBuffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\DeviceFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -475,6 +454,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\TextureFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

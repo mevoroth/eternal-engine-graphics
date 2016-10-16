@@ -9,6 +9,7 @@ namespace Eternal
 		{
 		public:
 			Viewport(_In_ int X, _In_ int Y, _In_ int Width, _In_ int Height);
+			virtual ~Viewport() {}
 
 			inline int X() const
 			{

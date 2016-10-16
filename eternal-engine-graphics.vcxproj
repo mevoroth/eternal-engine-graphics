@@ -80,9 +80,6 @@
     <ClInclude Include="include\d3d11\D3D11DepthStencil.hpp" />
     <ClInclude Include="include\d3d11\D3D11DepthStencilBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11PosColorVertexBuffer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11PosUVNormalVertexBuffer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11PosUVVertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11Resource.hpp" />
     <ClInclude Include="include\d3d11\D3D11Constant.hpp" />
     <ClInclude Include="include\d3d11\D3D11Context.hpp" />
@@ -97,7 +94,6 @@
     <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp" />
     <ClInclude Include="include\d3d11\D3D11StructuredBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11Texture.hpp" />
-    <ClInclude Include="include\d3d11\D3D11UInt32IndexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexBuffer.hpp" />
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
@@ -129,6 +125,7 @@
     <ClInclude Include="include\Graphics\DeviceFactory.hpp" />
     <ClInclude Include="include\Graphics\Format.hpp" />
     <ClInclude Include="include\Graphics\IndexBuffer.hpp" />
+    <ClInclude Include="include\Graphics\IndexBufferFactory.hpp" />
     <ClInclude Include="include\Graphics\InputLayout.hpp" />
     <ClInclude Include="include\Graphics\MaterialProperty.hpp" />
     <ClInclude Include="include\Graphics\Renderer.hpp" />
@@ -143,7 +140,9 @@
     <ClInclude Include="include\Graphics\StencilTest.hpp" />
     <ClInclude Include="include\Graphics\StructuredBuffer.hpp" />
     <ClInclude Include="include\Graphics\Texture.hpp" />
+    <ClInclude Include="include\Graphics\TextureFactory.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
+    <ClInclude Include="include\Graphics\VertexBufferFactory.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
@@ -207,12 +206,8 @@
     <ClCompile Include="src\d3d11\D3D11DepthStencilBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11Device.cpp" />
     <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp" />
-    <ClCompile Include="src\d3d11\D3D11IndexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11InputLayout.cpp" />
     <ClCompile Include="src\d3d11\D3D11PixelShader.cpp" />
-    <ClCompile Include="src\d3d11\D3D11PosColorVertexBuffer.cpp" />
-    <ClCompile Include="src\d3d11\D3D11PosUVNormalVertexBuffer.cpp" />
-    <ClCompile Include="src\d3d11\D3D11PosUVVertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
     <ClCompile Include="src\d3d11\D3D11Resource.cpp" />
@@ -221,8 +216,6 @@
     <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp" />
     <ClCompile Include="src\d3d11\D3D11StructuredBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
-    <ClCompile Include="src\d3d11\D3D11UInt32IndexBuffer.cpp" />
-    <ClCompile Include="src\d3d11\D3D11VertexBuffer.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
     <ClCompile Include="src\d3d12\D3D12BlendState.cpp" />
@@ -250,6 +243,7 @@
     <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
+    <ClCompile Include="src\Graphics\TextureFactory.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
     <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
   </ItemGroup>

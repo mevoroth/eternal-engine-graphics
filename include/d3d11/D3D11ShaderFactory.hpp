@@ -21,10 +21,12 @@ namespace Eternal
 			~D3D11ShaderFactory();
 
 			virtual void RegisterShaderPath(const string& Path) override;
+			virtual vector<string>& GetShaderPaths() override;
 			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size) override;
 			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src) override;
 			virtual Shader* CreateGeometryShader(_In_ const string& Name, _In_ const string& Src) override;
 			virtual Shader* CreatePixelShader(_In_ const string& Name, _In_ const string& Src) override;
+			virtual void Recompile() override;
 
 		private:
 			ID3D11ClassLinkage* _ClassLinkage = nullptr;
@@ -34,7 +36,7 @@ namespace Eternal
 			vector<D3D11PixelShader*> _PixelShaders;
 
 			template<class ShaderT>
-			ShaderT* _Find(const vector<ShaderT*>& Container, const string& Name) const
+			ShaderT* _Find(_In_ const vector<ShaderT*>& Container, _In_ const string& Name) const
 			{
 				for (uint32_t ShaderIndex = 0; ShaderIndex < Container.size(); ++ShaderIndex)
 				{
@@ -47,13 +49,22 @@ namespace Eternal
 			}
 
 			template<class ShaderT>
-			void _Clear(vector<ShaderT*>& Container)
+			void _Clear(_In_ vector<ShaderT*>& Container)
 			{
 				for (uint32_t ShaderIndex = 0; ShaderIndex < Container.size(); ++ShaderIndex)
 				{
 					delete Container[ShaderIndex];
 				}
 				Container.clear();
+			}
+
+			template<class ShaderT>
+			void _Recompile(_In_ vector<ShaderT*>& Container)
+			{
+				for (uint32_t ShaderIndex = 0; ShaderIndex < Container.size(); ++ShaderIndex)
+				{
+					Container[ShaderIndex]->Recompile();
+				}
 			}
 		};
 	}

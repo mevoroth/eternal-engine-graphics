@@ -19,13 +19,21 @@ namespace Eternal
 			{
 				friend class D3D11Shader;
 			public:
+				struct Dependency
+				{
+					string FileName;
+					vector<string> ShadersToRecompile;
+				};
 				D3D11Include();
 				virtual STDMETHODIMP Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes) override;
 				virtual STDMETHODIMP Close(THIS_ LPCVOID pData) override;
-				void RegisterShaderPath(const string& Path);
+				void RegisterShaderPath(_In_ const string& Path);
+				void CreateDependency(_In_ const string& Src);
+				vector<string>& GetShaderPaths();
 
 			private:
 				vector<string> _ShaderPaths;
+				vector<Dependency> _ShaderDependencies;
 			};
 
 			static inline D3D11Include* GetIncludeHandler()

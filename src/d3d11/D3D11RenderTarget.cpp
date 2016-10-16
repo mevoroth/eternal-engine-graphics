@@ -1,6 +1,9 @@
 #include "d3d11/D3D11RenderTarget.hpp"
 
+#include <d3d11.h>
+#include "Macros/Macros.hpp"
 #include "d3d11/D3D11Renderer.hpp"
+#include "d3d11/D3D11Context.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -64,9 +67,15 @@ D3D11RenderTarget::~D3D11RenderTarget()
 	_RenderTarget = nullptr;
 }
 
-void D3D11RenderTarget::Clear(Context* ContextObj)
+void D3D11RenderTarget::Clear(_In_ Context* ContextObj)
 {
 	FLOAT ClearColor[4] = { 0.f, 0.f, 0.f, 1.f };
+	static_cast<D3D11Context*>(ContextObj)->GetD3D11Context()->ClearRenderTargetView(_RenderTarget, ClearColor);
+}
+
+void D3D11RenderTarget::Clear(_In_ Context* ContextObj, _In_ float Value)
+{
+	FLOAT ClearColor[4] = { Value, Value, Value, 1.f };
 	static_cast<D3D11Context*>(ContextObj)->GetD3D11Context()->ClearRenderTargetView(_RenderTarget, ClearColor);
 }
 

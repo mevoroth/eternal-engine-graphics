@@ -10,7 +10,8 @@ namespace Eternal
 		class Clearable
 		{
 		public:
-			virtual void Clear(Context* ContextObj) = 0;
+			virtual void Clear(_In_ Context* ContextObj) = 0;
+			virtual void Clear(_In_ Context* ContextObj, _In_ float Value) = 0;
 		};
 	}
 }

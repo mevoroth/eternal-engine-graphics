@@ -1,9 +1,10 @@
 #ifndef _D3D11_RENDER_TARGET_HPP_
 #define _D3D11_RENDER_TARGET_HPP_
 
-#include <d3d11.h>
 #include "Graphics/RenderTarget.hpp"
 #include "d3d11/D3D11Texture.hpp"
+
+struct ID3D11RenderTargetView;
 
 namespace Eternal
 {
@@ -22,7 +23,8 @@ namespace Eternal
 			ID3D11RenderTargetView* GetD3D11RenderTarget();
 #pragma region RenderTarget
 			virtual Resource* GetAsResource() override;
-			virtual void Clear(Context* ContextObj) override;
+			virtual void Clear(_In_ Context* ContextObj) override;
+			virtual void Clear(_In_ Context* ContextObj, _In_ float Value) override;
 #pragma endregion RenderTarget
 
 		private:

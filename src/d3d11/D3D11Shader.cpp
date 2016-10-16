@@ -56,14 +56,17 @@ void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 
 	HRESULT hr = D3DCompileFromFile(
 		wstring(FilePath.cbegin(), FilePath.cend()).c_str(),
-		0,
+		nullptr,
 		_IncludeHandler,
 		Entry.c_str(),
 		Profile.c_str(),
 		D3DCOMPILE_ENABLE_STRICTNESS
 #ifdef ETERNAL_DEBUG
-		| D3DCOMPILE_DEBUG,
+		| D3DCOMPILE_DEBUG
+		| D3DCOMPILE_SKIP_OPTIMIZATION
+		| D3DCOMPILE_ALL_RESOURCES_BOUND
 #endif
+		,
 		0,
 		&_Program,
 		&Errors
@@ -71,7 +74,7 @@ void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 
 	if (hr != S_OK)
 	{
-		_Program = 0;
+		_Program = nullptr;
 		const char* Error = (LPCSTR)Errors->GetBufferPointer();
 		OutputDebugString(Error);
 		ETERNAL_ASSERT(false);
@@ -137,7 +140,7 @@ STDMETHODIMP D3D11Shader::D3D11Include::Close(THIS_ LPCVOID pData)
 	return S_OK;
 }
 
-void D3D11Shader::D3D11Include::RegisterShaderPath(const string& Path)
+void D3D11Shader::D3D11Include::RegisterShaderPath(_In_ const string& Path)
 {
 #ifdef ETERNAL_DEBUG
 	for (int ShaderPathIndex = 0; ShaderPathIndex < _ShaderPaths.size(); ++ShaderPathIndex)
@@ -146,4 +149,17 @@ void D3D11Shader::D3D11Include::RegisterShaderPath(const string& Path)
 	}
 #endif
 	_ShaderPaths.push_back(Path);
+}
+
+void D3D11Shader::D3D11Include::CreateDependency(_In_ const string& Src)
+{
+	//Dependency NewShader;
+	//NewShader.FileName = Src;
+	//NewShader
+	//_ShaderDependencies.push_back(NewShader);
+}
+
+vector<string>& D3D11Shader::D3D11Include::GetShaderPaths()
+{
+	return _ShaderPaths;
 }

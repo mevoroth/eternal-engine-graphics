@@ -14,6 +14,7 @@ namespace Eternal
 				COLOR_T,
 				NORMAL_T,
 				TANGENT_T,
+				BINORMAL_T,
 				UV_T,
 
 				// Imgui Format

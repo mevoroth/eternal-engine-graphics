@@ -68,7 +68,8 @@ namespace Eternal
 				_Enqueueing = false;
 #endif
 			}
-			virtual void Flush(Context& ContextObj) = 0;
+			virtual void PrepareFlush(Context& ContextObj) = 0;
+			virtual void Flush() = 0;
 			virtual void SetTopology(_In_ const Topology& TopologyObj) = 0;
 			virtual void SetViewport(_In_ Viewport* ViewportObj) = 0;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) = 0;
