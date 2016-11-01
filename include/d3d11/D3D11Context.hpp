@@ -25,6 +25,7 @@ namespace Eternal
 			virtual void PrepareFlush(Context& ContextObj) override;
 			virtual void Flush() override;
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) override;
+			virtual void DrawIndexedInstanced(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer, _In_ int InstanceCount) override;
 			virtual void DrawDirect(_In_ VertexBuffer* VerticesBuffer) override;
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;
 			virtual void SetRenderTargets(_In_ RenderTarget** RenderTargets, _In_ int RenderTargetsCount) override;

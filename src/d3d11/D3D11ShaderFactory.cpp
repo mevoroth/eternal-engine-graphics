@@ -34,7 +34,7 @@ vector<string>& D3D11ShaderFactory::GetShaderPaths()
 	return D3D11Shader::GetIncludeHandler()->GetShaderPaths();
 }
 
-Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size)
+Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size, _In_ const vector<string>& Defines)
 {
 	D3D11VertexShader* ShaderObj = _Find<D3D11VertexShader>(_VertexShaders, Name);
 	if (ShaderObj)
@@ -42,12 +42,12 @@ Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ con
 		return ShaderObj;
 	}
 	D3D11InputLayout* InputLayoutObj = new D3D11InputLayout(DataType, Size);
-	ShaderObj = new D3D11VertexShader(Name, Src, _ClassLinkage, InputLayoutObj);
+	ShaderObj = new D3D11VertexShader(Name, Src, Defines, _ClassLinkage, InputLayoutObj);
 	_VertexShaders.push_back(ShaderObj);
 	return ShaderObj;
 }
 
-Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src)
+Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines)
 {
 	D3D11VertexShader* ShaderObj = _Find<D3D11VertexShader>(_VertexShaders, Name);
 	if (ShaderObj)
@@ -55,31 +55,31 @@ Shader* D3D11ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ con
 		return ShaderObj;
 	}
 	D3D11InputLayout* InputLayoutObj = new D3D11InputLayout();
-	ShaderObj = new D3D11VertexShader(Name, Src, _ClassLinkage, InputLayoutObj);
+	ShaderObj = new D3D11VertexShader(Name, Src, Defines, _ClassLinkage, InputLayoutObj);
 	_VertexShaders.push_back(ShaderObj);
 	return ShaderObj;
 }
 
-Shader* D3D11ShaderFactory::CreateGeometryShader(_In_ const string& Name, _In_ const string& Src)
+Shader* D3D11ShaderFactory::CreateGeometryShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines)
 {
 	D3D11GeometryShader* ShaderObj = _Find<D3D11GeometryShader>(_GeometryShaders, Name);
 	if (ShaderObj)
 	{
 		return ShaderObj;
 	}
-	ShaderObj = new D3D11GeometryShader(Name, Src, _ClassLinkage);
+	ShaderObj = new D3D11GeometryShader(Name, Src, Defines, _ClassLinkage);
 	_GeometryShaders.push_back(ShaderObj);
 	return ShaderObj;
 }
 
-Shader* D3D11ShaderFactory::CreatePixelShader(_In_ const string& Name, _In_ const string& Src)
+Shader* D3D11ShaderFactory::CreatePixelShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines)
 {
 	D3D11PixelShader* ShaderObj = _Find<D3D11PixelShader>(_PixelShaders, Name);
 	if (ShaderObj)
 	{
 		return ShaderObj;
 	}
-	ShaderObj = new D3D11PixelShader(Name, Src, _ClassLinkage);
+	ShaderObj = new D3D11PixelShader(Name, Src, Defines, _ClassLinkage);
 	_PixelShaders.push_back(ShaderObj);
 	return ShaderObj;
 }

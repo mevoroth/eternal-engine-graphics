@@ -41,7 +41,7 @@ namespace Eternal
 				return (D3D11Include*)_IncludeHandler;
 			}
 
-			D3D11Shader(_In_ const string& Name, _In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile);
+			D3D11Shader(_In_ const string& Name, _In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile, _In_ const vector<string>& Defines);
 			virtual ~D3D11Shader();
 			virtual void* GetD3D11Shader() = 0;
 
@@ -49,7 +49,7 @@ namespace Eternal
 			static ID3DInclude* _IncludeHandler;
 			ID3DBlob* _Program;
 
-			void _CompileFile(_In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile);
+			void _CompileFile(_In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile, _In_ const vector<string>& Defines);
 			void _LoadFile(const string& Src);
 		};
 	}

@@ -19,13 +19,13 @@ using namespace std;
 
 ID3DInclude* D3D11Shader::_IncludeHandler = new D3D11Include();
 
-D3D11Shader::D3D11Shader(_In_ const string& Name, _In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile)
+D3D11Shader::D3D11Shader(_In_ const string& Name, _In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile, _In_ const vector<string>& Defines)
 	: Shader(Name)
-	, _Program(0)
+	, _Program(nullptr)
 {
 	ETERNAL_ASSERT(_IncludeHandler);
 #ifdef ETERNAL_DEBUG
-	_CompileFile(Src, Entry, Profile);
+	_CompileFile(Src, Entry, Profile, Defines);
 #else
 	_LoadFile(Src + ".cso");
 #endif
@@ -37,8 +37,10 @@ D3D11Shader::~D3D11Shader()
 	_Program = nullptr;
 }
 
-void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile)
+void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile, _In_ const vector<string>& Defines)
 {
+	ETERNAL_ASSERT(!(Defines.size() % 2)); // Force value for defines
+
 	vector<string>& ShaderPaths = ((D3D11Include*)_IncludeHandler)->_ShaderPaths;
 	bool FileExists = false;
 	string FilePath;
@@ -52,11 +54,20 @@ void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 	ETERNAL_ASSERT(FileExists);
 	ETERNAL_ASSERT(FilePath.size());
 
+	vector<D3D_SHADER_MACRO> Macros;
+	for (int DefineIndex = 0, DefineCount = Defines.size(); DefineIndex < DefineCount; ++DefineIndex)
+	{
+		D3D_SHADER_MACRO Macro;
+		Macro.Name = Defines[DefineIndex * 2].c_str();
+		Macro.Definition = Defines[DefineIndex * 2 + 1].c_str();
+		Macros.push_back(Macro);
+	}
+
 	ID3DBlob* Errors;
 
 	HRESULT hr = D3DCompileFromFile(
 		wstring(FilePath.cbegin(), FilePath.cend()).c_str(),
-		nullptr,
+		Defines.size() ? Macros.data() : nullptr,
 		_IncludeHandler,
 		Entry.c_str(),
 		Profile.c_str(),

@@ -271,6 +271,9 @@
     <ClInclude Include="include\Graphics\IndexBufferFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\StructuredBufferFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -457,6 +460,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\TextureFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\StructuredBufferFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

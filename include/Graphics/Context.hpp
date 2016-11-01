@@ -74,6 +74,7 @@ namespace Eternal
 			virtual void SetViewport(_In_ Viewport* ViewportObj) = 0;
 			virtual void SetBlendMode(_In_ BlendState* BlendStateObj) = 0;
 			virtual void DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer) = 0;
+			virtual void DrawIndexedInstanced(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer, _In_ int InstanceCount) = 0;
 			virtual void DrawDirect(_In_ VertexBuffer* VerticesBuffer) = 0;
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) = 0;
 			//template<class Vertex> virtual void DrawIndexInstanced()

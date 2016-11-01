@@ -6,8 +6,8 @@
 
 using namespace Eternal::Graphics;
 
-D3D11GeometryShader::D3D11GeometryShader(_In_ const string& Name, _In_ const string& Src, _In_ ID3D11ClassLinkage* ClassLinkage)
-	: D3D11Shader(Name, Src, "GS", "gs_5_0")
+D3D11GeometryShader::D3D11GeometryShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines, _In_ ID3D11ClassLinkage* ClassLinkage)
+	: D3D11Shader(Name, Src, "GS", "gs_5_0", Defines)
 {
 	ETERNAL_ASSERT(_Program);
 

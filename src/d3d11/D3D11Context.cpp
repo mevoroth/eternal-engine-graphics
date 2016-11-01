@@ -63,6 +63,21 @@ void D3D11Context::DrawIndexed(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuff
 	_DeviceContext->DrawIndexed(IndicesBuffer->GetCount(), 0, 0);
 }
 
+void D3D11Context::DrawIndexedInstanced(_In_ VertexBuffer* VerticesBuffer, _In_ IndexBuffer* IndicesBuffer, _In_ int InstanceCount)
+{
+	uint32_t Stride = (uint32_t)VerticesBuffer->GetSize();
+	uint32_t Offset = 0;
+
+	ID3D11Buffer* D3D11Indices = (ID3D11Buffer*)IndicesBuffer->GetNative();
+	DXGI_FORMAT D3D11IndicesFormat = (DXGI_FORMAT)IndicesBuffer->GetNativeFormat();
+	ID3D11Buffer* D3D11Vertices = (ID3D11Buffer*)VerticesBuffer->GetNative();
+
+	_DeviceContext->IASetVertexBuffers(0, 1, &D3D11Vertices, &Stride, &Offset);
+	_DeviceContext->IASetIndexBuffer(D3D11Indices, D3D11IndicesFormat, 0);
+
+	_DeviceContext->DrawIndexedInstanced(IndicesBuffer->GetCount(), InstanceCount, 0, 0, 0);
+}
+
 void D3D11Context::DrawDirect(_In_ VertexBuffer* VerticesBuffer)
 {
 	//_CommitRenderState();

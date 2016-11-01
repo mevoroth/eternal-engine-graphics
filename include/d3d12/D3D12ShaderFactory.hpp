@@ -14,10 +14,10 @@ namespace Eternal
 		{
 		public:
 			virtual void RegisterShaderPath(const string& Path) { *((long*)2) = 2; }
-			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size) override;
-			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src) override;
-			virtual Shader* CreateGeometryShader(_In_ const string& Name, _In_ const string& Src) override;
-			virtual Shader* CreatePixelShader(_In_ const string& Name, _In_ const string& Src) override;
+			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size, _In_ const vector<string>& Defines = vector<string>()) override;
+			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines = vector<string>()) override;
+			virtual Shader* CreateGeometryShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines = vector<string>()) override;
+			virtual Shader* CreatePixelShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines = vector<string>()) override;
 
 		private:
 			vector<Shader*> _Shaders;

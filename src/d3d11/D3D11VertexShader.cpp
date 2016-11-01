@@ -7,8 +7,8 @@
 using namespace std;
 using namespace Eternal::Graphics;
 
-D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string& Src, _In_ ID3D11ClassLinkage* ClassLinkage, _Inout_ D3D11InputLayout* InputLayout)
-	: D3D11Shader(Name, Src, "VS", "vs_5_0")
+D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines, _In_ ID3D11ClassLinkage* ClassLinkage, _Inout_ D3D11InputLayout* InputLayout)
+	: D3D11Shader(Name, Src, "VS", "vs_5_0", Defines)
 {
 	ETERNAL_ASSERT(_Program);
 
@@ -43,8 +43,8 @@ D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string&
 	ETERNAL_ASSERT(hr == S_OK);
 }
 
-D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string& Src, _In_ ID3D11ClassLinkage* ClassLinkage)
-	: D3D11Shader(Name, Src, "VS", "vs_5_0")
+D3D11VertexShader::D3D11VertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines, _In_ ID3D11ClassLinkage* ClassLinkage)
+	: D3D11Shader(Name, Src, "VS", "vs_5_0", Defines)
 {
 	ETERNAL_ASSERT(_Program);
 

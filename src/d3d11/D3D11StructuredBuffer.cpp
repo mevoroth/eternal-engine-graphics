@@ -41,3 +41,8 @@ D3D11StructuredBuffer::D3D11StructuredBuffer(_In_ const Usage& UsageObj, _In_ co
 	_SetD3D11Resource(Buffer);
 	_SetCPUAccess(CPUMode);
 }
+
+Resource* D3D11StructuredBuffer::GetAsResource()
+{
+	return this;
+}

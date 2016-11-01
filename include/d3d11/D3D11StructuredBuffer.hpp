@@ -18,6 +18,8 @@ namespace Eternal
 
 		public:
 			D3D11StructuredBuffer(_In_ const Usage& UsageObj, _In_ const CPUAccess& CPUMode, _In_ size_t Stride, _In_ uint32_t ElementsCount, _In_ const void* Data = nullptr);
+
+			virtual Resource* GetAsResource() override;
 			inline virtual ID3D11ShaderResourceView* GetD3D11ShaderResourceView() override
 			{
 				return _ShaderResourceView;
