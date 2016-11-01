@@ -5,10 +5,14 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Resource;
+
 		class StructuredBuffer
 		{
 		public:
 			virtual ~StructuredBuffer() {}
+
+			virtual Resource* GetAsResource() = 0;
 		};
 	}
 }
