@@ -405,9 +405,6 @@
     <ClCompile Include="src\d3d11\D3D11StructuredBuffer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="include\Window\Window.cpp">
-      <Filter>Window</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Device.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
@@ -476,6 +473,9 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
       <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\Window.cpp">
+      <Filter>Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

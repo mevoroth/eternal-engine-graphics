@@ -85,9 +85,9 @@ VulkanDevice::VulkanDevice()
 	InstanceInfo.flags = 0;
 	InstanceInfo.pApplicationInfo = &ApplicationInfo;
 	InstanceInfo.ppEnabledLayerNames = VulkanValidationLayers;
-	InstanceInfo.enabledLayerCount = ETERNAL_ARRAY_SIZE(VulkanValidationLayers);
+	InstanceInfo.enabledLayerCount = ETERNAL_ARRAYSIZE(VulkanValidationLayers);
 	InstanceInfo.ppEnabledExtensionNames = VulkanExtensions;
-	InstanceInfo.enabledExtensionCount = ETERNAL_ARRAY_SIZE(VulkanExtensions);
+	InstanceInfo.enabledExtensionCount = ETERNAL_ARRAYSIZE(VulkanExtensions);
 
 	Result = vkCreateInstance(&InstanceInfo, nullptr, &_Instance);
 	ETERNAL_ASSERT(!Result);
