@@ -11,7 +11,9 @@ using namespace Eternal::Graphics;
 static const D3D11TextureFormatInformation TEXTURE_FORMAT[] = {
 	{ DXGI_FORMAT_B8G8R8A8_UNORM, 4 },
 	{ DXGI_FORMAT_R8G8B8A8_UNORM, 4 },
-	{ DXGI_FORMAT_R32G32B32A32_FLOAT, 4 }
+	{ DXGI_FORMAT_R32G32B32A32_FLOAT, 4 },
+	{ DXGI_FORMAT_R32_FLOAT, 1 },
+	{ DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, 8 }
 };
 
 const D3D11TextureFormatInformation& D3D11Texture::GetD3D11TextureFormatInformation(const Format& FormatObj)

@@ -118,6 +118,7 @@ void D3D11Context::SetDepthBuffer(_In_ RenderTarget* DepthBuffer)
 {
 	_DepthBuffer = DepthBuffer;
 	_MarkRenderStateAsDirty();
+	_CommitRenderState();
 }
 
 void D3D11Context::SetViewport(_In_ Viewport* ViewportObj)

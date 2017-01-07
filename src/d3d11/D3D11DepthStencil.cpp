@@ -21,8 +21,8 @@ D3D11DepthStencil::D3D11DepthStencil(_In_ const DepthTest& DepthTestState, _In_ 
 
 	// Stencil Testing
 	DepthStencilDesc.StencilEnable = StencilState.IsEnabled() ? TRUE : FALSE;
-	DepthStencilDesc.StencilReadMask = 0xFF;
-	DepthStencilDesc.StencilWriteMask = 0xFF;
+	DepthStencilDesc.StencilReadMask = (UINT8)StencilState.GetReadMask();
+	DepthStencilDesc.StencilWriteMask = (UINT8)StencilState.GetWriteMask();
 	DepthStencilDesc.FrontFace.StencilFailOp = (D3D11_STENCIL_OP)(StencilState.GetFront().Fail + 1);
 	DepthStencilDesc.FrontFace.StencilDepthFailOp = (D3D11_STENCIL_OP)(StencilState.GetFront().FailDepth + 1);
 	DepthStencilDesc.FrontFace.StencilPassOp = (D3D11_STENCIL_OP)(StencilState.GetFront().Pass + 1);

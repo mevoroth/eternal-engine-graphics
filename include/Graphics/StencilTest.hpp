@@ -41,10 +41,12 @@ namespace Eternal
 			};
 
 			StencilTest() {}
-			StencilTest(const FaceOperator& Front, const FaceOperator& Back)
+			StencilTest(_In_ const FaceOperator& Front, _In_ const FaceOperator& Back, _In_ uint8_t ReadMask, _In_ uint8_t WriteMask)
 				: _Enabled(true)
 				, _Front(Front)
 				, _Back(Back)
+				, _ReadMask(ReadMask)
+				, _WriteMask(WriteMask)
 			{
 			}
 			bool IsEnabled() const
@@ -60,10 +62,22 @@ namespace Eternal
 				return _Back;
 			}
 
+			uint8_t GetReadMask() const
+			{
+				return _ReadMask;
+			}
+
+			uint8_t GetWriteMask() const
+			{
+				return _WriteMask;
+			}
+
 		private:
-			bool _Enabled = false;
 			FaceOperator _Front;
 			FaceOperator _Back;
+			bool _Enabled = false;
+			uint8_t _ReadMask = 0xFF;
+			uint8_t _WriteMask = 0xFF;
 		};
 	}
 }

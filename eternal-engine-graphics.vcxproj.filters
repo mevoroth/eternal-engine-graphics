@@ -16,6 +16,9 @@
     <Filter Include="Window">
       <UniqueIdentifier>{4024bae6-7f51-46a6-924d-cdf144f8b90d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vulkan">
+      <UniqueIdentifier>{ff1ff517-f3a5-4b5f-8c70-cb8fd7fb4706}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\d3d11\D3D11Device.hpp">
@@ -274,6 +277,12 @@
     <ClInclude Include="include\Graphics\StructuredBufferFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanDevice.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -464,6 +473,9 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\StructuredBufferFactory.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
+      <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

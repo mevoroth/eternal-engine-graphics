@@ -55,19 +55,23 @@ void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 	ETERNAL_ASSERT(FilePath.size());
 
 	vector<D3D_SHADER_MACRO> Macros;
-	for (int DefineIndex = 0, DefineCount = Defines.size(); DefineIndex < DefineCount; ++DefineIndex)
+	for (int DefineIndex = 0, DefineCount = Defines.size() / 2; DefineIndex < DefineCount; ++DefineIndex)
 	{
 		D3D_SHADER_MACRO Macro;
 		Macro.Name = Defines[DefineIndex * 2].c_str();
 		Macro.Definition = Defines[DefineIndex * 2 + 1].c_str();
 		Macros.push_back(Macro);
 	}
+	D3D_SHADER_MACRO EmptyMacro;
+	EmptyMacro.Name = nullptr;
+	EmptyMacro.Definition = nullptr;
+	Macros.push_back(EmptyMacro);
 
 	ID3DBlob* Errors;
 
 	HRESULT hr = D3DCompileFromFile(
 		wstring(FilePath.cbegin(), FilePath.cend()).c_str(),
-		Defines.size() ? Macros.data() : nullptr,
+		Defines.size() ? &Macros[0] : nullptr,
 		_IncludeHandler,
 		Entry.c_str(),
 		Profile.c_str(),
