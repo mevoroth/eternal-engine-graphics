@@ -148,6 +148,7 @@
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp" />
     <ClInclude Include="include\Vulkan\VulkanDevice.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanRenderTarget.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -249,7 +250,9 @@
     <ClCompile Include="src\Graphics\TextureFactory.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
     <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp" />
     <ClCompile Include="src\Vulkan\VulkanDevice.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -9,6 +9,8 @@ namespace Eternal
 	namespace Graphics
 	{
 		class Window;
+		class VulkanCommandQueue;
+		class VulkanRenderTarget;
 
 		class VulkanDevice
 		{
@@ -24,16 +26,24 @@ namespace Eternal
 				void*                                       pUserData
 			);
 
-			VulkanDevice();
+			VulkanDevice(_In_ Window& WindowObj);
 
-			void CreateSwapChain(Window& WindowObj);
+			VkDevice& GetDevice();
 
 		private:
-			VkDebugReportCallbackEXT _DebugReportCallback;
-			VkInstance _Instance;
-			VkPhysicalDevice _PhysicalDevice;
-			VkDevice _Device;
-			uint32_t _QueueFamilyPropertiesCount;
+			void _CreateDirectCommandQueue();
+			void _CreateSwapChain();
+			void _CreateBackBuffer(_In_ Window& WindowObj);
+
+			VulkanRenderTarget* _BackBuffer = nullptr;
+			VulkanCommandQueue* _CommandQueue = nullptr;
+
+			VkDebugReportCallbackEXT _DebugReportCallback = nullptr;
+			VkInstance _Instance = nullptr;
+			VkPhysicalDevice _PhysicalDevice = nullptr;
+			VkDevice _Device = nullptr;
+			VkSwapchainKHR _SwapChain = nullptr;
+			uint32_t _QueueFamilyPropertiesCount = 0;
 		};
 	}
 }
