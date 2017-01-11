@@ -146,6 +146,7 @@
     <ClInclude Include="include\Graphics\VertexBufferFactory.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanBuffer.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp" />
     <ClInclude Include="include\Vulkan\VulkanDevice.hpp" />
     <ClInclude Include="include\Vulkan\VulkanRenderTarget.hpp" />
@@ -250,6 +251,7 @@
     <ClCompile Include="src\Graphics\TextureFactory.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
     <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanBuffer.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp" />
     <ClCompile Include="src\Vulkan\VulkanDevice.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp" />

@@ -286,6 +286,9 @@
     <ClInclude Include="include\Vulkan\VulkanRenderTarget.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -484,6 +487,9 @@
       <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>

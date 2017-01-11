@@ -65,7 +65,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		//"VK_LAYER_GOOGLE_unique_objects",
 	};
 
-	const char* VulkanExtensions[] =
+	const char* VulkanInstanceExtensions[] =
 	{
 		VK_KHR_SURFACE_EXTENSION_NAME,
 		VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
@@ -88,8 +88,8 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	InstanceInfo.pApplicationInfo = &ApplicationInfo;
 	InstanceInfo.ppEnabledLayerNames = VulkanValidationLayers;
 	InstanceInfo.enabledLayerCount = ETERNAL_ARRAYSIZE(VulkanValidationLayers);
-	InstanceInfo.ppEnabledExtensionNames = VulkanExtensions;
-	InstanceInfo.enabledExtensionCount = ETERNAL_ARRAYSIZE(VulkanExtensions);
+	InstanceInfo.ppEnabledExtensionNames = VulkanInstanceExtensions;
+	InstanceInfo.enabledExtensionCount = ETERNAL_ARRAYSIZE(VulkanInstanceExtensions);
 
 	Result = vkCreateInstance(&InstanceInfo, nullptr, &_Instance);
 	ETERNAL_ASSERT(!Result);
@@ -102,7 +102,6 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	ETERNAL_ASSERT(PhysicalDevicesCount == 1); // 1gpu
 
 	vkEnumeratePhysicalDevices(_Instance, &PhysicalDevicesCount, &_PhysicalDevice);
-	//VK_KHR_SWAPCHAIN_EXTENSION_NAME
 
 	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReport = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(_Instance, "vkCreateDebugReportCallbackEXT");
 	PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReport = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(_Instance, "vkDestroyDebugReportCallbackEXT");
@@ -142,6 +141,11 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	float QueuePriorities = 0.0f;
 
+	const char* VulkanDeviceExtensions[] =
+	{
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME
+	};
+
 	VkDeviceQueueCreateInfo DeviceQueueInfo;
 	DeviceQueueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 	DeviceQueueInfo.pNext = nullptr;
@@ -156,8 +160,8 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	DeviceInfo.flags = 0;
 	DeviceInfo.pQueueCreateInfos = &DeviceQueueInfo;
 	DeviceInfo.queueCreateInfoCount = 1;
-	DeviceInfo.ppEnabledExtensionNames = nullptr;// VulkanExtensions;
-	DeviceInfo.enabledExtensionCount = 0;//ETERNAL_ARRAYSIZE(VulkanExtensions);
+	DeviceInfo.ppEnabledExtensionNames = VulkanDeviceExtensions;
+	DeviceInfo.enabledExtensionCount = ETERNAL_ARRAYSIZE(VulkanDeviceExtensions);
 	DeviceInfo.ppEnabledLayerNames = VulkanValidationLayers;
 	DeviceInfo.enabledLayerCount = ETERNAL_ARRAYSIZE(VulkanValidationLayers);
 	DeviceInfo.pEnabledFeatures = nullptr;
@@ -213,24 +217,28 @@ void VulkanDevice::_CreateSwapChain()
 	VkSwapchainCreateInfoKHR SwapChainInfo;
 	SwapChainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
 	SwapChainInfo.pNext = nullptr;
+	SwapChainInfo.flags = 0;
 	SwapChainInfo.surface = _BackBuffer->GetRenderTarget();
 	SwapChainInfo.minImageCount = SurfaceCapabilities.minImageCount;
 	SwapChainInfo.imageFormat = Formats[0].format;
+	SwapChainInfo.imageColorSpace = Formats[0].colorSpace;
 	SwapChainInfo.imageExtent = SurfaceCapabilities.currentExtent;
-	SwapChainInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-	SwapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 	SwapChainInfo.imageArrayLayers = 1;
-	SwapChainInfo.presentMode = PresentModes[0];
-	SwapChainInfo.oldSwapchain = VK_NULL_HANDLE;
-	SwapChainInfo.clipped = true;
-	SwapChainInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
 	SwapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	SwapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	SwapChainInfo.queueFamilyIndexCount = 0;
 	SwapChainInfo.pQueueFamilyIndices = nullptr;
+	SwapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	SwapChainInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+	SwapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	SwapChainInfo.presentMode = PresentModes[0];
+	SwapChainInfo.clipped = true;
+	SwapChainInfo.oldSwapchain = VK_NULL_HANDLE;
 
 	Result = vkCreateSwapchainKHR(_Device, &SwapChainInfo, nullptr, &_SwapChain);
 	ETERNAL_ASSERT(!Result);
+
+	VkPhysicalDeviceMemoryProperties PhysicalDeviceMemoryProperties;
+	vkGetPhysicalDeviceMemoryProperties(_PhysicalDevice, &PhysicalDeviceMemoryProperties);
 }
 
 void VulkanDevice::_CreateBackBuffer(_In_ Window& WindowObj)
@@ -258,6 +266,14 @@ void VulkanDevice::_CreateBackBuffer(_In_ Window& WindowObj)
 	VkSurfaceKHR RenderTarget;
 	Result = vkCreateWin32SurfaceKHR(_Instance, &Win32SurfaceInfo, nullptr, &RenderTarget);
 	ETERNAL_ASSERT(!Result);
+
+	std::vector<VkBool32> SupportPresents;
+	SupportPresents.resize(_QueueFamilyPropertiesCount);
+	for (int QueueFamilyIndex = 0; QueueFamilyIndex < _QueueFamilyPropertiesCount; ++QueueFamilyIndex)
+	{
+		Result = vkGetPhysicalDeviceSurfaceSupportKHR(_PhysicalDevice, QueueFamilyIndex, RenderTarget, &SupportPresents[QueueFamilyIndex]);
+		ETERNAL_ASSERT(!Result);
+	}
 
 	_BackBuffer = new VulkanRenderTarget(RenderTarget);
 }
