@@ -18,12 +18,16 @@ namespace Eternal
 			virtual Shader* CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines = vector<string>()) override;
 			virtual Shader* CreateGeometryShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines = vector<string>()) override;
 			virtual Shader* CreatePixelShader(_In_ const string& Name, _In_ const string& Src, _In_ const vector<string>& Defines = vector<string>()) override;
+			virtual vector<string>& GetShaderPaths() override { *((long*)2) = 2; return vector<string>(); }
+			virtual void Recompile() override { *((long*)2) = 2; }
 
 		private:
 			vector<Shader*> _Shaders;
 
 			Shader* _Find(_In_ const string& Key);
 			Shader* _FindOrCreate(_In_ const string& Key, _In_ const string& Src, _In_ const string& EntryPoint, _In_ const string& ShaderModel);
+
+
 		};
 	}
 }

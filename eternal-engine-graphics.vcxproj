@@ -102,6 +102,7 @@
     <ClInclude Include="include\d3d12\D3D12CommandList.hpp" />
     <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp" />
     <ClInclude Include="include\d3d12\D3D12Constant.hpp" />
+    <ClInclude Include="include\d3d12\D3D12DescriptorHeap.hpp" />
     <ClInclude Include="include\d3d12\D3D12Device.hpp" />
     <ClInclude Include="include\d3d12\D3D12InputLayout.hpp" />
     <ClInclude Include="include\d3d12\D3D12RenderTarget.hpp" />
@@ -146,8 +147,12 @@
     <ClInclude Include="include\Graphics\VertexBufferFactory.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanDevice.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanDevice.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +229,11 @@
     <ClCompile Include="src\d3d12\D3D12CommandList.cpp" />
     <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp" />
     <ClCompile Include="src\d3d12\D3D12Constant.cpp" />
+    <ClCompile Include="src\d3d12\D3D12DescriptorHeap.cpp" />
     <ClCompile Include="src\d3d12\D3D12Device.cpp" />
     <ClCompile Include="src\d3d12\D3D12InputLayout.cpp" />
     <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp" />
+    <ClCompile Include="src\d3d12\D3D12Resource.cpp" />
     <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp" />
     <ClCompile Include="src\d3d12\D3D12State.cpp" />
     <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp" />
@@ -249,7 +256,9 @@
     <ClCompile Include="src\Graphics\TextureFactory.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
     <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanDevice.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

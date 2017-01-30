@@ -10,12 +10,12 @@ namespace Eternal
 		class D3D12Resource
 		{
 		public:
-			inline ID3D12DescriptorHeap*& GetDescriptorHeap() { return _DescriptorHeap; }
+			virtual ~D3D12Resource();
+
 			inline ID3D12Resource*& GetResource() { return _Resource; }
 			inline D3D12_CPU_DESCRIPTOR_HANDLE& GetCpuDescriptor() { return _CpuDescriptor; }
 
 		private:
-			ID3D12DescriptorHeap* _DescriptorHeap = nullptr;
 			ID3D12Resource* _Resource = nullptr;
 			D3D12_CPU_DESCRIPTOR_HANDLE _CpuDescriptor;
 		};

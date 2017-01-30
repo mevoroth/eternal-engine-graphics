@@ -33,7 +33,7 @@ namespace Eternal
 			string _WindowName;
 			int _Width = 640;
 			int _Height = 480;
-			bool _Windowed = false;
+			bool _Windowed = true;
 		};
 	}
 }

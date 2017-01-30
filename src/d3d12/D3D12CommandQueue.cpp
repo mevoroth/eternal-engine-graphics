@@ -12,7 +12,7 @@ D3D12CommandQueue::D3D12CommandQueue(_In_ D3D12Device& Device)
 	CommandQueueDesc.Type = _CommandListType;
 	CommandQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_HIGH;
 	CommandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-	CommandQueueDesc.NodeMask = 0;
+	CommandQueueDesc.NodeMask = Device.GetDeviceMask();
 
 	HRESULT hr = Device.GetDevice()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
 	ETERNAL_ASSERT(hr == S_OK);
