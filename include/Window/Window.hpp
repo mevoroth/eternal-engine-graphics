@@ -7,6 +7,8 @@
 #define WIN32_EXTRA_LEAN
 #include <Windows.h>
 
+#undef GetClassName
+
 namespace Eternal
 {
 	namespace Graphics
@@ -20,10 +22,13 @@ namespace Eternal
 
 			void Create(WNDPROC WindowEventsHandler);
 			HWND GetWindowHandler() const;
+			HINSTANCE GetHInstance() const;
 			
 			inline bool GetWindowed() const { return _Windowed; }
 			inline int GetWidth() const { return _Width; }
 			inline int GetHeight() const { return _Height; }
+			inline const string& GetClassName() const { return _ClassName; }
+			inline const string& GetWindowName() const { return _WindowName; }
 
 		private:
 			HWND _WindowHandle;

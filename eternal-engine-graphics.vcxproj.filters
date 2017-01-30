@@ -285,6 +285,11 @@
     </ClInclude>
     <ClInclude Include="include\d3d12\D3D12DescriptorHeap.hpp">
       <Filter>d3d12</Filter>
+    <ClInclude Include="include\Vulkan\VulkanRenderTarget.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
+      <Filter>Vulkan</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -485,6 +490,15 @@
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Resource.cpp">
       <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
+      <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -63,3 +63,8 @@ HWND Window::GetWindowHandler() const
 {
 	return _WindowHandle;
 }
+
+HINSTANCE Window::GetHInstance() const
+{
+	return _hInstance;
+}
