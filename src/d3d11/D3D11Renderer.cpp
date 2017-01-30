@@ -1,7 +1,6 @@
 #include "d3d11/D3D11Renderer.hpp"
 
 #include <d3d11.h>
-#include <cassert>
 #include <dxgi.h>
 #include <cstdio>
 #include <WinBase.h>

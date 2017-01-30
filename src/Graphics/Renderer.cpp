@@ -1,6 +1,6 @@
 #include "Graphics/Renderer.hpp"
 
-#include <cassert>
+#include "Macros/Macros.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -25,6 +25,6 @@ RenderTarget* Renderer::GetBackBuffer() const
 
 Renderer* Renderer::Get()
 {
-	assert(_Inst);
+	ETERNAL_ASSERT(_Inst);
 	return _Inst;
 }
