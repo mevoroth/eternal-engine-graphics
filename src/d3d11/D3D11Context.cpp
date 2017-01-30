@@ -301,7 +301,7 @@ void D3D11Context::PrepareFlush(Context& ContextObj)
 	ETERNAL_ASSERT(IsDeferred());
 	D3D11Context& D3D11ContextObj = (D3D11Context&)ContextObj;
 
-	for (int CommandListIndex = 0; CommandListIndex < _CommandLists.size(); ++CommandListIndex)
+	for (uint32_t CommandListIndex = 0; CommandListIndex < _CommandLists.size(); ++CommandListIndex)
 	{
 		CommandListRecord& Record = _CommandLists[CommandListIndex];
 		vector<CommandListRecord>::iterator it = D3D11ContextObj._CommandLists.begin();
