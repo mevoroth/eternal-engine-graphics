@@ -1,12 +1,14 @@
 #include "d3d12/D3D12Shader.hpp"
 
 #include "Macros/Macros.hpp"
+#include "File/FilePath.hpp"
 
 #include <fstream>
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace Eternal::Graphics;
+using namespace Eternal::File;
 using namespace std;
 
 ID3DInclude* D3D12Shader::_IncludeHandler = new D3D12Include();
@@ -33,8 +35,10 @@ void D3D12Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 {
 	ID3DBlob* Errors = nullptr;
 
+	string FullPathSrc = FilePath::Find(Src, FilePath::SHADERS);
+
 	HRESULT hr = D3DCompileFromFile(
-		wstring(Src.cbegin(), Src.cend()).c_str(),
+		wstring(FullPathSrc.cbegin(), FullPathSrc.cend()).c_str(),
 		0,
 		_IncludeHandler,
 		Entry.c_str(),
@@ -67,7 +71,10 @@ void D3D12Shader::GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& ShaderObj)
 
 STDMETHODIMP D3D12Shader::D3D12Include::Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes)
 {
-	ifstream IncludedFile(pFileName, ios::in | ios::binary | ios::ate);
+	string IncludeSrc = pFileName;
+	string FullPathSrc = FilePath::Find(IncludeSrc, FilePath::SHADERS);
+	ifstream IncludedFile(FullPathSrc.c_str(), ios::in | ios::binary | ios::ate);
+	
 	if (!IncludedFile)
 	{
 		ETERNAL_ASSERT(false);

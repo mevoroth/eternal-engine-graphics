@@ -18,6 +18,8 @@ namespace Eternal
 			};
 
 		public:
+			static ID3DInclude* GetIncludeHandler() { return _IncludeHandler; }
+
 			D3D12Shader(_In_ const string& Name, _In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile);
 			virtual ~D3D12Shader();
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& ShaderObj);

@@ -17,6 +17,7 @@ namespace Eternal
 		class StencilTest;
 		class BlendState;
 		class D3D12RenderTarget;
+		class D3D12Sampler;
 
 		class D3D12State
 		{
@@ -30,7 +31,9 @@ namespace Eternal
 				_In_ const StencilTest& StencilTestObj,
 				_In_ const BlendState BlendStates[],
 				_In_ const D3D12RenderTarget RenderTargets[],
-				_In_ uint32_t RenderTargetsCount
+				_In_ uint32_t RenderTargetsCount,
+				_In_ const D3D12Sampler Samplers[],
+				_In_ uint32_t SamplersCount
 			);
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() { return _PipelineState; }

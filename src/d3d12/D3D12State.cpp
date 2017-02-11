@@ -22,7 +22,9 @@ D3D12State::D3D12State(
 	_In_ const StencilTest& StencilTestObj,
 	_In_ const BlendState BlendStates[],
 	_In_ const D3D12RenderTarget RenderTargets[],
-	_In_ uint32_t RenderTargetsCount
+	_In_ uint32_t RenderTargetsCount,
+	_In_ const D3D12Sampler Samplers[],
+	_In_ uint32_t SamplersCount
 )
 {
 	D3D12_ROOT_SIGNATURE_DESC RootSignatureDesc;
@@ -43,9 +45,11 @@ D3D12State::D3D12State(
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc;
 
-	PipelineStateDesc.InputLayout.pInputElementDescs = &static_cast<D3D12InputLayout&>(InputLayoutObj).GetInputElements()[0];
-	PipelineStateDesc.InputLayout.NumElements = (UINT)static_cast<D3D12InputLayout&>(InputLayoutObj).GetInputElements().size();
+	const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements = static_cast<D3D12InputLayout&>(InputLayoutObj).GetInputElements();
+	PipelineStateDesc.InputLayout.pInputElementDescs = InputElements.size() ? &InputElements[0] : nullptr;
+	PipelineStateDesc.InputLayout.NumElements = (UINT)InputElements.size();
 	PipelineStateDesc.pRootSignature = _RootSignature;
+	
 	static_cast<D3D12Shader*>(VS)->GetD3D12Shader(PipelineStateDesc.VS);
 	static_cast<D3D12Shader*>(PS)->GetD3D12Shader(PipelineStateDesc.PS);
 	PipelineStateDesc.GS.pShaderBytecode = nullptr;
@@ -54,6 +58,13 @@ D3D12State::D3D12State(
 	PipelineStateDesc.DS.BytecodeLength = 0;
 	PipelineStateDesc.HS.pShaderBytecode = nullptr;
 	PipelineStateDesc.HS.BytecodeLength = 0;
+
+	PipelineStateDesc.StreamOutput.pSODeclaration = nullptr;
+	PipelineStateDesc.StreamOutput.NumEntries = 0;
+	PipelineStateDesc.StreamOutput.pBufferStrides = nullptr;
+	PipelineStateDesc.StreamOutput.NumStrides = 0;
+	PipelineStateDesc.StreamOutput.RasterizedStream = 0;
+
 	PipelineStateDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
 	PipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
 	PipelineStateDesc.RasterizerState.FrontCounterClockwise = TRUE;
@@ -65,6 +76,7 @@ D3D12State::D3D12State(
 	PipelineStateDesc.RasterizerState.AntialiasedLineEnable = FALSE;
 	PipelineStateDesc.RasterizerState.ForcedSampleCount = 0;
 	PipelineStateDesc.RasterizerState.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+
 	PipelineStateDesc.DepthStencilState.DepthEnable = DepthTestObj.IsEnabled() ? TRUE : FALSE;
 	PipelineStateDesc.DepthStencilState.DepthFunc = (D3D12_COMPARISON_FUNC)DepthTestObj.GetComparisonOperator();
 	PipelineStateDesc.DepthStencilState.DepthWriteMask = (D3D12_DEPTH_WRITE_MASK)DepthTestObj.GetMask();
@@ -79,6 +91,7 @@ D3D12State::D3D12State(
 	PipelineStateDesc.DepthStencilState.BackFace.StencilDepthFailOp = (D3D12_STENCIL_OP)StencilTestObj.GetBack().FailDepth;
 	PipelineStateDesc.DepthStencilState.BackFace.StencilPassOp = (D3D12_STENCIL_OP)StencilTestObj.GetBack().Pass;
 	PipelineStateDesc.DepthStencilState.BackFace.StencilFunc = (D3D12_COMPARISON_FUNC)StencilTestObj.GetBack().ComparisonOp;
+
 	PipelineStateDesc.BlendState.AlphaToCoverageEnable = FALSE;
 	PipelineStateDesc.BlendState.IndependentBlendEnable = FALSE;
 	for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < ETERNAL_ARRAYSIZE(PipelineStateDesc.BlendState.RenderTarget); ++RenderTargetIndex)
@@ -101,25 +114,33 @@ D3D12State::D3D12State(
 		CurrentRTBlendDesc.DestBlendAlpha = CurrentBlendState.GetD3D12DestAlpha();
 		CurrentRTBlendDesc.BlendOpAlpha = CurrentBlendState.GetD3D12BlendAlphaOp();
 	}
+
 	PipelineStateDesc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
+
 	PipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+
 	PipelineStateDesc.NumRenderTargets = RenderTargetsCount;
-	for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < RenderTargetsCount; ++RenderTargetIndex)
+	uint32_t RenderTargetIndex = 0;
+	for (; RenderTargetIndex < RenderTargetsCount; ++RenderTargetIndex)
 	{
 		PipelineStateDesc.RTVFormats[RenderTargetIndex] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	}
+	for (; RenderTargetIndex < ETERNAL_ARRAYSIZE(PipelineStateDesc.RTVFormats); ++RenderTargetIndex)
+	{
+		PipelineStateDesc.RTVFormats[RenderTargetIndex] = DXGI_FORMAT_UNKNOWN;
+	}
 	PipelineStateDesc.DSVFormat = DXGI_FORMAT_R32_FLOAT;
+	
 	PipelineStateDesc.SampleDesc.Count = 1;
 	PipelineStateDesc.SampleDesc.Quality = 0;
 	PipelineStateDesc.SampleMask = UINT_MAX;
-	PipelineStateDesc.NodeMask = 0;
+
+	PipelineStateDesc.NodeMask = Device.GetDeviceMask();
+
 	PipelineStateDesc.CachedPSO.pCachedBlob = nullptr;
 	PipelineStateDesc.CachedPSO.CachedBlobSizeInBytes = 0;
-#ifdef ETERNAL_DEBUG
-	PipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_TOOL_DEBUG;
-#else
+
 	PipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
-#endif
 
 	hr = Device.GetDevice()->CreateGraphicsPipelineState(&PipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)&_PipelineState);
 	ETERNAL_ASSERT(hr == S_OK);

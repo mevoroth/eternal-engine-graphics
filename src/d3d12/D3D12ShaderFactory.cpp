@@ -2,9 +2,16 @@
 
 #include "Macros/Macros.hpp"
 
+#include "File/FilePath.hpp"
 #include "d3d12/D3D12Shader.hpp"
 
 using namespace Eternal::Graphics;
+using namespace Eternal::File;
+
+void D3D12ShaderFactory::RegisterShaderPath(const string& Path)
+{
+	FilePath::Register(Path, FilePath::SHADERS);
+}
 
 Shader* D3D12ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size, _In_ const vector<string>& Defines /*= vector<string>()*/)
 {
