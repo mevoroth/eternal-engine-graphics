@@ -21,7 +21,7 @@ VulkanBuffer::VulkanBuffer(_In_ VulkanDevice& Device)
 
 	VkResult Result = vkCreateBuffer(Device.GetDevice(), &BufferCreateInfo, nullptr, &_Buffer);
 	ETERNAL_ASSERT(!Result);
-
+	
 	VkMemoryRequirements MemoryRequirements;
 	vkGetBufferMemoryRequirements(Device.GetDevice(), _Buffer, &MemoryRequirements);
 

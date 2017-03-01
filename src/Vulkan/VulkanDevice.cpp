@@ -39,19 +39,19 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	// SHOULD CHECK
 
-	//// Validation layer
-	//uint32_t PropertyCount;
-	//Result = vkEnumerateInstanceLayerProperties(&PropertyCount, nullptr);
-	//ETERNAL_ASSERT(!Result);
+	// Validation layer
+	uint32_t PropertyCount;
+	Result = vkEnumerateInstanceLayerProperties(&PropertyCount, nullptr);
+	ETERNAL_ASSERT(!Result);
 
-	//if (!PropertyCount) // No validation layer
-	//	return;
+	if (!PropertyCount) // No validation layer
+		return;
 
-	//std::vector<VkLayerProperties> Layers;
-	//Layers.resize(PropertyCount);
+	std::vector<VkLayerProperties> Layers;
+	Layers.resize(PropertyCount);
 
-	//Result = vkEnumerateInstanceLayerProperties(&PropertyCount, Layers.data());
-	//ETERNAL_ASSERT(!Result);
+	Result = vkEnumerateInstanceLayerProperties(&PropertyCount, Layers.data());
+	ETERNAL_ASSERT(!Result);
 
 	const char* VulkanValidationLayers[] = 
 	{
@@ -71,6 +71,14 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
 		VK_EXT_DEBUG_REPORT_EXTENSION_NAME
 	};
+
+	uint32_t InstanceExtensionPropertiesCount;
+	vkEnumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, nullptr);
+
+	std::vector<VkExtensionProperties> InstanceExtensionProperties;
+	InstanceExtensionProperties.resize(InstanceExtensionPropertiesCount);
+
+	vkEnumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, InstanceExtensionProperties.data());
 
 	VkApplicationInfo ApplicationInfo;
 	ApplicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -103,6 +111,15 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	vkEnumeratePhysicalDevices(_Instance, &PhysicalDevicesCount, &_PhysicalDevice);
 
+	uint32_t ExtensionsCount;
+	Result = vkEnumerateDeviceExtensionProperties(_PhysicalDevice, nullptr, &ExtensionsCount, nullptr);
+	ETERNAL_ASSERT(!Result);
+	
+	std::vector<VkExtensionProperties> ExtensionProperties;
+	ExtensionProperties.resize(ExtensionsCount);
+	Result = vkEnumerateDeviceExtensionProperties(_PhysicalDevice, nullptr, &ExtensionsCount, ExtensionProperties.data());
+	ETERNAL_ASSERT(!Result);
+
 	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReport = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(_Instance, "vkCreateDebugReportCallbackEXT");
 	PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReport = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(_Instance, "vkDestroyDebugReportCallbackEXT");
 	PFN_vkDebugReportMessageEXT vkDebugReportMessage = (PFN_vkDebugReportMessageEXT)vkGetInstanceProcAddr(_Instance, "vkDebugReportMessageEXT");
@@ -116,6 +133,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	VkDebugReportCallbackCreateInfoEXT DebugReportCallbackInfo;
 	DebugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
 	DebugReportCallbackInfo.pNext = nullptr;
+	DebugReportCallbackInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
 	DebugReportCallbackInfo.pfnCallback = vkDebugReport;
 
 	Result = vkCreateDebugReport(_Instance, &DebugReportCallbackInfo, nullptr, &_DebugReportCallback);
@@ -156,7 +174,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	VkDeviceCreateInfo DeviceInfo;
 	DeviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	DeviceInfo.pNext = &DebugReportCallbackInfo;
+	DeviceInfo.pNext = nullptr;// &DebugReportCallbackInfo;
 	DeviceInfo.flags = 0;
 	DeviceInfo.pQueueCreateInfos = &DeviceQueueInfo;
 	DeviceInfo.queueCreateInfoCount = 1;
@@ -239,6 +257,14 @@ void VulkanDevice::_CreateSwapChain()
 
 	VkPhysicalDeviceMemoryProperties PhysicalDeviceMemoryProperties;
 	vkGetPhysicalDeviceMemoryProperties(_PhysicalDevice, &PhysicalDeviceMemoryProperties);
+
+	uint32_t SwapChainsCount;
+	Result =  vkGetSwapchainImagesKHR(_Device, _SwapChain, &SwapChainsCount, nullptr);
+	ETERNAL_ASSERT(!Result);
+	std::vector<VkImage> SwapChainImages;
+	SwapChainImages.resize(SwapChainsCount);
+	Result = vkGetSwapchainImagesKHR(_Device, _SwapChain, &SwapChainsCount, &SwapChainImages[0]);
+	ETERNAL_ASSERT(!Result);
 }
 
 void VulkanDevice::_CreateBackBuffer(_In_ Window& WindowObj)
