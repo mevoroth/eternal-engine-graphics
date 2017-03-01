@@ -14,6 +14,8 @@ namespace Eternal
 		public:
 			D3D12CommandQueue(_In_ D3D12Device& Device);
 
+			void Reset();
+
 			inline ID3D12CommandQueue* GetD3D12CommandQueue() { return _CommandQueue; }
 			inline ID3D12CommandAllocator* GetD3D12CommandAllocator() { return _CommandAllocator; }
 			inline D3D12_COMMAND_LIST_TYPE GetCommandListType() const { return _CommandListType; }

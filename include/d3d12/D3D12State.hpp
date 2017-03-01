@@ -37,6 +37,7 @@ namespace Eternal
 			);
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() { return _PipelineState; }
+			inline ID3D12RootSignature* GetD3D12RootSignature() { return _RootSignature; }
 
 		private:
 			ID3D12RootSignature* _RootSignature = nullptr;

@@ -292,6 +292,15 @@
     <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Sampler.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Sampler.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Fence.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -429,9 +438,6 @@
     <ClCompile Include="src\d3d12\D3D12InputLayout.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="include\d3d12\D3D12Shader.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
@@ -500,6 +506,15 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Shader.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Fence.cpp">
+      <Filter>d3d12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

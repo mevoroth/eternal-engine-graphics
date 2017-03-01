@@ -4,6 +4,7 @@
 #include <cstdint>
 
 struct IDXGISwapChain;
+struct IDXGISwapChain3;
 struct IDXGIFactory4;
 struct IDXGIAdapter1;
 struct ID3D12Device;
@@ -30,9 +31,10 @@ namespace Eternal
 
 			void CreateSwapChain(_In_ const Window& WindowObj);
 
-			inline ID3D12Device* GetDevice() { return _Device; }
+			inline ID3D12Device* GetD3D12Device() { return _Device; }
 			virtual uint32_t GetDeviceMask() const;
 			inline IDXGISwapChain* GetSwapChain() { return _SwapChain; }
+			inline IDXGISwapChain3* GetSwapChain3() { return _SwapChain3; }
 
 			inline uint32_t GetBackBufferFrameCount() const
 			{
@@ -40,6 +42,7 @@ namespace Eternal
 			}
 
 			D3D12RenderTarget*const & GetBackBuffer(_In_ uint32_t BackBufferIndex);
+			D3D12CommandQueue*&	GetCommandQueue() { return _CommandQueue; }
 
 		private:
 			void _CreateDirectCommandQueue();
@@ -57,6 +60,7 @@ namespace Eternal
 			IDXGIAdapter1* _DXGIAdapter = nullptr;
 			ID3D12Device* _Device = nullptr;
 			IDXGISwapChain* _SwapChain = nullptr;
+			IDXGISwapChain3* _SwapChain3 = nullptr;
 
 			uint32_t _DeviceMask = 0xFFFFFFFF;
 		};

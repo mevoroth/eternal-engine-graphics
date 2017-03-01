@@ -14,9 +14,14 @@ D3D12CommandQueue::D3D12CommandQueue(_In_ D3D12Device& Device)
 	CommandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	CommandQueueDesc.NodeMask = Device.GetDeviceMask();
 
-	HRESULT hr = Device.GetDevice()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
+	HRESULT hr = Device.GetD3D12Device()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
 	ETERNAL_ASSERT(hr == S_OK);
 
-	hr = Device.GetDevice()->CreateCommandAllocator(_CommandListType, __uuidof(ID3D12CommandAllocator), (void**)&_CommandAllocator);
+	hr = Device.GetD3D12Device()->CreateCommandAllocator(_CommandListType, __uuidof(ID3D12CommandAllocator), (void**)&_CommandAllocator);
 	ETERNAL_ASSERT(hr == S_OK);
+}
+
+void D3D12CommandQueue::Reset()
+{
+	_CommandAllocator->Reset();
 }

@@ -9,10 +9,10 @@
 
 using namespace Eternal::Graphics;
 
-D3D12CommandList::D3D12CommandList(D3D12Device& DeviceObj, D3D12CommandQueue& CommandQueue, D3D12State& State)
+D3D12CommandList::D3D12CommandList(_In_ D3D12Device& DeviceObj, _In_ D3D12CommandQueue& CommandQueue, _In_ D3D12State& State)
 {
-	HRESULT hr = DeviceObj.GetDevice()->CreateCommandList(
-		0,
+	HRESULT hr = DeviceObj.GetD3D12Device()->CreateCommandList(
+		DeviceObj.GetDeviceMask(),
 		CommandQueue.GetCommandListType(),
 		CommandQueue.GetD3D12CommandAllocator(),
 		State.GetD3D12PipelineState(),
@@ -21,8 +21,7 @@ D3D12CommandList::D3D12CommandList(D3D12Device& DeviceObj, D3D12CommandQueue& Co
 	);
 	ETERNAL_ASSERT(hr == S_OK);
 
-	hr = _CommandList->Close();
-	ETERNAL_ASSERT(hr == S_OK);
+	End();
 }
 
 void D3D12CommandList::ClearRenderTarget(_In_ D3D12RenderTarget& RenderTargetObj)
@@ -35,8 +34,9 @@ void D3D12CommandList::ClearRenderTarget(_In_ D3D12RenderTarget& RenderTargetObj
 
 void D3D12CommandList::DrawPrimitive(_In_ uint32_t PrimitiveCount)
 {
-	ETERNAL_ASSERT(!PrimitiveCount);
+	ETERNAL_ASSERT(PrimitiveCount);
 	ETERNAL_ASSERT(!(PrimitiveCount % 3));
+
 	_CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	_CommandList->DrawInstanced(PrimitiveCount, 1, 0, 0);
 }
@@ -72,4 +72,17 @@ void D3D12CommandList::BindRenderTarget(_In_ uint32_t Slot, _In_ D3D12RenderTarg
 void D3D12CommandList::BindConstant(_In_ uint32_t Slot, _In_ D3D12Constant& ConstantBuffer)
 {
 	//_CommandList->SetGraphicsRootConstantBufferView()
+}
+
+void D3D12CommandList::Begin(_In_ D3D12CommandQueue& CommandQueue, _In_ D3D12State& State)
+{
+	HRESULT hr = _CommandList->Reset(CommandQueue.GetD3D12CommandAllocator(), State.GetD3D12PipelineState());
+	ETERNAL_ASSERT(hr == S_OK);
+	_CommandList->SetGraphicsRootSignature(State.GetD3D12RootSignature());
+}
+
+void D3D12CommandList::End()
+{
+	HRESULT hr = _CommandList->Close();
+	ETERNAL_ASSERT(hr == S_OK);
 }

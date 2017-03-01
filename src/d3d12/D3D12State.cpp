@@ -40,7 +40,7 @@ D3D12State::D3D12State(
 	HRESULT hr = D3D12SerializeRootSignature(&RootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &RootSignatureBlob, &ErrorBlob);
 	ETERNAL_ASSERT(hr == S_OK);
 	
-	hr = Device.GetDevice()->CreateRootSignature(0, RootSignatureBlob->GetBufferPointer(), RootSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void**)&_RootSignature);
+	hr = Device.GetD3D12Device()->CreateRootSignature(0, RootSignatureBlob->GetBufferPointer(), RootSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void**)&_RootSignature);
 	ETERNAL_ASSERT(hr == S_OK);
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc;
@@ -129,7 +129,7 @@ D3D12State::D3D12State(
 	{
 		PipelineStateDesc.RTVFormats[RenderTargetIndex] = DXGI_FORMAT_UNKNOWN;
 	}
-	PipelineStateDesc.DSVFormat = DXGI_FORMAT_R32_FLOAT;
+	PipelineStateDesc.DSVFormat = DXGI_FORMAT_UNKNOWN;//DXGI_FORMAT_R32_FLOAT;
 	
 	PipelineStateDesc.SampleDesc.Count = 1;
 	PipelineStateDesc.SampleDesc.Quality = 0;
@@ -142,6 +142,6 @@ D3D12State::D3D12State(
 
 	PipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
-	hr = Device.GetDevice()->CreateGraphicsPipelineState(&PipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)&_PipelineState);
+	hr = Device.GetD3D12Device()->CreateGraphicsPipelineState(&PipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)&_PipelineState);
 	ETERNAL_ASSERT(hr == S_OK);
 }

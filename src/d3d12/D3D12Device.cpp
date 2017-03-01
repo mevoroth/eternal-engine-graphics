@@ -88,6 +88,9 @@ void D3D12Device::CreateSwapChain(_In_ const Window& WindowObj)
 	HRESULT hr = _DXGIFactory->CreateSwapChain(_CommandQueue->GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain);
 	ETERNAL_ASSERT(hr == S_OK);
 
+	hr = _SwapChain->QueryInterface(&_SwapChain3);
+	ETERNAL_ASSERT(hr == S_OK);
+
 	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
 	//ETERNAL_ASSERT(hr == S_OK);
 

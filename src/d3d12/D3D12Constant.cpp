@@ -27,7 +27,7 @@ D3D12Constant::D3D12Constant(_In_ D3D12Device& DeviceObj, _In_ uint32_t Size)
 	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	ResourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-	HRESULT hr = DeviceObj.GetDevice()->CreateCommittedResource(
+	HRESULT hr = DeviceObj.GetD3D12Device()->CreateCommittedResource(
 		&HeapProperties,
 		D3D12_HEAP_FLAG_NONE,
 		&ResourceDesc,
