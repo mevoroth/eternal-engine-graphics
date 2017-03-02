@@ -67,7 +67,7 @@ D3D12State::D3D12State(
 
 	PipelineStateDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
 	PipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
-	PipelineStateDesc.RasterizerState.FrontCounterClockwise = TRUE;
+	PipelineStateDesc.RasterizerState.FrontCounterClockwise = FALSE;
 	PipelineStateDesc.RasterizerState.DepthBias = 0;
 	PipelineStateDesc.RasterizerState.DepthBiasClamp = 0.0f;
 	PipelineStateDesc.RasterizerState.SlopeScaledDepthBias = 0.f;

@@ -11,6 +11,7 @@ namespace Eternal
 	{
 		class D3D12Device;
 		class D3D12CommandQueue;
+		class D3D12CommandAllocator;
 		class D3D12State;
 		class D3D12RenderTarget;
 		class D3D12Constant;
@@ -31,7 +32,7 @@ namespace Eternal
 			void BindRenderTarget(_In_ uint32_t Slot, _In_ D3D12RenderTarget& RenderTargetObj);
 			void BindConstant(_In_ uint32_t Slot, _In_ D3D12Constant& ConstantBuffer);
 
-			void Begin(_In_ D3D12CommandQueue& CommandQueue, _In_ D3D12State& State);
+			void Begin(_In_ D3D12CommandAllocator& CommandAllocator, _In_ D3D12State& State);
 			void End();
 
 			ID3D12GraphicsCommandList*& GetD3D12GraphicsCommandList() { return _CommandList; }

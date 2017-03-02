@@ -48,16 +48,16 @@ void D3D12Fence::Signal(_In_ D3D12CommandQueue& CommandQueueObj)
 void D3D12Fence::Wait()
 {
 	UINT64 completed = _Fence->GetCompletedValue();
-	char variable[256];
-	sprintf_s(variable, sizeof(char) * 256, "Completed value: %d; i: %d; FenceValue0: %d; FenceValue1: %d\n", completed, _CurrentFence, _FenceValues[_CurrentFence], _FenceValues[_CurrentFence ^ 1]);
+	//char variable[256];
+	//sprintf_s(variable, sizeof(char) * 256, "Completed value: %d; i: %d; FenceValue0: %d; FenceValue1: %d\n", completed, _CurrentFence, _FenceValues[_CurrentFence], _FenceValues[_CurrentFence ^ 1]);
 	if (completed < _FenceValues[_CurrentFence])
 	{
-		OutputDebugString("wait\n");
+		//OutputDebugString("wait\n");
 		HRESULT hr = _Fence->SetEventOnCompletion(_FenceValues[_CurrentFence], _FenceEvent);
 		ETERNAL_ASSERT(hr == S_OK);
 		DWORD WaitResult = WaitForSingleObjectEx(_FenceEvent, INFINITE, FALSE);
 		ETERNAL_ASSERT(WaitResult != WAIT_FAILED);
 	}
-	OutputDebugString(variable);
+	//OutputDebugString(variable);
 	_FenceValues[_CurrentFence] = _FenceValues[(_CurrentFence + _FenceValues.size() - 1) % _FenceValues.size()] + 1ull;
 }
