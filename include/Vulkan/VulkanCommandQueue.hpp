@@ -1,7 +1,8 @@
 #ifndef _VULKAN_COMMAND_QUEUE_HPP_
 #define _VULKAN_COMMAND_QUEUE_HPP_
 
-#include <vulkan/vulkan.h>
+struct VkQueue_T;
+struct VkCommandPool_T;
 
 namespace Eternal
 {
@@ -13,9 +14,15 @@ namespace Eternal
 		{
 		public:
 			VulkanCommandQueue(_In_ VulkanDevice& Device);
+			~VulkanCommandQueue();
+
+			void Reset(_In_ uint32_t FrameIndex);
+			VkCommandPool_T*& GetCommandPool() { return _CommandPool; }
 
 		private:
-			VkQueue _CommandQueue = nullptr;
+			VulkanDevice&		_Device;
+			VkQueue_T*			_CommandQueue	= nullptr;
+			VkCommandPool_T*	_CommandPool	= nullptr;
 		};
 	}
 }

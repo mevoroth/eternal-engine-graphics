@@ -28,6 +28,17 @@ namespace Eternal
 
 			VulkanDevice(_In_ Window& WindowObj);
 
+			inline uint32_t GetBackBufferFrameCount() const
+			{
+				return _BackBufferFrameCount;
+			}
+
+			uint32_t GetQueueFamilyIndex()
+			{
+				return 0;
+			}
+
+			VulkanCommandQueue*&	GetCommandQueue() { return _CommandQueue; }
 			VkDevice& GetDevice();
 
 		private:
@@ -35,7 +46,7 @@ namespace Eternal
 			void _CreateSwapChain();
 			void _CreateBackBuffer(_In_ Window& WindowObj);
 
-			VulkanRenderTarget* _BackBuffer = nullptr;
+			VulkanRenderTarget* _BackBuffers = nullptr;
 			VulkanCommandQueue* _CommandQueue = nullptr;
 
 			VkDebugReportCallbackEXT _DebugReportCallback = nullptr;
@@ -44,6 +55,7 @@ namespace Eternal
 			VkDevice _Device = nullptr;
 			VkSwapchainKHR _SwapChain = nullptr;
 			uint32_t _QueueFamilyPropertiesCount = 0;
+			uint32_t _BackBufferFrameCount = 2;
 		};
 	}
 }

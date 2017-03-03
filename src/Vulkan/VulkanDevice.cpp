@@ -81,23 +81,23 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	vkEnumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, InstanceExtensionProperties.data());
 
 	VkApplicationInfo ApplicationInfo;
-	ApplicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	ApplicationInfo.pNext = nullptr;
-	ApplicationInfo.pApplicationName = WindowObj.GetClassName().c_str();
-	ApplicationInfo.applicationVersion = 0;
-	ApplicationInfo.pEngineName = "EternalEngine";
-	ApplicationInfo.engineVersion = 0;
-	ApplicationInfo.apiVersion = VK_API_VERSION_1_0;
+	ApplicationInfo.sType				= VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	ApplicationInfo.pNext				= nullptr;
+	ApplicationInfo.pApplicationName	= WindowObj.GetClassName().c_str();
+	ApplicationInfo.applicationVersion	= 0;
+	ApplicationInfo.pEngineName			= "EternalEngine";
+	ApplicationInfo.engineVersion		= 0;
+	ApplicationInfo.apiVersion			= VK_API_VERSION_1_0;
 
 	VkInstanceCreateInfo InstanceInfo;
-	InstanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	InstanceInfo.pNext = nullptr;
-	InstanceInfo.flags = 0;
-	InstanceInfo.pApplicationInfo = &ApplicationInfo;
-	InstanceInfo.ppEnabledLayerNames = VulkanValidationLayers;
-	InstanceInfo.enabledLayerCount = ETERNAL_ARRAYSIZE(VulkanValidationLayers);
-	InstanceInfo.ppEnabledExtensionNames = VulkanInstanceExtensions;
-	InstanceInfo.enabledExtensionCount = ETERNAL_ARRAYSIZE(VulkanInstanceExtensions);
+	InstanceInfo.sType						= VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	InstanceInfo.pNext						= nullptr;
+	InstanceInfo.flags						= 0;
+	InstanceInfo.pApplicationInfo			= &ApplicationInfo;
+	InstanceInfo.ppEnabledLayerNames		= VulkanValidationLayers;
+	InstanceInfo.enabledLayerCount			= ETERNAL_ARRAYSIZE(VulkanValidationLayers);
+	InstanceInfo.ppEnabledExtensionNames	= VulkanInstanceExtensions;
+	InstanceInfo.enabledExtensionCount		= ETERNAL_ARRAYSIZE(VulkanInstanceExtensions);
 
 	Result = vkCreateInstance(&InstanceInfo, nullptr, &_Instance);
 	ETERNAL_ASSERT(!Result);
@@ -120,9 +120,9 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	Result = vkEnumerateDeviceExtensionProperties(_PhysicalDevice, nullptr, &ExtensionsCount, ExtensionProperties.data());
 	ETERNAL_ASSERT(!Result);
 
-	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReport = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(_Instance, "vkCreateDebugReportCallbackEXT");
-	PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReport = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(_Instance, "vkDestroyDebugReportCallbackEXT");
-	PFN_vkDebugReportMessageEXT vkDebugReportMessage = (PFN_vkDebugReportMessageEXT)vkGetInstanceProcAddr(_Instance, "vkDebugReportMessageEXT");
+	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReport		= (PFN_vkCreateDebugReportCallbackEXT)	vkGetInstanceProcAddr(_Instance, "vkCreateDebugReportCallbackEXT");
+	PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReport	= (PFN_vkDestroyDebugReportCallbackEXT)	vkGetInstanceProcAddr(_Instance, "vkDestroyDebugReportCallbackEXT");
+	PFN_vkDebugReportMessageEXT vkDebugReportMessage			= (PFN_vkDebugReportMessageEXT)			vkGetInstanceProcAddr(_Instance, "vkDebugReportMessageEXT");
 
 	PFN_vkDebugReportCallbackEXT vkDebugReport = VulkanDevice::DebugReport;
 
@@ -165,24 +165,24 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	};
 
 	VkDeviceQueueCreateInfo DeviceQueueInfo;
-	DeviceQueueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-	DeviceQueueInfo.pNext = nullptr;
-	DeviceQueueInfo.queueFamilyIndex = 0; //__debugbreak(); fix this
-	DeviceQueueInfo.queueCount = 1; //__debugbreak(); fix this
-	DeviceQueueInfo.pQueuePriorities = &QueuePriorities;
-	DeviceQueueInfo.flags = 0;
+	DeviceQueueInfo.sType				= VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+	DeviceQueueInfo.pNext				= nullptr;
+	DeviceQueueInfo.flags				= 0;
+	DeviceQueueInfo.queueFamilyIndex	= 0; //__debugbreak(); fix this
+	DeviceQueueInfo.queueCount			= 1; //__debugbreak(); fix this
+	DeviceQueueInfo.pQueuePriorities	= &QueuePriorities;
 
 	VkDeviceCreateInfo DeviceInfo;
-	DeviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	DeviceInfo.pNext = nullptr;// &DebugReportCallbackInfo;
-	DeviceInfo.flags = 0;
-	DeviceInfo.pQueueCreateInfos = &DeviceQueueInfo;
-	DeviceInfo.queueCreateInfoCount = 1;
-	DeviceInfo.ppEnabledExtensionNames = VulkanDeviceExtensions;
-	DeviceInfo.enabledExtensionCount = ETERNAL_ARRAYSIZE(VulkanDeviceExtensions);
-	DeviceInfo.ppEnabledLayerNames = VulkanValidationLayers;
-	DeviceInfo.enabledLayerCount = ETERNAL_ARRAYSIZE(VulkanValidationLayers);
-	DeviceInfo.pEnabledFeatures = nullptr;
+	DeviceInfo.sType					= VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	DeviceInfo.pNext					= nullptr;// &DebugReportCallbackInfo;
+	DeviceInfo.flags					= 0;
+	DeviceInfo.pQueueCreateInfos		= &DeviceQueueInfo;
+	DeviceInfo.queueCreateInfoCount		= 1;
+	DeviceInfo.ppEnabledExtensionNames	= VulkanDeviceExtensions;
+	DeviceInfo.enabledExtensionCount	= ETERNAL_ARRAYSIZE(VulkanDeviceExtensions);
+	DeviceInfo.ppEnabledLayerNames		= VulkanValidationLayers;
+	DeviceInfo.enabledLayerCount		= ETERNAL_ARRAYSIZE(VulkanValidationLayers);
+	DeviceInfo.pEnabledFeatures			= nullptr;
 
 	Result = vkCreateDevice(_PhysicalDevice, &DeviceInfo, nullptr, &_Device);
 	ETERNAL_ASSERT(!Result);
@@ -190,10 +190,6 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	_CreateSwapChain();
 
 	_CreateDirectCommandQueue();
-	//vkGetDeviceQueue(_Device, )
-
-	//for (int )
-	//vkGetPhysicalDeviceSurfaceSupportKHR(_PhysicalDevice, );
 }
 
 VkDevice& VulkanDevice::GetDevice()
@@ -233,24 +229,24 @@ void VulkanDevice::_CreateSwapChain()
 	ETERNAL_ASSERT(!Result);
 
 	VkSwapchainCreateInfoKHR SwapChainInfo;
-	SwapChainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	SwapChainInfo.pNext = nullptr;
-	SwapChainInfo.flags = 0;
-	SwapChainInfo.surface = _BackBuffer->GetRenderTarget();
-	SwapChainInfo.minImageCount = SurfaceCapabilities.minImageCount;
-	SwapChainInfo.imageFormat = Formats[0].format;
-	SwapChainInfo.imageColorSpace = Formats[0].colorSpace;
-	SwapChainInfo.imageExtent = SurfaceCapabilities.currentExtent;
-	SwapChainInfo.imageArrayLayers = 1;
-	SwapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	SwapChainInfo.queueFamilyIndexCount = 0;
-	SwapChainInfo.pQueueFamilyIndices = nullptr;
-	SwapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	SwapChainInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-	SwapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-	SwapChainInfo.presentMode = PresentModes[0];
-	SwapChainInfo.clipped = true;
-	SwapChainInfo.oldSwapchain = VK_NULL_HANDLE;
+	SwapChainInfo.sType					= VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+	SwapChainInfo.pNext					= nullptr;
+	SwapChainInfo.flags					= 0;
+	SwapChainInfo.surface				= _BackBuffer->GetRenderTarget();
+	SwapChainInfo.minImageCount			= SurfaceCapabilities.minImageCount;
+	SwapChainInfo.imageFormat			= Formats[0].format;
+	SwapChainInfo.imageColorSpace		= Formats[0].colorSpace;
+	SwapChainInfo.imageExtent			= SurfaceCapabilities.currentExtent;
+	SwapChainInfo.imageArrayLayers		= 1;
+	SwapChainInfo.imageUsage			= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+	SwapChainInfo.queueFamilyIndexCount	= 0;
+	SwapChainInfo.pQueueFamilyIndices	= nullptr;
+	SwapChainInfo.imageSharingMode		= VK_SHARING_MODE_EXCLUSIVE;
+	SwapChainInfo.preTransform			= VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+	SwapChainInfo.compositeAlpha		= VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	SwapChainInfo.presentMode			= PresentModes[0];
+	SwapChainInfo.clipped				= true;
+	SwapChainInfo.oldSwapchain			= VK_NULL_HANDLE;
 
 	Result = vkCreateSwapchainKHR(_Device, &SwapChainInfo, nullptr, &_SwapChain);
 	ETERNAL_ASSERT(!Result);
@@ -271,11 +267,11 @@ void VulkanDevice::_CreateBackBuffer(_In_ Window& WindowObj)
 {
 	VkResult Result;
 
-	PFN_vkGetPhysicalDeviceSurfaceSupportKHR vkGetPhysicalDeviceSurfaceSupportKHR = (PFN_vkGetPhysicalDeviceSurfaceSupportKHR)vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceSupportKHR");
-	PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR vkGetPhysicalDeviceSurfaceCapabilitiesKHR = (PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR)vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR");
-	PFN_vkGetPhysicalDeviceSurfaceFormatsKHR vkGetPhysicalDeviceSurfaceFormatsKHR = (PFN_vkGetPhysicalDeviceSurfaceFormatsKHR)vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceFormatsKHR");
-	PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentModesKHR = (PFN_vkGetPhysicalDeviceSurfacePresentModesKHR)vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfacePresentModesKHR");
-	PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR = (PFN_vkGetSwapchainImagesKHR)vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfacePresentModesKHR");
+	PFN_vkGetPhysicalDeviceSurfaceSupportKHR		vkGetPhysicalDeviceSurfaceSupportKHR		= (PFN_vkGetPhysicalDeviceSurfaceSupportKHR)		vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceSupportKHR");
+	PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR	vkGetPhysicalDeviceSurfaceCapabilitiesKHR	= (PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR)	vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR");
+	PFN_vkGetPhysicalDeviceSurfaceFormatsKHR		vkGetPhysicalDeviceSurfaceFormatsKHR		= (PFN_vkGetPhysicalDeviceSurfaceFormatsKHR)		vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceFormatsKHR");
+	PFN_vkGetPhysicalDeviceSurfacePresentModesKHR	vkGetPhysicalDeviceSurfacePresentModesKHR	= (PFN_vkGetPhysicalDeviceSurfacePresentModesKHR)	vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfacePresentModesKHR");
+	PFN_vkGetSwapchainImagesKHR						vkGetSwapchainImagesKHR						= (PFN_vkGetSwapchainImagesKHR)						vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfacePresentModesKHR");
 	ETERNAL_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR);
 	ETERNAL_ASSERT(vkGetPhysicalDeviceSurfaceCapabilitiesKHR);
 	ETERNAL_ASSERT(vkGetPhysicalDeviceSurfaceFormatsKHR);
@@ -283,11 +279,11 @@ void VulkanDevice::_CreateBackBuffer(_In_ Window& WindowObj)
 	ETERNAL_ASSERT(vkGetSwapchainImagesKHR);
 
 	VkWin32SurfaceCreateInfoKHR Win32SurfaceInfo;
-	Win32SurfaceInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
-	Win32SurfaceInfo.pNext = nullptr;
-	Win32SurfaceInfo.hinstance = WindowObj.GetHInstance();
-	Win32SurfaceInfo.hwnd = WindowObj.GetWindowHandler();
-	Win32SurfaceInfo.flags = 0;
+	Win32SurfaceInfo.sType		= VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+	Win32SurfaceInfo.pNext		= nullptr;
+	Win32SurfaceInfo.flags		= 0;
+	Win32SurfaceInfo.hinstance	= WindowObj.GetHInstance();
+	Win32SurfaceInfo.hwnd		= WindowObj.GetWindowHandler();
 
 	VkSurfaceKHR RenderTarget;
 	Result = vkCreateWin32SurfaceKHR(_Instance, &Win32SurfaceInfo, nullptr, &RenderTarget);

@@ -37,3 +37,7 @@ void* VulkanBuffer::Map(_In_ VulkanDevice& Device)
 	//vkMapMemory(Device.GetDevice(), )
 	return nullptr;
 }
+
+void VulkanBuffer::Unmap()
+{
+}

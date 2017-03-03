@@ -18,6 +18,7 @@ namespace Eternal
 		{
 		public:
 			VulkanShader(_In_ VulkanDevice& Device, _In_ const string& Name, _In_ const string& Src);
+			VkShaderModule_T* GetVulkanShader();
 
 		private:
 			std::vector<char> _ShaderCode;

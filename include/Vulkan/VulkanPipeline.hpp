@@ -3,6 +3,7 @@
 
 struct VkDescriptorSetLayout_T;
 struct VkPipelineLayout_T;
+struct VkRenderPass_T;
 
 namespace Eternal
 {
@@ -15,9 +16,13 @@ namespace Eternal
 		public:
 			VulkanPipeline(_In_ VulkanDevice& Device);
 
+			VkPipelineLayout_T* GetPipelineLayout();
+			VkRenderPass_T* GetRenderPass();
+
 		private:
 			VkDescriptorSetLayout_T* _DescriptorSetLayout = nullptr;
 			VkPipelineLayout_T* _PipelineLayout = nullptr;
+			VkRenderPass_T* _RenderPass = nullptr;
 		};
 	}
 }

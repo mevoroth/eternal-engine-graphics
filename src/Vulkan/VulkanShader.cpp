@@ -37,3 +37,8 @@ VulkanShader::VulkanShader(_In_ VulkanDevice& Device, _In_ const string& Name, _
 	VkResult Result = vkCreateShaderModule(Device.GetDevice(), &ShaderModuleInfo, nullptr, &_ShaderModule);
 	ETERNAL_ASSERT(!Result);
 }
+
+VkShaderModule_T* VulkanShader::GetVulkanShader()
+{
+	return _ShaderModule;
+}
