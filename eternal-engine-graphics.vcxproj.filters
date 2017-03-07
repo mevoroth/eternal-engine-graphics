@@ -19,6 +19,9 @@
     <Filter Include="Vulkan">
       <UniqueIdentifier>{ff1ff517-f3a5-4b5f-8c70-cb8fd7fb4706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NextGenGraphics">
+      <UniqueIdentifier>{ec393388-7bed-46d1-b272-835f9135b4d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\d3d11\D3D11Device.hpp">
@@ -322,6 +325,30 @@
     <ClInclude Include="include\Vulkan\VulkanState.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanResource.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NextGenGraphics\Resource.hpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12View.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanView.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\View.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanFrameBuffer.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanFormat.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -528,9 +555,6 @@
     <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Shader.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
@@ -553,6 +577,21 @@
       <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanState.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanResource.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanView.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanFrameBuffer.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>

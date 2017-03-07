@@ -9,8 +9,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Viewport;
 		class VulkanDevice;
 		class VulkanCommandQueue;
+		class VulkanState;
+		class VulkanPipeline;
+		class VulkanFrameBuffer;
 
 		class VulkanCommandList
 		{
@@ -18,9 +22,14 @@ namespace Eternal
 			VulkanCommandList(_In_ VulkanDevice& Device, _In_ VulkanCommandQueue& CommandQueue);
 			~VulkanCommandList();
 
-			void Begin();
+			void SetViewport(_In_ Viewport& ViewportObj);
+			void SetScissorRectangle(_In_ Viewport& ViewportObj);
+
+			void Begin(_In_ VulkanFrameBuffer& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanPipeline& Pipeline);
 			void DrawPrimitive(_In_ uint32_t PrimitiveCount);
 			void End();
+
+			inline VkCommandBuffer_T*& GetVulkanCommandList() { return _CommandBuffer; }
 
 		private:
 			VulkanDevice& _Device;

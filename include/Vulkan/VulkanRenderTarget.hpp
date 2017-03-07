@@ -1,7 +1,9 @@
 #ifndef _VULKAN_RENDER_TARGET_HPP_
 #define _VULKAN_RENDER_TARGET_HPP_
 
-#include <vulkan/vulkan.h>
+#include "Vulkan/VulkanResource.hpp"
+
+struct VkSurfaceKHR_T;
 
 namespace Eternal
 {
@@ -9,16 +11,16 @@ namespace Eternal
 	{
 		class VulkanDevice;
 
-		class VulkanRenderTarget
+		class VulkanRenderTarget : public VulkanResource
 		{
 		public:
 			//VulkanRenderTarget(_In_ VulkanDevice& Device);
-			VulkanRenderTarget(_In_ VkSurfaceKHR& RenderTargetHandle);
+			VulkanRenderTarget(_In_ VkSurfaceKHR_T*& RenderTargetHandle);
 
-			VkSurfaceKHR& GetRenderTarget() { return _RenderTarget; }
+			VkSurfaceKHR_T*& GetRenderTarget() { return _RenderTarget; }
 
 		private:
-			VkSurfaceKHR _RenderTarget;
+			VkSurfaceKHR_T* _RenderTarget;
 		};
 	}
 }

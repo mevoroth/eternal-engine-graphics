@@ -1,10 +1,13 @@
 #include "Vulkan/VulkanCommandQueue.hpp"
 
+#include <vector>
 #include "Macros/Macros.hpp"
 #include <vulkan/vulkan.h>
 #include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan/VulkanCommandList.hpp"
 
 using namespace Eternal::Graphics;
+using namespace std;
 
 VulkanCommandQueue::VulkanCommandQueue(_In_ VulkanDevice& Device)
 	: _Device(Device)
@@ -29,5 +32,29 @@ VulkanCommandQueue::~VulkanCommandQueue()
 
 void VulkanCommandQueue::Reset(_In_ uint32_t FrameIndex)
 {
+	VkResult Result = vkResetCommandPool(_Device.GetDevice(), _CommandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
+	ETERNAL_ASSERT(!Result);
+}
 
+void VulkanCommandQueue::Flush(_In_ VulkanCommandList CommandLists[], _In_ uint32_t CommandListsCount)
+{
+	vector<VkCommandBuffer> VulkanCommandLists;
+	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
+	{
+		VulkanCommandLists.push_back(CommandLists[CommandListIndex].GetVulkanCommandList());
+	}
+
+	VkSubmitInfo SubmitInfo;
+	SubmitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	SubmitInfo.pNext = nullptr;
+	SubmitInfo.waitSemaphoreCount = 0;
+	SubmitInfo.pWaitSemaphores = nullptr;
+	SubmitInfo.commandBufferCount = CommandListsCount;
+	SubmitInfo.pCommandBuffers = VulkanCommandLists.data();
+	SubmitInfo.signalSemaphoreCount = 0;
+	SubmitInfo.pSignalSemaphores = nullptr;
+
+	// FIX THIS
+	VkResult Result = vkQueueSubmit(_CommandQueue, 1, &SubmitInfo, nullptr);
+	ETERNAL_ASSERT(!Result);
 }
