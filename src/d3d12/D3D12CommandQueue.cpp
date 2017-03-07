@@ -3,6 +3,7 @@
 #include "Macros/Macros.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
+#include "d3d12/D3D12CommandList.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -29,6 +30,16 @@ void D3D12CommandQueue::Reset(_In_ uint32_t FrameIndex)
 {
 	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
 	_CommandAllocators[FrameIndex]->Reset();
+}
+
+void D3D12CommandQueue::Flush(_In_ D3D12CommandList CommandLists[], _In_ uint32_t CommandListsCount)
+{
+	vector<ID3D12CommandList*> D3D12CommandLists; // TODO: REMOVE THIS
+	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
+	{
+		D3D12CommandLists.push_back(CommandLists[CommandListIndex].GetD3D12GraphicsCommandList());
+	}
+	GetD3D12CommandQueue()->ExecuteCommandLists(CommandListsCount, D3D12CommandLists.data());
 }
 
 D3D12CommandAllocator* D3D12CommandQueue::GetCommandAllocator(_In_ uint32_t FrameIndex)
