@@ -114,6 +114,7 @@
     <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp" />
     <ClInclude Include="include\d3d12\D3D12State.hpp" />
     <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp" />
+    <ClInclude Include="include\d3d12\D3D12View.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
@@ -150,13 +151,17 @@
     <ClInclude Include="include\Graphics\TextureFactory.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="include\Graphics\VertexBufferFactory.hpp" />
+    <ClInclude Include="include\Graphics\View.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
+    <ClInclude Include="include\NextGenGraphics\Resource.hpp" />
     <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanFrameBuffer.hpp" />
     <ClInclude Include="include\Vulkan\VulkanInputLayout.hpp" />
     <ClInclude Include="include\Vulkan\VulkanPipeline.hpp" />
     <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp" />
@@ -169,8 +174,11 @@
     <ClInclude Include="include\Vulkan\VulkanDevice.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanResource.hpp" />
     <ClInclude Include="include\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="include\Vulkan\VulkanState.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanView.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -288,19 +296,23 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanFence.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanFrameBuffer.cpp" />
     <ClCompile Include="src\Vulkan\VulkanPipeline.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanResource.cpp" />
     <ClCompile Include="src\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="src\Vulkan\VulkanState.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanView.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>
     <RootNamespace>eternalenginegraphics</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

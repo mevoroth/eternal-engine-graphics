@@ -155,8 +155,6 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	VkPhysicalDeviceFeatures PhysicalDeviceFeatures;
 	vkGetPhysicalDeviceFeatures(_PhysicalDevice, &PhysicalDeviceFeatures);
 	
-	_CreateBackBuffer(WindowObj);
-
 	float QueuePriorities = 0.0f;
 
 	const char* VulkanDeviceExtensions[] =
@@ -187,8 +185,6 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	Result = vkCreateDevice(_PhysicalDevice, &DeviceInfo, nullptr, &_Device);
 	ETERNAL_ASSERT(!Result);
 
-	_CreateSwapChain();
-
 	_CreateDirectCommandQueue();
 }
 
@@ -202,100 +198,7 @@ void VulkanDevice::_CreateDirectCommandQueue()
 	_CommandQueue = new VulkanCommandQueue(*this);
 }
 
-void VulkanDevice::_CreateSwapChain()
+VulkanRenderTarget*const & VulkanDevice::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 {
-	VkResult Result;
-
-	uint32_t FormatsCount;
-	Result = vkGetPhysicalDeviceSurfaceFormatsKHR(_PhysicalDevice, _BackBuffer->GetRenderTarget(), &FormatsCount, nullptr);
-	ETERNAL_ASSERT(!Result);
-
-	std::vector<VkSurfaceFormatKHR> Formats;
-	Formats.resize(FormatsCount);
-	Result = vkGetPhysicalDeviceSurfaceFormatsKHR(_PhysicalDevice, _BackBuffer->GetRenderTarget(), &FormatsCount, Formats.data());
-	ETERNAL_ASSERT(!Result);
-
-	VkSurfaceCapabilitiesKHR SurfaceCapabilities;
-	Result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(_PhysicalDevice, _BackBuffer->GetRenderTarget(), &SurfaceCapabilities);
-	ETERNAL_ASSERT(!Result);
-
-	uint32_t PresentModesCount;
-	Result = vkGetPhysicalDeviceSurfacePresentModesKHR(_PhysicalDevice, _BackBuffer->GetRenderTarget(), &PresentModesCount, nullptr);
-	ETERNAL_ASSERT(!Result);
-
-	std::vector<VkPresentModeKHR> PresentModes;
-	PresentModes.resize(PresentModesCount);
-	Result = vkGetPhysicalDeviceSurfacePresentModesKHR(_PhysicalDevice, _BackBuffer->GetRenderTarget(), &PresentModesCount, PresentModes.data());
-	ETERNAL_ASSERT(!Result);
-
-	VkSwapchainCreateInfoKHR SwapChainInfo;
-	SwapChainInfo.sType					= VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	SwapChainInfo.pNext					= nullptr;
-	SwapChainInfo.flags					= 0;
-	SwapChainInfo.surface				= _BackBuffer->GetRenderTarget();
-	SwapChainInfo.minImageCount			= SurfaceCapabilities.minImageCount;
-	SwapChainInfo.imageFormat			= Formats[0].format;
-	SwapChainInfo.imageColorSpace		= Formats[0].colorSpace;
-	SwapChainInfo.imageExtent			= SurfaceCapabilities.currentExtent;
-	SwapChainInfo.imageArrayLayers		= 1;
-	SwapChainInfo.imageUsage			= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	SwapChainInfo.queueFamilyIndexCount	= 0;
-	SwapChainInfo.pQueueFamilyIndices	= nullptr;
-	SwapChainInfo.imageSharingMode		= VK_SHARING_MODE_EXCLUSIVE;
-	SwapChainInfo.preTransform			= VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-	SwapChainInfo.compositeAlpha		= VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-	SwapChainInfo.presentMode			= PresentModes[0];
-	SwapChainInfo.clipped				= true;
-	SwapChainInfo.oldSwapchain			= VK_NULL_HANDLE;
-
-	Result = vkCreateSwapchainKHR(_Device, &SwapChainInfo, nullptr, &_SwapChain);
-	ETERNAL_ASSERT(!Result);
-
-	VkPhysicalDeviceMemoryProperties PhysicalDeviceMemoryProperties;
-	vkGetPhysicalDeviceMemoryProperties(_PhysicalDevice, &PhysicalDeviceMemoryProperties);
-
-	uint32_t SwapChainsCount;
-	Result =  vkGetSwapchainImagesKHR(_Device, _SwapChain, &SwapChainsCount, nullptr);
-	ETERNAL_ASSERT(!Result);
-	std::vector<VkImage> SwapChainImages;
-	SwapChainImages.resize(SwapChainsCount);
-	Result = vkGetSwapchainImagesKHR(_Device, _SwapChain, &SwapChainsCount, &SwapChainImages[0]);
-	ETERNAL_ASSERT(!Result);
-}
-
-void VulkanDevice::_CreateBackBuffer(_In_ Window& WindowObj)
-{
-	VkResult Result;
-
-	PFN_vkGetPhysicalDeviceSurfaceSupportKHR		vkGetPhysicalDeviceSurfaceSupportKHR		= (PFN_vkGetPhysicalDeviceSurfaceSupportKHR)		vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceSupportKHR");
-	PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR	vkGetPhysicalDeviceSurfaceCapabilitiesKHR	= (PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR)	vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR");
-	PFN_vkGetPhysicalDeviceSurfaceFormatsKHR		vkGetPhysicalDeviceSurfaceFormatsKHR		= (PFN_vkGetPhysicalDeviceSurfaceFormatsKHR)		vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfaceFormatsKHR");
-	PFN_vkGetPhysicalDeviceSurfacePresentModesKHR	vkGetPhysicalDeviceSurfacePresentModesKHR	= (PFN_vkGetPhysicalDeviceSurfacePresentModesKHR)	vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfacePresentModesKHR");
-	PFN_vkGetSwapchainImagesKHR						vkGetSwapchainImagesKHR						= (PFN_vkGetSwapchainImagesKHR)						vkGetInstanceProcAddr(_Instance, "vkGetPhysicalDeviceSurfacePresentModesKHR");
-	ETERNAL_ASSERT(vkGetPhysicalDeviceSurfaceSupportKHR);
-	ETERNAL_ASSERT(vkGetPhysicalDeviceSurfaceCapabilitiesKHR);
-	ETERNAL_ASSERT(vkGetPhysicalDeviceSurfaceFormatsKHR);
-	ETERNAL_ASSERT(vkGetPhysicalDeviceSurfacePresentModesKHR);
-	ETERNAL_ASSERT(vkGetSwapchainImagesKHR);
-
-	VkWin32SurfaceCreateInfoKHR Win32SurfaceInfo;
-	Win32SurfaceInfo.sType		= VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
-	Win32SurfaceInfo.pNext		= nullptr;
-	Win32SurfaceInfo.flags		= 0;
-	Win32SurfaceInfo.hinstance	= WindowObj.GetHInstance();
-	Win32SurfaceInfo.hwnd		= WindowObj.GetWindowHandler();
-
-	VkSurfaceKHR RenderTarget;
-	Result = vkCreateWin32SurfaceKHR(_Instance, &Win32SurfaceInfo, nullptr, &RenderTarget);
-	ETERNAL_ASSERT(!Result);
-
-	std::vector<VkBool32> SupportPresents;
-	SupportPresents.resize(_QueueFamilyPropertiesCount);
-	for (int QueueFamilyIndex = 0; QueueFamilyIndex < _QueueFamilyPropertiesCount; ++QueueFamilyIndex)
-	{
-		Result = vkGetPhysicalDeviceSurfaceSupportKHR(_PhysicalDevice, QueueFamilyIndex, RenderTarget, &SupportPresents[QueueFamilyIndex]);
-		ETERNAL_ASSERT(!Result);
-	}
-
-	_BackBuffer = new VulkanRenderTarget(RenderTarget);
+	return _BackBuffer;
 }

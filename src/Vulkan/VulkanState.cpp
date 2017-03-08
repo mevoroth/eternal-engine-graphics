@@ -168,7 +168,6 @@ VulkanState::VulkanState(_In_ VulkanDevice& DeviceObj, _In_ VulkanPipeline& Pipe
 	PipelineInfo.basePipelineHandle		= nullptr;
 	PipelineInfo.basePipelineIndex		= 0;
 
-	VkPipeline _Pipeline = nullptr;
 	Result = vkCreateGraphicsPipelines(DeviceObj.GetDevice(), _PipelineCache, 1, &PipelineInfo, nullptr, &_Pipeline);
 	ETERNAL_ASSERT(!Result);
 }

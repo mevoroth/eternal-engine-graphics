@@ -38,15 +38,17 @@ namespace Eternal
 				return 0;
 			}
 
+			VulkanRenderTarget*const & GetBackBuffer(_In_ uint32_t BackBufferIndex);
 			VulkanCommandQueue*&	GetCommandQueue() { return _CommandQueue; }
 			VkDevice& GetDevice();
+			VkPhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
+			VkInstance& GetInstance() { return _Instance; }
+			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }
 
 		private:
 			void _CreateDirectCommandQueue();
-			void _CreateSwapChain();
-			void _CreateBackBuffer(_In_ Window& WindowObj);
 
-			VulkanRenderTarget* _BackBuffers = nullptr;
+			VulkanRenderTarget* _BackBuffer = nullptr;
 			VulkanCommandQueue* _CommandQueue = nullptr;
 
 			VkDebugReportCallbackEXT _DebugReportCallback = nullptr;

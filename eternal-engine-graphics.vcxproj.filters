@@ -19,6 +19,9 @@
     <Filter Include="Vulkan">
       <UniqueIdentifier>{ff1ff517-f3a5-4b5f-8c70-cb8fd7fb4706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NextGenGraphics">
+      <UniqueIdentifier>{ec393388-7bed-46d1-b272-835f9135b4d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\d3d11\D3D11Device.hpp">
@@ -322,8 +325,11 @@
     <ClInclude Include="include\Vulkan\VulkanState.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
     <ClInclude Include="include\Vulkan\VulkanResource.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
@@ -348,6 +354,7 @@
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="include\Graphics\ShaderType.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -355,6 +362,8 @@
       <Filter>Vulkan</Filter>
     </ClInclude>
 >>>>>>> Stashed changes
+=======
+>>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -561,9 +570,6 @@
     <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Shader.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
@@ -588,8 +594,11 @@
     <ClCompile Include="src\Vulkan\VulkanState.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
     <ClCompile Include="src\Vulkan\VulkanResource.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
@@ -605,9 +614,12 @@
     <ClCompile Include="src\Vulkan\VulkanFrameBuffer.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
 >>>>>>> Stashed changes
+=======
+>>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
   </ItemGroup>
 </Project>

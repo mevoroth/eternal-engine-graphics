@@ -13,6 +13,7 @@ namespace Eternal
 
 		class D3D12Device;
 		class D3D12CommandAllocator;
+		class D3D12CommandList;
 
 		class D3D12CommandQueue
 		{
@@ -20,6 +21,7 @@ namespace Eternal
 			D3D12CommandQueue(_In_ D3D12Device& Device);
 
 			void Reset(_In_ uint32_t FrameIndex);
+			void Flush(_In_ D3D12CommandList CommandLists[], _In_ uint32_t CommandListsCount);
 			D3D12CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex);
 
 			inline ID3D12CommandQueue* GetD3D12CommandQueue() { return _CommandQueue; }
