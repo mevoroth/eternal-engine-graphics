@@ -12,9 +12,13 @@ namespace Eternal
 		class VulkanFence
 		{
 		public:
-			VulkanFence(_In_ VulkanDevice& Device);
+			VulkanFence(_In_ VulkanDevice& DeviceObj);
+			~VulkanFence();
+
+			VkFence_T* GetFence() { return _Fence; }
 
 		private:
+			VulkanDevice& _Device;
 			VkFence_T* _Fence = nullptr;
 		};
 	}

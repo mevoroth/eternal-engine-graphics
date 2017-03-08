@@ -53,7 +53,6 @@ namespace Eternal
 			VkInstance _Instance = nullptr;
 			VkPhysicalDevice _PhysicalDevice = nullptr;
 			VkDevice _Device = nullptr;
-			VkSwapchainKHR _SwapChain = nullptr;
 			uint32_t _QueueFamilyPropertiesCount = 0;
 			uint32_t _BackBufferFrameCount = 2;
 		};

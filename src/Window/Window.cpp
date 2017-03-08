@@ -34,15 +34,19 @@ void Window::Create(WNDPROC WindowEventsHandler)
 
 	RegisterClassEx(&WindowClass);
 
+	RECT WindowRect = { 0, 0, _Width, _Height };
+	BOOL Adjust = AdjustWindowRect(&WindowRect, WS_OVERLAPPEDWINDOW, FALSE);
+	ETERNAL_ASSERT(Adjust);
+
 	_WindowHandle = CreateWindowEx(
 		WS_EX_APPWINDOW,
 		_ClassName.c_str(),
 		_WindowName.c_str(),
-		WS_OVERLAPPED,
+		WS_OVERLAPPEDWINDOW,
 		0,
 		0,
-		_Width,
-		_Height,
+		WindowRect.right - WindowRect.left,
+		WindowRect.bottom - WindowRect.top,
 		0,
 		0,
 		_hInstance,

@@ -9,6 +9,11 @@ namespace Eternal
 	namespace Graphics
 	{
 		class VulkanDevice;
+<<<<<<< Updated upstream
+=======
+		class VulkanCommandList;
+		class VulkanFence;
+>>>>>>> Stashed changes
 
 		class VulkanCommandQueue
 		{
@@ -17,6 +22,10 @@ namespace Eternal
 			~VulkanCommandQueue();
 
 			void Reset(_In_ uint32_t FrameIndex);
+<<<<<<< Updated upstream
+=======
+			void Flush(_In_ VulkanFence& FenceObj, _In_ VulkanCommandList CommandLists[], _In_ uint32_t CommandListsCount);
+>>>>>>> Stashed changes
 			VkCommandPool_T*& GetCommandPool() { return _CommandPool; }
 
 		private:

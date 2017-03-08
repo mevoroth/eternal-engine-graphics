@@ -142,6 +142,7 @@
     <ClInclude Include="include\Graphics\Shader.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp" />
+    <ClInclude Include="include\Graphics\ShaderType.hpp" />
     <ClInclude Include="include\Graphics\StencilTest.hpp" />
     <ClInclude Include="include\Graphics\StructuredBuffer.hpp" />
     <ClInclude Include="include\Graphics\StructuredBufferFactory.hpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
     <ClInclude Include="include\Vulkan\VulkanInputLayout.hpp" />
     <ClInclude Include="include\Vulkan\VulkanPipeline.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp" />
     <ClInclude Include="include\Vulkan\VulkanRenderTarget.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -287,6 +289,7 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanFence.cpp" />
     <ClCompile Include="src\Vulkan\VulkanPipeline.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>

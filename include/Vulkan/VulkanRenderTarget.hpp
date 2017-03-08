@@ -12,6 +12,7 @@ namespace Eternal
 		class VulkanRenderTarget
 		{
 		public:
+<<<<<<< Updated upstream
 			//VulkanRenderTarget(_In_ VulkanDevice& Device);
 			VulkanRenderTarget(_In_ VkSurfaceKHR& RenderTargetHandle);
 
@@ -19,6 +20,11 @@ namespace Eternal
 
 		private:
 			VkSurfaceKHR _RenderTarget;
+=======
+			VulkanRenderTarget();
+
+		private:
+>>>>>>> Stashed changes
 		};
 	}
 }

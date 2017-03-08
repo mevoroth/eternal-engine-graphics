@@ -3,6 +3,11 @@
 #include "Macros/Macros.hpp"
 #include <vulkan/vulkan.h>
 #include "Vulkan/VulkanDevice.hpp"
+<<<<<<< Updated upstream
+=======
+#include "Vulkan/VulkanCommandList.hpp"
+#include "Vulkan/VulkanFence.hpp"
+>>>>>>> Stashed changes
 
 using namespace Eternal::Graphics;
 
@@ -30,4 +35,29 @@ VulkanCommandQueue::~VulkanCommandQueue()
 void VulkanCommandQueue::Reset(_In_ uint32_t FrameIndex)
 {
 
+<<<<<<< Updated upstream
+=======
+void VulkanCommandQueue::Flush(_In_ VulkanFence& FenceObj, _In_ VulkanCommandList CommandLists[], _In_ uint32_t CommandListsCount)
+{
+	vector<VkCommandBuffer> VulkanCommandLists;
+	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
+	{
+		VulkanCommandLists.push_back(CommandLists[CommandListIndex].GetVulkanCommandList());
+	}
+
+	VkSubmitInfo SubmitInfo;
+	SubmitInfo.sType					= VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	SubmitInfo.pNext					= nullptr;
+	SubmitInfo.waitSemaphoreCount		= 0;
+	SubmitInfo.pWaitSemaphores			= nullptr;
+	SubmitInfo.pWaitDstStageMask		= nullptr;
+	SubmitInfo.commandBufferCount		= CommandListsCount;
+	SubmitInfo.pCommandBuffers			= VulkanCommandLists.data();
+	SubmitInfo.signalSemaphoreCount		= 0;
+	SubmitInfo.pSignalSemaphores		= nullptr;
+
+	// FIX THIS
+	VkResult Result = vkQueueSubmit(_CommandQueue, 1, &SubmitInfo, FenceObj.GetFence());
+	ETERNAL_ASSERT(!Result);
+>>>>>>> Stashed changes
 }
