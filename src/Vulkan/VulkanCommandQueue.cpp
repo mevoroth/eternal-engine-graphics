@@ -4,15 +4,8 @@
 #include "Macros/Macros.hpp"
 #include <vulkan/vulkan.h>
 #include "Vulkan/VulkanDevice.hpp"
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 #include "Vulkan/VulkanCommandList.hpp"
 #include "Vulkan/VulkanFence.hpp"
->>>>>>> Stashed changes
-=======
-#include "Vulkan/VulkanCommandList.hpp"
->>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
 
 using namespace Eternal::Graphics;
 using namespace std;
@@ -44,13 +37,7 @@ void VulkanCommandQueue::Reset(_In_ uint32_t FrameIndex)
 	ETERNAL_ASSERT(!Result);
 }
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
 void VulkanCommandQueue::Flush(_In_ VulkanFence& FenceObj, _In_ VulkanCommandList CommandLists[], _In_ uint32_t CommandListsCount)
-=======
-void VulkanCommandQueue::Flush(_In_ VulkanCommandList CommandLists[], _In_ uint32_t CommandListsCount)
->>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
 {
 	vector<VkCommandBuffer> VulkanCommandLists;
 	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
@@ -59,7 +46,6 @@ void VulkanCommandQueue::Flush(_In_ VulkanCommandList CommandLists[], _In_ uint3
 	}
 
 	VkSubmitInfo SubmitInfo;
-<<<<<<< HEAD
 	SubmitInfo.sType					= VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	SubmitInfo.pNext					= nullptr;
 	SubmitInfo.waitSemaphoreCount		= 0;
@@ -73,19 +59,4 @@ void VulkanCommandQueue::Flush(_In_ VulkanCommandList CommandLists[], _In_ uint3
 	// FIX THIS
 	VkResult Result = vkQueueSubmit(_CommandQueue, 1, &SubmitInfo, FenceObj.GetFence());
 	ETERNAL_ASSERT(!Result);
->>>>>>> Stashed changes
-=======
-	SubmitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	SubmitInfo.pNext = nullptr;
-	SubmitInfo.waitSemaphoreCount = 0;
-	SubmitInfo.pWaitSemaphores = nullptr;
-	SubmitInfo.commandBufferCount = CommandListsCount;
-	SubmitInfo.pCommandBuffers = VulkanCommandLists.data();
-	SubmitInfo.signalSemaphoreCount = 0;
-	SubmitInfo.pSignalSemaphores = nullptr;
-
-	// FIX THIS
-	VkResult Result = vkQueueSubmit(_CommandQueue, 1, &SubmitInfo, nullptr);
-	ETERNAL_ASSERT(!Result);
->>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
 }
