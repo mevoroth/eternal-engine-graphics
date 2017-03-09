@@ -325,11 +325,6 @@
     <ClInclude Include="include\Vulkan\VulkanState.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
     <ClInclude Include="include\Vulkan\VulkanResource.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
@@ -354,16 +349,12 @@
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="include\Graphics\ShaderType.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
->>>>>>> Stashed changes
-=======
->>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -594,11 +585,6 @@
     <ClCompile Include="src\Vulkan\VulkanState.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
     <ClCompile Include="src\Vulkan\VulkanResource.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
@@ -614,12 +600,8 @@
     <ClCompile Include="src\Vulkan\VulkanFrameBuffer.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
->>>>>>> Stashed changes
-=======
->>>>>>> 4a6e8cf3caa9bc469d4cbe28b1c95167a2572cce
   </ItemGroup>
 </Project>
