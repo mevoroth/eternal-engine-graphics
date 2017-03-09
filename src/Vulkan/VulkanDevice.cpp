@@ -23,6 +23,8 @@ VkBool32 VulkanDevice::DebugReport(
 )
 {
 	ETERNAL_ASSERT(false);
+	OutputDebugString(pMessage);
+	OutputDebugString("\n");
 	return VK_FALSE;
 }
 
@@ -133,7 +135,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	VkDebugReportCallbackCreateInfoEXT DebugReportCallbackInfo;
 	DebugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
 	DebugReportCallbackInfo.pNext = nullptr;
-	DebugReportCallbackInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
+	DebugReportCallbackInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;// | VK_DEBUG_REPORT_INFORMATION_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT;
 	DebugReportCallbackInfo.pfnCallback = vkDebugReport;
 
 	Result = vkCreateDebugReport(_Instance, &DebugReportCallbackInfo, nullptr, &_DebugReportCallback);
@@ -184,21 +186,9 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	Result = vkCreateDevice(_PhysicalDevice, &DeviceInfo, nullptr, &_Device);
 	ETERNAL_ASSERT(!Result);
-
-	_CreateDirectCommandQueue();
 }
 
 VkDevice& VulkanDevice::GetDevice()
 {
 	return _Device;
-}
-
-void VulkanDevice::_CreateDirectCommandQueue()
-{
-	_CommandQueue = new VulkanCommandQueue(*this);
-}
-
-VulkanRenderTarget*const & VulkanDevice::GetBackBuffer(_In_ uint32_t BackBufferIndex)
-{
-	return _BackBuffer;
 }

@@ -3,6 +3,7 @@
 #include "Macros/Macros.hpp"
 #include <vulkan/vulkan.h>
 #include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan/VulkanSwapChain.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanState.hpp"
 #include "Vulkan/VulkanPipeline.hpp"
@@ -12,7 +13,7 @@
 
 using namespace Eternal::Graphics;
 
-VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandQueue& CommandQueueObj)
+VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj, _In_ VulkanCommandQueue& CommandQueueObj)
 	: _Device(DeviceObj)
 	, _CommandQueue(CommandQueueObj)
 {
@@ -21,7 +22,7 @@ VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanCo
 	CommandBufferAllocateInfo.pNext					= nullptr;
 	CommandBufferAllocateInfo.commandPool			= CommandQueueObj.GetCommandPool();
 	CommandBufferAllocateInfo.level					= VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	CommandBufferAllocateInfo.commandBufferCount	= DeviceObj.GetBackBufferFrameCount();
+	CommandBufferAllocateInfo.commandBufferCount	= SwapChainObj.GetBackBuffersFrameCount();
 
 	VkResult Result = vkAllocateCommandBuffers(DeviceObj.GetDevice(), &CommandBufferAllocateInfo, &_CommandBuffer);
 	ETERNAL_ASSERT(!Result);

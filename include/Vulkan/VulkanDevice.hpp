@@ -28,35 +28,22 @@ namespace Eternal
 
 			VulkanDevice(_In_ Window& WindowObj);
 
-			inline uint32_t GetBackBufferFrameCount() const
-			{
-				return _BackBufferFrameCount;
-			}
-
 			uint32_t GetQueueFamilyIndex()
 			{
 				return 0;
 			}
 
-			VulkanRenderTarget*const & GetBackBuffer(_In_ uint32_t BackBufferIndex);
-			VulkanCommandQueue*&	GetCommandQueue() { return _CommandQueue; }
 			VkDevice& GetDevice();
 			VkPhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
 			VkInstance& GetInstance() { return _Instance; }
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }
 
 		private:
-			void _CreateDirectCommandQueue();
-
-			VulkanRenderTarget* _BackBuffer = nullptr;
-			VulkanCommandQueue* _CommandQueue = nullptr;
-
 			VkDebugReportCallbackEXT _DebugReportCallback = nullptr;
 			VkInstance _Instance = nullptr;
 			VkPhysicalDevice _PhysicalDevice = nullptr;
 			VkDevice _Device = nullptr;
 			uint32_t _QueueFamilyPropertiesCount = 0;
-			uint32_t _BackBufferFrameCount = 2;
 		};
 	}
 }

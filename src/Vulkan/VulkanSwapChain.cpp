@@ -10,6 +10,8 @@
 #include "Vulkan/VulkanFrameBuffer.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
+#include "Vulkan/VulkanFence.hpp"
+#include "Vulkan/VulkanCommandQueue.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -105,6 +107,7 @@ VulkanSwapChain::VulkanSwapChain(_In_ VulkanDevice& DeviceObj, _In_ Window& Wind
 
 	_BackBuffers.resize(BackBuffersCount);
 	_BackBufferViews.resize(BackBuffersCount);
+	_AcquireSemaphores.resize(BackBuffersCount);
 
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
 	{
@@ -119,6 +122,14 @@ VulkanSwapChain::VulkanSwapChain(_In_ VulkanDevice& DeviceObj, _In_ Window& Wind
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
 	{
 		_BackBuffers[BackBufferIndex] = new VulkanFrameBuffer(DeviceObj, *_RenderPass, BackBuffers[BackBufferIndex], *_BackBufferViews[BackBufferIndex], WindowObj.GetWidth(), WindowObj.GetHeight());
+		
+		VkSemaphoreCreateInfo SemaphoreInfo;
+		SemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+		SemaphoreInfo.pNext = nullptr;
+		SemaphoreInfo.flags = 0;
+
+		Result = vkCreateSemaphore(DeviceObj.GetDevice(), &SemaphoreInfo, nullptr, &_AcquireSemaphores[BackBufferIndex]);
+		ETERNAL_ASSERT(!Result);
 	}
 }
 
@@ -126,4 +137,43 @@ VulkanFrameBuffer& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 {
 	ETERNAL_ASSERT(BackBufferIndex < _BackBuffers.size());
 	return *_BackBuffers[BackBufferIndex];
+}
+
+uint32_t VulkanSwapChain::AcquireFrame(_In_ VulkanDevice& DeviceObj, _In_ VulkanFence& FenceObj)
+{
+	uint32_t FrameIndex;
+	FenceObj.Reset(DeviceObj);
+	VkResult Result = vkAcquireNextImageKHR(DeviceObj.GetDevice(), _SwapChain, UINT64_MAX, _AcquireSemaphores[_FrameIndex], nullptr, &FrameIndex);
+	ETERNAL_ASSERT(!Result);
+	return FrameIndex;
+}
+
+uint32_t VulkanSwapChain::GetBackBuffersFrameCount() const
+{
+	return _BackBuffers.size();
+}
+
+VkSemaphore_T*& VulkanSwapChain::GetAcquireSemaphore(_In_ uint32_t ResourceIndex)
+{
+	ETERNAL_ASSERT(ResourceIndex < _AcquireSemaphores.size());
+	return _AcquireSemaphores[ResourceIndex];
+}
+
+void VulkanSwapChain::Present(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
+{
+	uint32_t ImageIndice = 0;
+	VkResult PresentInfoResult;
+
+	VkPresentInfoKHR PresentInfo;
+	PresentInfo.sType					= VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	PresentInfo.pNext					= nullptr;
+	PresentInfo.waitSemaphoreCount		= 1;
+	PresentInfo.pWaitSemaphores			= &CommandQueueObj.GetCompletedSemaphore(ResourceIndex);
+	PresentInfo.swapchainCount			= 1;
+	PresentInfo.pSwapchains				= &_SwapChain;
+	PresentInfo.pImageIndices			= &ImageIndice;
+	PresentInfo.pResults				= &PresentInfoResult;
+
+	VkResult Result = vkQueuePresentKHR(CommandQueueObj.GetCommandQueue(), &PresentInfo);
+	ETERNAL_ASSERT(!Result);
 }

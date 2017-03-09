@@ -11,6 +11,7 @@ namespace Eternal
 	{
 		class Viewport;
 		class VulkanDevice;
+		class VulkanSwapChain;
 		class VulkanCommandQueue;
 		class VulkanState;
 		class VulkanPipeline;
@@ -20,7 +21,7 @@ namespace Eternal
 		class VulkanCommandList
 		{
 		public:
-			VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandQueue& CommandQueueObj);
+			VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj, _In_ VulkanCommandQueue& CommandQueueObj);
 			~VulkanCommandList();
 
 			void SetViewport(_In_ Viewport& ViewportObj);

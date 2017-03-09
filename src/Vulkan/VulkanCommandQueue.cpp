@@ -6,12 +6,13 @@
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandList.hpp"
 #include "Vulkan/VulkanFence.hpp"
+#include "Vulkan/VulkanSwapChain.hpp"
 
 using namespace Eternal::Graphics;
 using namespace std;
 
-VulkanCommandQueue::VulkanCommandQueue(_In_ VulkanDevice& Device)
-	: _Device(Device)
+VulkanCommandQueue::VulkanCommandQueue(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj)
+	: _Device(DeviceObj)
 {
 	vkGetDeviceQueue(_Device.GetDevice(), 0, 0, &_CommandQueue);
 
@@ -19,10 +20,24 @@ VulkanCommandQueue::VulkanCommandQueue(_In_ VulkanDevice& Device)
 	CommandPoolInfo.sType				= VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	CommandPoolInfo.pNext				= nullptr;
 	CommandPoolInfo.flags				= 0;
-	CommandPoolInfo.queueFamilyIndex	= Device.GetQueueFamilyIndex();
+	CommandPoolInfo.queueFamilyIndex	= DeviceObj.GetQueueFamilyIndex();
 
-	VkResult Result = vkCreateCommandPool(Device.GetDevice(), &CommandPoolInfo, nullptr, &_CommandPool);
+	VkResult Result = vkCreateCommandPool(DeviceObj.GetDevice(), &CommandPoolInfo, nullptr, &_CommandPool);
 	ETERNAL_ASSERT(!Result);
+
+	_CompletedSemaphores.resize(SwapChainObj.GetBackBuffersFrameCount());
+
+	for (uint32_t SemaphoreIndex = 0; SemaphoreIndex < _CompletedSemaphores.size(); ++SemaphoreIndex)
+	{
+		VkSemaphoreCreateInfo SemaphoreInfo;
+
+		SemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+		SemaphoreInfo.pNext = nullptr;
+		SemaphoreInfo.flags = 0;
+
+		Result = vkCreateSemaphore(DeviceObj.GetDevice(), &SemaphoreInfo, nullptr, &_CompletedSemaphores[SemaphoreIndex]);
+		ETERNAL_ASSERT(!Result);
+	}
 }
 
 VulkanCommandQueue::~VulkanCommandQueue()
@@ -37,26 +52,12 @@ void VulkanCommandQueue::Reset(_In_ uint32_t FrameIndex)
 	ETERNAL_ASSERT(!Result);
 }
 
-void VulkanCommandQueue::Flush(_In_ VulkanFence& FenceObj, _In_ VulkanCommandList CommandLists[], _In_ uint32_t CommandListsCount)
+VkSemaphore_T*& VulkanCommandQueue::GetCompletedSemaphore(_In_ uint32_t ResourceIndex)
 {
-	vector<VkCommandBuffer> VulkanCommandLists;
-	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
-	{
-		VulkanCommandLists.push_back(CommandLists[CommandListIndex].GetVulkanCommandList());
-	}
+	return _CompletedSemaphores[ResourceIndex];
+}
 
-	VkSubmitInfo SubmitInfo;
-	SubmitInfo.sType					= VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	SubmitInfo.pNext					= nullptr;
-	SubmitInfo.waitSemaphoreCount		= 0;
-	SubmitInfo.pWaitSemaphores			= nullptr;
-	SubmitInfo.pWaitDstStageMask		= nullptr;
-	SubmitInfo.commandBufferCount		= CommandListsCount;
-	SubmitInfo.pCommandBuffers			= VulkanCommandLists.data();
-	SubmitInfo.signalSemaphoreCount		= 0;
-	SubmitInfo.pSignalSemaphores		= nullptr;
-
-	// FIX THIS
-	VkResult Result = vkQueueSubmit(_CommandQueue, 1, &SubmitInfo, FenceObj.GetFence());
-	ETERNAL_ASSERT(!Result);
+VkQueue_T* VulkanCommandQueue::GetCommandQueue()
+{
+	return _CommandQueue;
 }
