@@ -1,6 +1,7 @@
 #ifndef _D3D12_COMMAND_QUEUE_HPP_
 #define _D3D12_COMMAND_QUEUE_HPP_
 
+#include "Graphics/CommandQueue.hpp"
 #include <cstdint>
 #include <vector>
 #include <d3d12.h>
@@ -15,12 +16,12 @@ namespace Eternal
 		class D3D12CommandAllocator;
 		class D3D12CommandList;
 
-		class D3D12CommandQueue
+		class D3D12CommandQueue : public CommandQueue
 		{
 		public:
 			D3D12CommandQueue(_In_ D3D12Device& Device);
 
-			void Reset(_In_ uint32_t FrameIndex);
+			virtual void Reset(_In_ uint32_t FrameIndex) override;
 			void Flush(_In_ D3D12CommandList CommandLists[], _In_ uint32_t CommandListsCount);
 			D3D12CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex);
 

@@ -37,6 +37,11 @@ void D3D12Device::Initialize()
 
 }
 
+IDXGIFactory4* D3D12Device::GetDXGIFactory()
+{
+	return _DXGIFactory;
+}
+
 D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 {
 	ETERNAL_ASSERT(_DXGIFactory);
@@ -65,42 +70,6 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 
 void D3D12Device::CreateSwapChain(_In_ const Window& WindowObj)
 {
-	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
-	
-	SwapChainDesc.BufferDesc.Width = WindowObj.GetWidth();
-	SwapChainDesc.BufferDesc.Height = WindowObj.GetHeight();
-	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;
-	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;
-	SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
-	SwapChainDesc.SampleDesc.Count = 1;
-	SwapChainDesc.SampleDesc.Quality = 0;
-	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	SwapChainDesc.BufferCount = GetBackBufferFrameCount();
-	SwapChainDesc.OutputWindow = WindowObj.GetWindowHandler();
-	SwapChainDesc.Windowed = WindowObj.GetWindowed() ? TRUE : FALSE;
-	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-	SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
-	HRESULT hr = _DXGIFactory->CreateSwapChain(_CommandQueue->GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain);
-	ETERNAL_ASSERT(hr == S_OK);
-
-	hr = _SwapChain->QueryInterface(&_SwapChain3);
-	ETERNAL_ASSERT(hr == S_OK);
-
-	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
-	//ETERNAL_ASSERT(hr == S_OK);
-
-	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(*this, D3D12DescriptorHeap::RENDERTARGET, GetBackBufferFrameCount());
-	_BackBuffers = new D3D12RenderTarget*[GetBackBufferFrameCount()];
-
-	for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBufferFrameCount(); ++BackBufferFrameIndex)
-	{
-		_BackBuffers[BackBufferFrameIndex] = new D3D12RenderTarget(*this, *_BackBufferDescriptorHeap, BackBufferFrameIndex);
-	}
 }
 
 uint32_t D3D12Device::GetDeviceMask() const

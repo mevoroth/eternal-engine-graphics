@@ -26,6 +26,7 @@ namespace Eternal
 		{
 		public:
 			static void Initialize();
+			static IDXGIFactory4* GetDXGIFactory();
 
 			D3D12Device(_In_ uint32_t DeviceIndex);
 
@@ -59,8 +60,6 @@ namespace Eternal
 
 			IDXGIAdapter1* _DXGIAdapter = nullptr;
 			ID3D12Device* _Device = nullptr;
-			IDXGISwapChain* _SwapChain = nullptr;
-			IDXGISwapChain3* _SwapChain3 = nullptr;
 
 			uint32_t _DeviceMask = 0xFFFFFFFF;
 		};
