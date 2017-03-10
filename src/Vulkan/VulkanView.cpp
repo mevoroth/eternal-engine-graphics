@@ -22,7 +22,7 @@ const VkImageViewType VULKAN_IMAGE_VIEW_TYPES[] =
 };
 //extern const VkFormat VULKAN_FORMATS[];
 
-VulkanView::VulkanView(_In_ VulkanDevice& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& View, _In_ const Format& FormatObj)
+VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& View, _In_ const Format& FormatObj)
 	: _Format(FormatObj)
 {
 	VkImageViewCreateInfo ImageViewInfo;
@@ -43,11 +43,11 @@ VulkanView::VulkanView(_In_ VulkanDevice& DeviceObj, _In_ VulkanResource& Resour
 	ImageViewInfo.subresourceRange.baseArrayLayer	= 0;
 	ImageViewInfo.subresourceRange.layerCount		= 1;
 
-	VkResult Result = vkCreateImageView(DeviceObj.GetVulkanDevice(), &ImageViewInfo, nullptr, &_View.ImageView);
+	VkResult Result = vkCreateImageView(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &ImageViewInfo, nullptr, &_View.ImageView);
 	ETERNAL_ASSERT(!Result);
 }
 
-VulkanView::VulkanView(_In_ VulkanDevice& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& View, _In_ const Format& FormatObj)
+VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& View, _In_ const Format& FormatObj)
 	: _Format(FormatObj)
 {
 	VkImageViewCreateInfo ImageViewInfo;
@@ -68,7 +68,7 @@ VulkanView::VulkanView(_In_ VulkanDevice& DeviceObj, _In_ VkImage_T*& BackBuffer
 	ImageViewInfo.subresourceRange.baseArrayLayer	= 0;
 	ImageViewInfo.subresourceRange.layerCount		= 1;
 
-	VkResult Result = vkCreateImageView(DeviceObj.GetVulkanDevice(), &ImageViewInfo, nullptr, &_View.ImageView);
+	VkResult Result = vkCreateImageView(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &ImageViewInfo, nullptr, &_View.ImageView);
 	ETERNAL_ASSERT(!Result);
 }
 

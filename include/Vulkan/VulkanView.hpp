@@ -11,7 +11,7 @@ namespace Eternal
 	{
 		enum Format;
 		enum TextureView;
-		class VulkanDevice;
+		class Device;
 		class VulkanResource;
 
 		class VulkanView
@@ -22,8 +22,8 @@ namespace Eternal
 				VkBufferView_T* BufferView;
 			};
 		public:
-			VulkanView(_In_ VulkanDevice& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& View, _In_ const Format& FormatObj);
-			VulkanView(_In_ VulkanDevice& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& View, _In_ const Format& FormatObj);
+			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& View, _In_ const Format& FormatObj);
+			VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& View, _In_ const Format& FormatObj);
 			virtual ~VulkanView();
 
 			VkImageView_T*& GetImageView() { return _View.ImageView; }
