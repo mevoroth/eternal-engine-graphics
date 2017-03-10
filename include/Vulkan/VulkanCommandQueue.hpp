@@ -18,6 +18,7 @@ namespace Eternal
 		class VulkanCommandList;
 		class VulkanFence;
 		class VulkanSwapChain;
+		class VulkanCommandAllocator;
 
 		class VulkanCommandQueue
 		{
@@ -26,15 +27,13 @@ namespace Eternal
 			~VulkanCommandQueue();
 
 			void Reset(_In_ uint32_t FrameIndex);
-			VkCommandPool_T*& GetCommandPool() { return _CommandPool; }
-			VkSemaphore_T*& GetCompletedSemaphore(_In_ uint32_t ResourceIndex);
+			VulkanCommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex);
 			VkQueue_T* GetCommandQueue();
 
 		private:
-			vector<VkSemaphore_T*> _CompletedSemaphores;
-			VulkanDevice&		_Device;
-			VkQueue_T*			_CommandQueue	= nullptr;
-			VkCommandPool_T*	_CommandPool	= nullptr;
+			vector<VulkanCommandAllocator*>	_CommandAllocators;
+			VulkanDevice&					_Device;
+			VkQueue_T*						_CommandQueue	= nullptr;
 		};
 	}
 }

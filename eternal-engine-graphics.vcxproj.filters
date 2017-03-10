@@ -355,6 +355,9 @@
     <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -601,6 +604,9 @@
       <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>

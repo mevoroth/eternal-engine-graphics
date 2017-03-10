@@ -158,6 +158,7 @@
     <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
@@ -288,6 +289,7 @@
     <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandList.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

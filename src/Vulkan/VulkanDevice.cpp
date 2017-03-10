@@ -22,7 +22,7 @@ VkBool32 VulkanDevice::DebugReport(
 	void*                                       pUserData
 )
 {
-	ETERNAL_ASSERT(false);
+	//ETERNAL_ASSERT(false);
 	OutputDebugString(pMessage);
 	OutputDebugString("\n");
 	return VK_FALSE;

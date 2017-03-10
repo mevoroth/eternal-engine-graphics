@@ -12,6 +12,7 @@
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanFence.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
+#include "Vulkan/VulkanCommandAllocator.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -142,9 +143,17 @@ VulkanFrameBuffer& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 uint32_t VulkanSwapChain::AcquireFrame(_In_ VulkanDevice& DeviceObj, _In_ VulkanFence& FenceObj)
 {
 	uint32_t FrameIndex;
-	FenceObj.Reset(DeviceObj);
-	VkResult Result = vkAcquireNextImageKHR(DeviceObj.GetDevice(), _SwapChain, UINT64_MAX, _AcquireSemaphores[_FrameIndex], nullptr, &FrameIndex);
+	//FenceObj.Reset(DeviceObj);
+	//VkResult Result = vkAcquireNextImageKHR(DeviceObj.GetDevice(), _SwapChain, UINT64_MAX, _AcquireSemaphores[_FrameIndex], nullptr, &FrameIndex);
+
+	VkResult Result = vkAcquireNextImageKHR(DeviceObj.GetDevice(), _SwapChain, UINT64_MAX, _AcquireSemaphores[_FrameIndex], FenceObj.GetFence(), &FrameIndex);
 	ETERNAL_ASSERT(!Result);
+	ETERNAL_ASSERT(_FrameIndex == FrameIndex);
+	
+	char test[256];
+	sprintf_s(test, "[VulkanSwapChain::AcquireFrame] FENCE: %d:%d\n", _FrameIndex, FrameIndex);
+	OutputDebugString(test);
+
 	return FrameIndex;
 }
 
@@ -161,19 +170,26 @@ VkSemaphore_T*& VulkanSwapChain::GetAcquireSemaphore(_In_ uint32_t ResourceIndex
 
 void VulkanSwapChain::Present(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
 {
-	uint32_t ImageIndice = 0;
+	uint32_t ImageIndice = ResourceIndex;
 	VkResult PresentInfoResult;
-
+	
 	VkPresentInfoKHR PresentInfo;
 	PresentInfo.sType					= VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	PresentInfo.pNext					= nullptr;
 	PresentInfo.waitSemaphoreCount		= 1;
-	PresentInfo.pWaitSemaphores			= &CommandQueueObj.GetCompletedSemaphore(ResourceIndex);
+	PresentInfo.pWaitSemaphores			= &CommandQueueObj.GetCommandAllocator(ResourceIndex)->GetSemaphore();
 	PresentInfo.swapchainCount			= 1;
 	PresentInfo.pSwapchains				= &_SwapChain;
 	PresentInfo.pImageIndices			= &ImageIndice;
 	PresentInfo.pResults				= &PresentInfoResult;
 
+	char test[256];
+	sprintf_s(test, "[VulkanSwapChain::Present] FENCE: %d\n", ResourceIndex);
+	OutputDebugString(test);
+
 	VkResult Result = vkQueuePresentKHR(CommandQueueObj.GetCommandQueue(), &PresentInfo);
+	ETERNAL_ASSERT(!PresentInfoResult);
 	ETERNAL_ASSERT(!Result);
+
+	_FrameIndex = (_FrameIndex + 1) % _BackBuffers.size();
 }

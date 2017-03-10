@@ -2,27 +2,26 @@
 
 #include "Macros/Macros.hpp"
 #include <vulkan/vulkan.h>
+#include "Graphics/Viewport.hpp"
 #include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/VulkanSwapChain.hpp"
-#include "Vulkan/VulkanCommandQueue.hpp"
+#include "Vulkan/VulkanCommandAllocator.hpp"
 #include "Vulkan/VulkanState.hpp"
 #include "Vulkan/VulkanPipeline.hpp"
 #include "Vulkan/VulkanFrameBuffer.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
-#include "Graphics/Viewport.hpp"
 
 using namespace Eternal::Graphics;
 
-VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj, _In_ VulkanCommandQueue& CommandQueueObj)
+VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandAllocator& CommandAllocatorObj)
 	: _Device(DeviceObj)
-	, _CommandQueue(CommandQueueObj)
+	, _CommandAllocator(CommandAllocatorObj)
 {
 	VkCommandBufferAllocateInfo CommandBufferAllocateInfo;
 	CommandBufferAllocateInfo.sType					= VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	CommandBufferAllocateInfo.pNext					= nullptr;
-	CommandBufferAllocateInfo.commandPool			= CommandQueueObj.GetCommandPool();
+	CommandBufferAllocateInfo.commandPool			= CommandAllocatorObj.GetVulkanCommandPool();
 	CommandBufferAllocateInfo.level					= VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	CommandBufferAllocateInfo.commandBufferCount	= SwapChainObj.GetBackBuffersFrameCount();
+	CommandBufferAllocateInfo.commandBufferCount	= 1;
 
 	VkResult Result = vkAllocateCommandBuffers(DeviceObj.GetDevice(), &CommandBufferAllocateInfo, &_CommandBuffer);
 	ETERNAL_ASSERT(!Result);
@@ -30,7 +29,7 @@ VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanSw
 
 VulkanCommandList::~VulkanCommandList()
 {
-	vkFreeCommandBuffers(_Device.GetDevice(), _CommandQueue.GetCommandPool(), 1, &_CommandBuffer);
+	vkFreeCommandBuffers(_Device.GetDevice(), _CommandAllocator.GetVulkanCommandPool(), 1, &_CommandBuffer);
 	_CommandBuffer = nullptr;
 }
 

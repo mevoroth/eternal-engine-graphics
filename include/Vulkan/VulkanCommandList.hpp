@@ -11,17 +11,17 @@ namespace Eternal
 	{
 		class Viewport;
 		class VulkanDevice;
-		class VulkanSwapChain;
 		class VulkanCommandQueue;
 		class VulkanState;
 		class VulkanPipeline;
 		class VulkanFrameBuffer;
 		class VulkanRenderPass;
+		class VulkanCommandAllocator;
 
 		class VulkanCommandList
 		{
 		public:
-			VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj, _In_ VulkanCommandQueue& CommandQueueObj);
+			VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandAllocator& CommandAllocatorObj);
 			~VulkanCommandList();
 
 			void SetViewport(_In_ Viewport& ViewportObj);
@@ -35,7 +35,7 @@ namespace Eternal
 
 		private:
 			VulkanDevice& _Device;
-			VulkanCommandQueue& _CommandQueue;
+			VulkanCommandAllocator& _CommandAllocator;
 			VkCommandBuffer_T* _CommandBuffer = nullptr;
 		};
 	}

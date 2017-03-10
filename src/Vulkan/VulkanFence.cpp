@@ -7,6 +7,12 @@
 #include "Vulkan/VulkanSwapChain.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanCommandList.hpp"
+#include "Vulkan/VulkanCommandAllocator.hpp"
+
+#define VC_EXTRALEAN
+#define WIN32_LEAN_AND_MEAN
+#define WIN32_EXTRA_LEAN
+#include <Windows.h>
 
 using namespace Eternal::Graphics;
 
@@ -49,7 +55,7 @@ void VulkanFence::Signal(_In_ VulkanSwapChain& SwapChainObj, _In_ VulkanCommandQ
 	}
 
 	VkPipelineStageFlags PipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-
+	
 	VkSubmitInfo SubmitInfo;
 	SubmitInfo.sType					= VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	SubmitInfo.pNext					= nullptr;
@@ -59,26 +65,31 @@ void VulkanFence::Signal(_In_ VulkanSwapChain& SwapChainObj, _In_ VulkanCommandQ
 	SubmitInfo.commandBufferCount		= VulkanCommandLists.size();
 	SubmitInfo.pCommandBuffers			= VulkanCommandLists.data();
 	SubmitInfo.signalSemaphoreCount		= 1;
-	SubmitInfo.pSignalSemaphores		= &CommandQueueObj.GetCompletedSemaphore(_FenceIndex);
+	SubmitInfo.pSignalSemaphores		= &CommandQueueObj.GetCommandAllocator(_FenceIndex)->GetSemaphore();
 
-	VkResult Result = vkQueueSubmit(CommandQueueObj.GetCommandQueue(), 1, &SubmitInfo, /*_Fences[_FenceIndex]*/nullptr);
+	char test[256];
+	sprintf_s(test, "[VulkanFence::Signal] FENCE: %d\n", _FenceIndex);
+	OutputDebugString(test);
+
+	VkResult Result = vkQueueSubmit(CommandQueueObj.GetCommandQueue(), 1, &SubmitInfo, _Fences[_FenceIndex]);
 	ETERNAL_ASSERT(!Result);
+
+	_FenceIndex = (_FenceIndex + 1) % _Fences.size();
 }
 
 void VulkanFence::Wait(_In_ VulkanDevice& DeviceObj)
 {
 	VkResult Result;
-	//Result = vkGetFenceStatus(DeviceObj.GetDevice(), _Fences[_FenceIndex]);
-	//if (Result == VK_SUCCESS)
-	//{
+	Result = vkGetFenceStatus(DeviceObj.GetDevice(), _Fences[_FenceIndex]);
+	if (Result == VK_SUCCESS)
+	{
 		Result = vkWaitForFences(DeviceObj.GetDevice(), 1, &_Fences[_FenceIndex], VK_TRUE, UINT64_MAX);
 		ETERNAL_ASSERT(!Result);
-	//}
+	}
 }
 
 void VulkanFence::Reset(_In_ VulkanDevice& DeviceObj)
 {
-	_FenceIndex = (_FenceIndex + 1) % _Fences.size();
 	VkResult Result = vkResetFences(DeviceObj.GetDevice(), 1, &_Fences[_FenceIndex]);
 	ETERNAL_ASSERT(!Result);
 }
