@@ -14,7 +14,7 @@ using namespace std;
 VulkanCommandQueue::VulkanCommandQueue(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj)
 	: _Device(DeviceObj)
 {
-	vkGetDeviceQueue(_Device.GetDevice(), 0, 0, &_CommandQueue);
+	vkGetDeviceQueue(_Device.GetVulkanDevice(), 0, 0, &_CommandQueue);
 
 	VkCommandPoolCreateInfo CommandPoolInfo;
 	CommandPoolInfo.sType				= VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -22,7 +22,7 @@ VulkanCommandQueue::VulkanCommandQueue(_In_ VulkanDevice& DeviceObj, _In_ Vulkan
 	CommandPoolInfo.flags				= 0;
 	CommandPoolInfo.queueFamilyIndex	= DeviceObj.GetQueueFamilyIndex();
 
-	VkResult Result = vkCreateCommandPool(DeviceObj.GetDevice(), &CommandPoolInfo, nullptr, &_CommandPool);
+	VkResult Result = vkCreateCommandPool(DeviceObj.GetVulkanDevice(), &CommandPoolInfo, nullptr, &_CommandPool);
 	ETERNAL_ASSERT(!Result);
 
 	_CompletedSemaphores.resize(SwapChainObj.GetBackBuffersFrameCount());
@@ -35,20 +35,20 @@ VulkanCommandQueue::VulkanCommandQueue(_In_ VulkanDevice& DeviceObj, _In_ Vulkan
 		SemaphoreInfo.pNext = nullptr;
 		SemaphoreInfo.flags = 0;
 
-		Result = vkCreateSemaphore(DeviceObj.GetDevice(), &SemaphoreInfo, nullptr, &_CompletedSemaphores[SemaphoreIndex]);
+		Result = vkCreateSemaphore(DeviceObj.GetVulkanDevice(), &SemaphoreInfo, nullptr, &_CompletedSemaphores[SemaphoreIndex]);
 		ETERNAL_ASSERT(!Result);
 	}
 }
 
 VulkanCommandQueue::~VulkanCommandQueue()
 {
-	vkDestroyCommandPool(_Device.GetDevice(), _CommandPool, nullptr);
+	vkDestroyCommandPool(_Device.GetVulkanDevice(), _CommandPool, nullptr);
 	_CommandPool = nullptr;
 }
 
 void VulkanCommandQueue::Reset(_In_ uint32_t FrameIndex)
 {
-	VkResult Result = vkResetCommandPool(_Device.GetDevice(), _CommandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
+	VkResult Result = vkResetCommandPool(_Device.GetVulkanDevice(), _CommandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
 	ETERNAL_ASSERT(!Result);
 }
 

@@ -75,7 +75,7 @@ VulkanShader::VulkanShader(_In_ VulkanDevice& Device, _In_ const string& Name, _
 	ShaderModuleInfo.codeSize = _ShaderCode.size();
 	ShaderModuleInfo.flags = 0;
 
-	VkResult Result = vkCreateShaderModule(Device.GetDevice(), &ShaderModuleInfo, nullptr, &_ShaderModule);
+	VkResult Result = vkCreateShaderModule(Device.GetVulkanDevice(), &ShaderModuleInfo, nullptr, &_ShaderModule);
 	ETERNAL_ASSERT(!Result);
 }
 

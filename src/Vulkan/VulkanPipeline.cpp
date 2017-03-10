@@ -15,7 +15,7 @@ VulkanPipeline::VulkanPipeline(_In_ VulkanDevice& Device)
 	DescriptorSetLayoutInfo.pBindings = nullptr;
 	DescriptorSetLayoutInfo.flags = 0;
 
-	VkResult Result = vkCreateDescriptorSetLayout(Device.GetDevice(), &DescriptorSetLayoutInfo, nullptr, &_DescriptorSetLayout);
+	VkResult Result = vkCreateDescriptorSetLayout(Device.GetVulkanDevice(), &DescriptorSetLayoutInfo, nullptr, &_DescriptorSetLayout);
 	ETERNAL_ASSERT(!Result);
 
 	VkPipelineLayoutCreateInfo PipelineLayoutInfo;
@@ -27,7 +27,7 @@ VulkanPipeline::VulkanPipeline(_In_ VulkanDevice& Device)
 	PipelineLayoutInfo.setLayoutCount = 1;
 	PipelineLayoutInfo.pSetLayouts = &_DescriptorSetLayout;
 
-	Result = vkCreatePipelineLayout(Device.GetDevice(), &PipelineLayoutInfo, nullptr, &_PipelineLayout);
+	Result = vkCreatePipelineLayout(Device.GetVulkanDevice(), &PipelineLayoutInfo, nullptr, &_PipelineLayout);
 	ETERNAL_ASSERT(!Result);
 
 	VkAttachmentDescription Attachment;
@@ -68,7 +68,7 @@ VulkanPipeline::VulkanPipeline(_In_ VulkanDevice& Device)
 	RenderPassInfo.dependencyCount = 0;
 	RenderPassInfo.pDependencies = nullptr;
 
-	Result = vkCreateRenderPass(Device.GetDevice(), &RenderPassInfo, nullptr, &_RenderPass);
+	Result = vkCreateRenderPass(Device.GetVulkanDevice(), &RenderPassInfo, nullptr, &_RenderPass);
 	ETERNAL_ASSERT(!Result);
 }
 

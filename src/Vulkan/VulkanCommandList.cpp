@@ -24,13 +24,13 @@ VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanSw
 	CommandBufferAllocateInfo.level					= VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	CommandBufferAllocateInfo.commandBufferCount	= SwapChainObj.GetBackBuffersFrameCount();
 
-	VkResult Result = vkAllocateCommandBuffers(DeviceObj.GetDevice(), &CommandBufferAllocateInfo, &_CommandBuffer);
+	VkResult Result = vkAllocateCommandBuffers(DeviceObj.GetVulkanDevice(), &CommandBufferAllocateInfo, &_CommandBuffer);
 	ETERNAL_ASSERT(!Result);
 }
 
 VulkanCommandList::~VulkanCommandList()
 {
-	vkFreeCommandBuffers(_Device.GetDevice(), _CommandQueue.GetCommandPool(), 1, &_CommandBuffer);
+	vkFreeCommandBuffers(_Device.GetVulkanDevice(), _CommandQueue.GetCommandPool(), 1, &_CommandBuffer);
 	_CommandBuffer = nullptr;
 }
 

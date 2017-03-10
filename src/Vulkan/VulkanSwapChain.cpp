@@ -90,19 +90,19 @@ VulkanSwapChain::VulkanSwapChain(_In_ VulkanDevice& DeviceObj, _In_ Window& Wind
 	SwapChainInfo.clipped				= true;
 	SwapChainInfo.oldSwapchain			= VK_NULL_HANDLE;
 
-	Result = vkCreateSwapchainKHR(DeviceObj.GetDevice(), &SwapChainInfo, nullptr, &_SwapChain);
+	Result = vkCreateSwapchainKHR(DeviceObj.GetVulkanDevice(), &SwapChainInfo, nullptr, &_SwapChain);
 	ETERNAL_ASSERT(!Result);
 
 	VkPhysicalDeviceMemoryProperties PhysicalDeviceMemoryProperties;
 	vkGetPhysicalDeviceMemoryProperties(DeviceObj.GetPhysicalDevice(), &PhysicalDeviceMemoryProperties);
 
 	uint32_t BackBuffersCount = 0u;
-	Result =  vkGetSwapchainImagesKHR(DeviceObj.GetDevice(), _SwapChain, &BackBuffersCount, nullptr);
+	Result =  vkGetSwapchainImagesKHR(DeviceObj.GetVulkanDevice(), _SwapChain, &BackBuffersCount, nullptr);
 	ETERNAL_ASSERT(!Result);
 
 	std::vector<VkImage> BackBuffers;
 	BackBuffers.resize(BackBuffersCount);
-	Result = vkGetSwapchainImagesKHR(DeviceObj.GetDevice(), _SwapChain, &BackBuffersCount, BackBuffers.data());
+	Result = vkGetSwapchainImagesKHR(DeviceObj.GetVulkanDevice(), _SwapChain, &BackBuffersCount, BackBuffers.data());
 	ETERNAL_ASSERT(!Result);
 
 	_BackBuffers.resize(BackBuffersCount);
@@ -128,22 +128,22 @@ VulkanSwapChain::VulkanSwapChain(_In_ VulkanDevice& DeviceObj, _In_ Window& Wind
 		SemaphoreInfo.pNext = nullptr;
 		SemaphoreInfo.flags = 0;
 
-		Result = vkCreateSemaphore(DeviceObj.GetDevice(), &SemaphoreInfo, nullptr, &_AcquireSemaphores[BackBufferIndex]);
+		Result = vkCreateSemaphore(DeviceObj.GetVulkanDevice(), &SemaphoreInfo, nullptr, &_AcquireSemaphores[BackBufferIndex]);
 		ETERNAL_ASSERT(!Result);
 	}
 }
 
-VulkanFrameBuffer& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
+FrameBuffer& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 {
 	ETERNAL_ASSERT(BackBufferIndex < _BackBuffers.size());
 	return *_BackBuffers[BackBufferIndex];
 }
 
-uint32_t VulkanSwapChain::AcquireFrame(_In_ VulkanDevice& DeviceObj, _In_ VulkanFence& FenceObj)
+uint32_t VulkanSwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj)
 {
 	uint32_t FrameIndex;
 	FenceObj.Reset(DeviceObj);
-	VkResult Result = vkAcquireNextImageKHR(DeviceObj.GetDevice(), _SwapChain, UINT64_MAX, _AcquireSemaphores[_FrameIndex], nullptr, &FrameIndex);
+	VkResult Result = vkAcquireNextImageKHR(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _SwapChain, UINT64_MAX, _AcquireSemaphores[_FrameIndex], nullptr, &FrameIndex);
 	ETERNAL_ASSERT(!Result);
 	return FrameIndex;
 }
@@ -159,8 +159,10 @@ VkSemaphore_T*& VulkanSwapChain::GetAcquireSemaphore(_In_ uint32_t ResourceIndex
 	return _AcquireSemaphores[ResourceIndex];
 }
 
-void VulkanSwapChain::Present(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
+void VulkanSwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
 {
+	VulkanCommandQueue& VulkanCommandQueueObj = static_cast<VulkanCommandQueue&>(CommandQueueObj);
+
 	uint32_t ImageIndice = 0;
 	VkResult PresentInfoResult;
 
@@ -168,12 +170,12 @@ void VulkanSwapChain::Present(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandQu
 	PresentInfo.sType					= VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	PresentInfo.pNext					= nullptr;
 	PresentInfo.waitSemaphoreCount		= 1;
-	PresentInfo.pWaitSemaphores			= &CommandQueueObj.GetCompletedSemaphore(ResourceIndex);
+	PresentInfo.pWaitSemaphores			= &VulkanCommandQueueObj.GetCompletedSemaphore(ResourceIndex);
 	PresentInfo.swapchainCount			= 1;
 	PresentInfo.pSwapchains				= &_SwapChain;
 	PresentInfo.pImageIndices			= &ImageIndice;
 	PresentInfo.pResults				= &PresentInfoResult;
 
-	VkResult Result = vkQueuePresentKHR(CommandQueueObj.GetCommandQueue(), &PresentInfo);
+	VkResult Result = vkQueuePresentKHR(VulkanCommandQueueObj.GetCommandQueue(), &PresentInfo);
 	ETERNAL_ASSERT(!Result);
 }

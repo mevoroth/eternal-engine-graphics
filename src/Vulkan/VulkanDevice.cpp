@@ -188,7 +188,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	ETERNAL_ASSERT(!Result);
 }
 
-VkDevice& VulkanDevice::GetDevice()
+VkDevice& VulkanDevice::GetVulkanDevice()
 {
 	return _Device;
 }

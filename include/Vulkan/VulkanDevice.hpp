@@ -33,7 +33,7 @@ namespace Eternal
 				return 0;
 			}
 
-			VkDevice& GetDevice();
+			VkDevice& GetVulkanDevice();
 			VkPhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
 			VkInstance& GetInstance() { return _Instance; }
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }

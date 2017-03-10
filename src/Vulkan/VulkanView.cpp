@@ -43,7 +43,7 @@ VulkanView::VulkanView(_In_ VulkanDevice& DeviceObj, _In_ VulkanResource& Resour
 	ImageViewInfo.subresourceRange.baseArrayLayer	= 0;
 	ImageViewInfo.subresourceRange.layerCount		= 1;
 
-	VkResult Result = vkCreateImageView(DeviceObj.GetDevice(), &ImageViewInfo, nullptr, &_View.ImageView);
+	VkResult Result = vkCreateImageView(DeviceObj.GetVulkanDevice(), &ImageViewInfo, nullptr, &_View.ImageView);
 	ETERNAL_ASSERT(!Result);
 }
 
@@ -68,7 +68,7 @@ VulkanView::VulkanView(_In_ VulkanDevice& DeviceObj, _In_ VkImage_T*& BackBuffer
 	ImageViewInfo.subresourceRange.baseArrayLayer	= 0;
 	ImageViewInfo.subresourceRange.layerCount		= 1;
 
-	VkResult Result = vkCreateImageView(DeviceObj.GetDevice(), &ImageViewInfo, nullptr, &_View.ImageView);
+	VkResult Result = vkCreateImageView(DeviceObj.GetVulkanDevice(), &ImageViewInfo, nullptr, &_View.ImageView);
 	ETERNAL_ASSERT(!Result);
 }
 

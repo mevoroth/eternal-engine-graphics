@@ -19,11 +19,11 @@ VulkanBuffer::VulkanBuffer(_In_ VulkanDevice& Device)
 	BufferCreateInfo.queueFamilyIndexCount = 0;
 	BufferCreateInfo.pQueueFamilyIndices = nullptr;
 
-	VkResult Result = vkCreateBuffer(Device.GetDevice(), &BufferCreateInfo, nullptr, &_Buffer);
+	VkResult Result = vkCreateBuffer(Device.GetVulkanDevice(), &BufferCreateInfo, nullptr, &_Buffer);
 	ETERNAL_ASSERT(!Result);
 	
 	VkMemoryRequirements MemoryRequirements;
-	vkGetBufferMemoryRequirements(Device.GetDevice(), _Buffer, &MemoryRequirements);
+	vkGetBufferMemoryRequirements(Device.GetVulkanDevice(), _Buffer, &MemoryRequirements);
 
 	VkMemoryAllocateInfo MemoryAllocateInfo;
 	MemoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;

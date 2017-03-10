@@ -24,11 +24,11 @@ VulkanFence::VulkanFence(_In_ VulkanDevice& DeviceObj, _In_ uint32_t Simultaneou
 		FenceInfo.pNext = nullptr;
 		FenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-		VkResult Result = vkCreateFence(DeviceObj.GetDevice(), &FenceInfo, nullptr, &_Fences[ResourceIndex]);
+		VkResult Result = vkCreateFence(DeviceObj.GetVulkanDevice(), &FenceInfo, nullptr, &_Fences[ResourceIndex]);
 		ETERNAL_ASSERT(!Result);
 	}
 
-	VkResult Result = vkResetFences(DeviceObj.GetDevice(), _Fences.size(), _Fences.data());
+	VkResult Result = vkResetFences(DeviceObj.GetVulkanDevice(), _Fences.size(), _Fences.data());
 	ETERNAL_ASSERT(!Result);
 }
 
@@ -36,16 +36,17 @@ VulkanFence::~VulkanFence()
 {
 	for (uint32_t ResourceIndex = 0; ResourceIndex < _Fences.size(); ++ResourceIndex)
 	{
-		vkDestroyFence(_Device.GetDevice(), _Fences[ResourceIndex], nullptr);
+		vkDestroyFence(_Device.GetVulkanDevice(), _Fences[ResourceIndex], nullptr);
 	}
 }
 
 void VulkanFence::Signal(_In_ VulkanSwapChain& SwapChainObj, _In_ VulkanCommandQueue& CommandQueueObj, _In_ VulkanCommandList CommandLists[], _In_ uint32_t CommandListsCount)
 {
 	vector<VkCommandBuffer> VulkanCommandLists;
+	VulkanCommandLists.resize(CommandListsCount);
 	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
 	{
-		VulkanCommandLists.push_back(CommandLists[CommandListIndex].GetVulkanCommandList());
+		VulkanCommandLists[CommandListIndex] = CommandLists[CommandListIndex].GetVulkanCommandList();
 	}
 
 	VkPipelineStageFlags PipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -71,7 +72,7 @@ void VulkanFence::Wait(_In_ VulkanDevice& DeviceObj)
 	//Result = vkGetFenceStatus(DeviceObj.GetDevice(), _Fences[_FenceIndex]);
 	//if (Result == VK_SUCCESS)
 	//{
-		Result = vkWaitForFences(DeviceObj.GetDevice(), 1, &_Fences[_FenceIndex], VK_TRUE, UINT64_MAX);
+		Result = vkWaitForFences(DeviceObj.GetVulkanDevice(), 1, &_Fences[_FenceIndex], VK_TRUE, UINT64_MAX);
 		ETERNAL_ASSERT(!Result);
 	//}
 }
@@ -79,7 +80,7 @@ void VulkanFence::Wait(_In_ VulkanDevice& DeviceObj)
 void VulkanFence::Reset(_In_ VulkanDevice& DeviceObj)
 {
 	_FenceIndex = (_FenceIndex + 1) % _Fences.size();
-	VkResult Result = vkResetFences(DeviceObj.GetDevice(), 1, &_Fences[_FenceIndex]);
+	VkResult Result = vkResetFences(DeviceObj.GetVulkanDevice(), 1, &_Fences[_FenceIndex]);
 	ETERNAL_ASSERT(!Result);
 }
 
