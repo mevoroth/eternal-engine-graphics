@@ -3,16 +3,16 @@
 
 #define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.h>
+#include "NextGenGraphics/Device.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
 		class Window;
-		class VulkanCommandQueue;
-		class VulkanRenderTarget;
+		class Vulkan;
 
-		class VulkanDevice
+		class VulkanDevice : public Device
 		{
 		public:
 			static VKAPI_ATTR VkBool32 VKAPI_CALL DebugReport(
@@ -33,7 +33,7 @@ namespace Eternal
 				return 0;
 			}
 
-			VkDevice& GetDevice();
+			VkDevice& GetVulkanDevice();
 			VkPhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
 			VkInstance& GetInstance() { return _Instance; }
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }

@@ -1,6 +1,7 @@
 #ifndef _VULKAN_COMMAND_QUEUE_HPP_
 #define _VULKAN_COMMAND_QUEUE_HPP_
 
+#include "Graphics/CommandQueue.hpp"
 #include <vector>
 #include <cstdint>
 
@@ -20,13 +21,13 @@ namespace Eternal
 		class VulkanSwapChain;
 		class VulkanCommandAllocator;
 
-		class VulkanCommandQueue
+		class VulkanCommandQueue : public CommandQueue
 		{
 		public:
 			VulkanCommandQueue(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj);
 			~VulkanCommandQueue();
 
-			void Reset(_In_ uint32_t FrameIndex);
+			virtual void Reset(_In_ uint32_t FrameIndex) override;
 			VulkanCommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex);
 			VkQueue_T* GetCommandQueue();
 

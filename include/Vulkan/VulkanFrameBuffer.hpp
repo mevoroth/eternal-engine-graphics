@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include "Vulkan/VulkanResource.hpp"
+#include "Graphics/FrameBuffer.hpp"
 
 struct VkFramebuffer_T;
 struct VkImage_T;
@@ -14,7 +15,9 @@ namespace Eternal
 		class VulkanRenderPass;
 		class VulkanView;
 
-		class VulkanFrameBuffer : public VulkanResource
+		class VulkanFrameBuffer
+			: public VulkanResource
+			, public FrameBuffer
 		{
 		public:
 			VulkanFrameBuffer(_In_ VulkanDevice& DeviceObj, _In_ VulkanRenderPass& RenderPassObj, _In_ VkImage_T*& VulkanImage, _In_ VulkanView& View, _In_ uint32_t Width, _In_ uint32_t Height);

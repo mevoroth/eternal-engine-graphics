@@ -114,11 +114,14 @@
     <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp" />
     <ClInclude Include="include\d3d12\D3D12State.hpp" />
     <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp" />
+    <ClInclude Include="include\d3d12\D3D12SwapChain.hpp" />
     <ClInclude Include="include\d3d12\D3D12View.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
     <ClInclude Include="include\Graphics\Clearable.hpp" />
+    <ClInclude Include="include\Graphics\CommandList.hpp" />
+    <ClInclude Include="include\Graphics\CommandQueue.hpp" />
     <ClInclude Include="include\Graphics\Comparison.hpp" />
     <ClInclude Include="include\Graphics\Constant.hpp" />
     <ClInclude Include="include\Graphics\ConstantFactory.hpp" />
@@ -128,7 +131,9 @@
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
     <ClInclude Include="include\Graphics\DeviceFactory.hpp" />
+    <ClInclude Include="include\Graphics\Fence.hpp" />
     <ClInclude Include="include\Graphics\Format.hpp" />
+    <ClInclude Include="include\Graphics\FrameBuffer.hpp" />
     <ClInclude Include="include\Graphics\IndexBuffer.hpp" />
     <ClInclude Include="include\Graphics\IndexBufferFactory.hpp" />
     <ClInclude Include="include\Graphics\InputLayout.hpp" />
@@ -147,6 +152,7 @@
     <ClInclude Include="include\Graphics\StencilTest.hpp" />
     <ClInclude Include="include\Graphics\StructuredBuffer.hpp" />
     <ClInclude Include="include\Graphics\StructuredBufferFactory.hpp" />
+    <ClInclude Include="include\Graphics\SwapChain.hpp" />
     <ClInclude Include="include\Graphics\Texture.hpp" />
     <ClInclude Include="include\Graphics\TextureFactory.hpp" />
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
@@ -154,6 +160,7 @@
     <ClInclude Include="include\Graphics\View.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
+    <ClInclude Include="include\NextGenGraphics\Device.hpp" />
     <ClInclude Include="include\NextGenGraphics\Resource.hpp" />
     <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -267,6 +274,7 @@
     <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp" />
     <ClCompile Include="src\d3d12\D3D12State.cpp" />
     <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp" />
+    <ClCompile Include="src\d3d12\D3D12SwapChain.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
     <ClCompile Include="src\Graphics\ConstantFactory.cpp" />

@@ -2,6 +2,7 @@
 #define _D3D12_DEVICE_HPP_
 
 #include <cstdint>
+#include "NextGenGraphics/Device.hpp"
 
 struct IDXGISwapChain;
 struct IDXGISwapChain3;
@@ -22,10 +23,11 @@ namespace Eternal
 		class D3D12RenderTarget;
 		class D3D12DescriptorHeap;
 
-		class D3D12Device
+		class D3D12Device : public Device
 		{
 		public:
 			static void Initialize();
+			static IDXGIFactory4* GetDXGIFactory();
 
 			D3D12Device(_In_ uint32_t DeviceIndex);
 
@@ -33,8 +35,6 @@ namespace Eternal
 
 			inline ID3D12Device* GetD3D12Device() { return _Device; }
 			virtual uint32_t GetDeviceMask() const;
-			inline IDXGISwapChain* GetSwapChain() { return _SwapChain; }
-			inline IDXGISwapChain3* GetSwapChain3() { return _SwapChain3; }
 
 			inline uint32_t GetBackBufferFrameCount() const
 			{
@@ -59,8 +59,6 @@ namespace Eternal
 
 			IDXGIAdapter1* _DXGIAdapter = nullptr;
 			ID3D12Device* _Device = nullptr;
-			IDXGISwapChain* _SwapChain = nullptr;
-			IDXGISwapChain3* _SwapChain3 = nullptr;
 
 			uint32_t _DeviceMask = 0xFFFFFFFF;
 		};

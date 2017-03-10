@@ -15,7 +15,7 @@ using namespace std;
 VulkanCommandQueue::VulkanCommandQueue(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj)
 	: _Device(DeviceObj)
 {
-	vkGetDeviceQueue(_Device.GetDevice(), 0, 0, &_CommandQueue);
+	vkGetDeviceQueue(_Device.GetVulkanDevice(), 0, 0, &_CommandQueue);
 
 	_CommandAllocators.resize(SwapChainObj.GetBackBuffersFrameCount());
 	for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
@@ -35,7 +35,7 @@ VulkanCommandQueue::~VulkanCommandQueue()
 
 void VulkanCommandQueue::Reset(_In_ uint32_t FrameIndex)
 {
-	VkResult Result = vkResetCommandPool(_Device.GetDevice(), _CommandAllocators[FrameIndex]->GetVulkanCommandPool(), VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
+	VkResult Result = vkResetCommandPool(_Device.GetVulkanDevice(), _CommandAllocators[FrameIndex]->GetVulkanCommandPool(), VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
 	ETERNAL_ASSERT(!Result);
 }
 

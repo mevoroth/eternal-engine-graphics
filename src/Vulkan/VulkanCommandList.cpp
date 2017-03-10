@@ -23,17 +23,17 @@ VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanCo
 	CommandBufferAllocateInfo.level					= VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	CommandBufferAllocateInfo.commandBufferCount	= 1;
 
-	VkResult Result = vkAllocateCommandBuffers(DeviceObj.GetDevice(), &CommandBufferAllocateInfo, &_CommandBuffer);
+	VkResult Result = vkAllocateCommandBuffers(DeviceObj.GetVulkanDevice(), &CommandBufferAllocateInfo, &_CommandBuffer);
 	ETERNAL_ASSERT(!Result);
 }
 
 VulkanCommandList::~VulkanCommandList()
 {
-	vkFreeCommandBuffers(_Device.GetDevice(), _CommandAllocator.GetVulkanCommandPool(), 1, &_CommandBuffer);
+	vkFreeCommandBuffers(_Device.GetVulkanDevice(), _CommandAllocator.GetVulkanCommandPool(), 1, &_CommandBuffer);
 	_CommandBuffer = nullptr;
 }
 
-void VulkanCommandList::Begin(_In_ VulkanFrameBuffer& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanPipeline& Pipeline, _In_ VulkanRenderPass& RenderPassObj)
+void VulkanCommandList::Begin(_In_ FrameBuffer& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanPipeline& Pipeline, _In_ VulkanRenderPass& RenderPassObj)
 {
 	VkCommandBufferBeginInfo CommandBufferBeginInfo;
 	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -56,7 +56,7 @@ void VulkanCommandList::Begin(_In_ VulkanFrameBuffer& FrameBufferObj, _In_ Vulka
 	RenderPassBeginInfo.sType						= VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	RenderPassBeginInfo.pNext						= nullptr;
 	RenderPassBeginInfo.renderPass					= RenderPassObj.GetRenderPass();
-	RenderPassBeginInfo.framebuffer					= FrameBufferObj.GetFrameBuffer();
+	RenderPassBeginInfo.framebuffer					= static_cast<VulkanFrameBuffer&>(FrameBufferObj).GetFrameBuffer();
 	// FIX THIS
 	RenderPassBeginInfo.renderArea.offset.x			= 0;
 	RenderPassBeginInfo.renderArea.offset.y			= 0;

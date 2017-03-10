@@ -15,7 +15,7 @@ VulkanCommandAllocator::VulkanCommandAllocator(_In_ VulkanDevice& DeviceObj)
 	CommandPoolInfo.flags				= 0;
 	CommandPoolInfo.queueFamilyIndex	= DeviceObj.GetQueueFamilyIndex();
 
-	VkResult Result = vkCreateCommandPool(DeviceObj.GetDevice(), &CommandPoolInfo, nullptr, &_CommandPool);
+	VkResult Result = vkCreateCommandPool(DeviceObj.GetVulkanDevice(), &CommandPoolInfo, nullptr, &_CommandPool);
 	ETERNAL_ASSERT(!Result);
 
 	VkSemaphoreCreateInfo SemaphoreInfo;
@@ -24,12 +24,12 @@ VulkanCommandAllocator::VulkanCommandAllocator(_In_ VulkanDevice& DeviceObj)
 	SemaphoreInfo.pNext = nullptr;
 	SemaphoreInfo.flags = 0;
 
-	Result = vkCreateSemaphore(DeviceObj.GetDevice(), &SemaphoreInfo, nullptr, &_CompletedSemaphore);
+	Result = vkCreateSemaphore(DeviceObj.GetVulkanDevice(), &SemaphoreInfo, nullptr, &_CompletedSemaphore);
 	ETERNAL_ASSERT(!Result);
 }
 
 VulkanCommandAllocator::~VulkanCommandAllocator()
 {
-	vkDestroySemaphore(_Device.GetDevice(), _CompletedSemaphore, nullptr);
-	vkDestroyCommandPool(_Device.GetDevice(), _CommandPool, nullptr);
+	vkDestroySemaphore(_Device.GetVulkanDevice(), _CompletedSemaphore, nullptr);
+	vkDestroyCommandPool(_Device.GetVulkanDevice(), _CommandPool, nullptr);
 }

@@ -21,7 +21,7 @@ VulkanState::VulkanState(_In_ VulkanDevice& DeviceObj, _In_ VulkanPipeline& Pipe
 	PipelineCacheInfo.initialDataSize	= 0;
 
 	VkPipelineCache _PipelineCache;
-	VkResult Result = vkCreatePipelineCache(DeviceObj.GetDevice(), &PipelineCacheInfo, nullptr, &_PipelineCache);
+	VkResult Result = vkCreatePipelineCache(DeviceObj.GetVulkanDevice(), &PipelineCacheInfo, nullptr, &_PipelineCache);
 	ETERNAL_ASSERT(!Result);
 	
 	std::vector<VkPipelineShaderStageCreateInfo> ShaderStages;
@@ -168,6 +168,6 @@ VulkanState::VulkanState(_In_ VulkanDevice& DeviceObj, _In_ VulkanPipeline& Pipe
 	PipelineInfo.basePipelineHandle		= nullptr;
 	PipelineInfo.basePipelineIndex		= 0;
 
-	Result = vkCreateGraphicsPipelines(DeviceObj.GetDevice(), _PipelineCache, 1, &PipelineInfo, nullptr, &_Pipeline);
+	Result = vkCreateGraphicsPipelines(DeviceObj.GetVulkanDevice(), _PipelineCache, 1, &PipelineInfo, nullptr, &_Pipeline);
 	ETERNAL_ASSERT(!Result);
 }

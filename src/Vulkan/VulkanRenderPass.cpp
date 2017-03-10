@@ -25,7 +25,7 @@ VulkanRenderPass::VulkanRenderPass(_In_ VulkanDevice& DeviceObj, _In_ const vect
 
 VulkanRenderPass::~VulkanRenderPass()
 {
-	vkDestroyRenderPass(_Device.GetDevice(), _RenderPass, nullptr);
+	vkDestroyRenderPass(_Device.GetVulkanDevice(), _RenderPass, nullptr);
 }
 
 void VulkanRenderPass::_BuildSubPass(_In_ VulkanRenderPass* SubPass, _Out_ VkSubpassDescription& SubPassDescription)
@@ -108,6 +108,6 @@ void VulkanRenderPass::Initialize()
 	RenderPassInfo.dependencyCount	= 0;
 	RenderPassInfo.pDependencies	= nullptr;
 
-	VkResult Result = vkCreateRenderPass(_Device.GetDevice(), &RenderPassInfo, nullptr, &_RenderPass);
+	VkResult Result = vkCreateRenderPass(_Device.GetVulkanDevice(), &RenderPassInfo, nullptr, &_RenderPass);
 	ETERNAL_ASSERT(!Result);
 }

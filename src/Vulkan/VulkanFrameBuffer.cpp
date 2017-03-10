@@ -22,6 +22,6 @@ VulkanFrameBuffer::VulkanFrameBuffer(_In_ VulkanDevice& DeviceObj, _In_ VulkanRe
 	FrameBufferInfo.height			= Height;
 	FrameBufferInfo.layers			= 1;
 
-	VkResult Result = vkCreateFramebuffer(DeviceObj.GetDevice(), &FrameBufferInfo, nullptr, &_FrameBuffer);
+	VkResult Result = vkCreateFramebuffer(DeviceObj.GetVulkanDevice(), &FrameBufferInfo, nullptr, &_FrameBuffer);
 	ETERNAL_ASSERT(!Result);
 }
