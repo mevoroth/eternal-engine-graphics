@@ -12,10 +12,11 @@ using namespace Eternal::Graphics;
 
 D3D12CommandList::D3D12CommandList(_In_ D3D12Device& DeviceObj, _In_ D3D12CommandQueue& CommandQueue, _In_ D3D12State& State)
 {
+	D3D12CommandAllocator* D3D12CommandAllocatorObj = static_cast<D3D12CommandAllocator*>(CommandQueue.GetCommandAllocator(0));
 	HRESULT hr = DeviceObj.GetD3D12Device()->CreateCommandList(
 		DeviceObj.GetDeviceMask(),
 		CommandQueue.GetCommandListType(),
-		CommandQueue.GetCommandAllocator(0)->GetD3D12CommandAllocator(),
+		D3D12CommandAllocatorObj->GetD3D12CommandAllocator(),
 		State.GetD3D12PipelineState(),
 		__uuidof(ID3D12GraphicsCommandList),
 		(void**)&_CommandList

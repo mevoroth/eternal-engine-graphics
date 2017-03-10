@@ -172,7 +172,8 @@ VkSemaphore_T*& VulkanSwapChain::GetAcquireSemaphore(_In_ uint32_t ResourceIndex
 
 void VulkanSwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
 {
-	VulkanCommandQueue& VulkanCommandQueueObj = static_cast<VulkanCommandQueue&>(CommandQueueObj);
+	VulkanCommandQueue& VulkanCommandQueueObj			= static_cast<VulkanCommandQueue&>(CommandQueueObj);
+	VulkanCommandAllocator* VulkanCommandAllocatorObj = static_cast<VulkanCommandAllocator*>(VulkanCommandQueueObj.GetCommandAllocator(ResourceIndex));
 	uint32_t ImageIndice = ResourceIndex;
 	VkResult PresentInfoResult;
 	
@@ -180,7 +181,7 @@ void VulkanSwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& Command
 	PresentInfo.sType					= VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	PresentInfo.pNext					= nullptr;
 	PresentInfo.waitSemaphoreCount		= 1;
-	PresentInfo.pWaitSemaphores			= &VulkanCommandQueueObj.GetCommandAllocator(ResourceIndex)->GetSemaphore();
+	PresentInfo.pWaitSemaphores			= &VulkanCommandAllocatorObj->GetSemaphore();
 	PresentInfo.swapchainCount			= 1;
 	PresentInfo.pSwapchains				= &_SwapChain;
 	PresentInfo.pImageIndices			= &ImageIndice;

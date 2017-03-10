@@ -28,7 +28,7 @@ namespace Eternal
 			~VulkanCommandQueue();
 
 			virtual void Reset(_In_ uint32_t FrameIndex) override;
-			VulkanCommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex);
+			virtual CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex) override;
 			VkQueue_T* GetCommandQueue();
 
 		private:

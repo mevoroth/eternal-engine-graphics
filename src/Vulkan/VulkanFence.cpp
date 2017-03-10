@@ -55,6 +55,8 @@ void VulkanFence::Signal(_In_ SwapChain& SwapChainObj, _In_ CommandQueue& Comman
 		VulkanCommandLists[CommandListIndex] = static_cast<VulkanCommandList*>(CommandLists[CommandListIndex])->GetVulkanCommandList();
 	}
 
+	VulkanCommandAllocator* VulkanCommandAllocatorObj = static_cast<VulkanCommandAllocator*>(static_cast<VulkanCommandQueue&>(CommandQueueObj).GetCommandAllocator(_FenceIndex));
+
 	VkPipelineStageFlags PipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	
 	VkSubmitInfo SubmitInfo;
@@ -66,7 +68,7 @@ void VulkanFence::Signal(_In_ SwapChain& SwapChainObj, _In_ CommandQueue& Comman
 	SubmitInfo.commandBufferCount		= VulkanCommandLists.size();
 	SubmitInfo.pCommandBuffers			= VulkanCommandLists.data();
 	SubmitInfo.signalSemaphoreCount		= 1;
-	SubmitInfo.pSignalSemaphores		= &static_cast<VulkanCommandQueue&>(CommandQueueObj).GetCommandAllocator(_FenceIndex)->GetSemaphore();
+	SubmitInfo.pSignalSemaphores		= &VulkanCommandAllocatorObj->GetSemaphore();
 
 	char test[256];
 	sprintf_s(test, "[VulkanFence::Signal] FENCE: %d\n", _FenceIndex);

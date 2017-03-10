@@ -23,7 +23,7 @@ namespace Eternal
 
 			virtual void Reset(_In_ uint32_t FrameIndex) override;
 			void Flush(_In_ D3D12CommandList CommandLists[], _In_ uint32_t CommandListsCount);
-			D3D12CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex);
+			virtual CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex) override;
 
 			inline ID3D12CommandQueue* GetD3D12CommandQueue() { return _CommandQueue; }
 			inline D3D12_COMMAND_LIST_TYPE GetCommandListType() const { return _CommandListType; }

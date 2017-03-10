@@ -6,16 +6,18 @@
 
 using namespace Eternal::Graphics;
 
-VulkanCommandAllocator::VulkanCommandAllocator(_In_ VulkanDevice& DeviceObj)
+VulkanCommandAllocator::VulkanCommandAllocator(_In_ Device& DeviceObj)
 	: _Device(DeviceObj)
 {
+	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(DeviceObj);
+
 	VkCommandPoolCreateInfo CommandPoolInfo;
 	CommandPoolInfo.sType				= VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	CommandPoolInfo.pNext				= nullptr;
 	CommandPoolInfo.flags				= 0;
-	CommandPoolInfo.queueFamilyIndex	= DeviceObj.GetQueueFamilyIndex();
+	CommandPoolInfo.queueFamilyIndex	= VulkanDeviceObj.GetQueueFamilyIndex();
 
-	VkResult Result = vkCreateCommandPool(DeviceObj.GetVulkanDevice(), &CommandPoolInfo, nullptr, &_CommandPool);
+	VkResult Result = vkCreateCommandPool(VulkanDeviceObj.GetVulkanDevice(), &CommandPoolInfo, nullptr, &_CommandPool);
 	ETERNAL_ASSERT(!Result);
 
 	VkSemaphoreCreateInfo SemaphoreInfo;
@@ -24,12 +26,13 @@ VulkanCommandAllocator::VulkanCommandAllocator(_In_ VulkanDevice& DeviceObj)
 	SemaphoreInfo.pNext = nullptr;
 	SemaphoreInfo.flags = 0;
 
-	Result = vkCreateSemaphore(DeviceObj.GetVulkanDevice(), &SemaphoreInfo, nullptr, &_CompletedSemaphore);
+	Result = vkCreateSemaphore(VulkanDeviceObj.GetVulkanDevice(), &SemaphoreInfo, nullptr, &_CompletedSemaphore);
 	ETERNAL_ASSERT(!Result);
 }
 
 VulkanCommandAllocator::~VulkanCommandAllocator()
 {
-	vkDestroySemaphore(_Device.GetVulkanDevice(), _CompletedSemaphore, nullptr);
-	vkDestroyCommandPool(_Device.GetVulkanDevice(), _CommandPool, nullptr);
+	VkDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(_Device).GetVulkanDevice();
+	vkDestroySemaphore(VulkanDeviceObj, _CompletedSemaphore, nullptr);
+	vkDestroyCommandPool(VulkanDeviceObj, _CommandPool, nullptr);
 }

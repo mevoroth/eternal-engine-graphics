@@ -2,6 +2,7 @@
 #define _D3D12_COMMAND_ALLOCATOR_HPP_
 
 #include <d3d12.h>
+#include "Graphics/CommandAllocator.hpp"
 
 namespace Eternal
 {
@@ -9,7 +10,7 @@ namespace Eternal
 	{
 		class D3D12Device;
 
-		class D3D12CommandAllocator
+		class D3D12CommandAllocator : public CommandAllocator
 		{
 		public:
 			D3D12CommandAllocator(_In_ D3D12Device& DeviceObj, _In_ const D3D12_COMMAND_LIST_TYPE& CommandListType);

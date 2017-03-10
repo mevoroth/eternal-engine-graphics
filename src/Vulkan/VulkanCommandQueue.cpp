@@ -44,7 +44,7 @@ VkQueue_T* VulkanCommandQueue::GetCommandQueue()
 	return _CommandQueue;
 }
 
-VulkanCommandAllocator* VulkanCommandQueue::GetCommandAllocator(_In_ uint32_t FrameIndex)
+CommandAllocator* VulkanCommandQueue::GetCommandAllocator(_In_ uint32_t FrameIndex)
 {
 	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
 	return _CommandAllocators[FrameIndex];

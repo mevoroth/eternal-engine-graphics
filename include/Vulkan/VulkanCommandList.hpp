@@ -11,33 +11,33 @@ namespace Eternal
 	namespace Graphics
 	{
 		class Viewport;
-		class VulkanDevice;
+		class Device;
 		class VulkanCommandQueue;
 		class VulkanState;
 		class VulkanPipeline;
 		class FrameBuffer;
 		class VulkanRenderPass;
-		class VulkanCommandAllocator;
+		class CommandAllocator;
 
 		class VulkanCommandList : public CommandList
 		{
 		public:
-			VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandAllocator& CommandAllocatorObj);
+			VulkanCommandList(_In_ Device& DeviceObj, _In_ CommandAllocator& CommandAllocatorObj);
 			~VulkanCommandList();
 
-			void SetViewport(_In_ Viewport& ViewportObj);
-			void SetScissorRectangle(_In_ Viewport& ViewportObj);
+			virtual void SetViewport(_In_ Viewport& ViewportObj) override;
+			virtual void SetScissorRectangle(_In_ Viewport& ViewportObj) override;
 
 			void Begin(_In_ FrameBuffer& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanPipeline& Pipeline, _In_ VulkanRenderPass& RenderPassObj);
-			void DrawPrimitive(_In_ uint32_t PrimitiveCount);
-			void End();
+			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;
+			virtual void End() override;
 
 			inline VkCommandBuffer_T*& GetVulkanCommandList() { return _CommandBuffer; }
 
 		private:
-			VulkanDevice& _Device;
-			VulkanCommandAllocator& _CommandAllocator;
-			VkCommandBuffer_T* _CommandBuffer = nullptr;
+			Device&				_Device;
+			CommandAllocator&	_CommandAllocator;
+			VkCommandBuffer_T*	_CommandBuffer = nullptr;
 		};
 	}
 }

@@ -120,6 +120,7 @@
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
     <ClInclude Include="include\Graphics\Clearable.hpp" />
+    <ClInclude Include="include\Graphics\CommandAllocator.hpp" />
     <ClInclude Include="include\Graphics\CommandList.hpp" />
     <ClInclude Include="include\Graphics\CommandQueue.hpp" />
     <ClInclude Include="include\Graphics\Comparison.hpp" />

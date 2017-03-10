@@ -12,24 +12,24 @@
 
 using namespace Eternal::Graphics;
 
-VulkanCommandList::VulkanCommandList(_In_ VulkanDevice& DeviceObj, _In_ VulkanCommandAllocator& CommandAllocatorObj)
+VulkanCommandList::VulkanCommandList(_In_ Device& DeviceObj, _In_ CommandAllocator& CommandAllocatorObj)
 	: _Device(DeviceObj)
 	, _CommandAllocator(CommandAllocatorObj)
 {
 	VkCommandBufferAllocateInfo CommandBufferAllocateInfo;
 	CommandBufferAllocateInfo.sType					= VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	CommandBufferAllocateInfo.pNext					= nullptr;
-	CommandBufferAllocateInfo.commandPool			= CommandAllocatorObj.GetVulkanCommandPool();
+	CommandBufferAllocateInfo.commandPool			= static_cast<VulkanCommandAllocator&>(CommandAllocatorObj).GetVulkanCommandPool();
 	CommandBufferAllocateInfo.level					= VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	CommandBufferAllocateInfo.commandBufferCount	= 1;
 
-	VkResult Result = vkAllocateCommandBuffers(DeviceObj.GetVulkanDevice(), &CommandBufferAllocateInfo, &_CommandBuffer);
+	VkResult Result = vkAllocateCommandBuffers(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &CommandBufferAllocateInfo, &_CommandBuffer);
 	ETERNAL_ASSERT(!Result);
 }
 
 VulkanCommandList::~VulkanCommandList()
 {
-	vkFreeCommandBuffers(_Device.GetVulkanDevice(), _CommandAllocator.GetVulkanCommandPool(), 1, &_CommandBuffer);
+	vkFreeCommandBuffers(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), static_cast<VulkanCommandAllocator&>(_CommandAllocator).GetVulkanCommandPool(), 1, &_CommandBuffer);
 	_CommandBuffer = nullptr;
 }
 

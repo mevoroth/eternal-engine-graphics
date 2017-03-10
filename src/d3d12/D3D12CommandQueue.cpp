@@ -42,7 +42,7 @@ void D3D12CommandQueue::Flush(_In_ D3D12CommandList CommandLists[], _In_ uint32_
 	GetD3D12CommandQueue()->ExecuteCommandLists(CommandListsCount, D3D12CommandLists.data());
 }
 
-D3D12CommandAllocator* D3D12CommandQueue::GetCommandAllocator(_In_ uint32_t FrameIndex)
+CommandAllocator* D3D12CommandQueue::GetCommandAllocator(_In_ uint32_t FrameIndex)
 {
 	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
 	return _CommandAllocators[FrameIndex];
