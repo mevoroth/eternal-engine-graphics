@@ -7,6 +7,8 @@
 #include <vulkan/vulkan.h>
 #include "Vulkan/VulkanDevice.hpp"
 #include "File/FilePath.hpp"
+#include "File/File.hpp"
+#include "File/FileFactory.hpp"
 
 using namespace Eternal::Graphics;
 using namespace Eternal::File;
@@ -29,53 +31,81 @@ static const char* SHADER_ENTRY_POINTS[] =
 
 static shaderc_include_result* IncludeResolver(void* UserData, const char* RequestedSource, int Type, const char* RequestingSource, size_t IncludeDepth)
 {
-	return nullptr;
+	std::vector<char>* ShaderSourceCode = new std::vector<char>();
+	string FullPathSrc = FilePath::Find(RequestedSource, FilePath::SHADERS);
+	Eternal::File::File* ShaderFile = Eternal::File::CreateFile(FullPathSrc);
+	ShaderFile->Open(Eternal::File::File::READ);
+	uint64_t ShaderFileSize = ShaderFile->GetFileSize();
+	ShaderSourceCode->resize(ShaderFileSize);
+	ShaderFile->Read((uint8_t*)ShaderSourceCode->data(), ShaderSourceCode->size());
+	ShaderFile->Close();
+	DestroyFile(ShaderFile);
+
+	shaderc_include_result* ShaderIncludeResult = new shaderc_include_result;
+	ShaderIncludeResult->source_name			= RequestedSource;
+	ShaderIncludeResult->source_name_length		= strlen(RequestedSource);
+	ShaderIncludeResult->content				= ShaderSourceCode->data();
+	ShaderIncludeResult->content_length			= ShaderSourceCode->size();
+	ShaderIncludeResult->user_data				= ShaderSourceCode;
+	return ShaderIncludeResult;
 }
 
 static void IncludeReleaser(void* UserData, shaderc_include_result* IncludeResult)
 {
-
+	delete (std::vector<char>*)IncludeResult->user_data;
+	delete IncludeResult;
 }
 
-VulkanShader::VulkanShader(_In_ VulkanDevice& Device, _In_ const string& Name, _In_ const string& Src, const ShaderType& Type)
+VulkanShader::VulkanShader(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Src, const ShaderType& Type)
 {
+#ifdef ETERNAL_DEBUG
+	_CompileFile(DeviceObj, Src, Type);
+#else
+	_LoadFile(DeviceObj, Src);
+#endif
+}
+
+void VulkanShader::_CompileFile(_In_ Device& DeviceObj, _In_ const string& Src, const ShaderType& Type)
+{
+	std::vector<char> ShaderSourceCode;
 	string FullPathSrc = FilePath::Find(Src, FilePath::SHADERS);
+	Eternal::File::File* ShaderFile = File::CreateFile(FullPathSrc);
+	ShaderFile->Open(Eternal::File::File::READ);
+	uint64_t ShaderFileSize = ShaderFile->GetFileSize();
+	ShaderSourceCode.resize(ShaderFileSize);
+	ShaderFile->Read((uint8_t*)ShaderSourceCode.data(), ShaderSourceCode.size());
+	ShaderFile->Close();
+	DestroyFile(ShaderFile);
 
-	ifstream ShaderFile(FullPathSrc.c_str(), ios::in | ios::binary | ios::ate);
+	shaderc_compiler_t Compiler						= shaderc_compiler_initialize();
+	shaderc_compile_options_t CompilerOptions		= shaderc_compile_options_initialize();
 
-	if (!ShaderFile)
-	{
-		ETERNAL_ASSERT(false);
-	}
+	shaderc_compile_options_set_source_language(CompilerOptions, shaderc_source_language_hlsl);
+	shaderc_compile_options_set_warnings_as_errors(CompilerOptions);
+	shaderc_compile_options_set_target_env(CompilerOptions, shaderc_target_env_vulkan, 0);
+	shaderc_compile_options_set_optimization_level(CompilerOptions, shaderc_optimization_level_zero);
+	shaderc_compile_options_set_include_callbacks(CompilerOptions, IncludeResolver, IncludeReleaser, nullptr);
 
-	uint32_t FileSize = (uint32_t)ShaderFile.tellg();
-	_ShaderCode.resize(FileSize);
-	ShaderFile.seekg(0, ios::beg);
-	ShaderFile.read(_ShaderCode.data(), FileSize);
-	ShaderFile.close();
+	shaderc_compilation_result_t CompilationResult	= shaderc_compile_into_spv(Compiler, ShaderSourceCode.data(), ShaderSourceCode.size(), SHADER_KINDS[Type], FullPathSrc.c_str(), SHADER_ENTRY_POINTS[Type], CompilerOptions);
+	size_t ShaderByteCodeLength						= shaderc_result_get_length(CompilationResult);
+	const char* ShaderByteCode						= shaderc_result_get_bytes(CompilationResult);
 
-	//shaderc_compiler_t Compiler = shaderc_compiler_initialize();
-	//shaderc_compile_options_t CompilerOptions = shaderc_compile_options_initialize();
+	size_t CompilationErrors						= shaderc_result_get_num_errors(CompilationResult);
+	size_t CompilationWarnings						= shaderc_result_get_num_warnings(CompilationResult);
+	shaderc_compilation_status CompilationStatus	= shaderc_result_get_compilation_status(CompilationResult);
+	const char* CompilationErrorMessages			= shaderc_result_get_error_message(CompilationResult);
 
-	//shaderc_compile_options_set_source_language(CompilerOptions, shaderc_source_language_hlsl);
-	//shaderc_compile_options_set_warnings_as_errors(CompilerOptions);
-	//shaderc_compile_options_set_target_env(CompilerOptions, shaderc_target_env_vulkan, 0);
-	//shaderc_compile_options_set_optimization_level(CompilerOptions, shaderc_optimization_level_zero);
-	//shaderc_compile_options_set_include_callbacks(CompilerOptions, IncludeResolver, IncludeReleaser, nullptr);
-
-	//shaderc_compilation_result_t CompilationResult = shaderc_compile_into_spv_assembly(Compiler, _ShaderCode.data(), _ShaderCode.size(), SHADER_KINDS[Type], FullPathSrc.c_str(), SHADER_ENTRY_POINTS[Type], CompilerOptions);
-
-	//shaderc_compile_options_release(CompilerOptions);
-	//shaderc_compiler_release(Compiler);
+	shaderc_compile_options_release(CompilerOptions);
+	shaderc_compiler_release(Compiler);
 
 	VkShaderModuleCreateInfo ShaderModuleInfo;
-	ShaderModuleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-	ShaderModuleInfo.pNext = nullptr;
-	ShaderModuleInfo.pCode = (const uint32_t*)_ShaderCode.data();
-	ShaderModuleInfo.codeSize = _ShaderCode.size();
-	ShaderModuleInfo.flags = 0;
+	ShaderModuleInfo.sType		= VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	ShaderModuleInfo.pNext		= nullptr;
+	ShaderModuleInfo.flags		= 0;
+	ShaderModuleInfo.pCode		= (const uint32_t*)ShaderByteCode;
+	ShaderModuleInfo.codeSize	= ShaderByteCodeLength;
 
-	VkResult Result = vkCreateShaderModule(Device.GetVulkanDevice(), &ShaderModuleInfo, nullptr, &_ShaderModule);
+	VkResult Result = vkCreateShaderModule(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &ShaderModuleInfo, nullptr, &_ShaderModule);
 	ETERNAL_ASSERT(!Result);
 }
 

@@ -12,17 +12,19 @@ namespace Eternal
 	{
 		using namespace std;
 
-		class VulkanDevice;
+		class Device;
 		enum ShaderType;
 
 		class VulkanShader
 		{
 		public:
-			VulkanShader(_In_ VulkanDevice& Device, _In_ const string& Name, _In_ const string& Src, const ShaderType& Type);
+			VulkanShader(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Src, const ShaderType& Type);
 			VkShaderModule_T* GetVulkanShader();
 
 		private:
-			std::vector<char> _ShaderCode;
+			void _CompileFile(_In_ Device& DeviceObj, _In_ const string& Src, const ShaderType& Type);
+
+			//std::vector<char> _ShaderCode;
 			VkShaderModule_T* _ShaderModule = nullptr;
 		};
 	}
