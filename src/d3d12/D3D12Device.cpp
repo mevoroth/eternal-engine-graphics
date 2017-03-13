@@ -64,27 +64,10 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 #endif
 
 	_DeviceMask = 1 << DeviceIndex;
-
-	_CreateDirectCommandQueue();
-}
-
-void D3D12Device::CreateSwapChain(_In_ const Window& WindowObj)
-{
 }
 
 uint32_t D3D12Device::GetDeviceMask() const
 {
 	ETERNAL_ASSERT(_DeviceMask != 0xFFFFFFFF);
 	return _DeviceMask;
-}
-
-D3D12RenderTarget*const & D3D12Device::GetBackBuffer(_In_ uint32_t BackBufferIndex)
-{
-	ETERNAL_ASSERT(BackBufferIndex < GetBackBufferFrameCount());
-	return _BackBuffers[BackBufferIndex];
-}
-
-void D3D12Device::_CreateDirectCommandQueue()
-{
-	_CommandQueue = new D3D12CommandQueue(*this);
 }

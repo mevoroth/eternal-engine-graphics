@@ -13,7 +13,7 @@ namespace Eternal
 	{
 		using namespace std;
 
-		class D3D12Device;
+		class Device;
 
 		class D3D12DescriptorHeap
 		{
@@ -26,7 +26,7 @@ namespace Eternal
 				DEPTHSTENCIL	= 3
 			};
 
-			D3D12DescriptorHeap(_In_ D3D12Device& DeviceObj, _In_ const HeapType HeapTypeObj, _In_ uint32_t ResourceCount);
+			D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const HeapType HeapTypeObj, _In_ uint32_t ResourceCount);
 
 			inline ID3D12DescriptorHeap* GetDescriptorHeap() { return _DescriptorHeap; }
 			

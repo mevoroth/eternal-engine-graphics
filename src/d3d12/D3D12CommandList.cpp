@@ -76,11 +76,11 @@ void D3D12CommandList::BindConstant(_In_ uint32_t Slot, _In_ D3D12Constant& Cons
 	//_CommandList->SetGraphicsRootConstantBufferView()
 }
 
-void D3D12CommandList::Begin(_In_ D3D12CommandAllocator& CommandAllocator, _In_ D3D12State& State)
+void D3D12CommandList::Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ D3D12State& StateObj)
 {
-	HRESULT hr = _CommandList->Reset(CommandAllocator.GetD3D12CommandAllocator(), State.GetD3D12PipelineState());
+	HRESULT hr = _CommandList->Reset(static_cast<D3D12CommandAllocator&>(CommandAllocatorObj).GetD3D12CommandAllocator(), StateObj.GetD3D12PipelineState());
 	ETERNAL_ASSERT(hr == S_OK);
-	_CommandList->SetGraphicsRootSignature(State.GetD3D12RootSignature());
+	_CommandList->SetGraphicsRootSignature(StateObj.GetD3D12RootSignature());
 }
 
 void D3D12CommandList::End()

@@ -12,14 +12,16 @@ namespace Eternal
 	{
 		using namespace std;
 
-		class D3D12Device;
+		class Device;
+		class SwapChain;
 		class D3D12CommandAllocator;
 		class D3D12CommandList;
 
 		class D3D12CommandQueue : public CommandQueue
 		{
 		public:
-			D3D12CommandQueue(_In_ D3D12Device& Device);
+			D3D12CommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount);
+			virtual ~D3D12CommandQueue();
 
 			virtual void Reset(_In_ uint32_t FrameIndex) override;
 			void Flush(_In_ D3D12CommandList CommandLists[], _In_ uint32_t CommandListsCount);

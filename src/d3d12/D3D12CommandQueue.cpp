@@ -1,29 +1,43 @@
 #include "d3d12/D3D12CommandQueue.hpp"
 
 #include "Macros/Macros.hpp"
+#include "Graphics/SwapChain.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
 #include "d3d12/D3D12CommandList.hpp"
 
 using namespace Eternal::Graphics;
 
-D3D12CommandQueue::D3D12CommandQueue(_In_ D3D12Device& Device)
+D3D12CommandQueue::D3D12CommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount)
 	: _CommandListType(D3D12_COMMAND_LIST_TYPE_DIRECT)
 {
-	D3D12_COMMAND_QUEUE_DESC CommandQueueDesc;
-	CommandQueueDesc.Type = _CommandListType;
-	CommandQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_HIGH;
-	CommandQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-	CommandQueueDesc.NodeMask = Device.GetDeviceMask();
+	D3D12Device& D3D12DeviceObj = static_cast<D3D12Device&>(DeviceObj);
 
-	HRESULT hr = Device.GetD3D12Device()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
+	D3D12_COMMAND_QUEUE_DESC CommandQueueDesc;
+	CommandQueueDesc.Type		= _CommandListType;
+	CommandQueueDesc.Priority	= D3D12_COMMAND_QUEUE_PRIORITY_HIGH;
+	CommandQueueDesc.Flags		= D3D12_COMMAND_QUEUE_FLAG_NONE;
+	CommandQueueDesc.NodeMask	= D3D12DeviceObj.GetDeviceMask();
+
+	HRESULT hr = D3D12DeviceObj.GetD3D12Device()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
 	ETERNAL_ASSERT(hr == S_OK);
 
-	_CommandAllocators.resize(Device.GetBackBufferFrameCount());
+	_CommandAllocators.resize(FrameCount);
 	for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
 	{
-		_CommandAllocators[CommandAllocatorIndex] = new D3D12CommandAllocator(Device, _CommandListType);
+		_CommandAllocators[CommandAllocatorIndex] = new D3D12CommandAllocator(DeviceObj, _CommandListType);
 	}
+}
+
+D3D12CommandQueue::~D3D12CommandQueue()
+{
+	for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
+	{
+		delete _CommandAllocators[CommandAllocatorIndex];
+	}
+	_CommandAllocators.clear();
+	_CommandQueue->Release();
+	_CommandQueue = nullptr;
 }
 
 void D3D12CommandQueue::Reset(_In_ uint32_t FrameIndex)

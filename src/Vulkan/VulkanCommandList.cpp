@@ -7,7 +7,7 @@
 #include "Vulkan/VulkanCommandAllocator.hpp"
 #include "Vulkan/VulkanState.hpp"
 #include "Vulkan/VulkanPipeline.hpp"
-#include "Vulkan/VulkanFrameBuffer.hpp"
+#include "Vulkan/VulkanRenderTarget.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
 
 using namespace Eternal::Graphics;
@@ -33,7 +33,7 @@ VulkanCommandList::~VulkanCommandList()
 	_CommandBuffer = nullptr;
 }
 
-void VulkanCommandList::Begin(_In_ FrameBuffer& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanPipeline& Pipeline, _In_ VulkanRenderPass& RenderPassObj)
+void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanPipeline& Pipeline, _In_ VulkanRenderPass& RenderPassObj)
 {
 	VkCommandBufferBeginInfo CommandBufferBeginInfo;
 	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -56,7 +56,7 @@ void VulkanCommandList::Begin(_In_ FrameBuffer& FrameBufferObj, _In_ VulkanState
 	RenderPassBeginInfo.sType						= VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	RenderPassBeginInfo.pNext						= nullptr;
 	RenderPassBeginInfo.renderPass					= RenderPassObj.GetRenderPass();
-	RenderPassBeginInfo.framebuffer					= static_cast<VulkanFrameBuffer&>(FrameBufferObj).GetFrameBuffer();
+	RenderPassBeginInfo.framebuffer					= static_cast<VulkanRenderTarget&>(FrameBufferObj).GetFrameBuffer();
 	// FIX THIS
 	RenderPassBeginInfo.renderArea.offset.x			= 0;
 	RenderPassBeginInfo.renderArea.offset.y			= 0;

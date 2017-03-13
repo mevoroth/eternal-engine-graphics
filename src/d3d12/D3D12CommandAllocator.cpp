@@ -6,10 +6,16 @@
 
 using namespace Eternal::Graphics;
 
-D3D12CommandAllocator::D3D12CommandAllocator(_In_ D3D12Device& DeviceObj, _In_ const D3D12_COMMAND_LIST_TYPE& CommandListType)
+D3D12CommandAllocator::D3D12CommandAllocator(_In_ Device& DeviceObj, _In_ const D3D12_COMMAND_LIST_TYPE& CommandListType)
 {
-	HRESULT hr = DeviceObj.GetD3D12Device()->CreateCommandAllocator(CommandListType, __uuidof(ID3D12CommandAllocator), (void**)&_CommandAllocator);
+	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateCommandAllocator(CommandListType, __uuidof(ID3D12CommandAllocator), (void**)&_CommandAllocator);
 	ETERNAL_ASSERT(hr == S_OK);
+}
+
+D3D12CommandAllocator::~D3D12CommandAllocator()
+{
+	_CommandAllocator->Release();
+	_CommandAllocator = nullptr;
 }
 
 void D3D12CommandAllocator::Reset()

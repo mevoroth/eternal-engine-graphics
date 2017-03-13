@@ -5,9 +5,10 @@
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include "Window/Window.hpp"
-#include "Graphics/FrameBuffer.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
+#include "d3d12/D3D12DescriptorHeap.hpp"
+#include "d3d12/D3D12RenderTarget.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -42,13 +43,12 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
 	//ETERNAL_ASSERT(hr == S_OK);
 
-	//_BackBufferDescriptorHeap = new D3D12DescriptorHeap(*this, D3D12DescriptorHeap::RENDERTARGET, GetBackBufferFrameCount());
-	//_BackBuffers = new D3D12RenderTarget*[GetBackBufferFrameCount()];
-
-	//for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBufferFrameCount(); ++BackBufferFrameIndex)
-	//{
-	//	_BackBuffers[BackBufferFrameIndex] = new D3D12RenderTarget(*this, *_BackBufferDescriptorHeap, BackBufferFrameIndex);
-	//}
+	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, D3D12DescriptorHeap::RENDERTARGET, GetBackBuffersFrameCount());
+	_BackBuffers.resize(GetBackBuffersFrameCount());
+	for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBuffersFrameCount(); ++BackBufferFrameIndex)
+	{
+		_BackBuffers[BackBufferFrameIndex] = new D3D12RenderTarget(DeviceObj, *this, *_BackBufferDescriptorHeap, BackBufferFrameIndex);
+	}
 }
 
 uint32_t D3D12SwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj)
@@ -62,9 +62,9 @@ void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQ
 	ETERNAL_ASSERT(hr == S_OK);
 }
 
-FrameBuffer& D3D12SwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
+RenderTarget& D3D12SwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 {
-	return FrameBuffer();
+	return *_BackBuffers[BackBufferIndex];
 }
 
 uint32_t D3D12SwapChain::GetBackBuffersFrameCount() const

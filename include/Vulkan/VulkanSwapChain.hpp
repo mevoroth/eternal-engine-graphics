@@ -19,11 +19,11 @@ namespace Eternal
 		class Window;
 		class Device;
 		class CommandQueue;
-		class FrameBuffer;
+		class RenderTarget;
 		class VulkanView;
 		class VulkanRenderPass;
 		class VulkanFence;
-		class VulkanFrameBuffer;
+		class VulkanRenderTarget;
 
 		class VulkanSwapChain : public SwapChain
 		{
@@ -33,7 +33,7 @@ namespace Eternal
 			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) override;
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) override;
 
-			virtual FrameBuffer& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
+			virtual RenderTarget& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
 			virtual uint32_t GetBackBuffersFrameCount() const override;
 			VkSwapchainKHR_T*& GetSwapChain() { return _SwapChain; }
 			VulkanRenderPass* GetMainRenderPass() { return _RenderPass; }
@@ -41,7 +41,7 @@ namespace Eternal
 			VkSemaphore_T*& GetAcquireSemaphore(_In_ uint32_t ResourceIndex);
 
 		private:
-			vector<VulkanFrameBuffer*>	_BackBuffers;
+			vector<VulkanRenderTarget*>	_BackBuffers;
 			vector<VulkanView*>			_BackBufferViews;
 			vector<VkSemaphore_T*>		_AcquireSemaphores;
 			VulkanRenderPass*			_RenderPass	= nullptr;

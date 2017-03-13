@@ -7,7 +7,7 @@
 #include "Graphics/View.hpp"
 #include "Graphics/Format.hpp"
 #include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/VulkanFrameBuffer.hpp"
+#include "Vulkan/VulkanRenderTarget.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanFence.hpp"
@@ -124,7 +124,7 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
 	{
-		_BackBuffers[BackBufferIndex] = new VulkanFrameBuffer(VulkanDeviceObj, *_RenderPass, BackBuffers[BackBufferIndex], *_BackBufferViews[BackBufferIndex], WindowObj.GetWidth(), WindowObj.GetHeight());
+		_BackBuffers[BackBufferIndex] = new VulkanRenderTarget(VulkanDeviceObj, *_RenderPass, BackBuffers[BackBufferIndex], *_BackBufferViews[BackBufferIndex], WindowObj.GetWidth(), WindowObj.GetHeight());
 		
 		VkSemaphoreCreateInfo SemaphoreInfo;
 		SemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -136,7 +136,7 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 	}
 }
 
-FrameBuffer& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
+RenderTarget& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 {
 	ETERNAL_ASSERT(BackBufferIndex < _BackBuffers.size());
 	return *_BackBuffers[BackBufferIndex];
