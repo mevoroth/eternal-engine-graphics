@@ -8,6 +8,8 @@ namespace Eternal
 		enum ShaderType
 		{
 			VS,
+			HS,
+			DS,
 			GS,
 			PS,
 			CS

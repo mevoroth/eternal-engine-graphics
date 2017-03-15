@@ -98,24 +98,60 @@
     <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
     <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp" />
-    <ClInclude Include="include\d3d12\D3D12BlendState.hpp" />
-    <ClInclude Include="include\d3d12\D3D12CommandAllocator.hpp" />
-    <ClInclude Include="include\d3d12\D3D12CommandList.hpp" />
-    <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp" />
-    <ClInclude Include="include\d3d12\D3D12Constant.hpp" />
-    <ClInclude Include="include\d3d12\D3D12DescriptorHeap.hpp" />
-    <ClInclude Include="include\d3d12\D3D12Device.hpp" />
-    <ClInclude Include="include\d3d12\D3D12Fence.hpp" />
-    <ClInclude Include="include\d3d12\D3D12InputLayout.hpp" />
-    <ClInclude Include="include\d3d12\D3D12RenderTarget.hpp" />
-    <ClInclude Include="include\d3d12\D3D12Resource.hpp" />
-    <ClInclude Include="include\d3d12\D3D12Sampler.hpp" />
-    <ClInclude Include="include\d3d12\D3D12Shader.hpp" />
-    <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp" />
-    <ClInclude Include="include\d3d12\D3D12State.hpp" />
-    <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp" />
-    <ClInclude Include="include\d3d12\D3D12SwapChain.hpp" />
-    <ClInclude Include="include\d3d12\D3D12View.hpp" />
+    <ClInclude Include="include\d3d12\D3D12BlendState.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12CommandAllocator.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12CommandList.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Constant.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12DescriptorHeap.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Device.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Fence.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12InputLayout.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12RenderTarget.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Resource.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Sampler.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Shader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12State.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12SwapChain.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12View.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
@@ -256,23 +292,57 @@
     <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
-    <ClCompile Include="src\d3d12\D3D12BlendState.cpp" />
-    <ClCompile Include="src\d3d12\D3D12CommandAllocator.cpp" />
-    <ClCompile Include="src\d3d12\D3D12CommandList.cpp" />
-    <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp" />
-    <ClCompile Include="src\d3d12\D3D12Constant.cpp" />
-    <ClCompile Include="src\d3d12\D3D12DescriptorHeap.cpp" />
-    <ClCompile Include="src\d3d12\D3D12Device.cpp" />
-    <ClCompile Include="src\d3d12\D3D12Fence.cpp" />
-    <ClCompile Include="src\d3d12\D3D12InputLayout.cpp" />
-    <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp" />
-    <ClCompile Include="src\d3d12\D3D12Resource.cpp" />
-    <ClCompile Include="src\d3d12\D3D12Sampler.cpp" />
-    <ClCompile Include="src\d3d12\D3D12Shader.cpp" />
-    <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp" />
-    <ClCompile Include="src\d3d12\D3D12State.cpp" />
-    <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp" />
-    <ClCompile Include="src\d3d12\D3D12SwapChain.cpp" />
+    <ClCompile Include="src\d3d12\D3D12BlendState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12CommandAllocator.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12CommandList.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Constant.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12DescriptorHeap.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Device.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Fence.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12InputLayout.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Resource.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Shader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12State.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12SwapChain.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
     <ClCompile Include="src\Graphics\ConstantFactory.cpp" />
@@ -317,7 +387,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>
     <RootNamespace>eternalenginegraphics</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -367,7 +437,7 @@
     <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;$(ProgramW6432)\VulkanSDK\1.0.37.0\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;C:\Users\dquach\Documents\Work\ReShieldProject\packages\shaderc.1.0.0.0\build\native\include;C:\Program Files\VulkanSDK\1.0.37.0\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -396,6 +466,7 @@
       </AdditionalUsingDirectories>
       <ForcedIncludeFiles>sal.h</ForcedIncludeFiles>
       <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

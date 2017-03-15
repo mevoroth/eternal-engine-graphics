@@ -16,6 +16,14 @@ namespace Eternal
 				ADRESSMODE_COUNT
 			};
 			virtual ~Sampler() {}
+
+		private:
+			AddressMode _U			= WRAP;
+			AddressMode _V			= WRAP;
+			AddressMode _W			= WRAP;
+			bool		_MINLinear	= true;
+			bool		_MAGLinear	= true;
+			bool		_MIPLinear	= false;
 		};
 	}
 }
