@@ -25,7 +25,7 @@ namespace Eternal
 		class VulkanCommandQueue : public CommandQueue
 		{
 		public:
-			VulkanCommandQueue(_In_ Device& DeviceObj, _In_ SwapChain& SwapChainObj);
+			VulkanCommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount);
 			~VulkanCommandQueue();
 
 			virtual void Reset(_In_ uint32_t FrameIndex) override;

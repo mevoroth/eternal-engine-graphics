@@ -17,12 +17,12 @@
 using namespace Eternal::Graphics;
 using namespace std;
 
-VulkanCommandQueue::VulkanCommandQueue(_In_ Device& DeviceObj, _In_ SwapChain& SwapChainObj)
+VulkanCommandQueue::VulkanCommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount)
 	: _Device(DeviceObj)
 {
 	vkGetDeviceQueue(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), 0, 0, &_CommandQueue);
 
-	_CommandAllocators.resize(SwapChainObj.GetBackBuffersFrameCount());
+	_CommandAllocators.resize(FrameCount);
 	for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
 	{
 		_CommandAllocators[CommandAllocatorIndex] = new VulkanCommandAllocator(DeviceObj);

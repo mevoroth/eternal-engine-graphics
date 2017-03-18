@@ -27,7 +27,8 @@ namespace Eternal
 			D3D12Device(_In_ uint32_t DeviceIndex);
 
 			inline ID3D12Device* GetD3D12Device() { return _Device; }
-			virtual uint32_t GetDeviceMask() const;
+			virtual uint32_t GetDeviceMask() const override;
+			virtual DeviceType GetDeviceType() const override { return D3D12; }
 
 #ifdef ETERNAL_DEBUG
 			static ID3D12Debug* _Debug;

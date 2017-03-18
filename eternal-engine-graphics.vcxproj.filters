@@ -379,6 +379,15 @@
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\CommandQueueFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\SwapChainFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\FenceFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -629,6 +638,15 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp">
       <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\CommandQueueFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SwapChainFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\FenceFactory.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
