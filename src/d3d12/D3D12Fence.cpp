@@ -38,7 +38,7 @@ D3D12Fence::~D3D12Fence()
 	_Fence = nullptr;
 }
 
-void D3D12Fence::Signal(_In_ SwapChain& SwapChainObj, _In_ CommandQueue& CommandQueueObj, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
+void D3D12Fence::Signal(_In_ CommandQueue& CommandQueueObj)
 {
 	HRESULT hr = static_cast<D3D12CommandQueue&>(CommandQueueObj).GetD3D12CommandQueue()->Signal(_Fence, _FenceValues[_CurrentFence]);
 	ETERNAL_ASSERT(hr == S_OK);

@@ -396,6 +396,7 @@
       </AdditionalUsingDirectories>
       <ForcedIncludeFiles>sal.h</ForcedIncludeFiles>
       <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

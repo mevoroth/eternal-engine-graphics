@@ -25,9 +25,9 @@ namespace Eternal
 			VulkanFence(_In_ Device& DeviceObj, _In_ uint32_t SimultaneousResourcesCount);
 			~VulkanFence();
 
-			VkFence_T* GetFence(/*_In_ uint32_t FenceIndex*/);
+			VkFence_T* GetFence();
 
-			virtual void Signal(_In_ SwapChain& SwapChainObj, _In_ CommandQueue& CommandQueueObj, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount) override;
+			virtual void Signal(_In_ CommandQueue& CommandQueueObj) override;
 			virtual void Wait(_In_ Device& DeviceObj) override;
 			virtual void Reset(_In_ Device& DeviceObj) override;
 

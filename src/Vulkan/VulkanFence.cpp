@@ -9,11 +9,6 @@
 #include "Vulkan/VulkanCommandList.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
 
-#define VC_EXTRALEAN
-#define WIN32_LEAN_AND_MEAN
-#define WIN32_EXTRA_LEAN
-#include <Windows.h>
-
 using namespace Eternal::Graphics;
 
 VulkanFence::VulkanFence(_In_ Device& DeviceObj, _In_ uint32_t SimultaneousResourcesCount)
@@ -34,7 +29,7 @@ VulkanFence::VulkanFence(_In_ Device& DeviceObj, _In_ uint32_t SimultaneousResou
 		ETERNAL_ASSERT(!Result);
 	}
 
-	VkResult Result = vkResetFences(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Fences.size(), _Fences.data());
+	VkResult Result = vkResetFences(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), (uint32_t)_Fences.size(), _Fences.data());
 	ETERNAL_ASSERT(!Result);
 }
 
@@ -46,37 +41,8 @@ VulkanFence::~VulkanFence()
 	}
 }
 
-void VulkanFence::Signal(_In_ SwapChain& SwapChainObj, _In_ CommandQueue& CommandQueueObj, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
+void VulkanFence::Signal(_In_ CommandQueue& CommandQueueObj)
 {
-	vector<VkCommandBuffer> VulkanCommandLists;
-	VulkanCommandLists.resize(CommandListsCount);
-	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
-	{
-		VulkanCommandLists[CommandListIndex] = static_cast<VulkanCommandList*>(CommandLists[CommandListIndex])->GetVulkanCommandList();
-	}
-
-	VulkanCommandAllocator* VulkanCommandAllocatorObj = static_cast<VulkanCommandAllocator*>(static_cast<VulkanCommandQueue&>(CommandQueueObj).GetCommandAllocator(_FenceIndex));
-
-	VkPipelineStageFlags PipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	
-	VkSubmitInfo SubmitInfo;
-	SubmitInfo.sType					= VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	SubmitInfo.pNext					= nullptr;
-	SubmitInfo.waitSemaphoreCount		= 1;
-	SubmitInfo.pWaitSemaphores			= &static_cast<VulkanSwapChain&>(SwapChainObj).GetAcquireSemaphore(_FenceIndex);
-	SubmitInfo.pWaitDstStageMask		= &PipelineStageFlags;
-	SubmitInfo.commandBufferCount		= VulkanCommandLists.size();
-	SubmitInfo.pCommandBuffers			= VulkanCommandLists.data();
-	SubmitInfo.signalSemaphoreCount		= 1;
-	SubmitInfo.pSignalSemaphores		= &VulkanCommandAllocatorObj->GetSemaphore();
-
-	char test[256];
-	sprintf_s(test, "[VulkanFence::Signal] FENCE: %d\n", _FenceIndex);
-	OutputDebugString(test);
-
-	VkResult Result = vkQueueSubmit(static_cast<VulkanCommandQueue&>(CommandQueueObj).GetCommandQueue(), 1, &SubmitInfo, _Fences[_FenceIndex]);
-	ETERNAL_ASSERT(!Result);
-
 	_FenceIndex = (_FenceIndex + 1) % _Fences.size();
 }
 
@@ -98,7 +64,7 @@ void VulkanFence::Reset(_In_ Device& DeviceObj)
 	ETERNAL_ASSERT(!Result);
 }
 
-VkFence_T* VulkanFence::GetFence(/*_In_ uint32_t FenceIndex*/)
+VkFence_T* VulkanFence::GetFence()
 {
 	return _Fences[_FenceIndex];
 }

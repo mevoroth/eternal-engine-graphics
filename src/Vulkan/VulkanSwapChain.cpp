@@ -45,7 +45,7 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 
 	std::vector<VkBool32> SupportPresents;
 	SupportPresents.resize(VulkanDeviceObj.GetQueueFamilyPropertiesCount());
-	for (int QueueFamilyIndex = 0; QueueFamilyIndex < VulkanDeviceObj.GetQueueFamilyPropertiesCount(); ++QueueFamilyIndex)
+	for (uint32_t QueueFamilyIndex = 0; QueueFamilyIndex < VulkanDeviceObj.GetQueueFamilyPropertiesCount(); ++QueueFamilyIndex)
 	{
 		Result = vkGetPhysicalDeviceSurfaceSupportKHR(VulkanDeviceObj.GetPhysicalDevice(), QueueFamilyIndex, _Surface, &SupportPresents[QueueFamilyIndex]);
 		ETERNAL_ASSERT(!Result);
@@ -161,7 +161,7 @@ uint32_t VulkanSwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& Fence
 
 uint32_t VulkanSwapChain::GetBackBuffersFrameCount() const
 {
-	return _BackBuffers.size();
+	return (uint32_t)_BackBuffers.size();
 }
 
 VkSemaphore_T*& VulkanSwapChain::GetAcquireSemaphore(_In_ uint32_t ResourceIndex)
@@ -191,7 +191,7 @@ void VulkanSwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& Command
 	sprintf_s(test, "[VulkanSwapChain::Present] FENCE: %d\n", ResourceIndex);
 	OutputDebugString(test);
 
-	VkResult Result = vkQueuePresentKHR(VulkanCommandQueueObj.GetCommandQueue(), &PresentInfo);
+	VkResult Result = vkQueuePresentKHR(VulkanCommandQueueObj.GetVulkanCommandQueue(), &PresentInfo);
 	ETERNAL_ASSERT(!PresentInfoResult);
 	ETERNAL_ASSERT(!Result);
 
