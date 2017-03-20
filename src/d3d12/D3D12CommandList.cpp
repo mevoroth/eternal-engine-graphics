@@ -10,12 +10,12 @@
 
 using namespace Eternal::Graphics;
 
-D3D12CommandList::D3D12CommandList(_In_ D3D12Device& DeviceObj, _In_ D3D12CommandQueue& CommandQueue, _In_ D3D12State& State)
+D3D12CommandList::D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueue, _In_ D3D12State& State)
 {
 	D3D12CommandAllocator* D3D12CommandAllocatorObj = static_cast<D3D12CommandAllocator*>(CommandQueue.GetCommandAllocator(0));
-	HRESULT hr = DeviceObj.GetD3D12Device()->CreateCommandList(
+	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateCommandList(
 		DeviceObj.GetDeviceMask(),
-		CommandQueue.GetCommandListType(),
+		static_cast<D3D12CommandQueue&>(CommandQueue).GetCommandListType(),
 		D3D12CommandAllocatorObj->GetD3D12CommandAllocator(),
 		State.GetD3D12PipelineState(),
 		__uuidof(ID3D12GraphicsCommandList),
@@ -46,22 +46,22 @@ void D3D12CommandList::DrawPrimitive(_In_ uint32_t PrimitiveCount)
 void D3D12CommandList::SetViewport(_In_ Viewport& ViewportObj)
 {
 	D3D12_VIEWPORT ViewportDesc;
-	ViewportDesc.TopLeftX = (FLOAT)ViewportObj.X();
-	ViewportDesc.TopLeftY = (FLOAT)ViewportObj.Y();
-	ViewportDesc.Width = (FLOAT)ViewportObj.Width();
-	ViewportDesc.Height = (FLOAT)ViewportObj.Height();
-	ViewportDesc.MinDepth = 0.f;
-	ViewportDesc.MaxDepth = 1.f;
+	ViewportDesc.TopLeftX	= (FLOAT)ViewportObj.X();
+	ViewportDesc.TopLeftY	= (FLOAT)ViewportObj.Y();
+	ViewportDesc.Width		= (FLOAT)ViewportObj.Width();
+	ViewportDesc.Height		= (FLOAT)ViewportObj.Height();
+	ViewportDesc.MinDepth	= 0.f;
+	ViewportDesc.MaxDepth	= 1.f;
 	_CommandList->RSSetViewports(1, &ViewportDesc);
 }
 
 void D3D12CommandList::SetScissorRectangle(_In_ Viewport& ViewportObj)
 {
 	D3D12_RECT ScissorRectangle;
-	ScissorRectangle.left = ViewportObj.X();
-	ScissorRectangle.top = ViewportObj.Y();
-	ScissorRectangle.right = ViewportObj.Width();
-	ScissorRectangle.bottom = ViewportObj.Height();
+	ScissorRectangle.left	= ViewportObj.X();
+	ScissorRectangle.top	= ViewportObj.Y();
+	ScissorRectangle.right	= ViewportObj.Width();
+	ScissorRectangle.bottom	= ViewportObj.Height();
 	_CommandList->RSSetScissorRects(1, &ScissorRectangle);
 }
 

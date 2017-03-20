@@ -38,6 +38,9 @@ namespace Eternal
 			VkInstance& GetInstance() { return _Instance; }
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }
 
+			virtual uint32_t GetDeviceMask() const override { return 0x1; }
+			virtual DeviceType GetDeviceType() const override { return VULKAN; }
+
 		private:
 			VkDebugReportCallbackEXT _DebugReportCallback = nullptr;
 			VkInstance _Instance = nullptr;

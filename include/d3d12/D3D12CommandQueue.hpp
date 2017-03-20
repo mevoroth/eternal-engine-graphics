@@ -24,7 +24,7 @@ namespace Eternal
 			virtual ~D3D12CommandQueue();
 
 			virtual void Reset(_In_ uint32_t FrameIndex) override;
-			void Flush(_In_ D3D12CommandList CommandLists[], _In_ uint32_t CommandListsCount);
+			virtual void Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj) override;
 			virtual CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex) override;
 
 			inline ID3D12CommandQueue* GetD3D12CommandQueue() { return _CommandQueue; }

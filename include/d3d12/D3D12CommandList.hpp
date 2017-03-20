@@ -11,8 +11,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class D3D12Device;
-		class D3D12CommandQueue;
+		class Device;
+		class CommandQueue;
 		class CommandAllocator;
 		class D3D12State;
 		class D3D12RenderTarget;
@@ -23,7 +23,7 @@ namespace Eternal
 		class D3D12CommandList : public CommandList
 		{
 		public:
-			D3D12CommandList(_In_ D3D12Device& DeviceObj, _In_ D3D12CommandQueue& CommandQueue, _In_ D3D12State& State);
+			D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueue, _In_ D3D12State& State);
 
 			void DrawPrimitive(_In_ uint32_t PrimitiveCount);
 

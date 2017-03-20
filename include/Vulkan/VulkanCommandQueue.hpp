@@ -15,25 +15,27 @@ namespace Eternal
 	{
 		using namespace std;
 
-		class VulkanDevice;
-		class VulkanCommandList;
-		class VulkanFence;
-		class VulkanSwapChain;
+		class Device;
+		class CommandList;
+		class Fence;
+		class SwapChain;
+		class CommandAllocator;
 		class VulkanCommandAllocator;
 
 		class VulkanCommandQueue : public CommandQueue
 		{
 		public:
-			VulkanCommandQueue(_In_ VulkanDevice& DeviceObj, _In_ VulkanSwapChain& SwapChainObj);
+			VulkanCommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount);
 			~VulkanCommandQueue();
 
 			virtual void Reset(_In_ uint32_t FrameIndex) override;
+			virtual void Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj) override;
 			virtual CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex) override;
-			VkQueue_T* GetCommandQueue();
+			VkQueue_T* GetVulkanCommandQueue();
 
 		private:
 			vector<VulkanCommandAllocator*>	_CommandAllocators;
-			VulkanDevice&					_Device;
+			Device&							_Device;
 			VkQueue_T*						_CommandQueue	= nullptr;
 		};
 	}

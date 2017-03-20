@@ -43,7 +43,7 @@ static shaderc_include_result* IncludeResolver(void* UserData, const char* Reque
 	ShaderSourceCode->resize(ShaderFileSize);
 	ShaderFile->Read((uint8_t*)ShaderSourceCode->data(), ShaderSourceCode->size());
 	ShaderFile->Close();
-	DestroyFile(ShaderFile);
+	//DestroyFile(ShaderFile);
 
 	shaderc_include_result* ShaderIncludeResult = new shaderc_include_result;
 	ShaderIncludeResult->source_name			= RequestedSource;
@@ -79,7 +79,7 @@ void VulkanShader::_CompileFile(_In_ Device& DeviceObj, _In_ const string& Src, 
 	ShaderSourceCode.resize(ShaderFileSize);
 	ShaderFile->Read((uint8_t*)ShaderSourceCode.data(), ShaderSourceCode.size());
 	ShaderFile->Close();
-	DestroyFile(ShaderFile);
+	//DestroyFile(ShaderFile);
 
 	shaderc_compiler_t Compiler						= shaderc_compiler_initialize();
 	shaderc_compile_options_t CompilerOptions		= shaderc_compile_options_initialize();
