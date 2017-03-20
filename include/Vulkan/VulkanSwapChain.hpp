@@ -20,6 +20,7 @@ namespace Eternal
 		class Device;
 		class CommandQueue;
 		class RenderTarget;
+		class View;
 		class VulkanView;
 		class VulkanRenderPass;
 		class VulkanFence;
@@ -34,6 +35,7 @@ namespace Eternal
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) override;
 
 			virtual RenderTarget& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
+			virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
 			virtual uint32_t GetBackBuffersFrameCount() const override;
 			VkSwapchainKHR_T*& GetSwapChain() { return _SwapChain; }
 			VulkanRenderPass* GetMainRenderPass() { return _RenderPass; }

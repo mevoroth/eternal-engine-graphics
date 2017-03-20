@@ -6,6 +6,7 @@
 #include <shaderc/shaderc.h>
 #include <vulkan/vulkan.h>
 #include "Vulkan/VulkanDevice.hpp"
+#include "Graphics/ShaderType.hpp"
 #include "File/FilePath.hpp"
 #include "File/File.hpp"
 #include "File/FileFactory.hpp"
@@ -24,10 +25,13 @@ static const shaderc_shader_kind SHADER_KINDS[] =
 static const char* SHADER_ENTRY_POINTS[] =
 {
 	"VS",
+	"HS",
+	"DS",
 	"GS",
 	"PS",
 	"CS"
 };
+ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == SHADER_TYPE_COUNT, "Shader entry points does not match ShaderType definition.");
 
 static shaderc_include_result* IncludeResolver(void* UserData, const char* RequestedSource, int Type, const char* RequestingSource, size_t IncludeDepth)
 {

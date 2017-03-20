@@ -6,7 +6,6 @@
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
 #include "Vulkan/VulkanState.hpp"
-#include "Vulkan/VulkanPipeline.hpp"
 #include "Vulkan/VulkanRenderTarget.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
 
@@ -33,7 +32,7 @@ VulkanCommandList::~VulkanCommandList()
 	_CommandBuffer = nullptr;
 }
 
-void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanPipeline& Pipeline, _In_ VulkanRenderPass& RenderPassObj)
+void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanRenderPass& RenderPassObj)
 {
 	VkCommandBufferBeginInfo CommandBufferBeginInfo;
 	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;

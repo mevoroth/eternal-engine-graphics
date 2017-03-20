@@ -9,14 +9,14 @@
 
 using namespace Eternal::Graphics;
 
-VulkanRenderPass::VulkanRenderPass(_In_ VulkanDevice& DeviceObj, _In_ const vector<VulkanView*>& RenderTargets, _In_ const vector<VulkanRenderPass*>& SubPasses)
+VulkanRenderPass::VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<VulkanRenderPass*>& SubPasses)
 	: _Device(DeviceObj)
 	, _RenderTargets(RenderTargets)
 	, _SubPasses(SubPasses)
 {
 }
 
-VulkanRenderPass::VulkanRenderPass(_In_ VulkanDevice& DeviceObj, _In_ const vector<VulkanView*>& RenderTargets)
+VulkanRenderPass::VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<View*>& RenderTargets)
 	: _Device(DeviceObj)
 	, _RenderTargets(RenderTargets)
 {
@@ -25,7 +25,7 @@ VulkanRenderPass::VulkanRenderPass(_In_ VulkanDevice& DeviceObj, _In_ const vect
 
 VulkanRenderPass::~VulkanRenderPass()
 {
-	vkDestroyRenderPass(_Device.GetVulkanDevice(), _RenderPass, nullptr);
+	vkDestroyRenderPass(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), _RenderPass, nullptr);
 }
 
 void VulkanRenderPass::_BuildSubPass(_In_ VulkanRenderPass* SubPass, _Out_ VkSubpassDescription& SubPassDescription)
@@ -58,7 +58,7 @@ void VulkanRenderPass::Initialize()
 	{
 		VkAttachmentDescription& CurrentAttachment = VulkanAttachements[RenderTargetIndex];
 		CurrentAttachment.flags				= 0;
-		CurrentAttachment.format			= VULKAN_FORMATS[_RenderTargets[RenderTargetIndex]->GetFormat()];
+		CurrentAttachment.format			= VULKAN_FORMATS[static_cast<VulkanView*>(_RenderTargets[RenderTargetIndex])->GetFormat()];
 		CurrentAttachment.samples			= VK_SAMPLE_COUNT_1_BIT;
 		CurrentAttachment.loadOp			= VK_ATTACHMENT_LOAD_OP_CLEAR;
 		CurrentAttachment.storeOp			= VK_ATTACHMENT_STORE_OP_STORE;
@@ -108,6 +108,6 @@ void VulkanRenderPass::Initialize()
 	RenderPassInfo.dependencyCount	= 0;
 	RenderPassInfo.pDependencies	= nullptr;
 
-	VkResult Result = vkCreateRenderPass(_Device.GetVulkanDevice(), &RenderPassInfo, nullptr, &_RenderPass);
+	VkResult Result = vkCreateRenderPass(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), &RenderPassInfo, nullptr, &_RenderPass);
 	ETERNAL_ASSERT(!Result);
 }

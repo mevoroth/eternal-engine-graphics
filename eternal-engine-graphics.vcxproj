@@ -179,6 +179,7 @@
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
     <ClInclude Include="include\Graphics\RenderTargetFactory.hpp" />
     <ClInclude Include="include\Graphics\Resource.hpp" />
+    <ClInclude Include="include\Graphics\RootSignature.hpp" />
     <ClInclude Include="include\Graphics\Sampler.hpp" />
     <ClInclude Include="include\Graphics\SamplerFactory.hpp" />
     <ClInclude Include="include\Graphics\Shader.hpp" />
@@ -208,7 +209,6 @@
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
     <ClInclude Include="include\Vulkan\VulkanRenderTarget.hpp" />
     <ClInclude Include="include\Vulkan\VulkanInputLayout.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanPipeline.hpp" />
     <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -217,6 +217,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanResource.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanRootSignature.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanSampler.hpp" />
     <ClInclude Include="include\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="include\Vulkan\VulkanState.hpp" />
     <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp" />
@@ -375,9 +377,9 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanFence.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanPipeline.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp" />
     <ClCompile Include="src\Vulkan\VulkanResource.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanRootSignature.cpp" />
     <ClCompile Include="src\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="src\Vulkan\VulkanState.cpp" />
     <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp" />

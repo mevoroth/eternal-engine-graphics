@@ -15,6 +15,10 @@ namespace Eternal
 			TEXTURE_VIEW_TYPE_CUBE,
 			TEXTURE_VIEW_TYPE_CUBEARRAY,
 		};
+
+		class View
+		{
+		};
 	}
 }
 

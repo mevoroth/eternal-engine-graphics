@@ -6,13 +6,15 @@
 #include "Macros/Macros.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/VulkanPipeline.hpp"
+#include "Vulkan/VulkanRootSignature.hpp"
+#include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanShader.hpp"
 
 using namespace Eternal::Graphics;
 
-VulkanState::VulkanState(_In_ VulkanDevice& DeviceObj, _In_ VulkanPipeline& Pipeline, _In_ VulkanShader& VS, _In_ VulkanShader& PS, _In_ Viewport& ViewportObj)
+VulkanState::VulkanState(_In_ Device& DeviceObj, _In_ VulkanRootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ VulkanShader& VS, _In_ VulkanShader& PS, _In_ Viewport& ViewportObj)
 {
+	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();
 	VkPipelineCacheCreateInfo PipelineCacheInfo;
 	PipelineCacheInfo.sType				= VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 	PipelineCacheInfo.pNext				= nullptr;
@@ -21,7 +23,7 @@ VulkanState::VulkanState(_In_ VulkanDevice& DeviceObj, _In_ VulkanPipeline& Pipe
 	PipelineCacheInfo.initialDataSize	= 0;
 
 	VkPipelineCache _PipelineCache;
-	VkResult Result = vkCreatePipelineCache(DeviceObj.GetVulkanDevice(), &PipelineCacheInfo, nullptr, &_PipelineCache);
+	VkResult Result = vkCreatePipelineCache(VkDeviceObj, &PipelineCacheInfo, nullptr, &_PipelineCache);
 	ETERNAL_ASSERT(!Result);
 	
 	std::vector<VkPipelineShaderStageCreateInfo> ShaderStages;
@@ -162,12 +164,12 @@ VulkanState::VulkanState(_In_ VulkanDevice& DeviceObj, _In_ VulkanPipeline& Pipe
 	PipelineInfo.pDepthStencilState		= &DepthStencilStateInfo;
 	PipelineInfo.pColorBlendState		= &ColorBlendStateInfo;
 	PipelineInfo.pDynamicState			= nullptr;
-	PipelineInfo.layout					= Pipeline.GetPipelineLayout();
-	PipelineInfo.renderPass				= Pipeline.GetRenderPass(); // NEED TO FIX THIS??
-	PipelineInfo.subpass				= 0;
+	PipelineInfo.layout					= RootSignatureObj.GetPipelineLayout();
+	PipelineInfo.renderPass				= RenderPassObj.GetRenderPass();
+	PipelineInfo.subpass				= 0;	// FIX THIS
 	PipelineInfo.basePipelineHandle		= nullptr;
 	PipelineInfo.basePipelineIndex		= 0;
 
-	Result = vkCreateGraphicsPipelines(DeviceObj.GetVulkanDevice(), _PipelineCache, 1, &PipelineInfo, nullptr, &_Pipeline);
+	Result = vkCreateGraphicsPipelines(VkDeviceObj, _PipelineCache, 1, &PipelineInfo, nullptr, &_Pipeline);
 	ETERNAL_ASSERT(!Result);
 }

@@ -7,12 +7,13 @@ namespace Eternal
 	{
 		enum ShaderType
 		{
-			VS,
+			VS = 0,
 			HS,
 			DS,
 			GS,
 			PS,
-			CS
+			CS,
+			SHADER_TYPE_COUNT
 		};
 	}
 }

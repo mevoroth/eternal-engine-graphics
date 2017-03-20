@@ -9,14 +9,14 @@ namespace Eternal
 	{
 		enum RootSignatureAccess
 		{
-			NONE	= 0x0,
-			IA		= 0x1,
-			VS		= 0x2,
-			HS		= 0x4,
-			DS		= 0x8,
-			GS		= 0x10,
-			PS		= 0x20,
-			SO		= 0x40
+			ROOT_SIGNATURE_NONE		= 0x0,
+			ROOT_SIGNATURE_IA		= 0x1,
+			ROOT_SIGNATURE_VS		= 0x2,
+			ROOT_SIGNATURE_HS		= 0x4,
+			ROOT_SIGNATURE_DS		= 0x8,
+			ROOT_SIGNATURE_GS		= 0x10,
+			ROOT_SIGNATURE_PS		= 0x20,
+			ROOT_SIGNATURE_SO		= 0x40
 		};
 
 		enum RootSignatureDynamicParameterType

@@ -14,7 +14,6 @@ namespace Eternal
 		class Device;
 		class VulkanCommandQueue;
 		class VulkanState;
-		class VulkanPipeline;
 		class RenderTarget;
 		class VulkanRenderPass;
 		class CommandAllocator;
@@ -28,7 +27,7 @@ namespace Eternal
 			virtual void SetViewport(_In_ Viewport& ViewportObj) override;
 			virtual void SetScissorRectangle(_In_ Viewport& ViewportObj) override;
 
-			void Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanPipeline& Pipeline, _In_ VulkanRenderPass& RenderPassObj);
+			void Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanRenderPass& RenderPassObj);
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;
 			virtual void End() override;
 

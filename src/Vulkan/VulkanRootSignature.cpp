@@ -11,11 +11,11 @@ using namespace Eternal::Graphics;
 
 static const VkShaderStageFlags RootSignatureAccessToVkShaderStageFlags(_In_ const RootSignatureAccess& RootSignatureAccessObj)
 {
-	return	(RootSignatureAccessObj & VS) ? VK_SHADER_STAGE_VERTEX_BIT					: 0
-		|	(RootSignatureAccessObj & HS) ? VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT	: 0
-		|	(RootSignatureAccessObj & DS) ? VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT	: 0
-		|	(RootSignatureAccessObj & GS) ? VK_SHADER_STAGE_GEOMETRY_BIT				: 0
-		|	(RootSignatureAccessObj & PS) ? VK_SHADER_STAGE_COMPUTE_BIT					: 0;
+	return	(RootSignatureAccessObj & ROOT_SIGNATURE_VS) ? VK_SHADER_STAGE_VERTEX_BIT					: 0
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_HS) ? VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT	: 0
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_DS) ? VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT	: 0
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_GS) ? VK_SHADER_STAGE_GEOMETRY_BIT				: 0
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_PS) ? VK_SHADER_STAGE_COMPUTE_BIT					: 0;
 }
 
 const VkDescriptorType VULKAN_DESCRIPTOR_TYPES[] =
@@ -48,7 +48,7 @@ VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* S
 	if (StaticSamplersCount)
 	{
 		VulkanStaticSamplers.resize(StaticSamplersCount);
-		for (uint32_t SamplerIndex; SamplerIndex < StaticSamplersCount; ++SamplerIndex)
+		for (uint32_t SamplerIndex = 0; SamplerIndex < StaticSamplersCount; ++SamplerIndex)
 		{
 			VulkanStaticSamplers[SamplerIndex] = static_cast<VulkanSampler*>(StaticSamplers[SamplerIndex])->GetVulkanSampler();
 		}
@@ -97,4 +97,31 @@ VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* S
 		Result = vkCreatePipelineLayout(VkDeviceObj, &PipelineLayoutInfo, nullptr, &_PipelineLayout);
 		ETERNAL_ASSERT(!Result);
 	}
+}
+
+VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj)
+{
+	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();
+
+	VkDescriptorSetLayoutCreateInfo DescriptorSetLayoutInfo;
+	DescriptorSetLayoutInfo.sType			= VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	DescriptorSetLayoutInfo.pNext			= nullptr;
+	DescriptorSetLayoutInfo.flags			= 0;
+	DescriptorSetLayoutInfo.bindingCount	= 0;
+	DescriptorSetLayoutInfo.pBindings		= nullptr;
+
+	VkResult Result = vkCreateDescriptorSetLayout(VkDeviceObj, &DescriptorSetLayoutInfo, nullptr, &_DescriptorSetLayout);
+	ETERNAL_ASSERT(!Result);
+
+	VkPipelineLayoutCreateInfo PipelineLayoutInfo;
+	PipelineLayoutInfo.sType					= VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	PipelineLayoutInfo.pNext					= nullptr;
+	PipelineLayoutInfo.flags					= 0;
+	PipelineLayoutInfo.setLayoutCount			= 0;
+	PipelineLayoutInfo.pSetLayouts				= nullptr;
+	PipelineLayoutInfo.pushConstantRangeCount	= 0;
+	PipelineLayoutInfo.pPushConstantRanges		= nullptr;
+
+	Result = vkCreatePipelineLayout(VkDeviceObj, &PipelineLayoutInfo, nullptr, &_PipelineLayout);
+	ETERNAL_ASSERT(!Result);
 }

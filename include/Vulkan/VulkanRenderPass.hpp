@@ -11,14 +11,14 @@ namespace Eternal
 	namespace Graphics
 	{
 		using namespace std;
-		class VulkanDevice;
-		class VulkanView;
+		class Device;
+		class View;
 
 		class VulkanRenderPass
 		{
 		public:
-			VulkanRenderPass(_In_ VulkanDevice& DeviceObj, _In_ const vector<VulkanView*>& RenderTargets, _In_ const vector<VulkanRenderPass*>& SubPasses);
-			VulkanRenderPass(_In_ VulkanDevice& DeviceObj, _In_ const vector<VulkanView*>& RenderTargets);
+			VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<VulkanRenderPass*>& SubPasses);
+			VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<View*>& RenderTargets);
 			~VulkanRenderPass();
 
 			void Initialize();
@@ -28,8 +28,8 @@ namespace Eternal
 		private:
 			void _BuildSubPass(_In_ VulkanRenderPass* SubPass, _Out_ VkSubpassDescription& SubPassDescription);
 
-			VulkanDevice& _Device;
-			const vector<VulkanView*>& _RenderTargets;
+			Device& _Device;
+			const vector<View*>& _RenderTargets;
 			vector<VulkanRenderPass*> _SubPasses;
 			VkRenderPass_T* _RenderPass = nullptr;
 		};

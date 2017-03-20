@@ -117,7 +117,7 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 		_BackBufferViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, BackBuffers[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, BGRA8888);
 	}
 
-	vector<VulkanView*> RenderTargets;
+	vector<View*> RenderTargets;
 	RenderTargets.push_back(_BackBufferViews[0]);
 	_RenderPass = new VulkanRenderPass(VulkanDeviceObj, RenderTargets);
 	_RenderPass->Initialize();
@@ -140,6 +140,12 @@ RenderTarget& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 {
 	ETERNAL_ASSERT(BackBufferIndex < _BackBuffers.size());
 	return *_BackBuffers[BackBufferIndex];
+}
+
+View& VulkanSwapChain::GetBackBufferView(_In_ uint32_t BackBufferIndex)
+{
+	ETERNAL_ASSERT(BackBufferIndex < _BackBufferViews.size());
+	return *_BackBufferViews[BackBufferIndex];
 }
 
 uint32_t VulkanSwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj)

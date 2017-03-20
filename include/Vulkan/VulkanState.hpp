@@ -8,14 +8,15 @@ namespace Eternal
 	namespace Graphics
 	{
 		class Viewport;
-		class VulkanDevice;
-		class VulkanPipeline;
+		class Device;
+		class VulkanRootSignature;
+		class VulkanRenderPass;
 		class VulkanShader;
 
 		class VulkanState
 		{
 		public:
-			VulkanState(_In_ VulkanDevice& DeviceObj, _In_ VulkanPipeline& Pipeline, _In_ VulkanShader& VS, _In_ VulkanShader& PS, _In_ Viewport& ViewportObj);
+			VulkanState(_In_ Device& DeviceObj, _In_ VulkanRootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ VulkanShader& VS, _In_ VulkanShader& PS, _In_ Viewport& ViewportObj);
 
 			VkPipeline_T* GetPipeline() { return _Pipeline; }
 
