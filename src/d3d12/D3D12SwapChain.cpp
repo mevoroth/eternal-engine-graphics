@@ -67,6 +67,11 @@ RenderTarget& D3D12SwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 	return *_BackBuffers[BackBufferIndex];
 }
 
+View& D3D12SwapChain::GetBackBufferView(_In_ uint32_t BackBufferIndex)
+{
+	return *(View*)nullptr;
+}
+
 uint32_t D3D12SwapChain::GetBackBuffersFrameCount() const
 {
 	return 2;
