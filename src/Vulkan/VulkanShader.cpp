@@ -17,6 +17,8 @@ using namespace Eternal::File;
 static const shaderc_shader_kind SHADER_KINDS[] =
 {
 	shaderc_glsl_vertex_shader,
+	shaderc_glsl_tess_control_shader,
+	shaderc_glsl_tess_evaluation_shader,
 	shaderc_glsl_geometry_shader,
 	shaderc_glsl_fragment_shader,
 	shaderc_glsl_compute_shader
@@ -31,7 +33,8 @@ static const char* SHADER_ENTRY_POINTS[] =
 	"PS",
 	"CS"
 };
-ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == SHADER_TYPE_COUNT, "Shader entry points does not match ShaderType definition.");
+ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_KINDS) == SHADER_TYPE_COUNT,			"Shader kinds does not match ShaderType definition.");
+ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == SHADER_TYPE_COUNT,	"Shader entry points does not match ShaderType definition.");
 
 static shaderc_include_result* IncludeResolver(void* UserData, const char* RequestedSource, int Type, const char* RequestingSource, size_t IncludeDepth)
 {

@@ -153,7 +153,7 @@ VulkanState::VulkanState(_In_ Device& DeviceObj, _In_ VulkanRootSignature& RootS
 	PipelineInfo.sType					= VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	PipelineInfo.pNext					= nullptr;
 	PipelineInfo.flags					= 0;
-	PipelineInfo.stageCount				= 2;
+	PipelineInfo.stageCount				= ShaderStages.size();
 	PipelineInfo.pStages				= ShaderStages.data();
 	PipelineInfo.pVertexInputState		= &InputLayoutStateInfo;
 	PipelineInfo.pInputAssemblyState	= &InputAssemblyStateInfo;

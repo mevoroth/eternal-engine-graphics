@@ -657,5 +657,8 @@
     <ClCompile Include="src\Graphics\FenceFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanSampler.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

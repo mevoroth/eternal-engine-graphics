@@ -387,6 +387,7 @@
     <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp" />
     <ClCompile Include="src\Vulkan\VulkanResource.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRootSignature.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanSampler.cpp" />
     <ClCompile Include="src\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="src\Vulkan\VulkanState.cpp" />
     <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp" />

@@ -12,9 +12,9 @@ using namespace Eternal::Graphics;
 static const VkShaderStageFlags RootSignatureAccessToVkShaderStageFlags(_In_ const RootSignatureAccess& RootSignatureAccessObj)
 {
 	return	(RootSignatureAccessObj & ROOT_SIGNATURE_VS) ? VK_SHADER_STAGE_VERTEX_BIT					: 0
-		|	(RootSignatureAccessObj & ROOT_SIGNATURE_HS) ? VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT	: 0
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_HS) ? VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT		: 0
 		|	(RootSignatureAccessObj & ROOT_SIGNATURE_DS) ? VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT	: 0
-		|	(RootSignatureAccessObj & ROOT_SIGNATURE_GS) ? VK_SHADER_STAGE_GEOMETRY_BIT				: 0
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_GS) ? VK_SHADER_STAGE_GEOMETRY_BIT					: 0
 		|	(RootSignatureAccessObj & ROOT_SIGNATURE_PS) ? VK_SHADER_STAGE_COMPUTE_BIT					: 0;
 }
 
@@ -32,10 +32,9 @@ const VkDescriptorType VULKAN_DESCRIPTOR_TYPES[] =
 	VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT
 };
 
-VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ const RootSignatureDynamicParameter Parameters[], _In_ uint32_t ParametersCount, _In_ const RootSignature RootSignatures[], _In_ uint32_t RootSignaturesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
+VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ const RootSignatureDynamicParameter Parameters[], _In_ uint32_t ParametersCount, _In_ RootSignature* RootSignatures[], _In_ uint32_t RootSignaturesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
 {
-	uint32_t TotalDescriptorSetLayouts = StaticSamplersCount + ParametersCount + RootSignaturesCount;
-	ETERNAL_ASSERT(TotalDescriptorSetLayouts > 0);
+	ETERNAL_ASSERT((StaticSamplersCount + ParametersCount) > 0);
 
 	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();
 
@@ -80,23 +79,26 @@ VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* S
 	VkResult Result = vkCreateDescriptorSetLayout(VkDeviceObj, &DescriptorSetLayoutInfo, nullptr, &_DescriptorSetLayout);
 	ETERNAL_ASSERT(!Result);
 
-	if (TotalDescriptorSetLayouts > StaticSamplersCount)
+	vector<VkDescriptorSetLayout> DescriptorsSetLayouts;
+	DescriptorsSetLayouts.resize(1 + RootSignaturesCount);
+
+	for (uint32_t DescriptorSetLayoutIndex = 0; DescriptorSetLayoutIndex < RootSignaturesCount; ++DescriptorSetLayoutIndex)
 	{
-		vector<VkDescriptorSetLayout> DescriptorsSetLayouts;
-		DescriptorsSetLayouts.resize(1 + TotalDescriptorSetLayouts);
-
-		VkPipelineLayoutCreateInfo PipelineLayoutInfo;
-		PipelineLayoutInfo.sType					= VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		PipelineLayoutInfo.pNext					= nullptr;
-		PipelineLayoutInfo.flags					= 0;
-		PipelineLayoutInfo.setLayoutCount			= DescriptorsSetLayouts.size();
-		PipelineLayoutInfo.pSetLayouts				= DescriptorsSetLayouts.data();
-		PipelineLayoutInfo.pushConstantRangeCount	= 0;
-		PipelineLayoutInfo.pPushConstantRanges		= nullptr;
-
-		Result = vkCreatePipelineLayout(VkDeviceObj, &PipelineLayoutInfo, nullptr, &_PipelineLayout);
-		ETERNAL_ASSERT(!Result);
+		DescriptorsSetLayouts[DescriptorSetLayoutIndex] = static_cast<VulkanRootSignature*>(RootSignatures[DescriptorSetLayoutIndex])->GetDescriptorSetLayout();
 	}
+	DescriptorsSetLayouts[RootSignaturesCount] = _DescriptorSetLayout;
+
+	VkPipelineLayoutCreateInfo PipelineLayoutInfo;
+	PipelineLayoutInfo.sType					= VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	PipelineLayoutInfo.pNext					= nullptr;
+	PipelineLayoutInfo.flags					= 0;
+	PipelineLayoutInfo.setLayoutCount			= DescriptorsSetLayouts.size();
+	PipelineLayoutInfo.pSetLayouts				= DescriptorsSetLayouts.data();
+	PipelineLayoutInfo.pushConstantRangeCount	= 0;
+	PipelineLayoutInfo.pPushConstantRanges		= nullptr;
+
+	Result = vkCreatePipelineLayout(VkDeviceObj, &PipelineLayoutInfo, nullptr, &_PipelineLayout);
+	ETERNAL_ASSERT(!Result);
 }
 
 VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj)

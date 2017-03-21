@@ -17,7 +17,7 @@ namespace Eternal
 		class VulkanRootSignature : public RootSignature
 		{
 		public:
-			VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ const RootSignatureDynamicParameter Parameters[], _In_ uint32_t ParametersCount, _In_ const RootSignature RootSignatures[], _In_ uint32_t RootSignaturesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj);
+			VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ const RootSignatureDynamicParameter Parameters[], _In_ uint32_t ParametersCount, _In_ RootSignature* RootSignatures[], _In_ uint32_t RootSignaturesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj);
 			VulkanRootSignature(_In_ Device& DeviceObj);
 			VkDescriptorSetLayout_T* GetDescriptorSetLayout() { return _DescriptorSetLayout; }
 			VkPipelineLayout_T* GetPipelineLayout() { return _PipelineLayout; }
