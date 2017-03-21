@@ -12,7 +12,7 @@
 
 using namespace Eternal::Graphics;
 
-VulkanState::VulkanState(_In_ Device& DeviceObj, _In_ VulkanRootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ VulkanShader& VS, _In_ VulkanShader& PS, _In_ Viewport& ViewportObj)
+VulkanState::VulkanState(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
 {
 	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();
 	VkPipelineCacheCreateInfo PipelineCacheInfo;
@@ -31,12 +31,12 @@ VulkanState::VulkanState(_In_ Device& DeviceObj, _In_ VulkanRootSignature& RootS
 	
 	ShaderStages[0].sType	= VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	ShaderStages[0].stage	= VK_SHADER_STAGE_VERTEX_BIT;
-	ShaderStages[0].module	= VS.GetVulkanShader();
+	ShaderStages[0].module	= static_cast<VulkanShader&>(VS).GetVulkanShader();
 	ShaderStages[0].pName	= "VS";
 
 	ShaderStages[1].sType	= VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	ShaderStages[1].stage	= VK_SHADER_STAGE_FRAGMENT_BIT;
-	ShaderStages[1].module	= PS.GetVulkanShader();
+	ShaderStages[1].module	= static_cast<VulkanShader&>(PS).GetVulkanShader();
 	ShaderStages[1].pName	= "PS";
 
 	VkPipelineVertexInputStateCreateInfo InputLayoutStateInfo;
@@ -164,7 +164,7 @@ VulkanState::VulkanState(_In_ Device& DeviceObj, _In_ VulkanRootSignature& RootS
 	PipelineInfo.pDepthStencilState		= &DepthStencilStateInfo;
 	PipelineInfo.pColorBlendState		= &ColorBlendStateInfo;
 	PipelineInfo.pDynamicState			= nullptr;
-	PipelineInfo.layout					= RootSignatureObj.GetPipelineLayout();
+	PipelineInfo.layout					= static_cast<VulkanRootSignature&>(RootSignatureObj).GetPipelineLayout();
 	PipelineInfo.renderPass				= RenderPassObj.GetRenderPass();
 	PipelineInfo.subpass				= 0;	// FIX THIS
 	PipelineInfo.basePipelineHandle		= nullptr;

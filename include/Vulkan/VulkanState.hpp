@@ -9,14 +9,14 @@ namespace Eternal
 	{
 		class Viewport;
 		class Device;
-		class VulkanRootSignature;
+		class RootSignature;
 		class VulkanRenderPass;
-		class VulkanShader;
+		class Shader;
 
 		class VulkanState
 		{
 		public:
-			VulkanState(_In_ Device& DeviceObj, _In_ VulkanRootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ VulkanShader& VS, _In_ VulkanShader& PS, _In_ Viewport& ViewportObj);
+			VulkanState(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj);
 
 			VkPipeline_T* GetPipeline() { return _Pipeline; }
 

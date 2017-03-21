@@ -14,7 +14,7 @@ namespace Eternal
 			switch (DeviceObj.GetDeviceType())
 			{
 			case D3D12:
-				return new D3D12Fence(DeviceObj, SimultaneousResourcesCount);
+				return nullptr;// new D3D12Fence(DeviceObj, SimultaneousResourcesCount);
 
 			case VULKAN:
 				return new VulkanFence(DeviceObj, SimultaneousResourcesCount);

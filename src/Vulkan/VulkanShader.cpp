@@ -64,6 +64,7 @@ static void IncludeReleaser(void* UserData, shaderc_include_result* IncludeResul
 }
 
 VulkanShader::VulkanShader(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Src, const ShaderType& Type)
+	: Shader(Name)
 {
 #ifdef ETERNAL_DEBUG
 	_CompileFile(DeviceObj, Src, Type);

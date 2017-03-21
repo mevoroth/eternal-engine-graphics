@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "Graphics/Shader.hpp"
 
 struct VkShaderModule_T;
 
@@ -15,7 +16,7 @@ namespace Eternal
 		class Device;
 		enum ShaderType;
 
-		class VulkanShader
+		class VulkanShader : public Shader
 		{
 		public:
 			VulkanShader(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Src, const ShaderType& Type);

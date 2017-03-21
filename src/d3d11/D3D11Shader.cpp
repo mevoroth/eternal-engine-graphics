@@ -79,7 +79,7 @@ void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 #ifdef ETERNAL_DEBUG
 		| D3DCOMPILE_DEBUG
 		| D3DCOMPILE_SKIP_OPTIMIZATION
-		| D3DCOMPILE_ALL_RESOURCES_BOUND
+		//| D3DCOMPILE_ALL_RESOURCES_BOUND
 #endif
 		,
 		0,

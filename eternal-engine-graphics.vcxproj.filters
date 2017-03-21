@@ -660,5 +660,8 @@
     <ClCompile Include="src\Vulkan\VulkanSampler.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
