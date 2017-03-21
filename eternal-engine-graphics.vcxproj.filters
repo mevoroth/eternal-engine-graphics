@@ -394,6 +394,9 @@
     <ClInclude Include="include\Graphics\FenceFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">

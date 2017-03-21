@@ -201,6 +201,7 @@
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\Device.hpp" />
+    <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp" />
     <ClInclude Include="include\NextGenGraphics\Resource.hpp" />
     <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
