@@ -14,7 +14,7 @@ namespace Eternal
 			switch (DeviceObj.GetDeviceType())
 			{
 			case D3D12:
-				return nullptr;//new D3D12SwapChain(DeviceObj, WindowObj, CommandQueueObj);
+				return new D3D12SwapChain(DeviceObj, WindowObj, CommandQueueObj);
 
 			case VULKAN:
 				return new VulkanSwapChain(DeviceObj, WindowObj);
