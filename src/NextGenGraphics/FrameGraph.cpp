@@ -20,6 +20,7 @@ using namespace Eternal::Graphics;
 void FrameGraph::RegisterRenderPass(_In_ RenderPass* RenderPassObj, _In_ const vector<Resource*>& Inputs, _In_ const vector<Resource*>& Outputs)
 {
 	uint32_t MinDepth = UINT32_MAX;
+	uint32_t TemporaryMinDepth = 0;
 	for (uint32_t InputIndex = 0; InputIndex < Inputs.size(); ++InputIndex)
 	{
 		Resource* Input = Inputs[InputIndex];
@@ -32,14 +33,16 @@ void FrameGraph::RegisterRenderPass(_In_ RenderPass* RenderPassObj, _In_ const v
 				break;
 			}
 		}
-		MinDepth = std::min(MinDepth, (uint32_t)std::max(0, Depth));//std::max(MinDepth, std::max(0, Depth));
+		TemporaryMinDepth = std::max(TemporaryMinDepth, (uint32_t)std::max(0, Depth));
 	}
-	
+	MinDepth = std::min(MinDepth, TemporaryMinDepth);
+
+	TemporaryMinDepth = 0;
 	for (uint32_t OutputIndex = 0; OutputIndex < Outputs.size(); ++OutputIndex)
 	{
 		Resource* Output = Outputs[OutputIndex];
 		int Depth;
-		for (Depth = _Consumed.size() - 1; Depth > (int)MinDepth; --Depth)
+		for (Depth = _Consumed.size() - 1; Depth >= 0; --Depth)
 		{
 			ETERNAL_ASSERT(_Produced[Depth].find(Output) == _Produced[Depth].cend());
 			if (_Consumed[Depth].find(Output) != _Consumed[Depth].cend())
@@ -48,8 +51,9 @@ void FrameGraph::RegisterRenderPass(_In_ RenderPass* RenderPassObj, _In_ const v
 				break;
 			}
 		}
-		MinDepth = std::max(MinDepth, (uint32_t)std::max(0, Depth));
+		TemporaryMinDepth = std::max(TemporaryMinDepth, (uint32_t)std::max(0, Depth));
 	}
+	MinDepth = std::max(MinDepth, TemporaryMinDepth);
 
 	if (MinDepth >= _Produced.size())
 	{
