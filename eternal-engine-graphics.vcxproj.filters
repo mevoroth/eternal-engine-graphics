@@ -397,6 +397,12 @@
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Heap.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanHeap.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -662,6 +668,9 @@
     </ClCompile>
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp">
       <Filter>NextGenGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanHeap.cpp">
+      <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

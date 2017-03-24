@@ -13,8 +13,10 @@ namespace Eternal
 		{
 			switch (DeviceObj.GetDeviceType())
 			{
+#ifdef _WIN32_WINNT >= _WIN32_WINNT_WIN10
 			case D3D12:
 				return new D3D12CommandQueue(DeviceObj, FrameCount);
+#endif
 
 			case VULKAN:
 				return new VulkanCommandQueue(DeviceObj, FrameCount);

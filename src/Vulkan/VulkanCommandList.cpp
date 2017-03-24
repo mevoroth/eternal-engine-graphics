@@ -65,6 +65,21 @@ void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanStat
 	RenderPassBeginInfo.pClearValues				= &ClearValue;
 
 	vkCmdBeginRenderPass(_CommandBuffer, &RenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+	//vkCmdPipelineBarrier()
+	//VkCommandBuffer                             commandBuffer,
+	//VkPipelineStageFlags                        srcStageMask,
+	//VkPipelineStageFlags                        dstStageMask,
+	//VkDependencyFlags                           dependencyFlags,
+	//uint32_t                                    memoryBarrierCount,
+	//const VkMemoryBarrier*                      pMemoryBarriers,
+	//uint32_t                                    bufferMemoryBarrierCount,
+	//const VkBufferMemoryBarrier*                pBufferMemoryBarriers,
+	//uint32_t                                    imageMemoryBarrierCount,
+	//const VkImageMemoryBarrier*                 pImageMemoryBarriers);
+
+	//VkPipelineStageFlags
+	//VkDependencyFlags
+	//VkBufferMemoryBarrier
 }
 
 void VulkanCommandList::End()

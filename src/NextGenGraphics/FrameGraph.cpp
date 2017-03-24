@@ -97,4 +97,6 @@ void FrameGraph::Batch()
 	//{
 	//	(*CurrentPass).Pass
 	//}
+
+	//vkCmdPipelineBarrier()
 }

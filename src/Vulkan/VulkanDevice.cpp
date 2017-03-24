@@ -5,6 +5,7 @@
 //#define VK_USE_PLATFORM_WIN32_KHR
 //#include <vulkan/vulkan.h>
 #include <vector>
+#include <algorithm>
 #include "Window/Window.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanRenderTarget.hpp"
@@ -36,6 +37,8 @@ VkBool32 VulkanDevice::DebugReport(
 
 VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 {
+	memset(&_PhysicalDeviceMemoryProperties, 0x0, sizeof(VkPhysicalDeviceMemoryProperties));
+
 	// 0 = OK
 	VkResult Result;
 
@@ -186,9 +189,24 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	Result = vkCreateDevice(_PhysicalDevice, &DeviceInfo, nullptr, &_Device);
 	ETERNAL_ASSERT(!Result);
+
+	vkGetPhysicalDeviceMemoryProperties(_PhysicalDevice, &_PhysicalDeviceMemoryProperties);
 }
 
 VkDevice& VulkanDevice::GetVulkanDevice()
 {
 	return _Device;
+}
+
+uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ const VkMemoryPropertyFlagBits& Flags) const
+{
+	uint32_t MemoryTypeIndex = 0;
+	uint32_t MemoryTypeCount = _PhysicalDeviceMemoryProperties.memoryTypeCount;
+	for (; MemoryTypeIndex < MemoryTypeCount; ++MemoryTypeIndex)
+	{
+		if (_PhysicalDeviceMemoryProperties.memoryTypes[MemoryTypeIndex].propertyFlags == Flags)
+			break;
+	}
+	ETERNAL_ASSERT(MemoryTypeIndex < MemoryTypeCount);
+	return MemoryTypeIndex;
 }

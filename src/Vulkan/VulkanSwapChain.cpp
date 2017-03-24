@@ -120,7 +120,6 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 	vector<View*> RenderTargets;
 	RenderTargets.push_back(_BackBufferViews[0]);
 	_RenderPass = new VulkanRenderPass(VulkanDeviceObj, RenderTargets);
-	_RenderPass->Initialize();
 
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
 	{

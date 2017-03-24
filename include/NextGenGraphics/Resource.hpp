@@ -5,6 +5,16 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum ResourceType
+		{
+			TRANSFER	= 0,
+			STRUCTURED,
+			BUFFER,
+			INDEX,
+			VERTEX,
+			INDIRECT
+		};
+
 		class Resource
 		{
 		public:

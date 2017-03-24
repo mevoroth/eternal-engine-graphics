@@ -37,16 +37,19 @@ namespace Eternal
 			VkPhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
 			VkInstance& GetInstance() { return _Instance; }
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }
+			const VkPhysicalDeviceMemoryProperties& GetPhysicalDeviceMemoryProperties() const { return _PhysicalDeviceMemoryProperties; }
+			uint32_t FindBestMemoryTypeIndex(_In_ const VkMemoryPropertyFlagBits& Flags) const;
 
 			virtual uint32_t GetDeviceMask() const override { return 0x1; }
 			virtual DeviceType GetDeviceType() const override { return VULKAN; }
 
 		private:
-			VkDebugReportCallbackEXT _DebugReportCallback = nullptr;
-			VkInstance _Instance = nullptr;
-			VkPhysicalDevice _PhysicalDevice = nullptr;
-			VkDevice _Device = nullptr;
-			uint32_t _QueueFamilyPropertiesCount = 0;
+			VkPhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;
+			VkDebugReportCallbackEXT			_DebugReportCallback			= nullptr;
+			VkInstance							_Instance						= nullptr;
+			VkPhysicalDevice					_PhysicalDevice					= nullptr;
+			VkDevice							_Device							= nullptr;
+			uint32_t							_QueueFamilyPropertiesCount		= 0;
 		};
 	}
 }

@@ -17,20 +17,14 @@ namespace Eternal
 		class VulkanRenderPass
 		{
 		public:
-			VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<VulkanRenderPass*>& SubPasses);
-			VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<View*>& RenderTargets);
+			VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<View*>& RenderTargets, _In_ View* DepthStencil = nullptr);
 			~VulkanRenderPass();
-
-			void Initialize();
 
 			VkRenderPass_T* GetRenderPass() { return _RenderPass; }
 
 		private:
-			void _BuildSubPass(_In_ VulkanRenderPass* SubPass, _Out_ VkSubpassDescription& SubPassDescription);
-
 			Device& _Device;
 			const vector<View*>& _RenderTargets;
-			vector<VulkanRenderPass*> _SubPasses;
 			VkRenderPass_T* _RenderPass = nullptr;
 		};
 	}
