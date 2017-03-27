@@ -1,7 +1,8 @@
-#ifndef _D3D12_STATE_HPP_
-#define _D3D12_STATE_HPP_
+#ifndef _D3D12_PIPELINE_HPP_
+#define _D3D12_PIPELINE_HPP_
 
 #include <cstdint>
+#include "Graphics/Pipeline.hpp"
 
 struct ID3D12PipelineState;
 struct ID3D12RootSignature;
@@ -17,13 +18,15 @@ namespace Eternal
 		class StencilTest;
 		class BlendState;
 		class RenderTarget;
+		class RootSignature;
 		class D3D12Sampler;
 
-		class D3D12State
+		class D3D12Pipeline : public Pipeline
 		{
 		public:
-			D3D12State(
+			D3D12Pipeline(
 				_In_ Device& DeviceObj,
+				_In_ RootSignature& RootSignatureObj,
 				_In_ InputLayout& InputLayoutObj,
 				_In_ Shader* VS,
 				_In_ Shader* PS,
@@ -37,11 +40,11 @@ namespace Eternal
 			);
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() { return _PipelineState; }
-			inline ID3D12RootSignature* GetD3D12RootSignature() { return _RootSignature; }
+			RootSignature& GetRootSignature() { return _RootSignature; }
 
 		private:
-			ID3D12RootSignature* _RootSignature = nullptr;
-			ID3D12PipelineState* _PipelineState = nullptr;
+			RootSignature&			_RootSignature;
+			ID3D12PipelineState*	_PipelineState = nullptr;
 		};
 	}
 }

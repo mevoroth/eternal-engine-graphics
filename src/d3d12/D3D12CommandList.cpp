@@ -4,14 +4,15 @@
 #include "Graphics/Viewport.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
-#include "d3d12/D3D12State.hpp"
+#include "d3d12/D3D12Pipeline.hpp"
 #include "d3d12/D3D12RenderTarget.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
 #include "d3d12/D3D12View.hpp"
+#include "d3d12/D3D12RootSignature.hpp"
 
 using namespace Eternal::Graphics;
 
-D3D12CommandList::D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueue, _In_ D3D12State& State)
+D3D12CommandList::D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueue, _In_ D3D12Pipeline& State)
 {
 	D3D12CommandAllocator* D3D12CommandAllocatorObj = static_cast<D3D12CommandAllocator*>(CommandQueue.GetCommandAllocator(0));
 	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateCommandList(
@@ -77,15 +78,19 @@ void D3D12CommandList::BindConstant(_In_ uint32_t Slot, _In_ D3D12Constant& Cons
 	//_CommandList->SetGraphicsRootConstantBufferView()
 }
 
-void D3D12CommandList::Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ D3D12State& StateObj)
+void D3D12CommandList::Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ Pipeline& PipelineObj)
 {
-	HRESULT hr = _CommandList->Reset(static_cast<D3D12CommandAllocator&>(CommandAllocatorObj).GetD3D12CommandAllocator(), StateObj.GetD3D12PipelineState());
+	HRESULT hr = _CommandList->Reset(static_cast<D3D12CommandAllocator&>(CommandAllocatorObj).GetD3D12CommandAllocator(), static_cast<D3D12Pipeline&>(PipelineObj).GetD3D12PipelineState());
 	ETERNAL_ASSERT(hr == S_OK);
-	_CommandList->SetGraphicsRootSignature(StateObj.GetD3D12RootSignature());
 }
 
 void D3D12CommandList::End()
 {
 	HRESULT hr = _CommandList->Close();
 	ETERNAL_ASSERT(hr == S_OK);
+}
+
+void D3D12CommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj)
+{
+	_CommandList->SetGraphicsRootSignature(static_cast<D3D12RootSignature&>(RootSignatureObj).GetD3D12RootSignature());
 }

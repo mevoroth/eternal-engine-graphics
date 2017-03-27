@@ -1,4 +1,4 @@
-#include "Vulkan/VulkanState.hpp"
+#include "Vulkan/VulkanPipeline.hpp"
 
 #include <vector>
 #include <vulkan/vulkan.h>
@@ -12,7 +12,7 @@
 
 using namespace Eternal::Graphics;
 
-VulkanState::VulkanState(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
+VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
 {
 	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();
 	VkPipelineCacheCreateInfo PipelineCacheInfo;

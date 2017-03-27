@@ -5,9 +5,10 @@
 #include "Graphics/Viewport.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
-#include "Vulkan/VulkanState.hpp"
+#include "Vulkan/VulkanPipeline.hpp"
 #include "Vulkan/VulkanRenderTarget.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
+#include "Vulkan/VulkanRootSignature.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -32,7 +33,7 @@ VulkanCommandList::~VulkanCommandList()
 	_CommandBuffer = nullptr;
 }
 
-void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanState& State, _In_ VulkanRenderPass& RenderPassObj)
+void VulkanCommandList::Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ Pipeline& PipelineObj)
 {
 	VkCommandBufferBeginInfo CommandBufferBeginInfo;
 	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -43,7 +44,21 @@ void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanStat
 	VkResult Result = vkBeginCommandBuffer(_CommandBuffer, &CommandBufferBeginInfo);
 	ETERNAL_ASSERT(!Result);
 
-	vkCmdBindPipeline(_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, State.GetPipeline());
+	vkCmdBindPipeline(_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, static_cast<VulkanPipeline&>(PipelineObj).GetVulkanPipeline());
+}
+
+void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanPipeline& PipelineObj, _In_ VulkanRenderPass& RenderPassObj)
+{
+	VkCommandBufferBeginInfo CommandBufferBeginInfo;
+	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	CommandBufferBeginInfo.pNext			= nullptr;
+	CommandBufferBeginInfo.flags			= 0;
+	CommandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+	VkResult Result = vkBeginCommandBuffer(_CommandBuffer, &CommandBufferBeginInfo);
+	ETERNAL_ASSERT(!Result);
+
+	vkCmdBindPipeline(_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, PipelineObj.GetVulkanPipeline());
 
 	VkClearValue ClearValue;
 	ClearValue.color.float32[0] = 0.0f;
@@ -116,4 +131,19 @@ void VulkanCommandList::SetScissorRectangle(_In_ Viewport& ViewportObj)
 	VulkanScissor.extent.height = ViewportObj.Height();
 
 	vkCmdSetScissor(_CommandBuffer, 0, 1, &VulkanScissor);
+}
+
+void VulkanCommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj)
+{
+	ETERNAL_ASSERT(false);
+	vkCmdBindDescriptorSets(
+		_CommandBuffer,
+		VK_PIPELINE_BIND_POINT_GRAPHICS,
+		static_cast<VulkanRootSignature&>(RootSignatureObj).GetPipelineLayout(),
+		0,
+		0,
+		nullptr,
+		0,
+		nullptr
+	);
 }

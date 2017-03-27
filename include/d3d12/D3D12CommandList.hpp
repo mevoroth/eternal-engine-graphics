@@ -15,18 +15,19 @@ namespace Eternal
 		class CommandQueue;
 		class CommandAllocator;
 		class View;
-		class D3D12State;
+		class D3D12Pipeline;
 		class D3D12RenderTarget;
 		class D3D12Constant;
 		class Viewport;
 		class BlendState;
+		class Pipeline;
+		class RootSignature;
 
 		class D3D12CommandList : public CommandList
 		{
 		public:
-			D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueue, _In_ D3D12State& State);
+			D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueue, _In_ D3D12Pipeline& State);
 
-			void DrawPrimitive(_In_ uint32_t PrimitiveCount);
 
 			void SetViewport(_In_ Viewport& ViewportObj);
 			void SetScissorRectangle(_In_ Viewport& ViewportObj);
@@ -35,8 +36,10 @@ namespace Eternal
 			void BindRenderTarget(_In_ uint32_t Slot, _In_ View& RenderTargetView);
 			void BindConstant(_In_ uint32_t Slot, _In_ D3D12Constant& ConstantBuffer);
 
-			void Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ D3D12State& State);
-			void End();
+			virtual void BindPipelineInput(_In_ RootSignature& RootSignatureObj) override;
+			virtual void Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ Pipeline& PipelineObj) override;
+			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;
+			virtual void End() override;
 
 			ID3D12GraphicsCommandList*& GetD3D12GraphicsCommandList() { return _CommandList; }
 

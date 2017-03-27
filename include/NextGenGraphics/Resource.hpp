@@ -15,7 +15,7 @@ namespace Eternal
 		{
 			TRANSFER	= 0,
 			STRUCTURED,
-			BUFFER,
+			RAW_BUFFER,
 			INDEX,
 			VERTEX,
 			INDIRECT

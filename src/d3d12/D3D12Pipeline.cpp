@@ -1,4 +1,4 @@
-#include "d3d12/D3D12State.hpp"
+#include "d3d12/D3D12Pipeline.hpp"
 
 #include "Macros/Macros.hpp"
 
@@ -10,11 +10,13 @@
 #include "Graphics/DepthTest.hpp"
 #include "Graphics/StencilTest.hpp"
 #include "d3d12/D3D12BlendState.hpp"
+#include "d3d12/D3D12RootSignature.hpp"
 
 using namespace Eternal::Graphics;
 
-D3D12State::D3D12State(
+D3D12Pipeline::D3D12Pipeline(
 	_In_ Device& DeviceObj,
+	_In_ RootSignature& RootSignatureObj,
 	_In_ InputLayout& InputLayoutObj,
 	_In_ Shader* VS,
 	_In_ Shader* PS,
@@ -26,31 +28,16 @@ D3D12State::D3D12State(
 	_In_ const D3D12Sampler Samplers[],
 	_In_ uint32_t SamplersCount
 )
+	: _RootSignature(RootSignatureObj)
 {
 	D3D12Device& D3D12DeviceObj = static_cast<D3D12Device&>(DeviceObj);
-
-	D3D12_ROOT_SIGNATURE_DESC RootSignatureDesc;
-
-	RootSignatureDesc.NumParameters = 0;
-	RootSignatureDesc.pParameters = nullptr;
-	RootSignatureDesc.NumStaticSamplers = 0;
-	RootSignatureDesc.pStaticSamplers = nullptr;
-	RootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-
-	ID3DBlob* RootSignatureBlob = nullptr;
-	ID3DBlob* ErrorBlob = nullptr;
-	HRESULT hr = D3D12SerializeRootSignature(&RootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &RootSignatureBlob, &ErrorBlob);
-	ETERNAL_ASSERT(hr == S_OK);
-	
-	hr = D3D12DeviceObj.GetD3D12Device()->CreateRootSignature(0, RootSignatureBlob->GetBufferPointer(), RootSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void**)&_RootSignature);
-	ETERNAL_ASSERT(hr == S_OK);
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc;
 
 	const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements = static_cast<D3D12InputLayout&>(InputLayoutObj).GetInputElements();
-	PipelineStateDesc.InputLayout.pInputElementDescs = InputElements.size() ? &InputElements[0] : nullptr;
-	PipelineStateDesc.InputLayout.NumElements = (UINT)InputElements.size();
-	PipelineStateDesc.pRootSignature = _RootSignature;
+	PipelineStateDesc.InputLayout.pInputElementDescs	= InputElements.size() ? &InputElements[0] : nullptr;
+	PipelineStateDesc.InputLayout.NumElements			= (UINT)InputElements.size();
+	PipelineStateDesc.pRootSignature					= static_cast<D3D12RootSignature&>(RootSignatureObj).GetD3D12RootSignature();
 	
 	static_cast<D3D12Shader*>(VS)->GetD3D12Shader(PipelineStateDesc.VS);
 	static_cast<D3D12Shader*>(PS)->GetD3D12Shader(PipelineStateDesc.PS);
@@ -144,6 +131,6 @@ D3D12State::D3D12State(
 
 	PipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
-	hr = D3D12DeviceObj.GetD3D12Device()->CreateGraphicsPipelineState(&PipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)&_PipelineState);
+	HRESULT hr = D3D12DeviceObj.GetD3D12Device()->CreateGraphicsPipelineState(&PipelineStateDesc, __uuidof(ID3D12PipelineState), (void**)&_PipelineState);
 	ETERNAL_ASSERT(hr == S_OK);
 }

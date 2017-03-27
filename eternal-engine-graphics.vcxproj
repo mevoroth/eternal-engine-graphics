@@ -130,6 +130,7 @@
     <ClInclude Include="include\d3d12\D3D12Resource.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12RootSignature.hpp" />
     <ClInclude Include="include\d3d12\D3D12Sampler.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -139,7 +140,7 @@
     <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12State.hpp">
+    <ClInclude Include="include\d3d12\D3D12Pipeline.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d12\D3D12SwapChain.hpp">
@@ -174,12 +175,14 @@
     <ClInclude Include="include\Graphics\IndexBufferFactory.hpp" />
     <ClInclude Include="include\Graphics\InputLayout.hpp" />
     <ClInclude Include="include\Graphics\MaterialProperty.hpp" />
+    <ClInclude Include="include\Graphics\Pipeline.hpp" />
     <ClInclude Include="include\Graphics\Renderer.hpp" />
     <ClInclude Include="include\Graphics\RendererFactory.hpp" />
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
     <ClInclude Include="include\Graphics\RenderTargetFactory.hpp" />
     <ClInclude Include="include\Graphics\Resource.hpp" />
     <ClInclude Include="include\Graphics\RootSignature.hpp" />
+    <ClInclude Include="include\Graphics\RootSignatureFactory.hpp" />
     <ClInclude Include="include\Graphics\Sampler.hpp" />
     <ClInclude Include="include\Graphics\SamplerFactory.hpp" />
     <ClInclude Include="include\Graphics\Shader.hpp" />
@@ -223,7 +226,7 @@
     <ClInclude Include="include\Vulkan\VulkanRootSignature.hpp" />
     <ClInclude Include="include\Vulkan\VulkanSampler.hpp" />
     <ClInclude Include="include\Vulkan\VulkanShader.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanState.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanPipeline.hpp" />
     <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp" />
     <ClInclude Include="include\Vulkan\VulkanView.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
@@ -328,6 +331,7 @@
     <ClCompile Include="src\d3d12\D3D12Resource.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12RootSignature.cpp" />
     <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -337,7 +341,7 @@
     <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12State.cpp">
+    <ClCompile Include="src\d3d12\D3D12Pipeline.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12SwapChain.cpp">
@@ -356,6 +360,7 @@
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\RendererFactory.cpp" />
     <ClCompile Include="src\Graphics\RenderTargetFactory.cpp" />
+    <ClCompile Include="src\Graphics\RootSignatureFactory.cpp" />
     <ClCompile Include="src\Graphics\SamplerFactory.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
@@ -386,7 +391,7 @@
     <ClCompile Include="src\Vulkan\VulkanRootSignature.cpp" />
     <ClCompile Include="src\Vulkan\VulkanSampler.cpp" />
     <ClCompile Include="src\Vulkan\VulkanShader.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanState.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanPipeline.cpp" />
     <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp" />
     <ClCompile Include="src\Vulkan\VulkanView.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />

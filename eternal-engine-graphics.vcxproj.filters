@@ -211,9 +211,6 @@
     <ClInclude Include="include\d3d12\D3D12RenderTarget.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12State.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d12\D3D12InputLayout.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
@@ -310,9 +307,6 @@
     <ClInclude Include="include\Vulkan\VulkanShader.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanState.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanResource.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
@@ -404,6 +398,21 @@
       <Filter>d3d12</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\DescriptorHeap.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Pipeline.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanPipeline.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Pipeline.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12RootSignature.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\RootSignatureFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -537,9 +546,6 @@
     <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12State.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d12\D3D12InputLayout.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
@@ -621,9 +627,6 @@
     <ClCompile Include="src\Vulkan\VulkanShader.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanState.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanResource.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
@@ -674,6 +677,18 @@
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12View.cpp">
       <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Pipeline.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanPipeline.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12RootSignature.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\RootSignatureFactory.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
