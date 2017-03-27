@@ -5,6 +5,8 @@
 #include <cstdint>
 #include "d3d12/D3D12Resource.hpp"
 
+struct ID3D12Resource;
+
 namespace Eternal
 {
 	namespace Graphics
@@ -18,7 +20,7 @@ namespace Eternal
 			, public RenderTarget
 		{
 		public:
-			D3D12RenderTarget(_In_ Device& DeviceObj, _In_ SwapChain& SwapChainObj, _In_ D3D12DescriptorHeap& DescriptorHeap, _In_ uint32_t BackBufferFrameIndex);
+			D3D12RenderTarget(_In_ ID3D12Resource* BackBuffer);
 		};
 	}
 }

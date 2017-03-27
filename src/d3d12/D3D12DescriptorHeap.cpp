@@ -6,23 +6,22 @@
 
 using namespace Eternal::Graphics;
 
-D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const HeapType HeapTypeObj, _In_ uint32_t ResourceCount)
-	: _ResourcesPool(ResourceCount)
+D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const HeapType HeapTypeObj, _In_ uint32_t ResourcesCount)
+	: _ResourcesPool(ResourcesCount)
 {
-	ETERNAL_ASSERT(ResourceCount > 0);
-	_ResourceCount = ResourceCount;
+	ETERNAL_ASSERT(ResourcesCount > 0);
+	_ResourcesCount = ResourcesCount;
 
-	for (uint32_t ResourceIndex = 0; ResourceIndex < _ResourceCount; ++ResourceIndex)
+	for (uint32_t ResourceIndex = 0; ResourceIndex < _ResourcesCount; ++ResourceIndex)
 	{
-		_ResourcesPool.push_back(ResourceCount - ResourceIndex - 1u);
-
+		_ResourcesPool.push_back(ResourcesCount - ResourceIndex - 1u);
 	}
 
 	D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc;
 
 	DescriptorHeapDesc.Type = (D3D12_DESCRIPTOR_HEAP_TYPE)HeapTypeObj;
 	DescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	DescriptorHeapDesc.NumDescriptors = ResourceCount;
+	DescriptorHeapDesc.NumDescriptors = ResourcesCount;
 	DescriptorHeapDesc.NodeMask = static_cast<D3D12Device&>(DeviceObj).GetDeviceMask();
 
 	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateDescriptorHeap(&DescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void**)&_DescriptorHeap);
@@ -48,9 +47,9 @@ D3D12_CPU_DESCRIPTOR_HANDLE D3D12DescriptorHeap::Pop()
 	return GetSlot(Slot);
 }
 
-void D3D12DescriptorHeap::Push(_In_ uint32_t Slot)
+void D3D12DescriptorHeap::Push(_In_ const D3D12_CPU_DESCRIPTOR_HANDLE& Handle)
 {
-	_ResourcesPool.push_back(Slot);
+	_ResourcesPool.push_back((Handle.ptr - _DescriptorHandleStart.ptr) / _DescriptorHandleSize);
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE D3D12DescriptorHeap::GetSlot(_In_ uint32_t Slot) const

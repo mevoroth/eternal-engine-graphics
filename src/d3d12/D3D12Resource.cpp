@@ -1,13 +1,50 @@
 #include "d3d12/D3D12Resource.hpp"
 
+#include <d3d12.h>
+#include "Macros/Macros.hpp"
+#include "d3d12/D3D12Device.hpp"
+#include "d3d12/D3D12SwapChain.hpp"
+#include "d3d12/D3D12Heap.hpp"
 #include "d3d12/D3D12CommandList.hpp"
+#include "d3d12/D3D12View.hpp"
 
 using namespace Eternal::Graphics;
+
+D3D12Resource::D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj)
+	: _Heap(HeapObj)
+{
+	D3D12_RESOURCE_DESC ResourceDesc;
+	
+	_HeapSlot = static_cast<D3D12Heap&>(HeapObj).Pop();
+
+	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreatePlacedResource(
+		static_cast<D3D12Heap&>(HeapObj).GetD3D12Heap(),
+		_HeapSlot,
+		&ResourceDesc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		__uuidof(ID3D12Resource),
+		(void**)&_Resource
+	);
+	ETERNAL_ASSERT(hr == S_OK);
+}
+
+D3D12Resource::D3D12Resource(_In_ ID3D12Resource* BackBuffer)
+	: _Heap(*(Heap*)nullptr)
+	, _Resource(BackBuffer)
+{
+}
 
 D3D12Resource::~D3D12Resource()
 {
 	_Resource->Release();
 	_Resource = nullptr;
+
+	if (&_Heap != nullptr)
+	{
+		static_cast<D3D12Heap&>(_Heap).Push(_HeapSlot);
+		_HeapSlot = 0xFFFFFFFFFFFFFFFF;
+	}
 }
 
 void D3D12Resource::Transition(_In_ D3D12CommandList& CommandList, _In_ const ResourceState& NewState)
@@ -28,7 +65,12 @@ void D3D12Resource::Transition(_In_ D3D12CommandList& CommandList, _In_ const Re
 	_OldState = NewState;
 }
 
-void D3D12Resource::SetCpuDescriptor(_In_ const D3D12_CPU_DESCRIPTOR_HANDLE& CpuDescriptor)
+View* D3D12Resource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
 {
-	_CpuDescriptor = CpuDescriptor;
+	return new D3D12View(DeviceObj, DescriptorHeapObj, *this, ViewType, FormatObj);
+}
+
+View* D3D12Resource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj)
+{
+	return new D3D12View(DeviceObj, DescriptorHeapObj, *this);
 }

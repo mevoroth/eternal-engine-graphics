@@ -27,12 +27,14 @@ namespace Eternal
 			};
 		public:
 			VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const ResourceType& Type, _In_ bool Writable = false);
+			VulkanResource(_In_ VkImage_T* Image);
 			virtual ~VulkanResource();
 
 			VkBuffer_T*& GetBuffer() { return _Resource.Buffer; }
 			VkImage_T*& GetImage() { return _Resource.Image; }
 
-			VulkanView* CreateView(_In_ VulkanDevice& DeviceObj, _In_ const TextureView& View, _In_ const Format& FormatObj);
+			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj) override;
+			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj) override;
 
 		private:
 			VkResource _Resource;

@@ -20,6 +20,7 @@ namespace Eternal
 		class RenderTarget;
 		class D3D12RenderTarget;
 		class D3D12DescriptorHeap;
+		class D3D12View;
 
 		class D3D12SwapChain : public SwapChain
 		{
@@ -36,7 +37,8 @@ namespace Eternal
 			IDXGISwapChain* GetDXGISwapChain() { return _SwapChain; }
 
 		private:
-			vector<D3D12RenderTarget*> _BackBuffers;
+			vector<D3D12RenderTarget*>	_BackBuffers;
+			vector<D3D12View*>			_BackBufferViews;
 			
 			D3D12DescriptorHeap*	_BackBufferDescriptorHeap	= nullptr;
 			IDXGISwapChain*			_SwapChain					= nullptr;

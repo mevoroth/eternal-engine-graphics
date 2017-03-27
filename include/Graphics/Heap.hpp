@@ -8,7 +8,7 @@ namespace Eternal
 		class Heap
 		{
 		public:
-			virtual ~Heap();
+			virtual ~Heap() {}
 		};
 	}
 }

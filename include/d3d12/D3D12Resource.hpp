@@ -1,7 +1,11 @@
 #ifndef _D3D12_RESOURCE_HPP_
 #define _D3D12_RESOURCE_HPP_
 
+#include <cstdint>
 #include <d3d12.h>
+#include "NextGenGraphics/Resource.hpp"
+
+struct ID3D12Resource;
 
 namespace Eternal
 {
@@ -14,25 +18,27 @@ namespace Eternal
 			PRESENT			= 0x0
 		};
 
+		class Heap;
 		class D3D12CommandList;
 
-		class D3D12Resource
+		class D3D12Resource : public Resource
 		{
 		public:
+			D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj);
+			D3D12Resource(_In_ ID3D12Resource* BackBuffer);
 			virtual ~D3D12Resource();
 
+			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj) override;
+			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj) override;
 			void Transition(_In_ D3D12CommandList& CommandList, _In_ const ResourceState& NewState);
 
 			inline ID3D12Resource*& GetResource() { return _Resource; }
-			inline D3D12_CPU_DESCRIPTOR_HANDLE& GetCpuDescriptor() { return _CpuDescriptor; }
-
-		protected:
-			void SetCpuDescriptor(_In_ const D3D12_CPU_DESCRIPTOR_HANDLE& CpuDescriptor);
 
 		private:
-			ID3D12Resource* _Resource = nullptr;
-			D3D12_CPU_DESCRIPTOR_HANDLE _CpuDescriptor;
-			ResourceState _OldState = COMMON;
+			Heap&						_Heap;
+			ID3D12Resource*				_Resource = nullptr;
+			uint64_t					_HeapSlot = 0xFFFFFFFFFFFFFFFFull;
+			ResourceState				_OldState = COMMON;
 		};
 	}
 }

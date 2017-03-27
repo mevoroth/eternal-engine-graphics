@@ -8,9 +8,8 @@
 using namespace Eternal::Graphics;
 
 VulkanRenderTarget::VulkanRenderTarget(_In_ VulkanDevice& DeviceObj, _In_ VulkanRenderPass& RenderPassObj, _In_ VkImage_T*& VulkanImage, _In_ VulkanView& View, _In_ uint32_t Width, _In_ uint32_t Height)
+	: VulkanResource(VulkanImage)
 {
-	GetImage() = VulkanImage;
-
 	VkFramebufferCreateInfo FrameBufferInfo;
 	FrameBufferInfo.sType			= VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 	FrameBufferInfo.pNext			= nullptr;

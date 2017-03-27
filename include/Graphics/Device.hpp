@@ -21,7 +21,7 @@ namespace Eternal
 				WIDTH	= 1600,
 				HEIGHT	= 900
 			};
-			Device();
+			//Device();
 			static Device* Get();
 
 			virtual HWND GetWindow() const = 0;

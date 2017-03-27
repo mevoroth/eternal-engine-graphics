@@ -7,6 +7,7 @@
 #include "d3d12/D3D12State.hpp"
 #include "d3d12/D3D12RenderTarget.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
+#include "d3d12/D3D12View.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -26,12 +27,12 @@ D3D12CommandList::D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& Co
 	End();
 }
 
-void D3D12CommandList::ClearRenderTarget(_In_ D3D12RenderTarget& RenderTargetObj)
+void D3D12CommandList::ClearRenderTarget(_In_ View& RenderTargetView)
 {
 	const FLOAT ClearColor[] = {
 		0.f, 0.f, 0.f, 0.f
 	};
-	_CommandList->ClearRenderTargetView(RenderTargetObj.GetCpuDescriptor(), ClearColor, 0, nullptr);
+	_CommandList->ClearRenderTargetView(static_cast<D3D12View&>(RenderTargetView).GetCpuDescriptor(), ClearColor, 0, nullptr);
 }
 
 void D3D12CommandList::DrawPrimitive(_In_ uint32_t PrimitiveCount)
@@ -65,9 +66,9 @@ void D3D12CommandList::SetScissorRectangle(_In_ Viewport& ViewportObj)
 	_CommandList->RSSetScissorRects(1, &ScissorRectangle);
 }
 
-void D3D12CommandList::BindRenderTarget(_In_ uint32_t Slot, _In_ D3D12RenderTarget& RenderTargetObj)
+void D3D12CommandList::BindRenderTarget(_In_ uint32_t Slot, _In_ View& RenderTargetView)
 {
-	const D3D12_CPU_DESCRIPTOR_HANDLE& CpuDescriptorHandle = RenderTargetObj.GetCpuDescriptor();
+	const D3D12_CPU_DESCRIPTOR_HANDLE& CpuDescriptorHandle = static_cast<D3D12View&>(RenderTargetView).GetCpuDescriptor();
 	_CommandList->OMSetRenderTargets(1, &CpuDescriptorHandle, FALSE, nullptr);
 }
 

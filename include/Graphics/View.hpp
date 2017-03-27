@@ -18,6 +18,8 @@ namespace Eternal
 
 		class View
 		{
+		public:
+			virtual ~View() {}
 		};
 	}
 }

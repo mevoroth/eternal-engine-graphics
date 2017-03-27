@@ -229,12 +229,6 @@
     <ClInclude Include="include\d3d12\D3D12CommandList.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Constant.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12StructuredBuffer.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\DeviceFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -403,6 +397,15 @@
     <ClInclude Include="include\Vulkan\VulkanHeap.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Heap.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Format.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\DescriptorHeap.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -549,12 +552,6 @@
     <ClCompile Include="src\d3d12\D3D12CommandList.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Constant.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12StructuredBuffer.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\DeviceFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -671,6 +668,12 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanHeap.cpp">
       <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Heap.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12View.cpp">
+      <Filter>d3d12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

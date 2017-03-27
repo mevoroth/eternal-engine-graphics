@@ -6,14 +6,7 @@
 
 using namespace Eternal::Graphics;
 
-VK_BUFFER_USAGE_TRANSFER_SRC_BIT = 0x00000001,
-VK_BUFFER_USAGE_TRANSFER_DST_BIT = 0x00000002,
-VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = 0x00000004,
-VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT = 0x00000008,
-VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT = 0x00000010,
-VK_BUFFER_USAGE_STORAGE_BUFFER_BIT = 0x00000020,
-
-static VkBufferUsageFlagBits RESOURCE_TYPE_TO_USAGE[] =
+static const VkBufferUsageFlagBits RESOURCE_TYPE_TO_USAGE[] =
 {
 	VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 	VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT,
@@ -32,7 +25,7 @@ static VkBufferUsageFlagBits BuildUsage(_In_ const ResourceType& Type, _In_ bool
 		return VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
 	}
 
-	return RESOURCE_TYPE_TO_USAGE[Type] << (Writable ? 1 : 0);
+	return (VkBufferUsageFlagBits)(RESOURCE_TYPE_TO_USAGE[Type] << (Writable ? 1 : 0));
 }
 
 VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const ResourceType& Type, _In_ bool Writable)
@@ -51,13 +44,24 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 	ETERNAL_ASSERT(!Result);
 }
 
+VulkanResource::VulkanResource(_In_ VkImage_T* Image)
+{
+	_Resource.Image = Image;
+}
+
 VulkanResource::~VulkanResource()
 {
 	ETERNAL_ASSERT(!_Resource.Buffer);
 }
 
-VulkanView* VulkanResource::CreateView(_In_ VulkanDevice& DeviceObj, _In_ const TextureView& View, _In_ const Format& FormatObj)
+View* VulkanResource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
 {
-	VulkanView* VkView = new VulkanView(DeviceObj, *this, View, FormatObj);
+	VulkanView* VkView = new VulkanView(DeviceObj, *this, ViewType, FormatObj);
 	return VkView;
+}
+
+View* VulkanResource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj)
+{
+	ETERNAL_ASSERT(false);
+	return nullptr;
 }
