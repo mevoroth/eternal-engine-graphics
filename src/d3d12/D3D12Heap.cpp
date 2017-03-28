@@ -56,10 +56,8 @@ static D3D12_CPU_PAGE_PROPERTY BuildD3D12CPUPageProperty(_In_ bool VisibleFromCP
 }
 
 D3D12Heap::D3D12Heap(_In_ Device& DeviceObj, _In_ size_t Size, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
+	: Heap(Size, ResourcesCount)
 {
-	ETERNAL_ASSERT(_Size > 0ull);
-	_Size = Size;
-
 	D3D12_HEAP_DESC HeapDesc;
 	HeapDesc.SizeInBytes						= Size * (size_t)ResourcesCount;
 	HeapDesc.Properties.Type					= BuildD3D12HeapType(InVRAM, VisibleFromCPU, Coherent, Cached);
@@ -78,16 +76,4 @@ D3D12Heap::~D3D12Heap()
 {
 	_Heap->Release();
 	_Heap = nullptr;
-}
-
-uint64_t D3D12Heap::Pop()
-{
-	uint64_t Slot = _ResourcesPool.back();
-	_ResourcesPool.pop_back();
-	return Slot * _Size;
-}
-
-void D3D12Heap::Push(_In_ uint64_t Offset)
-{
-	_ResourcesPool.push_back(Offset / _Size);
 }

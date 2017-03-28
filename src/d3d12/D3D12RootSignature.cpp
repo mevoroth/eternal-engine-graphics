@@ -30,5 +30,10 @@ D3D12RootSignature::D3D12RootSignature(_In_ Device& DeviceObj)
 		(void**)&_RootSignature
 	);
 	ETERNAL_ASSERT(hr == S_OK);
+}
 
+D3D12RootSignature::~D3D12RootSignature()
+{
+	_RootSignature->Release();
+	_RootSignature = nullptr;
 }

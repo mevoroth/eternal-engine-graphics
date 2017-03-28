@@ -11,6 +11,8 @@ namespace Eternal
 		class Pipeline;
 		class CommandAllocator;
 		class RootSignature;
+		class Resource;
+		class Device;
 
 		class CommandList
 		{

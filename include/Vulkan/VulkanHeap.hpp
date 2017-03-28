@@ -14,8 +14,10 @@ namespace Eternal
 		class VulkanHeap : public Heap
 		{
 		public:
-			VulkanHeap(_In_ Device& DeviceObj, _In_ size_t Size, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached);
+			VulkanHeap(_In_ Device& DeviceObj, _In_ size_t Size, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached);
 			~VulkanHeap();
+
+			VkDeviceMemory_T* GetVulkanDeviceMemory() { return _DeviceMemory; }
 
 		private:
 			Device&				_Device;

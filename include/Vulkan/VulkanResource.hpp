@@ -17,8 +17,9 @@ namespace Eternal
 		class Heap;
 		class VulkanDevice;
 		class VulkanView;
+		class VulkanHeap;
 
-		class VulkanResource : Resource
+		class VulkanResource : public Resource
 		{
 			union VkResource
 			{
@@ -37,7 +38,7 @@ namespace Eternal
 			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj) override;
 
 		private:
-			VkResource _Resource;
+			VkResource	_Resource;
 		};
 	}
 }

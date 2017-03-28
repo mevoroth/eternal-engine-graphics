@@ -7,7 +7,8 @@ namespace Eternal
 	{
 		class DescriptorHeap
 		{
-
+		public:
+			virtual ~DescriptorHeap() {}
 		};
 	}
 }

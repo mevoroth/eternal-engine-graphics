@@ -17,8 +17,10 @@ namespace Eternal
 		{
 			switch (DeviceObj.GetDeviceType())
 			{
+#ifdef ETERNAL_ENABLE_D3D12
 			case D3D12:
 				return new D3D12RootSignature(DeviceObj);
+#endif
 
 			case VULKAN:
 				return new VulkanRootSignature(DeviceObj);

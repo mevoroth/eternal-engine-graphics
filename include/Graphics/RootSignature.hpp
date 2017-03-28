@@ -41,7 +41,8 @@ namespace Eternal
 
 		class RootSignature
 		{
-
+		public:
+			virtual ~RootSignature() {}
 		};
 	}
 }

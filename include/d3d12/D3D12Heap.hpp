@@ -21,14 +21,8 @@ namespace Eternal
 
 			ID3D12Heap* GetD3D12Heap() { return _Heap; }
 
-			uint64_t Pop();
-			void Push(_In_ uint64_t Slot);
-
 		private:
-			vector<uint64_t>	_ResourcesPool;
 			ID3D12Heap*			_Heap = nullptr;
-			size_t				_Size = 0ull;
-			uint32_t			_ResourcesCount = 0u;
 		};
 	}
 }

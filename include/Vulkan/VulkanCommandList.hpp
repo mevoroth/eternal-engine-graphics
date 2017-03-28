@@ -19,6 +19,7 @@ namespace Eternal
 		class CommandAllocator;
 		class Pipeline;
 		class RootSignature;
+		class Resource;
 
 		class VulkanCommandList : public CommandList
 		{

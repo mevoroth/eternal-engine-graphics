@@ -690,5 +690,11 @@
     <ClCompile Include="src\Graphics\RootSignatureFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Heap.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\Resource.cpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

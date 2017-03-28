@@ -9,6 +9,8 @@
 #include "Vulkan/VulkanRenderTarget.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanRootSignature.hpp"
+#include "Vulkan/VulkanResource.hpp"
+#include "Vulkan/VulkanHeap.hpp"
 
 using namespace Eternal::Graphics;
 

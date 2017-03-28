@@ -35,10 +35,8 @@ namespace Eternal
 			inline ID3D12Resource*& GetResource() { return _Resource; }
 
 		private:
-			Heap&						_Heap;
-			ID3D12Resource*				_Resource = nullptr;
-			uint64_t					_HeapSlot = 0xFFFFFFFFFFFFFFFFull;
-			ResourceState				_OldState = COMMON;
+			ID3D12Resource*		_Resource = nullptr;
+			ResourceState		_OldState = COMMON;
 		};
 	}
 }

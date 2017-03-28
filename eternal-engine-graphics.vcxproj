@@ -119,8 +119,12 @@
     <ClInclude Include="include\d3d12\D3D12Fence.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Format.hpp" />
-    <ClInclude Include="include\d3d12\D3D12Heap.hpp" />
+    <ClInclude Include="include\d3d12\D3D12Format.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Heap.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\d3d12\D3D12InputLayout.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -130,7 +134,9 @@
     <ClInclude Include="include\d3d12\D3D12Resource.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12RootSignature.hpp" />
+    <ClInclude Include="include\d3d12\D3D12RootSignature.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\d3d12\D3D12Sampler.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -321,7 +327,9 @@
     <ClCompile Include="src\d3d12\D3D12Fence.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Heap.cpp" />
+    <ClCompile Include="src\d3d12\D3D12Heap.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\d3d12\D3D12InputLayout.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -331,7 +339,9 @@
     <ClCompile Include="src\d3d12\D3D12Resource.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12RootSignature.cpp" />
+    <ClCompile Include="src\d3d12\D3D12RootSignature.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -347,7 +357,9 @@
     <ClCompile Include="src\d3d12\D3D12SwapChain.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12View.cpp" />
+    <ClCompile Include="src\d3d12\D3D12View.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp" />
@@ -356,6 +368,7 @@
     <ClCompile Include="src\Graphics\Device.cpp" />
     <ClCompile Include="src\Graphics\DeviceFactory.cpp" />
     <ClCompile Include="src\Graphics\FenceFactory.cpp" />
+    <ClCompile Include="src\Graphics\Heap.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\RendererFactory.cpp" />
@@ -372,6 +385,7 @@
     <ClCompile Include="src\Graphics\Viewport.cpp" />
     <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp" />
+    <ClCompile Include="src\NextGenGraphics\Resource.cpp" />
     <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -399,7 +413,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>
     <RootNamespace>eternalenginegraphics</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -10,10 +10,10 @@ using namespace Eternal::Graphics;
 
 static VkMemoryPropertyFlagBits BuildMemoryPropertiesFlags(_In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
 {
-	return	(VkMemoryPropertyFlagBits)	(InVRAM ?			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT :	0
-									|	VisibleFromCPU ?	VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT	:	0
-									|	Coherent ?			VK_MEMORY_PROPERTY_HOST_COHERENT_BIT :	0
-									|	Cached ?			VK_MEMORY_PROPERTY_HOST_CACHED_BIT :	0);
+	return	(VkMemoryPropertyFlagBits)	((InVRAM ?			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT :	0)
+									|	(VisibleFromCPU ?	VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT	:	0)
+									|	(Coherent ?			VK_MEMORY_PROPERTY_HOST_COHERENT_BIT :	0)
+									|	(Cached ?			VK_MEMORY_PROPERTY_HOST_CACHED_BIT :	0));
 }
 
 static bool CheckMemoryPropertiesFlags(_In_ const VkMemoryPropertyFlagBits& Flags)
@@ -34,8 +34,9 @@ static bool CheckMemoryPropertiesFlags(_In_ const VkMemoryPropertyFlagBits& Flag
 	return std::find(AllowedMemoryProperties, EndAllowedMemoryProperties, Flags) != EndAllowedMemoryProperties;
 }
 
-VulkanHeap::VulkanHeap(_In_ Device& DeviceObj, _In_ size_t Size, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
-	: _Device(DeviceObj)
+VulkanHeap::VulkanHeap(_In_ Device& DeviceObj, _In_ size_t Size, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
+	: Heap(Size, ResourcesCount)
+	, _Device(DeviceObj)
 {
 	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(DeviceObj);
 

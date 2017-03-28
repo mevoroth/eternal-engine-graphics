@@ -6,7 +6,21 @@
 
 using namespace Eternal::Graphics;
 
-D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const HeapType HeapTypeObj, _In_ uint32_t ResourcesCount)
+const D3D12_DESCRIPTOR_HEAP_TYPE D3D12_HEAP_TYPES[] =
+{
+	D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+	D3D12_DESCRIPTOR_HEAP_TYPE_RTV
+};
+
+D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount)
 	: _ResourcesPool(ResourcesCount)
 {
 	ETERNAL_ASSERT(ResourcesCount > 0);
@@ -19,10 +33,10 @@ D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const Heap
 
 	D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc;
 
-	DescriptorHeapDesc.Type = (D3D12_DESCRIPTOR_HEAP_TYPE)HeapTypeObj;
-	DescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	DescriptorHeapDesc.NumDescriptors = ResourcesCount;
-	DescriptorHeapDesc.NodeMask = static_cast<D3D12Device&>(DeviceObj).GetDeviceMask();
+	DescriptorHeapDesc.Type				= D3D12_HEAP_TYPES[HeapTypeObj];
+	DescriptorHeapDesc.Flags			= D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	DescriptorHeapDesc.NumDescriptors	= ResourcesCount;
+	DescriptorHeapDesc.NodeMask			= static_cast<D3D12Device&>(DeviceObj).GetDeviceMask();
 
 	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateDescriptorHeap(&DescriptorHeapDesc, __uuidof(ID3D12DescriptorHeap), (void**)&_DescriptorHeap);
 	ETERNAL_ASSERT(hr == S_OK);

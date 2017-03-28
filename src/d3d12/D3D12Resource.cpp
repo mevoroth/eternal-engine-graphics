@@ -11,15 +11,13 @@
 using namespace Eternal::Graphics;
 
 D3D12Resource::D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj)
-	: _Heap(HeapObj)
+	: Resource(HeapObj)
 {
 	D3D12_RESOURCE_DESC ResourceDesc;
 	
-	_HeapSlot = static_cast<D3D12Heap&>(HeapObj).Pop();
-
 	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreatePlacedResource(
 		static_cast<D3D12Heap&>(HeapObj).GetD3D12Heap(),
-		_HeapSlot,
+		GetHeapSlot(),
 		&ResourceDesc,
 		D3D12_RESOURCE_STATE_COMMON,
 		nullptr,
@@ -30,7 +28,7 @@ D3D12Resource::D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj)
 }
 
 D3D12Resource::D3D12Resource(_In_ ID3D12Resource* BackBuffer)
-	: _Heap(*(Heap*)nullptr)
+	: Resource(*(Heap*)nullptr)
 	, _Resource(BackBuffer)
 {
 }
@@ -39,12 +37,6 @@ D3D12Resource::~D3D12Resource()
 {
 	_Resource->Release();
 	_Resource = nullptr;
-
-	if (&_Heap != nullptr)
-	{
-		static_cast<D3D12Heap&>(_Heap).Push(_HeapSlot);
-		_HeapSlot = 0xFFFFFFFFFFFFFFFF;
-	}
 }
 
 void D3D12Resource::Transition(_In_ D3D12CommandList& CommandList, _In_ const ResourceState& NewState)

@@ -3,6 +3,7 @@
 #include "Macros/Macros.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan/VulkanHeap.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -29,6 +30,7 @@ static VkBufferUsageFlagBits BuildUsage(_In_ const ResourceType& Type, _In_ bool
 }
 
 VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const ResourceType& Type, _In_ bool Writable)
+	: Resource(HeapObj)
 {
 	VkBufferCreateInfo BufferInfo;
 	BufferInfo.sType					= VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -42,9 +44,16 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 
 	VkResult Result = vkCreateBuffer(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &BufferInfo, nullptr, &_Resource.Buffer);
 	ETERNAL_ASSERT(!Result);
+	
+	VkMemoryRequirements MemoryRequirements;
+	vkGetBufferMemoryRequirements(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Buffer, &MemoryRequirements);
+
+	Result = vkBindBufferMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Buffer, static_cast<VulkanHeap&>(HeapObj).GetVulkanDeviceMemory(), GetHeapSlot());
+	ETERNAL_ASSERT(!Result);
 }
 
 VulkanResource::VulkanResource(_In_ VkImage_T* Image)
+	: Resource(*(Heap*)nullptr)
 {
 	_Resource.Image = Image;
 }
