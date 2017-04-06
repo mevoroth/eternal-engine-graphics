@@ -14,7 +14,7 @@ Heap::Heap(_In_ size_t Size, _In_ uint32_t ResourcesCount)
 	_ResourcesPool.resize(ResourcesCount);
 	for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesCount; ++ResourceIndex)
 	{
-		_ResourcesPool.push_back(ResourcesCount - ResourceIndex - 1u);
+		_ResourcesPool[ResourceIndex] = ResourcesCount - ResourceIndex - 1u;
 	}
 }
 

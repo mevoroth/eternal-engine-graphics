@@ -415,6 +415,9 @@
     <ClInclude Include="include\Graphics\RootSignatureFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanDescriptorHeap.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -695,6 +698,9 @@
     </ClCompile>
     <ClCompile Include="src\NextGenGraphics\Resource.cpp">
       <Filter>NextGenGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanDescriptorHeap.cpp">
+      <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

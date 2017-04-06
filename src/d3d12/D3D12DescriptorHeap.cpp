@@ -42,7 +42,7 @@ D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const Root
 	ETERNAL_ASSERT(hr == S_OK);
 
 	_DescriptorHandleStart = _DescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	_DescriptorHandleSize = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	_DescriptorHandleSize = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->GetDescriptorHandleIncrementSize(D3D12_HEAP_TYPES[HeapTypeObj]);
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE D3D12DescriptorHeap::Reserve(_In_ uint32_t Slot)

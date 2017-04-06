@@ -30,5 +30,24 @@ namespace Eternal
 				return nullptr;
 			}
 		}
+
+		RootSignature* CreateRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
+		{
+			switch (DeviceObj.GetDeviceType())
+			{
+#ifdef ETERNAL_ENABLE_D3D12
+			case D3D12:
+				ETERNAL_ASSERT(false);
+				return new D3D12RootSignature(DeviceObj);
+#endif
+
+			case VULKAN:
+				return new VulkanRootSignature(DeviceObj, StaticSamplers, StaticSamplersCount, DescriptorHeaps, DescriptorHeapsCount, RootSignatureAccessObj);
+
+			default:
+				ETERNAL_ASSERT(false);
+				return nullptr;
+			}
+		}
 	}
 }

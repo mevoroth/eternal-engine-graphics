@@ -216,6 +216,7 @@
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanDescriptorHeap.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
     <ClInclude Include="include\Vulkan\VulkanHeap.hpp" />
@@ -394,6 +395,7 @@
     <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanDescriptorHeap.cpp" />
     <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>

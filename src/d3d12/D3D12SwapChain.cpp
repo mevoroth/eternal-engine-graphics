@@ -44,7 +44,7 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
 	//ETERNAL_ASSERT(hr == S_OK);
 
-	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, D3D12DescriptorHeap::RENDERTARGET, GetBackBuffersFrameCount());
+	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, RENDER_TARGET, GetBackBuffersFrameCount());
 	_BackBuffers.resize(GetBackBuffersFrameCount());
 	_BackBufferViews.resize(GetBackBuffersFrameCount());
 	for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBuffersFrameCount(); ++BackBufferFrameIndex)
