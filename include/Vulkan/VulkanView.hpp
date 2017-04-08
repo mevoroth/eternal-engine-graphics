@@ -1,6 +1,7 @@
 #ifndef _VULKAN_VIEW_HPP_
 #define _VULKAN_VIEW_HPP_
 
+#include <cstdint>
 #include "Graphics/View.hpp"
 
 struct VkImage_T;
@@ -26,6 +27,7 @@ namespace Eternal
 		public:
 			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& View, _In_ const Format& FormatObj);
 			VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& View, _In_ const Format& FormatObj);
+			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull);
 			virtual ~VulkanView();
 
 			VkImageView_T*& GetImageView() { return _View.ImageView; }

@@ -11,11 +11,11 @@ using namespace Eternal::Graphics;
 
 static const VkShaderStageFlags RootSignatureAccessToVkShaderStageFlags(_In_ const RootSignatureAccess& RootSignatureAccessObj)
 {
-	return	(RootSignatureAccessObj & ROOT_SIGNATURE_VS) ? VK_SHADER_STAGE_VERTEX_BIT					: 0
-		|	(RootSignatureAccessObj & ROOT_SIGNATURE_HS) ? VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT		: 0
-		|	(RootSignatureAccessObj & ROOT_SIGNATURE_DS) ? VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT	: 0
-		|	(RootSignatureAccessObj & ROOT_SIGNATURE_GS) ? VK_SHADER_STAGE_GEOMETRY_BIT					: 0
-		|	(RootSignatureAccessObj & ROOT_SIGNATURE_PS) ? VK_SHADER_STAGE_COMPUTE_BIT					: 0;
+	return	(RootSignatureAccessObj & ROOT_SIGNATURE_VS ? VK_SHADER_STAGE_VERTEX_BIT					: 0)
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_HS ? VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT		: 0)
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_DS ? VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT	: 0)
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_GS ? VK_SHADER_STAGE_GEOMETRY_BIT					: 0)
+		|	(RootSignatureAccessObj & ROOT_SIGNATURE_PS ? VK_SHADER_STAGE_FRAGMENT_BIT					: 0);
 }
 
 VulkanDescriptorHeap::VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)

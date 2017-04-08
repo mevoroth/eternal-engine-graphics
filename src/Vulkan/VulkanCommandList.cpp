@@ -49,55 +49,55 @@ void VulkanCommandList::Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ P
 	vkCmdBindPipeline(_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, static_cast<VulkanPipeline&>(PipelineObj).GetVulkanPipeline());
 }
 
-void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanPipeline& PipelineObj, _In_ VulkanRenderPass& RenderPassObj)
-{
-	VkCommandBufferBeginInfo CommandBufferBeginInfo;
-	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	CommandBufferBeginInfo.pNext			= nullptr;
-	CommandBufferBeginInfo.flags			= 0;
-	CommandBufferBeginInfo.pInheritanceInfo = nullptr;
-
-	VkResult Result = vkBeginCommandBuffer(_CommandBuffer, &CommandBufferBeginInfo);
-	ETERNAL_ASSERT(!Result);
-
-	vkCmdBindPipeline(_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, PipelineObj.GetVulkanPipeline());
-
-	VkClearValue ClearValue;
-	ClearValue.color.float32[0] = 0.0f;
-	ClearValue.color.float32[1] = 0.0f;
-	ClearValue.color.float32[2] = 0.0f;
-	ClearValue.color.float32[3] = 0.0f;
-
-	VkRenderPassBeginInfo RenderPassBeginInfo;
-	RenderPassBeginInfo.sType						= VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-	RenderPassBeginInfo.pNext						= nullptr;
-	RenderPassBeginInfo.renderPass					= RenderPassObj.GetRenderPass();
-	RenderPassBeginInfo.framebuffer					= static_cast<VulkanRenderTarget&>(FrameBufferObj).GetFrameBuffer();
-	// FIX THIS
-	RenderPassBeginInfo.renderArea.offset.x			= 0;
-	RenderPassBeginInfo.renderArea.offset.y			= 0;
-	RenderPassBeginInfo.renderArea.extent.width		= 1280;
-	RenderPassBeginInfo.renderArea.extent.height	= 720;
-	RenderPassBeginInfo.clearValueCount				= 1;
-	RenderPassBeginInfo.pClearValues				= &ClearValue;
-
-	vkCmdBeginRenderPass(_CommandBuffer, &RenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
-	//vkCmdPipelineBarrier()
-	//VkCommandBuffer                             commandBuffer,
-	//VkPipelineStageFlags                        srcStageMask,
-	//VkPipelineStageFlags                        dstStageMask,
-	//VkDependencyFlags                           dependencyFlags,
-	//uint32_t                                    memoryBarrierCount,
-	//const VkMemoryBarrier*                      pMemoryBarriers,
-	//uint32_t                                    bufferMemoryBarrierCount,
-	//const VkBufferMemoryBarrier*                pBufferMemoryBarriers,
-	//uint32_t                                    imageMemoryBarrierCount,
-	//const VkImageMemoryBarrier*                 pImageMemoryBarriers);
-
-	//VkPipelineStageFlags
-	//VkDependencyFlags
-	//VkBufferMemoryBarrier
-}
+//void VulkanCommandList::Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanPipeline& PipelineObj, _In_ VulkanRenderPass& RenderPassObj)
+//{
+//	VkCommandBufferBeginInfo CommandBufferBeginInfo;
+//	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+//	CommandBufferBeginInfo.pNext			= nullptr;
+//	CommandBufferBeginInfo.flags			= 0;
+//	CommandBufferBeginInfo.pInheritanceInfo = nullptr;
+//
+//	VkResult Result = vkBeginCommandBuffer(_CommandBuffer, &CommandBufferBeginInfo);
+//	ETERNAL_ASSERT(!Result);
+//
+//	vkCmdBindPipeline(_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, PipelineObj.GetVulkanPipeline());
+//
+//	VkClearValue ClearValue;
+//	ClearValue.color.float32[0] = 0.0f;
+//	ClearValue.color.float32[1] = 0.0f;
+//	ClearValue.color.float32[2] = 0.0f;
+//	ClearValue.color.float32[3] = 0.0f;
+//
+//	VkRenderPassBeginInfo RenderPassBeginInfo;
+//	RenderPassBeginInfo.sType						= VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+//	RenderPassBeginInfo.pNext						= nullptr;
+//	RenderPassBeginInfo.renderPass					= RenderPassObj.GetRenderPass();
+//	RenderPassBeginInfo.framebuffer					= static_cast<VulkanRenderTarget&>(FrameBufferObj).GetFrameBuffer();
+//	// FIX THIS
+//	RenderPassBeginInfo.renderArea.offset.x			= 0;
+//	RenderPassBeginInfo.renderArea.offset.y			= 0;
+//	RenderPassBeginInfo.renderArea.extent.width		= 1280;
+//	RenderPassBeginInfo.renderArea.extent.height	= 720;
+//	RenderPassBeginInfo.clearValueCount				= 1;
+//	RenderPassBeginInfo.pClearValues				= &ClearValue;
+//
+//	vkCmdBeginRenderPass(_CommandBuffer, &RenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+//	//vkCmdPipelineBarrier()
+//	//VkCommandBuffer                             commandBuffer,
+//	//VkPipelineStageFlags                        srcStageMask,
+//	//VkPipelineStageFlags                        dstStageMask,
+//	//VkDependencyFlags                           dependencyFlags,
+//	//uint32_t                                    memoryBarrierCount,
+//	//const VkMemoryBarrier*                      pMemoryBarriers,
+//	//uint32_t                                    bufferMemoryBarrierCount,
+//	//const VkBufferMemoryBarrier*                pBufferMemoryBarriers,
+//	//uint32_t                                    imageMemoryBarrierCount,
+//	//const VkImageMemoryBarrier*                 pImageMemoryBarriers);
+//
+//	//VkPipelineStageFlags
+//	//VkDependencyFlags
+//	//VkBufferMemoryBarrier
+//}
 
 void VulkanCommandList::End()
 {

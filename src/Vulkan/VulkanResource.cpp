@@ -29,7 +29,7 @@ static VkBufferUsageFlagBits BuildUsage(_In_ const ResourceType& Type, _In_ bool
 	return (VkBufferUsageFlagBits)(RESOURCE_TYPE_TO_USAGE[Type] << (Writable ? 1 : 0));
 }
 
-VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const ResourceType& Type, _In_ bool Writable)
+VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const ResourceType& Type/*, _In_ bool Writable*/)
 	: Resource(HeapObj)
 {
 	VkBufferCreateInfo BufferInfo;
@@ -37,7 +37,7 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 	BufferInfo.pNext					= nullptr;
 	BufferInfo.flags					= 0;
 	BufferInfo.size						= Size;
-	BufferInfo.usage					= BuildUsage(Type, Writable);
+	BufferInfo.usage					= (VkBufferUsageFlagBits)Type;//BuildUsage(Type, Writable);
 	BufferInfo.sharingMode				= VK_SHARING_MODE_EXCLUSIVE;
 	BufferInfo.queueFamilyIndexCount	= 0;		// Ignored because of VK_SHARING_MODE_EXCLUSIVE
 	BufferInfo.pQueueFamilyIndices		= nullptr;	// Ignored because of VK_SHARING_MODE_EXCLUSIVE
@@ -66,6 +66,12 @@ VulkanResource::~VulkanResource()
 View* VulkanResource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
 {
 	VulkanView* VkView = new VulkanView(DeviceObj, *this, ViewType, FormatObj);
+	return VkView;
+}
+
+View* VulkanResource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj, _In_ uint64_t Offset, _In_ uint64_t Size)
+{
+	VulkanView* VkView = new VulkanView(DeviceObj, *this, FormatObj, Offset, Size);
 	return VkView;
 }
 

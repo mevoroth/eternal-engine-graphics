@@ -29,8 +29,6 @@ namespace Eternal
 
 			virtual void SetViewport(_In_ Viewport& ViewportObj) override;
 			virtual void SetScissorRectangle(_In_ Viewport& ViewportObj) override;
-
-			void Begin(_In_ RenderTarget& FrameBufferObj, _In_ VulkanPipeline& State, _In_ VulkanRenderPass& RenderPassObj);
 			virtual void BindPipelineInput(_In_ RootSignature& RootSignatureObj) override;
 			virtual void Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ Pipeline& PipelineObj) override;
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;

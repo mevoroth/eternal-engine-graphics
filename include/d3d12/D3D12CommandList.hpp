@@ -28,7 +28,6 @@ namespace Eternal
 		public:
 			D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueue, _In_ D3D12Pipeline& State);
 
-
 			void SetViewport(_In_ Viewport& ViewportObj);
 			void SetScissorRectangle(_In_ Viewport& ViewportObj);
 			

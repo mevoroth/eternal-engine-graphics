@@ -62,6 +62,12 @@ View* D3D12Resource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& Des
 	return new D3D12View(DeviceObj, DescriptorHeapObj, *this, ViewType, FormatObj);
 }
 
+View* D3D12Resource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj, _In_ uint64_t Offset, _In_ uint64_t Size)
+{
+	ETERNAL_ASSERT(false);
+	return nullptr;
+}
+
 View* D3D12Resource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj)
 {
 	return new D3D12View(DeviceObj, DescriptorHeapObj, *this);

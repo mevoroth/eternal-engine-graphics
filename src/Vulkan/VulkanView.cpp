@@ -72,6 +72,22 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage,
 	ETERNAL_ASSERT(!Result);
 }
 
+VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const Format& FormatObj, _In_ uint64_t Offset, _In_ uint64_t Size)
+{
+	VkBufferViewCreateInfo BufferViewInfo;
+	
+	BufferViewInfo.sType	= VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO;
+	BufferViewInfo.pNext	= nullptr;
+	BufferViewInfo.flags	= 0;
+	BufferViewInfo.buffer	= ResourceObj.GetBuffer();
+	BufferViewInfo.format	= VULKAN_FORMATS[FormatObj];
+	BufferViewInfo.offset	= Offset;
+	BufferViewInfo.range	= Size;
+
+	VkResult Result = vkCreateBufferView(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &BufferViewInfo, nullptr, &_View.BufferView);
+	ETERNAL_ASSERT(!Result);
+}
+
 VulkanView::~VulkanView()
 {
 	ETERNAL_ASSERT(_View.BufferView);
