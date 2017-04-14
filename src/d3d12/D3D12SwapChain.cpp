@@ -8,7 +8,7 @@
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "d3d12/D3D12DescriptorHeap.hpp"
-#include "d3d12/D3D12RenderTarget.hpp"
+#include "d3d12/D3D12Resource.hpp"
 #include "d3d12/D3D12View.hpp"
 
 using namespace Eternal::Graphics;
@@ -52,7 +52,7 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 		ID3D12Resource* BackBuffer = nullptr;
 		hr = _SwapChain->GetBuffer(BackBufferFrameIndex, __uuidof(ID3D12Resource), (void**)&BackBuffer);
 		ETERNAL_ASSERT(hr == S_OK);
-		_BackBuffers[BackBufferFrameIndex] = new D3D12RenderTarget(BackBuffer);
+		_BackBuffers[BackBufferFrameIndex] = new D3D12Resource(BackBuffer);
 		_BackBufferViews[BackBufferFrameIndex] = static_cast<D3D12View*>(_BackBuffers[BackBufferFrameIndex]->CreateRenderTargetView(DeviceObj, *_BackBufferDescriptorHeap));
 	}
 }
@@ -68,7 +68,7 @@ void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQ
 	ETERNAL_ASSERT(hr == S_OK);
 }
 
-RenderTarget& D3D12SwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
+Resource& D3D12SwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 {
 	return *_BackBuffers[BackBufferIndex];
 }

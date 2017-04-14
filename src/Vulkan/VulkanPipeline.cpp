@@ -12,7 +12,7 @@
 
 using namespace Eternal::Graphics;
 
-VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ VulkanRenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
+VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ RenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
 {
 	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();
 	VkPipelineCacheCreateInfo PipelineCacheInfo;
@@ -165,8 +165,8 @@ VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootS
 	PipelineInfo.pColorBlendState		= &ColorBlendStateInfo;
 	PipelineInfo.pDynamicState			= nullptr;
 	PipelineInfo.layout					= static_cast<VulkanRootSignature&>(RootSignatureObj).GetPipelineLayout();
-	PipelineInfo.renderPass				= RenderPassObj.GetRenderPass();
-	PipelineInfo.subpass				= 0;	// FIX THIS
+	PipelineInfo.renderPass				= static_cast<VulkanRenderPass&>(RenderPassObj).GetRenderPass();
+	PipelineInfo.subpass				= 0;
 	PipelineInfo.basePipelineHandle		= nullptr;
 	PipelineInfo.basePipelineIndex		= 0;
 

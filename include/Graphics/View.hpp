@@ -5,6 +5,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class RenderTarget;
+
 		enum TextureView
 		{
 			TEXTURE_VIEW_TYPE_1D,
@@ -20,6 +22,7 @@ namespace Eternal
 		{
 		public:
 			virtual ~View() {}
+			virtual RenderTarget& GetAsRenderTarget() = 0;
 		};
 	}
 }

@@ -21,6 +21,7 @@ namespace Eternal
 			D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj);
 			~D3D12View();
 
+			virtual RenderTarget& GetAsRenderTarget() override;
 			inline D3D12_CPU_DESCRIPTOR_HANDLE& GetCpuDescriptor() { return _CpuDescriptor; }
 
 		private:

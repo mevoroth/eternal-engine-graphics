@@ -22,7 +22,7 @@ const VkImageViewType VULKAN_IMAGE_VIEW_TYPES[] =
 };
 //extern const VkFormat VULKAN_FORMATS[];
 
-VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& View, _In_ const Format& FormatObj)
+VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
 	: _Format(FormatObj)
 {
 	VkImageViewCreateInfo ImageViewInfo;
@@ -31,7 +31,7 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj,
 	ImageViewInfo.pNext								= nullptr;
 	ImageViewInfo.flags								= 0;
 	ImageViewInfo.image								= ResourceObj.GetImage();
-	ImageViewInfo.viewType							= VULKAN_IMAGE_VIEW_TYPES[View];
+	ImageViewInfo.viewType							= VULKAN_IMAGE_VIEW_TYPES[ViewType];
 	ImageViewInfo.format							= VULKAN_FORMATS[FormatObj];
 	ImageViewInfo.components.r						= VK_COMPONENT_SWIZZLE_R;
 	ImageViewInfo.components.g						= VK_COMPONENT_SWIZZLE_G;
@@ -47,7 +47,7 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj,
 	ETERNAL_ASSERT(!Result);
 }
 
-VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& View, _In_ const Format& FormatObj)
+VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
 	: _Format(FormatObj)
 {
 	VkImageViewCreateInfo ImageViewInfo;
@@ -56,7 +56,7 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage,
 	ImageViewInfo.pNext								= nullptr;
 	ImageViewInfo.flags								= 0;
 	ImageViewInfo.image								= BackBufferImage;
-	ImageViewInfo.viewType							= VULKAN_IMAGE_VIEW_TYPES[View];
+	ImageViewInfo.viewType							= VULKAN_IMAGE_VIEW_TYPES[ViewType];
 	ImageViewInfo.format							= VULKAN_FORMATS[FormatObj];
 	ImageViewInfo.components.r						= VK_COMPONENT_SWIZZLE_R;
 	ImageViewInfo.components.g						= VK_COMPONENT_SWIZZLE_G;
@@ -91,4 +91,9 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj,
 VulkanView::~VulkanView()
 {
 	ETERNAL_ASSERT(_View.BufferView);
+}
+
+RenderTarget& VulkanView::GetAsRenderTarget()
+{
+	return *((RenderTarget*)nullptr);
 }

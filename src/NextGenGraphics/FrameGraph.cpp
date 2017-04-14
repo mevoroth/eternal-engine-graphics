@@ -3,24 +3,29 @@
 #include "Macros/Macros.hpp"
 #include <set>
 #include <algorithm>
-#define VC_EXTRALEAN
-#define WIN32_LEAN_AND_MEAN
-#define WIN32_EXTRA_LEAN
-#include <Windows.h>
+
 using namespace std;
 using namespace Eternal::Graphics;
 
-//void FrameGraph::RegisterResource(_In_ Resource* ResourceObj)
-//{
-//	ETERNAL_ASSERT(find(_Resources.cbegin(), _Resources.cend(), ResourceObj) == _Resources.cend());
-//	_Resources.push_back(ResourceObj);
-//}
-#undef max
-#undef min
+static uint32_t FindMaxDepth(_In_ const vector<Resource*>& Resources)
+{
+	for (const Resource* const& CurrentResource : Resources)
+	{
+
+	}
+}
+
 void FrameGraph::RegisterRenderPass(_In_ RenderPass* RenderPassObj, _In_ const vector<Resource*>& Inputs, _In_ const vector<Resource*>& Outputs)
 {
 	uint32_t MinDepth = UINT32_MAX;
 	uint32_t TemporaryMinDepth = 0;
+
+	//auto FindMaxDepth = [TemporaryMinDepth](const Resource* ResourceObj)
+	//{
+	//	for ()
+	//};
+	//for_each(Inputs.cbegin(), Inputs.cend(), FindMaxDepth);
+
 	for (uint32_t InputIndex = 0; InputIndex < Inputs.size(); ++InputIndex)
 	{
 		Resource* Input = Inputs[InputIndex];

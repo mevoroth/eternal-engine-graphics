@@ -19,12 +19,12 @@ namespace Eternal
 		class Window;
 		class Device;
 		class CommandQueue;
-		class RenderTarget;
+		class Resource;
 		class View;
 		class VulkanView;
 		class VulkanRenderPass;
 		class VulkanFence;
-		class VulkanRenderTarget;
+		class VulkanResource;
 
 		class VulkanSwapChain : public SwapChain
 		{
@@ -34,22 +34,22 @@ namespace Eternal
 			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) override;
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) override;
 
-			virtual RenderTarget& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
+			virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
 			virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
 			virtual uint32_t GetBackBuffersFrameCount() const override;
+			virtual RenderPass& GetMainRenderPass() override;
 			VkSwapchainKHR_T*& GetSwapChain() { return _SwapChain; }
-			VulkanRenderPass* GetMainRenderPass() { return _RenderPass; }
 
 			VkSemaphore_T*& GetAcquireSemaphore(_In_ uint32_t ResourceIndex);
 
 		private:
-			vector<VulkanRenderTarget*>	_BackBuffers;
-			vector<VulkanView*>			_BackBufferViews;
-			vector<VkSemaphore_T*>		_AcquireSemaphores;
-			VulkanRenderPass*			_RenderPass	= nullptr;
-			VkSurfaceKHR_T*				_Surface	= nullptr;
-			VkSwapchainKHR_T*			_SwapChain	= nullptr;
-			uint32_t					_FrameIndex	= 0u;
+			vector<VulkanResource*>	_BackBuffers;
+			vector<View*>			_BackBufferViews;
+			vector<VkSemaphore_T*>	_AcquireSemaphores;
+			VulkanRenderPass*		_RenderPass	= nullptr;
+			VkSurfaceKHR_T*			_Surface	= nullptr;
+			VkSwapchainKHR_T*		_SwapChain	= nullptr;
+			uint32_t				_FrameIndex	= 0u;
 		};
 	}
 }

@@ -112,18 +112,23 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 	_BackBufferViews.resize(BackBuffersCount);
 	_AcquireSemaphores.resize(BackBuffersCount);
 
+	std::vector<VulkanView*> VkViews;
+	VkViews.resize(BackBuffersCount);
+
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
 	{
-		_BackBufferViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, BackBuffers[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, BGRA8888);
+		VkViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, BackBuffers[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, BGRA8888);
+		//_BackBufferViews[BackBufferIndex] = new VulkanRenderTarget(DeviceObj, ;
+		_BackBuffers[BackBufferIndex] = new VulkanResource(BackBuffers[BackBufferIndex]);
 	}
 
 	vector<View*> RenderTargets;
-	RenderTargets.push_back(_BackBufferViews[0]);
+	RenderTargets.push_back(VkViews[0]);
 	_RenderPass = new VulkanRenderPass(VulkanDeviceObj, RenderTargets);
 
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
 	{
-		_BackBuffers[BackBufferIndex] = new VulkanRenderTarget(VulkanDeviceObj, *_RenderPass, BackBuffers[BackBufferIndex], *_BackBufferViews[BackBufferIndex], WindowObj.GetWidth(), WindowObj.GetHeight());
+		_BackBufferViews[BackBufferIndex] = new VulkanRenderTarget(DeviceObj, *_RenderPass, &VkViews[BackBufferIndex], 1u, (uint32_t)WindowObj.GetWidth(), (uint32_t)WindowObj.GetHeight());
 		
 		VkSemaphoreCreateInfo SemaphoreInfo;
 		SemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -135,7 +140,7 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 	}
 }
 
-RenderTarget& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
+Resource& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
 {
 	ETERNAL_ASSERT(BackBufferIndex < _BackBuffers.size());
 	return *_BackBuffers[BackBufferIndex];
@@ -173,6 +178,11 @@ VkSemaphore_T*& VulkanSwapChain::GetAcquireSemaphore(_In_ uint32_t ResourceIndex
 {
 	ETERNAL_ASSERT(ResourceIndex < _AcquireSemaphores.size());
 	return _AcquireSemaphores[ResourceIndex];
+}
+
+RenderPass& VulkanSwapChain::GetMainRenderPass()
+{
+	return *_RenderPass;
 }
 
 void VulkanSwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)

@@ -25,10 +25,12 @@ namespace Eternal
 				VkBufferView_T* BufferView;
 			};
 		public:
-			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& View, _In_ const Format& FormatObj);
-			VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& View, _In_ const Format& FormatObj);
+			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj);
+			VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& ViewType, _In_ const Format& FormatObj);
 			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull);
 			virtual ~VulkanView();
+
+			virtual RenderTarget& GetAsRenderTarget() override;
 
 			VkImageView_T*& GetImageView() { return _View.ImageView; }
 			VkBufferView_T*& GetBufferView() { return _View.BufferView; }

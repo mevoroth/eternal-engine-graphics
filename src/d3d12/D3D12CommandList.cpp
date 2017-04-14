@@ -94,3 +94,26 @@ void D3D12CommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj)
 {
 	_CommandList->SetGraphicsRootSignature(static_cast<D3D12RootSignature&>(RootSignatureObj).GetD3D12RootSignature());
 }
+
+void D3D12CommandList::BeginRenderPass(_In_ RenderPass& RenderPassObj, RenderTarget& RenderTargetObj, _In_ Viewport& ViewportObj)
+{
+}
+
+void D3D12CommandList::EndRenderPass()
+{
+}
+
+void D3D12CommandList::Transition(_In_ ResourceTransition Buffers[], _In_ uint32_t BuffersCount, _In_ ResourceTransition Images[], _In_ uint32_t ImagesCount)
+{
+
+}
+
+void D3D12CommandList::CopyBuffer(_In_ Resource& Source, _In_ Resource& Destination)
+{
+	Copy(Source, Destination);
+}
+
+void D3D12CommandList::Copy(_In_ Resource& Source, _In_ Resource& Destination)
+{
+	_CommandList->CopyResource(static_cast<D3D12Resource&>(Source).GetResource(), static_cast<D3D12Resource&>(Destination).GetResource());
+}

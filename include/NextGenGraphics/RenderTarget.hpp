@@ -7,7 +7,8 @@ namespace Eternal
 	{
 		class RenderTarget
 		{
-
+		public:
+			~RenderTarget() {}
 		};
 	}
 }

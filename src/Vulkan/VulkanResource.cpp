@@ -18,11 +18,11 @@ static VkBufferUsageFlagBits BuildUsage(_In_ const ResourceType& Type, _In_ bool
 {
 	switch (Type)
 	{
-	case INDEX:
+	case BUFFER_INDEX:
 		return VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
-	case VERTEX:
+	case BUFFER_VERTEX:
 		return VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-	case INDIRECT:
+	case BUFFER_INDIRECT:
 		return VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
 	}
 
@@ -30,8 +30,10 @@ static VkBufferUsageFlagBits BuildUsage(_In_ const ResourceType& Type, _In_ bool
 }
 
 VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const ResourceType& Type/*, _In_ bool Writable*/)
-	: Resource(HeapObj)
+	: Resource(HeapObj, Size)
 {
+	ETERNAL_ASSERT(Size > 0ull);
+
 	VkBufferCreateInfo BufferInfo;
 	BufferInfo.sType					= VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	BufferInfo.pNext					= nullptr;
@@ -79,4 +81,23 @@ View* VulkanResource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ Descri
 {
 	ETERNAL_ASSERT(false);
 	return nullptr;
+}
+
+VulkanHeap& VulkanResource::GetVulkanHeap()
+{
+	return static_cast<VulkanHeap&>(GetHeap());
+}
+
+void* VulkanResource::Map(_In_ Device& DeviceObj)
+{
+	void* Data = nullptr;
+	VkResult Result = vkMapMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), GetVulkanHeap().GetVulkanDeviceMemory(), 0, GetSize(), 0, &Data);
+	ETERNAL_ASSERT(!Result);
+	ETERNAL_ASSERT(Data);
+	return Data;
+}
+
+void VulkanResource::Unmap(_In_ Device& DeviceObj)
+{
+	vkUnmapMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), GetVulkanHeap().GetVulkanDeviceMemory());
 }

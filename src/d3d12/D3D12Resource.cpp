@@ -72,3 +72,14 @@ View* D3D12Resource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ Descrip
 {
 	return new D3D12View(DeviceObj, DescriptorHeapObj, *this);
 }
+
+void* D3D12Resource::Map(_In_ Device& DeviceObj)
+{
+	ETERNAL_ASSERT(false);
+	return nullptr;
+}
+
+void D3D12Resource::Unmap(_In_ Device& DeviceObj)
+{
+	ETERNAL_ASSERT(false);
+}

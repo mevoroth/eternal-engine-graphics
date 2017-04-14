@@ -418,6 +418,9 @@
     <ClInclude Include="include\Vulkan\VulkanDescriptorHeap.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\RenderPass.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">

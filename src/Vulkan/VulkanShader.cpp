@@ -103,6 +103,8 @@ void VulkanShader::_CompileFile(_In_ Device& DeviceObj, _In_ const string& Src, 
 	shaderc_compilation_status CompilationStatus	= shaderc_result_get_compilation_status(CompilationResult);
 	const char* CompilationErrorMessages			= shaderc_result_get_error_message(CompilationResult);
 
+	ETERNAL_ASSERT(CompilationStatus == shaderc_compilation_status_success);
+
 	shaderc_compile_options_release(CompilerOptions);
 	shaderc_compiler_release(Compiler);
 

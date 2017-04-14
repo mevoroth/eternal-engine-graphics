@@ -10,8 +10,9 @@ namespace Eternal
 		class Device;
 		class Fence;
 		class CommandQueue;
-		class RenderTarget;
+		class Resource;
 		class View;
+		class RenderPass;
 
 		class SwapChain
 		{
@@ -19,9 +20,10 @@ namespace Eternal
 			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) = 0;
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) = 0;
 
-			virtual RenderTarget& GetBackBuffer(_In_ uint32_t BackBufferIndex) = 0;
+			virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) = 0;
 			virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) = 0;
 			virtual uint32_t GetBackBuffersFrameCount() const = 0;
+			virtual RenderPass& GetMainRenderPass() = 0;
 		};
 	}
 }

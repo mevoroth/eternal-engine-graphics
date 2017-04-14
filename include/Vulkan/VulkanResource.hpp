@@ -38,7 +38,12 @@ namespace Eternal
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull) override;
 			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj) override;
 
+			virtual void* Map(_In_ Device& DeviceObj) override;
+			virtual void Unmap(_In_ Device& DeviceObj) override;
+
 		private:
+			VulkanHeap& GetVulkanHeap();
+
 			VkResource	_Resource;
 		};
 	}

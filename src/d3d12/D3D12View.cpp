@@ -103,3 +103,9 @@ D3D12View::~D3D12View()
 {
 	_DescriptorHeap.Push(_CpuDescriptor);
 }
+
+RenderTarget& D3D12View::GetAsRenderTarget()
+{
+	ETERNAL_ASSERT(false);
+	return *((RenderTarget*)nullptr);
+}
