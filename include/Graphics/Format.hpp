@@ -11,7 +11,9 @@ namespace Eternal
 			RGBA8888		= 1,
 			RGBA32323232	= 2,
 			R32				= 3,
-			RG328			= 4
+			RG328			= 4,
+			RG3232			= 5,
+			FORMAT_COUNT
 		};
 	}
 }

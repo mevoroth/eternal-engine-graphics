@@ -1,5 +1,6 @@
 #include "Vulkan/VulkanDescriptorHeap.hpp"
 
+#include <cstdint>
 #include <vector>
 #include <vulkan/vulkan.h>
 #include "Macros/Macros.hpp"
@@ -20,6 +21,7 @@ static const VkShaderStageFlags RootSignatureAccessToVkShaderStageFlags(_In_ con
 
 VulkanDescriptorHeap::VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
 	: _Device(DeviceObj)
+	, _BoundResources(ResourcesCount)
 {
 	VkDescriptorPoolSize DescriptorPoolSize;
 	DescriptorPoolSize.type				= VULKAN_DESCRIPTOR_TYPES[HeapTypeObj];
@@ -57,7 +59,7 @@ VulkanDescriptorHeap::VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ const Ro
 	vector<VkDescriptorSetLayout> DescriptorSetLayouts;
 	DescriptorSetLayouts.resize(ResourcesCount);
 
-	for (unsigned int ResourceIndex = 0; ResourceIndex < ResourcesCount; ++ResourceIndex)
+	for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesCount; ++ResourceIndex)
 	{
 		DescriptorSetLayouts[ResourceIndex] = _DescriptorSetLayout;
 	}
@@ -87,4 +89,18 @@ VkDescriptorSet_T* VulkanDescriptorHeap::Pop()
 void VulkanDescriptorHeap::Push(_In_ VkDescriptorSet_T* Handle)
 {
 	_ResourcesPool.push_back(Handle);
+}
+
+VkDescriptorSet_T* VulkanDescriptorHeap::Bind()
+{
+	VkDescriptorSet BoundDescriptorSet = Pop();
+	_BoundResources.Push(BoundDescriptorSet);
+	return BoundDescriptorSet;
+}
+
+void VulkanDescriptorHeap::Unbind()
+{
+	VkDescriptorSet_T* UnboundDescriptorSet = _BoundResources.Head();
+	_BoundResources.PopHead();
+	Push(UnboundDescriptorSet);
 }

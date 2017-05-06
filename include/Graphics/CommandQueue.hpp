@@ -7,6 +7,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class Device;
 		class CommandAllocator;
 		class CommandList;
 		class Fence;
@@ -18,6 +19,7 @@ namespace Eternal
 			virtual void Reset(_In_ uint32_t FrameIndex) = 0;
 			virtual void Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj) = 0;
 			virtual CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex) = 0;
+			virtual CommandList* Pop() = 0;
 		};
 	}
 }

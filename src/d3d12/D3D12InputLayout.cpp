@@ -20,9 +20,9 @@ static const DXGI_FORMAT D3D12_INPUT_FORMATS[]
 	DXGI_FORMAT_R32G32_FLOAT,
 };
 
-D3D12InputLayout::D3D12InputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t Size)
+D3D12InputLayout::D3D12InputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t DataTypeCount)
 {
-	for (uint32_t DataTypeIndex = 0; DataTypeIndex < Size; ++DataTypeIndex)
+	for (uint32_t DataTypeIndex = 0; DataTypeIndex < DataTypeCount; ++DataTypeIndex)
 	{
 		_AddInputDesc(D3D12_INPUT_SEMANTICS[DataType[DataTypeIndex]], D3D12_INPUT_FORMATS[DataType[DataTypeIndex]]);
 	}

@@ -16,12 +16,12 @@ namespace Eternal
 	{
 		class Device;
 
-		enum DeviceType
-		{
-			WINDOWS
-		};
+		//enum DeviceType
+		//{
+		//	WINDOWS
+		//};
 
-		Device* CreateDevice(_In_ const DeviceType& DeviceTypeObj, _In_ WNDPROC WindowsProcess, _In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& Name, _In_ const string& ClassName);
+		//Device* CreateDevice(_In_ const DeviceType& DeviceTypeObj, _In_ WNDPROC WindowsProcess, _In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& Name, _In_ const string& ClassName);
 	}
 }
 

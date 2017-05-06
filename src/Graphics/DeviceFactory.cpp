@@ -7,18 +7,18 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		Device* CreateDevice(_In_ const DeviceType& DeviceTypeObj, _In_ WNDPROC WindowsProcess, _In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& Name, _In_ const string& ClassName)
-		{
-			if (DeviceTypeObj == WINDOWS)
-			{
-				D3D11Device* D3DDevice = new D3D11Device(hInstance, nCmdShow, Name, ClassName);
-				D3DDevice->Create(WindowsProcess);
-				return D3DDevice;
-			}
+		//Device* CreateDevice(_In_ const DeviceType& DeviceTypeObj, _In_ WNDPROC WindowsProcess, _In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& Name, _In_ const string& ClassName)
+		//{
+		//	if (DeviceTypeObj == WINDOWS)
+		//	{
+		//		D3D11Device* D3DDevice = new D3D11Device(hInstance, nCmdShow, Name, ClassName);
+		//		D3DDevice->Create(WindowsProcess);
+		//		return D3DDevice;
+		//	}
 
-			ETERNAL_ASSERT(false);
+		//	ETERNAL_ASSERT(false);
 
-			return nullptr;
-		}
+		//	return nullptr;
+		//}
 	}
 }

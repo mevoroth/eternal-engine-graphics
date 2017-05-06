@@ -38,8 +38,8 @@ namespace Eternal
 			const Format& GetFormat() const { return _Format; }
 
 		private:
-			VkView _View;
-			Format _Format;
+			VkView			_View;
+			Format			_Format;
 		};
 	}
 }

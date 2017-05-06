@@ -155,12 +155,19 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	vkGetPhysicalDeviceQueueFamilyProperties(_PhysicalDevice, &_QueueFamilyPropertiesCount, QueueFamilyProperties.data());
 
-	ETERNAL_ASSERT(QueueFamilyProperties[0].queueFlags & VK_QUEUE_GRAPHICS_BIT); // Assume main device has graphics queue
+	ETERNAL_ASSERT(QueueFamilyProperties[GetQueueFamilyIndex()].queueFlags & VK_QUEUE_GRAPHICS_BIT); // Assume main device has graphics queue
 
 	VkPhysicalDeviceFeatures PhysicalDeviceFeatures;
 	vkGetPhysicalDeviceFeatures(_PhysicalDevice, &PhysicalDeviceFeatures);
 	
-	float QueuePriorities = 0.0f;
+	uint32_t VulkanQueueCount = QueueFamilyProperties[GetQueueFamilyIndex()].queueCount;
+
+	vector<float> QueuePriorities;
+	QueuePriorities.resize(VulkanQueueCount);
+	for (uint32_t QueuePriorityIndex = 0; QueuePriorityIndex < VulkanQueueCount; ++QueuePriorityIndex)
+	{
+		QueuePriorities[QueuePriorityIndex] = 0.0f;
+	}
 
 	const char* VulkanDeviceExtensions[] =
 	{
@@ -172,8 +179,8 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	DeviceQueueInfo.pNext				= nullptr;
 	DeviceQueueInfo.flags				= 0;
 	DeviceQueueInfo.queueFamilyIndex	= 0; //__debugbreak(); fix this
-	DeviceQueueInfo.queueCount			= 1; //__debugbreak(); fix this
-	DeviceQueueInfo.pQueuePriorities	= &QueuePriorities;
+	DeviceQueueInfo.queueCount			= VulkanQueueCount; //__debugbreak(); fix this
+	DeviceQueueInfo.pQueuePriorities	= QueuePriorities.data();
 
 	VkDeviceCreateInfo DeviceInfo;
 	DeviceInfo.sType					= VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -191,6 +198,12 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	ETERNAL_ASSERT(!Result);
 
 	vkGetPhysicalDeviceMemoryProperties(_PhysicalDevice, &_PhysicalDeviceMemoryProperties);
+
+	_VulkanQueues.resize(VulkanQueueCount);
+	for (uint32_t VulkanQueueIndex = 0; VulkanQueueIndex < VulkanQueueCount; ++VulkanQueueIndex)
+	{
+		vkGetDeviceQueue(_Device, GetQueueFamilyIndex(), VulkanQueueIndex, &_VulkanQueues[VulkanQueueCount - VulkanQueueIndex - 1]);
+	}
 }
 
 VkDevice& VulkanDevice::GetVulkanDevice()
@@ -209,4 +222,11 @@ uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ const VkMemoryPropertyFlagBi
 	}
 	ETERNAL_ASSERT(MemoryTypeIndex < MemoryTypeCount);
 	return MemoryTypeIndex;
+}
+
+VkQueue VulkanDevice::PopVulkanQueue()
+{
+	VkQueue CurrentQueue = _VulkanQueues.back();
+	_VulkanQueues.pop_back();
+	return CurrentQueue;
 }

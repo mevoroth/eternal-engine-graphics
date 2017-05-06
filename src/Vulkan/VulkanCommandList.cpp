@@ -2,6 +2,7 @@
 
 #include "Macros/Macros.hpp"
 #include <vulkan/vulkan.h>
+#include "GraphicsSettings.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
@@ -11,6 +12,8 @@
 #include "Vulkan/VulkanRootSignature.hpp"
 #include "Vulkan/VulkanResource.hpp"
 #include "Vulkan/VulkanHeap.hpp"
+#include "Vulkan/VulkanView.hpp"
+#include "Vulkan/VulkanDescriptorHeap.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -136,6 +139,34 @@ void VulkanCommandList::DrawPrimitive(_In_ uint32_t PrimitiveCount)
 	vkCmdDraw(_CommandBuffer, PrimitiveCount, 1, 0, 0);
 }
 
+void VulkanCommandList::DrawIndexed(_In_ uint32_t IndicesCount, _In_ uint32_t StartIndexLocation, _In_ int BaseVertexLocation)
+{
+	vkCmdDrawIndexed(_CommandBuffer, IndicesCount, 1, StartIndexLocation, BaseVertexLocation, 0);
+}
+
+void VulkanCommandList::DrawIndexedInstanced(_In_ uint32_t IndicesCount, _In_ uint32_t InstancesCount, _In_ uint32_t StartIndexLocation, _In_ int BaseVertexLocation, _In_ uint32_t StartInstanceLocation)
+{
+	vkCmdDrawIndexed(_CommandBuffer, IndicesCount, InstancesCount, StartIndexLocation, BaseVertexLocation, StartInstanceLocation);
+}
+
+void VulkanCommandList::SetIndicesBuffer(_In_ Resource* IndicesBuffer)
+{
+	vkCmdBindIndexBuffer(_CommandBuffer, static_cast<VulkanResource*>(IndicesBuffer)->GetBuffer(), 0, VK_INDEX_TYPE_UINT16);
+}
+
+void VulkanCommandList::SetVerticesBuffers(_In_ uint32_t StartSlot, _In_ uint32_t VerticesBuffersCount, _In_ Resource* VerticesBuffers[])
+{
+	ETERNAL_ASSERT(VerticesBuffersCount <= MAX_VERTICES_BUFFERS);
+	VkBuffer VerticesBuffersHandles[MAX_VERTICES_BUFFERS];
+	VkDeviceSize VerticesOffsets[MAX_VERTICES_BUFFERS];
+	for (uint32_t VerticesBufferIndex = 0; VerticesBufferIndex < VerticesBuffersCount; ++VerticesBufferIndex)
+	{
+		VerticesBuffersHandles[VerticesBufferIndex] = static_cast<VulkanResource*>(VerticesBuffers[VerticesBufferIndex])->GetBuffer();
+		VerticesOffsets[VerticesBufferIndex] = 0ull;
+	}
+	vkCmdBindVertexBuffers(_CommandBuffer, StartSlot, VerticesBuffersCount, VerticesBuffersHandles, VerticesOffsets);
+}
+
 void VulkanCommandList::SetViewport(_In_ Viewport& ViewportObj)
 {
 	VkViewport VulkanViewport;
@@ -160,16 +191,22 @@ void VulkanCommandList::SetScissorRectangle(_In_ Viewport& ViewportObj)
 	vkCmdSetScissor(_CommandBuffer, 0, 1, &VulkanScissor);
 }
 
-void VulkanCommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj)
+void VulkanCommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount)
 {
-	ETERNAL_ASSERT(false);
+	ETERNAL_ASSERT(DescriptorHeapsCount <= MAX_DESCRIPTORS_HEAPS);
+	VkDescriptorSet VulkanDescriptorSets[MAX_DESCRIPTORS_HEAPS];
+	for (uint32_t DescriptorSetIndex = 0; DescriptorSetIndex < DescriptorHeapsCount; ++DescriptorSetIndex)
+	{
+		VulkanDescriptorSets[DescriptorSetIndex] = static_cast<VulkanDescriptorHeap*>(DescriptorHeaps[DescriptorSetIndex])->Bind();
+	}
+
 	vkCmdBindDescriptorSets(
 		_CommandBuffer,
 		VK_PIPELINE_BIND_POINT_GRAPHICS,
 		static_cast<VulkanRootSignature&>(RootSignatureObj).GetPipelineLayout(),
 		0,
-		0,
-		nullptr,
+		DescriptorHeapsCount,
+		VulkanDescriptorSets,
 		0,
 		nullptr
 	);

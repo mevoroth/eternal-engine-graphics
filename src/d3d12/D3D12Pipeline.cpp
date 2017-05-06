@@ -18,8 +18,8 @@ D3D12Pipeline::D3D12Pipeline(
 	_In_ Device& DeviceObj,
 	_In_ RootSignature& RootSignatureObj,
 	_In_ InputLayout& InputLayoutObj,
-	_In_ Shader* VS,
-	_In_ Shader* PS,
+	_In_ Shader& VS,
+	_In_ Shader& PS,
 	_In_ const DepthTest& DepthTestObj,
 	_In_ const StencilTest& StencilTestObj,
 	_In_ const BlendState BlendStates[],
@@ -39,8 +39,8 @@ D3D12Pipeline::D3D12Pipeline(
 	PipelineStateDesc.InputLayout.NumElements			= (UINT)InputElements.size();
 	PipelineStateDesc.pRootSignature					= static_cast<D3D12RootSignature&>(RootSignatureObj).GetD3D12RootSignature();
 	
-	static_cast<D3D12Shader*>(VS)->GetD3D12Shader(PipelineStateDesc.VS);
-	static_cast<D3D12Shader*>(PS)->GetD3D12Shader(PipelineStateDesc.PS);
+	static_cast<D3D12Shader&>(VS).GetD3D12Shader(PipelineStateDesc.VS);
+	static_cast<D3D12Shader&>(PS).GetD3D12Shader(PipelineStateDesc.PS);
 	PipelineStateDesc.GS.pShaderBytecode	= nullptr;
 	PipelineStateDesc.GS.BytecodeLength		= 0;
 	PipelineStateDesc.DS.pShaderBytecode	= nullptr;
@@ -48,11 +48,11 @@ D3D12Pipeline::D3D12Pipeline(
 	PipelineStateDesc.HS.pShaderBytecode	= nullptr;
 	PipelineStateDesc.HS.BytecodeLength		= 0;
 
-	PipelineStateDesc.StreamOutput.pSODeclaration = nullptr;
-	PipelineStateDesc.StreamOutput.NumEntries = 0;
-	PipelineStateDesc.StreamOutput.pBufferStrides = nullptr;
-	PipelineStateDesc.StreamOutput.NumStrides = 0;
-	PipelineStateDesc.StreamOutput.RasterizedStream = 0;
+	PipelineStateDesc.StreamOutput.pSODeclaration	= nullptr;
+	PipelineStateDesc.StreamOutput.NumEntries		= 0;
+	PipelineStateDesc.StreamOutput.pBufferStrides	= nullptr;
+	PipelineStateDesc.StreamOutput.NumStrides		= 0;
+	PipelineStateDesc.StreamOutput.RasterizedStream	= 0;
 
 	PipelineStateDesc.RasterizerState.FillMode				= D3D12_FILL_MODE_SOLID;
 	PipelineStateDesc.RasterizerState.CullMode				= D3D12_CULL_MODE_BACK;
@@ -120,14 +120,14 @@ D3D12Pipeline::D3D12Pipeline(
 	}
 	PipelineStateDesc.DSVFormat = DXGI_FORMAT_UNKNOWN;//DXGI_FORMAT_R32_FLOAT;
 	
-	PipelineStateDesc.SampleDesc.Count = 1;
-	PipelineStateDesc.SampleDesc.Quality = 0;
-	PipelineStateDesc.SampleMask = UINT_MAX;
+	PipelineStateDesc.SampleDesc.Count		= 1;
+	PipelineStateDesc.SampleDesc.Quality	= 0;
+	PipelineStateDesc.SampleMask			= UINT_MAX;
 
 	PipelineStateDesc.NodeMask = D3D12DeviceObj.GetDeviceMask();
 
-	PipelineStateDesc.CachedPSO.pCachedBlob = nullptr;
-	PipelineStateDesc.CachedPSO.CachedBlobSizeInBytes = 0;
+	PipelineStateDesc.CachedPSO.pCachedBlob				= nullptr;
+	PipelineStateDesc.CachedPSO.CachedBlobSizeInBytes	= 0;
 
 	PipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 

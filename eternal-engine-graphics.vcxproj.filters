@@ -421,6 +421,24 @@
     <ClInclude Include="include\Graphics\RenderPass.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\HeapFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ResourceFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NextGenGraphics\SamplerFactory.hpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NextGenGraphics\DeviceFactory.hpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\PipelineFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\InputLayoutFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -704,6 +722,27 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanDescriptorHeap.cpp">
       <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\HeapFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ResourceFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\DeviceFactory.cpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\PipelineFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanInputLayout.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\InputLayoutFactory.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

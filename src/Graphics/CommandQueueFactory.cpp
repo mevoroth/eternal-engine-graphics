@@ -7,7 +7,7 @@
 #include "Macros/Macros.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
-#include "VUlkan/VulkanCommandQueue.hpp"
+#include "Vulkan/VulkanCommandQueue.hpp"
 
 namespace Eternal
 {

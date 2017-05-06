@@ -20,12 +20,14 @@ using namespace std;
 VulkanCommandQueue::VulkanCommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount)
 	: _Device(DeviceObj)
 {
-	vkGetDeviceQueue(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), 0, 0, &_CommandQueue);
+	_CommandQueue = static_cast<VulkanDevice&>(DeviceObj).PopVulkanQueue();
 
 	_CommandAllocators.resize(FrameCount);
-	for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
+	_CommandLists.resize(FrameCount);
+	for (uint32_t CommandBufferIndex = 0; CommandBufferIndex < _CommandAllocators.size(); ++CommandBufferIndex)
 	{
-		_CommandAllocators[CommandAllocatorIndex] = new VulkanCommandAllocator(DeviceObj);
+		_CommandAllocators[CommandBufferIndex]	= new VulkanCommandAllocator(DeviceObj);
+		_CommandLists[CommandBufferIndex]		= new VulkanCommandList(DeviceObj, *_CommandAllocators[CommandBufferIndex]);
 	}
 }
 
@@ -83,4 +85,11 @@ CommandAllocator* VulkanCommandQueue::GetCommandAllocator(_In_ uint32_t FrameInd
 {
 	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
 	return _CommandAllocators[FrameIndex];
+}
+
+CommandList* VulkanCommandQueue::Pop()
+{
+	VulkanCommandList* CommandListObj = _CommandLists[_FrameIndex];
+	_FrameIndex = (_FrameIndex + 1) % _CommandLists.size();
+	return CommandListObj;
 }

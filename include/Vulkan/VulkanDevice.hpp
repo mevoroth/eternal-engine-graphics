@@ -4,11 +4,13 @@
 #define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.h>
 #include "NextGenGraphics/Device.hpp"
+#include <vector>
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace std;
 		class Window;
 		class Vulkan;
 
@@ -39,11 +41,13 @@ namespace Eternal
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }
 			const VkPhysicalDeviceMemoryProperties& GetPhysicalDeviceMemoryProperties() const { return _PhysicalDeviceMemoryProperties; }
 			uint32_t FindBestMemoryTypeIndex(_In_ const VkMemoryPropertyFlagBits& Flags) const;
+			VkQueue PopVulkanQueue();
 
 			virtual uint32_t GetDeviceMask() const override { return 0x1; }
 			virtual DeviceType GetDeviceType() const override { return VULKAN; }
 
 		private:
+			vector<VkQueue>						_VulkanQueues;
 			VkPhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;
 			VkDebugReportCallbackEXT			_DebugReportCallback			= nullptr;
 			VkInstance							_Instance						= nullptr;

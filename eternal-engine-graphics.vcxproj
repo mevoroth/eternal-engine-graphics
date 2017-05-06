@@ -75,29 +75,75 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11BlendState.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Buffer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11DepthStencil.hpp" />
-    <ClInclude Include="include\d3d11\D3D11DepthStencilBuffer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Resource.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Constant.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Context.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Device.hpp" />
-    <ClInclude Include="include\d3d11\D3D11GeometryShader.hpp" />
-    <ClInclude Include="include\d3d11\D3D11InputLayout.hpp" />
-    <ClInclude Include="include\d3d11\D3D11PixelShader.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Renderer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Sampler.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Shader.hpp" />
-    <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp" />
-    <ClInclude Include="include\d3d11\D3D11StructuredBuffer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Texture.hpp" />
-    <ClInclude Include="include\d3d11\D3D11VertexBuffer.hpp" />
-    <ClInclude Include="include\d3d11\D3D11VertexShader.hpp" />
-    <ClInclude Include="include\d3d11\D3D11Viewport.hpp" />
-    <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp" />
+    <ClInclude Include="include\d3d11\D3D11BlendState.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Buffer.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11DepthStencil.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11DepthStencilBuffer.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Resource.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Constant.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Context.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Device.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11GeometryShader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11InputLayout.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11PixelShader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Renderer.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Sampler.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Shader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11StructuredBuffer.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Texture.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11VertexBuffer.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11VertexShader.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\D3D11Viewport.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\d3d12\D3D12BlendState.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -157,7 +203,9 @@
     </ClInclude>
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
-    <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
+    <ClInclude Include="include\Graphics\BlendStateFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\Graphics\Clearable.hpp" />
     <ClInclude Include="include\Graphics\CommandAllocator.hpp" />
     <ClInclude Include="include\Graphics\CommandList.hpp" />
@@ -172,26 +220,38 @@
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
     <ClInclude Include="include\Graphics\DescriptorHeap.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
-    <ClInclude Include="include\Graphics\DeviceFactory.hpp" />
+    <ClInclude Include="include\Graphics\DeviceFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\Graphics\Fence.hpp" />
     <ClInclude Include="include\Graphics\FenceFactory.hpp" />
     <ClInclude Include="include\Graphics\Format.hpp" />
     <ClInclude Include="include\Graphics\Heap.hpp" />
+    <ClInclude Include="include\Graphics\HeapFactory.hpp" />
     <ClInclude Include="include\Graphics\IndexBuffer.hpp" />
     <ClInclude Include="include\Graphics\IndexBufferFactory.hpp" />
     <ClInclude Include="include\Graphics\InputLayout.hpp" />
+    <ClInclude Include="include\Graphics\InputLayoutFactory.hpp" />
     <ClInclude Include="include\Graphics\MaterialProperty.hpp" />
     <ClInclude Include="include\Graphics\Pipeline.hpp" />
+    <ClInclude Include="include\Graphics\PipelineFactory.hpp" />
     <ClInclude Include="include\Graphics\Renderer.hpp" />
-    <ClInclude Include="include\Graphics\RendererFactory.hpp" />
+    <ClInclude Include="include\Graphics\RendererFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\Graphics\RenderPass.hpp" />
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
-    <ClInclude Include="include\Graphics\RenderTargetFactory.hpp" />
+    <ClInclude Include="include\Graphics\RenderTargetFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\Graphics\Resource.hpp" />
+    <ClInclude Include="include\Graphics\ResourceFactory.hpp" />
     <ClInclude Include="include\Graphics\RootSignature.hpp" />
     <ClInclude Include="include\Graphics\RootSignatureFactory.hpp" />
     <ClInclude Include="include\Graphics\Sampler.hpp" />
-    <ClInclude Include="include\Graphics\SamplerFactory.hpp" />
+    <ClInclude Include="include\Graphics\SamplerFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\Graphics\Shader.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp" />
@@ -202,16 +262,22 @@
     <ClInclude Include="include\Graphics\SwapChain.hpp" />
     <ClInclude Include="include\Graphics\SwapChainFactory.hpp" />
     <ClInclude Include="include\Graphics\Texture.hpp" />
-    <ClInclude Include="include\Graphics\TextureFactory.hpp" />
+    <ClInclude Include="include\Graphics\TextureFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="include\Graphics\VertexBufferFactory.hpp" />
     <ClInclude Include="include\Graphics\View.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
-    <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
+    <ClInclude Include="include\Graphics\ViewportFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Device.hpp" />
+    <ClInclude Include="include\NextGenGraphics\DeviceFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp" />
     <ClInclude Include="include\NextGenGraphics\Resource.hpp" />
+    <ClInclude Include="include\NextGenGraphics\SamplerFactory.hpp" />
     <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -288,26 +354,66 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11BlendState.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Buffer.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Constant.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Context.cpp" />
-    <ClCompile Include="src\d3d11\D3D11DepthStencil.cpp" />
-    <ClCompile Include="src\d3d11\D3D11DepthStencilBuffer.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Device.cpp" />
-    <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp" />
-    <ClCompile Include="src\d3d11\D3D11InputLayout.cpp" />
-    <ClCompile Include="src\d3d11\D3D11PixelShader.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Renderer.cpp" />
-    <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Resource.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Sampler.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Shader.cpp" />
-    <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp" />
-    <ClCompile Include="src\d3d11\D3D11StructuredBuffer.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Texture.cpp" />
-    <ClCompile Include="src\d3d11\D3D11VertexShader.cpp" />
-    <ClCompile Include="src\d3d11\D3D11Viewport.cpp" />
+    <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Buffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Constant.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Context.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11DepthStencil.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11DepthStencilBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Device.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11InputLayout.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11PixelShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Renderer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Resource.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Sampler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Shader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11StructuredBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Texture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11VertexShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\d3d11\D3D11Viewport.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\d3d12\D3D12BlendState.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -363,31 +469,51 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Graphics\BlendState.cpp" />
-    <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
+    <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp" />
     <ClCompile Include="src\Graphics\ConstantFactory.cpp" />
     <ClCompile Include="src\Graphics\DepthStencilFactory.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
-    <ClCompile Include="src\Graphics\DeviceFactory.cpp" />
+    <ClCompile Include="src\Graphics\DeviceFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Graphics\FenceFactory.cpp" />
     <ClCompile Include="src\Graphics\Heap.cpp" />
+    <ClCompile Include="src\Graphics\HeapFactory.cpp" />
+    <ClCompile Include="src\Graphics\InputLayoutFactory.cpp" />
     <ClCompile Include="src\Graphics\MaterialProperty.cpp" />
+    <ClCompile Include="src\Graphics\PipelineFactory.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
-    <ClCompile Include="src\Graphics\RendererFactory.cpp" />
-    <ClCompile Include="src\Graphics\RenderTargetFactory.cpp" />
+    <ClCompile Include="src\Graphics\RendererFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\RenderTargetFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ResourceFactory.cpp" />
     <ClCompile Include="src\Graphics\RootSignatureFactory.cpp" />
-    <ClCompile Include="src\Graphics\SamplerFactory.cpp" />
+    <ClCompile Include="src\Graphics\SamplerFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp" />
     <ClCompile Include="src\Graphics\StructuredBufferFactory.cpp" />
     <ClCompile Include="src\Graphics\SwapChainFactory.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
-    <ClCompile Include="src\Graphics\TextureFactory.cpp" />
+    <ClCompile Include="src\Graphics\TextureFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Graphics\Viewport.cpp" />
-    <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
+    <ClCompile Include="src\Graphics\ViewportFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\DeviceFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp" />
     <ClCompile Include="src\NextGenGraphics\Resource.cpp" />
+    <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp" />
     <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -402,6 +528,7 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanFence.cpp" />
     <ClCompile Include="src\Vulkan\VulkanHeap.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanInputLayout.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp" />
     <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp" />
     <ClCompile Include="src\Vulkan\VulkanResource.cpp" />

@@ -73,6 +73,7 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage,
 }
 
 VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const Format& FormatObj, _In_ uint64_t Offset, _In_ uint64_t Size)
+	: _Format(FormatObj)
 {
 	VkBufferViewCreateInfo BufferViewInfo;
 	

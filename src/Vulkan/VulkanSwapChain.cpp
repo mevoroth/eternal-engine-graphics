@@ -188,7 +188,7 @@ RenderPass& VulkanSwapChain::GetMainRenderPass()
 void VulkanSwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
 {
 	VulkanCommandQueue& VulkanCommandQueueObj			= static_cast<VulkanCommandQueue&>(CommandQueueObj);
-	VulkanCommandAllocator* VulkanCommandAllocatorObj = static_cast<VulkanCommandAllocator*>(VulkanCommandQueueObj.GetCommandAllocator(ResourceIndex));
+	VulkanCommandAllocator* VulkanCommandAllocatorObj	= static_cast<VulkanCommandAllocator*>(VulkanCommandQueueObj.GetCommandAllocator(ResourceIndex));
 	uint32_t ImageIndice = ResourceIndex;
 	VkResult PresentInfoResult;
 	

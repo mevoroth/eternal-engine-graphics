@@ -3,4 +3,8 @@
 
 #define ETERNAL_USE_DXMATH_TYPES
 
+#define FRAME_LAG					(2)
+#define MAX_VERTICES_BUFFERS		(8)
+#define MAX_DESCRIPTORS_HEAPS		(64)
+
 #endif

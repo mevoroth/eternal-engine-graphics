@@ -9,10 +9,11 @@
 #include "Vulkan/VulkanRootSignature.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanShader.hpp"
+#include "Vulkan/VulkanInputLayout.hpp"
 
 using namespace Eternal::Graphics;
 
-VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ RenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
+VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ InputLayout& InputLayoutObj, _In_ RenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
 {
 	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();
 	VkPipelineCacheCreateInfo PipelineCacheInfo;
@@ -39,14 +40,17 @@ VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootS
 	ShaderStages[1].module	= static_cast<VulkanShader&>(PS).GetVulkanShader();
 	ShaderStages[1].pName	= "PS";
 
+	const vector<VkVertexInputAttributeDescription>& VertexInputAttributeDescriptions	= static_cast<VulkanInputLayout&>(InputLayoutObj).GetVertexInputAttributeDescriptions();
+	const vector<VkVertexInputBindingDescription>& VertexInputBindingDescriptions		= static_cast<VulkanInputLayout&>(InputLayoutObj).GetVertexInputBindingDescriptions();
+
 	VkPipelineVertexInputStateCreateInfo InputLayoutStateInfo;
 	InputLayoutStateInfo.sType								= VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 	InputLayoutStateInfo.pNext								= nullptr;
 	InputLayoutStateInfo.flags								= 0;
-	InputLayoutStateInfo.vertexAttributeDescriptionCount	= 0;
-	InputLayoutStateInfo.pVertexAttributeDescriptions		= nullptr;
-	InputLayoutStateInfo.vertexBindingDescriptionCount		= 0;
-	InputLayoutStateInfo.pVertexBindingDescriptions			= nullptr;
+	InputLayoutStateInfo.vertexAttributeDescriptionCount	= VertexInputAttributeDescriptions.size();
+	InputLayoutStateInfo.pVertexAttributeDescriptions		= VertexInputAttributeDescriptions.data();
+	InputLayoutStateInfo.vertexBindingDescriptionCount		= VertexInputBindingDescriptions.size();
+	InputLayoutStateInfo.pVertexBindingDescriptions			= VertexInputBindingDescriptions.data();
 
 	VkPipelineInputAssemblyStateCreateInfo InputAssemblyStateInfo;
 	InputAssemblyStateInfo.sType					= VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;

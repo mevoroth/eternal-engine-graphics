@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <vector>
 #include "Graphics/DescriptorHeap.hpp"
+#include "Container/RingBuffer.hpp"
 
 struct VkDescriptorPool_T;
 struct VkDescriptorSetLayout_T;
@@ -14,6 +15,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		using namespace std;
+		using namespace Eternal::Container;
 
 		class Device;
 		class RootSignature;
@@ -30,8 +32,12 @@ namespace Eternal
 			VkDescriptorSet_T* Pop();
 			void Push(_In_ VkDescriptorSet_T* Handle);
 
+			VkDescriptorSet_T* Bind();
+			void Unbind();
+
 		private:
-			vector<VkDescriptorSet_T*>	_ResourcesPool;
+			vector<VkDescriptorSet_T*>		_ResourcesPool;
+			RingBuffer<VkDescriptorSet_T*>	_BoundResources;
 
 			Device& _Device;
 			VkDescriptorPool_T*			_DescriptorPool			= nullptr;

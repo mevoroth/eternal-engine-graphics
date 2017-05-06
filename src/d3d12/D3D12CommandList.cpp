@@ -12,20 +12,26 @@
 
 using namespace Eternal::Graphics;
 
-D3D12CommandList::D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueue, _In_ D3D12Pipeline& State)
+D3D12CommandList::D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandAllocator& CommandAllocatorObj, _In_ Pipeline* DefaultPipeline)
 {
-	D3D12CommandAllocator* D3D12CommandAllocatorObj = static_cast<D3D12CommandAllocator*>(CommandQueue.GetCommandAllocator(0));
-	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateCommandList(
-		DeviceObj.GetDeviceMask(),
-		static_cast<D3D12CommandQueue&>(CommandQueue).GetCommandListType(),
-		D3D12CommandAllocatorObj->GetD3D12CommandAllocator(),
-		State.GetD3D12PipelineState(),
-		__uuidof(ID3D12GraphicsCommandList),
-		(void**)&_CommandList
-	);
-	ETERNAL_ASSERT(hr == S_OK);
-
+	D3D12CommandAllocator& D3D12CommandAllocatorObj = static_cast<D3D12CommandAllocator&>(CommandAllocatorObj);
+	//HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateCommandList(
+	//	DeviceObj.GetDeviceMask(),
+	//	static_cast<D3D12CommandQueue&>(CommandQueueObj).GetCommandListType(),
+	//	D3D12CommandAllocatorObj.GetD3D12CommandAllocator(),
+	//	DefaultPipeline ? static_cast<D3D12Pipeline*>(DefaultPipeline)->GetD3D12PipelineState() : nullptr,
+	//	__uuidof(ID3D12GraphicsCommandList),
+	//	(void**)&_CommandList
+	//);
+	//ETERNAL_ASSERT(hr == S_OK);
+	ETERNAL_ASSERT(false);
 	End();
+}
+
+D3D12CommandList::~D3D12CommandList()
+{
+	_CommandList->Release();
+	_CommandList = nullptr;
 }
 
 void D3D12CommandList::ClearRenderTarget(_In_ View& RenderTargetView)
@@ -90,7 +96,7 @@ void D3D12CommandList::End()
 	ETERNAL_ASSERT(hr == S_OK);
 }
 
-void D3D12CommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj)
+void D3D12CommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount)
 {
 	_CommandList->SetGraphicsRootSignature(static_cast<D3D12RootSignature&>(RootSignatureObj).GetD3D12RootSignature());
 }

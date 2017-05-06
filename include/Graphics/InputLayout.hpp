@@ -1,6 +1,9 @@
 #ifndef _INPUT_LAYOUT_HPP_
 #define _INPUT_LAYOUT_HPP_
 
+#include "Macros/Macros.hpp"
+#include "Graphics/Format.hpp"
+
 namespace Eternal
 {
 	namespace Graphics
@@ -27,6 +30,21 @@ namespace Eternal
 				IMGUI_COLOR_T	= COLOR_T
 			};
 		};
+
+		const Format VERTEX_FORMATS[] =
+		{
+			RGBA32323232,
+			RGBA8888,
+			RGBA32323232,
+			RGBA32323232,
+			RGBA32323232,
+			RG3232,
+
+			// Imgui Format
+			RG3232
+		};
+
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VERTEX_FORMATS) == InputLayout::VERTEX_DATA_TYPE_COUNT, "Vertex Formats implementation not complete");
 	}
 }
 
