@@ -11,17 +11,37 @@ using namespace Eternal::Graphics;
 using namespace Eternal::File;
 using namespace std;
 
+const char* D3D12_SHADER_ENTRIES[] =
+{
+	"VS",
+	"HS",
+	"DS",
+	"GS",
+	"PS",
+	"CS"
+};
+
+const char* D3D12_SHADER_PROFILES[] =
+{
+	"vs_5_1",
+	"hs_5_1",
+	"ds_5_1",
+	"gs_5_1",
+	"ps_5_1",
+	"cs_5_1"
+};
+
 ID3DInclude* D3D12Shader::_IncludeHandler = new D3D12Include();
 
-D3D12Shader::D3D12Shader(_In_ const string& Name, _In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile)
+D3D12Shader::D3D12Shader(_In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines /* = vector<string>() */)
 	: Shader(Name)
 	, _Program(nullptr)
 {
 	ETERNAL_ASSERT(_IncludeHandler);
 #ifdef ETERNAL_DEBUG
-	_CompileFile(Src, Entry, Profile);
+	_CompileFile(Source, D3D12_SHADER_ENTRIES[Type], D3D12_SHADER_PROFILES[Type], Defines);
 #else
-	_LoadFile(Src + ".cso");
+	_LoadFile(Source + ".cso");
 #endif
 }
 
@@ -31,18 +51,31 @@ D3D12Shader::~D3D12Shader()
 	_Program = nullptr;
 }
 
-void D3D12Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry, _In_ const string& Profile)
+void D3D12Shader::_CompileFile(_In_ const string& Source, _In_ const char* Entry, _In_ const char* Profile, _In_ const vector<string>& Defines)
 {
+	ETERNAL_ASSERT(!(Defines.size() % 2)); // Force value for defines
+
 	ID3DBlob* Errors = nullptr;
 
-	string FullPathSrc = FilePath::Find(Src, FilePath::SHADERS);
+	string FullPathSource = FilePath::Find(Source, FilePath::SHADERS);
+
+	vector<D3D_SHADER_MACRO> Macros;
+	Macros.resize((Defines.size() / 2) + 1);
+	for (int DefineIndex = 0; DefineIndex < Macros.size(); ++DefineIndex)
+	{
+		Macros[DefineIndex].Name		= Defines[DefineIndex * 2].c_str();
+		Macros[DefineIndex].Definition	= Defines[DefineIndex * 2 + 1].c_str();
+	}
+	// Empty macro (eq. end of array)
+	Macros[Defines.size() - 1].Name			= nullptr;
+	Macros[Defines.size() - 1].Definition	= nullptr;
 
 	HRESULT hr = D3DCompileFromFile(
-		wstring(FullPathSrc.cbegin(), FullPathSrc.cend()).c_str(),
-		0,
+		wstring(FullPathSource.cbegin(), FullPathSource.cend()).c_str(),
+		Macros.data(),
 		_IncludeHandler,
-		Entry.c_str(),
-		Profile.c_str(),
+		Entry,
+		Profile,
 		D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG,
 		0,
 		&_Program,
@@ -58,7 +91,7 @@ void D3D12Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 	}
 }
 
-void D3D12Shader::_LoadFile(_In_ const string& shader)
+void D3D12Shader::_LoadFile(_In_ const string& ShaderFile)
 {
 	ETERNAL_ASSERT(false);
 }

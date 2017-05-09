@@ -5,6 +5,7 @@
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include "Window/Window.hpp"
+#include "Graphics/Format.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "d3d12/D3D12DescriptorHeap.hpp"
@@ -44,7 +45,7 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
 	//ETERNAL_ASSERT(hr == S_OK);
 
-	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, RENDER_TARGET, GetBackBuffersFrameCount());
+	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, GetBackBuffersFrameCount());
 	_BackBuffers.resize(GetBackBuffersFrameCount());
 	_BackBufferViews.resize(GetBackBuffersFrameCount());
 	for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBuffersFrameCount(); ++BackBufferFrameIndex)
@@ -53,7 +54,7 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 		hr = _SwapChain->GetBuffer(BackBufferFrameIndex, __uuidof(ID3D12Resource), (void**)&BackBuffer);
 		ETERNAL_ASSERT(hr == S_OK);
 		_BackBuffers[BackBufferFrameIndex] = new D3D12Resource(BackBuffer);
-		_BackBufferViews[BackBufferFrameIndex] = static_cast<D3D12View*>(_BackBuffers[BackBufferFrameIndex]->CreateRenderTargetView(DeviceObj, *_BackBufferDescriptorHeap));
+		_BackBufferViews[BackBufferFrameIndex] = static_cast<D3D12View*>(_BackBuffers[BackBufferFrameIndex]->CreateRenderTargetView(DeviceObj, *_BackBufferDescriptorHeap, FORMAT_RGBA8888));
 	}
 }
 

@@ -14,10 +14,10 @@ namespace Eternal
 		class DescriptorHeap;
 		class Heap;
 
-		enum ResourceType
+		enum BufferType
 		{
-			BUFFER_TRANSFER_READ		= 0x1,
-			BUFFER_TRANSFER_WRITE		= 0x2,
+			BUFFER_COPY_READ			= 0x1,
+			BUFFER_COPY_WRITE			= 0x2,
 			BUFFER_STRUCTURED_READ		= 0x4,
 			BUFFER_STRUCTURED_WRITE		= 0x8,
 			BUFFER_RAW_BUFFER_READ		= 0x10,
@@ -27,6 +27,25 @@ namespace Eternal
 			BUFFER_INDIRECT				= 0x100
 		};
 
+		enum TextureType
+		{
+			TEXTURE_TRANSFER_READ		= 0x1,
+			TEXTURE_TRANSFER_WRITE		= 0x2,
+			TEXTURE_READ				= 0x4,
+			TEXTURE_WRITE				= 0x8,
+			TEXTURE_RENDER_TARGET		= 0x10,
+			TEXTURE_DEPTH_STENCIL		= 0x20,
+			TEXTURE_TRANSIENT			= 0x40,
+			TEXTURE_BLEND_READ			= 0x80
+		};
+
+		enum ResourceDimension
+		{
+			RESOURCE_DIMENSION_TEXTURE_1D	= 0,
+			RESOURCE_DIMENSION_TEXTURE_2D	= 1,
+			RESOURCE_DIMENSION_TEXTURE_3D	= 2
+		};
+
 		class Resource
 		{
 		public:
@@ -34,7 +53,8 @@ namespace Eternal
 			virtual ~Resource();
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj) = 0;
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull)  = 0;
-			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj) = 0;
+			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj) = 0;
+			virtual View* CreateDepthStencilView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj) = 0;
 			virtual void* Map(_In_ Device& DeviceObj) = 0;
 			virtual void Unmap(_In_ Device& DeviceObj) = 0;
 

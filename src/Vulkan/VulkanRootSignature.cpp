@@ -107,8 +107,6 @@ VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* S
 	PipelineLayoutInfo.sType					= VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	PipelineLayoutInfo.pNext					= nullptr;
 	PipelineLayoutInfo.flags					= 0;
-	//PipelineLayoutInfo.setLayoutCount			= DescriptorsSetLayouts.size();
-	//PipelineLayoutInfo.pSetLayouts				= DescriptorsSetLayouts.data();
 	PipelineLayoutInfo.setLayoutCount			= DescriptorHeapsCount;
 	PipelineLayoutInfo.pSetLayouts				= DescriptorsSetLayouts.data();
 	PipelineLayoutInfo.pushConstantRangeCount	= 0;

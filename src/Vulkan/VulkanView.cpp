@@ -25,6 +25,10 @@ const VkImageViewType VULKAN_IMAGE_VIEW_TYPES[] =
 VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
 	: _Format(FormatObj)
 {
+	VkImageAspectFlagBits AspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	if (FormatObj == FORMAT_D32)
+		AspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+
 	VkImageViewCreateInfo ImageViewInfo;
 
 	ImageViewInfo.sType								= VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -37,7 +41,7 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj,
 	ImageViewInfo.components.g						= VK_COMPONENT_SWIZZLE_G;
 	ImageViewInfo.components.b						= VK_COMPONENT_SWIZZLE_B;
 	ImageViewInfo.components.a						= VK_COMPONENT_SWIZZLE_A;
-	ImageViewInfo.subresourceRange.aspectMask		= VK_IMAGE_ASPECT_COLOR_BIT;
+	ImageViewInfo.subresourceRange.aspectMask		= AspectMask;
 	ImageViewInfo.subresourceRange.baseMipLevel		= 0;
 	ImageViewInfo.subresourceRange.levelCount		= 1;
 	ImageViewInfo.subresourceRange.baseArrayLayer	= 0;

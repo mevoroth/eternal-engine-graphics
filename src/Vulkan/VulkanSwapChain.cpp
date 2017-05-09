@@ -8,6 +8,7 @@
 #include "Graphics/Format.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanRenderTarget.hpp"
+#include "Vulkan/VulkanResource.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanFence.hpp"
@@ -112,12 +113,12 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 	_BackBufferViews.resize(BackBuffersCount);
 	_AcquireSemaphores.resize(BackBuffersCount);
 
-	std::vector<VulkanView*> VkViews;
+	std::vector<View*> VkViews;
 	VkViews.resize(BackBuffersCount);
 
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
 	{
-		VkViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, BackBuffers[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, BGRA8888);
+		VkViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, BackBuffers[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, FORMAT_BGRA8888);
 		//_BackBufferViews[BackBufferIndex] = new VulkanRenderTarget(DeviceObj, ;
 		_BackBuffers[BackBufferIndex] = new VulkanResource(BackBuffers[BackBufferIndex]);
 	}

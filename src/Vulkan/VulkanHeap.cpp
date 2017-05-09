@@ -35,27 +35,33 @@ static bool CheckMemoryPropertiesFlags(_In_ const VkMemoryPropertyFlagBits& Flag
 }
 
 VulkanHeap::VulkanHeap(_In_ Device& DeviceObj, _In_ size_t Size, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
-	: Heap(Size, ResourcesCount)
-	, _Device(DeviceObj)
+	: Heap(DeviceObj, ResourcesCount)
 {
-	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(DeviceObj);
-
 	VkMemoryPropertyFlagBits MemoryPropertiesFlags = BuildMemoryPropertiesFlags(InVRAM, VisibleFromCPU, Coherent, Cached);
 	ETERNAL_ASSERT(CheckMemoryPropertiesFlags(MemoryPropertiesFlags));
+	_MemoryPropertiesFlags = MemoryPropertiesFlags;
+}
+
+void VulkanHeap::Initialize(_In_ size_t Size)
+{
+	ETERNAL_ASSERT(Size > 0);
+	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(GetDevice());
 
 	VkMemoryAllocateInfo MemoryAllocateInfo;
 	MemoryAllocateInfo.sType			= VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	MemoryAllocateInfo.pNext			= nullptr;
-	MemoryAllocateInfo.allocationSize	= Size;
-	MemoryAllocateInfo.memoryTypeIndex	= VulkanDeviceObj.FindBestMemoryTypeIndex(MemoryPropertiesFlags);
+	MemoryAllocateInfo.allocationSize	= Size * GetResourcesCount();
+	MemoryAllocateInfo.memoryTypeIndex	= VulkanDeviceObj.FindBestMemoryTypeIndex(_MemoryPropertiesFlags);
 
 	VkResult Result = vkAllocateMemory(VulkanDeviceObj.GetVulkanDevice(), &MemoryAllocateInfo, nullptr, &_DeviceMemory);
 	ETERNAL_ASSERT(!Result);
+
+	SetSize(Size);
 }
 
 VulkanHeap::~VulkanHeap()
 {
-	vkFreeMemory(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), _DeviceMemory, nullptr);
+	vkFreeMemory(static_cast<VulkanDevice&>(GetDevice()).GetVulkanDevice(), _DeviceMemory, nullptr);
 }
 
 

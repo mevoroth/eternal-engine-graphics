@@ -11,8 +11,6 @@ Resource::Resource(_In_ Heap& HeapObj, _In_ uint64_t Width, _In_ uint64_t Height
 	, _Depth(Depth)
 	, _MipCount(MipCount)
 {
-	if (&_Heap != nullptr)
-		SetHeapSlot(_Heap.Pop());
 }
 
 Resource::~Resource()

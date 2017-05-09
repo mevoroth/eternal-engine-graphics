@@ -44,25 +44,31 @@ static inline VkAccessFlags BuildAccessFlags(const TransitionState& State)
 	return (VkAccessFlags)(State & AllAccessFlags);
 }
 
-static inline VkImageLayout BuildImageLayout(const TransitionState& State)
+namespace Eternal
 {
-	if (State == TRANSITION_UNDEFINED)
-		return VK_IMAGE_LAYOUT_UNDEFINED;
-	else if (State & TRANSITION_RENDER_TARGET_WRITE)
-		return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	else if (State & TRANSITION_DEPTH_STENCIL_WRITE)
-		return VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-	else if (State & TRANSITION_DEPTH_STENCIL_READ)
-		return VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-	else if (State & TRANSITION_TRANSFER_READ)
-		return VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-	else if (State & TRANSITION_TRANSFER_WRITE)
-		return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-	else if (State & TRANSITION_PRESENT)
-		return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-	else
-		return VK_IMAGE_LAYOUT_GENERAL;
-	//VK_IMAGE_LAYOUT_PREINITIALIZED
+	namespace Graphics
+	{
+		VkImageLayout BuildImageLayout(const TransitionState& State)
+		{
+			if (State == TRANSITION_UNDEFINED)
+				return VK_IMAGE_LAYOUT_UNDEFINED;
+			else if (State & TRANSITION_RENDER_TARGET_WRITE)
+				return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+			else if (State & TRANSITION_DEPTH_STENCIL_WRITE)
+				return VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+			else if (State & TRANSITION_DEPTH_STENCIL_READ)
+				return VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+			else if (State & TRANSITION_COPY_READ)
+				return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+			else if (State & TRANSITION_COPY_WRITE)
+				return VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+			else if (State & TRANSITION_PRESENT)
+				return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+			else
+				return VK_IMAGE_LAYOUT_GENERAL;
+			//VK_IMAGE_LAYOUT_PREINITIALIZED
+		}
+	}
 }
 
 VulkanCommandList::VulkanCommandList(_In_ Device& DeviceObj, _In_ CommandAllocator& CommandAllocatorObj)

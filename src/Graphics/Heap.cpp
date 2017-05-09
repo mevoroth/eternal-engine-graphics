@@ -4,11 +4,10 @@
 
 using namespace Eternal::Graphics;
 
-Heap::Heap(_In_ size_t Size, _In_ uint32_t ResourcesCount)
-	: _Size(Size)
+Heap::Heap(_In_ Device& DeviceObj, _In_ uint32_t ResourcesCount)
+	: _Device(DeviceObj)
 	, _ResourcesCount(ResourcesCount)
 {
-	ETERNAL_ASSERT(_Size > 0);
 	ETERNAL_ASSERT(_ResourcesCount > 0);
 
 	_ResourcesPool.resize(ResourcesCount);
@@ -20,6 +19,7 @@ Heap::Heap(_In_ size_t Size, _In_ uint32_t ResourcesCount)
 
 uint64_t Heap::Pop()
 {
+	ETERNAL_ASSERT(_Size > 0);
 	uint64_t Slot = _ResourcesPool.back();
 	_ResourcesPool.pop_back();
 	return Slot * _Size;

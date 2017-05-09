@@ -13,6 +13,7 @@ namespace Eternal
 	{
 		enum Format;
 		enum TextureView;
+		enum TransitionState;
 		class Device;
 		class Heap;
 		class VulkanDevice;
@@ -27,8 +28,9 @@ namespace Eternal
 				VkImage_T* Image;
 			};
 		public:
-			VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const ResourceType& Type/*, _In_ bool Writable = false*/);
+			VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const BufferType& Type/*, _In_ bool Writable = false*/);
 			VulkanResource(_In_ VkImage_T* Image);
+			VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& State);
 			virtual ~VulkanResource();
 
 			VkBuffer_T*& GetBuffer() { return _Resource.Buffer; }
@@ -36,7 +38,8 @@ namespace Eternal
 
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj) override;
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull) override;
-			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj) override;
+			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj) override;
+			virtual View* CreateDepthStencilView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj) override;
 
 			virtual void* Map(_In_ Device& DeviceObj) override;
 			virtual void Unmap(_In_ Device& DeviceObj) override;

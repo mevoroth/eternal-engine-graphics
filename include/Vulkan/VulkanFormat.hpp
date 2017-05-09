@@ -17,7 +17,8 @@ namespace Eternal
 			VK_FORMAT_R32G32B32A32_SFLOAT,
 			VK_FORMAT_R32_SFLOAT,
 			VK_FORMAT_R32G32B32_SFLOAT, // FIX THIS
-			VK_FORMAT_R32G32_SFLOAT
+			VK_FORMAT_R32G32_SFLOAT,
+			VK_FORMAT_D32_SFLOAT
 		};
 
 		const uint32_t VULKAN_FORMAT_SIZES[] =
@@ -27,11 +28,12 @@ namespace Eternal
 			16,
 			4,
 			12,
-			8
+			8,
+			4
 		};
 
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMATS) == FORMAT_COUNT, "Vulkan Formats declaration not complete");
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMAT_SIZES) == FORMAT_COUNT, "Vulkan Format Sizes declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMATS) == FORMATS_COUNT, "Vulkan Formats declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMAT_SIZES) == FORMATS_COUNT, "Vulkan Format Sizes declaration not complete");
 	}
 }
 

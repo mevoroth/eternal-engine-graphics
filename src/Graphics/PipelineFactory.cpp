@@ -11,12 +11,11 @@ namespace Eternal
 	{
 		Pipeline* CreatePipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ InputLayout& InputLayoutObj, _In_ RenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
 		{
-			ETERNAL_ASSERT(false); // NOT FULLY IMPLEMENTED
-
 			switch (DeviceObj.GetDeviceType())
 			{
 			case D3D12:
-				//return new D3D12Pipeline(DeviceObj, RootSignatureObj, InputLayoutObj, );
+				ETERNAL_ASSERT(false); // NOT FULLY IMPLEMENTED
+				//return new D3D12Pipeline(DeviceObj, RootSignatureObj, InputLayoutObj, VS, PS, );
 				return nullptr;
 
 			case VULKAN:

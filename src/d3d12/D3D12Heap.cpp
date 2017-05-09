@@ -55,21 +55,29 @@ static D3D12_CPU_PAGE_PROPERTY BuildD3D12CPUPageProperty(_In_ bool VisibleFromCP
 	return D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 }
 
-D3D12Heap::D3D12Heap(_In_ Device& DeviceObj, _In_ size_t Size, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
-	: Heap(Size, ResourcesCount)
+D3D12Heap::D3D12Heap(_In_ Device& DeviceObj, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
+	: Heap(DeviceObj, ResourcesCount)
+{
+	_HeapType			= BuildD3D12HeapType(InVRAM, VisibleFromCPU, Coherent, Cached);
+	_CpuPageProperty	= BuildD3D12CPUPageProperty(VisibleFromCPU, Coherent, Cached);
+}
+
+void D3D12Heap::Initialize(_In_ size_t Size)
 {
 	D3D12_HEAP_DESC HeapDesc;
-	HeapDesc.SizeInBytes						= Size * (size_t)ResourcesCount;
-	HeapDesc.Properties.Type					= BuildD3D12HeapType(InVRAM, VisibleFromCPU, Coherent, Cached);
-	HeapDesc.Properties.CPUPageProperty			= BuildD3D12CPUPageProperty(VisibleFromCPU, Coherent, Cached);
+	HeapDesc.SizeInBytes						= Size * GetResourcesCount();
+	HeapDesc.Properties.Type					= _HeapType;
+	HeapDesc.Properties.CPUPageProperty			= _CpuPageProperty;
 	HeapDesc.Properties.MemoryPoolPreference	= D3D12_MEMORY_POOL_L1;
-	HeapDesc.Properties.CreationNodeMask		= DeviceObj.GetDeviceMask();
-	HeapDesc.Properties.VisibleNodeMask			= DeviceObj.GetDeviceMask();
+	HeapDesc.Properties.CreationNodeMask		= GetDevice().GetDeviceMask();
+	HeapDesc.Properties.VisibleNodeMask			= GetDevice().GetDeviceMask();
 	HeapDesc.Alignment							= D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
 	HeapDesc.Flags								= D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES;
 
-	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateHeap(&HeapDesc, __uuidof(ID3D12Heap), (void**)&_Heap);
+	HRESULT hr = static_cast<D3D12Device&>(GetDevice()).GetD3D12Device()->CreateHeap(&HeapDesc, __uuidof(ID3D12Heap), (void**)&_Heap);
 	ETERNAL_ASSERT(hr == S_OK);
+
+	SetSize(Size);
 }
 
 D3D12Heap::~D3D12Heap()

@@ -23,7 +23,7 @@ const D3D11TextureFormatInformation& D3D11Texture::GetD3D11TextureFormatInformat
 }
 
 D3D11Texture::D3D11Texture(ID3D11Texture2D* TextureObj)
-	: Texture(BGRA8888)
+	: Texture(FORMAT_BGRA8888)
 	, D3D11Resource((ID3D11Resource*)TextureObj)
 {
 }
@@ -71,7 +71,7 @@ D3D11Texture::D3D11Texture(_In_ const Format& FormatObj, _In_ const Usage& Usage
 }
 
 D3D11Texture::D3D11Texture()
-	: Texture(BGRA8888)
+	: Texture(FORMAT_BGRA8888)
 	, D3D11Resource()
 {
 }

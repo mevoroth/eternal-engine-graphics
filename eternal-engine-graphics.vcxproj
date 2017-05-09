@@ -190,7 +190,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\d3d12\D3D12Pipeline.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -219,6 +219,7 @@
     <ClInclude Include="include\Graphics\DepthStencilFactory.hpp" />
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
     <ClInclude Include="include\Graphics\DescriptorHeap.hpp" />
+    <ClInclude Include="include\Graphics\DescriptorHeapFactory.hpp" />
     <ClInclude Include="include\Graphics\Device.hpp" />
     <ClInclude Include="include\Graphics\DeviceFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -240,6 +241,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\Graphics\RenderPass.hpp" />
+    <ClInclude Include="include\Graphics\RenderPassFactory.hpp" />
     <ClInclude Include="include\Graphics\RenderTarget.hpp" />
     <ClInclude Include="include\Graphics\RenderTargetFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -253,8 +255,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\Graphics\Shader.hpp" />
-    <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
-    <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp" />
+    <ClInclude Include="include\Graphics\ShaderFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="include\Graphics\ShaderType.hpp" />
     <ClInclude Include="include\Graphics\StencilTest.hpp" />
     <ClInclude Include="include\Graphics\StructuredBuffer.hpp" />
@@ -278,6 +284,7 @@
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp" />
     <ClInclude Include="include\NextGenGraphics\Resource.hpp" />
     <ClInclude Include="include\NextGenGraphics\SamplerFactory.hpp" />
+    <ClInclude Include="include\NextGenGraphics\ShaderFactory.hpp" />
     <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -457,7 +464,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Pipeline.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -475,6 +482,7 @@
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp" />
     <ClCompile Include="src\Graphics\ConstantFactory.cpp" />
     <ClCompile Include="src\Graphics\DepthStencilFactory.cpp" />
+    <ClCompile Include="src\Graphics\DescriptorHeapFactory.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
     <ClCompile Include="src\Graphics\DeviceFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -489,6 +497,7 @@
     <ClCompile Include="src\Graphics\RendererFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Graphics\RenderPassFactory.cpp" />
     <ClCompile Include="src\Graphics\RenderTargetFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -498,8 +507,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Graphics\Shader.cpp" />
-    <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
-    <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp" />
+    <ClCompile Include="src\Graphics\ShaderFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Graphics\StructuredBufferFactory.cpp" />
     <ClCompile Include="src\Graphics\SwapChainFactory.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
@@ -514,6 +527,7 @@
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp" />
     <ClCompile Include="src\NextGenGraphics\Resource.cpp" />
     <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp" />
+    <ClCompile Include="src\NextGenGraphics\ShaderFactory.cpp" />
     <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -593,7 +607,7 @@
     <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;C:\Program Files\VulkanSDK\1.0.37.0\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;$(ProgramW6432)\VulkanSDK\1.0.37.0\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

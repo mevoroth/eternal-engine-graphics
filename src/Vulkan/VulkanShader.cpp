@@ -46,7 +46,7 @@ static shaderc_include_result* IncludeResolver(void* UserData, const char* Reque
 	ShaderSourceCode->resize(ShaderFileSize);
 	ShaderFile->Read((uint8_t*)ShaderSourceCode->data(), ShaderSourceCode->size());
 	ShaderFile->Close();
-	//DestroyFile(ShaderFile);
+	DestroyFile(ShaderFile);
 
 	shaderc_include_result* ShaderIncludeResult = new shaderc_include_result;
 	ShaderIncludeResult->source_name			= RequestedSource;
@@ -63,27 +63,29 @@ static void IncludeReleaser(void* UserData, shaderc_include_result* IncludeResul
 	delete IncludeResult;
 }
 
-VulkanShader::VulkanShader(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Src, const ShaderType& Type)
+VulkanShader::VulkanShader(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines /* = vector<string>() */)
 	: Shader(Name)
 {
 #ifdef ETERNAL_DEBUG
-	_CompileFile(DeviceObj, Src, Type);
+	_CompileFile(DeviceObj, Source, Type, Defines);
 #else
-	_LoadFile(DeviceObj, Src);
+	_LoadFile(DeviceObj, Source);
 #endif
 }
 
-void VulkanShader::_CompileFile(_In_ Device& DeviceObj, _In_ const string& Src, const ShaderType& Type)
+void VulkanShader::_CompileFile(_In_ Device& DeviceObj, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines)
 {
+	ETERNAL_ASSERT(!(Defines.size() % 2));
+
 	std::vector<char> ShaderSourceCode;
-	string FullPathSrc = FilePath::Find(Src, FilePath::SHADERS);
+	string FullPathSrc = FilePath::Find(Source, FilePath::SHADERS);
 	Eternal::File::File* ShaderFile = File::CreateFile(FullPathSrc);
 	ShaderFile->Open(Eternal::File::File::READ);
 	uint64_t ShaderFileSize = ShaderFile->GetFileSize();
 	ShaderSourceCode.resize(ShaderFileSize);
 	ShaderFile->Read((uint8_t*)ShaderSourceCode.data(), ShaderSourceCode.size());
 	ShaderFile->Close();
-	//DestroyFile(ShaderFile);
+	DestroyFile(ShaderFile);
 
 	shaderc_compiler_t Compiler						= shaderc_compiler_initialize();
 	shaderc_compile_options_t CompilerOptions		= shaderc_compile_options_initialize();
@@ -93,6 +95,17 @@ void VulkanShader::_CompileFile(_In_ Device& DeviceObj, _In_ const string& Src, 
 	shaderc_compile_options_set_target_env(CompilerOptions, shaderc_target_env_vulkan, 0);
 	shaderc_compile_options_set_optimization_level(CompilerOptions, shaderc_optimization_level_zero);
 	shaderc_compile_options_set_include_callbacks(CompilerOptions, IncludeResolver, IncludeReleaser, nullptr);
+
+	for (int DefineIndex = 0, DefineCount = Defines.size() / 2; DefineIndex < DefineCount; ++DefineIndex)
+	{
+		shaderc_compile_options_add_macro_definition(
+			CompilerOptions,
+			Defines[DefineIndex * 2].c_str(),
+			Defines[DefineIndex * 2].size(),
+			Defines[DefineIndex * 2 + 1].c_str(),
+			Defines[DefineIndex * 2 + 1].size()
+		);
+	}
 
 	shaderc_compilation_result_t CompilationResult	= shaderc_compile_into_spv(Compiler, ShaderSourceCode.data(), ShaderSourceCode.size(), SHADER_KINDS[Type], FullPathSrc.c_str(), SHADER_ENTRY_POINTS[Type], CompilerOptions);
 	size_t ShaderByteCodeLength						= shaderc_result_get_length(CompilationResult);

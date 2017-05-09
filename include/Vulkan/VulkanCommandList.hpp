@@ -5,6 +5,7 @@
 #include <cstdint>
 
 struct VkCommandBuffer_T;
+enum VkImageLayout;
 
 namespace Eternal
 {
@@ -20,6 +21,8 @@ namespace Eternal
 		class Pipeline;
 		class RootSignature;
 		class Resource;
+
+		VkImageLayout BuildImageLayout(const TransitionState& State);
 
 		class VulkanCommandList : public CommandList
 		{

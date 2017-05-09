@@ -9,20 +9,20 @@
 using namespace std;
 using namespace Eternal::Graphics;
 
-VulkanRenderTarget::VulkanRenderTarget(_In_ Device& DeviceObj, _In_ VulkanRenderPass& RenderPassObj, _In_ VulkanView* RenderTargetViews[], _In_ uint32_t RenderTargetViewsCount, _In_ uint32_t Width, _In_ uint32_t Height)
+VulkanRenderTarget::VulkanRenderTarget(_In_ Device& DeviceObj, _In_ RenderPass& RenderPassObj, _In_ View* RenderTargetViews[], _In_ uint32_t RenderTargetViewsCount, _In_ uint32_t Width, _In_ uint32_t Height)
 {
 	vector<VkImageView> AttachmentViews;
 	AttachmentViews.resize(RenderTargetViewsCount);
 	for (unsigned int RenderTargetViewIndex = 0; RenderTargetViewIndex < RenderTargetViewsCount; ++RenderTargetViewIndex)
 	{
-		AttachmentViews[RenderTargetViewIndex] = RenderTargetViews[RenderTargetViewIndex]->GetImageView();
+		AttachmentViews[RenderTargetViewIndex] = static_cast<VulkanView*>(RenderTargetViews[RenderTargetViewIndex])->GetImageView();
 	}
 
 	VkFramebufferCreateInfo FrameBufferInfo;
 	FrameBufferInfo.sType			= VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 	FrameBufferInfo.pNext			= nullptr;
 	FrameBufferInfo.flags			= 0;
-	FrameBufferInfo.renderPass		= RenderPassObj.GetRenderPass();
+	FrameBufferInfo.renderPass		= static_cast<VulkanRenderPass&>(RenderPassObj).GetRenderPass();
 	FrameBufferInfo.attachmentCount	= AttachmentViews.size();
 	FrameBufferInfo.pAttachments	= AttachmentViews.data();
 	FrameBufferInfo.width			= Width;

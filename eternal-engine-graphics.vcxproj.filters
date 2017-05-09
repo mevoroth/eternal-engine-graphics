@@ -439,6 +439,15 @@
     <ClInclude Include="include\Graphics\InputLayoutFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\RenderPassFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\DescriptorHeapFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NextGenGraphics\ShaderFactory.hpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -743,6 +752,15 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\InputLayoutFactory.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\RenderPassFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\DescriptorHeapFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\ShaderFactory.cpp">
+      <Filter>NextGenGraphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

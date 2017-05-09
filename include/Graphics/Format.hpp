@@ -7,13 +7,14 @@ namespace Eternal
 	{
 		enum Format
 		{
-			BGRA8888		= 0,
-			RGBA8888		= 1,
-			RGBA32323232	= 2,
-			R32				= 3,
-			RG328			= 4,
-			RG3232			= 5,
-			FORMAT_COUNT
+			FORMAT_BGRA8888		= 0,
+			FORMAT_RGBA8888		= 1,
+			FORMAT_RGBA32323232	= 2,
+			FORMAT_R32			= 3,
+			FORMAT_RG328		= 4,
+			FORMAT_RG3232		= 5,
+			FORMAT_D32			= 6,
+			FORMATS_COUNT
 		};
 	}
 }

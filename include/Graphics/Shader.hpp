@@ -11,12 +11,13 @@ namespace Eternal
 	{
 		class Shader
 		{
-		private:
-			string _Name;
 		public:
-			Shader(const string& Name);
+			Shader(_In_ const string& Name);
 			virtual ~Shader() {}
 			const string& GetName() const;
+
+		private:
+			string _Name;
 		};
 	}
 }

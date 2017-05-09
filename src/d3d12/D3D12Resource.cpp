@@ -14,6 +14,8 @@ D3D12Resource::D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj)
 	: Resource(HeapObj)
 {
 	D3D12_RESOURCE_DESC ResourceDesc;
+
+	ETERNAL_ASSERT(false); // Desc not implemented
 	
 	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreatePlacedResource(
 		static_cast<D3D12Heap&>(HeapObj).GetD3D12Heap(),
@@ -68,7 +70,7 @@ View* D3D12Resource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& Des
 	return nullptr;
 }
 
-View* D3D12Resource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj)
+View* D3D12Resource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj)
 {
 	return new D3D12View(DeviceObj, DescriptorHeapObj, *this);
 }

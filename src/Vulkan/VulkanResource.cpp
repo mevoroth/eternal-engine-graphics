@@ -4,6 +4,8 @@
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanHeap.hpp"
+#include "Vulkan/VulkanFormat.hpp"
+#include "Vulkan/VulkanCommandList.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -14,7 +16,7 @@ static const VkBufferUsageFlagBits RESOURCE_TYPE_TO_USAGE[] =
 	VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
 };
 
-static VkBufferUsageFlagBits BuildUsage(_In_ const ResourceType& Type, _In_ bool Writable)
+static VkBufferUsageFlagBits BuildUsage(_In_ const BufferType& Type, _In_ bool Writable)
 {
 	switch (Type)
 	{
@@ -29,7 +31,7 @@ static VkBufferUsageFlagBits BuildUsage(_In_ const ResourceType& Type, _In_ bool
 	return (VkBufferUsageFlagBits)(RESOURCE_TYPE_TO_USAGE[Type] << (Writable ? 1 : 0));
 }
 
-VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const ResourceType& Type/*, _In_ bool Writable*/)
+VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const BufferType& Type/*, _In_ bool Writable*/)
 	: Resource(HeapObj, Size)
 {
 	ETERNAL_ASSERT(Size > 0ull);
@@ -50,6 +52,9 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 	VkMemoryRequirements MemoryRequirements;
 	vkGetBufferMemoryRequirements(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Buffer, &MemoryRequirements);
 
+	HeapObj.Initialize(MemoryRequirements.size);
+	SetHeapSlot(HeapObj.Pop());
+
 	Result = vkBindBufferMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Buffer, static_cast<VulkanHeap&>(HeapObj).GetVulkanDeviceMemory(), GetHeapSlot());
 	ETERNAL_ASSERT(!Result);
 }
@@ -58,6 +63,51 @@ VulkanResource::VulkanResource(_In_ VkImage_T* Image)
 	: Resource(*(Heap*)nullptr)
 {
 	_Resource.Image = Image;
+}
+
+VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& State)
+	: Resource(HeapObj)
+{
+	ETERNAL_ASSERT(Width > 0);
+	ETERNAL_ASSERT(Height > 0);
+	ETERNAL_ASSERT(Depth > 0);
+#ifdef ETERNAL_DEBUG
+	if (Dimension == RESOURCE_DIMENSION_TEXTURE_1D)
+	{
+		ETERNAL_ASSERT(Height == 1);
+	}
+#endif
+
+	VkImageCreateInfo ImageInfo;
+	ImageInfo.sType					= VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	ImageInfo.pNext					= nullptr;
+	ImageInfo.flags					= 0;
+	ImageInfo.imageType				= (VkImageType)Dimension;
+	ImageInfo.format				= VULKAN_FORMATS[FormatObj];
+	ImageInfo.extent.width			= Width;
+	ImageInfo.extent.height			= Height;
+	ImageInfo.extent.depth			= (Dimension == RESOURCE_DIMENSION_TEXTURE_3D) ? Depth : 1u;
+	ImageInfo.mipLevels				= MipCount;
+	ImageInfo.arrayLayers			= (Dimension != RESOURCE_DIMENSION_TEXTURE_3D) ? Depth : 1u;
+	ImageInfo.samples				= VK_SAMPLE_COUNT_1_BIT;
+	ImageInfo.tiling				= VK_IMAGE_TILING_OPTIMAL;
+	ImageInfo.usage					= Type;
+	ImageInfo.sharingMode			= VK_SHARING_MODE_EXCLUSIVE;
+	ImageInfo.queueFamilyIndexCount = 0;		// Ignored because of VK_SHARING_MODE_EXCLUSIVE
+	ImageInfo.pQueueFamilyIndices	= nullptr;	// Ignored because of VK_SHARING_MODE_EXCLUSIVE
+	ImageInfo.initialLayout			= BuildImageLayout(State);
+
+	VkResult Result = vkCreateImage(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &ImageInfo, nullptr, &_Resource.Image);
+	ETERNAL_ASSERT(!Result);
+
+	VkMemoryRequirements MemoryRequirements;
+	vkGetImageMemoryRequirements(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Image, &MemoryRequirements);
+	
+	HeapObj.Initialize(MemoryRequirements.size);
+	SetHeapSlot(HeapObj.Pop());
+
+	Result = vkBindImageMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Image, static_cast<VulkanHeap&>(HeapObj).GetVulkanDeviceMemory(), GetHeapSlot());
+	ETERNAL_ASSERT(!Result);
 }
 
 VulkanResource::~VulkanResource()
@@ -77,10 +127,15 @@ View* VulkanResource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& De
 	return VkView;
 }
 
-View* VulkanResource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj)
+View* VulkanResource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj)
 {
-	ETERNAL_ASSERT(false);
-	return nullptr;
+	return CreateView(DeviceObj, DescriptorHeapObj, TEXTURE_VIEW_TYPE_2D, FormatObj);
+}
+
+View* VulkanResource::CreateDepthStencilView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj)
+{
+	ETERNAL_ASSERT(FormatObj == FORMAT_D32);
+	return CreateView(DeviceObj, DescriptorHeapObj, TEXTURE_VIEW_TYPE_2D, FormatObj);
 }
 
 VulkanHeap& VulkanResource::GetVulkanHeap()
