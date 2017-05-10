@@ -10,7 +10,7 @@ namespace Eternal
 		class Heap;
 		class Device;
 
-		Heap* CreateHeap(_In_ Device& DeviceObj, _In_ size_t Size, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached);
+		Heap* CreateHeap(_In_ Device& DeviceObj, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached);
 	}
 }
 

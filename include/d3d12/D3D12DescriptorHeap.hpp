@@ -28,7 +28,7 @@ namespace Eternal
 			//	DEPTHSTENCIL	= 3
 			//};
 
-			D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount);
+			D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount);
 
 			inline ID3D12DescriptorHeap* GetDescriptorHeap() { return _DescriptorHeap; }
 			

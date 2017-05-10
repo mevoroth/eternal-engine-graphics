@@ -17,6 +17,7 @@ namespace Eternal
 		class SwapChain
 		{
 		public:
+			virtual ~SwapChain() {}
 			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) = 0;
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) = 0;
 

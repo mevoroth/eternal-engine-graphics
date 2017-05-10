@@ -11,10 +11,17 @@ namespace Eternal
 	{
 		Device* CreateDevice(_In_ const DeviceType& DeviceTypeObj, _In_ Window& WindowObj)
 		{
+			static bool InitDXGIFactory = false;
+
 			switch (DeviceTypeObj)
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case D3D12:
+				if (!InitDXGIFactory)
+				{
+					D3D12Device::Initialize();
+					InitDXGIFactory = true;
+				}
 				return new D3D12Device(0);
 #endif
 

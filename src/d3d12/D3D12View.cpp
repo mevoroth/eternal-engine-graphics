@@ -81,22 +81,39 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 	_CpuDescriptor = _DescriptorHeap.Pop();
 
 	static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateShaderResourceView(
-		static_cast<D3D12Resource&>(ResourceObj).GetResource(),
+		static_cast<D3D12Resource&>(ResourceObj).GetD3D12Resource(),
 		&ShaderResourceViewDesc,
 		_CpuDescriptor
 	);
 }
 
-D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj)
+D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj, _In_ const Format& FormatObj)
 	: _DescriptorHeap(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj))
 {
 	_CpuDescriptor = _DescriptorHeap.Pop();
 
-	static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateRenderTargetView(
-		static_cast<D3D12Resource&>(ResourceObj).GetResource(),
-		nullptr,
-		_CpuDescriptor
-	);
+	if (FormatObj == FORMAT_D32)
+	{
+		D3D12_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc;
+		DepthStencilViewDesc.Format				= D3D12_FORMATS[FormatObj];
+		DepthStencilViewDesc.ViewDimension		= D3D12_DSV_DIMENSION_TEXTURE2D;
+		DepthStencilViewDesc.Flags				= D3D12_DSV_FLAG_READ_ONLY_DEPTH;
+		DepthStencilViewDesc.Texture2D.MipSlice = 0;
+
+		static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateDepthStencilView(
+			static_cast<D3D12Resource&>(ResourceObj).GetD3D12Resource(),
+			&DepthStencilViewDesc,
+			_CpuDescriptor
+		);
+	}
+	else
+	{
+		static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateRenderTargetView(
+			static_cast<D3D12Resource&>(ResourceObj).GetD3D12Resource(),
+			nullptr,
+			_CpuDescriptor
+		);
+	}
 }
 
 D3D12View::~D3D12View()

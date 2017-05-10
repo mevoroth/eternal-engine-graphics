@@ -20,8 +20,9 @@ const D3D12_DESCRIPTOR_HEAP_TYPE D3D12_HEAP_TYPES[] =
 	D3D12_DESCRIPTOR_HEAP_TYPE_RTV
 };
 
-D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount)
-	: _ResourcesPool(ResourcesCount)
+D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount)
+	: DescriptorHeap(Space)
+	, _ResourcesPool(ResourcesCount)
 {
 	ETERNAL_ASSERT(ResourcesCount > 0);
 	_ResourcesCount = ResourcesCount;

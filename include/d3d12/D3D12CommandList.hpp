@@ -25,7 +25,7 @@ namespace Eternal
 		class D3D12CommandList : public CommandList
 		{
 		public:
-			D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandAllocator& CommandAllocatorObj, _In_ Pipeline* DefaultPipeline = nullptr);
+			D3D12CommandList(_In_ Device& DeviceObj, _In_ CommandAllocator& CommandAllocatorObj, _In_ const CommandListType& Type, _In_ Pipeline* DefaultPipeline = nullptr);
 			virtual ~D3D12CommandList();
 
 			virtual void SetViewport(_In_ Viewport& ViewportObj) override;
@@ -38,12 +38,14 @@ namespace Eternal
 			virtual void BindPipelineInput(_In_ RootSignature& RootSignatureObj, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount) override;
 			virtual void Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ Pipeline& PipelineObj) override;
 			virtual void DrawPrimitive(_In_ uint32_t PrimitiveCount) override;
+			virtual void DrawIndexed(_In_ uint32_t IndicesCount, _In_ uint32_t StartIndexLocation, _In_ int BaseVertexLocation) override;
+			virtual void DrawIndexedInstanced(_In_ uint32_t IndicesCount, _In_ uint32_t InstancesCount, _In_ uint32_t StartIndexLocation, _In_ int BaseVertexLocation, _In_ uint32_t StartInstanceLocation) override;
 			virtual void End() override;
 			virtual void BeginRenderPass(_In_ RenderPass& RenderPassObj, RenderTarget& RenderTargetObj, _In_ Viewport& ViewportObj) override;
 			virtual void EndRenderPass() override;
 			virtual void CopyBuffer(_In_ Resource& Source, _In_ Resource& Destination) override;
 			virtual void SetIndicesBuffer(_In_ Resource* IndicesBuffer) override;
-			virtual void SetVerticesBuffers(_In_ uint32_t StartSlot, _In_ uint32_t NumViews, _In_ Resource* VerticesBufferViews[]) override;
+			virtual void SetVerticesBuffers(_In_ uint32_t StartSlot, _In_ uint32_t NumViews, _In_ Resource* VerticesBuffers[]) override;
 
 			virtual void Transition(_In_ ResourceTransition Buffers[], _In_ uint32_t BuffersCount, _In_ ResourceTransition Images[], _In_ uint32_t ImagesCount) override;
 

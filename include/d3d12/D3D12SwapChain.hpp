@@ -26,6 +26,7 @@ namespace Eternal
 		{
 		public:
 			D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _In_ CommandQueue& CommandQueueObj);
+			virtual ~D3D12SwapChain();
 
 			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) override;
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) override;
@@ -33,6 +34,7 @@ namespace Eternal
 			virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
 			virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
 			virtual uint32_t GetBackBuffersFrameCount() const override;
+			virtual RenderPass& GetMainRenderPass() override;
 
 			IDXGISwapChain* GetDXGISwapChain() { return _SwapChain; }
 
@@ -43,6 +45,7 @@ namespace Eternal
 			D3D12DescriptorHeap*	_BackBufferDescriptorHeap	= nullptr;
 			IDXGISwapChain*			_SwapChain					= nullptr;
 			IDXGISwapChain3*		_SwapChain3					= nullptr;
+			uint32_t				_BackBuffersCount			= 0u;
 		};
 	}
 }

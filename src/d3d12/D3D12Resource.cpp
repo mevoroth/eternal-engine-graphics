@@ -7,16 +7,33 @@
 #include "d3d12/D3D12Heap.hpp"
 #include "d3d12/D3D12CommandList.hpp"
 #include "d3d12/D3D12View.hpp"
+#include "d3d12/D3D12Format.hpp"
 
 using namespace Eternal::Graphics;
 
-D3D12Resource::D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj)
-	: Resource(HeapObj)
+D3D12Resource::D3D12Resource(Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& State)
+	: Resource(HeapObj, Width, Height, Depth, MipCount)
 {
 	D3D12_RESOURCE_DESC ResourceDesc;
-
-	ETERNAL_ASSERT(false); // Desc not implemented
+	ResourceDesc.Dimension			= (D3D12_RESOURCE_DIMENSION)(Dimension + D3D12_RESOURCE_DIMENSION_TEXTURE1D);
+	ResourceDesc.Width				= Width;
+	ResourceDesc.Height				= Height;
+	ResourceDesc.DepthOrArraySize	= Depth;
+	ResourceDesc.MipLevels			= MipCount;
+	ResourceDesc.Format				= D3D12_FORMATS[FormatObj];
+	ResourceDesc.SampleDesc.Count	= 1;
+	ResourceDesc.SampleDesc.Quality = 0;
+	ResourceDesc.Layout				= D3D12_TEXTURE_LAYOUT_64KB_STANDARD_SWIZZLE;
+	if (Type & TEXTURE_RENDER_TARGET)
+		ResourceDesc.Flags			|= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+	if (Type & TEXTURE_DEPTH_STENCIL)
+		ResourceDesc.Flags			|= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+	if (Type & TEXTURE_WRITE)
+		ResourceDesc.Flags			|= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
 	
+	D3D12_RESOURCE_ALLOCATION_INFO ResourceAllocationInfo = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->GetResourceAllocationInfo(DeviceObj.GetDeviceMask(), 1, &ResourceDesc);
+	HeapObj.Initialize(ResourceAllocationInfo.SizeInBytes);
+
 	HRESULT hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreatePlacedResource(
 		static_cast<D3D12Heap&>(HeapObj).GetD3D12Heap(),
 		GetHeapSlot(),
@@ -30,33 +47,18 @@ D3D12Resource::D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj)
 }
 
 D3D12Resource::D3D12Resource(_In_ ID3D12Resource* BackBuffer)
-	: Resource(*(Heap*)nullptr)
+	: Resource()
 	, _Resource(BackBuffer)
 {
 }
 
 D3D12Resource::~D3D12Resource()
 {
-	_Resource->Release();
-	_Resource = nullptr;
-}
-
-void D3D12Resource::Transition(_In_ D3D12CommandList& CommandList, _In_ const ResourceState& NewState)
-{
-	if (_OldState == NewState)
-		return;
-
-	D3D12_RESOURCE_BARRIER ResourceBarrier;
-	ResourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	ResourceBarrier.Transition.pResource	= _Resource;
-	ResourceBarrier.Transition.StateBefore	= (D3D12_RESOURCE_STATES)_OldState;
-	ResourceBarrier.Transition.StateAfter	= (D3D12_RESOURCE_STATES)NewState;
-	ResourceBarrier.Transition.Subresource	= D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	ResourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-
-	CommandList.GetD3D12GraphicsCommandList()->ResourceBarrier(1, &ResourceBarrier);
-
-	_OldState = NewState;
+	if (&GetHeap())
+	{
+		_Resource->Release();
+		_Resource = nullptr;
+	}
 }
 
 View* D3D12Resource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
@@ -72,7 +74,12 @@ View* D3D12Resource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& Des
 
 View* D3D12Resource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj)
 {
-	return new D3D12View(DeviceObj, DescriptorHeapObj, *this);
+	return new D3D12View(DeviceObj, DescriptorHeapObj, *this, FormatObj);
+}
+
+View* D3D12Resource::CreateDepthStencilView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj)
+{
+	return new D3D12View(DeviceObj, DescriptorHeapObj, *this, FormatObj);
 }
 
 void* D3D12Resource::Map(_In_ Device& DeviceObj)

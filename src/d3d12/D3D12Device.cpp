@@ -58,8 +58,8 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 	ETERNAL_ASSERT(_Device);
 
 #ifdef ETERNAL_DEBUG
-	DXGI_ADAPTER_DESC DXGIAdapterDesc;
-	hr = _DXGIAdapter->GetDesc(&DXGIAdapterDesc);
+	DXGI_ADAPTER_DESC1 DXGIAdapterDesc1;
+	hr = _DXGIAdapter->GetDesc1(&DXGIAdapterDesc1);
 	ETERNAL_ASSERT(hr == S_OK); // Break here for debug info on device
 #endif
 

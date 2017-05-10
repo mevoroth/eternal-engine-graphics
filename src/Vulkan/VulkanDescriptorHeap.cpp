@@ -19,8 +19,9 @@ static const VkShaderStageFlags RootSignatureAccessToVkShaderStageFlags(_In_ con
 		|	(RootSignatureAccessObj & ROOT_SIGNATURE_PS ? VK_SHADER_STAGE_FRAGMENT_BIT					: 0);
 }
 
-VulkanDescriptorHeap::VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
-	: _Device(DeviceObj)
+VulkanDescriptorHeap::VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
+	: DescriptorHeap(Space)
+	, _Device(DeviceObj)
 	, _BoundResources(ResourcesCount)
 {
 	VkDescriptorPoolSize DescriptorPoolSize;
@@ -39,7 +40,7 @@ VulkanDescriptorHeap::VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ const Ro
 	ETERNAL_ASSERT(!Result);
 
 	VkDescriptorSetLayoutBinding DescriptorSetLayoutBinding;
-	DescriptorSetLayoutBinding.binding				= 0;
+	DescriptorSetLayoutBinding.binding				= Space;
 	DescriptorSetLayoutBinding.descriptorType		= VULKAN_DESCRIPTOR_TYPES[HeapTypeObj];
 	DescriptorSetLayoutBinding.descriptorCount		= 1;
 	DescriptorSetLayoutBinding.stageFlags			= RootSignatureAccessToVkShaderStageFlags(RootSignatureAccessObj);

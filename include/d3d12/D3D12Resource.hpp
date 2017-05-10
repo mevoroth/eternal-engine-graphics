@@ -24,7 +24,8 @@ namespace Eternal
 		class D3D12Resource : public Resource
 		{
 		public:
-			D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj);
+			D3D12Resource(Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& State);
+			D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const BufferType& Type);
 			D3D12Resource(_In_ ID3D12Resource* BackBuffer);
 			virtual ~D3D12Resource();
 
@@ -36,13 +37,10 @@ namespace Eternal
 			virtual void* Map(_In_ Device& DeviceObj) override;
 			virtual void Unmap(_In_ Device& DeviceObj) override;
 
-			void Transition(_In_ D3D12CommandList& CommandList, _In_ const ResourceState& NewState);
-
-			inline ID3D12Resource*& GetResource() { return _Resource; }
+			inline ID3D12Resource*& GetD3D12Resource() { return _Resource; }
 
 		private:
 			ID3D12Resource*		_Resource = nullptr;
-			ResourceState		_OldState = COMMON;
 		};
 	}
 }

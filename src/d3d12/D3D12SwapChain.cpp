@@ -15,6 +15,7 @@
 using namespace Eternal::Graphics;
 
 D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _In_ CommandQueue& CommandQueueObj)
+	: _BackBuffersCount(2)
 {
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 
@@ -34,7 +35,7 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 	SwapChainDesc.OutputWindow							= WindowObj.GetWindowHandler();
 	SwapChainDesc.Windowed								= WindowObj.GetWindowed() ? TRUE : FALSE;
 	SwapChainDesc.SwapEffect							= DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-	SwapChainDesc.Flags									= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	SwapChainDesc.Flags									= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
 
 	HRESULT hr = D3D12Device::GetDXGIFactory()->CreateSwapChain(static_cast<D3D12CommandQueue&>(CommandQueueObj).GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain);
 	ETERNAL_ASSERT(hr == S_OK);
@@ -42,10 +43,13 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 	hr = _SwapChain->QueryInterface(&_SwapChain3);
 	ETERNAL_ASSERT(hr == S_OK);
 
+	//hr = _SwapChain3->GetMaximumFrameLatency(&_BackBuffersCount);
+	//ETERNAL_ASSERT(hr == S_OK);
+
 	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
 	//ETERNAL_ASSERT(hr == S_OK);
 
-	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, GetBackBuffersFrameCount());
+	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, 0, ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, GetBackBuffersFrameCount());
 	_BackBuffers.resize(GetBackBuffersFrameCount());
 	_BackBufferViews.resize(GetBackBuffersFrameCount());
 	for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBuffersFrameCount(); ++BackBufferFrameIndex)
@@ -56,6 +60,21 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 		_BackBuffers[BackBufferFrameIndex] = new D3D12Resource(BackBuffer);
 		_BackBufferViews[BackBufferFrameIndex] = static_cast<D3D12View*>(_BackBuffers[BackBufferFrameIndex]->CreateRenderTargetView(DeviceObj, *_BackBufferDescriptorHeap, FORMAT_RGBA8888));
 	}
+}
+
+D3D12SwapChain::~D3D12SwapChain()
+{
+	for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBuffersFrameCount(); ++BackBufferFrameIndex)
+	{
+		delete _BackBufferViews[BackBufferFrameIndex];
+		_BackBufferViews[BackBufferFrameIndex] = nullptr;
+		delete _BackBuffers[BackBufferFrameIndex];
+		_BackBuffers[BackBufferFrameIndex] = nullptr;
+	}
+	delete _BackBufferDescriptorHeap;
+	_BackBufferDescriptorHeap = nullptr;
+	_SwapChain->Release();
+	_SwapChain = nullptr;
 }
 
 uint32_t D3D12SwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj)
@@ -82,4 +101,10 @@ View& D3D12SwapChain::GetBackBufferView(_In_ uint32_t BackBufferIndex)
 uint32_t D3D12SwapChain::GetBackBuffersFrameCount() const
 {
 	return 2;
+}
+
+RenderPass& D3D12SwapChain::GetMainRenderPass()
+{
+	ETERNAL_ASSERT(false);
+	return *(RenderPass*)nullptr;
 }

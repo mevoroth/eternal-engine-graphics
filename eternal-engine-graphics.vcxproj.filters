@@ -762,5 +762,8 @@
     <ClCompile Include="src\NextGenGraphics\ShaderFactory.cpp">
       <Filter>NextGenGraphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\DescriptorHeap.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

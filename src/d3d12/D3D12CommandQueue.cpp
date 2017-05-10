@@ -28,8 +28,8 @@ D3D12CommandQueue::D3D12CommandQueue(_In_ Device& DeviceObj, _In_ uint32_t Frame
 	{
 		_CommandAllocators[CommandAllocatorIndex] = new D3D12CommandAllocator(DeviceObj, _CommandListType);
 	}
-	ETERNAL_ASSERT(false);
-	//_CommandList = new D3D12CommandList(DeviceObj, )
+
+	_CommandList = new D3D12CommandList(DeviceObj, *_CommandAllocators[0], COMMAND_LIST_GRAPHIC);
 }
 
 D3D12CommandQueue::~D3D12CommandQueue()
@@ -68,6 +68,5 @@ CommandAllocator* D3D12CommandQueue::GetCommandAllocator(_In_ uint32_t FrameInde
 
 CommandList* D3D12CommandQueue::Pop()
 {
-	ETERNAL_ASSERT(false);
-	return nullptr;
+	return _CommandList;
 }

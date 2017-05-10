@@ -53,6 +53,12 @@ namespace Eternal
 			TransitionState After	= TRANSITION_UNDEFINED;
 		};
 
+		enum CommandListType
+		{
+			COMMAND_LIST_GRAPHIC	= 0,
+			COMMAND_LIST_COMPUTE
+		};
+
 		class CommandList
 		{
 		public:

@@ -31,14 +31,14 @@ namespace Eternal
 			virtual DeviceType GetDeviceType() const override { return D3D12; }
 
 #ifdef ETERNAL_DEBUG
-			static ID3D12Debug* _Debug;
+			static ID3D12Debug*		_Debug;
 #endif
-			static IDXGIFactory4* _DXGIFactory;
+			static IDXGIFactory4*	_DXGIFactory;
 
-			IDXGIAdapter1* _DXGIAdapter = nullptr;
-			ID3D12Device* _Device = nullptr;
+			IDXGIAdapter1*			_DXGIAdapter	= nullptr;
+			ID3D12Device*			_Device			= nullptr;
 
-			uint32_t _DeviceMask = 0xFFFFFFFF;
+			uint32_t				_DeviceMask		= 0xFFFFFFFF;
 		};
 	}
 }

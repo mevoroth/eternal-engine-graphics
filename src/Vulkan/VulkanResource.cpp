@@ -31,8 +31,8 @@ static VkBufferUsageFlagBits BuildUsage(_In_ const BufferType& Type, _In_ bool W
 	return (VkBufferUsageFlagBits)(RESOURCE_TYPE_TO_USAGE[Type] << (Writable ? 1 : 0));
 }
 
-VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Size, _In_ const BufferType& Type/*, _In_ bool Writable*/)
-	: Resource(HeapObj, Size)
+VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Stride, _In_ uint64_t Size, _In_ const BufferType& Type/*, _In_ bool Writable*/)
+	: Resource(HeapObj, Stride, Size)
 {
 	ETERNAL_ASSERT(Size > 0ull);
 
@@ -60,13 +60,13 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 }
 
 VulkanResource::VulkanResource(_In_ VkImage_T* Image)
-	: Resource(*(Heap*)nullptr)
+	: Resource()
 {
 	_Resource.Image = Image;
 }
 
-VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& State)
-	: Resource(HeapObj)
+VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& InitialState)
+	: Resource(HeapObj, Width, Height, Depth, MipCount)
 {
 	ETERNAL_ASSERT(Width > 0);
 	ETERNAL_ASSERT(Height > 0);
@@ -95,7 +95,7 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 	ImageInfo.sharingMode			= VK_SHARING_MODE_EXCLUSIVE;
 	ImageInfo.queueFamilyIndexCount = 0;		// Ignored because of VK_SHARING_MODE_EXCLUSIVE
 	ImageInfo.pQueueFamilyIndices	= nullptr;	// Ignored because of VK_SHARING_MODE_EXCLUSIVE
-	ImageInfo.initialLayout			= BuildImageLayout(State);
+	ImageInfo.initialLayout			= BuildImageLayout(InitialState);
 
 	VkResult Result = vkCreateImage(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &ImageInfo, nullptr, &_Resource.Image);
 	ETERNAL_ASSERT(!Result);

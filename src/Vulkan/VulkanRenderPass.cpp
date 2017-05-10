@@ -59,7 +59,7 @@ VulkanRenderPass::VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<Vie
 	RenderPassInfo.sType			= VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 	RenderPassInfo.pNext			= nullptr;
 	RenderPassInfo.flags			= 0;
-	RenderPassInfo.attachmentCount	= VulkanAttachments.size() /*+ (DepthStencil ? 1 : 0)*/;
+	RenderPassInfo.attachmentCount	= VulkanAttachments.size();
 	RenderPassInfo.pAttachments		= VulkanAttachments.data();
 	RenderPassInfo.subpassCount		= 1;
 	RenderPassInfo.pSubpasses		= &VulkanSubPass;
