@@ -5,6 +5,7 @@
 #define WIN32_EXTRA_LEAN
 #include <Windows.h>
 #include "Macros/Macros.hpp"
+#include "Log/Log.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12SwapChain.hpp"
 #include "Vulkan/VulkanSwapChain.hpp"
@@ -15,6 +16,7 @@ namespace Eternal
 	{
 		SwapChain* CreateSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _In_ CommandQueue& CommandQueueObj)
 		{
+			Eternal::Log::Log::Get()->Write(Eternal::Log::Log::Info, Eternal::Log::Log::Engine, "[Graphics::CreateDevice]Creating SwapChain");
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12

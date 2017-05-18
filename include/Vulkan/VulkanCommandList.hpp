@@ -41,7 +41,7 @@ namespace Eternal
 			virtual void End() override;
 			virtual void SetIndicesBuffer(_In_ Resource* IndicesBuffer) override;
 			virtual void SetVerticesBuffers(_In_ uint32_t StartSlot, _In_ uint32_t VerticesBuffersCount, _In_ Resource* VerticesBuffers[]) override;
-			virtual void BeginRenderPass(_In_ RenderPass& RenderPassObj, RenderTarget& RenderTargetObj, _In_ Viewport& ViewportObj) override;
+			virtual void BeginRenderPass(_In_ RenderPass& RenderPassObj) override;
 			virtual void EndRenderPass() override;
 			virtual void CopyBuffer(_In_ Resource& Source, _In_ Resource& Destination) override;
 			virtual void Transition(_In_ ResourceTransition Buffers[], _In_ uint32_t BuffersCount, _In_ ResourceTransition Images[], _In_ uint32_t ImagesCount) override;

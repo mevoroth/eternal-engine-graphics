@@ -20,10 +20,9 @@ const VkImageViewType VULKAN_IMAGE_VIEW_TYPES[] =
 	VK_IMAGE_VIEW_TYPE_CUBE,
 	VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
 };
-//extern const VkFormat VULKAN_FORMATS[];
 
 VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
-	: _Format(FormatObj)
+	: View(FormatObj)
 {
 	VkImageAspectFlagBits AspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	if (FormatObj == FORMAT_D32)
@@ -52,7 +51,7 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj,
 }
 
 VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
-	: _Format(FormatObj)
+	: View(FormatObj)
 {
 	VkImageViewCreateInfo ImageViewInfo;
 
@@ -77,7 +76,7 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage,
 }
 
 VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const Format& FormatObj, _In_ uint64_t Offset, _In_ uint64_t Size)
-	: _Format(FormatObj)
+	: View(FormatObj)
 {
 	VkBufferViewCreateInfo BufferViewInfo;
 	
@@ -98,7 +97,7 @@ VulkanView::~VulkanView()
 	ETERNAL_ASSERT(_View.BufferView);
 }
 
-RenderTarget& VulkanView::GetAsRenderTarget()
-{
-	return *((RenderTarget*)nullptr);
-}
+//RenderTarget& VulkanView::GetAsRenderTarget()
+//{
+//	return *((RenderTarget*)nullptr);
+//}

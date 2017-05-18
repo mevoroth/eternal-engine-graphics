@@ -8,6 +8,7 @@
 using namespace Eternal::Graphics;
 
 VulkanSampler::VulkanSampler(_In_ Device& DeviceObj, _In_ bool MINLinear, _In_ bool MAGLinear, _In_ bool MIPLinear, _In_ const AddressMode& U, _In_ const AddressMode& V, _In_ const AddressMode& W)
+	: Sampler(MINLinear, MAGLinear, MIPLinear, U, V, W)
 {
 	VkSamplerCreateInfo SamplerInfo;
 	SamplerInfo.sType					= VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -26,7 +27,7 @@ VulkanSampler::VulkanSampler(_In_ Device& DeviceObj, _In_ bool MINLinear, _In_ b
 	SamplerInfo.compareOp				= VK_COMPARE_OP_ALWAYS;
 	SamplerInfo.minLod					= 0.0f;
 	SamplerInfo.maxLod					= FLT_MAX;
-	SamplerInfo.borderColor				= VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+	SamplerInfo.borderColor				= VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
 	SamplerInfo.unnormalizedCoordinates = VK_FALSE;
 
 	VkResult Result = vkCreateSampler(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &SamplerInfo, nullptr, &_Sampler);

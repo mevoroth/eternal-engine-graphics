@@ -146,7 +146,7 @@ VulkanHeap& VulkanResource::GetVulkanHeap()
 void* VulkanResource::Map(_In_ Device& DeviceObj)
 {
 	void* Data = nullptr;
-	VkResult Result = vkMapMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), GetVulkanHeap().GetVulkanDeviceMemory(), 0, GetSize(), 0, &Data);
+	VkResult Result = vkMapMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), GetVulkanHeap().GetVulkanDeviceMemory(), 0, GetBufferSize(), 0, &Data);
 	ETERNAL_ASSERT(!Result);
 	ETERNAL_ASSERT(Data);
 	return Data;

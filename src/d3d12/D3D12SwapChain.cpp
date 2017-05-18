@@ -49,7 +49,7 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
 	//ETERNAL_ASSERT(hr == S_OK);
 
-	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, 0, ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, GetBackBuffersFrameCount());
+	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, 0, 0, ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, GetBackBuffersFrameCount());
 	_BackBuffers.resize(GetBackBuffersFrameCount());
 	_BackBufferViews.resize(GetBackBuffersFrameCount());
 	for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBuffersFrameCount(); ++BackBufferFrameIndex)
@@ -88,15 +88,15 @@ void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQ
 	ETERNAL_ASSERT(hr == S_OK);
 }
 
-Resource& D3D12SwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
-{
-	return *_BackBuffers[BackBufferIndex];
-}
-
-View& D3D12SwapChain::GetBackBufferView(_In_ uint32_t BackBufferIndex)
-{
-	return *_BackBufferViews[BackBufferIndex];
-}
+//Resource& D3D12SwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
+//{
+//	return *_BackBuffers[BackBufferIndex];
+//}
+//
+//View& D3D12SwapChain::GetBackBufferView(_In_ uint32_t BackBufferIndex)
+//{
+//	return *_BackBufferViews[BackBufferIndex];
+//}
 
 uint32_t D3D12SwapChain::GetBackBuffersFrameCount() const
 {

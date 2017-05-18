@@ -17,13 +17,12 @@ namespace Eternal
 		class View;
 
 		class VulkanRenderTarget
-			: public View
-			, public RenderTarget
+			: public RenderTarget
 		{
 		public:
 			VulkanRenderTarget(_In_ Device& DeviceObj, _In_ RenderPass& RenderPassObj, _In_ View* RenderTargetViews[], _In_ uint32_t RenderTargetViewsCount, _In_ uint32_t Width, _In_ uint32_t Height);
 
-			virtual RenderTarget& GetAsRenderTarget() override;
+			//virtual RenderTarget& GetAsRenderTarget() override;
 			VkFramebuffer_T*& GetFrameBuffer() { return _FrameBuffer; }
 
 		private:

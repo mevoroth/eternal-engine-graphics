@@ -448,6 +448,12 @@
     <ClInclude Include="include\NextGenGraphics\ShaderFactory.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12RenderPass.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanBlendState.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -583,9 +589,6 @@
       <Filter>d3d12</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12BlendState.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12CommandList.cpp">
@@ -763,6 +766,18 @@
       <Filter>NextGenGraphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\DescriptorHeap.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Sampler.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12RenderPass.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\RenderPass.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\View.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

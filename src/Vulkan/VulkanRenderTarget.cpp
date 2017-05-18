@@ -1,5 +1,6 @@
 #include "Vulkan/VulkanRenderTarget.hpp"
 
+#include <cstdint>
 #include <vector>
 #include "Macros/Macros.hpp"
 #include "Vulkan/VulkanDevice.hpp"
@@ -13,7 +14,7 @@ VulkanRenderTarget::VulkanRenderTarget(_In_ Device& DeviceObj, _In_ RenderPass& 
 {
 	vector<VkImageView> AttachmentViews;
 	AttachmentViews.resize(RenderTargetViewsCount);
-	for (unsigned int RenderTargetViewIndex = 0; RenderTargetViewIndex < RenderTargetViewsCount; ++RenderTargetViewIndex)
+	for (uint32_t RenderTargetViewIndex = 0; RenderTargetViewIndex < RenderTargetViewsCount; ++RenderTargetViewIndex)
 	{
 		AttachmentViews[RenderTargetViewIndex] = static_cast<VulkanView*>(RenderTargetViews[RenderTargetViewIndex])->GetImageView();
 	}
@@ -33,7 +34,7 @@ VulkanRenderTarget::VulkanRenderTarget(_In_ Device& DeviceObj, _In_ RenderPass& 
 	ETERNAL_ASSERT(!Result);
 }
 
-RenderTarget& VulkanRenderTarget::GetAsRenderTarget()
-{
-	return *this;
-}
+//RenderTarget& VulkanRenderTarget::GetAsRenderTarget()
+//{
+//	return *this;
+//}

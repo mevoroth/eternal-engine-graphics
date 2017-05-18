@@ -1,14 +1,18 @@
 #ifndef _BLEND_STATE_FACTORY_HPP_
 #define _BLEND_STATE_FACTORY_HPP_
 
-#include "Graphics/BlendState.hpp"
-
 namespace Eternal
 {
 	namespace Graphics
 	{
-		BlendState* CreateBlendState(_In_ const BlendState::Blend& Src, _In_ const BlendState::Blend& Dest, _In_ const BlendState::BlendOp& BlendOpCol,
-			_In_ const BlendState::Blend& SrcAlpha, _In_ const BlendState::Blend& DestAlpha, _In_ const BlendState::BlendOp& BlendAlphaOp);
+		enum Blend;
+		enum BlendOp;
+		enum BlendChannel;
+		class BlendState;
+
+		BlendState* CreateBlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendColorOp,
+			_In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp,
+			_In_ const BlendChannel& BlendChannelObj);
 	}
 }
 

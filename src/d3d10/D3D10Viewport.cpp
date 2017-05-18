@@ -14,10 +14,10 @@ D3D10Viewport::D3D10Viewport(_In_ int x, _In_ int y, _In_ int width, _In_ int he
 void D3D10Viewport::Apply()
 {
 	D3D10_VIEWPORT viewport;
-	viewport.TopLeftX = X();
-	viewport.TopLeftY = Y();
-	viewport.Height = Height();
-	viewport.Width = Width();
+	viewport.TopLeftX = GetX();
+	viewport.TopLeftY = GetY();
+	viewport.Height = GetHeight();
+	viewport.Width = GetWidth();
 	viewport.MinDepth = 0.f;
 	viewport.MaxDepth = 1.f;
 

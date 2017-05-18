@@ -5,6 +5,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum Format;
 		class RenderTarget;
 
 		enum TextureView
@@ -21,8 +22,13 @@ namespace Eternal
 		class View
 		{
 		public:
+			View(_In_ const Format& FormatObj);
 			virtual ~View() {}
-			virtual RenderTarget& GetAsRenderTarget() = 0;
+			//virtual RenderTarget& GetAsRenderTarget() = 0;
+			const Format& GetFormat() const { return _Format; }
+
+		private:
+			Format	_Format;
 		};
 	}
 }

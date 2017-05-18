@@ -6,10 +6,6 @@ using namespace Eternal::Graphics;
 
 Resource::Resource(_In_ Heap& HeapObj, _In_ uint64_t Width, _In_ uint64_t Height, _In_ uint64_t Depth, _In_ uint64_t MipCount)
 	: _Heap(HeapObj)
-	//, _Width(Width)
-	//, _Height(Height)
-	//, _Depth(Depth)
-	//, _MipCount(MipCount)
 {
 	_ResourceDescription.Width			= Width;
 	_ResourceDescription.Height			= Height;

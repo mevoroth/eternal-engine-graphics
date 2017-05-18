@@ -2,13 +2,20 @@
 
 using namespace Eternal::Graphics;
 
-BlendState::BlendState(_In_ const Blend& src, _In_ const Blend& dest, _In_ const BlendOp& blendOp, _In_ const Blend& srcAlpha, _In_ const Blend& destAlpha, _In_ const BlendOp& blendAlphaOp)
+BlendState::BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendColorOp, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp, _In_ const BlendChannel& BlendChannelObj)
 	: _Enabled(true)
-	, _Src(src)
-	, _Dest(dest)
-	, _BlendOp(blendOp)
-	, _SrcAlpha(srcAlpha)
-	, _DestAlpha(destAlpha)
-	, _BlendAlphaOp(blendAlphaOp)
+	, _Src(Src)
+	, _Dest(Dest)
+	, _BlendOp(BlendColorOp)
+	, _SrcAlpha(SrcAlpha)
+	, _DestAlpha(DestAlpha)
+	, _BlendAlphaOp(BlendAlphaOp)
+	, _BlendChannel(BlendChannelObj)
+{
+}
+
+LogicBlend::LogicBlend(_In_ const LogicOp& LogicOpObj)
+	: _Enabled(true)
+	, _LogicOp(LogicOpObj)
 {
 }

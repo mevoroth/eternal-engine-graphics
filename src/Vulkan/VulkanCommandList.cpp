@@ -106,7 +106,7 @@ void VulkanCommandList::Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ P
 	vkCmdBindPipeline(_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, static_cast<VulkanPipeline&>(PipelineObj).GetVulkanPipeline());
 }
 
-void VulkanCommandList::BeginRenderPass(_In_ RenderPass& RenderPassObj, RenderTarget& RenderTargetObj, _In_ Viewport& ViewportObj)
+void VulkanCommandList::BeginRenderPass(_In_ RenderPass& RenderPassObj)
 {
 	VkClearValue ClearValue;
 	ClearValue.color.float32[0] = 0.0f;
@@ -118,11 +118,11 @@ void VulkanCommandList::BeginRenderPass(_In_ RenderPass& RenderPassObj, RenderTa
 	RenderPassBeginInfo.sType						= VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 	RenderPassBeginInfo.pNext						= nullptr;
 	RenderPassBeginInfo.renderPass					= static_cast<VulkanRenderPass&>(RenderPassObj).GetRenderPass();
-	RenderPassBeginInfo.framebuffer					= static_cast<VulkanRenderTarget&>(RenderTargetObj).GetFrameBuffer();
-	RenderPassBeginInfo.renderArea.offset.x			= ViewportObj.X();
-	RenderPassBeginInfo.renderArea.offset.y			= ViewportObj.Y();
-	RenderPassBeginInfo.renderArea.extent.width		= ViewportObj.Width();
-	RenderPassBeginInfo.renderArea.extent.height	= ViewportObj.Height();
+	RenderPassBeginInfo.framebuffer					= static_cast<VulkanRenderPass&>(RenderPassObj).GetFrameBuffer();
+	RenderPassBeginInfo.renderArea.offset.x			= RenderPassObj.GetViewport().GetX();
+	RenderPassBeginInfo.renderArea.offset.y			= RenderPassObj.GetViewport().GetY();
+	RenderPassBeginInfo.renderArea.extent.width		= RenderPassObj.GetViewport().GetWidth();
+	RenderPassBeginInfo.renderArea.extent.height	= RenderPassObj.GetViewport().GetHeight();
 	RenderPassBeginInfo.clearValueCount				= 1;
 	RenderPassBeginInfo.pClearValues				= &ClearValue;
 
@@ -176,10 +176,10 @@ void VulkanCommandList::SetVerticesBuffers(_In_ uint32_t StartSlot, _In_ uint32_
 void VulkanCommandList::SetViewport(_In_ Viewport& ViewportObj)
 {
 	VkViewport VulkanViewport;
-	VulkanViewport.x		= ViewportObj.X();
-	VulkanViewport.y		= ViewportObj.Y();
-	VulkanViewport.width	= ViewportObj.Width();
-	VulkanViewport.height	= ViewportObj.Height();
+	VulkanViewport.x		= ViewportObj.GetX();
+	VulkanViewport.y		= ViewportObj.GetY();
+	VulkanViewport.width	= ViewportObj.GetWidth();
+	VulkanViewport.height	= ViewportObj.GetHeight();
 	VulkanViewport.minDepth	= 0.0f;
 	VulkanViewport.maxDepth	= 1.0f;
 
@@ -189,10 +189,10 @@ void VulkanCommandList::SetViewport(_In_ Viewport& ViewportObj)
 void VulkanCommandList::SetScissorRectangle(_In_ Viewport& ViewportObj)
 {
 	VkRect2D VulkanScissor;
-	VulkanScissor.offset.x		= ViewportObj.X();
-	VulkanScissor.offset.y		= ViewportObj.Y();
-	VulkanScissor.extent.width	= ViewportObj.Width();
-	VulkanScissor.extent.height = ViewportObj.Height();
+	VulkanScissor.offset.x		= ViewportObj.GetX();
+	VulkanScissor.offset.y		= ViewportObj.GetY();
+	VulkanScissor.extent.width	= ViewportObj.GetWidth();
+	VulkanScissor.extent.height = ViewportObj.GetHeight();
 
 	vkCmdSetScissor(_CommandBuffer, 0, 1, &VulkanScissor);
 }
@@ -223,7 +223,7 @@ void VulkanCommandList::CopyBuffer(_In_ Resource& Source, _In_ Resource& Destina
 	VkBufferCopy BufferCopy;
 	BufferCopy.srcOffset	= 0ull;
 	BufferCopy.dstOffset	= 0ull;
-	BufferCopy.size			= Source.GetSize();
+	BufferCopy.size			= Source.GetBufferSize();
 
 	vkCmdCopyBuffer(_CommandBuffer, static_cast<VulkanResource&>(Source).GetBuffer(), static_cast<VulkanResource&>(Destination).GetBuffer(), 1, &BufferCopy);
 }
@@ -248,7 +248,7 @@ void VulkanCommandList::Transition(_In_ ResourceTransition Buffers[], _In_ uint3
 		BufferMemoryBarriers[BufferIndex].dstQueueFamilyIndex	= 0;
 		BufferMemoryBarriers[BufferIndex].buffer				= CurrentVulkanBuffer->GetBuffer();
 		BufferMemoryBarriers[BufferIndex].offset				= 0ull;
-		BufferMemoryBarriers[BufferIndex].size					= CurrentVulkanBuffer->GetSize();
+		BufferMemoryBarriers[BufferIndex].size					= CurrentVulkanBuffer->GetBufferSize();
 	}
 
 	for (uint32_t ImageIndex = 0; ImageIndex < ImagesCount; ++ImageIndex)

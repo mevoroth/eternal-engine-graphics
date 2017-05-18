@@ -13,7 +13,17 @@
 
 using namespace Eternal::Graphics;
 
-VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ InputLayout& InputLayoutObj, _In_ RenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj)
+VulkanPipeline::VulkanPipeline(
+	_In_ Device& DeviceObj,
+	_In_ RootSignature& RootSignatureObj,
+	_In_ InputLayout& InputLayoutObj,
+	_In_ RenderPass& RenderPassObj,
+	_In_ Shader& VS,
+	_In_ Shader& PS,
+	_In_ const DepthTest& DepthTestObj,
+	_In_ const StencilTest& StencilTestObj,
+	_In_ Viewport& ViewportObj
+)
 {
 	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();
 	VkPipelineCacheCreateInfo PipelineCacheInfo;
@@ -75,18 +85,18 @@ VulkanPipeline::VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootS
 	RasterizationStateInfo.lineWidth				= 1.0f;
 
 	VkViewport VulkanViewport;
-	VulkanViewport.x		= (float)ViewportObj.X();
-	VulkanViewport.y		= (float)ViewportObj.Y();
-	VulkanViewport.width	= (float)ViewportObj.Width();
-	VulkanViewport.height	= (float)ViewportObj.Height();
+	VulkanViewport.x		= (float)ViewportObj.GetX();
+	VulkanViewport.y		= (float)ViewportObj.GetY();
+	VulkanViewport.width	= (float)ViewportObj.GetWidth();
+	VulkanViewport.height	= (float)ViewportObj.GetHeight();
 	VulkanViewport.minDepth = 0.0f;
 	VulkanViewport.maxDepth = 1.0f;
 
 	VkRect2D VulkanScissor;
-	VulkanScissor.offset.x		= ViewportObj.X();
-	VulkanScissor.offset.y		= ViewportObj.Y();
-	VulkanScissor.extent.width	= ViewportObj.Width();
-	VulkanScissor.extent.height = ViewportObj.Height();
+	VulkanScissor.offset.x		= ViewportObj.GetX();
+	VulkanScissor.offset.y		= ViewportObj.GetY();
+	VulkanScissor.extent.width	= ViewportObj.GetWidth();
+	VulkanScissor.extent.height = ViewportObj.GetHeight();
 
 	VkPipelineViewportStateCreateInfo ViewportStateInfo;
 	ViewportStateInfo.sType			= VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;

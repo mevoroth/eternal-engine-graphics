@@ -10,15 +10,6 @@
 using namespace std;
 using namespace Eternal::Graphics;
 
-//static const VkShaderStageFlags RootSignatureAccessToVkShaderStageFlags(_In_ const RootSignatureAccess& RootSignatureAccessObj)
-//{
-//	return	(RootSignatureAccessObj & ROOT_SIGNATURE_VS) ? VK_SHADER_STAGE_VERTEX_BIT					: 0
-//		|	(RootSignatureAccessObj & ROOT_SIGNATURE_HS) ? VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT		: 0
-//		|	(RootSignatureAccessObj & ROOT_SIGNATURE_DS) ? VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT	: 0
-//		|	(RootSignatureAccessObj & ROOT_SIGNATURE_GS) ? VK_SHADER_STAGE_GEOMETRY_BIT					: 0
-//		|	(RootSignatureAccessObj & ROOT_SIGNATURE_PS) ? VK_SHADER_STAGE_COMPUTE_BIT					: 0;
-//}
-
 namespace Eternal
 {
 	namespace Graphics
@@ -34,12 +25,15 @@ namespace Eternal
 			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
 			VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
 			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,
+			VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,
 			VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT
 		};
 	}
+
+	ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_DESCRIPTOR_TYPES) == ROOT_SIGNATURE_PARAMETER_COUNT, "Vulkan Descriptor Types declaration not complete");
 }
 
-VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount, /*_In_ const RootSignatureDynamicParameter Parameters[], _In_ uint32_t ParametersCount, _In_ RootSignature* RootSignatures[], _In_ uint32_t RootSignaturesCount,*/ _In_ const RootSignatureAccess& RootSignatureAccessObj)
+VulkanRootSignature::VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
 {
 	//ETERNAL_ASSERT((StaticSamplersCount + ParametersCount) > 0);
 

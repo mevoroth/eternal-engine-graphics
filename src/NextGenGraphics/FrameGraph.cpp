@@ -70,7 +70,7 @@ void FrameGraph::RegisterRenderPass(_In_ RenderPass* RenderPassObj, _In_ const v
 	_Consumed[MinDepth].insert(Inputs.begin(), Inputs.end());
 	_Produced[MinDepth].insert(Outputs.begin(), Outputs.end());
 	_RenderPasses[MinDepth].insert(RenderPassObj);
-
+	
 	//for (int Depth = _Produced.size() - 1; Depth > 0; --Depth)
 	//{
 	//	for (int InputIndex = 0; InputIndex < Inputs.size(); ++InputIndex)

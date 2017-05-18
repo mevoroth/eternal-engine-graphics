@@ -6,5 +6,6 @@
 #define FRAME_LAG					(2)
 #define MAX_VERTICES_BUFFERS		(8)
 #define MAX_DESCRIPTORS_HEAPS		(64)
+#define MAX_RENDER_TARGETS			(8)
 
 #endif

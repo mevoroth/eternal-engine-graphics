@@ -77,18 +77,18 @@ namespace Eternal
 				// Image
 				struct
 				{
-					uint64_t Height;
+					uint64_t TextureSize;
 					uint64_t Width;
+					uint64_t Height;
 					uint64_t Depth;
 					uint64_t MipCount;
-					uint64_t TextureSize;
 				};
 
 				// Buffer
 				struct 
 				{
-					uint64_t Stride;
 					uint64_t BufferSize;
+					uint64_t Stride;
 				};
 			};
 

@@ -3,37 +3,42 @@
 #include "Macros/Macros.hpp"
 #include <vulkan/vulkan.h>
 #include "Graphics/Format.hpp"
+#include "Graphics/Viewport.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanFormat.hpp"
 
 using namespace Eternal::Graphics;
 
-VulkanRenderPass::VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<View*>& RenderTargets, _In_ View* DepthStencil)
-	: _Device(DeviceObj)
-	, _RenderTargets(RenderTargets)
+VulkanRenderPass::VulkanRenderPass(_In_ Device& DeviceObj, _In_ const Viewport& ViewportObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<BlendState*>& BlendStates, _In_ View* DepthStencil /* = nullptr */, _In_ const LogicBlend& LogicBlendObj /* = LogicBlend() */)
+	: RenderPass(RenderTargets, BlendStates, ViewportObj, LogicBlendObj)
+	, _Device(DeviceObj)
 {
 	vector<VkAttachmentDescription> VulkanAttachments;
 	vector<VkAttachmentReference> VulkanAttachmentReferences;
+	vector<VkImageView> AttachmentViews;
 	VulkanAttachments.resize(RenderTargets.size());
 	VulkanAttachmentReferences.resize(RenderTargets.size());
+	AttachmentViews.resize(RenderTargets.size());
 	
 	uint32_t RenderTargetIndex = 0;
-	for (; RenderTargetIndex < _RenderTargets.size(); ++RenderTargetIndex)
+	for (; RenderTargetIndex < GetRenderTargets().size(); ++RenderTargetIndex)
 	{
 		VkAttachmentDescription& CurrentAttachment = VulkanAttachments[RenderTargetIndex];
 		CurrentAttachment.flags				= 0;
-		CurrentAttachment.format			= VULKAN_FORMATS[static_cast<VulkanView*>(_RenderTargets[RenderTargetIndex])->GetFormat()];
+		CurrentAttachment.format			= VULKAN_FORMATS[static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetFormat()];
 		CurrentAttachment.samples			= VK_SAMPLE_COUNT_1_BIT;
 		CurrentAttachment.loadOp			= VK_ATTACHMENT_LOAD_OP_CLEAR;
 		CurrentAttachment.storeOp			= VK_ATTACHMENT_STORE_OP_STORE;
 		CurrentAttachment.stencilLoadOp		= VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 		CurrentAttachment.stencilStoreOp	= VK_ATTACHMENT_STORE_OP_DONT_CARE;
 		CurrentAttachment.initialLayout		= VK_IMAGE_LAYOUT_UNDEFINED;
-		CurrentAttachment.finalLayout		= VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // FIX ME
+		CurrentAttachment.finalLayout		= VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; // FIX ME
 
 		VulkanAttachmentReferences[RenderTargetIndex].attachment	= RenderTargetIndex;
-		VulkanAttachmentReferences[RenderTargetIndex].layout		= VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		VulkanAttachmentReferences[RenderTargetIndex].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+		AttachmentViews[RenderTargetIndex] = static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetImageView();
 	}
 
 	VkAttachmentReference DepthStencilAttachmentReference;
@@ -67,6 +72,20 @@ VulkanRenderPass::VulkanRenderPass(_In_ Device& DeviceObj, _In_ const vector<Vie
 	RenderPassInfo.pDependencies	= nullptr;
 
 	VkResult Result = vkCreateRenderPass(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &RenderPassInfo, nullptr, &_RenderPass);
+	ETERNAL_ASSERT(!Result);
+
+	VkFramebufferCreateInfo FrameBufferInfo;
+	FrameBufferInfo.sType			= VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+	FrameBufferInfo.pNext			= nullptr;
+	FrameBufferInfo.flags			= 0;
+	FrameBufferInfo.renderPass		= _RenderPass;
+	FrameBufferInfo.attachmentCount	= AttachmentViews.size();
+	FrameBufferInfo.pAttachments	= AttachmentViews.data();
+	FrameBufferInfo.width			= ViewportObj.GetWidth();
+	FrameBufferInfo.height			= ViewportObj.GetHeight();
+	FrameBufferInfo.layers			= 1;
+
+	Result = vkCreateFramebuffer(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &FrameBufferInfo, nullptr, &_FrameBuffer);
 	ETERNAL_ASSERT(!Result);
 }
 

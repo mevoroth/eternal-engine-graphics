@@ -71,7 +71,7 @@ namespace Eternal
 			virtual void DrawIndexed(_In_ uint32_t IndicesCount, _In_ uint32_t StartIndexLocation, _In_ int BaseVertexLocation) = 0;
 			virtual void DrawIndexedInstanced(_In_ uint32_t IndicesCount, _In_ uint32_t InstancesCount, _In_ uint32_t StartIndexLocation, _In_ int BaseVertexLocation, _In_ uint32_t StartInstanceLocation) = 0;
 			virtual void End() = 0;
-			virtual void BeginRenderPass(_In_ RenderPass& RenderPassObj, RenderTarget& RenderTargetObj, _In_ Viewport& ViewportObj) = 0;
+			virtual void BeginRenderPass(_In_ RenderPass& RenderPassObj) = 0;
 			virtual void EndRenderPass() = 0;
 			virtual void SetIndicesBuffer(_In_ Resource* IndicesBuffer) = 0;
 			virtual void SetVerticesBuffers(_In_ uint32_t StartSlot, _In_ uint32_t VerticesBuffersCount, _In_ Resource* VerticesBuffers[]) = 0;

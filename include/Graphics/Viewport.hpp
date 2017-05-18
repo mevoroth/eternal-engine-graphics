@@ -11,19 +11,19 @@ namespace Eternal
 			Viewport(_In_ int X, _In_ int Y, _In_ int Width, _In_ int Height);
 			virtual ~Viewport() {}
 
-			inline int X() const
+			inline int GetX() const
 			{
 				return _X;
 			}
-			inline int Y() const
+			inline int GetY() const
 			{
 				return _Y;
 			}
-			inline int Width() const
+			inline int GetWidth() const
 			{
 				return _Width;
 			}
-			inline int Height() const
+			inline int GetHeight() const
 			{
 				return _Height;
 			}

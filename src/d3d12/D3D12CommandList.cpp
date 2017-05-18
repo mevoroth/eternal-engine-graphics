@@ -10,6 +10,8 @@
 #include "d3d12/D3D12CommandAllocator.hpp"
 #include "d3d12/D3D12View.hpp"
 #include "d3d12/D3D12RootSignature.hpp"
+#include "d3d12/D3D12RenderPass.hpp"
+#include "d3d12/D3D12View.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -70,10 +72,10 @@ void D3D12CommandList::DrawIndexedInstanced(_In_ uint32_t IndicesCount, _In_ uin
 void D3D12CommandList::SetViewport(_In_ Viewport& ViewportObj)
 {
 	D3D12_VIEWPORT ViewportDesc;
-	ViewportDesc.TopLeftX	= (FLOAT)ViewportObj.X();
-	ViewportDesc.TopLeftY	= (FLOAT)ViewportObj.Y();
-	ViewportDesc.Width		= (FLOAT)ViewportObj.Width();
-	ViewportDesc.Height		= (FLOAT)ViewportObj.Height();
+	ViewportDesc.TopLeftX	= (FLOAT)ViewportObj.GetX();
+	ViewportDesc.TopLeftY	= (FLOAT)ViewportObj.GetY();
+	ViewportDesc.Width		= (FLOAT)ViewportObj.GetWidth();
+	ViewportDesc.Height		= (FLOAT)ViewportObj.GetHeight();
 	ViewportDesc.MinDepth	= 0.f;
 	ViewportDesc.MaxDepth	= 1.f;
 	_CommandList->RSSetViewports(1, &ViewportDesc);
@@ -82,10 +84,10 @@ void D3D12CommandList::SetViewport(_In_ Viewport& ViewportObj)
 void D3D12CommandList::SetScissorRectangle(_In_ Viewport& ViewportObj)
 {
 	D3D12_RECT ScissorRectangle;
-	ScissorRectangle.left	= ViewportObj.X();
-	ScissorRectangle.top	= ViewportObj.Y();
-	ScissorRectangle.right	= ViewportObj.Width();
-	ScissorRectangle.bottom	= ViewportObj.Height();
+	ScissorRectangle.left	= ViewportObj.GetX();
+	ScissorRectangle.top	= ViewportObj.GetY();
+	ScissorRectangle.right	= ViewportObj.GetWidth();
+	ScissorRectangle.bottom	= ViewportObj.GetHeight();
 	_CommandList->RSSetScissorRects(1, &ScissorRectangle);
 }
 
@@ -117,8 +119,21 @@ void D3D12CommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj, _
 	_CommandList->SetGraphicsRootSignature(static_cast<D3D12RootSignature&>(RootSignatureObj).GetD3D12RootSignature());
 }
 
-void D3D12CommandList::BeginRenderPass(_In_ RenderPass& RenderPassObj, RenderTarget& RenderTargetObj, _In_ Viewport& ViewportObj)
+void D3D12CommandList::BeginRenderPass(_In_ RenderPass& RenderPassObj)
 {
+	D3D12RenderPass& D3D12RenderPassObj = static_cast<D3D12RenderPass&>(RenderPassObj);
+
+	vector<D3D12_CPU_DESCRIPTOR_HANDLE> RenderTargets;
+	RenderTargets.resize(D3D12RenderPassObj.GetRenderTargets().size());
+	for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < D3D12RenderPassObj.GetRenderTargets().size(); ++RenderTargetIndex)
+	{
+		RenderTargets[RenderTargetIndex] = static_cast<D3D12View*>(D3D12RenderPassObj.GetRenderTargets()[RenderTargetIndex])->GetCpuDescriptor();
+	}
+	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilCpuDescriptor;
+	if (D3D12RenderPassObj.GetDepthStencil())
+		DepthStencilCpuDescriptor = static_cast<D3D12View*>(D3D12RenderPassObj.GetDepthStencil())->GetCpuDescriptor();
+
+	_CommandList->OMSetRenderTargets(D3D12RenderPassObj.GetRenderTargets().size(), RenderTargets.data(), FALSE, D3D12RenderPassObj.GetDepthStencil() ? &DepthStencilCpuDescriptor : nullptr);
 }
 
 void D3D12CommandList::EndRenderPass()

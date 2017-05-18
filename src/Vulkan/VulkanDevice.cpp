@@ -2,13 +2,10 @@
 
 #include "Macros/Macros.hpp"
 
-//#define VK_USE_PLATFORM_WIN32_KHR
-//#include <vulkan/vulkan.h>
 #include <vector>
 #include <algorithm>
 #include "Window/Window.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
-#include "Vulkan/VulkanRenderTarget.hpp"
 
 using namespace Eternal::Graphics;
 

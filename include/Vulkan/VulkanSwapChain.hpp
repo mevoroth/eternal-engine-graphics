@@ -5,6 +5,8 @@
 #include <cstdint>
 
 #include "Graphics/SwapChain.hpp"
+#include "Graphics/Viewport.hpp"
+#include "Graphics/BlendState.hpp"
 
 struct VkSurfaceKHR_T;
 struct VkSwapchainKHR_T;
@@ -34,8 +36,8 @@ namespace Eternal
 			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) override;
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) override;
 
-			virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
-			virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
+			//virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
+			//virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
 			virtual uint32_t GetBackBuffersFrameCount() const override;
 			virtual RenderPass& GetMainRenderPass() override;
 			VkSwapchainKHR_T*& GetSwapChain() { return _SwapChain; }
@@ -43,6 +45,8 @@ namespace Eternal
 			VkSemaphore_T*& GetAcquireSemaphore(_In_ uint32_t ResourceIndex);
 
 		private:
+			Viewport				_BackBufferViewport;
+			BlendState				_BackBufferBlendState;
 			vector<VulkanResource*>	_BackBuffers;
 			vector<View*>			_BackBufferViews;
 			vector<VkSemaphore_T*>	_AcquireSemaphores;

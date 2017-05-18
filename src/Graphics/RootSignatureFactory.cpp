@@ -19,7 +19,9 @@ namespace Eternal
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case D3D12:
-				return new D3D12RootSignature(DeviceObj);
+				ETERNAL_ASSERT(false);
+				//return new D3D12RootSignature(DeviceObj);
+				return nullptr;
 #endif
 
 			case VULKAN:
@@ -37,8 +39,7 @@ namespace Eternal
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case D3D12:
-				ETERNAL_ASSERT(false);
-				return new D3D12RootSignature(DeviceObj);
+				return new D3D12RootSignature(DeviceObj, StaticSamplers, StaticSamplersCount, DescriptorHeaps, DescriptorHeapsCount, RootSignatureAccessObj);
 #endif
 
 			case VULKAN:

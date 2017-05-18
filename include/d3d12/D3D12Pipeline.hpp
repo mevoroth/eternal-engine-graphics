@@ -16,10 +16,10 @@ namespace Eternal
 		class Shader;
 		class DepthTest;
 		class StencilTest;
-		class BlendState;
 		class RenderTarget;
 		class RootSignature;
-		class D3D12Sampler;
+		class RenderPass;
+		class Viewport;
 
 		class D3D12Pipeline : public Pipeline
 		{
@@ -28,15 +28,12 @@ namespace Eternal
 				_In_ Device& DeviceObj,
 				_In_ RootSignature& RootSignatureObj,
 				_In_ InputLayout& InputLayoutObj,
+				_In_ RenderPass& RenderPassObj,
 				_In_ Shader& VS,
 				_In_ Shader& PS,
 				_In_ const DepthTest& DepthTestObj,
 				_In_ const StencilTest& StencilTestObj,
-				_In_ const BlendState BlendStates[],
-				//_In_ const FrameBuffer* RenderTargets[],
-				_In_ uint32_t RenderTargetsCount,
-				_In_ const D3D12Sampler Samplers[],
-				_In_ uint32_t SamplersCount
+				_In_ Viewport& ViewportObj
 			);
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() { return _PipelineState; }

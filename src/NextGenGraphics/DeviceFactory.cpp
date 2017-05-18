@@ -1,6 +1,7 @@
 #include "NextGenGraphics/DeviceFactory.hpp"
 
 #include "Macros/Macros.hpp"
+#include "Log/Log.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "Vulkan/VulkanDevice.hpp"
@@ -19,13 +20,16 @@ namespace Eternal
 			case D3D12:
 				if (!InitDXGIFactory)
 				{
+					Eternal::Log::Log::Get()->Write(Eternal::Log::Log::Info, Eternal::Log::Log::Engine, "[Graphics::CreateDevice]Creating DXGI Factory");
 					D3D12Device::Initialize();
 					InitDXGIFactory = true;
 				}
+				Eternal::Log::Log::Get()->Write(Eternal::Log::Log::Info, Eternal::Log::Log::Engine, "[Graphics::CreateDevice]Creating Direct3D 12 Device");
 				return new D3D12Device(0);
 #endif
 
 			case VULKAN:
+				Eternal::Log::Log::Get()->Write(Eternal::Log::Log::Info, Eternal::Log::Log::Engine, "[Graphics::CreateDevice]Creating Vulkan Device");
 				return new VulkanDevice(WindowObj);
 
 			default:

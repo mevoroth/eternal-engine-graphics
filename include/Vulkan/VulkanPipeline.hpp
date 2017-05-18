@@ -15,11 +15,23 @@ namespace Eternal
 		class InputLayout;
 		class RenderPass;
 		class Shader;
+		class DepthTest;
+		class StencilTest;
 
 		class VulkanPipeline : public Pipeline
 		{
 		public:
-			VulkanPipeline(_In_ Device& DeviceObj, _In_ RootSignature& RootSignatureObj, _In_ InputLayout& InputLayoutObj, _In_ RenderPass& RenderPassObj, _In_ Shader& VS, _In_ Shader& PS, _In_ Viewport& ViewportObj);
+			VulkanPipeline(
+				_In_ Device& DeviceObj,
+				_In_ RootSignature& RootSignatureObj,
+				_In_ InputLayout& InputLayoutObj,
+				_In_ RenderPass& RenderPassObj,
+				_In_ Shader& VS,
+				_In_ Shader& PS,
+				_In_ const DepthTest& DepthTestObj,
+				_In_ const StencilTest& StencilTestObj,
+				_In_ Viewport& ViewportObj
+			);
 
 			VkPipeline_T* GetVulkanPipeline() { return _Pipeline; }
 

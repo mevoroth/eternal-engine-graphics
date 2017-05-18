@@ -12,7 +12,6 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum Format;
 		enum TextureView;
 		class Device;
 		class VulkanResource;
@@ -30,16 +29,13 @@ namespace Eternal
 			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull);
 			virtual ~VulkanView();
 
-			virtual RenderTarget& GetAsRenderTarget() override;
+			//virtual RenderTarget& GetAsRenderTarget() override;
 
 			VkImageView_T*& GetImageView() { return _View.ImageView; }
 			VkBufferView_T*& GetBufferView() { return _View.BufferView; }
 
-			const Format& GetFormat() const { return _Format; }
-
 		private:
-			VkView			_View;
-			Format			_Format;
+			VkView _View;
 		};
 	}
 }

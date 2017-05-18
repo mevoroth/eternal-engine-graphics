@@ -31,8 +31,8 @@ namespace Eternal
 			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) override;
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) override;
 
-			virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
-			virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
+			//virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
+			//virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
 			virtual uint32_t GetBackBuffersFrameCount() const override;
 			virtual RenderPass& GetMainRenderPass() override;
 

@@ -21,8 +21,6 @@ namespace Eternal
 			const vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElements() const { return _Input; }
 
 		private:
-			void _AddInputDesc(_In_ const char* Semantic, _In_ const DXGI_FORMAT& Format);
-
 			vector<D3D12_INPUT_ELEMENT_DESC> _Input;
 		};
 	}

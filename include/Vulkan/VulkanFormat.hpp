@@ -32,8 +32,8 @@ namespace Eternal
 			4
 		};
 
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMATS) == FORMATS_COUNT, "Vulkan Formats declaration not complete");
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMAT_SIZES) == FORMATS_COUNT, "Vulkan Format Sizes declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMATS) == FORMAT_COUNT, "Vulkan Formats declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMAT_SIZES) == FORMAT_COUNT, "Vulkan Format Sizes declaration not complete");
 	}
 }
 

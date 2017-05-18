@@ -61,14 +61,15 @@ void D3D12Shader::_CompileFile(_In_ const string& Source, _In_ const char* Entry
 
 	vector<D3D_SHADER_MACRO> Macros;
 	Macros.resize((Defines.size() / 2) + 1);
-	for (int DefineIndex = 0; DefineIndex < Macros.size(); ++DefineIndex)
+	uint32_t DefineIndex = 0;
+	for (; DefineIndex < Macros.size() - 1; ++DefineIndex)
 	{
 		Macros[DefineIndex].Name		= Defines[DefineIndex * 2].c_str();
 		Macros[DefineIndex].Definition	= Defines[DefineIndex * 2 + 1].c_str();
 	}
 	// Empty macro (eq. end of array)
-	Macros[Defines.size() - 1].Name			= nullptr;
-	Macros[Defines.size() - 1].Definition	= nullptr;
+	Macros[DefineIndex].Name		= nullptr;
+	Macros[DefineIndex].Definition	= nullptr;
 
 	HRESULT hr = D3DCompileFromFile(
 		wstring(FullPathSource.cbegin(), FullPathSource.cend()).c_str(),

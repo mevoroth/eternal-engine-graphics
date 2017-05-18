@@ -71,7 +71,8 @@ static void BuildSrvDescription(_In_ const TextureView& View, _Out_ D3D12_SHADER
 }
 
 D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj)
-	: _DescriptorHeap(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj))
+	: View(FormatObj)
+	, _DescriptorHeap(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj))
 {
 	D3D12_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
 	ShaderResourceViewDesc.Format					= D3D12_FORMATS[FormatObj];
@@ -88,7 +89,8 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 }
 
 D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj, _In_ const Format& FormatObj)
-	: _DescriptorHeap(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj))
+	: View(FormatObj)
+	, _DescriptorHeap(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj))
 {
 	_CpuDescriptor = _DescriptorHeap.Pop();
 
@@ -97,7 +99,7 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 		D3D12_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc;
 		DepthStencilViewDesc.Format				= D3D12_FORMATS[FormatObj];
 		DepthStencilViewDesc.ViewDimension		= D3D12_DSV_DIMENSION_TEXTURE2D;
-		DepthStencilViewDesc.Flags				= D3D12_DSV_FLAG_READ_ONLY_DEPTH;
+		DepthStencilViewDesc.Flags				= D3D12_DSV_FLAG_NONE;
 		DepthStencilViewDesc.Texture2D.MipSlice = 0;
 
 		static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateDepthStencilView(
@@ -108,6 +110,11 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 	}
 	else
 	{
+		D3D12_RENDER_TARGET_VIEW_DESC RenderTargetViewDesc;
+		RenderTargetViewDesc.Format					= D3D12_FORMATS[FormatObj];
+		RenderTargetViewDesc.Texture2D.MipSlice		= 0;
+		RenderTargetViewDesc.Texture2D.PlaneSlice	= 0; // See D3D12_FEATURE_DATA_FORMAT_INFO value in D3D12Device.cpp
+
 		static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateRenderTargetView(
 			static_cast<D3D12Resource&>(ResourceObj).GetD3D12Resource(),
 			nullptr,
@@ -121,8 +128,8 @@ D3D12View::~D3D12View()
 	_DescriptorHeap.Push(_CpuDescriptor);
 }
 
-RenderTarget& D3D12View::GetAsRenderTarget()
-{
-	ETERNAL_ASSERT(false);
-	return *((RenderTarget*)nullptr);
-}
+//RenderTarget& D3D12View::GetAsRenderTarget()
+//{
+//	ETERNAL_ASSERT(false);
+//	return *((RenderTarget*)nullptr);
+//}

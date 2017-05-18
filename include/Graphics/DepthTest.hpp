@@ -39,9 +39,9 @@ namespace Eternal
 			}
 
 		private:
-			bool _Enabled = false;
-			Mask _Mask = ZERO;
-			Comparison _ComparisonOp = LESS;
+			bool _Enabled				= false;
+			Mask _Mask					= ZERO;
+			Comparison _ComparisonOp	= COMPARISON_LESS;
 		};
 	}
 }

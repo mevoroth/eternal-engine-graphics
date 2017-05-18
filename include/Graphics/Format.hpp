@@ -14,7 +14,7 @@ namespace Eternal
 			FORMAT_RG328		= 4,
 			FORMAT_RG3232		= 5,
 			FORMAT_D32			= 6,
-			FORMATS_COUNT
+			FORMAT_COUNT
 		};
 	}
 }

@@ -33,25 +33,29 @@ static D3D12_HEAP_TYPE BuildD3D12HeapType(_In_ bool InVRAM, _In_ bool VisibleFro
 
 static D3D12_CPU_PAGE_PROPERTY BuildD3D12CPUPageProperty(_In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
 {
-	if (VisibleFromCPU)
+	//if (VisibleFromCPU)
+	//{
+	//	if (Coherent)
+	//	{
+	//		ETERNAL_ASSERT(!Cached);
+	//		return D3D12_CPU_PAGE_PROPERTY_WRITE_COMBINE;
+	//	}
+	//	else if (Cached)
+	//	{
+	//		return D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+	//	}
+	//}
+	//else
+	//{
+	//	ETERNAL_ASSERT(!Coherent);
+	//	ETERNAL_ASSERT(!Cached);
+	//	return D3D12_CPU_PAGE_PROPERTY_NOT_AVAILABLE;
+	//}
+	//ETERNAL_ASSERT(false);
+	if (VisibleFromCPU && !(Coherent || Cached))
 	{
-		if (Coherent)
-		{
-			ETERNAL_ASSERT(!Cached);
-			return D3D12_CPU_PAGE_PROPERTY_WRITE_COMBINE;
-		}
-		else if (Cached)
-		{
-			return D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-		}
+		ETERNAL_ASSERT(false); // Wrong flags
 	}
-	else
-	{
-		ETERNAL_ASSERT(!Coherent);
-		ETERNAL_ASSERT(!Cached);
-		return D3D12_CPU_PAGE_PROPERTY_NOT_AVAILABLE;
-	}
-	ETERNAL_ASSERT(false);
 	return D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 }
 
@@ -68,11 +72,11 @@ void D3D12Heap::Initialize(_In_ size_t Size)
 	HeapDesc.SizeInBytes						= Size * GetResourcesCount();
 	HeapDesc.Properties.Type					= _HeapType;
 	HeapDesc.Properties.CPUPageProperty			= _CpuPageProperty;
-	HeapDesc.Properties.MemoryPoolPreference	= D3D12_MEMORY_POOL_L1;
+	HeapDesc.Properties.MemoryPoolPreference	= D3D12_MEMORY_POOL_UNKNOWN;
 	HeapDesc.Properties.CreationNodeMask		= GetDevice().GetDeviceMask();
 	HeapDesc.Properties.VisibleNodeMask			= GetDevice().GetDeviceMask();
 	HeapDesc.Alignment							= D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
-	HeapDesc.Flags								= D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES;
+	HeapDesc.Flags								= D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
 
 	HRESULT hr = static_cast<D3D12Device&>(GetDevice()).GetD3D12Device()->CreateHeap(&HeapDesc, __uuidof(ID3D12Heap), (void**)&_Heap);
 	ETERNAL_ASSERT(hr == S_OK);

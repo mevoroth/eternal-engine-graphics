@@ -14,14 +14,14 @@ namespace Eternal
 		public:
 			enum StencilOperator
 			{
-				KEEP,
-				ZERO,
-				REPLACE,
-				INC_SAT,
-				DEC_SAT,
-				INV,
-				INC,
-				DEC
+				STENCIL_OPERATOR_KEEP	= 0,
+				STENCIL_OPERATOR_ZERO,
+				STENCIL_OPERATOR_REPLACE,
+				STENCIL_OPERATOR_INC_SAT,
+				STENCIL_OPERATOR_DEC_SAT,
+				STENCIL_OPERATOR_INV,
+				STENCIL_OPERATOR_INC,
+				STENCIL_OPERATOR_DEC
 			};
 			struct FaceOperator
 			{
@@ -34,10 +34,10 @@ namespace Eternal
 				{
 				}
 
-				StencilOperator Fail = KEEP;
-				StencilOperator FailDepth = KEEP;
-				StencilOperator Pass = KEEP;
-				Comparison ComparisonOp = ALWAYS;
+				StencilOperator Fail		= STENCIL_OPERATOR_KEEP;
+				StencilOperator FailDepth	= STENCIL_OPERATOR_KEEP;
+				StencilOperator Pass		= STENCIL_OPERATOR_KEEP;
+				Comparison ComparisonOp		= COMPARISON_ALWAYS;
 			};
 
 			StencilTest() {}

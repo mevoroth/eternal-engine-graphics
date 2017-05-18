@@ -25,7 +25,7 @@ namespace Eternal
 		class VulkanDescriptorHeap : public DescriptorHeap
 		{
 		public:
-			VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj);
+			VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ uint32_t Register, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj);
 			~VulkanDescriptorHeap();
 
 			VkDescriptorSetLayout_T*& GetDescriptorSetLayout() { return _DescriptorSetLayout; }

@@ -6,6 +6,8 @@
 #include "Window/Window.hpp"
 #include "Graphics/View.hpp"
 #include "Graphics/Format.hpp"
+#include "Graphics/BlendState.hpp"
+#include "Graphics/BlendStateFactory.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanRenderTarget.hpp"
 #include "Vulkan/VulkanResource.hpp"
@@ -18,6 +20,7 @@
 using namespace Eternal::Graphics;
 
 VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
+	: _BackBufferViewport(0, 0, WindowObj.GetWidth(), WindowObj.GetHeight())
 {
 	VkResult Result;
 
@@ -113,23 +116,10 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 	_BackBufferViews.resize(BackBuffersCount);
 	_AcquireSemaphores.resize(BackBuffersCount);
 
-	std::vector<View*> VkViews;
-	VkViews.resize(BackBuffersCount);
-
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
 	{
-		VkViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, BackBuffers[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, FORMAT_BGRA8888);
-		//_BackBufferViews[BackBufferIndex] = new VulkanRenderTarget(DeviceObj, ;
+		_BackBufferViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, BackBuffers[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, FORMAT_BGRA8888);
 		_BackBuffers[BackBufferIndex] = new VulkanResource(BackBuffers[BackBufferIndex]);
-	}
-
-	vector<View*> RenderTargets;
-	RenderTargets.push_back(VkViews[0]);
-	_RenderPass = new VulkanRenderPass(VulkanDeviceObj, RenderTargets);
-
-	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffers.size(); ++BackBufferIndex)
-	{
-		_BackBufferViews[BackBufferIndex] = new VulkanRenderTarget(DeviceObj, *_RenderPass, &VkViews[BackBufferIndex], 1u, (uint32_t)WindowObj.GetWidth(), (uint32_t)WindowObj.GetHeight());
 		
 		VkSemaphoreCreateInfo SemaphoreInfo;
 		SemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -139,19 +129,27 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 		Result = vkCreateSemaphore(VulkanDeviceObj.GetVulkanDevice(), &SemaphoreInfo, nullptr, &_AcquireSemaphores[BackBufferIndex]);
 		ETERNAL_ASSERT(!Result);
 	}
+
+	vector<View*> RenderTargets;
+	RenderTargets.push_back(_BackBufferViews[0]);
+
+	vector<BlendState*> BlendStates;
+	BlendStates.push_back(&_BackBufferBlendState);
+
+	_RenderPass = new VulkanRenderPass(VulkanDeviceObj, _BackBufferViewport, RenderTargets, BlendStates);
 }
 
-Resource& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
-{
-	ETERNAL_ASSERT(BackBufferIndex < _BackBuffers.size());
-	return *_BackBuffers[BackBufferIndex];
-}
-
-View& VulkanSwapChain::GetBackBufferView(_In_ uint32_t BackBufferIndex)
-{
-	ETERNAL_ASSERT(BackBufferIndex < _BackBufferViews.size());
-	return *_BackBufferViews[BackBufferIndex];
-}
+//Resource& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
+//{
+//	ETERNAL_ASSERT(BackBufferIndex < _BackBuffers.size());
+//	return *_BackBuffers[BackBufferIndex];
+//}
+//
+//View& VulkanSwapChain::GetBackBufferView(_In_ uint32_t BackBufferIndex)
+//{
+//	ETERNAL_ASSERT(BackBufferIndex < _BackBufferViews.size());
+//	return *_BackBufferViews[BackBufferIndex];
+//}
 
 uint32_t VulkanSwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj)
 {

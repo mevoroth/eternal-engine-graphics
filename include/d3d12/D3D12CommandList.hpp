@@ -41,7 +41,7 @@ namespace Eternal
 			virtual void DrawIndexed(_In_ uint32_t IndicesCount, _In_ uint32_t StartIndexLocation, _In_ int BaseVertexLocation) override;
 			virtual void DrawIndexedInstanced(_In_ uint32_t IndicesCount, _In_ uint32_t InstancesCount, _In_ uint32_t StartIndexLocation, _In_ int BaseVertexLocation, _In_ uint32_t StartInstanceLocation) override;
 			virtual void End() override;
-			virtual void BeginRenderPass(_In_ RenderPass& RenderPassObj, RenderTarget& RenderTargetObj, _In_ Viewport& ViewportObj) override;
+			virtual void BeginRenderPass(_In_ RenderPass& RenderPassObj) override;
 			virtual void EndRenderPass() override;
 			virtual void CopyBuffer(_In_ Resource& Source, _In_ Resource& Destination) override;
 			virtual void SetIndicesBuffer(_In_ Resource* IndicesBuffer) override;
