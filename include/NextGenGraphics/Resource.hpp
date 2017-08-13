@@ -50,9 +50,12 @@ namespace Eternal
 		{
 		public:
 			Resource();
-			Resource(_In_ Heap& HeapObj, _In_ uint64_t Width, _In_ uint64_t Height, _In_ uint64_t Depth, _In_ uint64_t MipCount = 1ull);
+			Resource(_In_ Heap& HeapObj, _In_ const Format& ImageFormat, _In_ uint64_t Width, _In_ uint64_t Height, _In_ uint64_t Depth, _In_ uint64_t MipCount = 1ull);
 			Resource(_In_ Heap& HeapObj, _In_ uint64_t Stride, _In_ uint64_t Size);
 			virtual ~Resource();
+
+			virtual void SetName(_In_ const wchar_t* Name) = 0;
+
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj) = 0;
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull)  = 0;
 			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj) = 0;
@@ -60,16 +63,17 @@ namespace Eternal
 			virtual void* Map(_In_ Device& DeviceObj) = 0;
 			virtual void Unmap(_In_ Device& DeviceObj) = 0;
 
-			uint64_t	GetHeapSlot() const { return _HeapSlot; }
-			void		SetHeapSlot(_In_ uint64_t HeapSlot) { _HeapSlot = HeapSlot; }
-			Heap&		GetHeap() { return _Heap; }
+			uint64_t		GetHeapSlot() const { return _HeapSlot; }
+			void			SetHeapSlot(_In_ uint64_t HeapSlot) { _HeapSlot = HeapSlot; }
+			Heap&			GetHeap() { return _Heap; }
 
-			uint64_t	GetTextureSize() const	{ return _ResourceDescription.TextureSize; }
-			uint64_t	GetDepth() const		{ return _ResourceDescription.Depth; }
-			uint64_t	GetMipCount() const		{ return _ResourceDescription.MipCount; }
+			uint64_t		GetTextureSize() const	{ return _ResourceDescription.TextureSize; }
+			uint64_t		GetDepth() const		{ return _ResourceDescription.Depth; }
+			uint64_t		GetMipCount() const		{ return _ResourceDescription.MipCount; }
+			const Format&	GetFormat() const		{ return _ResourceDescription.ImageFormat; }
 
-			uint64_t	GetStride() const		{ return _ResourceDescription.Stride; }
-			uint64_t	GetBufferSize() const	{ return _ResourceDescription.BufferSize; }
+			uint64_t		GetStride() const		{ return _ResourceDescription.Stride; }
+			uint64_t		GetBufferSize() const	{ return _ResourceDescription.BufferSize; }
 
 		private:
 			union ResourceDescription
@@ -77,11 +81,12 @@ namespace Eternal
 				// Image
 				struct
 				{
-					uint64_t TextureSize;
-					uint64_t Width;
-					uint64_t Height;
-					uint64_t Depth;
-					uint64_t MipCount;
+					uint64_t	TextureSize;
+					uint64_t	Width;
+					uint64_t	Height;
+					uint64_t	Depth;
+					uint64_t	MipCount;
+					Format		ImageFormat;
 				};
 
 				// Buffer

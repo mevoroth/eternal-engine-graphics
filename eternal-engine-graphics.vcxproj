@@ -209,13 +209,18 @@
     </ClInclude>
     <ClInclude Include="include\Graphics\Clearable.hpp" />
     <ClInclude Include="include\Graphics\CommandAllocator.hpp" />
+    <ClInclude Include="include\Graphics\CommandAllocatorFactory.hpp" />
     <ClInclude Include="include\Graphics\CommandList.hpp" />
+    <ClInclude Include="include\Graphics\CommandListFactory.hpp" />
     <ClInclude Include="include\Graphics\CommandQueue.hpp" />
     <ClInclude Include="include\Graphics\CommandQueueFactory.hpp" />
     <ClInclude Include="include\Graphics\Comparison.hpp" />
     <ClInclude Include="include\Graphics\Constant.hpp" />
     <ClInclude Include="include\Graphics\ConstantFactory.hpp" />
-    <ClInclude Include="include\Graphics\Context.hpp" />
+    <ClInclude Include="include\Graphics\Context.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ContextFactory.hpp" />
     <ClInclude Include="include\Graphics\DepthStencil.hpp" />
     <ClInclude Include="include\Graphics\DepthStencilFactory.hpp" />
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
@@ -279,6 +284,8 @@
     <ClInclude Include="include\Graphics\ViewportFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="include\NextGenGraphics\Context.hpp" />
+    <ClInclude Include="include\NextGenGraphics\ContextFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\Device.hpp" />
     <ClInclude Include="include\NextGenGraphics\DeviceFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
@@ -292,6 +299,7 @@
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanContext.hpp" />
     <ClInclude Include="include\Vulkan\VulkanDescriptorHeap.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
@@ -479,6 +487,9 @@
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Graphics\CommandAllocatorFactory.cpp" />
+    <ClCompile Include="src\Graphics\CommandList.cpp" />
+    <ClCompile Include="src\Graphics\CommandListFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp" />
     <ClCompile Include="src\Graphics\ConstantFactory.cpp" />
     <ClCompile Include="src\Graphics\DepthStencilFactory.cpp" />
@@ -517,6 +528,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Graphics\StructuredBufferFactory.cpp" />
+    <ClCompile Include="src\Graphics\SwapChain.cpp" />
     <ClCompile Include="src\Graphics\SwapChainFactory.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\TextureFactory.cpp">
@@ -527,6 +539,8 @@
     <ClCompile Include="src\Graphics\ViewportFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\Context.cpp" />
+    <ClCompile Include="src\NextGenGraphics\ContextFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\DeviceFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp" />
     <ClCompile Include="src\NextGenGraphics\Resource.cpp" />
@@ -540,6 +554,7 @@
     <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanContext.cpp" />
     <ClCompile Include="src\Vulkan\VulkanDescriptorHeap.cpp" />
     <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -611,7 +626,7 @@
     <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;$(ProgramW6432)\VulkanSDK\1.0.37.0\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;$(ProgramW6432)\VulkanSDK\1.0.57.0\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

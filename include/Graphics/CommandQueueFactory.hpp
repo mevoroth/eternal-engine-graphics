@@ -1,7 +1,7 @@
 #ifndef _COMMAND_QUEUE_FACTORY_HPP_
 #define _COMMAND_QUEUE_FACTORY_HPP_
 
-#include <cstdint>
+#include "Graphics/CommandList.hpp"
 
 namespace Eternal
 {
@@ -10,7 +10,7 @@ namespace Eternal
 		class Device;
 		class CommandQueue;
 
-		CommandQueue* CreateCommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount);
+		CommandQueue* CreateCommandQueue(_In_ Device& DeviceObj, _In_ const CommandListType& Type = COMMAND_LIST_TYPE_GRAPHIC);
 	}
 }
 

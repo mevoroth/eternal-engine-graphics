@@ -1,19 +1,21 @@
 #ifndef _D3D12_COMMAND_ALLOCATOR_HPP_
 #define _D3D12_COMMAND_ALLOCATOR_HPP_
 
-#include <d3d12.h>
 #include "Graphics/CommandAllocator.hpp"
+
+struct ID3D12CommandAllocator;
 
 namespace Eternal
 {
 	namespace Graphics
 	{
 		class Device;
+		enum CommandListType;
 
 		class D3D12CommandAllocator : public CommandAllocator
 		{
 		public:
-			D3D12CommandAllocator(_In_ Device& DeviceObj, _In_ const D3D12_COMMAND_LIST_TYPE& CommandListType);
+			D3D12CommandAllocator(_In_ Device& DeviceObj, _In_ const CommandListType& Type);
 			virtual ~D3D12CommandAllocator();
 
 			void Reset();

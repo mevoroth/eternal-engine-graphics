@@ -22,7 +22,7 @@ VulkanSampler::VulkanSampler(_In_ Device& DeviceObj, _In_ bool MINLinear, _In_ b
 	SamplerInfo.addressModeW			= (VkSamplerAddressMode)(W - 1);
 	SamplerInfo.mipLodBias				= 0.0f;
 	SamplerInfo.anisotropyEnable		= VK_FALSE;
-	SamplerInfo.maxAnisotropy			= 0.0f;
+	SamplerInfo.maxAnisotropy			= 1.0f;
 	SamplerInfo.compareEnable			= VK_FALSE;
 	SamplerInfo.compareOp				= VK_COMPARE_OP_ALWAYS;
 	SamplerInfo.minLod					= 0.0f;

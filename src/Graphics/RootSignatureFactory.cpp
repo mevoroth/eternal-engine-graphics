@@ -19,8 +19,7 @@ namespace Eternal
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case D3D12:
-				ETERNAL_ASSERT(false);
-				//return new D3D12RootSignature(DeviceObj);
+				return new D3D12RootSignature(DeviceObj);
 				return nullptr;
 #endif
 
@@ -33,17 +32,35 @@ namespace Eternal
 			}
 		}
 
-		RootSignature* CreateRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
+//		RootSignature* CreateRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
+//		{
+//			switch (DeviceObj.GetDeviceType())
+//			{
+//#ifdef ETERNAL_ENABLE_D3D12
+//			case D3D12:
+//				return new D3D12RootSignature(DeviceObj, StaticSamplers, StaticSamplersCount, DescriptorHeaps, DescriptorHeapsCount, RootSignatureAccessObj);
+//#endif
+//
+//			case VULKAN:
+//				return new VulkanRootSignature(DeviceObj, StaticSamplers, StaticSamplersCount, DescriptorHeaps, DescriptorHeapsCount, RootSignatureAccessObj);
+//
+//			default:
+//				ETERNAL_ASSERT(false);
+//				return nullptr;
+//			}
+//		}
+
+		RootSignature* CreateRootSignature(_In_ Device& DeviceObj, _In_ const vector<RootSignatureParameter> Resources[], _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
 		{
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case D3D12:
-				return new D3D12RootSignature(DeviceObj, StaticSamplers, StaticSamplersCount, DescriptorHeaps, DescriptorHeapsCount, RootSignatureAccessObj);
+				return new D3D12RootSignature(DeviceObj, Resources, ResourcesCount, RootSignatureAccessObj);
 #endif
 
 			case VULKAN:
-				return new VulkanRootSignature(DeviceObj, StaticSamplers, StaticSamplersCount, DescriptorHeaps, DescriptorHeapsCount, RootSignatureAccessObj);
+				return new VulkanRootSignature(DeviceObj, Resources, ResourcesCount, RootSignatureAccessObj);
 
 			default:
 				ETERNAL_ASSERT(false);

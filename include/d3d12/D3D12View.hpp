@@ -3,6 +3,7 @@
 
 #include <d3d12.h>
 #include "Graphics/View.hpp"
+#include "d3d12/D3D12DescriptorHeap.hpp"
 
 namespace Eternal
 {
@@ -12,21 +13,21 @@ namespace Eternal
 		class Device;
 		class Resource;
 		class DescriptorHeap;
-		class D3D12DescriptorHeap;
 
 		class D3D12View : public View
 		{
 		public:
 			D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj);
 			D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj, _In_ const Format& FormatObj);
-			~D3D12View();
+			D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj);
+			virtual ~D3D12View();
 
-			//virtual RenderTarget& GetAsRenderTarget() override;
-			inline D3D12_CPU_DESCRIPTOR_HANDLE& GetCpuDescriptor() { return _CpuDescriptor; }
+			inline DescriptorHeapHandle& GetHandle()				{ return _Handle; }
+			inline const DescriptorHeapHandle& GetHandle() const	{ return _Handle; }
 
 		private:
-			D3D12DescriptorHeap&		_DescriptorHeap;
-			D3D12_CPU_DESCRIPTOR_HANDLE _CpuDescriptor;
+			DescriptorHeapHandle	_Handle;
+			D3D12DescriptorHeap&	_DescriptorHeap;
 		};
 	}
 }

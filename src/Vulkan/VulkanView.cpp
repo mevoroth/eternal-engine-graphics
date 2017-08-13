@@ -7,6 +7,7 @@
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanResource.hpp"
 #include "Vulkan/VulkanFormat.hpp"
+#include "Vulkan/VulkanDescriptorHeap.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -90,6 +91,12 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj,
 
 	VkResult Result = vkCreateBufferView(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &BufferViewInfo, nullptr, &_View.BufferView);
 	ETERNAL_ASSERT(!Result);
+}
+
+VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ VkDescriptorSet_T*& DescriptorSet)
+	: View(FORMAT_RGBA8888)
+{
+	_View.DescriptorSet = DescriptorSet;
 }
 
 VulkanView::~VulkanView()

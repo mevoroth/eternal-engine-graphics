@@ -21,6 +21,7 @@ namespace Eternal
 		class D3D12Resource;
 		class D3D12DescriptorHeap;
 		class D3D12View;
+		class D3D12RenderPass;
 
 		class D3D12SwapChain : public SwapChain
 		{
@@ -28,7 +29,9 @@ namespace Eternal
 			D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _In_ CommandQueue& CommandQueueObj);
 			virtual ~D3D12SwapChain();
 
+			virtual void AcquireFrame(_In_ Device& DeviceObj, _Inout_ Context& GfxContext) override;
 			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) override;
+			virtual void Present(_In_ Device& DeviceObj, _In_ Context& GfxContext) override;
 			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) override;
 
 			//virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
@@ -39,13 +42,16 @@ namespace Eternal
 			IDXGISwapChain* GetDXGISwapChain() { return _SwapChain; }
 
 		private:
-			vector<D3D12Resource*>	_BackBuffers;
-			vector<D3D12View*>		_BackBufferViews;
+			vector<D3D12Resource*>			_BackBuffers;
+			vector<D3D12View*>				_BackBufferViews;
+			vector< vector<View*> >			_BackBufferViewReferences;
+			vector< vector<BlendState*> >	_BlendStateReferences;
+			vector<D3D12RenderPass*>		_RenderPasses;
 			
-			D3D12DescriptorHeap*	_BackBufferDescriptorHeap	= nullptr;
-			IDXGISwapChain*			_SwapChain					= nullptr;
-			IDXGISwapChain3*		_SwapChain3					= nullptr;
-			uint32_t				_BackBuffersCount			= 0u;
+			D3D12DescriptorHeap*			_BackBufferDescriptorHeap	= nullptr;
+			IDXGISwapChain*					_SwapChain					= nullptr;
+			IDXGISwapChain3*				_SwapChain3					= nullptr;
+			uint32_t						_BackBuffersCount			= 0u;
 		};
 	}
 }

@@ -9,17 +9,19 @@ namespace Eternal
 	{
 		enum RootSignatureAccess
 		{
-			ROOT_SIGNATURE_NONE		= 0x0,
-			ROOT_SIGNATURE_IA		= 0x1,
-			ROOT_SIGNATURE_VS		= 0x2,
-			ROOT_SIGNATURE_HS		= 0x4,
-			ROOT_SIGNATURE_DS		= 0x8,
-			ROOT_SIGNATURE_GS		= 0x10,
-			ROOT_SIGNATURE_PS		= 0x20,
-			ROOT_SIGNATURE_SO		= 0x40
+			ROOT_SIGNATURE_ACCESS_NONE		= 0x0,
+			ROOT_SIGNATURE_ACCESS_IA		= 0x1,
+			ROOT_SIGNATURE_ACCESS_VS		= 0x2,
+			ROOT_SIGNATURE_ACCESS_HS		= 0x4,
+			ROOT_SIGNATURE_ACCESS_DS		= 0x8,
+			ROOT_SIGNATURE_ACCESS_GS		= 0x10,
+			ROOT_SIGNATURE_ACCESS_PS		= 0x20,
+			ROOT_SIGNATURE_ACCESS_SO		= 0x40,
+
+			ROOT_SIGNATURE_ACCESS_IA_VS_PS	= (ROOT_SIGNATURE_ACCESS_IA | ROOT_SIGNATURE_ACCESS_VS | ROOT_SIGNATURE_ACCESS_PS)
 		};
 
-		enum RootSignatureDynamicParameterType
+		enum RootSignatureParameterType
 		{
 			ROOT_SIGNATURE_PARAMETER_SAMPLER	= 0,
 			ROOT_SIGNATURE_PARAMETER_TEXTURE,
@@ -35,9 +37,16 @@ namespace Eternal
 			ROOT_SIGNATURE_PARAMETER_COUNT
 		};
 
+		struct RootSignatureParameter
+		{
+			RootSignatureParameterType	Parameter;
+			RootSignatureAccess			Access;
+			uint32_t					Register;
+		};
+
 		struct RootSignatureDynamicParameter
 		{
-			RootSignatureDynamicParameterType	Type;
+			RootSignatureParameterType	Type;
 			uint32_t							Count;
 		};
 

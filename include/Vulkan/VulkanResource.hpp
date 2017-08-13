@@ -36,6 +36,8 @@ namespace Eternal
 			VkBuffer_T*& GetBuffer() { return _Resource.Buffer; }
 			VkImage_T*& GetImage() { return _Resource.Image; }
 
+			virtual void SetName(_In_ const wchar_t* Name) override;
+
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj) override;
 			virtual View* CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull) override;
 			virtual View* CreateRenderTargetView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj) override;

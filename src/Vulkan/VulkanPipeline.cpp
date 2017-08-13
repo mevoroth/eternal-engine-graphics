@@ -22,7 +22,7 @@ VulkanPipeline::VulkanPipeline(
 	_In_ Shader& PS,
 	_In_ const DepthTest& DepthTestObj,
 	_In_ const StencilTest& StencilTestObj,
-	_In_ Viewport& ViewportObj
+	_In_ const Viewport& ViewportObj
 )
 {
 	VkDevice& VkDeviceObj = static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice();

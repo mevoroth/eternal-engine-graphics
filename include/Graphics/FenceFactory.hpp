@@ -10,7 +10,7 @@ namespace Eternal
 		class Device;
 		class Fence;
 
-		Fence* CreateFence(_In_ Device& DeviceObj, _In_ uint32_t SimultaneousResourcesCount = 1u);
+		Fence* CreateFence(_In_ Device& DeviceObj);
 	}
 }
 

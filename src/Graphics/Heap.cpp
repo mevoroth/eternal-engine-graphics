@@ -4,8 +4,9 @@
 
 using namespace Eternal::Graphics;
 
-Heap::Heap(_In_ Device& DeviceObj, _In_ uint32_t ResourcesCount)
+Heap::Heap(_In_ Device& DeviceObj, _In_ const HeapType& HeapTypeObj, _In_ uint32_t ResourcesCount)
 	: _Device(DeviceObj)
+	, _HeapType(HeapTypeObj)
 	, _ResourcesCount(ResourcesCount)
 {
 	ETERNAL_ASSERT(_ResourcesCount > 0);

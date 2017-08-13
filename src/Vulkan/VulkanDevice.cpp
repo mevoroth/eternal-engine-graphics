@@ -10,14 +10,14 @@
 using namespace Eternal::Graphics;
 
 VkBool32 VulkanDevice::DebugReport(
-	VkDebugReportFlagsEXT                       flags,
-	VkDebugReportObjectTypeEXT                  objectType,
-	uint64_t                                    object,
-	size_t                                      location,
-	int32_t                                     messageCode,
-	const char*                                 pLayerPrefix,
-	const char*                                 pMessage,
-	void*                                       pUserData
+	VkDebugReportFlagsEXT						flags,
+	VkDebugReportObjectTypeEXT					objectType,
+	uint64_t									object,
+	size_t										location,
+	int32_t										messageCode,
+	const char*									pLayerPrefix,
+	const char*									pMessage,
+	void*										pUserData
 )
 {
 	//ETERNAL_ASSERT(false);

@@ -59,8 +59,8 @@ static D3D12_CPU_PAGE_PROPERTY BuildD3D12CPUPageProperty(_In_ bool VisibleFromCP
 	return D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 }
 
-D3D12Heap::D3D12Heap(_In_ Device& DeviceObj, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
-	: Heap(DeviceObj, ResourcesCount)
+D3D12Heap::D3D12Heap(_In_ Device& DeviceObj, _In_ const HeapType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
+	: Heap(DeviceObj, HeapTypeObj, ResourcesCount)
 {
 	_HeapType			= BuildD3D12HeapType(InVRAM, VisibleFromCPU, Coherent, Cached);
 	_CpuPageProperty	= BuildD3D12CPUPageProperty(VisibleFromCPU, Coherent, Cached);
@@ -68,6 +68,8 @@ D3D12Heap::D3D12Heap(_In_ Device& DeviceObj, _In_ uint32_t ResourcesCount, _In_ 
 
 void D3D12Heap::Initialize(_In_ size_t Size)
 {
+	ETERNAL_ASSERT(!_Heap);
+
 	D3D12_HEAP_DESC HeapDesc;
 	HeapDesc.SizeInBytes						= Size * GetResourcesCount();
 	HeapDesc.Properties.Type					= _HeapType;
@@ -76,12 +78,17 @@ void D3D12Heap::Initialize(_In_ size_t Size)
 	HeapDesc.Properties.CreationNodeMask		= GetDevice().GetDeviceMask();
 	HeapDesc.Properties.VisibleNodeMask			= GetDevice().GetDeviceMask();
 	HeapDesc.Alignment							= D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
-	HeapDesc.Flags								= D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
+	HeapDesc.Flags								= GetHeapType() == HEAP_TYPE_TEXTURE ? D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES : D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS;
 
 	HRESULT hr = static_cast<D3D12Device&>(GetDevice()).GetD3D12Device()->CreateHeap(&HeapDesc, __uuidof(ID3D12Heap), (void**)&_Heap);
 	ETERNAL_ASSERT(hr == S_OK);
 
 	SetSize(Size);
+}
+
+bool D3D12Heap::IsInitialized() const
+{
+	return _Heap != nullptr;
 }
 
 D3D12Heap::~D3D12Heap()

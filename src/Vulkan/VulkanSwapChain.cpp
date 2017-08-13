@@ -8,6 +8,7 @@
 #include "Graphics/Format.hpp"
 #include "Graphics/BlendState.hpp"
 #include "Graphics/BlendStateFactory.hpp"
+#include "NextGenGraphics/Context.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanRenderTarget.hpp"
 #include "Vulkan/VulkanResource.hpp"
@@ -16,11 +17,12 @@
 #include "Vulkan/VulkanFence.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
+#include "Vulkan/VulkanContext.hpp"
 
 using namespace Eternal::Graphics;
 
 VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
-	: _BackBufferViewport(0, 0, WindowObj.GetWidth(), WindowObj.GetHeight())
+	: SwapChain(WindowObj)
 {
 	VkResult Result;
 
@@ -134,9 +136,9 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 	RenderTargets.push_back(_BackBufferViews[0]);
 
 	vector<BlendState*> BlendStates;
-	BlendStates.push_back(&_BackBufferBlendState);
+	BlendStates.push_back(&GetBackBufferBlendState());
 
-	_RenderPass = new VulkanRenderPass(VulkanDeviceObj, _BackBufferViewport, RenderTargets, BlendStates);
+	_RenderPass = new VulkanRenderPass(VulkanDeviceObj, GetMainViewport(), RenderTargets, BlendStates);
 }
 
 //Resource& VulkanSwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
@@ -161,11 +163,25 @@ uint32_t VulkanSwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& Fence
 	ETERNAL_ASSERT(!Result);
 	ETERNAL_ASSERT(_FrameIndex == FrameIndex);
 	
-	char test[256];
-	sprintf_s(test, "[VulkanSwapChain::AcquireFrame] FENCE: %d:%d\n", _FrameIndex, FrameIndex);
-	OutputDebugString(test);
+	//char test[256];
+	//sprintf_s(test, "[VulkanSwapChain::AcquireFrame] FENCE: %d:%d\n", _FrameIndex, FrameIndex);
+	//OutputDebugString(test);
 
 	return FrameIndex;
+}
+
+void VulkanSwapChain::AcquireFrame(_In_ Device& DeviceObj, _Inout_ Context& GfxContext)
+{
+	uint32_t FrameIndex;
+
+	VkFence		FrameFence		= static_cast<VulkanFence*>(GfxContext.GetFrameFence())->GetFence();
+	VkSemaphore	FrameSemaphore	= static_cast<VulkanContext&>(GfxContext).GetFrameSemaphore();
+
+	VkResult Result = vkAcquireNextImageKHR(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _SwapChain, UINT64_MAX, FrameSemaphore, FrameFence, &FrameIndex);
+	ETERNAL_ASSERT(!Result);
+	ETERNAL_ASSERT(_FrameIndex == FrameIndex);
+
+	GfxContext.SetFrameIndex(FrameIndex);
 }
 
 uint32_t VulkanSwapChain::GetBackBuffersFrameCount() const
@@ -187,27 +203,54 @@ RenderPass& VulkanSwapChain::GetMainRenderPass()
 void VulkanSwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
 {
 	VulkanCommandQueue& VulkanCommandQueueObj			= static_cast<VulkanCommandQueue&>(CommandQueueObj);
-	VulkanCommandAllocator* VulkanCommandAllocatorObj	= static_cast<VulkanCommandAllocator*>(VulkanCommandQueueObj.GetCommandAllocator(ResourceIndex));
+	//VulkanCommandAllocator* VulkanCommandAllocatorObj	= static_cast<VulkanCommandAllocator*>(VulkanCommandQueueObj.GetCommandAllocator());
 	uint32_t ImageIndice = ResourceIndex;
 	VkResult PresentInfoResult;
 	
+	ETERNAL_ASSERT(false);
+
 	VkPresentInfoKHR PresentInfo;
 	PresentInfo.sType					= VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	PresentInfo.pNext					= nullptr;
-	PresentInfo.waitSemaphoreCount		= 1;
-	PresentInfo.pWaitSemaphores			= &VulkanCommandAllocatorObj->GetSemaphore();
+	//PresentInfo.waitSemaphoreCount		= 1;
+	//PresentInfo.pWaitSemaphores			= &VulkanCommandAllocatorObj->GetSemaphore();
 	PresentInfo.swapchainCount			= 1;
 	PresentInfo.pSwapchains				= &_SwapChain;
-	PresentInfo.pImageIndices			= &ImageIndice;
+	PresentInfo.pImageIndices			= &_FrameIndex;//&ImageIndice;
 	PresentInfo.pResults				= &PresentInfoResult;
 
-	char test[256];
-	sprintf_s(test, "[VulkanSwapChain::Present] FENCE: %d\n", ResourceIndex);
-	OutputDebugString(test);
+	//char test[256];
+	//sprintf_s(test, "[VulkanSwapChain::Present] FENCE: %d\n", ResourceIndex);
+	//OutputDebugString(test);
 
 	VkResult Result = vkQueuePresentKHR(VulkanCommandQueueObj.GetVulkanCommandQueue(), &PresentInfo);
 	ETERNAL_ASSERT(!PresentInfoResult);
 	ETERNAL_ASSERT(!Result);
 
 	_FrameIndex = (_FrameIndex + 1) % _BackBuffers.size();
+}
+
+void VulkanSwapChain::Present(_In_ Device& DeviceObj, _Inout_ Context& GfxContext)
+{
+	uint32_t ImageIndex = GfxContext.GetFrameIndex();
+	VkResult PresentInfoResult;
+
+	VkPresentInfoKHR PresentInfo;
+	PresentInfo.sType					= VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	PresentInfo.pNext					= nullptr;
+	//PresentInfo.waitSemaphoreCount		= 1;
+	//PresentInfo.pWaitSemaphores			= &VulkanCommandAllocatorObj->GetSemaphore();
+	PresentInfo.swapchainCount			= 1;
+	PresentInfo.pSwapchains				= &_SwapChain;
+	PresentInfo.pImageIndices			= &ImageIndex;
+	PresentInfo.pResults				= &PresentInfoResult;
+
+	//char test[256];
+	//sprintf_s(test, "[VulkanSwapChain::Present] FENCE: %d\n", ResourceIndex);
+	//OutputDebugString(test);
+
+	//VkResult Result = vkQueuePresentKHR(VulkanCommandQueueObj.GetVulkanCommandQueue(), &PresentInfo);
+	ETERNAL_ASSERT(false);
+	ETERNAL_ASSERT(!PresentInfoResult);
+	//ETERNAL_ASSERT(!Result);
 }

@@ -454,6 +454,24 @@
     <ClInclude Include="include\Vulkan\VulkanBlendState.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\CommandAllocatorFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NextGenGraphics\Context.hpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanContext.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NextGenGraphics\ContextFactory.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ContextFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\CommandListFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -774,10 +792,31 @@
     <ClCompile Include="src\d3d12\D3D12RenderPass.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\RenderPass.cpp">
+    <ClCompile Include="src\Graphics\View.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\CommandList.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\CommandAllocatorFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\ContextFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NextGenGraphics\Context.cpp">
+      <Filter>NextGenGraphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\CommandListFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanContext.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\View.cpp">
+    <ClCompile Include="src\Graphics\RenderPass.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SwapChain.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

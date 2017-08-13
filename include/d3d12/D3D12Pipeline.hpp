@@ -33,7 +33,7 @@ namespace Eternal
 				_In_ Shader& PS,
 				_In_ const DepthTest& DepthTestObj,
 				_In_ const StencilTest& StencilTestObj,
-				_In_ Viewport& ViewportObj
+				_In_ const Viewport& ViewportObj
 			);
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() { return _PipelineState; }

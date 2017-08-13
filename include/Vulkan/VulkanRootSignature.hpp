@@ -2,6 +2,7 @@
 #define _VULKAN_ROOT_SIGNATURE_HPP_
 
 #include <cstdint>
+#include <vector>
 #include "Graphics/RootSignature.hpp"
 
 enum VkDescriptorType;
@@ -12,6 +13,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace std;
+
 		class Device;
 		class Sampler;
 		class DescriptorHeap;
@@ -21,12 +24,18 @@ namespace Eternal
 		class VulkanRootSignature : public RootSignature
 		{
 		public:
-			VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount, /*_In_ const RootSignatureDynamicParameter Parameters[], _In_ uint32_t ParametersCount, _In_ RootSignature* RootSignatures[], _In_ uint32_t RootSignaturesCount,*/ _In_ const RootSignatureAccess& RootSignatureAccessObj);
+			VulkanRootSignature(_In_ Device& DeviceObj, _In_ const vector<RootSignatureParameter> Resources[], _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj);
+			//VulkanRootSignature(_In_ Device& DeviceObj, _In_ Sampler* StaticSamplers[], _In_ uint32_t StaticSamplersCount, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount, /*_In_ const RootSignatureDynamicParameter Parameters[], _In_ uint32_t ParametersCount, _In_ RootSignature* RootSignatures[], _In_ uint32_t RootSignaturesCount,*/ _In_ const RootSignatureAccess& RootSignatureAccessObj);
 			VulkanRootSignature(_In_ Device& DeviceObj);
-			VkPipelineLayout_T* GetPipelineLayout() { return _PipelineLayout; }
+			virtual ~VulkanRootSignature();
+
+			VkPipelineLayout_T*	GetPipelineLayout()			{ return _PipelineLayout; }
+			uint32_t			GetParametersCount() const	{ return _ParametersCount; }
 
 		private:
-			VkPipelineLayout_T*	_PipelineLayout = nullptr;
+			Device&				_Device;
+			VkPipelineLayout_T*	_PipelineLayout		= nullptr;
+			uint32_t			_ParametersCount	= 0u;
 		};
 	}
 }

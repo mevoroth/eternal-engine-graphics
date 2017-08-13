@@ -76,15 +76,15 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 {
 	D3D12_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
 	ShaderResourceViewDesc.Format					= D3D12_FORMATS[FormatObj];
-	ShaderResourceViewDesc.Shader4ComponentMapping	= 0;
+	ShaderResourceViewDesc.Shader4ComponentMapping	= D3D12_ENCODE_SHADER_4_COMPONENT_MAPPING(D3D12_SHADER_COMPONENT_MAPPING_FROM_MEMORY_COMPONENT_0, D3D12_SHADER_COMPONENT_MAPPING_FROM_MEMORY_COMPONENT_1, D3D12_SHADER_COMPONENT_MAPPING_FROM_MEMORY_COMPONENT_2, D3D12_SHADER_COMPONENT_MAPPING_FROM_MEMORY_COMPONENT_3);
 	BuildSrvDescription(ViewType, ShaderResourceViewDesc);
 
-	_CpuDescriptor = _DescriptorHeap.Pop();
+	_Handle = _DescriptorHeap.Pop();
 
 	static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateShaderResourceView(
 		static_cast<D3D12Resource&>(ResourceObj).GetD3D12Resource(),
 		&ShaderResourceViewDesc,
-		_CpuDescriptor
+		_Handle.Cpu
 	);
 }
 
@@ -92,7 +92,7 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 	: View(FormatObj)
 	, _DescriptorHeap(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj))
 {
-	_CpuDescriptor = _DescriptorHeap.Pop();
+	_Handle = _DescriptorHeap.Pop();
 
 	if (FormatObj == FORMAT_D32)
 	{
@@ -105,7 +105,7 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 		static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateDepthStencilView(
 			static_cast<D3D12Resource&>(ResourceObj).GetD3D12Resource(),
 			&DepthStencilViewDesc,
-			_CpuDescriptor
+			_Handle.Cpu
 		);
 	}
 	else
@@ -118,14 +118,22 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 		static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateRenderTargetView(
 			static_cast<D3D12Resource&>(ResourceObj).GetD3D12Resource(),
 			nullptr,
-			_CpuDescriptor
+			_Handle.Cpu
 		);
 	}
 }
 
+D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj)
+	: View(FORMAT_RGBA8888)
+	, _DescriptorHeap(*(D3D12DescriptorHeap*)nullptr)
+{
+	_Handle = static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj).GetBase();
+}
+
 D3D12View::~D3D12View()
 {
-	_DescriptorHeap.Push(_CpuDescriptor);
+	if (&_DescriptorHeap)
+		_DescriptorHeap.Push(_Handle);
 }
 
 //RenderTarget& D3D12View::GetAsRenderTarget()

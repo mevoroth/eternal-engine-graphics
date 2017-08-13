@@ -14,7 +14,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		CommandQueue* CreateCommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount)
+		CommandQueue* CreateCommandQueue(_In_ Device& DeviceObj, _In_ const CommandListType& Type)
 		{
 			Eternal::Log::Log::Get()->Write(Eternal::Log::Log::Info, Eternal::Log::Log::Engine, "[Graphics::CreateDevice]Creating Command Queue");
 
@@ -22,11 +22,11 @@ namespace Eternal
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case D3D12:
-				return new D3D12CommandQueue(DeviceObj, FrameCount);
+				return new D3D12CommandQueue(DeviceObj, Type);
 #endif
 
 			case VULKAN:
-				return new VulkanCommandQueue(DeviceObj, FrameCount);
+				return new VulkanCommandQueue(DeviceObj);
 
 			default:
 				ETERNAL_ASSERT(false);

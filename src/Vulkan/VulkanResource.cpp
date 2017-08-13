@@ -52,7 +52,8 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 	VkMemoryRequirements MemoryRequirements;
 	vkGetBufferMemoryRequirements(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Buffer, &MemoryRequirements);
 
-	HeapObj.Initialize(MemoryRequirements.size);
+	if (!HeapObj.IsInitialized())
+		HeapObj.Initialize(MemoryRequirements.size);
 	SetHeapSlot(HeapObj.Pop());
 
 	Result = vkBindBufferMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Buffer, static_cast<VulkanHeap&>(HeapObj).GetVulkanDeviceMemory(), GetHeapSlot());
@@ -66,7 +67,7 @@ VulkanResource::VulkanResource(_In_ VkImage_T* Image)
 }
 
 VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& InitialState)
-	: Resource(HeapObj, Width, Height, Depth, MipCount)
+	: Resource(HeapObj, FormatObj, Width, Height, Depth, MipCount)
 {
 	ETERNAL_ASSERT(Width > 0);
 	ETERNAL_ASSERT(Height > 0);
@@ -95,7 +96,7 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 	ImageInfo.sharingMode			= VK_SHARING_MODE_EXCLUSIVE;
 	ImageInfo.queueFamilyIndexCount = 0;		// Ignored because of VK_SHARING_MODE_EXCLUSIVE
 	ImageInfo.pQueueFamilyIndices	= nullptr;	// Ignored because of VK_SHARING_MODE_EXCLUSIVE
-	ImageInfo.initialLayout			= BuildImageLayout(InitialState);
+	ImageInfo.initialLayout			= VK_IMAGE_LAYOUT_PREINITIALIZED;//BuildImageLayout(InitialState);
 
 	VkResult Result = vkCreateImage(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &ImageInfo, nullptr, &_Resource.Image);
 	ETERNAL_ASSERT(!Result);
@@ -103,7 +104,8 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 	VkMemoryRequirements MemoryRequirements;
 	vkGetImageMemoryRequirements(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Image, &MemoryRequirements);
 	
-	HeapObj.Initialize(MemoryRequirements.size);
+	if (!HeapObj.IsInitialized())
+		HeapObj.Initialize(MemoryRequirements.size);
 	SetHeapSlot(HeapObj.Pop());
 
 	Result = vkBindImageMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _Resource.Image, static_cast<VulkanHeap&>(HeapObj).GetVulkanDeviceMemory(), GetHeapSlot());
@@ -155,4 +157,9 @@ void* VulkanResource::Map(_In_ Device& DeviceObj)
 void VulkanResource::Unmap(_In_ Device& DeviceObj)
 {
 	vkUnmapMemory(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), GetVulkanHeap().GetVulkanDeviceMemory());
+}
+
+void VulkanResource::SetName(_In_ const wchar_t* Name)
+{
+	ETERNAL_ASSERT(false);
 }

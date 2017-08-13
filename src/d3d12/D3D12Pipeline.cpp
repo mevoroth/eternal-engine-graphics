@@ -27,7 +27,7 @@ D3D12Pipeline::D3D12Pipeline(
 	_In_ Shader& PS,
 	_In_ const DepthTest& DepthTestObj,
 	_In_ const StencilTest& StencilTestObj,
-	_In_ Viewport& ViewportObj
+	_In_ const Viewport& ViewportObj
 )
 	: _RootSignature(RootSignatureObj)
 {
@@ -131,7 +131,7 @@ D3D12Pipeline::D3D12Pipeline(
 	{
 		PipelineStateDesc.RTVFormats[RenderTargetIndex] = DXGI_FORMAT_UNKNOWN;
 	}
-	PipelineStateDesc.DSVFormat = D3D12_FORMATS[D3D12RenderPassObj.GetDepthStencil()->GetFormat()];
+	PipelineStateDesc.DSVFormat	= D3D12RenderPassObj.GetDepthStencil() ? D3D12_FORMATS[D3D12RenderPassObj.GetDepthStencil()->GetFormat()] : DXGI_FORMAT_UNKNOWN;
 	
 	PipelineStateDesc.SampleDesc.Count		= 1;
 	PipelineStateDesc.SampleDesc.Quality	= 0;

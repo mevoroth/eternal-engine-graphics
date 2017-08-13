@@ -13,13 +13,15 @@
 using namespace Eternal::Graphics;
 
 #ifdef ETERNAL_DEBUG
+#include <dxgidebug.h>
 #define ETERNAL_D3D12_DXGIFLAG	(0x1)
 #else
 #define ETERNAL_D3D12_DXGIFLAG	(0x0)
 #endif
 
-ID3D12Debug* D3D12Device::_Debug = nullptr;
-IDXGIFactory4* D3D12Device::_DXGIFactory = nullptr;
+ID3D12Debug*	D3D12Device::_Debug			= nullptr;
+IDXGIInfoQueue*	D3D12Device::_DXGIInfoQueue	= nullptr;
+IDXGIFactory4* D3D12Device::_DXGIFactory	= nullptr;
 
 void D3D12Device::Initialize()
 {
@@ -33,6 +35,47 @@ void D3D12Device::Initialize()
 	{
 		_Debug->EnableDebugLayer();
 	}
+
+	//typedef HRESULT(WINAPI * LPDXGIGETDEBUGINTERFACE)(REFIID, void **);
+
+	//LPDXGIGETDEBUGINTERFACE DXGIGetDebugInterface;
+
+	//HMODULE DXGIDebugLib = LoadLibraryEx("dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+	//hr = S_FALSE;
+	//if (DXGIDebugLib)
+	//{
+	//	DXGIGetDebugInterface = reinterpret_cast<LPDXGIGETDEBUGINTERFACE>(
+	//		reinterpret_cast<void*>(GetProcAddress(DXGIDebugLib, "DXGIGetDebugInterface")));
+	//	ETERNAL_ASSERT(DXGIGetDebugInterface);
+
+	//	hr = DXGIGetDebugInterface(__uuidof(IDXGIInfoQueue), (void**)&_DXGIInfoQueue);
+	//}
+
+	//if (hr == S_OK)
+	//{
+	//	// Break on category
+	//	DXGI_DEBUG_ID DebugID = DXGI_DEBUG_ALL;
+	//	//_DXGIInfoQueue->SetMuteDebugOutput(DebugID, TRUE);
+	//	
+	//	for (uint32_t CategoryIndex = DXGI_INFO_QUEUE_MESSAGE_CATEGORY_UNKNOWN; CategoryIndex < DXGI_INFO_QUEUE_MESSAGE_CATEGORY_SHADER; ++CategoryIndex)
+	//	{
+	//		hr = _DXGIInfoQueue->SetBreakOnCategory(DebugID, (DXGI_INFO_QUEUE_MESSAGE_CATEGORY)CategoryIndex, TRUE);
+	//		ETERNAL_ASSERT(hr == S_OK);
+	//	}
+
+	//	for (uint32_t SeverityIndex = DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION; SeverityIndex <= DXGI_INFO_QUEUE_MESSAGE_SEVERITY_WARNING; ++SeverityIndex)
+	//	{
+	//		hr = _DXGIInfoQueue->SetBreakOnSeverity(DebugID, (DXGI_INFO_QUEUE_MESSAGE_SEVERITY)SeverityIndex, TRUE);
+	//		ETERNAL_ASSERT(hr == S_OK);
+	//	}
+
+	//	//for (uint32_t MessageId = DXGI_INFO_QUEUE_MESSAGE_ID)
+	//	//for (uint32_t MessageId = D3D12_MESSAGE_ID_UNKNOWN; MessageId <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageId)
+	//	//{
+	//	//	hr = _DXGIInfoQueue->SetBreakOnID(DebugID, (DXGI_INFO_QUEUE_MESSAGE_ID)MessageId, TRUE);
+	//	//	ETERNAL_ASSERT(hr == S_OK);
+	//	//}
+	//}
 #endif
 }
 
@@ -49,9 +92,10 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 	if (hr == DXGI_ERROR_NOT_FOUND)
 	{
 		// No GPU at this index
+		ETERNAL_ASSERT(false);
 		return;
 	}
-
+	
 	hr = D3D12CreateDevice(_DXGIAdapter, D3D_FEATURE_LEVEL_12_0, __uuidof(ID3D12Device), (void**)&_Device);
 	ETERNAL_ASSERT(hr == S_OK);
 	ETERNAL_ASSERT(_Device);
@@ -60,6 +104,28 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 	DXGI_ADAPTER_DESC1 DXGIAdapterDesc1;
 	hr = _DXGIAdapter->GetDesc1(&DXGIAdapterDesc1);
 	ETERNAL_ASSERT(hr == S_OK); // Break here for debug info on device
+
+	//hr = _Device->QueryInterface(__uuidof(ID3D12InfoQueue), (void**)_InfoQueue);
+	//ETERNAL_ASSERT(hr == S_OK);
+
+	//// Break on category
+	//for (uint32_t CategoryIndex = D3D12_MESSAGE_CATEGORY_APPLICATION_DEFINED; CategoryIndex <= D3D12_MESSAGE_CATEGORY_SHADER; ++CategoryIndex)
+	//{
+	//	hr = _InfoQueue->SetBreakOnCategory((D3D12_MESSAGE_CATEGORY)CategoryIndex, TRUE);
+	//	ETERNAL_ASSERT(hr == S_OK);
+	//}
+
+	//for (uint32_t SeverityIndex = D3D12_MESSAGE_SEVERITY_CORRUPTION; SeverityIndex <= D3D12_MESSAGE_SEVERITY_WARNING; ++SeverityIndex)
+	//{
+	//	hr = _InfoQueue->SetBreakOnSeverity((D3D12_MESSAGE_SEVERITY)SeverityIndex, TRUE);
+	//	ETERNAL_ASSERT(hr == S_OK);
+	//}
+
+	//for (uint32_t MessageId = D3D12_MESSAGE_ID_UNKNOWN; MessageId <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageId)
+	//{
+	//	hr = _InfoQueue->SetBreakOnID((D3D12_MESSAGE_ID)MessageId, TRUE);
+	//	ETERNAL_ASSERT(hr == S_OK);
+	//}
 #endif
 
 	D3D12_FEATURE_DATA_D3D12_OPTIONS FeatureD3D12Options;
@@ -268,6 +334,10 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 	ETERNAL_ASSERT(hr == S_OK);
 
 	_DeviceMask = 1 << DeviceIndex;
+
+	D3D12_HEAP_PROPERTIES DefaultHeapProperties		= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_DEFAULT);
+	D3D12_HEAP_PROPERTIES UploadHeapProperties		= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_UPLOAD);
+	D3D12_HEAP_PROPERTIES ReadbackHeapProperties	= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_READBACK);
 }
 
 uint32_t D3D12Device::GetDeviceMask() const

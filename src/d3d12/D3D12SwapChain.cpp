@@ -1,7 +1,7 @@
 #include "d3d12/D3D12SwapChain.hpp"
 
 #include "Macros/Macros.hpp"
-
+#include <cwchar>
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include "Window/Window.hpp"
@@ -11,11 +11,16 @@
 #include "d3d12/D3D12DescriptorHeap.hpp"
 #include "d3d12/D3D12Resource.hpp"
 #include "d3d12/D3D12View.hpp"
+#include "d3d12/D3D12RenderPass.hpp"
+#include "NextGenGraphics/Context.hpp"
+#include "Graphics/Viewport.hpp"
+#include "Graphics/RenderPassFactory.hpp"
 
 using namespace Eternal::Graphics;
 
 D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _In_ CommandQueue& CommandQueueObj)
-	: _BackBuffersCount(2)
+	: SwapChain(WindowObj)
+	, _BackBuffersCount(2)
 {
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 
@@ -49,16 +54,33 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
 	//ETERNAL_ASSERT(hr == S_OK);
 
-	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, 0, 0, ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, GetBackBuffersFrameCount());
+	vector<RootSignatureParameter> Parameters;
+	Parameters.resize(GetBackBuffersFrameCount());
+	Parameters[0] = { ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, ROOT_SIGNATURE_ACCESS_IA_VS_PS, 0 };
+	Parameters[1] = { ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, ROOT_SIGNATURE_ACCESS_IA_VS_PS, 0 };
+
+	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, Parameters.data(), Parameters.size());
 	_BackBuffers.resize(GetBackBuffersFrameCount());
 	_BackBufferViews.resize(GetBackBuffersFrameCount());
+	_BackBufferViewReferences.resize(GetBackBuffersFrameCount());
+	_RenderPasses.resize(GetBackBuffersFrameCount());
+	_BlendStateReferences.resize(GetBackBuffersFrameCount());
+
+	wchar_t BackBufferName[256];
+
 	for (uint32_t BackBufferFrameIndex = 0; BackBufferFrameIndex < GetBackBuffersFrameCount(); ++BackBufferFrameIndex)
 	{
 		ID3D12Resource* BackBuffer = nullptr;
 		hr = _SwapChain->GetBuffer(BackBufferFrameIndex, __uuidof(ID3D12Resource), (void**)&BackBuffer);
 		ETERNAL_ASSERT(hr == S_OK);
-		_BackBuffers[BackBufferFrameIndex] = new D3D12Resource(BackBuffer);
-		_BackBufferViews[BackBufferFrameIndex] = static_cast<D3D12View*>(_BackBuffers[BackBufferFrameIndex]->CreateRenderTargetView(DeviceObj, *_BackBufferDescriptorHeap, FORMAT_RGBA8888));
+		swprintf(BackBufferName, ETERNAL_ARRAYSIZE(BackBufferName), L"Back Buffer %d", BackBufferFrameIndex);
+		BackBuffer->SetName(BackBufferName);
+		_BackBuffers[BackBufferFrameIndex]		= new D3D12Resource(BackBuffer);
+		_BackBufferViews[BackBufferFrameIndex]	= static_cast<D3D12View*>(_BackBuffers[BackBufferFrameIndex]->CreateRenderTargetView(DeviceObj, *_BackBufferDescriptorHeap, FORMAT_RGBA8888));
+
+		_BackBufferViewReferences[BackBufferFrameIndex].push_back(_BackBufferViews[BackBufferFrameIndex]);
+		_BlendStateReferences[BackBufferFrameIndex].push_back(&GetBackBufferBlendState());
+		_RenderPasses[BackBufferFrameIndex]		= static_cast<D3D12RenderPass*>(CreateRenderPass(DeviceObj, GetMainViewport(), _BackBufferViewReferences[BackBufferFrameIndex], _BlendStateReferences[BackBufferFrameIndex]));
 	}
 }
 
@@ -77,15 +99,39 @@ D3D12SwapChain::~D3D12SwapChain()
 	_SwapChain = nullptr;
 }
 
+void D3D12SwapChain::AcquireFrame(_In_ Device& DeviceObj, _Inout_ Context& GfxContext)
+{
+	UINT FrameIndex = _SwapChain3->GetCurrentBackBufferIndex();
+	GfxContext.SetFrameIndex(FrameIndex);
+	GfxContext.SetFrameRenderPass(_RenderPasses[FrameIndex]);
+	GfxContext.SetFrameBackBuffer(_BackBuffers[FrameIndex]);
+}
+
 uint32_t D3D12SwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj)
 {
 	return _SwapChain3->GetCurrentBackBufferIndex();
 }
 
+void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ Context& GfxContext)
+{
+	HRESULT hr = _SwapChain->Present(0, 0);
+	if (hr != S_OK)
+	{
+		ETERNAL_ASSERT(false);
+		hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->GetDeviceRemovedReason();
+		ETERNAL_ASSERT(false);
+	}
+}
+
 void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
 {
 	HRESULT hr = _SwapChain->Present(0, 0);
-	ETERNAL_ASSERT(hr == S_OK);
+	if (hr != S_OK)
+	{
+		ETERNAL_ASSERT(false);
+		hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->GetDeviceRemovedReason();
+		ETERNAL_ASSERT(false);
+	}
 }
 
 //Resource& D3D12SwapChain::GetBackBuffer(_In_ uint32_t BackBufferIndex)
@@ -100,11 +146,10 @@ void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQ
 
 uint32_t D3D12SwapChain::GetBackBuffersFrameCount() const
 {
-	return 2;
+	return _BackBuffersCount;
 }
 
 RenderPass& D3D12SwapChain::GetMainRenderPass()
 {
-	ETERNAL_ASSERT(false);
-	return *(RenderPass*)nullptr;
+	return *_RenderPasses[0];
 }

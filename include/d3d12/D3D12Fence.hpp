@@ -20,7 +20,7 @@ namespace Eternal
 		class D3D12Fence : public Fence
 		{
 		public:
-			D3D12Fence(_In_ Device& DeviceObj, _In_ uint32_t SimultaneousResourcesCount = 1u);
+			D3D12Fence(_In_ Device& DeviceObj);
 			~D3D12Fence();
 
 			virtual void Signal(_In_ CommandQueue& CommandQueueObj) override;
@@ -28,10 +28,10 @@ namespace Eternal
 			virtual void Reset(_In_ Device& DeviceObj) override;
 
 		private:
-			vector<uint64_t>	_FenceValues;
-			ID3D12Fence*		_Fence = nullptr;
-			void*				_FenceEvent = nullptr;
-			uint32_t			_CurrentFence = 0u;
+			uint64_t		_PreviousFenceValue	= 0ull;
+			uint64_t		_FenceValue			= 0ull;
+			ID3D12Fence*	_Fence				= nullptr;
+			void*			_FenceEvent			= nullptr;
 		};
 	}
 }

@@ -9,8 +9,8 @@
 
 using namespace Eternal::Graphics;
 
-D3D12CommandQueue::D3D12CommandQueue(_In_ Device& DeviceObj, _In_ uint32_t FrameCount)
-	: _CommandListType(D3D12_COMMAND_LIST_TYPE_DIRECT)
+D3D12CommandQueue::D3D12CommandQueue(_In_ Device& DeviceObj, _In_ const CommandListType& Type)
+	: _CommandListType(D3D12_COMMAND_LIST_TYPES[Type])
 {
 	D3D12Device& D3D12DeviceObj = static_cast<D3D12Device&>(DeviceObj);
 
@@ -23,31 +23,31 @@ D3D12CommandQueue::D3D12CommandQueue(_In_ Device& DeviceObj, _In_ uint32_t Frame
 	HRESULT hr = D3D12DeviceObj.GetD3D12Device()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
 	ETERNAL_ASSERT(hr == S_OK);
 
-	_CommandAllocators.resize(FrameCount);
-	for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
-	{
-		_CommandAllocators[CommandAllocatorIndex] = new D3D12CommandAllocator(DeviceObj, _CommandListType);
-	}
+	//_CommandAllocators.resize(FrameCount);
+	//for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
+	//{
+	//	_CommandAllocators[CommandAllocatorIndex] = new D3D12CommandAllocator(DeviceObj, _CommandListType);
+	//}
 
-	_CommandList = new D3D12CommandList(DeviceObj, *_CommandAllocators[0], COMMAND_LIST_GRAPHIC);
+	//_CommandList = new D3D12CommandList(DeviceObj, *_CommandAllocators[0], COMMAND_LIST_GRAPHIC);
 }
 
 D3D12CommandQueue::~D3D12CommandQueue()
 {
-	for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
-	{
-		delete _CommandAllocators[CommandAllocatorIndex];
-	}
-	_CommandAllocators.clear();
+	//for (uint32_t CommandAllocatorIndex = 0; CommandAllocatorIndex < _CommandAllocators.size(); ++CommandAllocatorIndex)
+	//{
+	//	delete _CommandAllocators[CommandAllocatorIndex];
+	//}
+	//_CommandAllocators.clear();
 	_CommandQueue->Release();
 	_CommandQueue = nullptr;
 }
 
-void D3D12CommandQueue::Reset(_In_ uint32_t FrameIndex)
-{
-	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
-	_CommandAllocators[FrameIndex]->Reset();
-}
+//void D3D12CommandQueue::Reset(_In_ uint32_t FrameIndex)
+//{
+//	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
+//	_CommandAllocators[FrameIndex]->Reset();
+//}
 
 void D3D12CommandQueue::Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj)
 {
@@ -60,13 +60,8 @@ void D3D12CommandQueue::Submit(_In_ uint32_t FrameIndex, _In_ CommandList* Comma
 	GetD3D12CommandQueue()->ExecuteCommandLists(CommandListsCount, D3D12CommandLists.data());
 }
 
-CommandAllocator* D3D12CommandQueue::GetCommandAllocator(_In_ uint32_t FrameIndex)
-{
-	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
-	return _CommandAllocators[FrameIndex];
-}
-
-CommandList* D3D12CommandQueue::Pop()
-{
-	return _CommandList;
-}
+//CommandAllocator* D3D12CommandQueue::GetCommandAllocator(_In_ uint32_t FrameIndex)
+//{
+//	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
+//	return _CommandAllocators[FrameIndex];
+//}

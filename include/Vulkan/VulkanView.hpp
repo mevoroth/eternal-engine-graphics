@@ -7,6 +7,7 @@
 struct VkImage_T;
 struct VkImageView_T;
 struct VkBufferView_T;
+struct VkDescriptorSet_T;
 
 namespace Eternal
 {
@@ -15,24 +16,28 @@ namespace Eternal
 		enum TextureView;
 		class Device;
 		class VulkanResource;
+		class VulkanDescriptorHeap;
 
 		class VulkanView : public View
 		{
 			union VkView
 			{
-				VkImageView_T* ImageView;
-				VkBufferView_T* BufferView;
+				VkImageView_T*		ImageView;
+				VkBufferView_T*		BufferView;
+				VkDescriptorSet_T*	DescriptorSet;
 			};
 		public:
 			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj);
 			VulkanView(_In_ Device& DeviceObj, _In_ VkImage_T*& BackBufferImage, _In_ const TextureView& ViewType, _In_ const Format& FormatObj);
 			VulkanView(_In_ Device& DeviceObj, _In_ VulkanResource& ResourceObj, _In_ const Format& FormatObj, _In_ uint64_t Offset = 0ull, _In_ uint64_t Size = ~0ull);
+			VulkanView(_In_ Device& DeviceObj, _In_ VkDescriptorSet_T*& DescriptorSet);
 			virtual ~VulkanView();
 
 			//virtual RenderTarget& GetAsRenderTarget() override;
 
-			VkImageView_T*& GetImageView() { return _View.ImageView; }
-			VkBufferView_T*& GetBufferView() { return _View.BufferView; }
+			VkImageView_T*&		GetImageView()		{ return _View.ImageView; }
+			VkBufferView_T*&	GetBufferView()		{ return _View.BufferView; }
+			VkDescriptorSet_T*&	GetDescriptorSet()	{ return _View.DescriptorSet; }
 
 		private:
 			VkView _View;

@@ -7,19 +7,21 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class View;
+		class Device;
+		struct RootSignatureParameter;
+
 		class DescriptorHeap
 		{
 		public:
-			DescriptorHeap(_In_ uint32_t Space, _In_ uint32_t Register);
+			DescriptorHeap(_In_ const RootSignatureParameter Resources[], _In_ uint32_t ResourcesCount);
 
 			virtual ~DescriptorHeap() {}
 
-			uint32_t GetSpace() const { return _Space; }
-			uint32_t GetRegister() const { return _Register; }
+			virtual View* CreateView(_In_ Device& DeviceObj) = 0;
 
-		private:
-			uint32_t _Space		= 0u;
-			uint32_t _Register	= 0u;
+		protected:
+			static bool IsD3D12Compatible(_In_ const RootSignatureParameter Resources[], _In_ uint32_t ResourcesCount);
 		};
 	}
 }

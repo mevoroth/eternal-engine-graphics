@@ -29,8 +29,9 @@ D3D12Sampler::D3D12Sampler(_In_ Device& DeviceObj, _In_ DescriptorHeap& Descript
 
 	static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->CreateSampler(
 		&SamplerDesc,
-		static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj).Pop()
+		static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj).Pop().Cpu
 	);
+	ETERNAL_ASSERT(false);// SAMPLER NOT CLEANED ON DESTRUCTOR
 }
 
 D3D12Sampler::D3D12Sampler(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ bool Comparison, _In_ const AddressMode& U, _In_ const AddressMode& V, _In_ const AddressMode& W)

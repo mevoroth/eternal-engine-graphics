@@ -22,7 +22,7 @@ namespace Eternal
 		class VulkanFence : public Fence
 		{
 		public:
-			VulkanFence(_In_ Device& DeviceObj, _In_ uint32_t SimultaneousResourcesCount);
+			VulkanFence(_In_ Device& DeviceObj);
 			~VulkanFence();
 
 			VkFence_T* GetFence();
@@ -32,9 +32,8 @@ namespace Eternal
 			virtual void Reset(_In_ Device& DeviceObj) override;
 
 		private:
-			vector<VkFence_T*>	_Fences;
-			Device&				_Device;
-			uint32_t			_FenceIndex = 0u;
+			Device&		_Device;
+			VkFence_T*	_Fence	= nullptr;
 		};
 	}
 }

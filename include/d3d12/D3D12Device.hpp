@@ -10,6 +10,8 @@ struct ID3D12Device;
 
 #ifdef ETERNAL_DEBUG
 struct ID3D12Debug;
+struct IDXGIInfoQueue;
+struct ID3D12InfoQueue;
 #endif
 
 namespace Eternal
@@ -32,6 +34,8 @@ namespace Eternal
 
 #ifdef ETERNAL_DEBUG
 			static ID3D12Debug*		_Debug;
+			static IDXGIInfoQueue*	_DXGIInfoQueue;
+			ID3D12InfoQueue*		_InfoQueue		= nullptr;
 #endif
 			static IDXGIFactory4*	_DXGIFactory;
 

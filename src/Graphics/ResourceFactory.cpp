@@ -9,13 +9,17 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		Resource* CreateResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Stride, _In_ uint64_t Size, _In_ const BufferType& Type)
+		Resource* CreateResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ const wchar_t* Name, _In_ uint64_t Stride, _In_ uint64_t Size, _In_ const BufferType& Type)
 		{
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case D3D12:
-				return new D3D12Resource(DeviceObj, HeapObj, Stride, Size, Type);
+			{
+				Resource* ResourceObj = new D3D12Resource(DeviceObj, HeapObj, Stride, Size, Type);
+				ResourceObj->SetName(Name);
+				return ResourceObj;
+			}
 #endif
 
 			case VULKAN:
@@ -27,7 +31,7 @@ namespace Eternal
 			}
 		}
 
-		Resource* CreateResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& InitialState)
+		Resource* CreateResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ const wchar_t* Name, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& InitialState)
 		{
 			switch (DeviceObj.GetDeviceType())
 			{

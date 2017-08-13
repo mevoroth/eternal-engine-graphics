@@ -71,14 +71,14 @@ namespace Eternal
 	}
 }
 
-VulkanCommandList::VulkanCommandList(_In_ Device& DeviceObj, _In_ CommandAllocator& CommandAllocatorObj)
-	: _Device(DeviceObj)
-	, _CommandAllocator(CommandAllocatorObj)
+VulkanCommandList::VulkanCommandList(_In_ Device& DeviceObj, _In_ const CommandListType& Type)
+	: CommandList(DeviceObj, Type)
+	, _Device(DeviceObj)
 {
 	VkCommandBufferAllocateInfo CommandBufferAllocateInfo;
 	CommandBufferAllocateInfo.sType					= VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	CommandBufferAllocateInfo.pNext					= nullptr;
-	CommandBufferAllocateInfo.commandPool			= static_cast<VulkanCommandAllocator&>(CommandAllocatorObj).GetVulkanCommandPool();
+	CommandBufferAllocateInfo.commandPool			= static_cast<VulkanCommandAllocator&>(*GetCommandAllocator()).GetVulkanCommandPool();
 	CommandBufferAllocateInfo.level					= VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 	CommandBufferAllocateInfo.commandBufferCount	= 1;
 
@@ -88,11 +88,11 @@ VulkanCommandList::VulkanCommandList(_In_ Device& DeviceObj, _In_ CommandAllocat
 
 VulkanCommandList::~VulkanCommandList()
 {
-	vkFreeCommandBuffers(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), static_cast<VulkanCommandAllocator&>(_CommandAllocator).GetVulkanCommandPool(), 1, &_CommandBuffer);
+	vkFreeCommandBuffers(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), static_cast<VulkanCommandAllocator&>(*GetCommandAllocator()).GetVulkanCommandPool(), 1, &_CommandBuffer);
 	_CommandBuffer = nullptr;
 }
 
-void VulkanCommandList::Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ Pipeline& PipelineObj)
+void VulkanCommandList::Begin(_In_ Pipeline& PipelineObj)
 {
 	VkCommandBufferBeginInfo CommandBufferBeginInfo;
 	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -104,6 +104,18 @@ void VulkanCommandList::Begin(_In_ CommandAllocator& CommandAllocatorObj, _In_ P
 	ETERNAL_ASSERT(!Result);
 
 	vkCmdBindPipeline(_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, static_cast<VulkanPipeline&>(PipelineObj).GetVulkanPipeline());
+}
+
+void VulkanCommandList::Begin()
+{
+	VkCommandBufferBeginInfo CommandBufferBeginInfo;
+	CommandBufferBeginInfo.sType			= VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	CommandBufferBeginInfo.pNext			= nullptr;
+	CommandBufferBeginInfo.flags			= 0;
+	CommandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+	VkResult Result = vkBeginCommandBuffer(_CommandBuffer, &CommandBufferBeginInfo);
+	ETERNAL_ASSERT(!Result);
 }
 
 void VulkanCommandList::BeginRenderPass(_In_ RenderPass& RenderPassObj)
@@ -140,6 +152,28 @@ void VulkanCommandList::End()
 	ETERNAL_ASSERT(!Result);
 }
 
+void VulkanCommandList::BindConstantBuffer(_In_ uint32_t Slot, _In_ View& ConstantBuffer)
+{
+
+}
+
+void VulkanCommandList::BindDescriptorTable(_In_ uint32_t Slot, _In_ View& DescriptorTable)
+{
+	ETERNAL_ASSERT(Slot < _CommandListCache.DescriptorTablesCount);
+	_CommandListCache.DescriptorTables[Slot]	= static_cast<VulkanView&>(DescriptorTable).GetDescriptorSet();
+	_CommandListCache.Dirty						= true;
+}
+
+void VulkanCommandList::BindBuffer(_In_ uint32_t Slot, _In_ View& Buffer)
+{
+
+}
+
+void VulkanCommandList::BindUAV(_In_ uint32_t Slot, _In_ View& UAV)
+{
+
+}
+
 void VulkanCommandList::DrawPrimitive(_In_ uint32_t PrimitiveCount)
 {
 	vkCmdDraw(_CommandBuffer, PrimitiveCount, 1, 0, 0);
@@ -173,7 +207,7 @@ void VulkanCommandList::SetVerticesBuffers(_In_ uint32_t StartSlot, _In_ uint32_
 	vkCmdBindVertexBuffers(_CommandBuffer, StartSlot, VerticesBuffersCount, VerticesBuffersHandles, VerticesOffsets);
 }
 
-void VulkanCommandList::SetViewport(_In_ Viewport& ViewportObj)
+void VulkanCommandList::SetViewport(_In_ const Viewport& ViewportObj)
 {
 	VkViewport VulkanViewport;
 	VulkanViewport.x		= ViewportObj.GetX();
@@ -186,7 +220,7 @@ void VulkanCommandList::SetViewport(_In_ Viewport& ViewportObj)
 	vkCmdSetViewport(_CommandBuffer, 0, 1, &VulkanViewport);
 }
 
-void VulkanCommandList::SetScissorRectangle(_In_ Viewport& ViewportObj)
+void VulkanCommandList::SetScissorRectangle(_In_ const Viewport& ViewportObj)
 {
 	VkRect2D VulkanScissor;
 	VulkanScissor.offset.x		= ViewportObj.GetX();
@@ -199,23 +233,32 @@ void VulkanCommandList::SetScissorRectangle(_In_ Viewport& ViewportObj)
 
 void VulkanCommandList::BindPipelineInput(_In_ RootSignature& RootSignatureObj, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount)
 {
-	ETERNAL_ASSERT(DescriptorHeapsCount <= MAX_DESCRIPTORS_HEAPS);
-	VkDescriptorSet VulkanDescriptorSets[MAX_DESCRIPTORS_HEAPS];
-	for (uint32_t DescriptorSetIndex = 0; DescriptorSetIndex < DescriptorHeapsCount; ++DescriptorSetIndex)
-	{
-		VulkanDescriptorSets[DescriptorSetIndex] = static_cast<VulkanDescriptorHeap*>(DescriptorHeaps[DescriptorSetIndex])->Bind();
-	}
+	//ETERNAL_ASSERT(DescriptorHeapsCount <= MAX_DESCRIPTORS_HEAPS);
+	//VkDescriptorSet VulkanDescriptorSets[MAX_DESCRIPTORS_HEAPS];
+	//for (uint32_t DescriptorSetIndex = 0; DescriptorSetIndex < DescriptorHeapsCount; ++DescriptorSetIndex)
+	//{
+	//	VulkanDescriptorSets[DescriptorSetIndex] = static_cast<VulkanDescriptorHeap*>(DescriptorHeaps[DescriptorSetIndex])->Bind();
+	//}
 
-	vkCmdBindDescriptorSets(
-		_CommandBuffer,
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		static_cast<VulkanRootSignature&>(RootSignatureObj).GetPipelineLayout(),
-		0,
-		DescriptorHeapsCount,
-		VulkanDescriptorSets,
-		0,
-		nullptr
-	);
+	//vkCmdBindDescriptorSets(
+	//	_CommandBuffer,
+	//	VK_PIPELINE_BIND_POINT_GRAPHICS,
+	//	static_cast<VulkanRootSignature&>(RootSignatureObj).GetPipelineLayout(),
+	//	0,
+	//	DescriptorHeapsCount,
+	//	VulkanDescriptorSets,
+	//	0,
+	//	nullptr
+	//);
+
+	VulkanRootSignature& VkRootSignature = static_cast<VulkanRootSignature&>(RootSignatureObj);
+	ETERNAL_ASSERT(VkRootSignature.GetParametersCount() < MAX_BINDABLE_RESOURCES);
+
+	_CommandListCache.PipelineLayout		= VkRootSignature.GetPipelineLayout();
+	_CommandListCache.DescriptorTablesCount	= VkRootSignature.GetParametersCount();
+#ifdef ETERNAL_DEBUG
+	memset(_CommandListCache.DescriptorTables, 0x0, VkRootSignature.GetParametersCount() * sizeof(VkDescriptorSet));
+#endif
 }
 
 void VulkanCommandList::CopyBuffer(_In_ Resource& Source, _In_ Resource& Destination)
@@ -226,6 +269,26 @@ void VulkanCommandList::CopyBuffer(_In_ Resource& Source, _In_ Resource& Destina
 	BufferCopy.size			= Source.GetBufferSize();
 
 	vkCmdCopyBuffer(_CommandBuffer, static_cast<VulkanResource&>(Source).GetBuffer(), static_cast<VulkanResource&>(Destination).GetBuffer(), 1, &BufferCopy);
+}
+
+void VulkanCommandList::CopyBuffer(_In_ Resource& Source, _In_ Resource& Destination, uint64_t SourceOffset, uint64_t DestinationOffset, uint64_t Size)
+{
+	VkBufferCopy BufferCopy;
+	BufferCopy.srcOffset	= SourceOffset;
+	BufferCopy.dstOffset	= DestinationOffset;
+	BufferCopy.size			= Size;
+
+	vkCmdCopyBuffer(_CommandBuffer, static_cast<VulkanResource&>(Source).GetBuffer(), static_cast<VulkanResource&>(Destination).GetBuffer(), 1, &BufferCopy);
+}
+
+void VulkanCommandList::CopyTexture(_In_ Resource& Source, _In_ Resource& Destination, _In_ const Position3D& SourcePosition, _In_ const Position3D& DestinationPosition, _In_ const Extent& Size)
+{
+	ETERNAL_ASSERT(false);
+}
+
+void VulkanCommandList::CopyBufferToTexture(_In_ Resource& Buffer, _In_ Resource& Texture, uint64_t BufferOffset, uint64_t BufferSize, _In_ const Position3D& TexturePosition, _In_ const Extent& Size)
+{
+	ETERNAL_ASSERT(false);
 }
 
 void VulkanCommandList::Transition(_In_ ResourceTransition Buffers[], _In_ uint32_t BuffersCount, _In_ ResourceTransition Images[], _In_ uint32_t ImagesCount)

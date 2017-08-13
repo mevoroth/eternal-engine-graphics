@@ -7,12 +7,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum RootSignatureDynamicParameterType;
-		enum RootSignatureAccess;
+		struct RootSignatureParameter;
 		class Device;
 		class DescriptorHeap;
 
-		DescriptorHeap* CreateDescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ uint32_t Register, _In_ const RootSignatureDynamicParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj);
+		//DescriptorHeap* CreateDescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ uint32_t Register, _In_ const RootSignatureParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj);
+		DescriptorHeap* CreateDescriptorHeap(_In_ Device& DeviceObj, _In_ const RootSignatureParameter Resources[], _In_ uint32_t ResourcesCount);
 	}
 }
 

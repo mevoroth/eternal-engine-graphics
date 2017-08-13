@@ -25,10 +25,10 @@ namespace Eternal
 			const Viewport&				GetViewport() const			{ return _Viewport; }
 
 		private:
-			LogicBlend					_LogicBlend;
-			const Viewport&				_Viewport;
-			const vector<View*>&		_RenderTargets;
-			const vector<BlendState*>&	_BlendStates;
+			vector<View*>		_RenderTargets;
+			vector<BlendState*>	_BlendStates;
+			LogicBlend			_LogicBlend;
+			const Viewport&		_Viewport;
 		};
 	}
 }

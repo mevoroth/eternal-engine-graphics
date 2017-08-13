@@ -34,8 +34,8 @@ static bool CheckMemoryPropertiesFlags(_In_ const VkMemoryPropertyFlagBits& Flag
 	return std::find(AllowedMemoryProperties, EndAllowedMemoryProperties, Flags) != EndAllowedMemoryProperties;
 }
 
-VulkanHeap::VulkanHeap(_In_ Device& DeviceObj, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
-	: Heap(DeviceObj, ResourcesCount)
+VulkanHeap::VulkanHeap(_In_ Device& DeviceObj, _In_ const HeapType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ bool InVRAM, _In_ bool VisibleFromCPU, _In_ bool Coherent, _In_ bool Cached)
+	: Heap(DeviceObj, HeapTypeObj, ResourcesCount)
 {
 	VkMemoryPropertyFlagBits MemoryPropertiesFlags = BuildMemoryPropertiesFlags(InVRAM, VisibleFromCPU, Coherent, Cached);
 	ETERNAL_ASSERT(CheckMemoryPropertiesFlags(MemoryPropertiesFlags));
@@ -44,6 +44,7 @@ VulkanHeap::VulkanHeap(_In_ Device& DeviceObj, _In_ uint32_t ResourcesCount, _In
 
 void VulkanHeap::Initialize(_In_ size_t Size)
 {
+	ETERNAL_ASSERT(!_DeviceMemory);
 	ETERNAL_ASSERT(Size > 0);
 	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(GetDevice());
 
@@ -57,6 +58,11 @@ void VulkanHeap::Initialize(_In_ size_t Size)
 	ETERNAL_ASSERT(!Result);
 
 	SetSize(Size);
+}
+
+bool VulkanHeap::IsInitialized() const
+{
+	return _DeviceMemory != nullptr;
 }
 
 VulkanHeap::~VulkanHeap()
