@@ -26,7 +26,7 @@ namespace Eternal
 			D3D12CommandQueue(_In_ Device& DeviceObj, _In_ const CommandListType& Type = COMMAND_LIST_TYPE_GRAPHIC);
 			virtual ~D3D12CommandQueue();
 
-			virtual void Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj) override;
+			virtual void Submit(_In_ Context& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount) override;
 			//virtual CommandAllocator* GetCommandAllocator(_In_ uint32_t FrameIndex) override;
 
 			inline ID3D12CommandQueue* GetD3D12CommandQueue() { return _CommandQueue; }

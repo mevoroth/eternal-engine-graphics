@@ -179,7 +179,7 @@ VulkanPipeline::VulkanPipeline(
 	PipelineInfo.pColorBlendState		= &ColorBlendStateInfo;
 	PipelineInfo.pDynamicState			= nullptr;
 	PipelineInfo.layout					= static_cast<VulkanRootSignature&>(RootSignatureObj).GetPipelineLayout();
-	PipelineInfo.renderPass				= static_cast<VulkanRenderPass&>(RenderPassObj).GetRenderPass();
+	PipelineInfo.renderPass				= static_cast<VulkanRenderPass&>(RenderPassObj).GetVulkanRenderPass();
 	PipelineInfo.subpass				= 0;
 	PipelineInfo.basePipelineHandle		= nullptr;
 	PipelineInfo.basePipelineIndex		= 0;

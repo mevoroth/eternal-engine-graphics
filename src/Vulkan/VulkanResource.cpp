@@ -96,7 +96,7 @@ VulkanResource::VulkanResource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ 
 	ImageInfo.sharingMode			= VK_SHARING_MODE_EXCLUSIVE;
 	ImageInfo.queueFamilyIndexCount = 0;		// Ignored because of VK_SHARING_MODE_EXCLUSIVE
 	ImageInfo.pQueueFamilyIndices	= nullptr;	// Ignored because of VK_SHARING_MODE_EXCLUSIVE
-	ImageInfo.initialLayout			= VK_IMAGE_LAYOUT_PREINITIALIZED;//BuildImageLayout(InitialState);
+	ImageInfo.initialLayout			= VK_IMAGE_LAYOUT_UNDEFINED;//BuildImageLayout(InitialState);
 
 	VkResult Result = vkCreateImage(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &ImageInfo, nullptr, &_Resource.Image);
 	ETERNAL_ASSERT(!Result);

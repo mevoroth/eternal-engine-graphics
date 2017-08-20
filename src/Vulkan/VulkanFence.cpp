@@ -53,7 +53,7 @@ void VulkanFence::Reset(_In_ Device& DeviceObj)
 	ETERNAL_ASSERT(!Result);
 }
 
-VkFence_T* VulkanFence::GetFence()
+VkFence_T* VulkanFence::GetVulkanFence()
 {
 	return _Fence;
 }

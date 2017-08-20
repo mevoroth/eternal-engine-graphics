@@ -24,7 +24,7 @@ namespace Eternal
 			VulkanRenderPass(_In_ Device& DeviceObj, _In_ const Viewport& ViewportObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<BlendState*>& BlendStates, _In_ View* DepthStencil = nullptr, _In_ const LogicBlend& LogicBlendObj = LogicBlend());
 			~VulkanRenderPass();
 
-			VkRenderPass_T* GetRenderPass() { return _RenderPass; }
+			VkRenderPass_T* GetVulkanRenderPass() { return _RenderPass; }
 			VkFramebuffer_T* GetFrameBuffer() { return _FrameBuffer; }
 
 		private:

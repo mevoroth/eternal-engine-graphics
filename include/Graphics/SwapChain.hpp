@@ -25,9 +25,7 @@ namespace Eternal
 			SwapChain(_In_ Window& WindowObj);
 			virtual ~SwapChain() {}
 			virtual void AcquireFrame(_In_ Device& DeviceObj, _Inout_ Context& GfxContext) = 0;
-			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) = 0;
-			virtual void Present(_In_ Device& DeviceObj, _Inout_ Context& GfxContext) = 0;
-			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) = 0;
+			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _Inout_ Context& GfxContext) = 0;
 
 			//virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) = 0;
 			//virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) = 0;

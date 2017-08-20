@@ -84,6 +84,8 @@ D3D12_RESOURCE_STATES BuildResourceStates(_In_ const TransitionState& State)
 	//{
 	//	ETERNAL_ASSERT(!(State & ~TRANSITION_PRESENT));
 	//}
+	if (State & TRANSITION_PRESENT)
+		return D3D12_RESOURCE_STATE_PRESENT;
 
 	if (State & (TRANSITION_VERTEX_ATTRIBUTE_READ | TRANSITION_CONSTANT_READ))
 		ResourceState |= D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
@@ -357,6 +359,9 @@ void D3D12CommandList::Transition(_In_ ResourceTransition Buffers[], _In_ uint32
 		ResourceBarriers[ResourceIndex].Transition.Subresource	= 0;
 		ResourceBarriers[ResourceIndex].Transition.StateBefore	= BuildResourceStates(Images[ImageIndex].Before);
 		ResourceBarriers[ResourceIndex].Transition.StateAfter	= BuildResourceStates(Images[ImageIndex].After);
+
+		ETERNAL_ASSERT(static_cast<D3D12Resource*>(Images[ImageIndex].ResourceObj)->GetCurrentTransitionState() == Images[ImageIndex].Before);
+		static_cast<D3D12Resource*>(Images[ImageIndex].ResourceObj)->GetCurrentTransitionState() = Images[ImageIndex].After;
 	}
 
 	_CommandList->ResourceBarrier(ResourcesCount, ResourceBarriers.data());

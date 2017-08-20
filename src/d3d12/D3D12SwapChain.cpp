@@ -107,23 +107,7 @@ void D3D12SwapChain::AcquireFrame(_In_ Device& DeviceObj, _Inout_ Context& GfxCo
 	GfxContext.SetFrameBackBuffer(_BackBuffers[FrameIndex]);
 }
 
-uint32_t D3D12SwapChain::AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj)
-{
-	return _SwapChain3->GetCurrentBackBufferIndex();
-}
-
-void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ Context& GfxContext)
-{
-	HRESULT hr = _SwapChain->Present(0, 0);
-	if (hr != S_OK)
-	{
-		ETERNAL_ASSERT(false);
-		hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->GetDeviceRemovedReason();
-		ETERNAL_ASSERT(false);
-	}
-}
-
-void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex)
+void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _Inout_ Context& GfxContext)
 {
 	HRESULT hr = _SwapChain->Present(0, 0);
 	if (hr != S_OK)

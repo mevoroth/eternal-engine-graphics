@@ -8,6 +8,7 @@
 #include "Vulkan/VulkanFence.hpp"
 #include "Vulkan/VulkanSwapChain.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
+#include "Vulkan/VulkanContext.hpp"
 
 #define VC_EXTRALEAN
 #define WIN32_LEAN_AND_MEAN
@@ -27,37 +28,36 @@ VulkanCommandQueue::~VulkanCommandQueue()
 {
 }
 
-void VulkanCommandQueue::Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj)
+void VulkanCommandQueue::Submit(_In_ Context& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
 {
-	vector<VkCommandBuffer> VulkanCommandLists;
+	VulkanContext& VkContext = static_cast<VulkanContext&>(GfxContext);
+
+	vector<VkCommandBuffer>	VulkanCommandLists;
 	VulkanCommandLists.resize(CommandListsCount);
+	vector<VkSemaphore>&	VulkanSemaphores = VkContext.GetFrameCommandListSemaphores();
+	VulkanSemaphores.resize(CommandListsCount);
 	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
 	{
-		VulkanCommandLists[CommandListIndex] = static_cast<VulkanCommandList*>(CommandLists[CommandListIndex])->GetVulkanCommandList();
+		VulkanCommandLists[CommandListIndex]	= static_cast<VulkanCommandList*>(CommandLists[CommandListIndex])->GetVulkanCommandList();
+		VulkanSemaphores[CommandListIndex]		= static_cast<VulkanCommandAllocator*>(CommandLists[CommandListIndex]->GetCommandAllocator())->GetVulkanSemaphore();
 	}
 	
 	VkPipelineStageFlags PipelineStageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 	
+	VkSemaphore Semaphore = VkContext.GetFrameSemaphore();
+
 	VkSubmitInfo SubmitInfo;
-	SubmitInfo.sType					= VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	SubmitInfo.pNext					= nullptr;
+	SubmitInfo.sType				= VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	SubmitInfo.pNext				= nullptr;
+	SubmitInfo.waitSemaphoreCount	= 1;
+	SubmitInfo.pWaitSemaphores		= &Semaphore;
+	SubmitInfo.pWaitDstStageMask	= &PipelineStageFlags;
+	SubmitInfo.commandBufferCount	= (uint32_t)VulkanCommandLists.size();
+	SubmitInfo.pCommandBuffers		= VulkanCommandLists.data();
+	SubmitInfo.signalSemaphoreCount	= (uint32_t)VulkanSemaphores.size();
+	SubmitInfo.pSignalSemaphores	= VulkanSemaphores.data();
 
-	// ACQUIRE FRAME SEMAPHORE
-	//SubmitInfo.waitSemaphoreCount		= 1;
-	//SubmitInfo.pWaitSemaphores			= &static_cast<VulkanSwapChain&>(SwapChainObj).GetAcquireSemaphore(FrameIndex);
-	SubmitInfo.pWaitDstStageMask		= &PipelineStageFlags;
-	SubmitInfo.commandBufferCount		= (uint32_t)VulkanCommandLists.size();
-	SubmitInfo.pCommandBuffers			= VulkanCommandLists.data();
-
-	// PREVIOUS FRAME SEMAPHORE
-	//SubmitInfo.signalSemaphoreCount		= 1;
-	//SubmitInfo.pSignalSemaphores		= &_CommandAllocators[FrameIndex]->GetSemaphore();
-
-	//char test[256];
-	//sprintf_s(test, "[VulkanFence::Signal] FENCE: %d\n", FrameIndex);
-	//OutputDebugString(test);
-	
-	VkResult Result = vkQueueSubmit(GetVulkanCommandQueue(), 1, &SubmitInfo, static_cast<VulkanFence&>(FenceObj).GetFence());
+	VkResult Result = vkQueueSubmit(GetVulkanCommandQueue(), 1, &SubmitInfo, static_cast<VulkanFence*>(VkContext.GetFrameFence())->GetVulkanFence());
 	ETERNAL_ASSERT(!Result);
 }
 

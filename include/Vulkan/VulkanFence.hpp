@@ -25,7 +25,7 @@ namespace Eternal
 			VulkanFence(_In_ Device& DeviceObj);
 			~VulkanFence();
 
-			VkFence_T* GetFence();
+			VkFence_T* GetVulkanFence();
 
 			virtual void Signal(_In_ CommandQueue& CommandQueueObj) override;
 			virtual void Wait(_In_ Device& DeviceObj) override;

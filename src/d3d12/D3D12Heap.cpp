@@ -78,7 +78,12 @@ void D3D12Heap::Initialize(_In_ size_t Size)
 	HeapDesc.Properties.CreationNodeMask		= GetDevice().GetDeviceMask();
 	HeapDesc.Properties.VisibleNodeMask			= GetDevice().GetDeviceMask();
 	HeapDesc.Alignment							= D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
-	HeapDesc.Flags								= GetHeapType() == HEAP_TYPE_TEXTURE ? D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES : D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS;
+	if (GetHeapType() == HEAP_TYPE_RENDER_TARGET_DEPTH_STENCIL)
+		HeapDesc.Flags							= D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
+	else if (GetHeapType() == HEAP_TYPE_TEXTURE)
+		HeapDesc.Flags							= D3D12_HEAP_FLAG_ALLOW_ONLY_NON_RT_DS_TEXTURES;
+	else
+		HeapDesc.Flags							= D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS;
 
 	HRESULT hr = static_cast<D3D12Device&>(GetDevice()).GetD3D12Device()->CreateHeap(&HeapDesc, __uuidof(ID3D12Heap), (void**)&_Heap);
 	ETERNAL_ASSERT(hr == S_OK);

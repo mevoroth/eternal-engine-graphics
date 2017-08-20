@@ -42,8 +42,11 @@ namespace Eternal
 
 			inline ID3D12Resource*& GetD3D12Resource() { return _Resource; }
 
+			TransitionState& GetCurrentTransitionState() { return _DebugCurrentTransition; }
+
 		private:
 			ID3D12Resource*		_Resource = nullptr;
+			TransitionState		_DebugCurrentTransition;
 		};
 	}
 }

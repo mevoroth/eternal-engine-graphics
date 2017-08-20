@@ -12,12 +12,13 @@ namespace Eternal
 		class CommandList;
 		class Fence;
 		class SwapChain;
+		class Context;
 
 		class CommandQueue
 		{
 		public:
 			virtual ~CommandQueue() {}
-			virtual void Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj) = 0;
+			virtual void Submit(_In_ Context& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount) = 0;
 		};
 	}
 }

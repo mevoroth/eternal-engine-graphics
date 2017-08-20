@@ -13,7 +13,8 @@ namespace Eternal
 		enum HeapType
 		{
 			HEAP_TYPE_BUFFER,
-			HEAP_TYPE_TEXTURE
+			HEAP_TYPE_TEXTURE,
+			HEAP_TYPE_RENDER_TARGET_DEPTH_STENCIL
 		};
 
 		class Device;

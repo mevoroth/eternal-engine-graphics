@@ -43,13 +43,7 @@ D3D12CommandQueue::~D3D12CommandQueue()
 	_CommandQueue = nullptr;
 }
 
-//void D3D12CommandQueue::Reset(_In_ uint32_t FrameIndex)
-//{
-//	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
-//	_CommandAllocators[FrameIndex]->Reset();
-//}
-
-void D3D12CommandQueue::Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj)
+void D3D12CommandQueue::Submit(_In_ Context& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
 {
 	vector<ID3D12CommandList*> D3D12CommandLists;
 	D3D12CommandLists.resize(CommandListsCount);
@@ -59,9 +53,3 @@ void D3D12CommandQueue::Submit(_In_ uint32_t FrameIndex, _In_ CommandList* Comma
 	}
 	GetD3D12CommandQueue()->ExecuteCommandLists(CommandListsCount, D3D12CommandLists.data());
 }
-
-//CommandAllocator* D3D12CommandQueue::GetCommandAllocator(_In_ uint32_t FrameIndex)
-//{
-//	ETERNAL_ASSERT(FrameIndex < _CommandAllocators.size());
-//	return _CommandAllocators[FrameIndex];
-//}

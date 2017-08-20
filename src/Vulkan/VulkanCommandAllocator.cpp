@@ -14,7 +14,7 @@ VulkanCommandAllocator::VulkanCommandAllocator(_In_ Device& DeviceObj)
 	VkCommandPoolCreateInfo CommandPoolInfo;
 	CommandPoolInfo.sType				= VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	CommandPoolInfo.pNext				= nullptr;
-	CommandPoolInfo.flags				= 0;
+	CommandPoolInfo.flags				= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 	CommandPoolInfo.queueFamilyIndex	= VulkanDeviceObj.GetQueueFamilyIndex();
 
 	VkResult Result = vkCreateCommandPool(VulkanDeviceObj.GetVulkanDevice(), &CommandPoolInfo, nullptr, &_CommandPool);

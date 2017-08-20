@@ -23,7 +23,7 @@ VulkanRenderTarget::VulkanRenderTarget(_In_ Device& DeviceObj, _In_ RenderPass& 
 	FrameBufferInfo.sType			= VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 	FrameBufferInfo.pNext			= nullptr;
 	FrameBufferInfo.flags			= 0;
-	FrameBufferInfo.renderPass		= static_cast<VulkanRenderPass&>(RenderPassObj).GetRenderPass();
+	FrameBufferInfo.renderPass		= static_cast<VulkanRenderPass&>(RenderPassObj).GetVulkanRenderPass();
 	FrameBufferInfo.attachmentCount	= AttachmentViews.size();
 	FrameBufferInfo.pAttachments	= AttachmentViews.data();
 	FrameBufferInfo.width			= Width;

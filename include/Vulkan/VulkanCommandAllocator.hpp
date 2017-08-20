@@ -18,8 +18,8 @@ namespace Eternal
 			VulkanCommandAllocator(_In_ Device& DeviceObj);
 			virtual ~VulkanCommandAllocator();
 
-			inline VkCommandPool_T*& GetVulkanCommandPool() { return _CommandPool; }
-			inline VkSemaphore_T*& GetSemaphore() { return _CompletedSemaphore; }
+			inline VkCommandPool_T*&	GetVulkanCommandPool()	{ return _CommandPool; }
+			inline VkSemaphore_T*&		GetVulkanSemaphore()	{ return _CompletedSemaphore; }
 
 		private:
 			Device&				_Device;

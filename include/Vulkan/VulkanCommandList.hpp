@@ -61,12 +61,17 @@ namespace Eternal
 			inline VkCommandBuffer_T*& GetVulkanCommandList() { return _CommandBuffer; }
 
 		private:
+			void _Commit();
+
 			struct CommandListCache
 			{
 				VkDescriptorSet_T*	DescriptorTables[MAX_BINDABLE_RESOURCES];
 				uint32_t			DescriptorTablesCount	= 0u;
-				bool				Dirty					= false;
 				VkPipelineLayout_T*	PipelineLayout			= nullptr;
+
+				VulkanRenderPass*	RenderPass				= nullptr;
+
+				bool				Dirty					= false;
 			};
 
 			CommandListCache	_CommandListCache;

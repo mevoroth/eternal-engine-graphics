@@ -24,7 +24,7 @@ namespace Eternal
 			VulkanCommandQueue(_In_ Device& DeviceObj);
 			~VulkanCommandQueue();
 
-			virtual void Submit(_In_ uint32_t FrameIndex, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount, _In_ Fence& FenceObj, _In_ SwapChain& SwapChainObj) override;
+			virtual void Submit(_In_ Context& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount) override;
 			VkQueue_T* GetVulkanCommandQueue();
 
 		private:

@@ -30,9 +30,7 @@ namespace Eternal
 			virtual ~D3D12SwapChain();
 
 			virtual void AcquireFrame(_In_ Device& DeviceObj, _Inout_ Context& GfxContext) override;
-			virtual uint32_t AcquireFrame(_In_ Device& DeviceObj, _In_ Fence& FenceObj) override;
-			virtual void Present(_In_ Device& DeviceObj, _In_ Context& GfxContext) override;
-			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _In_ uint32_t ResourceIndex) override;
+			virtual void Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _Inout_ Context& GfxContext) override;
 
 			//virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) override;
 			//virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
