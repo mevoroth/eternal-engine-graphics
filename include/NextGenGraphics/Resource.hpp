@@ -67,13 +67,16 @@ namespace Eternal
 			void			SetHeapSlot(_In_ uint64_t HeapSlot) { _HeapSlot = HeapSlot; }
 			Heap&			GetHeap() { return _Heap; }
 
-			uint64_t		GetTextureSize() const	{ return _ResourceDescription.TextureSize; }
-			uint64_t		GetDepth() const		{ return _ResourceDescription.Depth; }
-			uint64_t		GetMipCount() const		{ return _ResourceDescription.MipCount; }
-			const Format&	GetFormat() const		{ return _ResourceDescription.ImageFormat; }
+			uint64_t		GetTextureSize() const			{ return _ResourceDescription.TextureSize; }
+			uint64_t		GetDepth() const				{ return _ResourceDescription.Depth; }
+			uint64_t		GetMipCount() const				{ return _ResourceDescription.MipCount; }
+			const Format&	GetFormat() const				{ return _ResourceDescription.ImageFormat; }
 
-			uint64_t		GetStride() const		{ return _ResourceDescription.Stride; }
-			uint64_t		GetBufferSize() const	{ return _ResourceDescription.BufferSize; }
+			uint64_t		GetStride() const				{ return _ResourceDescription.Stride; }
+			uint64_t		GetBufferSize() const			{ return _ResourceDescription.BufferSize; }
+
+		protected:
+			void			SetTextureSize(uint64_t Size)	{ _ResourceDescription.TextureSize = Size; }
 
 		private:
 			union ResourceDescription

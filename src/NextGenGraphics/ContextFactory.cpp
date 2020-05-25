@@ -13,10 +13,10 @@ namespace Eternal
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
-			case D3D12:
+			case DeviceType::D3D12:
 				return new Context(DeviceObj);
 #endif
-			case VULKAN:
+			case DeviceType::VULKAN:
 				return new VulkanContext(DeviceObj);
 
 			default:

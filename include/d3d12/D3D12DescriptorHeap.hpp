@@ -30,7 +30,7 @@ namespace Eternal
 			//D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ uint32_t Register, _In_ const RootSignatureParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount);
 			virtual ~D3D12DescriptorHeap();
 
-			virtual View* CreateView(_In_ Device& DeviceObj) override;
+			virtual DescriptorTable* CreateView(_In_ Device& DeviceObj) override;
 
 			inline ID3D12DescriptorHeap* GetD3D12DescriptorHeap() { return _DescriptorHeap; }
 			
@@ -53,7 +53,6 @@ namespace Eternal
 			D3D12_CPU_DESCRIPTOR_HANDLE		_CPUDescriptorHandleStart;
 			D3D12_GPU_DESCRIPTOR_HANDLE		_GPUDescriptorHandleStart;
 			uint32_t						_DescriptorHandleSize	= 0;
-			uint32_t						_ResourcesCount			= 0;
 		};
 	}
 }

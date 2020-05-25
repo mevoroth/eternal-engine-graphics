@@ -1,5 +1,7 @@
 #include "Graphics/CommandAllocatorFactory.hpp"
 
+#include "Macros/Macros.hpp"
+#include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
@@ -13,14 +15,15 @@ namespace Eternal
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
-			case D3D12:
+			case DeviceType::D3D12:
 				return new D3D12CommandAllocator(DeviceObj, Type);
 #endif
-			case VULKAN:
+			case DeviceType::VULKAN:
 				return new VulkanCommandAllocator(DeviceObj);
 
 			default:
-				break;
+				ETERNAL_ASSERT(false);
+				return nullptr;
 			}
 		}
 	}

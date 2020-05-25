@@ -56,10 +56,10 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 
 	vector<RootSignatureParameter> Parameters;
 	Parameters.resize(GetBackBuffersFrameCount());
-	Parameters[0] = { ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, ROOT_SIGNATURE_ACCESS_IA_VS_PS, 0 };
-	Parameters[1] = { ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, ROOT_SIGNATURE_ACCESS_IA_VS_PS, 0 };
+	Parameters[0] = { RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, RootSignatureAccess::ROOT_SIGNATURE_ACCESS_IA_VS_PS, 0 };
+	Parameters[1] = { RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RENDER_TARGET, RootSignatureAccess::ROOT_SIGNATURE_ACCESS_IA_VS_PS, 0 };
 
-	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, Parameters.data(), Parameters.size());
+	_BackBufferDescriptorHeap = new D3D12DescriptorHeap(DeviceObj, Parameters.data(), uint32_t(Parameters.size()));
 	_BackBuffers.resize(GetBackBuffersFrameCount());
 	_BackBufferViews.resize(GetBackBuffersFrameCount());
 	_BackBufferViewReferences.resize(GetBackBuffersFrameCount());
@@ -79,8 +79,14 @@ D3D12SwapChain::D3D12SwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _
 		_BackBufferViews[BackBufferFrameIndex]	= static_cast<D3D12View*>(_BackBuffers[BackBufferFrameIndex]->CreateRenderTargetView(DeviceObj, *_BackBufferDescriptorHeap, FORMAT_RGBA8888));
 
 		_BackBufferViewReferences[BackBufferFrameIndex].push_back(_BackBufferViews[BackBufferFrameIndex]);
-		_BlendStateReferences[BackBufferFrameIndex].push_back(&GetBackBufferBlendState());
-		_RenderPasses[BackBufferFrameIndex]		= static_cast<D3D12RenderPass*>(CreateRenderPass(DeviceObj, GetMainViewport(), _BackBufferViewReferences[BackBufferFrameIndex], _BlendStateReferences[BackBufferFrameIndex]));
+		_BlendStateReferences[BackBufferFrameIndex].push_back(GetBackBufferBlendState());
+
+		RenderPassCreateInformation RenderPassInformation(
+			GetMainViewport(),
+			_BackBufferViewReferences[BackBufferFrameIndex],
+			_BlendStateReferences[BackBufferFrameIndex]
+		);
+		//_RenderPasses[BackBufferFrameIndex]		= static_cast<D3D12RenderPass*>(CreateRenderPass(RenderPassInformation));
 	}
 }
 

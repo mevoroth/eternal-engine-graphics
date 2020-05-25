@@ -5,6 +5,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class GraphicsContext;
 		class Pipeline;
 		class Device;
 		class RootSignature;
@@ -14,6 +15,7 @@ namespace Eternal
 		class Viewport;
 		class DepthTest;
 		class StencilTest;
+		struct PipelineCreateInformation;
 
 		Pipeline* CreatePipeline(
 			_In_ Device& DeviceObj,
@@ -25,6 +27,11 @@ namespace Eternal
 			_In_ const DepthTest& DepthTestObj,
 			_In_ const StencilTest& StencilTestObj,
 			_In_ const Viewport& ViewportObj
+		);
+
+		Pipeline* CreatePipeline(
+			_In_ GraphicsContext& Context,
+			_In_ const PipelineCreateInformation& CreateInformation
 		);
 	}
 }

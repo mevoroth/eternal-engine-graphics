@@ -9,6 +9,7 @@
 struct VkDescriptorPool_T;
 struct VkDescriptorSetLayout_T;
 struct VkDescriptorSet_T;
+enum VkDescriptorType;
 
 namespace Eternal
 {
@@ -19,8 +20,8 @@ namespace Eternal
 
 		class Device;
 		class RootSignature;
-		enum RootSignatureParameterType;
-		enum RootSignatureAccess;
+		enum class RootSignatureParameterType;
+		enum class RootSignatureAccess;
 
 		class VulkanDescriptorHeap : public DescriptorHeap
 		{
@@ -29,22 +30,21 @@ namespace Eternal
 			//VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ uint32_t Space, _In_ uint32_t Register, _In_ const RootSignatureParameterType& HeapTypeObj, _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj);
 			~VulkanDescriptorHeap();
 
-			virtual View* CreateView(_In_ Device& DeviceObj) override;
+			virtual DescriptorTable* CreateView(_In_ Device& DeviceObj) override;
 			VkDescriptorSetLayout_T*& GetDescriptorSetLayout() { return _DescriptorSetLayout; }
-			VkDescriptorSet_T* Pop();
-			void Push(_In_ VkDescriptorSet_T* Handle);
-
-			VkDescriptorSet_T* Bind();
-			void Unbind();
+			VkDescriptorSet_T*& GetDescriptorSet() { return _DescriptorSet; }
+			const vector<VkDescriptorType>& GetDescriptorTypes() const { return _DescriptorFormats; }
 
 		private:
-			VkDescriptorSet_T*					_DescriptorSet	= nullptr;
+			vector<VkDescriptorType>	_DescriptorFormats;
+			VkDescriptorSet_T*			_DescriptorSet	= nullptr;
 			//vector<VkDescriptorSet_T*>		_ResourcesPool;
 			//RingBuffer<VkDescriptorSet_T*>	_BoundResources;
 
-			Device& _Device;
+			Device&						_Device;
 			VkDescriptorPool_T*			_DescriptorPool			= nullptr;
 			VkDescriptorSetLayout_T*	_DescriptorSetLayout	= nullptr;
+			uint32_t					_ResourcesCount			= 0u;
 		};
 	}
 }

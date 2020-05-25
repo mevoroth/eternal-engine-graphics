@@ -5,9 +5,9 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum Blend;
-		enum BlendOp;
-		enum BlendChannel;
+		enum class Blend;
+		enum class BlendOp;
+		enum class BlendChannel;
 		class BlendState;
 
 		BlendState* CreateBlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendColorOp,

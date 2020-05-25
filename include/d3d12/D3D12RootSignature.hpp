@@ -12,7 +12,7 @@ namespace Eternal
 	{
 		using namespace std;
 
-		enum RootSignatureAccess;
+		enum class RootSignatureAccess;
 
 		class Device;
 		class Sampler;

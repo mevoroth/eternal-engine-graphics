@@ -19,7 +19,7 @@ namespace Eternal
 		public:
 			D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj, _In_ const TextureView& ViewType, _In_ const Format& FormatObj);
 			D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ Resource& ResourceObj, _In_ const Format& FormatObj);
-			D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj);
+			//D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj);
 			virtual ~D3D12View();
 
 			inline DescriptorHeapHandle& GetHandle()				{ return _Handle; }

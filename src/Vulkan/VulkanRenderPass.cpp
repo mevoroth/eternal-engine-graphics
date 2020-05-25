@@ -1,95 +1,88 @@
 #include "Vulkan/VulkanRenderPass.hpp"
 
 #include "Macros/Macros.hpp"
-#include <vulkan/vulkan.h>
 #include "Graphics/Format.hpp"
 #include "Graphics/Viewport.hpp"
+#include "NextGenGraphics/Context.hpp"
+#include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanFormat.hpp"
 
 using namespace Eternal::Graphics;
 
-VulkanRenderPass::VulkanRenderPass(_In_ Device& DeviceObj, _In_ const Viewport& ViewportObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<BlendState*>& BlendStates, _In_ View* DepthStencil /* = nullptr */, _In_ const LogicBlend& LogicBlendObj /* = LogicBlend() */)
-	: RenderPass(RenderTargets, BlendStates, ViewportObj, LogicBlendObj)
-	, _Device(DeviceObj)
+VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation)
+	: RenderPass(CreateInformation)
+	, _Device(Context.GetDevice())
 {
-	vector<VkAttachmentDescription> VulkanAttachments;
-	vector<VkAttachmentReference> VulkanAttachmentReferences;
-	vector<VkImageView> AttachmentViews;
-	VulkanAttachments.resize(RenderTargets.size());
-	VulkanAttachmentReferences.resize(RenderTargets.size());
-	AttachmentViews.resize(RenderTargets.size());
-	
-	uint32_t RenderTargetIndex = 0;
-	for (; RenderTargetIndex < GetRenderTargets().size(); ++RenderTargetIndex)
-	{
-		VkAttachmentDescription& CurrentAttachment = VulkanAttachments[RenderTargetIndex];
-		CurrentAttachment.flags				= 0;
-		CurrentAttachment.format			= VULKAN_FORMATS[static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetFormat()];
-		CurrentAttachment.samples			= VK_SAMPLE_COUNT_1_BIT;
-		CurrentAttachment.loadOp			= VK_ATTACHMENT_LOAD_OP_CLEAR;
-		CurrentAttachment.storeOp			= VK_ATTACHMENT_STORE_OP_STORE;
-		CurrentAttachment.stencilLoadOp		= VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		CurrentAttachment.stencilStoreOp	= VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		CurrentAttachment.initialLayout		= VK_IMAGE_LAYOUT_UNDEFINED;
-		CurrentAttachment.finalLayout		= VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; // FIX ME
+	using namespace Vulkan;
 
-		VulkanAttachmentReferences[RenderTargetIndex].attachment	= RenderTargetIndex;
-		VulkanAttachmentReferences[RenderTargetIndex].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	vk::Device& Device = static_cast<VulkanDevice&>(Context.GetDevice()).GetVulkanDevice();
+
+	vector<vk::AttachmentDescription> VulkanAttachments;
+	vector<vk::AttachmentReference> VulkanAttachmentReferences;
+	vector<vk::ImageView> AttachmentViews;
+	VulkanAttachments.resize(CreateInformation.RenderTargets.size());
+	VulkanAttachmentReferences.resize(CreateInformation.RenderTargets.size());
+	AttachmentViews.resize(CreateInformation.RenderTargets.size());
+	
+	for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < GetRenderTargets().size(); ++RenderTargetIndex)
+	{
+		VulkanAttachments[RenderTargetIndex] = vk::AttachmentDescription(
+			vk::AttachmentDescriptionFlagBits(),
+			VULKAN_FORMATS[int(static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetFormat())],
+			vk::SampleCountFlagBits::e1,
+			vk::AttachmentLoadOp::eDontCare
+		).setFinalLayout(
+			vk::ImageLayout::eColorAttachmentOptimal
+		);
+
+		VulkanAttachmentReferences[RenderTargetIndex] = vk::AttachmentReference(RenderTargetIndex, vk::ImageLayout::eColorAttachmentOptimal);
 
 		AttachmentViews[RenderTargetIndex] = static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetImageView();
 	}
 
-	VkAttachmentReference DepthStencilAttachmentReference;
-	if (DepthStencil)
+	vk::AttachmentReference DepthStencilAttachmentReference;
+	if (CreateInformation.DepthStencilRenderTarget)
 	{
-		DepthStencilAttachmentReference.attachment	= 0;
-		DepthStencilAttachmentReference.layout		= VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+		DepthStencilAttachmentReference = vk::AttachmentReference(0, vk::ImageLayout::eDepthStencilAttachmentOptimal);
 	}
 
-	VkSubpassDescription VulkanSubPass;
-	VulkanSubPass.flags						= 0;
-	VulkanSubPass.pipelineBindPoint			= VK_PIPELINE_BIND_POINT_GRAPHICS;
-	VulkanSubPass.inputAttachmentCount		= 0;
-	VulkanSubPass.pInputAttachments			= nullptr;
-	VulkanSubPass.colorAttachmentCount		= VulkanAttachmentReferences.size();
-	VulkanSubPass.pColorAttachments			= VulkanAttachmentReferences.data();
-	VulkanSubPass.pResolveAttachments		= nullptr;
-	VulkanSubPass.pDepthStencilAttachment	= DepthStencil ? &DepthStencilAttachmentReference : nullptr;
-	VulkanSubPass.preserveAttachmentCount	= 0;
-	VulkanSubPass.pPreserveAttachments		= nullptr;
+	vk::SubpassDescription VulkanSubPass(
+		vk::SubpassDescriptionFlagBits(),
+		vk::PipelineBindPoint::eGraphics,
+		0, nullptr,
+		uint32_t(VulkanAttachmentReferences.size()),
+		VulkanAttachmentReferences.data(),
+		nullptr,
+		CreateInformation.DepthStencilRenderTarget ? &DepthStencilAttachmentReference : nullptr,
+		0, nullptr
+	);
 
-	VkRenderPassCreateInfo RenderPassInfo;
-	RenderPassInfo.sType			= VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-	RenderPassInfo.pNext			= nullptr;
-	RenderPassInfo.flags			= 0;
-	RenderPassInfo.attachmentCount	= VulkanAttachments.size();
-	RenderPassInfo.pAttachments		= VulkanAttachments.data();
-	RenderPassInfo.subpassCount		= 1;
-	RenderPassInfo.pSubpasses		= &VulkanSubPass;
-	RenderPassInfo.dependencyCount	= 0;
-	RenderPassInfo.pDependencies	= nullptr;
+	vk::RenderPassCreateInfo RenderPassInfo(
+		vk::RenderPassCreateFlagBits(),
+		uint32_t(VulkanAttachments.size()),
+		VulkanAttachments.data(),
+		1, &VulkanSubPass,
+		0, nullptr
+	);
 
-	VkResult Result = vkCreateRenderPass(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &RenderPassInfo, nullptr, &_RenderPass);
-	ETERNAL_ASSERT(!Result);
+	VerifySuccess(Device.createRenderPass(&RenderPassInfo, nullptr, &_RenderPass));
 
-	VkFramebufferCreateInfo FrameBufferInfo;
-	FrameBufferInfo.sType			= VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-	FrameBufferInfo.pNext			= nullptr;
-	FrameBufferInfo.flags			= 0;
-	FrameBufferInfo.renderPass		= _RenderPass;
-	FrameBufferInfo.attachmentCount	= AttachmentViews.size();
-	FrameBufferInfo.pAttachments	= AttachmentViews.data();
-	FrameBufferInfo.width			= ViewportObj.GetWidth();
-	FrameBufferInfo.height			= ViewportObj.GetHeight();
-	FrameBufferInfo.layers			= 1;
-
-	Result = vkCreateFramebuffer(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), &FrameBufferInfo, nullptr, &_FrameBuffer);
-	ETERNAL_ASSERT(!Result);
+	vk::FramebufferCreateInfo FrameBufferInfo(
+		vk::FramebufferCreateFlagBits(),
+		_RenderPass,
+		uint32_t(AttachmentViews.size()),
+		AttachmentViews.data(),
+		CreateInformation.Viewport.GetWidth(),
+		CreateInformation.Viewport.GetHeight(),
+		1
+	);
+	
+	VerifySuccess(Device.createFramebuffer(&FrameBufferInfo, nullptr, &_FrameBuffer));
 }
 
 VulkanRenderPass::~VulkanRenderPass()
 {
-	vkDestroyRenderPass(static_cast<VulkanDevice&>(_Device).GetVulkanDevice(), _RenderPass, nullptr);
+	static_cast<VulkanDevice&>(_Device).GetVulkanDevice().destroyRenderPass(_RenderPass, nullptr);
 }

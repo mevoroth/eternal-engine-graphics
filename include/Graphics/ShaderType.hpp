@@ -5,7 +5,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum ShaderType
+		enum class ShaderType
 		{
 			VS = 0,
 			HS,

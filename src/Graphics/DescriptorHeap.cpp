@@ -8,6 +8,7 @@
 using namespace Eternal::Graphics;
 
 DescriptorHeap::DescriptorHeap(_In_ const RootSignatureParameter Resources[], _In_ uint32_t ResourcesCount)
+	: _ResourcesCount(ResourcesCount)
 {
 	ETERNAL_ASSERT(ResourcesCount > 0);
 	ETERNAL_ASSERT(IsD3D12Compatible(Resources, ResourcesCount));
@@ -37,14 +38,14 @@ bool DescriptorHeap::IsD3D12Compatible(_In_ const RootSignatureParameter Resourc
 		RTV,
 		DSV
 	};
-	ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(RootSignatureParameterTypeToType) == ROOT_SIGNATURE_PARAMETER_COUNT, "Parameters Types declaration not complete");
+	ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(RootSignatureParameterTypeToType) == int(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Parameters Types declaration not complete");
 
 	uint32_t TypeCount[TYPE_COUNT];
 	memset(TypeCount, 0x0, sizeof(uint32_t) * TYPE_COUNT);
 
 	for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesCount; ++ResourceIndex)
 	{
-		++TypeCount[RootSignatureParameterTypeToType[Resources[ResourceIndex].Parameter]];
+		++TypeCount[RootSignatureParameterTypeToType[int(Resources[ResourceIndex].Parameter)]];
 	}
 	
 	uint32_t DifferentTypeCount = 0;

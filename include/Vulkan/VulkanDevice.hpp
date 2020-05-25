@@ -2,7 +2,8 @@
 #define _VULKAN_DEVICE_HPP_
 
 #define VK_USE_PLATFORM_WIN32_KHR
-#include <vulkan/vulkan.h>
+#include <vulkan/vulkan.hpp>
+#include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include <vector>
 
@@ -12,7 +13,6 @@ namespace Eternal
 	{
 		using namespace std;
 		class Window;
-		class Vulkan;
 
 		class VulkanDevice : public Device
 		{
@@ -28,6 +28,13 @@ namespace Eternal
 				void*                                       pUserData
 			);
 
+			static VKAPI_ATTR VkBool32 VKAPI_CALL DebugUtilsMessenger(
+				VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
+				VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
+				const VkDebugUtilsMessengerCallbackDataEXT*      pCallbackData,
+				void*                                            pUserData
+			);
+
 			VulkanDevice(_In_ Window& WindowObj);
 
 			uint32_t GetQueueFamilyIndex()
@@ -35,25 +42,28 @@ namespace Eternal
 				return 0;
 			}
 
-			VkDevice& GetVulkanDevice();
-			VkPhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
-			VkInstance& GetInstance() { return _Instance; }
+			vk::Device& GetVulkanDevice();
+			vk::PhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
+			vk::Instance& GetInstance() { return _Instance; }
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }
-			const VkPhysicalDeviceMemoryProperties& GetPhysicalDeviceMemoryProperties() const { return _PhysicalDeviceMemoryProperties; }
-			uint32_t FindBestMemoryTypeIndex(_In_ const VkMemoryPropertyFlagBits& Flags) const;
-			VkQueue PopVulkanQueue();
+			const vk::PhysicalDeviceMemoryProperties& GetPhysicalDeviceMemoryProperties() const { return _PhysicalDeviceMemoryProperties; }
+			uint32_t FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const;
+			uint32_t GetVulkanVersion() const { return _VulkanVersion; }
+			//vk::Queue PopVulkanQueue();
 
 			virtual uint32_t GetDeviceMask() const override { return 0x1; }
-			virtual DeviceType GetDeviceType() const override { return VULKAN; }
+			virtual DeviceType GetDeviceType() const override { return DeviceType::VULKAN; }
 
 		private:
-			vector<VkQueue>						_VulkanQueues;
-			VkPhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;
-			VkDebugReportCallbackEXT			_DebugReportCallback			= nullptr;
-			VkInstance							_Instance						= nullptr;
-			VkPhysicalDevice					_PhysicalDevice					= nullptr;
-			VkDevice							_Device							= nullptr;
-			uint32_t							_QueueFamilyPropertiesCount		= 0;
+			vector<vk::Queue>						_VulkanQueues;
+			vk::PhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;
+			vk::DebugReportCallbackEXT			_DebugReportCallback;
+			vk::DebugUtilsMessengerEXT			_DebugUtilsMessengerCallback;
+			vk::Instance						_Instance;
+			vk::PhysicalDevice					_PhysicalDevice;
+			vk::Device							_Device;
+			uint32_t							_QueueFamilyPropertiesCount = 0;
+			uint32_t							_VulkanVersion = 0;
 		};
 	}
 }

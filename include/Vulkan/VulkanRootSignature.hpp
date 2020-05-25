@@ -1,13 +1,9 @@
 #ifndef _VULKAN_ROOT_SIGNATURE_HPP_
 #define _VULKAN_ROOT_SIGNATURE_HPP_
 
-#include <cstdint>
 #include <vector>
+#include <vulkan/vulkan.hpp>
 #include "Graphics/RootSignature.hpp"
-
-enum VkDescriptorType;
-struct VkPipelineLayout_T;
-struct VkDescriptorSetLayout_T;
 
 namespace Eternal
 {
@@ -17,9 +13,6 @@ namespace Eternal
 
 		class Device;
 		class Sampler;
-		class DescriptorHeap;
-
-		extern const VkDescriptorType VULKAN_DESCRIPTOR_TYPES[];
 
 		class VulkanRootSignature : public RootSignature
 		{
@@ -29,13 +22,15 @@ namespace Eternal
 			VulkanRootSignature(_In_ Device& DeviceObj);
 			virtual ~VulkanRootSignature();
 
-			VkPipelineLayout_T*	GetPipelineLayout()			{ return _PipelineLayout; }
+			vk::PipelineLayout&	GetPipelineLayout()			{ return _PipelineLayout; }
 			uint32_t			GetParametersCount() const	{ return _ParametersCount; }
+			const vector<vk::DescriptorSetLayout>& GetDescriptorSetLayouts() const { return _DescriptorSetLayouts; }
 
 		private:
 			Device&				_Device;
-			VkPipelineLayout_T*	_PipelineLayout		= nullptr;
-			uint32_t			_ParametersCount	= 0u;
+			vk::PipelineLayout	_PipelineLayout;
+			vector<vk::DescriptorSetLayout>	_DescriptorSetLayouts;
+			uint32_t						_ParametersCount	= 0u;
 		};
 	}
 }

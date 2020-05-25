@@ -1,6 +1,7 @@
 #include "d3d12/D3D12Shader.hpp"
 
 #include "Macros/Macros.hpp"
+#include "GraphicsSettings.hpp"
 #include "File/FilePath.hpp"
 
 #include <fstream>
@@ -38,8 +39,8 @@ D3D12Shader::D3D12Shader(_In_ const string& Name, _In_ const string& Source, _In
 	, _Program(nullptr)
 {
 	ETERNAL_ASSERT(_IncludeHandler);
-#ifdef ETERNAL_DEBUG
-	_CompileFile(Source, D3D12_SHADER_ENTRIES[Type], D3D12_SHADER_PROFILES[Type], Defines);
+#if defined(ETERNAL_DEBUG) && defined(ETERNAL_USE_DEBUG_SHADERS)
+	_CompileFile(Source, D3D12_SHADER_ENTRIES[int(Type)], D3D12_SHADER_PROFILES[int(Type)], Defines);
 #else
 	_LoadFile(Source + ".cso");
 #endif
@@ -57,7 +58,7 @@ void D3D12Shader::_CompileFile(_In_ const string& Source, _In_ const char* Entry
 
 	ID3DBlob* Errors = nullptr;
 
-	string FullPathSource = FilePath::Find(Source, FilePath::SHADERS);
+	string FullPathSource = FilePath::Find(Source, FileType::SHADERS);
 
 	vector<D3D_SHADER_MACRO> Macros;
 	Macros.resize((Defines.size() / 2) + 1);
@@ -106,7 +107,7 @@ void D3D12Shader::GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& ShaderObj)
 STDMETHODIMP D3D12Shader::D3D12Include::Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes)
 {
 	string IncludeSrc = pFileName;
-	string FullPathSrc = FilePath::Find(IncludeSrc, FilePath::SHADERS);
+	string FullPathSrc = FilePath::Find(IncludeSrc, FileType::SHADERS);
 	ifstream IncludedFile(FullPathSrc.c_str(), ios::in | ios::binary | ios::ate);
 	
 	if (!IncludedFile)

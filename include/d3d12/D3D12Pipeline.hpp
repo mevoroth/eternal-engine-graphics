@@ -25,15 +25,8 @@ namespace Eternal
 		{
 		public:
 			D3D12Pipeline(
-				_In_ Device& DeviceObj,
-				_In_ RootSignature& RootSignatureObj,
-				_In_ InputLayout& InputLayoutObj,
-				_In_ RenderPass& RenderPassObj,
-				_In_ Shader& VS,
-				_In_ Shader& PS,
-				_In_ const DepthTest& DepthTestObj,
-				_In_ const StencilTest& StencilTestObj,
-				_In_ const Viewport& ViewportObj
+				Device& InDevice,
+				const PipelineCreateInformation& CreateInformation
 			);
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() { return _PipelineState; }

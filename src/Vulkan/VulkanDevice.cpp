@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include "Window/Window.hpp"
+#include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
 
 using namespace Eternal::Graphics;
@@ -26,38 +27,102 @@ VkBool32 VulkanDevice::DebugReport(
 	return VK_FALSE;
 }
 
+VkBool32 VulkanDevice::DebugUtilsMessenger(
+	VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
+	VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
+	const VkDebugUtilsMessengerCallbackDataEXT*      pCallbackData,
+	void*                                            pUserData
+)
+{
+	OutputDebugString(pCallbackData->pMessage);
+	OutputDebugString("\n");
+	return VK_FALSE;
+}
+
 //PFN_vkGetPhysicalDeviceSurfaceSupportKHR		vkGetPhysicalDeviceSurfaceSupportKHR;
 //PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR	vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
 //PFN_vkGetPhysicalDeviceSurfaceFormatsKHR		vkGetPhysicalDeviceSurfaceFormatsKHR;
 //PFN_vkGetPhysicalDeviceSurfacePresentModesKHR	vkGetPhysicalDeviceSurfacePresentModesKHR;
 //PFN_vkGetSwapchainImagesKHR						vkGetSwapchainImagesKHR;
 
+namespace Eternal
+{
+	namespace Graphics
+	{
+		namespace VulkanPrivate
+		{
+			class EternalDispatchLoader
+			{
+			public:
+				EternalDispatchLoader(vk::Instance& InInstance)
+					: _Instance(InInstance)
+				{
+					_vkCreateDebugReport			= (PFN_vkCreateDebugReportCallbackEXT)	_Instance.getProcAddr("vkCreateDebugReportCallbackEXT");
+					_vkDestroyDebugReport			= (PFN_vkDestroyDebugReportCallbackEXT)	_Instance.getProcAddr("vkDestroyDebugReportCallbackEXT");
+					_vkDebugReportMessage			= (PFN_vkDebugReportMessageEXT)			_Instance.getProcAddr("vkDebugReportMessageEXT");
+					_vkCreateDebugUtilsMessenger	= (PFN_vkCreateDebugUtilsMessengerEXT)	_Instance.getProcAddr("vkCreateDebugUtilsMessengerEXT");
+
+					ETERNAL_ASSERT(_vkCreateDebugReport);
+					ETERNAL_ASSERT(_vkDestroyDebugReport);
+					ETERNAL_ASSERT(_vkDebugReportMessage);
+					ETERNAL_ASSERT(_vkCreateDebugUtilsMessenger);
+				}
+
+				VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback) const VULKAN_HPP_NOEXCEPT
+				{
+					return _vkCreateDebugReport(instance, pCreateInfo, pAllocator, pCallback);
+				}
+
+				void vkDestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator)
+				{
+					_vkDestroyDebugReport(instance, callback, pAllocator);
+				}
+
+				void vkDebugReportMessageEXT(VkInstance instance, VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage)
+				{
+					_vkDebugReportMessage(instance, flags, objectType, object, location, messageCode, pLayerPrefix, pMessage);
+				}
+
+				VkResult vkCreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pMessenger) const VULKAN_HPP_NOEXCEPT
+				{
+					return _vkCreateDebugUtilsMessenger(instance, pCreateInfo, pAllocator, pMessenger);
+				}
+
+			private:
+				vk::Instance& _Instance;
+				PFN_vkCreateDebugReportCallbackEXT _vkCreateDebugReport = nullptr;
+				PFN_vkDestroyDebugReportCallbackEXT _vkDestroyDebugReport = nullptr;
+				PFN_vkDebugReportMessageEXT _vkDebugReportMessage = nullptr;
+				PFN_vkCreateDebugUtilsMessengerEXT _vkCreateDebugUtilsMessenger = nullptr;
+			};
+		}
+	}
+}
+
 VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 {
-	memset(&_PhysicalDeviceMemoryProperties, 0x0, sizeof(VkPhysicalDeviceMemoryProperties));
+	using namespace Vulkan;
 
-	// 0 = OK
-	VkResult Result;
+	memset(&_PhysicalDeviceMemoryProperties, 0x0, sizeof(VkPhysicalDeviceMemoryProperties));
 
 	// SHOULD CHECK
 
 	// Validation layer
 	uint32_t PropertyCount;
-	Result = vkEnumerateInstanceLayerProperties(&PropertyCount, nullptr);
-	ETERNAL_ASSERT(!Result);
+	VerifySuccess(vk::enumerateInstanceLayerProperties(&PropertyCount, static_cast<vk::LayerProperties*>(nullptr)));
 
 	if (!PropertyCount) // No validation layer
 		return;
 
-	std::vector<VkLayerProperties> Layers;
+	std::vector<vk::LayerProperties> Layers;
 	Layers.resize(PropertyCount);
 
-	Result = vkEnumerateInstanceLayerProperties(&PropertyCount, Layers.data());
-	ETERNAL_ASSERT(!Result);
+	VerifySuccess(vk::enumerateInstanceLayerProperties(&PropertyCount, Layers.data()));
 
-	const char* VulkanValidationLayers[] = 
+	const char* VulkanValidationLayers[] =
 	{
-		"VK_LAYER_LUNARG_standard_validation",
+		//"VK_LAYER_KHRONOS_validation"
+		//"VK_LAYER_LUNARG_standard_validation",
 		//"VK_LAYER_GOOGLE_threading",
 		//"VK_LAYER_LUNARG_parameter_validation",
 		//"VK_LAYER_LUNARG_object_tracker",
@@ -65,97 +130,99 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		//"VK_LAYER_LUNARG_core_validation",
 		//"VK_LAYER_LUNARG_swapchain",
 		//"VK_LAYER_GOOGLE_unique_objects",
+
+		//"VK_LAYER_LUNARG_api_dump",
+		//"VK_LAYER_LUNARG_device_simulation",
+		"VK_LAYER_KHRONOS_validation",
+		//"VK_LAYER_LUNARG_monitor",
+		//"VK_LAYER_LUNARG_screenshot",
+		"VK_LAYER_LUNARG_standard_validation",
+		//"VK_LAYER_LUNARG_vktrace"
 	};
 
 	const char* VulkanInstanceExtensions[] =
 	{
 		VK_KHR_SURFACE_EXTENSION_NAME,
 		VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
-		VK_EXT_DEBUG_REPORT_EXTENSION_NAME
+		VK_EXT_DEBUG_REPORT_EXTENSION_NAME, 
+		VK_EXT_DEBUG_UTILS_EXTENSION_NAME
 	};
 
 	uint32_t InstanceExtensionPropertiesCount;
-	vkEnumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, nullptr);
+	vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, static_cast<vk::ExtensionProperties *>(nullptr));
 
-	std::vector<VkExtensionProperties> InstanceExtensionProperties;
+	std::vector<vk::ExtensionProperties> InstanceExtensionProperties;
 	InstanceExtensionProperties.resize(InstanceExtensionPropertiesCount);
 
-	vkEnumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, InstanceExtensionProperties.data());
+	vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, InstanceExtensionProperties.data());
 
-	VkApplicationInfo ApplicationInfo;
-	ApplicationInfo.sType				= VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	ApplicationInfo.pNext				= nullptr;
-	ApplicationInfo.pApplicationName	= WindowObj.GetClassName().c_str();
-	ApplicationInfo.applicationVersion	= 0;
-	ApplicationInfo.pEngineName			= "EternalEngine";
-	ApplicationInfo.engineVersion		= 0;
-	ApplicationInfo.apiVersion			= VK_API_VERSION_1_0;
+	_VulkanVersion = VK_API_VERSION_1_1; // Vulkan version
+	vk::ApplicationInfo ApplicationInfo(
+		WindowObj.GetClassName().c_str(),
+		0,
+		"EternalEngine",
+		0,
+		_VulkanVersion
+	);
 
-	VkInstanceCreateInfo InstanceInfo;
-	InstanceInfo.sType						= VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	InstanceInfo.pNext						= nullptr;
-	InstanceInfo.flags						= 0;
-	InstanceInfo.pApplicationInfo			= &ApplicationInfo;
-	InstanceInfo.ppEnabledLayerNames		= VulkanValidationLayers;
-	InstanceInfo.enabledLayerCount			= ETERNAL_ARRAYSIZE(VulkanValidationLayers);
-	InstanceInfo.ppEnabledExtensionNames	= VulkanInstanceExtensions;
-	InstanceInfo.enabledExtensionCount		= ETERNAL_ARRAYSIZE(VulkanInstanceExtensions);
+	vk::InstanceCreateInfo InstanceInfo(
+		vk::InstanceCreateFlags(),
+		&ApplicationInfo,
+		ETERNAL_ARRAYSIZE(VulkanValidationLayers),
+		VulkanValidationLayers,
+		ETERNAL_ARRAYSIZE(VulkanInstanceExtensions),
+		VulkanInstanceExtensions
+	);
 
-	Result = vkCreateInstance(&InstanceInfo, nullptr, &_Instance);
-	ETERNAL_ASSERT(!Result);
+	VerifySuccess(vk::createInstance(&InstanceInfo, nullptr, &_Instance));
 
 	uint32_t PhysicalDevicesCount;
-	Result = vkEnumeratePhysicalDevices(_Instance, &PhysicalDevicesCount, nullptr);
-	ETERNAL_ASSERT(!Result);
+	VerifySuccess(_Instance.enumeratePhysicalDevices(&PhysicalDevicesCount, static_cast<vk::PhysicalDevice*>(nullptr)));
 
 	ETERNAL_ASSERT(PhysicalDevicesCount > 0);
 	ETERNAL_ASSERT(PhysicalDevicesCount == 1); // 1gpu
 
-	vkEnumeratePhysicalDevices(_Instance, &PhysicalDevicesCount, &_PhysicalDevice);
+	VerifySuccess(_Instance.enumeratePhysicalDevices(&PhysicalDevicesCount, &_PhysicalDevice));
 
 	uint32_t ExtensionsCount;
-	Result = vkEnumerateDeviceExtensionProperties(_PhysicalDevice, nullptr, &ExtensionsCount, nullptr);
-	ETERNAL_ASSERT(!Result);
+	VerifySuccess(_PhysicalDevice.enumerateDeviceExtensionProperties(nullptr, &ExtensionsCount, static_cast<vk::ExtensionProperties*>(nullptr)));
 	
-	std::vector<VkExtensionProperties> ExtensionProperties;
+	std::vector<vk::ExtensionProperties> ExtensionProperties;
 	ExtensionProperties.resize(ExtensionsCount);
-	Result = vkEnumerateDeviceExtensionProperties(_PhysicalDevice, nullptr, &ExtensionsCount, ExtensionProperties.data());
-	ETERNAL_ASSERT(!Result);
-
-	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReport		= (PFN_vkCreateDebugReportCallbackEXT)	vkGetInstanceProcAddr(_Instance, "vkCreateDebugReportCallbackEXT");
-	PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReport	= (PFN_vkDestroyDebugReportCallbackEXT)	vkGetInstanceProcAddr(_Instance, "vkDestroyDebugReportCallbackEXT");
-	PFN_vkDebugReportMessageEXT vkDebugReportMessage			= (PFN_vkDebugReportMessageEXT)			vkGetInstanceProcAddr(_Instance, "vkDebugReportMessageEXT");
+	VerifySuccess(_PhysicalDevice.enumerateDeviceExtensionProperties(nullptr, &ExtensionsCount, ExtensionProperties.data()));
 
 	PFN_vkDebugReportCallbackEXT vkDebugReport = VulkanDevice::DebugReport;
 
-	ETERNAL_ASSERT(vkCreateDebugReport);
-	ETERNAL_ASSERT(vkDestroyDebugReport);
-	ETERNAL_ASSERT(vkDebugReportMessage);
+	vk::DebugReportCallbackCreateInfoEXT DebugReportCallbackInfo(
+		vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning | vk::DebugReportFlagBitsEXT::ePerformanceWarning | vk::DebugReportFlagBitsEXT::eInformation | vk::DebugReportFlagBitsEXT::eDebug, // | VK_DEBUG_REPORT_INFORMATION_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT,
+		vkDebugReport,
+		nullptr
+	);
 
-	VkDebugReportCallbackCreateInfoEXT DebugReportCallbackInfo;
-	DebugReportCallbackInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-	DebugReportCallbackInfo.pNext = nullptr;
-	DebugReportCallbackInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;// | VK_DEBUG_REPORT_INFORMATION_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT;
-	DebugReportCallbackInfo.pfnCallback = vkDebugReport;
+	VulkanPrivate::EternalDispatchLoader EternalLoader(_Instance);
 
-	Result = vkCreateDebugReport(_Instance, &DebugReportCallbackInfo, nullptr, &_DebugReportCallback);
-	ETERNAL_ASSERT(!Result);
+	VerifySuccess(_Instance.createDebugReportCallbackEXT(&DebugReportCallbackInfo, nullptr, &_DebugReportCallback, EternalLoader));
+	
+	vk::DebugUtilsMessengerCreateInfoEXT DebugUtilsCallbackInfo(
+		vk::DebugUtilsMessengerCreateFlagBitsEXT(),
+		vk::DebugUtilsMessageSeverityFlagBitsEXT::eError | vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning,// | vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo,// | vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose,
+		vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation | vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance | vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral,
+		VulkanDevice::DebugUtilsMessenger
+	);
+	VerifySuccess(_Instance.createDebugUtilsMessengerEXT(&DebugUtilsCallbackInfo, nullptr, &_DebugUtilsMessengerCallback, EternalLoader));
 
-	VkPhysicalDeviceProperties PhysicalDeviceProperties;
-	vkGetPhysicalDeviceProperties(_PhysicalDevice, &PhysicalDeviceProperties);
+	vk::PhysicalDeviceProperties PhysicalDeviceProperties;
+	_PhysicalDevice.getProperties(&PhysicalDeviceProperties);
 
-	vkGetPhysicalDeviceQueueFamilyProperties(_PhysicalDevice, &_QueueFamilyPropertiesCount, nullptr);
+	_PhysicalDevice.getQueueFamilyProperties(&_QueueFamilyPropertiesCount, static_cast<vk::QueueFamilyProperties*>(nullptr));
 	ETERNAL_ASSERT(_QueueFamilyPropertiesCount > 0);
 
-	std::vector<VkQueueFamilyProperties> QueueFamilyProperties;
-	QueueFamilyProperties.resize(_QueueFamilyPropertiesCount);
+	std::vector<vk::QueueFamilyProperties> QueueFamilyProperties = _PhysicalDevice.getQueueFamilyProperties();
 
-	vkGetPhysicalDeviceQueueFamilyProperties(_PhysicalDevice, &_QueueFamilyPropertiesCount, QueueFamilyProperties.data());
+	ETERNAL_ASSERT(QueueFamilyProperties[GetQueueFamilyIndex()].queueFlags & vk::QueueFlagBits::eGraphics); // Assume main device has graphics queue
 
-	ETERNAL_ASSERT(QueueFamilyProperties[GetQueueFamilyIndex()].queueFlags & VK_QUEUE_GRAPHICS_BIT); // Assume main device has graphics queue
-
-	VkPhysicalDeviceFeatures PhysicalDeviceFeatures;
-	vkGetPhysicalDeviceFeatures(_PhysicalDevice, &PhysicalDeviceFeatures);
+	vk::PhysicalDeviceFeatures PhysicalDeviceFeatures;
+	_PhysicalDevice.getFeatures(&PhysicalDeviceFeatures);
 	
 	uint32_t VulkanQueueCount = QueueFamilyProperties[GetQueueFamilyIndex()].queueCount;
 
@@ -171,59 +238,60 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
 
-	VkDeviceQueueCreateInfo DeviceQueueInfo;
-	DeviceQueueInfo.sType				= VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-	DeviceQueueInfo.pNext				= nullptr;
-	DeviceQueueInfo.flags				= 0;
-	DeviceQueueInfo.queueFamilyIndex	= 0; //__debugbreak(); fix this
-	DeviceQueueInfo.queueCount			= VulkanQueueCount; //__debugbreak(); fix this
-	DeviceQueueInfo.pQueuePriorities	= QueuePriorities.data();
+	vk::DeviceQueueCreateInfo DeviceQueueInfo(
+		vk::DeviceQueueCreateFlagBits(),
+		0,
+		VulkanQueueCount,
+		QueuePriorities.data()
+	);
 
-	VkDeviceCreateInfo DeviceInfo;
-	DeviceInfo.sType					= VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	DeviceInfo.pNext					= nullptr;// &DebugReportCallbackInfo;
-	DeviceInfo.flags					= 0;
-	DeviceInfo.pQueueCreateInfos		= &DeviceQueueInfo;
-	DeviceInfo.queueCreateInfoCount		= 1;
-	DeviceInfo.ppEnabledExtensionNames	= VulkanDeviceExtensions;
-	DeviceInfo.enabledExtensionCount	= ETERNAL_ARRAYSIZE(VulkanDeviceExtensions);
-	DeviceInfo.ppEnabledLayerNames		= VulkanValidationLayers;
-	DeviceInfo.enabledLayerCount		= ETERNAL_ARRAYSIZE(VulkanValidationLayers);
-	DeviceInfo.pEnabledFeatures			= nullptr;
+	vk::DeviceCreateInfo DeviceInfo(
+		vk::DeviceCreateFlagBits(),
+		1, &DeviceQueueInfo,
+		ETERNAL_ARRAYSIZE(VulkanValidationLayers), VulkanValidationLayers,
+		ETERNAL_ARRAYSIZE(VulkanDeviceExtensions), VulkanDeviceExtensions,
+		static_cast<vk::PhysicalDeviceFeatures*>(nullptr)
+	);
 
-	Result = vkCreateDevice(_PhysicalDevice, &DeviceInfo, nullptr, &_Device);
-	ETERNAL_ASSERT(!Result);
+	VerifySuccess(_PhysicalDevice.createDevice(&DeviceInfo, nullptr, &_Device));
 
-	vkGetPhysicalDeviceMemoryProperties(_PhysicalDevice, &_PhysicalDeviceMemoryProperties);
+	_PhysicalDevice.getMemoryProperties(&_PhysicalDeviceMemoryProperties);
 
 	_VulkanQueues.resize(VulkanQueueCount);
 	for (uint32_t VulkanQueueIndex = 0; VulkanQueueIndex < VulkanQueueCount; ++VulkanQueueIndex)
 	{
-		vkGetDeviceQueue(_Device, GetQueueFamilyIndex(), VulkanQueueIndex, &_VulkanQueues[VulkanQueueCount - VulkanQueueIndex - 1]);
+		_Device.getQueue(GetQueueFamilyIndex(), VulkanQueueIndex, &_VulkanQueues[VulkanQueueCount - VulkanQueueIndex - 1]);
 	}
 }
 
-VkDevice& VulkanDevice::GetVulkanDevice()
+vk::Device& VulkanDevice::GetVulkanDevice()
 {
 	return _Device;
 }
 
-uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ const VkMemoryPropertyFlagBits& Flags) const
+uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const
 {
 	uint32_t MemoryTypeIndex = 0;
 	uint32_t MemoryTypeCount = _PhysicalDeviceMemoryProperties.memoryTypeCount;
 	for (; MemoryTypeIndex < MemoryTypeCount; ++MemoryTypeIndex)
 	{
-		if (_PhysicalDeviceMemoryProperties.memoryTypes[MemoryTypeIndex].propertyFlags == Flags)
+		const bool IsRequiredMemoryType		= (MemoryTypeBitsRequirement & (1 << MemoryTypeIndex)) != 0;
+		const bool HasRequiredProperties	= (_PhysicalDeviceMemoryProperties.memoryTypes[MemoryTypeIndex].propertyFlags & Flags) != vk::MemoryPropertyFlagBits();
+
+		if (IsRequiredMemoryType && HasRequiredProperties)
 			break;
 	}
+	
 	ETERNAL_ASSERT(MemoryTypeIndex < MemoryTypeCount);
-	return MemoryTypeIndex;
+	if (MemoryTypeIndex < MemoryTypeCount)
+		return MemoryTypeIndex;
+
+	return -1;
 }
 
-VkQueue VulkanDevice::PopVulkanQueue()
-{
-	VkQueue CurrentQueue = _VulkanQueues.back();
-	_VulkanQueues.pop_back();
-	return CurrentQueue;
-}
+//VkQueue VulkanDevice::PopVulkanQueue()
+//{
+//	VkQueue CurrentQueue = _VulkanQueues.back();
+//	_VulkanQueues.pop_back();
+//	return CurrentQueue;
+//}

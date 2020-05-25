@@ -31,6 +31,8 @@ namespace Eternal
 			DepthTest _DepthTest;
 			StencilTest _StencilTest;
 		};
+
+		extern const DepthStencil DepthStencilNoneNone;
 	}
 }
 

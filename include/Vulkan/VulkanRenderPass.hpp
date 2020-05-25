@@ -2,11 +2,8 @@
 #define _VULKAN_RENDER_PASS_HPP_
 
 #include <vector>
+#include <vulkan/vulkan.hpp>
 #include "Graphics/RenderPass.hpp"
-
-struct VkRenderPass_T;
-struct VkFramebuffer_T;
-struct VkSubpassDescription;
 
 namespace Eternal
 {
@@ -17,20 +14,21 @@ namespace Eternal
 		class View;
 		class BlendState;
 		class Viewport;
+		class GraphicsContext;
 
 		class VulkanRenderPass : public RenderPass
 		{
 		public:
-			VulkanRenderPass(_In_ Device& DeviceObj, _In_ const Viewport& ViewportObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<BlendState*>& BlendStates, _In_ View* DepthStencil = nullptr, _In_ const LogicBlend& LogicBlendObj = LogicBlend());
+			VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation);
 			~VulkanRenderPass();
 
-			VkRenderPass_T* GetVulkanRenderPass() { return _RenderPass; }
-			VkFramebuffer_T* GetFrameBuffer() { return _FrameBuffer; }
+			vk::RenderPass& GetVulkanRenderPass() { return _RenderPass; }
+			vk::Framebuffer& GetFrameBuffer() { return _FrameBuffer; }
 
 		private:
-			Device&				_Device;
-			VkRenderPass_T*		_RenderPass = nullptr;
-			VkFramebuffer_T*	_FrameBuffer = nullptr;
+			Device&			_Device;
+			vk::RenderPass	_RenderPass;
+			vk::Framebuffer	_FrameBuffer;
 		};
 	}
 }

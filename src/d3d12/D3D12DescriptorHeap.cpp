@@ -4,6 +4,7 @@
 #include <d3d12.h>
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12View.hpp"
+#include "d3d12/D3D12DescriptorTable.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -22,18 +23,17 @@ const D3D12_DESCRIPTOR_HEAP_TYPE D3D12_HEAP_TYPES[] =
 	D3D12_DESCRIPTOR_HEAP_TYPE_DSV
 };
 
-ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_HEAP_TYPES) == ROOT_SIGNATURE_PARAMETER_COUNT, "D3D12 Heap Types declaration not complete");
+ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_HEAP_TYPES) == int(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "D3D12 Heap Types declaration not complete");
 
 D3D12DescriptorHeap::D3D12DescriptorHeap(_In_ Device& DeviceObj, _In_ const RootSignatureParameter Resources[], _In_ uint32_t ResourcesCount)
 	: DescriptorHeap(Resources, ResourcesCount)
-	, _ResourcesCount(ResourcesCount)
 {
-	D3D12_DESCRIPTOR_HEAP_TYPE DescriptorHeapType = D3D12_HEAP_TYPES[Resources[0].Parameter];
+	D3D12_DESCRIPTOR_HEAP_TYPE DescriptorHeapType = D3D12_HEAP_TYPES[int(Resources[0].Parameter)];
 
 	D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc;
 
 	DescriptorHeapDesc.Type				= DescriptorHeapType;
-	DescriptorHeapDesc.Flags			= DescriptorHeapType == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	DescriptorHeapDesc.Flags			= DescriptorHeapType <= D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	DescriptorHeapDesc.NumDescriptors	= ResourcesCount;
 	DescriptorHeapDesc.NodeMask			= static_cast<D3D12Device&>(DeviceObj).GetDeviceMask();
 
@@ -81,15 +81,15 @@ D3D12DescriptorHeap::~D3D12DescriptorHeap()
 //	_GPUDescriptorHandleStart = _DescriptorHeap->GetGPUDescriptorHandleForHeapStart();
 //}
 
-View* D3D12DescriptorHeap::CreateView(_In_ Device& DeviceObj)
+DescriptorTable* D3D12DescriptorHeap::CreateView(_In_ Device& DeviceObj)
 {
-	return new D3D12View(DeviceObj, *this);
+	return new D3D12DescriptorTable(*this);
 }
 
 DescriptorHeapHandle D3D12DescriptorHeap::Reserve(_In_ uint32_t Slot)
 {
-	const bool IsAllocated = (_ResourcesPool & (1 << Slot));
-	ETERNAL_ASSERT(Slot < _ResourcesCount);
+	const bool IsAllocated = (_ResourcesPool & (1ull << Slot));
+	ETERNAL_ASSERT(Slot < GetResourcesCount());
 	ETERNAL_ASSERT(!IsAllocated);
 	return GetSlot(Slot);
 }
@@ -97,13 +97,13 @@ DescriptorHeapHandle D3D12DescriptorHeap::Reserve(_In_ uint32_t Slot)
 DescriptorHeapHandle D3D12DescriptorHeap::Pop()
 {
 	uint32_t Slot = 0;
-	for (; Slot < _ResourcesCount; ++Slot)
+	for (; Slot < GetResourcesCount(); ++Slot)
 	{
-		const bool IsAllocated = (_ResourcesPool & (1 << Slot));
+		const bool IsAllocated = (_ResourcesPool & (1ull << Slot));
 		if (!IsAllocated)
 			break;
 	}
-	ETERNAL_ASSERT(Slot < _ResourcesCount);
+	ETERNAL_ASSERT(Slot < GetResourcesCount());
 	_ResourcesPool |= (1 << Slot);
 	return GetSlot(Slot);
 }
@@ -111,7 +111,7 @@ DescriptorHeapHandle D3D12DescriptorHeap::Pop()
 void D3D12DescriptorHeap::Push(_In_ const DescriptorHeapHandle& Handle)
 {
 	uint64_t Slot = (Handle.Cpu.ptr - _CPUDescriptorHandleStart.ptr) / _DescriptorHandleSize;
-	const bool IsAllocated = (_ResourcesPool & (1 << Slot));
+	const bool IsAllocated = (_ResourcesPool & (1ull << Slot));
 	ETERNAL_ASSERT(IsAllocated);
 	_ResourcesPool &= ~(1 << Slot);
 }

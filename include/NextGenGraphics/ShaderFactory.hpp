@@ -10,7 +10,7 @@ namespace Eternal
 	{
 		using namespace std;
 
-		enum ShaderType;
+		enum class ShaderType;
 
 		class Device;
 		class Shader;

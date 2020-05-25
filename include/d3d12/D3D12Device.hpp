@@ -1,7 +1,7 @@
 #ifndef _D3D12_DEVICE_HPP_
 #define _D3D12_DEVICE_HPP_
 
-#include <cstdint>
+#include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
 
 struct IDXGIFactory4;
@@ -30,7 +30,7 @@ namespace Eternal
 
 			inline ID3D12Device* GetD3D12Device() { return _Device; }
 			virtual uint32_t GetDeviceMask() const override;
-			virtual DeviceType GetDeviceType() const override { return D3D12; }
+			virtual DeviceType GetDeviceType() const override { return DeviceType::D3D12; }
 
 #ifdef ETERNAL_DEBUG
 			static ID3D12Debug*		_Debug;

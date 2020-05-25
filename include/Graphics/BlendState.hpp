@@ -5,7 +5,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum Blend
+		enum class Blend
 		{
 			BLEND_ZERO						= 0,
 			BLEND_ONE						= 1,
@@ -37,7 +37,7 @@ namespace Eternal
 			BLEND_COUNT
 		};
 
-		enum BlendOp
+		enum class BlendOp
 		{
 			BLEND_OP_ADD		= 0,
 			BLEND_OP_SUB		= 1,
@@ -47,7 +47,7 @@ namespace Eternal
 			BLEND_OP_COUNT
 		};
 
-		enum LogicOp
+		enum class LogicOp
 		{
 			LOGIC_OP_CLEAR			= 0,
 			LOGIC_OP_SET			= 1,
@@ -68,7 +68,7 @@ namespace Eternal
 			LOGIC_OP_COUNT
 		};
 
-		enum BlendChannel
+		enum class BlendChannel
 		{
 			BLEND_CHANNEL_RED	= 0x1,
 			BLEND_CHANNEL_GREEN	= 0x2,
@@ -84,23 +84,24 @@ namespace Eternal
 			BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendColorOp, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp, _In_ const BlendChannel& BlendChannelObj);
 			virtual ~BlendState() {}
 
-			inline bool IsEnabled() const					{ return _Enabled; }
-			inline const Blend& GetSrc() const				{ return _Src; }
-			inline const Blend& GetDest() const				{ return _Dest; }
-			inline const BlendOp& GetBlendOp() const		{ return _BlendOp; }
-			inline const Blend& GetSrcAlpha() const			{ return _SrcAlpha; }
-			inline const Blend& GetDestAlpha() const		{ return _DestAlpha; }
-			inline const BlendOp& GetBlendAlphaOp() const	{ return _BlendAlphaOp; }
+			inline bool IsEnabled() const						{ return _Enabled; }
+			inline const Blend& GetSrc() const					{ return _Src; }
+			inline const Blend& GetDest() const					{ return _Dest; }
+			inline const BlendOp& GetBlendOp() const			{ return _BlendOp; }
+			inline const Blend& GetSrcAlpha() const				{ return _SrcAlpha; }
+			inline const Blend& GetDestAlpha() const			{ return _DestAlpha; }
+			inline const BlendOp& GetBlendAlphaOp() const		{ return _BlendAlphaOp; }
+			inline const BlendChannel& GetBlendChannel() const	{ return _BlendChannel; }
 
 		private:
 			bool			_Enabled		= false;
-			Blend			_Src			= BLEND_SRC_ALPHA;
-			Blend			_Dest			= BLEND_INV_SRC_ALPHA;
-			BlendOp			_BlendOp		= BLEND_OP_ADD;
-			Blend			_SrcAlpha		= BLEND_SRC_ALPHA;
-			Blend			_DestAlpha		= BLEND_INV_SRC_ALPHA;
-			BlendOp			_BlendAlphaOp	= BLEND_OP_ADD;
-			BlendChannel	_BlendChannel	= BLEND_CHANNEL_ALL;
+			Blend			_Src			= Blend::BLEND_ONE;
+			Blend			_Dest			= Blend::BLEND_ZERO;
+			BlendOp			_BlendOp		= BlendOp::BLEND_OP_ADD;
+			Blend			_SrcAlpha		= Blend::BLEND_ONE;
+			Blend			_DestAlpha		= Blend::BLEND_ZERO;
+			BlendOp			_BlendAlphaOp	= BlendOp::BLEND_OP_ADD;
+			BlendChannel	_BlendChannel	= BlendChannel::BLEND_CHANNEL_ALL;
 		};
 
 		class LogicBlend
@@ -109,10 +110,17 @@ namespace Eternal
 			LogicBlend() {}
 			LogicBlend(_In_ const LogicOp& LogicOpObj);
 
+			bool IsEnabled() const { return _Enabled; }
+			const LogicOp& GetLogicOp() const { return _LogicOp; }
+
 		private:
 			bool	_Enabled	= false;
-			LogicOp	_LogicOp	= LOGIC_OP_NOOP;
+			LogicOp	_LogicOp	= LogicOp::LOGIC_OP_NOOP;
 		};
+
+		extern const BlendState BlendStateNone;
+		extern const BlendState BlendStateAlphaBlend;
+		extern const LogicBlend LogicBlendNone;
 	}
 }
 

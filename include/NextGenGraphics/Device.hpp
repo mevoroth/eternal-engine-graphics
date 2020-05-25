@@ -1,17 +1,11 @@
 #ifndef _DEVICE_HPP_
 #define _DEVICE_HPP_
 
-#include <cstdint>
-
 namespace Eternal
 {
 	namespace Graphics
 	{
-		enum DeviceType
-		{
-			D3D12,
-			VULKAN
-		};
+		enum class DeviceType;
 
 		class Device
 		{

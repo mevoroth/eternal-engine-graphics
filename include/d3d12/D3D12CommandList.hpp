@@ -38,7 +38,7 @@ namespace Eternal
 
 			virtual void BindPipelineInput(_In_ RootSignature& RootSignatureObj, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount) override;
 			virtual void BindConstantBuffer(_In_ uint32_t Slot, _In_ View& ConstantBuffer) override;
-			virtual void BindDescriptorTable(_In_ uint32_t Slot, _In_ View& DescriptorTable) override;
+			virtual void BindDescriptorTable(_In_ uint32_t Slot, _In_ DescriptorTable& DescriptorTableObj) override;
 			virtual void BindBuffer(_In_ uint32_t Slot, _In_ View& Buffer) override;
 			virtual void BindUAV(_In_ uint32_t Slot, _In_ View& UAV) override;
 			virtual void Begin() override;

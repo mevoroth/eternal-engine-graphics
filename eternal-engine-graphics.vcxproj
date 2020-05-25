@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -159,6 +159,7 @@
     <ClInclude Include="include\d3d12\D3D12DescriptorHeap.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12DescriptorTable.hpp" />
     <ClInclude Include="include\d3d12\D3D12Device.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -226,6 +227,7 @@
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
     <ClInclude Include="include\Graphics\DescriptorHeap.hpp" />
     <ClInclude Include="include\Graphics\DescriptorHeapFactory.hpp" />
+    <ClInclude Include="include\Graphics\DescriptorTable.h" />
     <ClInclude Include="include\Graphics\Device.hpp" />
     <ClInclude Include="include\Graphics\DeviceFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -289,10 +291,13 @@
     <ClInclude Include="include\NextGenGraphics\Device.hpp" />
     <ClInclude Include="include\NextGenGraphics\DeviceFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
+    <ClInclude Include="include\NextGenGraphics\Types.hpp" />
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp" />
     <ClInclude Include="include\NextGenGraphics\Resource.hpp" />
     <ClInclude Include="include\NextGenGraphics\SamplerFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\ShaderFactory.hpp" />
+    <ClInclude Include="include\NextGenGraphics\Types\DeviceType.hpp" />
+    <ClInclude Include="include\NextGenGraphics\Types\MemoryType.hpp" />
     <ClInclude Include="include\Vulkan\VulkanBlendState.hpp" />
     <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -301,6 +306,7 @@
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
     <ClInclude Include="include\Vulkan\VulkanContext.hpp" />
     <ClInclude Include="include\Vulkan\VulkanDescriptorHeap.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanDescriptorTable.h" />
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
     <ClInclude Include="include\Vulkan\VulkanHeap.hpp" />
@@ -319,10 +325,14 @@
     <ClInclude Include="include\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="include\Vulkan\VulkanPipeline.hpp" />
     <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanUtils.hpp" />
     <ClInclude Include="include\Vulkan\VulkanView.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\d3d12\D3D12DescriptorTable.cpp" />
+    <ClCompile Include="source\Vulkan\VulkanDescriptorTable.cpp" />
+    <ClCompile Include="source\Vulkan\VulkanUtils.cpp" />
     <ClCompile Include="src\d3d10\D3D10BlendState.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -492,7 +502,9 @@
     <ClCompile Include="src\Graphics\CommandListFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp" />
     <ClCompile Include="src\Graphics\ConstantFactory.cpp" />
+    <ClCompile Include="src\Graphics\DepthStencil.cpp" />
     <ClCompile Include="src\Graphics\DepthStencilFactory.cpp" />
+    <ClCompile Include="src\Graphics\DepthTest.cpp" />
     <ClCompile Include="src\Graphics\DescriptorHeap.cpp" />
     <ClCompile Include="src\Graphics\DescriptorHeapFactory.cpp" />
     <ClCompile Include="src\Graphics\Device.cpp" />
@@ -527,6 +539,7 @@
     <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Graphics\StencilTest.cpp" />
     <ClCompile Include="src\Graphics\StructuredBufferFactory.cpp" />
     <ClCompile Include="src\Graphics\SwapChain.cpp" />
     <ClCompile Include="src\Graphics\SwapChainFactory.cpp" />
@@ -546,6 +559,7 @@
     <ClCompile Include="src\NextGenGraphics\Resource.cpp" />
     <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\ShaderFactory.cpp" />
+    <ClCompile Include="src\NextGenGraphics\Types\MemoryType.cpp" />
     <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -576,32 +590,32 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFECF84-04D0-4BBC-BCB9-DA51D5564E95}</ProjectGuid>
     <RootNamespace>eternalenginegraphics</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -626,7 +640,7 @@
     <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;$(ProgramW6432)\VulkanSDK\1.0.57.0\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;$(ProgramW6432)\VulkanSDK\1.2.131.2\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -653,9 +667,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <ForcedIncludeFiles>sal.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles>sal.h;cstdint</ForcedIncludeFiles>
       <MinimalRebuild>false</MinimalRebuild>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

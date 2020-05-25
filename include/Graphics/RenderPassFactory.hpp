@@ -10,12 +10,11 @@ namespace Eternal
 	{
 		using namespace std;
 
-		class Device;
+		class GraphicsContext;
 		class RenderPass;
-		class View;
-		class Viewport;
+		struct RenderPassCreateInformation;
 
-		RenderPass* CreateRenderPass(_In_ Device& DeviceObj, _In_ const Viewport& ViewportObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<BlendState*>& BlendStates, _In_ View* DepthStencil = nullptr, _In_ const LogicBlend& LogicBlendObj = LogicBlend());
+		RenderPass* CreateRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation);
 	}
 }
 

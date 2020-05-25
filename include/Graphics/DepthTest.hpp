@@ -1,8 +1,6 @@
 #ifndef _DEPTH_TEST_HPP_
 #define _DEPTH_TEST_HPP_
 
-#include <cstdint>
-
 #include "Graphics/Comparison.hpp"
 
 namespace Eternal
@@ -12,7 +10,7 @@ namespace Eternal
 		class DepthTest
 		{
 		public:
-			enum Mask
+			enum class Mask
 			{
 				ZERO	= 0,
 				ALL		= 1
@@ -33,6 +31,10 @@ namespace Eternal
 			{
 				return _Mask;
 			}
+			inline bool IsWriteEnabled() const
+			{
+				return _Mask == Mask::ALL;
+			}
 			inline Comparison GetComparisonOperator() const
 			{
 				return _ComparisonOp;
@@ -40,9 +42,11 @@ namespace Eternal
 
 		private:
 			bool _Enabled				= false;
-			Mask _Mask					= ZERO;
-			Comparison _ComparisonOp	= COMPARISON_LESS;
+			Mask _Mask					= Mask::ZERO;
+			Comparison _ComparisonOp	= Comparison::COMPARISON_LESS;
 		};
+
+		extern const DepthTest DepthTestNone;
 	}
 }
 

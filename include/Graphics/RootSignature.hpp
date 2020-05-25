@@ -7,7 +7,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum RootSignatureAccess
+		enum class RootSignatureAccess
 		{
 			ROOT_SIGNATURE_ACCESS_NONE		= 0x0,
 			ROOT_SIGNATURE_ACCESS_IA		= 0x1,
@@ -21,7 +21,7 @@ namespace Eternal
 			ROOT_SIGNATURE_ACCESS_IA_VS_PS	= (ROOT_SIGNATURE_ACCESS_IA | ROOT_SIGNATURE_ACCESS_VS | ROOT_SIGNATURE_ACCESS_PS)
 		};
 
-		enum RootSignatureParameterType
+		enum class RootSignatureParameterType
 		{
 			ROOT_SIGNATURE_PARAMETER_SAMPLER	= 0,
 			ROOT_SIGNATURE_PARAMETER_TEXTURE,
@@ -47,7 +47,7 @@ namespace Eternal
 		struct RootSignatureDynamicParameter
 		{
 			RootSignatureParameterType	Type;
-			uint32_t							Count;
+			uint32_t					Count;
 		};
 
 		class RootSignature

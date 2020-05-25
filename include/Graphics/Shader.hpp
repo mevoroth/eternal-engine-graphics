@@ -9,6 +9,22 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class ShaderType;
+
+		struct ShaderCreateInformation
+		{
+			ShaderCreateInformation(const ShaderType& Stage, const char* Name, const char* FileName)
+				: Stage(Stage)
+				, Name(Name)
+				, FileName(FileName)
+			{
+			}
+
+			const ShaderType& Stage;
+			const char* Name = nullptr;
+			const char* FileName = nullptr;
+		};
+
 		class Shader
 		{
 		public:

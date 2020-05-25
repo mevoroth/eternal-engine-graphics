@@ -19,6 +19,7 @@ namespace Eternal
 		class Resource;
 		class DescriptorHeap;
 		class View;
+		class DescriptorTable;
 
 		enum TransitionState
 		{
@@ -38,7 +39,8 @@ namespace Eternal
 			TRANSITION_COPY_WRITE				= 0x1000,
 			TRANSITION_CPU_READ					= 0x2000,
 			TRANSITION_CPU_WRITE				= 0x4000,
-			TRANSITION_PRESENT					= 0x8000
+			TRANSITION_PRESENT					= 0x8000,
+			TRANSITION_PREINITIALIZED			= 0x10000
 		};
 
 		struct ResourceTransition
@@ -91,7 +93,7 @@ namespace Eternal
 			
 			virtual void BindPipelineInput(_In_ RootSignature& RootSignatureObj, _In_ DescriptorHeap* DescriptorHeaps[], _In_ uint32_t DescriptorHeapsCount) = 0;
 			virtual void BindConstantBuffer(_In_ uint32_t Slot, _In_ View& ConstantBuffer) = 0;
-			virtual void BindDescriptorTable(_In_ uint32_t Slot, _In_ View& DescriptorTable) = 0;
+			virtual void BindDescriptorTable(_In_ uint32_t Slot, _In_ DescriptorTable& DescriptorTableObj) = 0;
 			virtual void BindBuffer(_In_ uint32_t Slot, _In_ View& Buffer) = 0;
 			virtual void BindUAV(_In_ uint32_t Slot, _In_ View& UAV) = 0;
 			//virtual void BindConstant(_In_ uint32_t Slot, _In_ )

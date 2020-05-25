@@ -2,13 +2,10 @@
 #define _VULKAN_SWAP_CHAIN_HPP_
 
 #include <vector>
-#include <cstdint>
 
+#define VK_USE_PLATFORM_WIN32_KHR
+#include <vulkan/vulkan.hpp>
 #include "Graphics/SwapChain.hpp"
-
-struct VkSurfaceKHR_T;
-struct VkSwapchainKHR_T;
-struct VkSemaphore_T;
 
 namespace Eternal
 {
@@ -38,17 +35,20 @@ namespace Eternal
 			//virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) override;
 			virtual uint32_t GetBackBuffersFrameCount() const override;
 			virtual RenderPass& GetMainRenderPass() override;
-			VkSwapchainKHR_T*& GetSwapChain() { return _SwapChain; }
+			vk::SwapchainKHR& GetSwapChain() { return _SwapChain; }
+			const vector<View*>& GetBackBufferViews() const { return _BackBufferViews; }
+			const vector<vk::Image>& GetBackBufferImages() const { return _BackBufferImages; }
 
-			VkSemaphore_T*& GetAcquireSemaphore(_In_ uint32_t ResourceIndex);
+			//VkSemaphore_T*& GetAcquireSemaphore(_In_ uint32_t ResourceIndex);
 
-		private:
+		//private:
 			vector<VulkanRenderPass*>	_RenderPasses;
 			vector<VulkanResource*>		_BackBuffers;
 			vector<View*>				_BackBufferViews;
-			vector<VkSemaphore_T*>		_AcquireSemaphores;
-			VkSurfaceKHR_T*				_Surface	= nullptr;
-			VkSwapchainKHR_T*			_SwapChain	= nullptr;
+			//vector<VkSemaphore_T*>		_AcquireSemaphores;
+			vector<vk::Image>			_BackBufferImages;
+			vk::SurfaceKHR				_Surface;
+			vk::SwapchainKHR			_SwapChain;
 			uint32_t					_FrameIndex	= 0u;
 		};
 	}

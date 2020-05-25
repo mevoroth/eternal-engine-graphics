@@ -1,6 +1,7 @@
 #include "NextGenGraphics/SamplerFactory.hpp"
 
 #include "Macros/Macros.hpp"
+#include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12Sampler.hpp"
 #include "Vulkan/VulkanSampler.hpp"
@@ -14,11 +15,11 @@ namespace Eternal
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
-			case D3D12:
+			case DeviceType::D3D12:
 				return new D3D12Sampler(DeviceObj, DescriptorHeapObj, MINLinear, MAGLinear, MIPLinear, Comparison, U, V, W);
 #endif
 
-			case VULKAN:
+			case DeviceType::VULKAN:
 			{
 				if (!Comparison)
 					return new VulkanSampler(DeviceObj, MINLinear, MAGLinear, MIPLinear, U, V, W);
@@ -34,13 +35,13 @@ namespace Eternal
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
-			case D3D12:
+			case DeviceType::D3D12:
 				return new D3D12Sampler(DeviceObj, Register, MINLinear, MAGLinear, MIPLinear, Comparison, U, V, W);
 #endif
 
-			case VULKAN:
+			case DeviceType::VULKAN:
 			{
-				ETERNAL_ASSERT(false);
+				//ETERNAL_ASSERT(false); // TODO: FIX THIS
 				if (!Comparison)
 					return new VulkanSampler(DeviceObj, MINLinear, MAGLinear, MIPLinear, U, V, W);
 			}

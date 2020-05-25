@@ -12,7 +12,7 @@ namespace Eternal
 	{
 		using namespace std;
 
-		enum ShaderType;
+		enum class ShaderType;
 
 		class D3D12Shader : public Shader
 		{

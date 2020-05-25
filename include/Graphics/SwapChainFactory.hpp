@@ -9,8 +9,10 @@ namespace Eternal
 		class SwapChain;
 		class Window;
 		class CommandQueue;
+		class GraphicsContext;
 
 		SwapChain* CreateSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _In_ CommandQueue& CommandQueueObj);
+		SwapChain* CreateSwapChain(_In_ GraphicsContext& Context);
 	}
 }
 

@@ -31,9 +31,9 @@ namespace Eternal
 			inline const string& GetWindowName() const { return _WindowName; }
 
 		private:
-			HWND _WindowHandle;
-			HINSTANCE _hInstance;
-			int _nCmdShow;
+			HWND _WindowHandle = nullptr;
+			HINSTANCE _hInstance = nullptr;
+			int _nCmdShow = 0;
 			string _ClassName;
 			string _WindowName;
 			int _Width = 640;

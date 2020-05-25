@@ -2,23 +2,22 @@
 #define _VULKAN_FORMAT_HPP_
 
 #include "Macros/Macros.hpp"
-#include <cstdint>
-#include <vulkan/vulkan.h>
+#include <vulkan/vulkan.hpp>
 #include "Graphics/Format.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		const VkFormat VULKAN_FORMATS[] =
+		const vk::Format VULKAN_FORMATS[] =
 		{
-			VK_FORMAT_B8G8R8A8_UNORM,
-			VK_FORMAT_R8G8B8A8_UNORM,
-			VK_FORMAT_R32G32B32A32_SFLOAT,
-			VK_FORMAT_R32_SFLOAT,
-			VK_FORMAT_R32G32B32_SFLOAT, // FIX THIS
-			VK_FORMAT_R32G32_SFLOAT,
-			VK_FORMAT_D32_SFLOAT
+			vk::Format::eB8G8R8A8Unorm,
+			vk::Format::eR8G8B8A8Unorm,
+			vk::Format::eR32G32B32A32Sfloat,
+			vk::Format::eR32Sfloat,
+			vk::Format::eR32G32B32Sfloat, // FIX THIS
+			vk::Format::eR32G32Sfloat,
+			vk::Format::eD32Sfloat
 		};
 
 		const uint32_t VULKAN_FORMAT_SIZES[] =

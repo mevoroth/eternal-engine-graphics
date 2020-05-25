@@ -8,4 +8,6 @@
 #define MAX_RENDER_TARGETS			(8)
 #define UPLOAD_BUFFER_SIZE			(32768)
 
+#define ETERNAL_USE_DEBUG_SHADERS	(1)
+
 #endif

@@ -1,6 +1,8 @@
 #include "NextGenGraphics/ShaderFactory.hpp"
 
 #include "Macros/Macros.hpp"
+#include "Graphics/ShaderType.hpp"
+#include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12Shader.hpp"
 #include "Vulkan/VulkanShader.hpp"
@@ -57,10 +59,12 @@ Shader* ShaderFactory::_Create(_In_ Device& DeviceObj, _In_ const string& Name, 
 {
 	switch (DeviceObj.GetDeviceType())
 	{
-	case D3D12:
+#ifdef ETERNAL_ENABLE_D3D12
+	case DeviceType::D3D12:
 		return new D3D12Shader(Name, Source, Type, Defines);
+#endif
 
-	case VULKAN:
+	case DeviceType::VULKAN:
 		return new VulkanShader(DeviceObj, Name, Source, Type, Defines);
 
 	default:

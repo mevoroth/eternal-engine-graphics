@@ -37,7 +37,7 @@ namespace Eternal
 			D3D12_BLEND_INV_SRC1_ALPHA
 		};
 
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_BLENDS) == BLEND_COUNT, "D3D12 Blends declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_BLENDS) == int(Blend::BLEND_COUNT), "D3D12 Blends declaration not complete");
 
 		const D3D12_BLEND_OP D3D12_BLEND_OPS[] =
 		{
@@ -48,7 +48,7 @@ namespace Eternal
 			D3D12_BLEND_OP_MAX
 		};
 
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_BLEND_OPS) == BLEND_OP_COUNT, "D3D12 Blend operators declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_BLEND_OPS) == int(BlendOp::BLEND_OP_COUNT), "D3D12 Blend operators declaration not complete");
 
 		const D3D12_LOGIC_OP D3D12_LOGIC_OPS[] =
 		{
@@ -70,7 +70,7 @@ namespace Eternal
 			D3D12_LOGIC_OP_OR_INVERTED
 		};
 
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_LOGIC_OPS) == LOGIC_OP_COUNT, "D3D12 Logic operators declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_LOGIC_OPS) == int(LogicOp::LOGIC_OP_COUNT), "D3D12 Logic operators declaration not complete");
 	}
 }
 

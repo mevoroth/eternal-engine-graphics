@@ -5,11 +5,12 @@
 
 using namespace Eternal::Graphics;
 
-RenderPass::RenderPass(_In_ const vector<View*>& RenderTargets, _In_ const vector<BlendState*>& BlendStates, _In_ const Viewport& ViewportObj, _In_ const LogicBlend& LogicBlendObj)
-	: _RenderTargets(RenderTargets)
-	, _BlendStates(BlendStates)
-	, _LogicBlend(LogicBlendObj)
-	, _Viewport(ViewportObj)
+RenderPass::RenderPass(_In_ const RenderPassCreateInformation& CreateInformation)
+	: _RenderTargets(CreateInformation.RenderTargets)
+	, _BlendStates(CreateInformation.BlendStates)
+	, _LogicBlend(CreateInformation.LogicBlend)
+	, _Viewport(CreateInformation.Viewport)
+	, _DepthStencilRenderTarget(CreateInformation.DepthStencilRenderTarget)
 {
 	ETERNAL_ASSERT(_RenderTargets.size() < MAX_RENDER_TARGETS);
 	ETERNAL_ASSERT(_RenderTargets.size() == _BlendStates.size());

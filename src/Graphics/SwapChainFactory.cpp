@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include "Macros/Macros.hpp"
 #include "Log/Log.hpp"
+#include "NextGenGraphics/Context.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12SwapChain.hpp"
 #include "Vulkan/VulkanSwapChain.hpp"
@@ -16,21 +17,26 @@ namespace Eternal
 	{
 		SwapChain* CreateSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _In_ CommandQueue& CommandQueueObj)
 		{
-			Eternal::Log::Log::Get()->Write(Eternal::Log::Log::Info, Eternal::Log::Log::Engine, "[Graphics::CreateDevice]Creating SwapChain");
+			LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating SwapChain");
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
-			case D3D12:
+			case DeviceType::D3D12:
 				return new D3D12SwapChain(DeviceObj, WindowObj, CommandQueueObj);
 #endif
 
-			case VULKAN:
+			case DeviceType::VULKAN:
 				return new VulkanSwapChain(DeviceObj, WindowObj);
 
 			default:
 				ETERNAL_ASSERT(false);
 				return nullptr;
 			}
+		}
+
+		SwapChain* CreateSwapChain(_In_ GraphicsContext& Context)
+		{
+			return CreateSwapChain(Context.GetDevice(), Context.GetWindow(), *(CommandQueue*)nullptr);
 		}
 	}
 }

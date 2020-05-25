@@ -13,6 +13,8 @@ namespace Eternal
 		class Fence
 		{
 		public:
+			virtual ~Fence() {}
+
 			virtual void Signal(_In_ CommandQueue& CommandQueueObj) = 0;
 			virtual void Wait(_In_ Device& DeviceObj) = 0;
 			virtual void Reset(_In_ Device& DeviceObj) = 0;

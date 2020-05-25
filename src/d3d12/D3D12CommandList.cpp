@@ -19,6 +19,7 @@
 #include "d3d12/D3D12View.hpp"
 #include "d3d12/D3D12Format.hpp"
 #include "d3d12/D3D12DescriptorHeap.hpp"
+#include "d3d12/D3D12DescriptorTable.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -254,9 +255,9 @@ void D3D12CommandList::BindConstantBuffer(_In_ uint32_t Slot, _In_ View& Constan
 	_CommandList->SetGraphicsRootConstantBufferView(Slot, static_cast<D3D12View&>(ConstantBuffer).GetHandle().Gpu.ptr);
 }
 
-void D3D12CommandList::BindDescriptorTable(_In_ uint32_t Slot, _In_ View& DescriptorTable)
+void D3D12CommandList::BindDescriptorTable(_In_ uint32_t Slot, _In_ DescriptorTable& DescriptorTableObj)
 {
-	_CommandList->SetGraphicsRootDescriptorTable(Slot, static_cast<D3D12View&>(DescriptorTable).GetHandle().Gpu);
+	_CommandList->SetGraphicsRootDescriptorTable(Slot, static_cast<D3D12DescriptorTable&>(DescriptorTableObj).GetHandle().Gpu);
 }
 
 void D3D12CommandList::BindBuffer(_In_ uint32_t Slot, _In_ View& Buffer)
@@ -280,10 +281,10 @@ void D3D12CommandList::BeginRenderPass(_In_ RenderPass& RenderPassObj)
 		RenderTargets[RenderTargetIndex] = static_cast<D3D12View*>(D3D12RenderPassObj.GetRenderTargets()[RenderTargetIndex])->GetHandle().Cpu;
 	}
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilCpuDescriptor;
-	if (D3D12RenderPassObj.GetDepthStencil())
-		DepthStencilCpuDescriptor = static_cast<D3D12View*>(D3D12RenderPassObj.GetDepthStencil())->GetHandle().Cpu;
+	if (D3D12RenderPassObj.GetDepthStencilRenderTarget())
+		DepthStencilCpuDescriptor = static_cast<const D3D12View*>(D3D12RenderPassObj.GetDepthStencilRenderTarget())->GetHandle().Cpu;
 
-	_CommandList->OMSetRenderTargets(D3D12RenderPassObj.GetRenderTargets().size(), RenderTargets.data(), FALSE, D3D12RenderPassObj.GetDepthStencil() ? &DepthStencilCpuDescriptor : nullptr);
+	_CommandList->OMSetRenderTargets(D3D12RenderPassObj.GetRenderTargets().size(), RenderTargets.data(), FALSE, D3D12RenderPassObj.GetDepthStencilRenderTarget() ? &DepthStencilCpuDescriptor : nullptr);
 }
 
 void D3D12CommandList::EndRenderPass()
@@ -396,8 +397,8 @@ void D3D12CommandList::CopyTexture(_In_ Resource& Source, _In_ Resource& Destina
 	
 	D3D12_BOX SourceBox =
 	{
-		SourcePosition.X,				SourcePosition.Y,				SourcePosition.Z,
-		SourcePosition.X + Size.Width,	SourcePosition.Y + Size.Height,	SourcePosition.Z + Size.Depth
+		UINT(SourcePosition.X),					UINT(SourcePosition.Y),					UINT(SourcePosition.Z),
+		UINT(SourcePosition.X + Size.Width),	UINT(SourcePosition.Y + Size.Height),	UINT(SourcePosition.Z + Size.Depth)
 	};
 
 	_CommandList->CopyTextureRegion(&DestinationCopyLocation, DestinationPosition.X, DestinationPosition.Y, DestinationPosition.Z, &SourceCopyLocation, &SourceBox);

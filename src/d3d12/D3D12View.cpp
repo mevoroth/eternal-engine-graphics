@@ -123,13 +123,6 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 	}
 }
 
-D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj)
-	: View(FORMAT_RGBA8888)
-	, _DescriptorHeap(*(D3D12DescriptorHeap*)nullptr)
-{
-	_Handle = static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj).GetBase();
-}
-
 D3D12View::~D3D12View()
 {
 	if (&_DescriptorHeap)

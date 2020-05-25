@@ -5,7 +5,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum Comparison
+		enum class Comparison
 		{
 			COMPARISON_NEVER			= 0,
 			COMPARISON_LESS,

@@ -1,6 +1,8 @@
 #include "Graphics/PipelineFactory.hpp"
 
 #include "Macros/Macros.hpp"
+#include "NextGenGraphics/Context.hpp"
+#include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12Pipeline.hpp"
 #include "Vulkan/VulkanPipeline.hpp"
@@ -23,11 +25,31 @@ namespace Eternal
 		{
 			switch (DeviceObj.GetDeviceType())
 			{
-			case D3D12:
-				return new D3D12Pipeline(DeviceObj, RootSignatureObj, InputLayoutObj, RenderPassObj, VS, PS, DepthTestObj, StencilTestObj, ViewportObj);
+//#ifdef ETERNAL_ENABLE_D3D12
+//			case DeviceType::D3D12:
+//				return new D3D12Pipeline(DeviceObj, RootSignatureObj, InputLayoutObj, RenderPassObj, VS, PS, DepthTestObj, StencilTestObj, ViewportObj);
+//#endif
+//
+//			case DeviceType::VULKAN:
+//				return new VulkanPipeline(DeviceObj, RootSignatureObj, InputLayoutObj, RenderPassObj, VS, PS, DepthTestObj, StencilTestObj, ViewportObj);
+//
+			default:
+				ETERNAL_ASSERT(false);
+				return nullptr;
+			}
+		}
 
-			case VULKAN:
-				return new VulkanPipeline(DeviceObj, RootSignatureObj, InputLayoutObj, RenderPassObj, VS, PS, DepthTestObj, StencilTestObj, ViewportObj);
+		Pipeline* CreatePipeline(_In_ GraphicsContext& Context, _In_ const PipelineCreateInformation& CreateInformation)
+		{
+			switch (Context.GetDevice().GetDeviceType())
+			{
+//#ifdef ETERNAL_ENABLE_D3D12
+//			case DeviceType::D3D12:
+//				return new D3D12Pipeline()
+//#endif
+
+			case DeviceType::VULKAN:
+				return new VulkanPipeline(Context.GetDevice(), CreateInformation);
 
 			default:
 				ETERNAL_ASSERT(false);

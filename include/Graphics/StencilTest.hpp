@@ -1,8 +1,6 @@
 #ifndef _STENCIL_HPP_
 #define _STENCIL_HPP_
 
-#include <cstdint>
-
 #include "Graphics/Comparison.hpp"
 
 namespace Eternal
@@ -12,7 +10,7 @@ namespace Eternal
 		class StencilTest
 		{
 		public:
-			enum StencilOperator
+			enum class StencilOperator
 			{
 				STENCIL_OPERATOR_KEEP	= 0,
 				STENCIL_OPERATOR_ZERO,
@@ -34,19 +32,20 @@ namespace Eternal
 				{
 				}
 
-				StencilOperator Fail		= STENCIL_OPERATOR_KEEP;
-				StencilOperator FailDepth	= STENCIL_OPERATOR_KEEP;
-				StencilOperator Pass		= STENCIL_OPERATOR_KEEP;
-				Comparison ComparisonOp		= COMPARISON_ALWAYS;
+				StencilOperator Fail		= StencilOperator::STENCIL_OPERATOR_KEEP;
+				StencilOperator FailDepth	= StencilOperator::STENCIL_OPERATOR_KEEP;
+				StencilOperator Pass		= StencilOperator::STENCIL_OPERATOR_KEEP;
+				Comparison ComparisonOp		= Comparison::COMPARISON_ALWAYS;
 			};
 
 			StencilTest() {}
-			StencilTest(_In_ const FaceOperator& Front, _In_ const FaceOperator& Back, _In_ uint8_t ReadMask, _In_ uint8_t WriteMask)
+			StencilTest(_In_ const FaceOperator& Front, _In_ const FaceOperator& Back, _In_ uint8_t ReadMask, _In_ uint8_t WriteMask, _In_ uint8_t Reference)
 				: _Enabled(true)
 				, _Front(Front)
 				, _Back(Back)
 				, _ReadMask(ReadMask)
 				, _WriteMask(WriteMask)
+				, _Reference(Reference)
 			{
 			}
 			bool IsEnabled() const
@@ -66,19 +65,25 @@ namespace Eternal
 			{
 				return _ReadMask;
 			}
-
 			uint8_t GetWriteMask() const
 			{
 				return _WriteMask;
+			}
+			uint8_t GetReference() const
+			{
+				return _Reference;
 			}
 
 		private:
 			FaceOperator _Front;
 			FaceOperator _Back;
 			bool _Enabled = false;
-			uint8_t _ReadMask = 0xFF;
-			uint8_t _WriteMask = 0xFF;
+			uint8_t _ReadMask = 0x0;
+			uint8_t _WriteMask = 0x0;
+			uint8_t _Reference = 0x0;
 		};
+
+		extern const StencilTest StencilTestNone;
 	}
 }
 

@@ -28,7 +28,7 @@ const D3D12_ROOT_PARAMETER_TYPE D3D12_PARAMETER_TYPES[] =
 	//D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE
 };
 
-ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_PARAMETER_TYPES) == ROOT_SIGNATURE_PARAMETER_COUNT, "D3D12 Parameters Types declaration not complete");
+ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_PARAMETER_TYPES) == int(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "D3D12 Parameters Types declaration not complete");
 
 const D3D12_DESCRIPTOR_RANGE_TYPE D3D12_PARAMETER_RANGE_TYPES[] =
 {
@@ -45,7 +45,7 @@ const D3D12_DESCRIPTOR_RANGE_TYPE D3D12_PARAMETER_RANGE_TYPES[] =
 	D3D12_DESCRIPTOR_RANGE_TYPE_SRV
 };
 
-ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_PARAMETER_RANGE_TYPES) == ROOT_SIGNATURE_PARAMETER_COUNT, "D3D12 Parameter Range Types declaration not complete");
+ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_PARAMETER_RANGE_TYPES) == int(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "D3D12 Parameter Range Types declaration not complete");
 
 D3D12RootSignature::D3D12RootSignature(_In_ Device& DeviceObj, _In_ const vector<RootSignatureParameter> Resources[], _In_ uint32_t ResourcesCount, _In_ const RootSignatureAccess& RootSignatureAccessObj)
 {
@@ -67,12 +67,12 @@ D3D12RootSignature::D3D12RootSignature(_In_ Device& DeviceObj, _In_ const vector
 
 		ETERNAL_ASSERT(Parameter.size() > 0);
 		if (Parameter.size() == 1 &&
-			Parameter[0].Parameter != ROOT_SIGNATURE_PARAMETER_TEXTURE &&
-			Parameter[0].Parameter != ROOT_SIGNATURE_PARAMETER_SAMPLER)
+			Parameter[0].Parameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_TEXTURE &&
+			Parameter[0].Parameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER)
 		{
 			const RootSignatureParameter& SingleParameter = Parameter[0];
 
-			D3D12RootParameters[RootParameterIndex].ParameterType							= D3D12_PARAMETER_TYPES[SingleParameter.Parameter];
+			D3D12RootParameters[RootParameterIndex].ParameterType							= D3D12_PARAMETER_TYPES[int(SingleParameter.Parameter)];
 			D3D12RootParameters[RootParameterIndex].Descriptor.RegisterSpace				= 0;
 			D3D12RootParameters[RootParameterIndex].Descriptor.ShaderRegister				= SingleParameter.Register;
 			D3D12RootParameters[RootParameterIndex].ShaderVisibility						= D3D12_SHADER_VISIBILITY_ALL;
@@ -86,7 +86,7 @@ D3D12RootSignature::D3D12RootSignature(_In_ Device& DeviceObj, _In_ const vector
 				const RootSignatureParameter& CurrentParameter = Parameter[RangeIndex];
 
 				D3D12_DESCRIPTOR_RANGE DescriptorRange;
-				DescriptorRange.RangeType							= D3D12_PARAMETER_RANGE_TYPES[CurrentParameter.Parameter];
+				DescriptorRange.RangeType							= D3D12_PARAMETER_RANGE_TYPES[int(CurrentParameter.Parameter)];
 				DescriptorRange.NumDescriptors						= 1;
 				DescriptorRange.BaseShaderRegister					= CurrentParameter.Register;
 				DescriptorRange.RegisterSpace						= 0;

@@ -15,12 +15,7 @@ namespace Eternal
 		class D3D12RenderPass : public RenderPass
 		{
 		public:
-			D3D12RenderPass(_In_ const Viewport& ViewportObj, _In_ const vector<View*>& RenderTargets, _In_ const vector<BlendState*>& BlendStates, _In_ View* DepthStencil = nullptr, _In_ const LogicBlend& LogicBlendObj = LogicBlend());
-
-			View*					GetDepthStencil() const { return _DepthStencil; }
-
-		private:
-			View*					_DepthStencil = nullptr;
+			D3D12RenderPass(_In_ const RenderPassCreateInformation& CreateInformation);
 		};
 	}
 }

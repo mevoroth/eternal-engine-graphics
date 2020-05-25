@@ -1,6 +1,7 @@
 #include "Graphics/ResourceFactory.hpp"
 
 #include "Macros/Macros.hpp"
+#include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12Resource.hpp"
 #include "Vulkan/VulkanResource.hpp"
@@ -14,7 +15,7 @@ namespace Eternal
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
-			case D3D12:
+			case DeviceType::D3D12:
 			{
 				Resource* ResourceObj = new D3D12Resource(DeviceObj, HeapObj, Stride, Size, Type);
 				ResourceObj->SetName(Name);
@@ -22,7 +23,7 @@ namespace Eternal
 			}
 #endif
 
-			case VULKAN:
+			case DeviceType::VULKAN:
 				return new VulkanResource(DeviceObj, HeapObj, Stride, Size, Type);
 
 			default:
@@ -36,11 +37,11 @@ namespace Eternal
 			switch (DeviceObj.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
-			case D3D12:
+			case DeviceType::D3D12:
 				return new D3D12Resource(DeviceObj, HeapObj, Dimension, FormatObj, Type, Width, Height, Depth, MipCount, InitialState);
 #endif
 
-			case VULKAN:
+			case DeviceType::VULKAN:
 				return new VulkanResource(DeviceObj, HeapObj, Dimension, FormatObj, Type, Width, Height, Depth, MipCount, InitialState);
 
 			default:

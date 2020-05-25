@@ -7,7 +7,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class View;
+		class DescriptorTable;
 		class Device;
 		struct RootSignatureParameter;
 
@@ -18,10 +18,15 @@ namespace Eternal
 
 			virtual ~DescriptorHeap() {}
 
-			virtual View* CreateView(_In_ Device& DeviceObj) = 0;
+			virtual DescriptorTable* CreateView(_In_ Device& DeviceObj) = 0;
 
 		protected:
 			static bool IsD3D12Compatible(_In_ const RootSignatureParameter Resources[], _In_ uint32_t ResourcesCount);
+
+			uint32_t GetResourcesCount() const { return _ResourcesCount; }
+
+		private:
+			uint32_t _ResourcesCount = 0;
 		};
 	}
 }

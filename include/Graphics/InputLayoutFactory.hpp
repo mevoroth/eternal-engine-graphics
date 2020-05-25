@@ -8,9 +8,11 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		class GraphicsContext;
 		class Device;
 
-		InputLayout* CreateInputLayout(_In_ Device& DeviceObj, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t DataTypeCount);
+		InputLayout* CreateInputLayout(_In_ Device& DeviceObj, _In_ const InputLayout::VertexDataType DataType[] = nullptr, _In_ uint32_t DataTypeCount = 0);
+		InputLayout* CreateInputLayout(_In_ GraphicsContext& Context, _In_ const InputLayout::VertexDataType DataType[] = nullptr, _In_ uint32_t DataTypeCount = 0);
 	}
 }
 

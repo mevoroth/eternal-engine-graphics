@@ -43,7 +43,7 @@ namespace Eternal
 			vector<D3D12Resource*>			_BackBuffers;
 			vector<D3D12View*>				_BackBufferViews;
 			vector< vector<View*> >			_BackBufferViewReferences;
-			vector< vector<BlendState*> >	_BlendStateReferences;
+			vector< vector<BlendState> >	_BlendStateReferences;
 			vector<D3D12RenderPass*>		_RenderPasses;
 			
 			D3D12DescriptorHeap*			_BackBufferDescriptorHeap	= nullptr;

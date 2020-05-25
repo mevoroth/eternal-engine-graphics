@@ -7,7 +7,8 @@ namespace Eternal
 	{
 		class CommandAllocator
 		{
-
+		public:
+			virtual ~CommandAllocator() {}
 		};
 	}
 }
