@@ -276,7 +276,7 @@ uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequi
 	for (; MemoryTypeIndex < MemoryTypeCount; ++MemoryTypeIndex)
 	{
 		const bool IsRequiredMemoryType		= (MemoryTypeBitsRequirement & (1 << MemoryTypeIndex)) != 0;
-		const bool HasRequiredProperties	= (_PhysicalDeviceMemoryProperties.memoryTypes[MemoryTypeIndex].propertyFlags & Flags) != vk::MemoryPropertyFlagBits();
+		const bool HasRequiredProperties	= (_PhysicalDeviceMemoryProperties.memoryTypes[MemoryTypeIndex].propertyFlags & Flags) == Flags;
 
 		if (IsRequiredMemoryType && HasRequiredProperties)
 			break;
