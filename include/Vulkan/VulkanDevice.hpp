@@ -62,6 +62,7 @@ namespace Eternal
 			vk::Instance						_Instance;
 			vk::PhysicalDevice					_PhysicalDevice;
 			vk::Device							_Device;
+			vk::PhysicalDeviceProperties		_PhysicalDeviceProperties;
 			uint32_t							_QueueFamilyPropertiesCount = 0;
 			uint32_t							_VulkanVersion = 0;
 		};

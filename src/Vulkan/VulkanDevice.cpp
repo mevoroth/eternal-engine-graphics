@@ -180,9 +180,32 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	VerifySuccess(_Instance.enumeratePhysicalDevices(&PhysicalDevicesCount, static_cast<vk::PhysicalDevice*>(nullptr)));
 
 	ETERNAL_ASSERT(PhysicalDevicesCount > 0);
-	ETERNAL_ASSERT(PhysicalDevicesCount == 1); // 1gpu
+	//ETERNAL_ASSERT(PhysicalDevicesCount == 1); // 1gpu
 
-	VerifySuccess(_Instance.enumeratePhysicalDevices(&PhysicalDevicesCount, &_PhysicalDevice));
+	vector<vk::PhysicalDevice> PhysicalDevices;
+	PhysicalDevices.resize(PhysicalDevicesCount);
+
+	VerifySuccess(_Instance.enumeratePhysicalDevices(&PhysicalDevicesCount, PhysicalDevices.data()));
+
+	vector<vk::PhysicalDeviceProperties> PhysicalDeviceProperties;
+	PhysicalDeviceProperties.resize(PhysicalDevicesCount);
+
+	for (uint32_t PhysicalDeviceIndex = 0; PhysicalDeviceIndex < PhysicalDevicesCount; ++PhysicalDeviceIndex)
+	{
+		PhysicalDevices[PhysicalDeviceIndex].getProperties(&PhysicalDeviceProperties[PhysicalDeviceIndex]);
+	}
+
+	for (uint32_t PhysicalDeviceIndex = 0; PhysicalDeviceIndex < PhysicalDevicesCount; ++PhysicalDeviceIndex)
+	{
+		if (PhysicalDeviceProperties[PhysicalDeviceIndex].deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
+		{
+			_PhysicalDevice = PhysicalDevices[PhysicalDeviceIndex];
+			_PhysicalDeviceProperties = PhysicalDeviceProperties[PhysicalDeviceIndex];
+			break;
+		}
+	}
+
+	ETERNAL_ASSERT(_PhysicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu);
 
 	uint32_t ExtensionsCount;
 	VerifySuccess(_PhysicalDevice.enumerateDeviceExtensionProperties(nullptr, &ExtensionsCount, static_cast<vk::ExtensionProperties*>(nullptr)));
@@ -210,9 +233,6 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		VulkanDevice::DebugUtilsMessenger
 	);
 	VerifySuccess(_Instance.createDebugUtilsMessengerEXT(&DebugUtilsCallbackInfo, nullptr, &_DebugUtilsMessengerCallback, EternalLoader));
-
-	vk::PhysicalDeviceProperties PhysicalDeviceProperties;
-	_PhysicalDevice.getProperties(&PhysicalDeviceProperties);
 
 	_PhysicalDevice.getQueueFamilyProperties(&_QueueFamilyPropertiesCount, static_cast<vk::QueueFamilyProperties*>(nullptr));
 	ETERNAL_ASSERT(_QueueFamilyPropertiesCount > 0);
