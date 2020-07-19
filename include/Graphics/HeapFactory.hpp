@@ -1,8 +1,6 @@
 #ifndef _HEAP_FACTORY_HPP_
 #define _HEAP_FACTORY_HPP_
 
-#include <cstdint>
-
 namespace Eternal
 {
 	namespace Graphics

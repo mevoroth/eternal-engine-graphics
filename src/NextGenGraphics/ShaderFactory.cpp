@@ -1,6 +1,5 @@
 #include "NextGenGraphics/ShaderFactory.hpp"
 
-#include "Macros/Macros.hpp"
 #include "Graphics/ShaderType.hpp"
 #include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"

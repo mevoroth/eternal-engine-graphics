@@ -1,7 +1,5 @@
 #include "d3d11/D3D11GeometryShader.hpp"
 
-#include "Macros/Macros.hpp"
-
 #include "d3d11/D3D11Renderer.hpp"
 
 using namespace Eternal::Graphics;

@@ -1,10 +1,6 @@
 #ifndef _TEXTURE_HPP_
 #define _TEXTURE_HPP_
 
-#include <cstdint>
-
-#include "Macros/Macros.hpp"
-
 namespace Eternal
 {
 	namespace Graphics

@@ -1,14 +1,7 @@
 #include "d3d11/D3D11Shader.hpp"
 
-#include "Macros/Macros.hpp"
-
-//#define WIN32_LEAN_AND_MEAN
-//#define VC_EXTRALEAN
-//#define WIN32_EXTRA_LEAN
-//#include <Windows.h>
 #include <cstdlib>
 #include <fstream>
-//#include <string>
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 

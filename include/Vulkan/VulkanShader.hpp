@@ -2,7 +2,6 @@
 #define _VULKAN_SHADER_HPP_
 
 #include <string>
-#include <vector>
 #include <vulkan/vulkan.hpp>
 #include "Graphics/Shader.hpp"
 

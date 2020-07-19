@@ -1,7 +1,6 @@
 #ifndef _D3D11_SHADER_HPP_
 #define _D3D11_SHADER_HPP_
 
-#include <vector>
 #include <string>
 #include <d3d11.h>
 #include "Graphics/Shader.hpp"

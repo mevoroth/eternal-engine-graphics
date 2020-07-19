@@ -4,7 +4,6 @@
 #include "d3d11/D3D11VertexShader.hpp"
 #include "d3d11/D3D11GeometryShader.hpp"
 #include "d3d11/D3D11PixelShader.hpp"
-#include "Macros/Macros.hpp"
 
 using namespace Eternal::Graphics;
 

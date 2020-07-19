@@ -1,7 +1,5 @@
 #include "d3d12/D3D12Device.hpp"
 
-#include "Macros/Macros.hpp"
-
 #include <d3d12.h>
 #include <DXGI1_4.h>
 

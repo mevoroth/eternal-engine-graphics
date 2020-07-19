@@ -1,7 +1,5 @@
 #include "Vulkan/VulkanCommandList.hpp"
 
-#include "Macros/Macros.hpp"
-#include "GraphicsSettings.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"

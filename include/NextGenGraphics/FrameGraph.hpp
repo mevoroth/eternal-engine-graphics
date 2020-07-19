@@ -1,8 +1,6 @@
 #ifndef _FRAME_GRAPH_HPP_
 #define _FRAME_GRAPH_HPP_
 
-#include <cstdint>
-#include <vector>
 #include <map>
 #include <set>
 

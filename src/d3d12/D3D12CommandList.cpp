@@ -5,8 +5,6 @@
 #define VC_EXTRALEAN
 #include <Windows.h>
 
-#include "Macros/Macros.hpp"
-#include <vector>
 #include "Graphics/Viewport.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"

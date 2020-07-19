@@ -1,7 +1,6 @@
 #ifndef _VULKAN_INPUT_LAYOUT_HPP_
 #define _VULKAN_INPUT_LAYOUT_HPP_
 
-#include <vector>
 #include <vulkan/vulkan.hpp>
 #include "Graphics/InputLayout.hpp"
 

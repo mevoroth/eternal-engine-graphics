@@ -2,7 +2,6 @@
 #define _D3D11_INDEX_BUFFER_HPP_
 
 #include <d3d11.h>
-#include <vector>
 #include "Graphics/IndexBuffer.hpp"
 #include "d3d11/D3D11Buffer.hpp"
 

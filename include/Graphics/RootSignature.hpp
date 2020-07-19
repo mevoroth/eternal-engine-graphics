@@ -1,8 +1,6 @@
 #ifndef _ROOT_SIGNATURE_HPP_
 #define _ROOT_SIGNATURE_HPP_
 
-#include <cstdint>
-
 namespace Eternal
 {
 	namespace Graphics

@@ -1,8 +1,6 @@
 #include "Vulkan/VulkanInputLayout.hpp"
 
-#include <cstdint>
 #include <vulkan/vulkan.h>
-#include "Macros/Macros.hpp"
 #include "Graphics/InputLayout.hpp"
 #include "Vulkan/VulkanFormat.hpp"
 #include "Log/Log.hpp"

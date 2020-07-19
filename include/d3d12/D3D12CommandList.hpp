@@ -3,7 +3,6 @@
 
 #include "Graphics/CommandList.hpp"
 
-#include <cstdint>
 #include <d3d12.h>
 
 namespace Eternal

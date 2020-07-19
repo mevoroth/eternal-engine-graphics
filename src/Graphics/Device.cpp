@@ -1,7 +1,5 @@
 #include "Graphics/Device.hpp"
 
-#include "Macros/Macros.hpp"
-
 using namespace Eternal::Graphics;
 
 Device* Device::_Inst = 0;

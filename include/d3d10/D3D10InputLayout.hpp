@@ -2,7 +2,6 @@
 #define _D3D10_INPUT_LAYOUT_HPP_
 
 #include <d3d10.h>
-#include <vector>
 
 using namespace std;
 

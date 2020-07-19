@@ -1,6 +1,5 @@
 #include "Graphics/ContextFactory.hpp"
 
-#include "Macros/Macros.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "Vulkan/VulkanContext.hpp"
 

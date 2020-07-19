@@ -1,7 +1,6 @@
 #ifndef _STRUCTURED_BUFFER_FACTORY_HPP_
 #define _STRUCTURED_BUFFER_FACTORY_HPP_
 
-#include <cstdint>
 #include "Graphics/Resource.hpp"
 
 namespace Eternal

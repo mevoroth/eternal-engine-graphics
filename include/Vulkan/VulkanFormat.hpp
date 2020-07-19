@@ -1,7 +1,6 @@
 #ifndef _VULKAN_FORMAT_HPP_
 #define _VULKAN_FORMAT_HPP_
 
-#include "Macros/Macros.hpp"
 #include <vulkan/vulkan.hpp>
 #include "Graphics/Format.hpp"
 

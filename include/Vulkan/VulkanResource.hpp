@@ -1,7 +1,6 @@
 #ifndef _VULKAN_RESOURCE_HPP_
 #define _VULKAN_RESOURCE_HPP_
 
-#include <cstdint>
 #include "NextGenGraphics/Resource.hpp"
 
 struct VkBuffer_T;

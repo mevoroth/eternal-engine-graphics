@@ -1,8 +1,6 @@
 #ifndef _VULKAN_SWAP_CHAIN_HPP_
 #define _VULKAN_SWAP_CHAIN_HPP_
 
-#include <vector>
-
 #define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.hpp>
 #include "Graphics/SwapChain.hpp"

@@ -3,9 +3,7 @@
 
 #include "Graphics/InputLayout.hpp"
 
-#include <cstdint>
 #include <d3d11.h>
-#include <vector>
 
 using namespace std;
 

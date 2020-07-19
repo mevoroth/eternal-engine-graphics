@@ -1,6 +1,5 @@
 #include "Vulkan/VulkanDescriptorTable.h"
 
-#include "Macros/Macros.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanDescriptorHeap.hpp"

@@ -1,6 +1,5 @@
 #include "d3d12/D3D12CommandQueue.hpp"
 
-#include "Macros/Macros.hpp"
 #include "Graphics/SwapChain.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"

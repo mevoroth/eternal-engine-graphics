@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Macros/Macros.hpp"
 #include <vulkan/vulkan.hpp>
 #include "Graphics/StencilTest.hpp"
 #include "NextGenGraphics/Types/MemoryType.hpp"

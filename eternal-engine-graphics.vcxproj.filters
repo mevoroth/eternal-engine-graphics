@@ -493,7 +493,9 @@
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
-    <ClInclude Include="include\NextGenGraphics\Types\MemoryType.hpp" />
+    <ClInclude Include="include\NextGenGraphics\Types\MemoryType.hpp">
+      <Filter>NextGenGraphics\Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">

@@ -1,8 +1,5 @@
 #include "Vulkan/VulkanDevice.hpp"
 
-#include "Macros/Macros.hpp"
-
-#include <vector>
 #include <algorithm>
 #include "Window/Window.hpp"
 #include "Vulkan/VulkanUtils.hpp"

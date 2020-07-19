@@ -1,6 +1,5 @@
 #include "Vulkan/VulkanShader.hpp"
 
-#include "Macros/Macros.hpp"
 #include <fstream>
 #include <shaderc/shaderc.h>
 #include "NextGenGraphics/Context.hpp"

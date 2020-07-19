@@ -1,7 +1,6 @@
 #ifndef _VULKAN_DESCRIPTOR_TABLE_HPP_
 #define _VULKAN_DESCRIPTOR_TABLE_HPP_
 
-#include <vector>
 #include "Graphics/DescriptorTable.h"
 
 struct VkDescriptorSet_T;

@@ -1,6 +1,5 @@
 #include "d3d12/D3D12SwapChain.hpp"
 
-#include "Macros/Macros.hpp"
 #include <cwchar>
 #include <d3d12.h>
 #include <dxgi1_4.h>

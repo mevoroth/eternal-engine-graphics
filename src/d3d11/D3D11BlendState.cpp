@@ -1,6 +1,5 @@
 #include "d3d11/D3D11BlendState.hpp"
 
-#include "Macros/Macros.hpp"
 #include "d3d11/D3D11Renderer.hpp"
 #include "d3d11/D3D11Context.hpp"
 

@@ -1,9 +1,6 @@
 #ifndef _RESOURCE_HPP_
 #define _RESOURCE_HPP_
 
-#include <cstdint>
-#include "Macros/Macros.hpp"
-
 namespace Eternal
 {
 	namespace Graphics

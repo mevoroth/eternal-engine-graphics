@@ -1,7 +1,6 @@
 #ifndef _VULKAN_ROOT_SIGNATURE_HPP_
 #define _VULKAN_ROOT_SIGNATURE_HPP_
 
-#include <vector>
 #include <vulkan/vulkan.hpp>
 #include "Graphics/RootSignature.hpp"
 

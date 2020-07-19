@@ -1,7 +1,6 @@
 #ifndef _VERTEX_BUFFER_FACTORY_HPP_
 #define _VERTEX_BUFFER_FACTORY_HPP_
 
-#include <vector>
 #include "d3d11/D3D11VertexBuffer.hpp"
 
 namespace Eternal

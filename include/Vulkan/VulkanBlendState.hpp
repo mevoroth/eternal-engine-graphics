@@ -1,7 +1,6 @@
 #ifndef _VULKAN_BLEND_STATE_HPP_
 #define _VULKAN_BLEND_STATE_HPP_
 
-#include "Macros/Macros.hpp"
 #include "Graphics/BlendState.hpp"
 #include <vulkan/vulkan.h>
 

@@ -1,6 +1,5 @@
 #include "Vulkan/VulkanRenderPass.hpp"
 
-#include "Macros/Macros.hpp"
 #include "Graphics/Format.hpp"
 #include "Graphics/Viewport.hpp"
 #include "NextGenGraphics/Context.hpp"

@@ -1,7 +1,6 @@
 #ifndef _D3D12_RENDER_PASS_HPP_
 #define _D3D12_RENDER_PASS_HPP_
 
-#include <vector>
 #include "Graphics/RenderPass.hpp"
 
 namespace Eternal

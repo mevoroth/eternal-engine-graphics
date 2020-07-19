@@ -1,8 +1,6 @@
 #ifndef _FENCE_HPP_
 #define _FENCE_HPP_
 
-#include <cstdint>
-
 namespace Eternal
 {
 	namespace Graphics

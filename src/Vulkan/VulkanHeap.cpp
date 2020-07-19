@@ -1,7 +1,6 @@
 #include "Vulkan/VulkanHeap.hpp"
 
 #include <cstring>
-#include "Macros/Macros.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include <algorithm>
 

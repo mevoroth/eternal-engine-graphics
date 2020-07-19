@@ -1,7 +1,6 @@
 #ifndef _INPUT_LAYOUT_HPP_
 #define _INPUT_LAYOUT_HPP_
 
-#include "Macros/Macros.hpp"
 #include "Graphics/Format.hpp"
 
 namespace Eternal

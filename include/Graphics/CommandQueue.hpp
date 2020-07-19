@@ -1,8 +1,6 @@
 #ifndef _COMMAND_QUEUE_HPP_
 #define _COMMAND_QUEUE_HPP_
 
-#include <cstdint>
-
 namespace Eternal
 {
 	namespace Graphics

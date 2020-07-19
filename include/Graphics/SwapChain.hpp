@@ -1,7 +1,6 @@
 #ifndef _SWAP_CHAIN_HPP_
 #define _SWAP_CHAIN_HPP_
 
-#include <cstdint>
 #include "Graphics/Viewport.hpp"
 #include "Graphics/BlendState.hpp"
 

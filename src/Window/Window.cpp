@@ -1,7 +1,5 @@
 #include "Window/Window.hpp"
 
-#include "Macros/Macros.hpp"
-
 using namespace Eternal::Graphics;
 
 Window::Window(_In_ HINSTANCE hInstance, _In_ int nCmdShow, _In_ const string& Name, _In_ const string& ClassName, _In_ int Width, _In_ int Height)

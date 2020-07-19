@@ -6,8 +6,6 @@
 struct IDXGISwapChain;
 struct IDXGISwapChain3;
 
-#include <vector>
-
 namespace Eternal
 {
 	namespace Graphics

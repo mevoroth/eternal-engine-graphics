@@ -1,8 +1,6 @@
 #ifndef _VULKAN_DESCRIPTOR_HPP_
 #define _VULKAN_DESCRIPTOR_HPP_
 
-#include <cstdint>
-#include <vector>
 #include "Graphics/DescriptorHeap.hpp"
 #include "Container/RingBuffer.hpp"
 

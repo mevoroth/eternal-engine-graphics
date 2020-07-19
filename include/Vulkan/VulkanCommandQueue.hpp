@@ -2,8 +2,6 @@
 #define _VULKAN_COMMAND_QUEUE_HPP_
 
 #include "Graphics/CommandQueue.hpp"
-#include <vector>
-#include <cstdint>
 
 struct VkQueue_T;
 

@@ -1,6 +1,5 @@
 #include "d3d12/D3D12View.hpp"
 
-#include "Macros/Macros.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12DescriptorHeap.hpp"
 #include "d3d12/D3D12Resource.hpp"

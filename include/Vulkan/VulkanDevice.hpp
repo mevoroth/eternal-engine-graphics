@@ -5,7 +5,6 @@
 #include <vulkan/vulkan.hpp>
 #include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
-#include <vector>
 
 namespace Eternal
 {

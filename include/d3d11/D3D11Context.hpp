@@ -1,7 +1,6 @@
 #ifndef _D3D11_CONTEXT_HPP_
 #define _D3D11_CONTEXT_HPP_
 
-#include <vector>
 #include "Graphics/Context.hpp"
 #include "Time/Time.hpp"
 

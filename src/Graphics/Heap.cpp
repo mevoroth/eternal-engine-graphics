@@ -1,7 +1,5 @@
 #include "Graphics/Heap.hpp"
 
-#include "Macros/Macros.hpp"
-
 using namespace Eternal::Graphics;
 
 Heap::Heap(_In_ Device& DeviceObj, _In_ const HeapType& HeapTypeObj, _In_ uint32_t ResourcesCount)

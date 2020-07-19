@@ -1,9 +1,6 @@
 #ifndef _CONTEXT_HPP_
 #define _CONTEXT_HPP_
 
-#include <cstdint>
-#include "Macros/Macros.hpp"
-
 namespace Eternal
 {
 	namespace Graphics

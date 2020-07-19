@@ -1,7 +1,6 @@
 #ifndef _MATERIAL_PROPERTY_HPP_
 #define _MATERIAL_PROPERTY_HPP_
 
-#include <cstdint>
 #include <string>
 
 using namespace std;

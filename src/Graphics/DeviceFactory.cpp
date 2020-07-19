@@ -1,6 +1,5 @@
 #include "Graphics/DeviceFactory.hpp"
 
-#include "Macros/Macros.hpp"
 #include "d3d11/D3D11Device.hpp"
 
 namespace Eternal

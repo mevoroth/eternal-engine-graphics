@@ -1,7 +1,5 @@
 #include "Graphics/ShaderFactory.hpp"
 
-#include "Macros/Macros.hpp"
-
 using namespace Eternal::Graphics;
 
 ShaderFactory* ShaderFactory::_Inst = nullptr;

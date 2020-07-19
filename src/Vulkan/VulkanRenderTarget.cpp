@@ -1,8 +1,5 @@
 #include "Vulkan/VulkanRenderTarget.hpp"
 
-#include <cstdint>
-#include <vector>
-#include "Macros/Macros.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"

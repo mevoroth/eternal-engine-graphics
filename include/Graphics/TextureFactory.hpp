@@ -1,7 +1,6 @@
 #ifndef _GRAPHICS_TEXTURE_FACTORY_HPP_
 #define _GRAPHICS_TEXTURE_FACTORY_HPP_
 
-#include <cstdint>
 #include "Graphics/Resource.hpp"
 
 namespace Eternal

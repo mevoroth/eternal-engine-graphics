@@ -1,7 +1,5 @@
 #include "Vulkan/VulkanFence.hpp"
 
-#include "Macros/Macros.hpp"
-
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanSwapChain.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"

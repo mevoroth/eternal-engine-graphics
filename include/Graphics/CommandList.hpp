@@ -1,9 +1,6 @@
 #ifndef _COMMAND_LIST_HPP_
 #define _COMMAND_LIST_HPP_
 
-#include <cstdint>
-#include <vector>
-
 namespace Eternal
 {
 	namespace Graphics

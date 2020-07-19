@@ -1,7 +1,6 @@
 #ifndef _D3D11_STRUCTURED_BUFFER_HPP_
 #define _D3D11_STRUCTURED_BUFFER_HPP_
 
-#include <cstdint>
 #include "Graphics/StructuredBuffer.hpp"
 #include "d3d11/D3D11Buffer.hpp"
 #include "d3d11/ID3D11ShaderResource.hpp"

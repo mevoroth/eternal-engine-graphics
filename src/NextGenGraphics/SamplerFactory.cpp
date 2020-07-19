@@ -1,6 +1,5 @@
 #include "NextGenGraphics/SamplerFactory.hpp"
 
-#include "Macros/Macros.hpp"
 #include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12Sampler.hpp"

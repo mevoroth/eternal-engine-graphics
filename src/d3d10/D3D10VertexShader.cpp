@@ -1,6 +1,5 @@
 #include "d3d10/D3D10VertexShader.hpp"
 
-#include <vector>
 #include "d3d10/D3D10Renderer.hpp"
 
 using namespace std;

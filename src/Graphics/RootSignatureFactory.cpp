@@ -1,6 +1,5 @@
 #include "Graphics/RootSignatureFactory.hpp"
 
-#include "Macros/Macros.hpp"
 #include "NextGenGraphics/Context.hpp"
 #include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"

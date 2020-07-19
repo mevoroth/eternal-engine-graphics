@@ -1,7 +1,6 @@
 #ifndef _VULKAN_RENDER_TARGET_HPP_
 #define _VULKAN_RENDER_TARGET_HPP_
 
-#include <cstdint>
 #include "NextGenGraphics/RenderTarget.hpp"
 #include "Graphics/View.hpp"
 

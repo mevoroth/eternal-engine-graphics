@@ -2,8 +2,6 @@
 #define _VULKAN_FENCE_HPP_
 
 #include "Graphics/Fence.hpp"
-#include <cstdint>
-#include <vector>
 
 struct VkFence_T;
 struct VkSemaphore_T;

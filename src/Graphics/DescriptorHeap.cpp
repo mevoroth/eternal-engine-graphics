@@ -1,8 +1,6 @@
 #include "Graphics/DescriptorHeap.hpp"
 
-#include <cstdint>
 #include <cstring>
-#include "Macros/Macros.hpp"
 #include "Graphics/RootSignature.hpp"
 
 using namespace Eternal::Graphics;

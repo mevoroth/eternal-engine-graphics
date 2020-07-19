@@ -1,8 +1,6 @@
 #ifndef _D3D11_DEPTH_STENCIL_BUFFER_HPP_
 #define _D3D11_DEPTH_STENCIL_BUFFER_HPP_
 
-#include <cstdint>
-
 #include "Graphics/RenderTarget.hpp"
 #include "d3d11/D3D11Texture.hpp"
 

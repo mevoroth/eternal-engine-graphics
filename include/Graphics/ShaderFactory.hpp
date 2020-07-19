@@ -1,8 +1,6 @@
 #ifndef _SHADER_FACTORY_HPP_
 #define _SHADER_FACTORY_HPP_
 
-#include <cstdint>
-#include <vector>
 #include <string>
 
 #include "Graphics/InputLayout.hpp"

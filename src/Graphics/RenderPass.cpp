@@ -1,7 +1,6 @@
 #include "Graphics/RenderPass.hpp"
 
 #include "GraphicsSettings.hpp"
-#include "Macros/Macros.hpp"
 
 using namespace Eternal::Graphics;
 

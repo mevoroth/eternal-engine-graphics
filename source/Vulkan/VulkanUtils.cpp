@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <vulkan/vulkan.hpp>
-#include "Macros/Macros.hpp"
 #include "Graphics/RootSignature.hpp"
 #include "Graphics/Viewport.hpp"
 

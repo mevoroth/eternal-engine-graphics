@@ -1,7 +1,6 @@
 #ifndef _D3D12_SHADER_FACTORY_HPP_
 #define _D3D12_SHADER_FACTORY_HPP_
 
-#include <vector>
 #include "Graphics/ShaderFactory.hpp"
 
 namespace Eternal

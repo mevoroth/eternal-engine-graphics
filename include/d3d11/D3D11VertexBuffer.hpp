@@ -1,7 +1,6 @@
 #ifndef _D3D11_VERTEX_BUFFER_HPP_
 #define _D3D11_VERTEX_BUFFER_HPP_
 
-#include <vector>
 #include "Graphics/VertexBuffer.hpp"
 #include "D3D11Buffer.hpp"
 

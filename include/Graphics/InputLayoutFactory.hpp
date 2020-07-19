@@ -1,7 +1,6 @@
 #ifndef _INPUT_LAYOUT_FACTORY_HPP_
 #define _INPUT_LAYOUT_FACTORY_HPP_
 
-#include <cstdint>
 #include "Graphics/InputLayout.hpp"
 
 namespace Eternal

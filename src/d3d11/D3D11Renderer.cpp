@@ -5,7 +5,6 @@
 #include <cstdio>
 #include <WinBase.h>
 
-#include "Macros/Macros.hpp"
 #include "d3d11/D3D11Device.hpp"
 #include "d3d11/D3D11Context.hpp"
 #include "d3d11/D3D11RenderTarget.hpp"

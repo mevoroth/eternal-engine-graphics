@@ -1,8 +1,6 @@
 #ifndef _RESOURCE_FACTORY_HPP_
 #define _RESOURCE_FACTORY_HPP_
 
-#include <cstdint>
-
 namespace Eternal
 {
 	namespace Graphics

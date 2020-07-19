@@ -1,7 +1,5 @@
 #include "Graphics/Renderer.hpp"
 
-#include "Macros/Macros.hpp"
-
 using namespace Eternal::Graphics;
 
 Renderer* Renderer::_Inst = 0;

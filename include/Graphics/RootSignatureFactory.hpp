@@ -1,8 +1,6 @@
 #ifndef _ROOT_SIGNATURE_FACTORY_HPP_
 #define _ROOT_SIGNATURE_FACTORY_HPP_
 
-#include <vector>
-
 namespace Eternal
 {
 	namespace Graphics

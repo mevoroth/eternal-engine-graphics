@@ -1,6 +1,5 @@
 #include "NextGenGraphics/DeviceFactory.hpp"
 
-#include "Macros/Macros.hpp"
 #include "Log/Log.hpp"
 #include "NextGenGraphics/Device.hpp"
 #include "d3d12/D3D12Device.hpp"

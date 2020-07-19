@@ -4,7 +4,6 @@
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <Windows.h>
-#include "Macros/Macros.hpp"
 #include "Log/Log.hpp"
 #include "NextGenGraphics/Context.hpp"
 #include "NextGenGraphics/Device.hpp"

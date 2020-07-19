@@ -2,7 +2,6 @@
 #define _D3D12_RENDER_TARGET_HPP_
 
 #include "NextGenGraphics/RenderTarget.hpp"
-#include <cstdint>
 #include "d3d12/D3D12Resource.hpp"
 
 struct ID3D12Resource;

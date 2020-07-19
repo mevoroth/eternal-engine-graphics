@@ -1,8 +1,6 @@
 #ifndef _SAMPLER_HPP_
 #define _SAMPLER_HPP_
 
-#include <cstdint>
-
 namespace Eternal
 {
 	namespace Graphics

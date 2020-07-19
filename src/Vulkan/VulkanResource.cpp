@@ -1,6 +1,5 @@
 #include "Vulkan/VulkanResource.hpp"
 
-#include "Macros/Macros.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanHeap.hpp"

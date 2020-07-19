@@ -1,7 +1,6 @@
 #ifndef _VULKAN_CONTEXT_HPP_
 #define _VULKAN_CONTEXT_HPP_
 
-#include <vector>
 #include "NextGenGraphics/Context.hpp"
 
 struct VkSemaphore_T;

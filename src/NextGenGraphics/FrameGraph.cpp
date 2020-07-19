@@ -1,6 +1,5 @@
 #include "NextGenGraphics/FrameGraph.hpp"
 
-#include "Macros/Macros.hpp"
 #include <set>
 #include <algorithm>
 

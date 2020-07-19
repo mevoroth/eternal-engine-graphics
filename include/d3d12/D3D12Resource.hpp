@@ -1,7 +1,6 @@
 #ifndef _D3D12_RESOURCE_HPP_
 #define _D3D12_RESOURCE_HPP_
 
-#include <cstdint>
 #include <d3d12.h>
 #include "NextGenGraphics/Resource.hpp"
 

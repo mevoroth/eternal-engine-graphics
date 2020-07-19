@@ -1,8 +1,6 @@
 #ifndef _D3D12_INPUT_LAYOUT_HPP_
 #define _D3D12_INPUT_LAYOUT_HPP_
 
-#include <cstdint>
-#include <vector>
 #include <d3d12.h>
 
 #include "Graphics/InputLayout.hpp"

@@ -10,4 +10,8 @@
 
 #define ETERNAL_USE_DEBUG_SHADERS	(1)
 
+#include <cstdint>
+#include <vector>
+#include "Macros/Macros.hpp"
+
 #endif

@@ -1,6 +1,5 @@
 #include "d3d12/D3D12Shader.hpp"
 
-#include "Macros/Macros.hpp"
 #include "GraphicsSettings.hpp"
 #include "File/FilePath.hpp"
 

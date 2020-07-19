@@ -1,7 +1,6 @@
 #ifndef _D3D12_SHADER_HPP_
 #define _D3D12_SHADER_HPP_
 
-#include <vector>
 #include <string>
 #include <d3d12.h>
 #include "Graphics/Shader.hpp"

@@ -2,7 +2,6 @@
 #define _SHADER_FACTORY_HPP_
 
 #include <string>
-#include <vector>
 
 namespace Eternal
 {

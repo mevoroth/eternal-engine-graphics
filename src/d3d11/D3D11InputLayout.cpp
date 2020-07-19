@@ -1,7 +1,6 @@
 #include "d3d11/D3D11InputLayout.hpp"
 
 #include "d3d11/D3D11Renderer.hpp"
-#include "Macros/Macros.hpp"
 
 using namespace Eternal::Graphics;
 

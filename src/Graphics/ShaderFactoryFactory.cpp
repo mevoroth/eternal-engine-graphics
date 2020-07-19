@@ -1,6 +1,5 @@
 #include "Graphics/ShaderFactoryFactory.hpp"
 
-#include "Macros/Macros.hpp"
 #include "d3d11/D3D11ShaderFactory.hpp"
 
 namespace Eternal

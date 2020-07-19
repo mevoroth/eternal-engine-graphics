@@ -1,7 +1,6 @@
 #ifndef _D3D12_HEAP_HPP_
 #define _D3D12_HEAP_HPP_
 
-#include <vector>
 #include "Graphics/Heap.hpp"
 
 enum D3D12_HEAP_TYPE;

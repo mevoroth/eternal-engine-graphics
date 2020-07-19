@@ -1,7 +1,5 @@
 #include "Vulkan/VulkanRootSignature.hpp"
 
-#include <vector>
-#include "Macros/Macros.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanSampler.hpp"
 #include "Vulkan/VulkanDevice.hpp"

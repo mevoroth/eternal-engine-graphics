@@ -1,6 +1,5 @@
 #include "Vulkan/VulkanSwapChain.hpp"
 
-#include "Macros/Macros.hpp"
 #include "Window/Window.hpp"
 #include "Graphics/View.hpp"
 #include "Graphics/Format.hpp"

@@ -2,7 +2,6 @@
 
 #include <d3d11.h>
 
-#include "Macros/Macros.hpp"
 #include "Graphics/Format.hpp"
 #include "d3d11/D3D11Renderer.hpp"
 

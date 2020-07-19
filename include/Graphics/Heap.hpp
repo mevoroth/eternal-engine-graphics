@@ -1,9 +1,6 @@
 #ifndef _HEAP_HPP_
 #define _HEAP_HPP_
 
-#include <cstdint>
-#include <vector>
-
 namespace Eternal
 {
 	namespace Graphics

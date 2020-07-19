@@ -1,9 +1,6 @@
 #include "d3d12/D3D12RootSignature.hpp"
 
-#include <cstdint>
-#include <vector>
 #include <d3d12.h>
-#include "Macros/Macros.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12RootSignature.hpp"
 #include "d3d12/D3D12Sampler.hpp"

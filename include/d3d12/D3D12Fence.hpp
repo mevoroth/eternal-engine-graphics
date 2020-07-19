@@ -3,9 +3,6 @@
 
 #include "Graphics/Fence.hpp"
 
-#include <cstdint>
-#include <vector>
-
 struct ID3D12Fence;
 
 namespace Eternal

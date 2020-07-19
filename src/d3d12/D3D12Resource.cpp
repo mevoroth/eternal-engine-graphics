@@ -1,7 +1,6 @@
 #include "d3d12/D3D12Resource.hpp"
 
 #include <d3d12.h>
-#include "Macros/Macros.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12SwapChain.hpp"
 #include "d3d12/D3D12Heap.hpp"

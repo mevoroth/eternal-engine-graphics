@@ -1,7 +1,6 @@
 #ifndef _D3D12_BLEND_STATE_HPP_
 #define _D3D12_BLEND_STATE_HPP_
 
-#include "Macros/Macros.hpp"
 #include "Graphics/BlendState.hpp"
 #include <d3d12.h>
 

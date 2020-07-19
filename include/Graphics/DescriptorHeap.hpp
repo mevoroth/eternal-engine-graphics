@@ -1,8 +1,6 @@
 #ifndef _DESCRIPTOR_HEAP_HPP_
 #define _DESCRIPTOR_HEAP_HPP_
 
-#include <cstdint>
-
 namespace Eternal
 {
 	namespace Graphics

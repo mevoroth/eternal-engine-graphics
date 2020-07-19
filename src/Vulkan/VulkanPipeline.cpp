@@ -1,8 +1,5 @@
 #include "Vulkan/VulkanPipeline.hpp"
 
-#include <vector>
-
-#include "Macros/Macros.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/DepthStencil.hpp"
 #include "Graphics/BlendState.hpp"

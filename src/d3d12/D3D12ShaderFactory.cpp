@@ -1,7 +1,5 @@
 #include "d3d12/D3D12ShaderFactory.hpp"
 
-#include "Macros/Macros.hpp"
-
 #include "File/FilePath.hpp"
 #include "d3d12/D3D12Shader.hpp"
 

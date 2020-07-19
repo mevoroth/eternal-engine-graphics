@@ -1,8 +1,6 @@
 #ifndef _D3D11_SHADER_FACTORY_HPP_
 #define _D3D11_SHADER_FACTORY_HPP_
 
-#include <vector>
-
 #include "Graphics/ShaderFactory.hpp"
 #include "d3d11/D3D11VertexShader.hpp"
 #include "d3d11/D3D11GeometryShader.hpp"

@@ -1,7 +1,6 @@
 #ifndef _SAMPLER_FACTORY_HPP_
 #define _SAMPLER_FACTORY_HPP_
 
-#include <cstdint>
 #include "Graphics/Sampler.hpp"
 
 namespace Eternal

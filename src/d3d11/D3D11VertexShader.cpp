@@ -1,8 +1,6 @@
 #include "d3d11/D3D11VertexShader.hpp"
 
-#include <vector>
 #include "d3d11/D3D11Renderer.hpp"
-#include "Macros/Macros.hpp"
 
 using namespace std;
 using namespace Eternal::Graphics;

@@ -2,8 +2,6 @@
 #define _VULKAN_COMMAND_LIST_HPP_
 
 #include "Graphics/CommandList.hpp"
-#include <cstdint>
-#include <vector>
 
 struct VkCommandBuffer_T;
 struct VkPipelineLayout_T;

@@ -1,6 +1,5 @@
 #include "Vulkan/VulkanCommandAllocator.hpp"
 
-#include "Macros/Macros.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 
 using namespace Eternal::Graphics;

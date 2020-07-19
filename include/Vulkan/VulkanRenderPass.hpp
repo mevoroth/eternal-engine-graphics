@@ -1,7 +1,6 @@
 #ifndef _VULKAN_RENDER_PASS_HPP_
 #define _VULKAN_RENDER_PASS_HPP_
 
-#include <vector>
 #include <vulkan/vulkan.hpp>
 #include "Graphics/RenderPass.hpp"
 

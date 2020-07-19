@@ -1,7 +1,6 @@
 #include "Vulkan/VulkanSampler.hpp"
 
 #include <float.h>
-#include "Macros/Macros.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 
 using namespace Eternal::Graphics;

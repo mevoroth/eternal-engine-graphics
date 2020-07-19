@@ -4,8 +4,6 @@
 #include "Graphics/DescriptorHeap.hpp"
 #include "Graphics/RootSignature.hpp"
 #include <d3d12.h>
-#include <cstdint>
-#include <vector>
 
 struct ID3D12DescriptorHeap;
 
