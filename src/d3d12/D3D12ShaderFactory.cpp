@@ -13,7 +13,7 @@ void D3D12ShaderFactory::RegisterShaderPath(const string& Path)
 
 Shader* D3D12ShaderFactory::CreateVertexShader(_In_ const string& Name, _In_ const string& Src, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t Size, _In_ const vector<string>& Defines /*= vector<string>()*/)
 {
-	ETERNAL_ASSERT(false);
+	ETERNAL_BREAK();
 	return nullptr;
 }
 

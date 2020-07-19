@@ -28,7 +28,7 @@ namespace Eternal
 				return new VulkanSwapChain(DeviceObj, WindowObj);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

@@ -33,7 +33,7 @@ namespace Eternal
 //				return new VulkanPipeline(DeviceObj, RootSignatureObj, InputLayoutObj, RenderPassObj, VS, PS, DepthTestObj, StencilTestObj, ViewportObj);
 //
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}
@@ -51,7 +51,7 @@ namespace Eternal
 				return new VulkanPipeline(Context.GetDevice(), CreateInformation);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

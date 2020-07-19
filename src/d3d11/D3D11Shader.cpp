@@ -85,13 +85,13 @@ void D3D11Shader::_CompileFile(_In_ const string& Src, _In_ const string& Entry,
 		_Program = nullptr;
 		const char* Error = (LPCSTR)Errors->GetBufferPointer();
 		OutputDebugString(Error);
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 	}
 }
 
 void D3D11Shader::_LoadFile(_In_ const string& shader)
 {
-	ETERNAL_ASSERT(false);
+	ETERNAL_BREAK();
 }
 
 D3D11Shader::D3D11Include::D3D11Include()
@@ -129,7 +129,7 @@ STDMETHODIMP D3D11Shader::D3D11Include::Open(THIS_ D3D_INCLUDE_TYPE IncludeType,
 
 	if (!IncludedFile)
 	{
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 	}
 
 	*pBytes = (UINT)IncludedFile.tellg();

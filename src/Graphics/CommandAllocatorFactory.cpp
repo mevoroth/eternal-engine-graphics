@@ -21,7 +21,7 @@ namespace Eternal
 				return new VulkanCommandAllocator(DeviceObj);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

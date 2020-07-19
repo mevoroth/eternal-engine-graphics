@@ -22,7 +22,7 @@ namespace Eternal
 				return new VulkanCommandList(DeviceObj, Type);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

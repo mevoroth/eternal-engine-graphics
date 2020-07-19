@@ -45,26 +45,26 @@ static void BuildSrvDescription(_In_ const TextureView& View, _Out_ D3D12_SHADER
 	{
 		ShaderResourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
 
-		ETERNAL_ASSERT(false); // NOT IMPLEMENTED
+		ETERNAL_BREAK(); // NOT IMPLEMENTED
 	} break;
 	case TEXTURE_VIEW_TYPE_3D:
 	{
 		ShaderResourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
-		ETERNAL_ASSERT(false); // NOT IMPLEMENTED
+		ETERNAL_BREAK(); // NOT IMPLEMENTED
 	} break;
 	case TEXTURE_VIEW_TYPE_CUBE:
 	{
 		ShaderResourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
-		ETERNAL_ASSERT(false); // NOT IMPLEMENTED
+		ETERNAL_BREAK(); // NOT IMPLEMENTED
 	} break;
 	case TEXTURE_VIEW_TYPE_CUBEARRAY:
 	{
 		ShaderResourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBEARRAY;
-		ETERNAL_ASSERT(false); // NOT IMPLEMENTED
+		ETERNAL_BREAK(); // NOT IMPLEMENTED
 	} break;
 	default:
 		ShaderResourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_UNKNOWN;
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		break;
 	}
 }
@@ -130,6 +130,6 @@ D3D12View::~D3D12View()
 
 //RenderTarget& D3D12View::GetAsRenderTarget()
 //{
-//	ETERNAL_ASSERT(false);
+//	ETERNAL_BREAK();
 //	return *((RenderTarget*)nullptr);
 //}

@@ -67,7 +67,7 @@ Shader* ShaderFactory::_Create(_In_ Device& DeviceObj, _In_ const string& Name, 
 		return new VulkanShader(DeviceObj, Name, Source, Type, Defines);
 
 	default:
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		return nullptr;
 	}
 }

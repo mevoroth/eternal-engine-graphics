@@ -25,7 +25,7 @@ namespace Eternal
 				return new VulkanCommandQueue(DeviceObj);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 			

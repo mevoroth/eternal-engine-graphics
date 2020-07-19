@@ -107,7 +107,7 @@ View* D3D12Resource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& Des
 
 View* D3D12Resource::CreateView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj, _In_ uint64_t Offset, _In_ uint64_t Size)
 {
-	ETERNAL_ASSERT(false);
+	ETERNAL_BREAK();
 	return nullptr;
 }
 

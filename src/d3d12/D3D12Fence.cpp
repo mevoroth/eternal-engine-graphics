@@ -18,7 +18,7 @@ D3D12Fence::D3D12Fence(_In_ Device& DeviceObj)
 	{
 		DWORD LastError = GetLastError();
 		ETERNAL_ASSERT(LastError != ERROR_ALREADY_EXISTS);
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		return;
 	}
 }

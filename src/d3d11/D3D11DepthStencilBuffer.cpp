@@ -67,7 +67,7 @@ void D3D11DepthStencilBuffer::Clear(_In_ Context* ContextObj)
 
 void D3D11DepthStencilBuffer::Clear(_In_ Context* ContextObj, _In_ float Value)
 {
-	ETERNAL_ASSERT(false); // Not implemented
+	ETERNAL_BREAK(); // Not implemented
 }
 
 Resource* D3D11DepthStencilBuffer::GetAsResource()

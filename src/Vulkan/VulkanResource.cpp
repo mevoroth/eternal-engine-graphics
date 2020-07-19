@@ -165,5 +165,5 @@ void VulkanResource::Unmap(_In_ Device& DeviceObj)
 
 void VulkanResource::SetName(_In_ const wchar_t* Name)
 {
-	ETERNAL_ASSERT(false);
+	ETERNAL_BREAK();
 }

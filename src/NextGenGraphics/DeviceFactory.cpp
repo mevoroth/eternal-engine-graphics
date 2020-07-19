@@ -33,7 +33,7 @@ namespace Eternal
 				return new VulkanDevice(WindowObj);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

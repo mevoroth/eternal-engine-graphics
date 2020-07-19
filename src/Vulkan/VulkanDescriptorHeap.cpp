@@ -83,7 +83,7 @@ VulkanDescriptorHeap::VulkanDescriptorHeap(_In_ Device& DeviceObj, _In_ const Ro
 //	, _Device(DeviceObj)
 //	//, _BoundResources(ResourcesCount)
 //{
-//	ETERNAL_ASSERT(false); // DEPRECATED
+//	ETERNAL_BREAK(); // DEPRECATED
 //	//VkDescriptorPoolSize DescriptorPoolSize;
 //	//DescriptorPoolSize.type				= VULKAN_DESCRIPTOR_TYPES[HeapTypeObj];
 //	//DescriptorPoolSize.descriptorCount	= ResourcesCount;

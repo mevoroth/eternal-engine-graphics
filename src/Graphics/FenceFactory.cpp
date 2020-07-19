@@ -22,7 +22,7 @@ namespace Eternal
 				return new VulkanFence(DeviceObj);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

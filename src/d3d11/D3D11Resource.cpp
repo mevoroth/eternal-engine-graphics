@@ -89,7 +89,7 @@ void D3D11Resource::_CreateBuffer(size_t BufferSize, const Usage& UsageObj, cons
 		DWORD removedReason = static_cast<D3D11Renderer*>(Renderer::Get())->GetDevice()->GetDeviceRemovedReason();
 		sprintf_s(errors, ETERNAL_ARRAYSIZE(errors), "ERROR %d:%x:%x\n", err, err, removedReason);
 		OutputDebugString(errors);
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 	}
 #endif
 

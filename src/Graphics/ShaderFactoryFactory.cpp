@@ -10,7 +10,7 @@ namespace Eternal
 		{
 			if (ShaderFactoryTypeObj == ShaderFactoryType::SHADER_FACTORY_D3D11)
 				return new D3D11ShaderFactory();
-			ETERNAL_ASSERT(false);
+			ETERNAL_BREAK();
 			return nullptr;
 		}
 	}

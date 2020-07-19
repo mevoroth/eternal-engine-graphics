@@ -15,7 +15,7 @@ namespace Eternal
 		//		return D3DDevice;
 		//	}
 
-		//	ETERNAL_ASSERT(false);
+		//	ETERNAL_BREAK();
 
 		//	return nullptr;
 		//}

@@ -23,7 +23,7 @@ namespace Eternal
 				return new VulkanInputLayout(DataType, DataTypeCount);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

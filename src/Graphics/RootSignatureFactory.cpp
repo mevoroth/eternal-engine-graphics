@@ -23,7 +23,7 @@ namespace Eternal
 				return new VulkanRootSignature(DeviceObj);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}
@@ -41,7 +41,7 @@ namespace Eternal
 				return new VulkanRootSignature(DeviceObj, Resources, ResourcesCount, RootSignatureAccessObj);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

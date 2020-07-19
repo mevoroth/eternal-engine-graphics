@@ -117,9 +117,9 @@ void D3D12SwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQ
 	HRESULT hr = _SwapChain->Present(0, 0);
 	if (hr != S_OK)
 	{
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		hr = static_cast<D3D12Device&>(DeviceObj).GetD3D12Device()->GetDeviceRemovedReason();
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 	}
 }
 

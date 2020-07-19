@@ -39,7 +39,7 @@ namespace Eternal
 			virtual ~Resource() {}
 			virtual LockedResource Lock(Context& ContextObj, const LockMode& LockingMode) = 0;
 			virtual void Unlock(Context& ContextObj) = 0;
-			void Resize(const size_t& Size) { ETERNAL_ASSERT(false); };
+			void Resize(const size_t& Size) { ETERNAL_BREAK(); };
 			inline size_t GetSize()
 			{
 				return _Size;

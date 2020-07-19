@@ -33,7 +33,7 @@ D3D11Sampler::D3D11Sampler(_In_ bool MINLinear, _In_ bool MAGLinear, _In_ bool M
 D3D11Sampler::D3D11Sampler(_In_ bool Comparison, _In_ const AddressMode& U, _In_ const AddressMode& V, _In_ const AddressMode& W)
 {
 	// TODO: Implement anisotropic
-	ETERNAL_ASSERT(false);
+	ETERNAL_BREAK();
 }
 
 D3D11Sampler::~D3D11Sampler()

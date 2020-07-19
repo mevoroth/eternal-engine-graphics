@@ -22,7 +22,7 @@ namespace Eternal
 //				return new VulkanDescriptorHeap(DeviceObj, Space, Register, HeapTypeObj, ResourcesCount, RootSignatureAccessObj);
 //
 //			default:
-//				ETERNAL_ASSERT(false);
+//				ETERNAL_BREAK();
 //				return nullptr;
 //			}
 //		}
@@ -40,7 +40,7 @@ namespace Eternal
 				return new VulkanDescriptorHeap(DeviceObj, Resources, ResourcesCount);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

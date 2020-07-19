@@ -19,7 +19,7 @@ namespace Eternal
 				return new VulkanContext(DeviceObj);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

@@ -24,7 +24,7 @@ namespace Eternal
 					return new VulkanSampler(DeviceObj, MINLinear, MAGLinear, MIPLinear, U, V, W);
 			}
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}
@@ -40,13 +40,13 @@ namespace Eternal
 
 			case DeviceType::VULKAN:
 			{
-				//ETERNAL_ASSERT(false); // TODO: FIX THIS
+				//ETERNAL_BREAK(); // TODO: FIX THIS
 				if (!Comparison)
 					return new VulkanSampler(DeviceObj, MINLinear, MAGLinear, MIPLinear, U, V, W);
 			}
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

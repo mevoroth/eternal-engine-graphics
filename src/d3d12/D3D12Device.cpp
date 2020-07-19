@@ -90,7 +90,7 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 	if (hr == DXGI_ERROR_NOT_FOUND)
 	{
 		// No GPU at this index
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		return;
 	}
 	

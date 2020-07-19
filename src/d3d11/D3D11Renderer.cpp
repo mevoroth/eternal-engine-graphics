@@ -23,14 +23,14 @@ D3D11Renderer::D3D11Renderer(_In_ const RenderMode& mode, _In_ const AntiAliasin
 	hr = _CreateDevice();
 	if (hr != S_OK)
 	{
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		// ERROR
 	}
 
 	hr = _CreateSwapChain();
 	if (hr != S_OK)
 	{
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		// ERROR
 	}
 
@@ -82,7 +82,7 @@ int D3D11Renderer::_CreateDevice()
 	{
 		// ERROR
 		printf("ERROR\n");
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 	}
 
 	if (hr != S_OK)
@@ -90,7 +90,7 @@ int D3D11Renderer::_CreateDevice()
 		// ERROR
 		DWORD err = GetLastError();
 		printf("ERROR %d:%x\n", err, err);
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 	}
 
 	//hr = _Device->QueryInterface(__uuidof(ID3D11Debug), (void**)&_Debug);
@@ -180,7 +180,7 @@ int D3D11Renderer::_CreateSwapChain()
 
 	if (hr != S_OK)
 	{
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		// ERROR
 		//char str[256];
 		//DWORD err = GetLastError();

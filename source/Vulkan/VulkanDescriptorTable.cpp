@@ -79,7 +79,7 @@ void VulkanDescriptorTable::Update(_In_ Device& DeviceObj)
 	//	}
 	//	else
 	//	{
-	//		ETERNAL_ASSERT(false);
+	//		ETERNAL_BREAK();
 	//	}
 	//}
 	//

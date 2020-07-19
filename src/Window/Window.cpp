@@ -54,7 +54,7 @@ void Window::Create(WNDPROC WindowEventsHandler)
 	if (!_WindowHandle)
 	{
 		DWORD err = GetLastError();
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 		// LOG
 	}
 

@@ -26,7 +26,7 @@ static D3D12_HEAP_TYPE BuildD3D12HeapType(_In_ bool InVRAM, _In_ bool VisibleFro
 			return D3D12_HEAP_TYPE_READBACK;
 		}
 	}
-	ETERNAL_ASSERT(false);
+	ETERNAL_BREAK();
 	return D3D12_HEAP_TYPE_CUSTOM;
 }
 
@@ -50,10 +50,10 @@ static D3D12_CPU_PAGE_PROPERTY BuildD3D12CPUPageProperty(_In_ bool VisibleFromCP
 	//	ETERNAL_ASSERT(!Cached);
 	//	return D3D12_CPU_PAGE_PROPERTY_NOT_AVAILABLE;
 	//}
-	//ETERNAL_ASSERT(false);
+	//ETERNAL_BREAK();
 	if (VisibleFromCPU && !(Coherent || Cached))
 	{
-		ETERNAL_ASSERT(false); // Wrong flags
+		ETERNAL_BREAK(); // Wrong flags
 	}
 	return D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 }

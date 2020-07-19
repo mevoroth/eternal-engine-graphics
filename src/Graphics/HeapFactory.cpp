@@ -22,7 +22,7 @@ namespace Eternal
 				return new VulkanHeap(DeviceObj, HeapTypeObj, ResourcesCount, InVRAM, VisibleFromCPU, Coherent, Cached);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

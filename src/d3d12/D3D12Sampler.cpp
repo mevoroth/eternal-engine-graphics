@@ -36,7 +36,7 @@ D3D12Sampler::D3D12Sampler(_In_ Device& DeviceObj, _In_ DescriptorHeap& Descript
 	: Sampler(false, false, false, U, V, W/*, 0xFFFFFFFF*/)
 {
 	// TODO: Implement anisotropic
-	ETERNAL_ASSERT(false);
+	ETERNAL_BREAK();
 }
 
 D3D12Sampler::D3D12Sampler(_In_ Device& DeviceObj, _In_ uint32_t Register, _In_ bool MINLinear, _In_ bool MAGLinear, _In_ bool MIPLinear, _In_ bool Comparison, _In_ const AddressMode& U, _In_ const AddressMode& V, _In_ const AddressMode& W)

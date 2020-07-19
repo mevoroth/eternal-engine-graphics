@@ -88,13 +88,13 @@ void D3D12Shader::_CompileFile(_In_ const string& Source, _In_ const char* Entry
 		_Program = nullptr;
 		const char* Error = (LPCSTR)Errors->GetBufferPointer();
 		OutputDebugString(Error);
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 	}
 }
 
 void D3D12Shader::_LoadFile(_In_ const string& ShaderFile)
 {
-	ETERNAL_ASSERT(false);
+	ETERNAL_BREAK();
 }
 
 void D3D12Shader::GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& ShaderObj)
@@ -111,7 +111,7 @@ STDMETHODIMP D3D12Shader::D3D12Include::Open(THIS_ D3D_INCLUDE_TYPE IncludeType,
 	
 	if (!IncludedFile)
 	{
-		ETERNAL_ASSERT(false);
+		ETERNAL_BREAK();
 	}
 
 	*pBytes = (UINT)IncludedFile.tellg();

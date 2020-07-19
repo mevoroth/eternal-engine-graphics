@@ -86,7 +86,7 @@ namespace Eternal
 				case VERTEX: _BindVertexShader(ShaderObj); break;
 				case GEOMETRY: _BindGeometryShader(ShaderObj); break;
 				case PIXEL: _BindPixelShader(ShaderObj); break;
-				default: ETERNAL_ASSERT(false); break;
+				default: ETERNAL_BREAK(); break;
 				}
 			}
 			template<ShaderStage Stage> void UnbindShader()
@@ -96,7 +96,7 @@ namespace Eternal
 				case VERTEX: _UnbindVertexShader(); break;
 				case GEOMETRY: _UnbindGeometryShader(); break;
 				case PIXEL: _UnbindPixelShader(); break;
-				default: ETERNAL_ASSERT(false); break;
+				default: ETERNAL_BREAK(); break;
 				}
 			}
 			template<ShaderStage Stage> void BindConstant(_In_ uint32_t Slot, _In_ Constant* ConstantObj)
@@ -106,7 +106,7 @@ namespace Eternal
 				case VERTEX: _BindVSConstant(Slot, ConstantObj); break;
 				case GEOMETRY: _BindGSConstant(Slot, ConstantObj); break;
 				case PIXEL: _BindPSConstant(Slot, ConstantObj); break;
-				default: ETERNAL_ASSERT(false); break;
+				default: ETERNAL_BREAK(); break;
 				}
 			}
 			template<ShaderStage Stage> void UnbindConstant(_In_ uint32_t Slot)
@@ -116,7 +116,7 @@ namespace Eternal
 				case VERTEX: _UnbindVSConstant(Slot); break;
 				case GEOMETRY: _UnbindGSConstant(Slot); break;
 				case PIXEL: _UnbindPSConstant(Slot); break;
-				default: ETERNAL_ASSERT(false); break;
+				default: ETERNAL_BREAK(); break;
 				}
 			}
 			template<ShaderStage Stage> void BindBuffer(_In_ uint32_t Slot, _In_ Resource* BufferObj)
@@ -126,7 +126,7 @@ namespace Eternal
 				case VERTEX: _BindVSBuffer(Slot, BufferObj); break;
 				case GEOMETRY: _BindGSBuffer(Slot, BufferObj); break;
 				case PIXEL: _BindPSBuffer(Slot, BufferObj); break;
-				default: ETERNAL_ASSERT(false); break;
+				default: ETERNAL_BREAK(); break;
 				}
 			}
 			template<ShaderStage Stage> void UnbindBuffer(_In_ uint32_t Slot)
@@ -136,12 +136,12 @@ namespace Eternal
 				case VERTEX: _UnbindVSBuffer(Slot); break;
 				case GEOMETRY: _UnbindGSBuffer(Slot); break;
 				case PIXEL: _UnbindPSBuffer(Slot); break;
-				default: ETERNAL_ASSERT(false); break;
+				default: ETERNAL_BREAK(); break;
 				}
 			}
 			template<ShaderStage Stage> void BindUAV()
 			{
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				//switch (Stage)
 				//{
 				//}
@@ -153,7 +153,7 @@ namespace Eternal
 				case VERTEX: _BindVSSampler(Slot, SamplerObj); break;
 				case GEOMETRY: _BindGSSampler(Slot, SamplerObj); break;
 				case PIXEL: _BindPSSampler(Slot, SamplerObj); break;
-				default: ETERNAL_ASSERT(false); break;
+				default: ETERNAL_BREAK(); break;
 				}
 			}
 			template<ShaderStage Stage> void UnbindSampler(_In_ uint32_t Slot)
@@ -163,7 +163,7 @@ namespace Eternal
 				case VERTEX: _UnbindVSSampler(Slot); break;
 				case GEOMETRY: _UnbindGSSampler(Slot); break;
 				case PIXEL: _UnbindPSSampler(Slot); break;
-				default: ETERNAL_ASSERT(false); break;
+				default: ETERNAL_BREAK(); break;
 				}
 			}
 		protected:

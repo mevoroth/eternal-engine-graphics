@@ -26,7 +26,7 @@ namespace Eternal
 				return new VulkanResource(DeviceObj, HeapObj, Stride, Size, Type);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}
@@ -44,7 +44,7 @@ namespace Eternal
 				return new VulkanResource(DeviceObj, HeapObj, Dimension, FormatObj, Type, Width, Height, Depth, MipCount, InitialState);
 
 			default:
-				ETERNAL_ASSERT(false);
+				ETERNAL_BREAK();
 				return nullptr;
 			}
 		}

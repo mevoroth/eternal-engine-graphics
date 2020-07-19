@@ -10,7 +10,7 @@ namespace Eternal
 		{
 			if (RendererTypeObj == RendererType::RENDERER_D3D11)
 				return new D3D11Renderer();
-			ETERNAL_ASSERT(false);
+			ETERNAL_BREAK();
 			return nullptr;
 		}
 	}
