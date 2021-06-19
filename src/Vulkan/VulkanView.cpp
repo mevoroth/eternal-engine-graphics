@@ -73,6 +73,7 @@ VulkanView::VulkanView(_In_ Device& DeviceObj, _In_ const vk::Image& BackBufferI
 			0, 1
 		)
 	);
+	ImageViewInfo.flags = vk::ImageViewCreateFlagBits();
 
 	VerifySuccess(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice().createImageView(&ImageViewInfo, nullptr, &_ImageView));
 }

@@ -640,7 +640,10 @@
     <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.2.141.2\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.2.176.1\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\Code\VulkanSDK\1.2.176.1\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -696,6 +699,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\Code\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -133,7 +133,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		"VK_LAYER_KHRONOS_validation",
 		//"VK_LAYER_LUNARG_monitor",
 		//"VK_LAYER_LUNARG_screenshot",
-		"VK_LAYER_LUNARG_standard_validation",
+		//"VK_LAYER_LUNARG_standard_validation", //deprecated?
 		//"VK_LAYER_LUNARG_vktrace"
 	};
 
@@ -141,7 +141,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	{
 		VK_KHR_SURFACE_EXTENSION_NAME,
 		VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
-		VK_EXT_DEBUG_REPORT_EXTENSION_NAME, 
+		VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
 		VK_EXT_DEBUG_UTILS_EXTENSION_NAME
 	};
 
@@ -153,7 +153,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, InstanceExtensionProperties.data());
 
-	_VulkanVersion = VK_API_VERSION_1_1; // Vulkan version
+	_VulkanVersion = VK_API_VERSION_1_2; // Vulkan version
 	vk::ApplicationInfo ApplicationInfo(
 		WindowObj.GetClassName().c_str(),
 		0,
@@ -192,6 +192,10 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		PhysicalDevices[PhysicalDeviceIndex].getProperties(&PhysicalDeviceProperties[PhysicalDeviceIndex]);
 	}
 
+	bool FoundIntegratedGPU = false;
+	vk::PhysicalDevice IntegratedPhysicalDevice;
+	vk::PhysicalDeviceProperties IntegratedPhysicalDeviceProperties;
+
 	for (uint32_t PhysicalDeviceIndex = 0; PhysicalDeviceIndex < PhysicalDevicesCount; ++PhysicalDeviceIndex)
 	{
 		if (PhysicalDeviceProperties[PhysicalDeviceIndex].deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
@@ -200,9 +204,26 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 			_PhysicalDeviceProperties = PhysicalDeviceProperties[PhysicalDeviceIndex];
 			break;
 		}
+		else if (PhysicalDeviceProperties[PhysicalDeviceIndex].deviceType == vk::PhysicalDeviceType::eIntegratedGpu)
+		{
+			if (!FoundIntegratedGPU)
+			{
+				FoundIntegratedGPU = true;
+				IntegratedPhysicalDevice = PhysicalDevices[PhysicalDeviceIndex];
+				IntegratedPhysicalDeviceProperties = PhysicalDeviceProperties[PhysicalDeviceIndex];
+			}
+		}
 	}
 
-	ETERNAL_ASSERT(_PhysicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu);
+	if (_PhysicalDeviceProperties.deviceType != vk::PhysicalDeviceType::eDiscreteGpu && FoundIntegratedGPU)
+	{
+		_PhysicalDevice = IntegratedPhysicalDevice;
+		_PhysicalDeviceProperties = IntegratedPhysicalDeviceProperties;
+	}
+	else
+	{
+		ETERNAL_ASSERT(_PhysicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu);
+	}
 
 	uint32_t ExtensionsCount;
 	VerifySuccess(_PhysicalDevice.enumerateDeviceExtensionProperties(nullptr, &ExtensionsCount, static_cast<vk::ExtensionProperties*>(nullptr)));
