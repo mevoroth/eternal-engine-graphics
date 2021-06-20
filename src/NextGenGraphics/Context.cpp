@@ -1,23 +1,13 @@
 #include "NextGenGraphics/Context.hpp"
 
-#include "Graphics_deprecated/FenceFactory.hpp"
 #include "NextGenGraphics/DeviceFactory.hpp"
 #include "NextGenGraphics/Device.hpp"
+#include "NextGenGraphics/Context.hpp"
+#include "Vulkan/VulkanGraphicsContext.hpp"
+
 #include "Graphics_deprecated/SwapChainFactory.hpp"
-#include <vulkan/vulkan.hpp>
 
 using namespace Eternal::Graphics;
-
-//Context::Context(_In_ Device& DeviceObj)
-//{
-//	_FrameFence = CreateFence(DeviceObj);
-//}
-//
-//Context::~Context()
-//{
-//	delete _FrameFence;
-//	_FrameFence = nullptr;
-//}
 
 namespace Eternal
 {
@@ -25,7 +15,20 @@ namespace Eternal
 	{
 		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
 		{
-			return new GraphicsContext(CreateInformation);
+			switch (CreateInformation.Settings.Driver)
+			{
+#ifdef ETERNAL_ENABLE_D3D12
+			case DeviceType::D3D12:
+				return new GraphicsContext(CreateInformation);
+#endif
+			case DeviceType::VULKAN:
+				return new VulkanGraphicsContext(CreateInformation);
+
+			default:
+				ETERNAL_BREAK();
+				return nullptr;
+			}
+
 		}
 
 		void DestroyGraphicsContext(GraphicsContext*& Context)
