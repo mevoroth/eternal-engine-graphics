@@ -4,7 +4,7 @@
 #include "GraphicsSettings.hpp"
 #include "NextGenGraphics/Types.hpp"
 #include "Window/Window.hpp"
-#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics/Viewport.hpp"
 
 namespace Eternal
 {

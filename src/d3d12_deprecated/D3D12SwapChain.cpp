@@ -12,7 +12,7 @@
 #include "d3d12_deprecated/D3D12View.hpp"
 #include "d3d12_deprecated/D3D12RenderPass.hpp"
 #include "NextGenGraphics/Context.hpp"
-#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics/Viewport.hpp"
 #include "Graphics_deprecated/RenderPassFactory.hpp"
 
 using namespace Eternal::Graphics;

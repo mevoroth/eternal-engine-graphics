@@ -469,9 +469,6 @@
     <ClInclude Include="include\Graphics_deprecated\View.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Viewport.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\ViewportFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
@@ -495,6 +492,9 @@
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\DepthStencilFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Viewport.hpp">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -834,9 +834,6 @@
     <ClCompile Include="src\Graphics_deprecated\View.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\Viewport.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\ViewportFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
@@ -857,6 +854,9 @@
     </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\DepthStencilFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Viewport.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

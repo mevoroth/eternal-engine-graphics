@@ -2,7 +2,7 @@
 #define _RENDER_PASS_HPP_
 
 #include "Graphics/BlendState.hpp"
-#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics/Viewport.hpp"
 
 namespace Eternal
 {

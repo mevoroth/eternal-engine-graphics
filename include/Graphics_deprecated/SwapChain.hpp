@@ -1,7 +1,7 @@
 #ifndef _SWAP_CHAIN_HPP_
 #define _SWAP_CHAIN_HPP_
 
-#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics/Viewport.hpp"
 #include "Graphics/BlendState.hpp"
 
 namespace Eternal

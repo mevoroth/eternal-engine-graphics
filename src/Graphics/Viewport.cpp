@@ -1,4 +1,4 @@
-#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics/Viewport.hpp"
 
 using namespace Eternal::Graphics;
 

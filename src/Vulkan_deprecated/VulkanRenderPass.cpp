@@ -1,7 +1,7 @@
 #include "Vulkan_deprecated/VulkanRenderPass.hpp"
 
 #include "Graphics_deprecated/Format.hpp"
-#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics/Viewport.hpp"
 #include "NextGenGraphics/Context.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan_deprecated/VulkanDevice.hpp"
