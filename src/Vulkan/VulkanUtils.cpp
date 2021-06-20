@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <vulkan/vulkan.hpp>
 #include "Graphics_deprecated/RootSignature.hpp"
-#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics/Viewport.hpp"
 
 namespace Eternal
 {

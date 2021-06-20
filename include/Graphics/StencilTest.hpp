@@ -1,5 +1,4 @@
-#ifndef _STENCIL_HPP_
-#define _STENCIL_HPP_
+#pragma once
 
 #include "Graphics/Comparison.hpp"
 
@@ -86,5 +85,3 @@ namespace Eternal
 		extern const StencilTest StencilTestNone;
 	}
 }
-
-#endif

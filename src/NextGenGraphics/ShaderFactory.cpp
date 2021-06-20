@@ -1,10 +1,10 @@
 #include "NextGenGraphics/ShaderFactory.hpp"
 
-#include "Graphics_deprecated/ShaderType.hpp"
+#include "Graphics/ShaderType.hpp"
 #include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
-#include "d3d12_deprecated/D3D12Shader.hpp"
-#include "Vulkan_deprecated/VulkanShader.hpp"
+#include "d3d12/D3D12Shader.hpp"
+#include "Vulkan/VulkanShader.hpp"
 
 using namespace Eternal::Graphics;
 

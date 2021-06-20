@@ -1,8 +1,8 @@
-#include "Graphics_deprecated/Shader.hpp"
+#include "Graphics/Shader.hpp"
 
 using namespace Eternal::Graphics;
 
-Shader::Shader(const string& Name)
+Shader::Shader(_In_ const string& Name)
 	: _Name(Name)
 {
 }

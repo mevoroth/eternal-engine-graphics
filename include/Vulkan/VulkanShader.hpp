@@ -1,9 +1,8 @@
-#ifndef _VULKAN_SHADER_HPP_
-#define _VULKAN_SHADER_HPP_
+#pragma once
 
 #include <string>
 #include <vulkan/vulkan.hpp>
-#include "Graphics_deprecated/Shader.hpp"
+#include "Graphics/Shader.hpp"
 
 struct VkShaderModule_T;
 
@@ -27,10 +26,7 @@ namespace Eternal
 		private:
 			void _CompileFile(_In_ Device& DeviceObj, _In_ const string& Src, _In_ const ShaderType& Type, _In_ const vector<string>& Defines);
 
-			//std::vector<char> _ShaderCode;
 			vk::ShaderModule _ShaderModule;
 		};
 	}
 }
-
-#endif

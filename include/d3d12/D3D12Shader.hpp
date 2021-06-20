@@ -1,9 +1,8 @@
-#ifndef _D3D12_SHADER_HPP_
-#define _D3D12_SHADER_HPP_
+#pragma once
 
 #include <string>
 #include <d3d12.h>
-#include "Graphics_deprecated/Shader.hpp"
+#include "Graphics/Shader.hpp"
 
 namespace Eternal
 {
@@ -38,5 +37,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

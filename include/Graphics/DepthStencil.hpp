@@ -1,5 +1,4 @@
-#ifndef _DEPTH_STENCIL_HPP_
-#define _DEPTH_STENCIL_HPP_
+#pragma once
 
 #include "Graphics/DepthTest.hpp"
 #include "Graphics/StencilTest.hpp"
@@ -35,5 +34,3 @@ namespace Eternal
 		extern const DepthStencil DepthStencilNoneNone;
 	}
 }
-
-#endif

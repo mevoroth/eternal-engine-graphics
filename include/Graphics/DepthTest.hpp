@@ -1,5 +1,4 @@
-#ifndef _DEPTH_TEST_HPP_
-#define _DEPTH_TEST_HPP_
+#pragma once
 
 #include "Graphics/Comparison.hpp"
 
@@ -49,5 +48,3 @@ namespace Eternal
 		extern const DepthTest DepthTestNone;
 	}
 }
-
-#endif

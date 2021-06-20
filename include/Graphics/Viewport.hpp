@@ -1,5 +1,4 @@
-#ifndef _VIEWPORT_HPP_
-#define _VIEWPORT_HPP_
+#pragma once
 
 namespace Eternal
 {
@@ -35,5 +34,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

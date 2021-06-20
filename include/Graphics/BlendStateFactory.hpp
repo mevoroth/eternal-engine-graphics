@@ -1,5 +1,4 @@
-#ifndef _BLEND_STATE_FACTORY_HPP_
-#define _BLEND_STATE_FACTORY_HPP_
+#pragma once
 
 namespace Eternal
 {
@@ -15,5 +14,3 @@ namespace Eternal
 			_In_ const BlendChannel& BlendChannelObj);
 	}
 }
-
-#endif

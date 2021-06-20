@@ -1,5 +1,4 @@
-#ifndef _BLEND_STATE_HPP_
-#define _BLEND_STATE_HPP_
+#pragma once
 
 namespace Eternal
 {
@@ -123,5 +122,3 @@ namespace Eternal
 		extern const LogicBlend LogicBlendNone;
 	}
 }
-
-#endif

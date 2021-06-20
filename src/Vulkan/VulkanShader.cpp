@@ -1,11 +1,11 @@
-#include "Vulkan_deprecated/VulkanShader.hpp"
+#include "Vulkan/VulkanShader.hpp"
 
 #include <fstream>
 #include <shaderc/shaderc.h>
 #include "NextGenGraphics/Context.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan_deprecated/VulkanDevice.hpp"
-#include "Graphics_deprecated/ShaderType.hpp"
+#include "Graphics/ShaderType.hpp"
 #include "File/FilePath.hpp"
 #include "File/File.hpp"
 #include "File/FileFactory.hpp"

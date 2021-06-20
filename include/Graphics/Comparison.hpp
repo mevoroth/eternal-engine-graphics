@@ -1,5 +1,4 @@
-#ifndef _COMPARISON_HPP_
-#define _COMPARISON_HPP_
+#pragma once
 
 namespace Eternal
 {
@@ -18,5 +17,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

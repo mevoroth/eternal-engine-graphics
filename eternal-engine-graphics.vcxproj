@@ -144,6 +144,7 @@
     <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Shader.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12BlendState.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12CommandAllocator.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12CommandList.hpp" />
@@ -161,7 +162,6 @@
     <ClInclude Include="include\d3d12_deprecated\D3D12Resource.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12RootSignature.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12Sampler.hpp" />
-    <ClInclude Include="include\d3d12_deprecated\D3D12Shader.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12ShaderFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
@@ -173,6 +173,8 @@
     <ClInclude Include="include\Graphics\Comparison.hpp" />
     <ClInclude Include="include\Graphics\DepthStencil.hpp" />
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
+    <ClInclude Include="include\Graphics\Shader.hpp" />
+    <ClInclude Include="include\Graphics\ShaderType.hpp" />
     <ClInclude Include="include\Graphics\StencilTest.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics_deprecated\CommandAllocator.hpp" />
@@ -220,12 +222,10 @@
     <ClInclude Include="include\Graphics_deprecated\SamplerFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Shader.hpp" />
     <ClInclude Include="include\Graphics_deprecated\ShaderFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\ShaderFactoryFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\ShaderType.hpp" />
     <ClInclude Include="include\Graphics_deprecated\StructuredBuffer.hpp" />
     <ClInclude Include="include\Graphics_deprecated\StructuredBufferFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\SwapChain.hpp" />
@@ -247,6 +247,7 @@
     <ClInclude Include="include\NextGenGraphics\ShaderFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\Types\DeviceType.hpp" />
     <ClInclude Include="include\NextGenGraphics\Types\MemoryType.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanBlendState.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanBuffer.hpp" />
@@ -267,7 +268,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanResource.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanRootSignature.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanSampler.hpp" />
-    <ClInclude Include="include\Vulkan_deprecated\VulkanShader.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanSwapChain.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanUtils.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanView.hpp" />
@@ -382,6 +382,7 @@
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Shader.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12CommandAllocator.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12CommandList.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12CommandQueue.cpp" />
@@ -397,7 +398,6 @@
     <ClCompile Include="src\d3d12_deprecated\D3D12Resource.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12RootSignature.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12Sampler.cpp" />
-    <ClCompile Include="src\d3d12_deprecated\D3D12Shader.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12ShaderFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -407,6 +407,7 @@
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
     <ClCompile Include="src\Graphics\DepthStencil.cpp" />
     <ClCompile Include="src\Graphics\DepthTest.cpp" />
+    <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\StencilTest.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
     <ClCompile Include="src\Graphics_deprecated\CommandAllocatorFactory.cpp" />
@@ -440,7 +441,6 @@
     <ClCompile Include="src\Graphics_deprecated\SamplerFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\Shader.cpp" />
     <ClCompile Include="src\Graphics_deprecated\ShaderFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\ShaderFactoryFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -459,6 +459,7 @@
     <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\ShaderFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\Types\MemoryType.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="src\Vulkan\VulkanUtils.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanBuffer.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanCommandAllocator.cpp" />
@@ -476,7 +477,6 @@
     <ClCompile Include="src\Vulkan_deprecated\VulkanResource.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanRootSignature.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanSampler.cpp" />
-    <ClCompile Include="src\Vulkan_deprecated\VulkanShader.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanSwapChain.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanView.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
