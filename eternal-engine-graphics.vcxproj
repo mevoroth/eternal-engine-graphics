@@ -144,71 +144,34 @@
     <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12BlendState.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12CommandAllocator.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12CommandList.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12DescriptorHeap.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12DescriptorTable.hpp" />
-    <ClInclude Include="include\d3d12\D3D12Device.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Fence.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Format.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Heap.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12InputLayout.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12RenderPass.hpp" />
-    <ClInclude Include="include\d3d12\D3D12RenderTarget.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Resource.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12RootSignature.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Sampler.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Shader.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp">
+    <ClInclude Include="include\d3d12_deprecated\D3D12BlendState.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12CommandAllocator.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12CommandList.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12CommandQueue.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12DescriptorHeap.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12DescriptorTable.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12Device.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12Fence.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12Format.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12Heap.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12InputLayout.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12Pipeline.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12RenderPass.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12RenderTarget.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12Resource.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12RootSignature.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12Sampler.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12Shader.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12ShaderFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Pipeline.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12SwapChain.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12View.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12SwapChain.hpp" />
+    <ClInclude Include="include\d3d12_deprecated\D3D12View.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Clearable.hpp" />
     <ClInclude Include="include\Graphics\CommandAllocator.hpp" />
     <ClInclude Include="include\Graphics\CommandAllocatorFactory.hpp" />
     <ClInclude Include="include\Graphics\CommandList.hpp" />
@@ -250,7 +213,6 @@
     </ClInclude>
     <ClInclude Include="include\Graphics\RenderPass.hpp" />
     <ClInclude Include="include\Graphics\RenderPassFactory.hpp" />
-    <ClInclude Include="include\Graphics\RenderTarget.hpp" />
     <ClInclude Include="include\Graphics\RenderTargetFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
@@ -287,7 +249,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Context.hpp" />
-    <ClInclude Include="include\NextGenGraphics\ContextFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\Device.hpp" />
     <ClInclude Include="include\NextGenGraphics\DeviceFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
@@ -298,41 +259,33 @@
     <ClInclude Include="include\NextGenGraphics\ShaderFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\Types\DeviceType.hpp" />
     <ClInclude Include="include\NextGenGraphics\Types\MemoryType.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanBlendState.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanContext.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanDescriptorHeap.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanDescriptorTable.h" />
-    <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanHeap.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanRenderTarget.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanInputLayout.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanDevice.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanResource.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanRootSignature.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanSampler.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanShader.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanPipeline.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp" />
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanView.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanBlendState.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanBuffer.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanCommandAllocator.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanCommandList.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanCommandQueue.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanContext.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorHeap.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorTable.h" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanDevice.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanFence.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanFormat.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanHeap.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanInputLayout.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanPipeline.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanRenderPass.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanRenderTarget.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanResource.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanRootSignature.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanSampler.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanShader.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanSwapChain.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanUtils.hpp" />
+    <ClInclude Include="include\Vulkan_deprecated\VulkanView.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\d3d12\D3D12DescriptorTable.cpp" />
-    <ClCompile Include="source\Vulkan\VulkanDescriptorTable.cpp" />
-    <ClCompile Include="source\Vulkan\VulkanUtils.cpp" />
     <ClCompile Include="src\d3d10\D3D10BlendState.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -441,58 +394,27 @@
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12CommandAllocator.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12CommandList.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12DescriptorHeap.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Device.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Fence.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Heap.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12InputLayout.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12RenderPass.cpp" />
-    <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Resource.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12RootSignature.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Shader.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp">
+    <ClCompile Include="src\d3d12_deprecated\D3D12CommandAllocator.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12CommandList.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12CommandQueue.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorHeap.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorTable.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12Device.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12Fence.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12Heap.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12InputLayout.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12Pipeline.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12RenderPass.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12RenderTarget.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12Resource.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12RootSignature.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12Sampler.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12Shader.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12ShaderFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Pipeline.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12SwapChain.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12View.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12SwapChain.cpp" />
+    <ClCompile Include="src\d3d12_deprecated\D3D12View.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -560,31 +482,26 @@
     <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\ShaderFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\Types\MemoryType.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanCommandList.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanContext.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanDescriptorHeap.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanFence.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanHeap.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanInputLayout.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanResource.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanRootSignature.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanSampler.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanShader.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanPipeline.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp" />
-    <ClCompile Include="src\Vulkan\VulkanView.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanUtils.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanBuffer.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanCommandAllocator.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanCommandList.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanCommandQueue.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanContext.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanDescriptorHeap.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanDevice.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanFence.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanHeap.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanInputLayout.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanPipeline.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanRenderPass.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanRenderTarget.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanResource.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanRootSignature.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanSampler.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanShader.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanSwapChain.cpp" />
+    <ClCompile Include="src\Vulkan_deprecated\VulkanView.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

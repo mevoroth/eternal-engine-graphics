@@ -10,20 +10,23 @@
     <Filter Include="d3d10">
       <UniqueIdentifier>{015fb133-e049-4630-9b11-25bfbccbf082}</UniqueIdentifier>
     </Filter>
-    <Filter Include="d3d12">
-      <UniqueIdentifier>{16e4b1e5-700a-4ebb-8d36-5aa4d71913e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Window">
       <UniqueIdentifier>{4024bae6-7f51-46a6-924d-cdf144f8b90d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Vulkan">
-      <UniqueIdentifier>{ff1ff517-f3a5-4b5f-8c70-cb8fd7fb4706}</UniqueIdentifier>
     </Filter>
     <Filter Include="NextGenGraphics">
       <UniqueIdentifier>{ec393388-7bed-46d1-b272-835f9135b4d7}</UniqueIdentifier>
     </Filter>
     <Filter Include="NextGenGraphics\Types">
       <UniqueIdentifier>{728ff0bc-a6f6-4b7c-8fd4-7e23ee7ddb25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vulkan_deprecated">
+      <UniqueIdentifier>{ff1ff517-f3a5-4b5f-8c70-cb8fd7fb4706}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="d3d12_deprecated">
+      <UniqueIdentifier>{16e4b1e5-700a-4ebb-8d36-5aa4d71913e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vulkan">
+      <UniqueIdentifier>{cbd7f7d3-0270-41b2-b4a6-b9591a0a3b99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,9 +43,6 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\Renderer.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\RenderTarget.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\Texture.hpp">
@@ -178,9 +178,6 @@
     <ClInclude Include="include\Graphics\DepthTest.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Clearable.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11DepthStencil.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
@@ -201,33 +198,6 @@
     </ClInclude>
     <ClInclude Include="include\Window\Window.hpp">
       <Filter>Window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Device.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Resource.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12RenderTarget.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12InputLayout.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Shader.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12ShaderFactory.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12BlendState.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12CommandList.hpp">
-      <Filter>d3d12</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\DeviceFactory.hpp">
       <Filter>Graphics</Filter>
@@ -274,77 +244,20 @@
     <ClInclude Include="include\Graphics\StructuredBufferFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanDevice.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12DescriptorHeap.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanBuffer.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Sampler.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\Sampler.hpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Fence.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12CommandAllocator.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanCommandList.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanFence.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanInputLayout.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanShader.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanResource.hpp">
-      <Filter>Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Resource.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12View.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanView.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\View.hpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanFormat.hpp">
-      <Filter>Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\ShaderType.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\CommandQueue.hpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12SwapChain.hpp">
-      <Filter>d3d12</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\SwapChain.hpp">
       <Filter>Graphics</Filter>
@@ -361,20 +274,11 @@
     <ClInclude Include="include\Graphics\CommandAllocator.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanRenderTarget.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\RootSignature.hpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanRootSignature.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanSampler.hpp">
-      <Filter>Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\CommandQueueFactory.hpp">
       <Filter>Graphics</Filter>
@@ -391,35 +295,14 @@
     <ClInclude Include="include\Graphics\Heap.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanHeap.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Heap.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Format.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\DescriptorHeap.hpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12Pipeline.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanPipeline.hpp">
-      <Filter>Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\Pipeline.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12RootSignature.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\RootSignatureFactory.hpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanDescriptorHeap.hpp">
-      <Filter>Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\RenderPass.hpp">
       <Filter>Graphics</Filter>
@@ -451,23 +334,11 @@
     <ClInclude Include="include\NextGenGraphics\ShaderFactory.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12RenderPass.hpp">
-      <Filter>d3d12</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanBlendState.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\CommandAllocatorFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Context.hpp">
       <Filter>NextGenGraphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanContext.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\NextGenGraphics\ContextFactory.hpp">
-      <Filter>d3d12</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\ContextFactory.hpp">
       <Filter>Graphics</Filter>
@@ -475,14 +346,8 @@
     <ClInclude Include="include\Graphics\CommandListFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanDescriptorTable.h">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\DescriptorTable.h">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12\D3D12DescriptorTable.hpp">
-      <Filter>d3d12</Filter>
     </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Types.hpp">
       <Filter>NextGenGraphics</Filter>
@@ -490,11 +355,143 @@
     <ClInclude Include="include\NextGenGraphics\Types\DeviceType.hpp">
       <Filter>NextGenGraphics\Types</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
-      <Filter>Vulkan</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Types\MemoryType.hpp">
       <Filter>NextGenGraphics\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanBlendState.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanBuffer.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanCommandAllocator.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanCommandList.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanCommandQueue.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanContext.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorHeap.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorTable.h">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanDevice.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanFence.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanFormat.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanHeap.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanInputLayout.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanPipeline.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanRenderPass.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanRenderTarget.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanResource.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanRootSignature.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanSampler.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanShader.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanSwapChain.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanUtils.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan_deprecated\VulkanView.hpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12BlendState.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12CommandAllocator.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12CommandList.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12CommandQueue.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12DescriptorHeap.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12DescriptorTable.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12Device.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12Fence.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12Format.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12Heap.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12InputLayout.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12Pipeline.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12RenderPass.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12RenderTarget.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12Resource.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12RootSignature.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12Sampler.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12Shader.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12ShaderFactory.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12SwapChain.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12_deprecated\D3D12View.hpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
+      <Filter>Vulkan</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -618,24 +615,6 @@
     <ClCompile Include="src\d3d11\D3D11StructuredBuffer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Device.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12RenderTarget.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12InputLayout.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12ShaderFactory.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12CommandList.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\DeviceFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -669,68 +648,8 @@
     <ClCompile Include="src\Graphics\StructuredBufferFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
     <ClCompile Include="src\Window\Window.cpp">
       <Filter>Window</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12DescriptorHeap.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Resource.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanBuffer.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Shader.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Fence.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12CommandAllocator.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanCommandList.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanFence.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanShader.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanResource.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Sampler.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanView.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12SwapChain.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanRenderTarget.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanRootSignature.cpp">
-      <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp">
       <Filter>Graphics</Filter>
@@ -741,29 +660,8 @@
     <ClCompile Include="src\Graphics\FenceFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanSampler.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp">
       <Filter>NextGenGraphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanHeap.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Heap.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12View.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Pipeline.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanPipeline.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12RootSignature.cpp">
-      <Filter>d3d12</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\RootSignatureFactory.cpp">
       <Filter>Graphics</Filter>
@@ -773,9 +671,6 @@
     </ClCompile>
     <ClCompile Include="src\NextGenGraphics\Resource.cpp">
       <Filter>NextGenGraphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanDescriptorHeap.cpp">
-      <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\HeapFactory.cpp">
       <Filter>Graphics</Filter>
@@ -791,9 +686,6 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\PipelineFactory.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanInputLayout.cpp">
-      <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\InputLayoutFactory.cpp">
       <Filter>Graphics</Filter>
@@ -813,9 +705,6 @@
     <ClCompile Include="src\Graphics\Sampler.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12RenderPass.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\View.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -834,23 +723,11 @@
     <ClCompile Include="src\Graphics\CommandListFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanContext.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\RenderPass.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\SwapChain.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Vulkan\VulkanDescriptorTable.cpp">
-      <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="source\d3d12\D3D12DescriptorTable.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Vulkan\VulkanUtils.cpp">
-      <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\DepthTest.cpp">
       <Filter>Graphics</Filter>
@@ -863,6 +740,123 @@
     </ClCompile>
     <ClCompile Include="src\NextGenGraphics\Types\MemoryType.cpp">
       <Filter>NextGenGraphics\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanBuffer.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanCommandAllocator.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanCommandList.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanCommandQueue.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanContext.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanDescriptorHeap.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanDevice.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanFence.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanHeap.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanInputLayout.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanPipeline.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanRenderPass.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanRenderTarget.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanResource.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanRootSignature.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanSampler.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanShader.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanSwapChain.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan_deprecated\VulkanView.cpp">
+      <Filter>Vulkan_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12CommandAllocator.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12CommandList.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12CommandQueue.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorHeap.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12Device.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12Fence.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12Heap.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12InputLayout.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12Pipeline.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12RenderPass.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12RenderTarget.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12Resource.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12RootSignature.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12Sampler.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12Shader.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12ShaderFactory.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12SwapChain.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12View.cpp">
+      <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanUtils.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorTable.cpp">
+      <Filter>d3d12_deprecated</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
