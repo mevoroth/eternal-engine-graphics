@@ -12,7 +12,7 @@ namespace Eternal
 	{
 		enum Format;
 		enum TextureView;
-		enum TransitionState;
+		enum class TransitionState;
 		class Device;
 		class Heap;
 		class VulkanDevice;

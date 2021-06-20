@@ -9,7 +9,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		CommandAllocator* CreateCommandAllocator(_In_ Device& DeviceObj, _In_ const CommandListType& Type)
+		CommandAllocator* CreateCommandAllocator(_In_ Device& DeviceObj, _In_ const CommandType& Type)
 		{
 			switch (DeviceObj.GetDeviceType())
 			{

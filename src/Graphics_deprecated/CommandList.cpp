@@ -3,7 +3,7 @@
 
 using namespace Eternal::Graphics;
 
-CommandList::CommandList(_In_ Device& DeviceObj, _In_ const CommandListType& Type)
+CommandList::CommandList(_In_ Device& DeviceObj, _In_ const CommandType& Type)
 {
 	_CommandAllocator = CreateCommandAllocator(DeviceObj, Type);
 }

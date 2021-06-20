@@ -12,18 +12,18 @@ namespace Eternal
 		using namespace std;
 		class Device;
 
-		class VulkanContext : public Context
-		{
-		public:
-			VulkanContext(_In_ Device& DeviceObj);
+		//class VulkanContext : public Context
+		//{
+		//public:
+		//	VulkanContext(_In_ Device& DeviceObj);
 
-			vector<VkSemaphore_T*>&	GetFrameCommandListSemaphores() { return _CommandListSemaphores; }
-			VkSemaphore_T*			GetFrameSemaphore()				{ return _FrameSemaphore; }
+		//	vector<VkSemaphore_T*>&	GetFrameCommandListSemaphores() { return _CommandListSemaphores; }
+		//	VkSemaphore_T*			GetFrameSemaphore()				{ return _FrameSemaphore; }
 
-		private:
-			vector<VkSemaphore_T*>	_CommandListSemaphores;
-			VkSemaphore_T*			_FrameSemaphore = nullptr;
-		};
+		//private:
+		//	vector<VkSemaphore_T*>	_CommandListSemaphores;
+		//	VkSemaphore_T*			_FrameSemaphore = nullptr;
+		//};
 	}
 }
 

@@ -9,7 +9,7 @@ namespace Eternal
 		enum TextureType;
 		enum Format;
 		enum ResourceDimension;
-		enum TransitionState;
+		enum class TransitionState;
 
 		class Device;
 		class Heap;

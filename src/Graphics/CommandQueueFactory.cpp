@@ -1,16 +1,16 @@
-#include "Graphics_deprecated/CommandQueueFactory.hpp"
+#include "Graphics/CommandQueueFactory.hpp"
 
 #include "Log/Log.hpp"
 #include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
-#include "d3d12_deprecated/D3D12CommandQueue.hpp"
-#include "Vulkan_deprecated/VulkanCommandQueue.hpp"
+#include "d3d12/D3D12CommandQueue.hpp"
+#include "Vulkan/VulkanCommandQueue.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		CommandQueue* CreateCommandQueue(_In_ Device& DeviceObj, _In_ const CommandListType& Type)
+		CommandQueue* CreateCommandQueue(_In_ Device& DeviceObj, _In_ const CommandType& Type)
 		{
 			LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Command Queue");
 
@@ -22,7 +22,7 @@ namespace Eternal
 #endif
 
 			case DeviceType::VULKAN:
-				return new VulkanCommandQueue(DeviceObj);
+				return new VulkanCommandQueue(DeviceObj, Type);
 
 			default:
 				ETERNAL_BREAK();

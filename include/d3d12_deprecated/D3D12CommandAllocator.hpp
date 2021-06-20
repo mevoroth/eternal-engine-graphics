@@ -2,6 +2,7 @@
 #define _D3D12_COMMAND_ALLOCATOR_HPP_
 
 #include "Graphics_deprecated/CommandAllocator.hpp"
+#include "Graphics/CommandUtils.h"
 
 struct ID3D12CommandAllocator;
 
@@ -10,12 +11,12 @@ namespace Eternal
 	namespace Graphics
 	{
 		class Device;
-		enum CommandListType;
+		enum class CommandType;
 
 		class D3D12CommandAllocator : public CommandAllocator
 		{
 		public:
-			D3D12CommandAllocator(_In_ Device& DeviceObj, _In_ const CommandListType& Type);
+			D3D12CommandAllocator(_In_ Device& DeviceObj, _In_ const CommandType& Type);
 			virtual ~D3D12CommandAllocator();
 
 			void Reset();

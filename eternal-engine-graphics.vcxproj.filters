@@ -196,9 +196,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanCommandList.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanCommandQueue.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanContext.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
@@ -259,16 +256,10 @@
     <ClInclude Include="include\d3d12_deprecated\D3D12CommandList.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12CommandQueue.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12DescriptorHeap.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12DescriptorTable.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12Device.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12Fence.hpp">
@@ -323,12 +314,6 @@
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\CommandListFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\CommandQueue.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\CommandQueueFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\Constant.hpp">
@@ -499,6 +484,36 @@
     <ClInclude Include="include\Vulkan\VulkanShader.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\CommandQueue.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\CommandList.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12CommandList.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Device.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\CommandUtils.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Utils.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanGraphicsContext.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\CommandQueueFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -630,9 +645,6 @@
     <ClCompile Include="src\Vulkan_deprecated\VulkanCommandList.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanCommandQueue.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanContext.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
@@ -681,13 +693,7 @@
     <ClCompile Include="src\d3d12_deprecated\D3D12CommandList.cpp">
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12CommandQueue.cpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorHeap.cpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12Device.cpp">
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12Fence.cpp">
@@ -739,9 +745,6 @@
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\CommandListFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\CommandQueueFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\ConstantFactory.cpp">
@@ -860,6 +863,33 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanShader.cpp">
       <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\CommandList.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12CommandList.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Device.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\CommandQueue.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Utils.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanGraphicsContext.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\CommandQueueFactory.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

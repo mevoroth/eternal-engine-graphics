@@ -2,7 +2,6 @@
 
 #include "Vulkan_deprecated/VulkanDevice.hpp"
 #include "Vulkan_deprecated/VulkanSwapChain.hpp"
-#include "Vulkan_deprecated/VulkanCommandQueue.hpp"
 #include "Vulkan_deprecated/VulkanCommandList.hpp"
 #include "Vulkan_deprecated/VulkanCommandAllocator.hpp"
 

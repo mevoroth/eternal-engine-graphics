@@ -9,7 +9,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		CommandList* CreateCommandList(_In_ Device& DeviceObj, _In_ const CommandListType& Type)
+		CommandList* CreateCommandList(_In_ Device& DeviceObj, _In_ const CommandType& Type)
 		{
 			switch (DeviceObj.GetDeviceType())
 			{

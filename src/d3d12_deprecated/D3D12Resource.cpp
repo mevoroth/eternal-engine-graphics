@@ -1,7 +1,7 @@
 #include "d3d12_deprecated/D3D12Resource.hpp"
 
 #include <d3d12.h>
-#include "d3d12_deprecated/D3D12Device.hpp"
+#include "d3d12/D3D12Device.hpp"
 #include "d3d12_deprecated/D3D12SwapChain.hpp"
 #include "d3d12_deprecated/D3D12Heap.hpp"
 #include "d3d12_deprecated/D3D12CommandList.hpp"
@@ -12,7 +12,7 @@ using namespace Eternal::Graphics;
 
 D3D12Resource::D3D12Resource(Device& DeviceObj, _In_ Heap& HeapObj, _In_ const ResourceDimension& Dimension, _In_ const Format& FormatObj, const TextureType& Type, _In_ uint32_t Width, _In_ uint32_t Height, _In_ uint32_t Depth, _In_ uint32_t MipCount, _In_ const TransitionState& State)
 	: Resource(HeapObj, FormatObj, Width, Height, Depth, MipCount)
-	, _DebugCurrentTransition(TRANSITION_UNDEFINED)
+	, _DebugCurrentTransition(TransitionState::TRANSITION_UNDEFINED)
 {
 	D3D12_RESOURCE_DESC ResourceDesc;
 	ResourceDesc.Dimension			= (D3D12_RESOURCE_DIMENSION)(Dimension + D3D12_RESOURCE_DIMENSION_TEXTURE1D);
@@ -52,7 +52,7 @@ D3D12Resource::D3D12Resource(Device& DeviceObj, _In_ Heap& HeapObj, _In_ const R
 
 D3D12Resource::D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ uint64_t Stride, _In_ uint64_t Size, _In_ const BufferType& Type)
 	: Resource(HeapObj, Stride, Size)
-	, _DebugCurrentTransition(TRANSITION_UNDEFINED)
+	, _DebugCurrentTransition(TransitionState::TRANSITION_UNDEFINED)
 {
 	D3D12_RESOURCE_DESC ResourceDesc;
 	ResourceDesc.Dimension			= D3D12_RESOURCE_DIMENSION_BUFFER;
@@ -87,7 +87,7 @@ D3D12Resource::D3D12Resource(_In_ Device& DeviceObj, _In_ Heap& HeapObj, _In_ ui
 D3D12Resource::D3D12Resource(_In_ ID3D12Resource* BackBuffer)
 	: Resource()
 	, _Resource(BackBuffer)
-	, _DebugCurrentTransition(TRANSITION_PRESENT)
+	, _DebugCurrentTransition(TransitionState::TRANSITION_PRESENT)
 {
 }
 

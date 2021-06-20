@@ -1,12 +1,7 @@
-#include "d3d12_deprecated/D3D12Device.hpp"
+#include "d3d12/D3D12Device.hpp"
 
 #include <d3d12.h>
 #include <DXGI1_4.h>
-
-#include "d3d12_deprecated/D3D12CommandQueue.hpp"
-#include "d3d12_deprecated/D3D12RenderTarget.hpp"
-#include "d3d12_deprecated/D3D12DescriptorHeap.hpp"
-#include "Window/Window.hpp"
 
 using namespace Eternal::Graphics;
 

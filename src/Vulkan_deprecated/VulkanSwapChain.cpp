@@ -14,7 +14,7 @@
 #include "Vulkan_deprecated/VulkanView.hpp"
 #include "Vulkan_deprecated/VulkanRenderPass.hpp"
 #include "Vulkan_deprecated/VulkanFence.hpp"
-#include "Vulkan_deprecated/VulkanCommandQueue.hpp"
+#include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan_deprecated/VulkanCommandAllocator.hpp"
 #include "Vulkan_deprecated/VulkanContext.hpp"
 

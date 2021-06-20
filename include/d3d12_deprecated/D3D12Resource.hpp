@@ -10,7 +10,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum TransitionState;
+		enum class TransitionState;
 		enum ResourceState
 		{
 			COMMON			= 0x0,

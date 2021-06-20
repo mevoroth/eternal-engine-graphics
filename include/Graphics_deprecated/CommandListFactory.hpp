@@ -5,11 +5,11 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum CommandListType;
+		enum class CommandType;
 		class Device;
 		class CommandList;
 
-		CommandList* CreateCommandList(_In_ Device& DeviceObj, _In_ const CommandListType& Type);
+		CommandList* CreateCommandList(_In_ Device& DeviceObj, _In_ const CommandType& Type);
 	}
 }
 

@@ -3,7 +3,6 @@
 #include <algorithm>
 #include "Window/Window.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan_deprecated/VulkanCommandQueue.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -35,12 +34,6 @@ VkBool32 VulkanDevice::DebugUtilsMessenger(
 	OutputDebugString("\n");
 	return VK_FALSE;
 }
-
-//PFN_vkGetPhysicalDeviceSurfaceSupportKHR		vkGetPhysicalDeviceSurfaceSupportKHR;
-//PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR	vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
-//PFN_vkGetPhysicalDeviceSurfaceFormatsKHR		vkGetPhysicalDeviceSurfaceFormatsKHR;
-//PFN_vkGetPhysicalDeviceSurfacePresentModesKHR	vkGetPhysicalDeviceSurfacePresentModesKHR;
-//PFN_vkGetSwapchainImagesKHR						vkGetSwapchainImagesKHR;
 
 namespace Eternal
 {
@@ -326,10 +319,3 @@ uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequi
 
 	return -1;
 }
-
-//VkQueue VulkanDevice::PopVulkanQueue()
-//{
-//	VkQueue CurrentQueue = _VulkanQueues.back();
-//	_VulkanQueues.pop_back();
-//	return CurrentQueue;
-//}
