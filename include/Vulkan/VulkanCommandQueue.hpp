@@ -20,7 +20,7 @@ namespace Eternal
 			VulkanCommandQueue(_In_ Device& DeviceObj, _In_ const CommandType& Type);
 			~VulkanCommandQueue();
 
-			virtual void SubmitCommandLists(_In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount) override;
+			virtual void SubmitCommandLists(_In_ GraphicsContext& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount) override;
 			//VkQueue_T* GetVulkanCommandQueue();
 
 		private:

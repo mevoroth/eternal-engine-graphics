@@ -48,13 +48,11 @@ namespace Eternal
 			const vk::PhysicalDeviceMemoryProperties& GetPhysicalDeviceMemoryProperties() const { return _PhysicalDeviceMemoryProperties; }
 			uint32_t FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const;
 			uint32_t GetVulkanVersion() const { return _VulkanVersion; }
-			//vk::Queue PopVulkanQueue();
 
 			virtual uint32_t GetDeviceMask() const override { return 0x1; }
 			virtual DeviceType GetDeviceType() const override { return DeviceType::VULKAN; }
 
 		private:
-			vector<vk::Queue>					_VulkanQueues;
 			vk::PhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;
 			vk::DebugReportCallbackEXT			_DebugReportCallback;
 			vk::DebugUtilsMessengerEXT			_DebugUtilsMessengerCallback;

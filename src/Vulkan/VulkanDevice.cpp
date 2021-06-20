@@ -288,11 +288,11 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	_PhysicalDevice.getMemoryProperties(&_PhysicalDeviceMemoryProperties);
 
-	_VulkanQueues.resize(VulkanQueueCount);
-	for (uint32_t VulkanQueueIndex = 0; VulkanQueueIndex < VulkanQueueCount; ++VulkanQueueIndex)
-	{
-		_Device.getQueue(GetQueueFamilyIndex(), VulkanQueueIndex, &_VulkanQueues[VulkanQueueCount - VulkanQueueIndex - 1]);
-	}
+	//_VulkanQueues.resize(VulkanQueueCount);
+	//for (uint32_t VulkanQueueIndex = 0; VulkanQueueIndex < VulkanQueueCount; ++VulkanQueueIndex)
+	//{
+	//	_Device.getQueue(GetQueueFamilyIndex(), VulkanQueueIndex, &_VulkanQueues[VulkanQueueCount - VulkanQueueIndex - 1]);
+	//}
 }
 
 vk::Device& VulkanDevice::GetVulkanDevice()

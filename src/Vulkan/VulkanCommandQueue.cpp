@@ -1,18 +1,8 @@
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include <vulkan/vulkan.hpp>
 #include "Vulkan/VulkanUtils.hpp"
-
-//#include "Vulkan_deprecated/VulkanDevice.hpp"
-//#include "Vulkan_deprecated/VulkanCommandList.hpp"
-//#include "Vulkan_deprecated/VulkanFence.hpp"
-//#include "Vulkan_deprecated/VulkanSwapChain.hpp"
-//#include "Vulkan_deprecated/VulkanCommandAllocator.hpp"
-//#include "Vulkan_deprecated/VulkanContext.hpp"
-
-//#define VC_EXTRALEAN
-//#define WIN32_LEAN_AND_MEAN
-//#define WIN32_EXTRA_LEAN
-//#include <Windows.h>
+#include "Vulkan/VUlkanCommandList.hpp"
+#include "Vulkan/VulkanGraphicsContext.hpp"
 
 using namespace Eternal::Graphics;
 using namespace std;
@@ -26,9 +16,9 @@ VulkanCommandQueue::~VulkanCommandQueue()
 {
 }
 
-void VulkanCommandQueue::SubmitCommandLists(_In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
+void VulkanCommandQueue::SubmitCommandLists(_In_ GraphicsContext& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
 {
-	//vk::PipelineStageFlags WaitDestStageMask = vk::PipelineStageFlagBits::eAllGraphics;
+	
 	//vk::SubmitInfo SubmitInfo(
 	//	1, &CurrentSemaphore,
 	//	&WaitDestStageMask,
@@ -45,9 +35,27 @@ void VulkanCommandQueue::SubmitCommandLists(_In_ CommandList* CommandLists[], _I
 	//	uint32_t                                         signalSemaphoreCount_ = {},
 	//	const VULKAN_HPP_NAMESPACE::Semaphore * pSignalSemaphores_ = {}) VULKAN_HPP_NOEXCEPT
 
-	//vk::SubmitInfo SubmitInfo(
+	VulkanGraphicsContext& VulkanGfxContext = static_cast<VulkanGraphicsContext&>(GfxContext);
+	vk::Semaphore CurrentFrameSemaphore = VulkanGfxContext.GetCurrentFrameSemaphore();
+	vk::Semaphore SubmitCompletionSemaphore = VulkanGfxContext.GetSubmitCompletionSemaphore();
 
-	//);
+	vk::PipelineStageFlags WaitDestStageMask = vk::PipelineStageFlagBits::eAllGraphics;
 
-	//Vulkan::VerifySuccess(_CommandQueue.submit());
+	vector<vk::CommandBuffer> VulkanCommandLists;
+	VulkanCommandLists.resize(CommandListsCount);
+	for (int32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
+	{
+		VulkanCommandLists[CommandListIndex] = static_cast<VulkanCommandList*>(CommandLists[CommandListIndex])->GetVulkanCommandBuffer();
+	}
+
+	vk::SubmitInfo SubmitInfo(
+		1, &CurrentFrameSemaphore,
+		&WaitDestStageMask,
+		CommandListsCount, VulkanCommandLists.data()
+		1, &SubmitCompletionSemaphore
+	);
+
+	Vulkan::VerifySuccess(
+		_CommandQueue.submit(1, &SubmitInfo)
+	);
 }

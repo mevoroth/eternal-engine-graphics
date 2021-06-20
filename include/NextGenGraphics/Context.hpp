@@ -30,6 +30,8 @@ namespace Eternal
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 			virtual ~GraphicsContext();
 
+			virtual void UpdateGraphicsContext() {}
+
 			Device& GetDevice() { return *_Device; }
 			Window& GetWindow() { return _Window; }
 			SwapChain& GetSwapChain() { return *_SwapChain; }

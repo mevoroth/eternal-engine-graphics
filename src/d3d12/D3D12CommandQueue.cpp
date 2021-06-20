@@ -33,7 +33,7 @@ namespace Eternal
 			_CommandQueue = nullptr;
 		}
 
-		void D3D12CommandQueue::SubmitCommandLists(_In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
+		void D3D12CommandQueue::SubmitCommandLists(_In_ GraphicsContext& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
 		{
 			vector<ID3D12CommandList*> D3D12CommandLists;
 			D3D12CommandLists.resize(CommandListsCount);

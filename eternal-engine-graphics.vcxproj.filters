@@ -193,9 +193,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanCommandAllocator.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanCommandList.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanContext.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
@@ -203,9 +200,6 @@
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorTable.h">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanDevice.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanFence.hpp">
@@ -514,6 +508,12 @@
     <ClInclude Include="include\Graphics\CommandQueueFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanCommandList.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanDevice.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -642,16 +642,10 @@
     <ClCompile Include="src\Vulkan_deprecated\VulkanCommandAllocator.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanCommandList.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanContext.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanDescriptorHeap.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanDevice.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanFence.cpp">
@@ -890,6 +884,12 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanCommandList.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
+      <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
