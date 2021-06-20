@@ -1,4 +1,4 @@
-#include "Graphics_deprecated/StencilTest.hpp"
+#include "Graphics/StencilTest.hpp"
 
 namespace Eternal
 {

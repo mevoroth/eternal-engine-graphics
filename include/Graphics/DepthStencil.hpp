@@ -1,8 +1,8 @@
 #ifndef _DEPTH_STENCIL_HPP_
 #define _DEPTH_STENCIL_HPP_
 
-#include "Graphics_deprecated/DepthTest.hpp"
-#include "Graphics_deprecated/StencilTest.hpp"
+#include "Graphics/DepthTest.hpp"
+#include "Graphics/StencilTest.hpp"
 
 namespace Eternal
 {

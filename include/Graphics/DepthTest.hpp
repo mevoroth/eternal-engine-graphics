@@ -1,7 +1,7 @@
 #ifndef _DEPTH_TEST_HPP_
 #define _DEPTH_TEST_HPP_
 
-#include "Graphics_deprecated/Comparison.hpp"
+#include "Graphics/Comparison.hpp"
 
 namespace Eternal
 {

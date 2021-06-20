@@ -3,9 +3,9 @@
 #include <d3d12.h>
 
 #include "Graphics_deprecated/Viewport.hpp"
-#include "Graphics_deprecated/DepthStencil.hpp"
-#include "Graphics_deprecated/DepthTest.hpp"
-#include "Graphics_deprecated/StencilTest.hpp"
+#include "Graphics/DepthStencil.hpp"
+#include "Graphics/DepthTest.hpp"
+#include "Graphics/StencilTest.hpp"
 #include "d3d12_deprecated/D3D12Device.hpp"
 #include "d3d12_deprecated/D3D12InputLayout.hpp"
 #include "d3d12_deprecated/D3D12Shader.hpp"

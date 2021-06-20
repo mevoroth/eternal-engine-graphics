@@ -334,9 +334,6 @@
     <ClInclude Include="include\Graphics_deprecated\CommandQueueFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Comparison.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\Constant.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
@@ -347,15 +344,6 @@
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\ContextFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\DepthStencil.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\DepthStencilFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\DepthTest.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\DescriptorHeap.hpp">
@@ -454,9 +442,6 @@
     <ClInclude Include="include\Graphics_deprecated\ShaderType.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\StencilTest.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\StructuredBuffer.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
@@ -495,6 +480,21 @@
     </ClInclude>
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\DepthTest.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\StencilTest.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Comparison.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\DepthStencil.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\DepthStencilFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -750,15 +750,6 @@
     <ClCompile Include="src\Graphics_deprecated\ConstantFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\DepthStencil.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\DepthStencilFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\DepthTest.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\DescriptorHeap.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
@@ -825,9 +816,6 @@
     <ClCompile Include="src\Graphics_deprecated\ShaderFactoryFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\StencilTest.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\StructuredBufferFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
@@ -857,6 +845,18 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\DepthTest.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\StencilTest.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\DepthStencil.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\DepthStencilFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

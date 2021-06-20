@@ -1,4 +1,4 @@
-#include "Graphics_deprecated/DepthTest.hpp"
+#include "Graphics/DepthTest.hpp"
 
 namespace Eternal
 {

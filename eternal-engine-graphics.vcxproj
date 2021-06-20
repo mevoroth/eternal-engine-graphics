@@ -170,20 +170,21 @@
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
+    <ClInclude Include="include\Graphics\Comparison.hpp" />
+    <ClInclude Include="include\Graphics\DepthStencil.hpp" />
+    <ClInclude Include="include\Graphics\DepthTest.hpp" />
+    <ClInclude Include="include\Graphics\StencilTest.hpp" />
     <ClInclude Include="include\Graphics_deprecated\CommandAllocator.hpp" />
     <ClInclude Include="include\Graphics_deprecated\CommandAllocatorFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\CommandList.hpp" />
     <ClInclude Include="include\Graphics_deprecated\CommandListFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\CommandQueue.hpp" />
     <ClInclude Include="include\Graphics_deprecated\CommandQueueFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\Comparison.hpp" />
     <ClInclude Include="include\Graphics_deprecated\Constant.hpp" />
     <ClInclude Include="include\Graphics_deprecated\ConstantFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\Context.hpp" />
     <ClInclude Include="include\Graphics_deprecated\ContextFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\DepthStencil.hpp" />
     <ClInclude Include="include\Graphics_deprecated\DepthStencilFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\DepthTest.hpp" />
     <ClInclude Include="include\Graphics_deprecated\DescriptorHeap.hpp" />
     <ClInclude Include="include\Graphics_deprecated\DescriptorHeapFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\DescriptorTable.h" />
@@ -224,7 +225,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\ShaderType.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\StencilTest.hpp" />
     <ClInclude Include="include\Graphics_deprecated\StructuredBuffer.hpp" />
     <ClInclude Include="include\Graphics_deprecated\StructuredBufferFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\SwapChain.hpp" />
@@ -405,14 +405,15 @@
     <ClCompile Include="src\d3d12_deprecated\D3D12View.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
+    <ClCompile Include="src\Graphics\DepthStencil.cpp" />
+    <ClCompile Include="src\Graphics\DepthTest.cpp" />
+    <ClCompile Include="src\Graphics\StencilTest.cpp" />
     <ClCompile Include="src\Graphics_deprecated\CommandAllocatorFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\CommandList.cpp" />
     <ClCompile Include="src\Graphics_deprecated\CommandListFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\CommandQueueFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\ConstantFactory.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\DepthStencil.cpp" />
     <ClCompile Include="src\Graphics_deprecated\DepthStencilFactory.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\DepthTest.cpp" />
     <ClCompile Include="src\Graphics_deprecated\DescriptorHeap.cpp" />
     <ClCompile Include="src\Graphics_deprecated\DescriptorHeapFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\Device.cpp" />
@@ -443,7 +444,6 @@
     <ClCompile Include="src\Graphics_deprecated\ShaderFactoryFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\StencilTest.cpp" />
     <ClCompile Include="src\Graphics_deprecated\StructuredBufferFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\SwapChain.cpp" />
     <ClCompile Include="src\Graphics_deprecated\SwapChainFactory.cpp" />

@@ -1,7 +1,7 @@
 #ifndef _STENCIL_HPP_
 #define _STENCIL_HPP_
 
-#include "Graphics_deprecated/Comparison.hpp"
+#include "Graphics/Comparison.hpp"
 
 namespace Eternal
 {

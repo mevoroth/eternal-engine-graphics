@@ -1,7 +1,7 @@
 #ifndef _D3D11_DEPTH_STENCIL_HPP_
 #define _D3D11_DEPTH_STENCIL_HPP_
 
-#include "Graphics_deprecated/DepthStencil.hpp"
+#include "Graphics/DepthStencil.hpp"
 
 struct ID3D11DepthStencilState;
 
