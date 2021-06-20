@@ -1,7 +1,7 @@
 #ifndef _SAMPLER_FACTORY_HPP_
 #define _SAMPLER_FACTORY_HPP_
 
-#include "Graphics/Sampler.hpp"
+#include "Graphics_deprecated/Sampler.hpp"
 
 namespace Eternal
 {

@@ -1,7 +1,7 @@
 #ifndef _D3D12_DESCRIPTOR_TABLE_HPP_
 #define _D3D12_DESCRIPTOR_TABLE_HPP_
 
-#include "Graphics/DescriptorTable.h"
+#include "Graphics_deprecated/DescriptorTable.h"
 #include "d3d12_deprecated/D3D12View.hpp"
 
 namespace Eternal

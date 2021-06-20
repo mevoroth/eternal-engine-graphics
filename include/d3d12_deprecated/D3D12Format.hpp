@@ -2,7 +2,7 @@
 #define _D3D12_FORMAT_HPP_
 
 #include <d3d12.h>
-#include "Graphics/Format.hpp"
+#include "Graphics_deprecated/Format.hpp"
 
 namespace Eternal
 {

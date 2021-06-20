@@ -1,7 +1,7 @@
 #ifndef _VULKAN_HEAP_HPP_
 #define _VULKAN_HEAP_HPP_
 
-#include "Graphics/Heap.hpp"
+#include "Graphics_deprecated/Heap.hpp"
 
 enum VkMemoryPropertyFlagBits;
 struct VkDeviceMemory_T;

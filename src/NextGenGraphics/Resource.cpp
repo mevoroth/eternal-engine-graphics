@@ -1,6 +1,6 @@
 #include "NextGenGraphics/Resource.hpp"
 
-#include "Graphics/Heap.hpp"
+#include "Graphics_deprecated/Heap.hpp"
 
 using namespace Eternal::Graphics;
 

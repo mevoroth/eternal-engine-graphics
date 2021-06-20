@@ -3,7 +3,7 @@
 
 #define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.hpp>
-#include "Graphics/SwapChain.hpp"
+#include "Graphics_deprecated/SwapChain.hpp"
 
 namespace Eternal
 {

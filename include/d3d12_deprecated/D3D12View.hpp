@@ -2,7 +2,7 @@
 #define _D3D12_VIEW_HPP_
 
 #include <d3d12.h>
-#include "Graphics/View.hpp"
+#include "Graphics_deprecated/View.hpp"
 #include "d3d12_deprecated/D3D12DescriptorHeap.hpp"
 
 namespace Eternal

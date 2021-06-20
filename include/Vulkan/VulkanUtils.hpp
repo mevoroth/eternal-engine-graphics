@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vulkan/vulkan.hpp>
-#include "Graphics/StencilTest.hpp"
+#include "Graphics_deprecated/StencilTest.hpp"
 #include "NextGenGraphics/Types/MemoryType.hpp"
 
 namespace Eternal

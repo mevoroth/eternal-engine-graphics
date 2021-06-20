@@ -2,8 +2,8 @@
 
 #include <algorithm>
 #include <vulkan/vulkan.hpp>
-#include "Graphics/RootSignature.hpp"
-#include "Graphics/Viewport.hpp"
+#include "Graphics_deprecated/RootSignature.hpp"
+#include "Graphics_deprecated/Viewport.hpp"
 
 namespace Eternal
 {

@@ -2,7 +2,7 @@
 #define _VULKAN_INPUT_LAYOUT_HPP_
 
 #include <vulkan/vulkan.hpp>
-#include "Graphics/InputLayout.hpp"
+#include "Graphics_deprecated/InputLayout.hpp"
 
 struct VkVertexInputAttributeDescription;
 struct VkVertexInputBindingDescription;

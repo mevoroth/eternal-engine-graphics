@@ -1,7 +1,7 @@
 #ifndef _D3D12_SAMPLER_HPP_
 #define _D3D12_SAMPLER_HPP_
 
-#include "Graphics/Sampler.hpp"
+#include "Graphics_deprecated/Sampler.hpp"
 
 struct D3D12_STATIC_SAMPLER_DESC;
 

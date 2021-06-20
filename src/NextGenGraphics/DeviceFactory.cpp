@@ -2,8 +2,8 @@
 
 #include "Log/Log.hpp"
 #include "NextGenGraphics/Device.hpp"
-#include "d3d12/D3D12Device.hpp"
-#include "Vulkan/VulkanDevice.hpp"
+#include "d3d12_deprecated/D3D12Device.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
 #include "NextGenGraphics/Context.hpp"
 
 namespace Eternal

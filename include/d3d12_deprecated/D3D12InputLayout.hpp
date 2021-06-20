@@ -3,7 +3,7 @@
 
 #include <d3d12.h>
 
-#include "Graphics/InputLayout.hpp"
+#include "Graphics_deprecated/InputLayout.hpp"
 
 using namespace std;
 

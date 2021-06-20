@@ -1,7 +1,7 @@
 #ifndef _VULKAN_FENCE_HPP_
 #define _VULKAN_FENCE_HPP_
 
-#include "Graphics/Fence.hpp"
+#include "Graphics_deprecated/Fence.hpp"
 
 struct VkFence_T;
 struct VkSemaphore_T;

@@ -1,7 +1,7 @@
 #ifndef _D3D12_PIPELINE_HPP_
 #define _D3D12_PIPELINE_HPP_
 
-#include "Graphics/Pipeline.hpp"
+#include "Graphics_deprecated/Pipeline.hpp"
 
 struct ID3D12PipelineState;
 struct ID3D12RootSignature;

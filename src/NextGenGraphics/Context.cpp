@@ -1,9 +1,9 @@
 #include "NextGenGraphics/Context.hpp"
 
-#include "Graphics/FenceFactory.hpp"
+#include "Graphics_deprecated/FenceFactory.hpp"
 #include "NextGenGraphics/DeviceFactory.hpp"
 #include "NextGenGraphics/Device.hpp"
-#include "Graphics/SwapChainFactory.hpp"
+#include "Graphics_deprecated/SwapChainFactory.hpp"
 #include <vulkan/vulkan.hpp>
 
 using namespace Eternal::Graphics;

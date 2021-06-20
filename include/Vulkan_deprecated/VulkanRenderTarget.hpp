@@ -2,7 +2,7 @@
 #define _VULKAN_RENDER_TARGET_HPP_
 
 #include "NextGenGraphics/RenderTarget.hpp"
-#include "Graphics/View.hpp"
+#include "Graphics_deprecated/View.hpp"
 
 struct VkFramebuffer_T;
 struct VkImage_T;

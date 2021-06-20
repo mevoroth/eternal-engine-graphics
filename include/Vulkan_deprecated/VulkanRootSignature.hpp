@@ -2,7 +2,7 @@
 #define _VULKAN_ROOT_SIGNATURE_HPP_
 
 #include <vulkan/vulkan.hpp>
-#include "Graphics/RootSignature.hpp"
+#include "Graphics_deprecated/RootSignature.hpp"
 
 namespace Eternal
 {

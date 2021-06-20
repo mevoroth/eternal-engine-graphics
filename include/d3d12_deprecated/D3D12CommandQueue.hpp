@@ -1,8 +1,8 @@
 #ifndef _D3D12_COMMAND_QUEUE_HPP_
 #define _D3D12_COMMAND_QUEUE_HPP_
 
-#include "Graphics/CommandQueue.hpp"
-#include "Graphics/CommandList.hpp"
+#include "Graphics_deprecated/CommandQueue.hpp"
+#include "Graphics_deprecated/CommandList.hpp"
 #include <d3d12.h>
 
 namespace Eternal

@@ -1,7 +1,7 @@
 #ifndef _D3D11_CONSTANT_HPP_
 #define _D3D11_CONSTANT_HPP_
 
-#include "Graphics/Constant.hpp"
+#include "Graphics_deprecated/Constant.hpp"
 #include "d3d11/D3D11Buffer.hpp"
 
 namespace Eternal

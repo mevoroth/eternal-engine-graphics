@@ -5,7 +5,7 @@
 #define VC_EXTRALEAN
 #include <Windows.h>
 
-#include "Graphics/Viewport.hpp"
+#include "Graphics_deprecated/Viewport.hpp"
 #include "d3d12_deprecated/D3D12Device.hpp"
 #include "d3d12_deprecated/D3D12CommandQueue.hpp"
 #include "d3d12_deprecated/D3D12Pipeline.hpp"

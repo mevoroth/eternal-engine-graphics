@@ -1,10 +1,10 @@
-#include "d3d12/D3D12CommandQueue.hpp"
+#include "d3d12_deprecated/D3D12CommandQueue.hpp"
 
-#include "Graphics/SwapChain.hpp"
-#include "d3d12/D3D12Device.hpp"
-#include "d3d12/D3D12CommandAllocator.hpp"
-#include "d3d12/D3D12CommandList.hpp"
-#include "d3d12/D3D12Fence.hpp"
+#include "Graphics_deprecated/SwapChain.hpp"
+#include "d3d12_deprecated/D3D12Device.hpp"
+#include "d3d12_deprecated/D3D12CommandAllocator.hpp"
+#include "d3d12_deprecated/D3D12CommandList.hpp"
+#include "d3d12_deprecated/D3D12Fence.hpp"
 
 using namespace Eternal::Graphics;
 

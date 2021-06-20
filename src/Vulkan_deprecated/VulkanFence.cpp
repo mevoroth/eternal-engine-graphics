@@ -1,10 +1,10 @@
-#include "Vulkan/VulkanFence.hpp"
+#include "Vulkan_deprecated/VulkanFence.hpp"
 
-#include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/VulkanSwapChain.hpp"
-#include "Vulkan/VulkanCommandQueue.hpp"
-#include "Vulkan/VulkanCommandList.hpp"
-#include "Vulkan/VulkanCommandAllocator.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanSwapChain.hpp"
+#include "Vulkan_deprecated/VulkanCommandQueue.hpp"
+#include "Vulkan_deprecated/VulkanCommandList.hpp"
+#include "Vulkan_deprecated/VulkanCommandAllocator.hpp"
 
 using namespace Eternal::Graphics;
 

@@ -1,8 +1,8 @@
-#include "d3d12/D3D12CommandAllocator.hpp"
+#include "d3d12_deprecated/D3D12CommandAllocator.hpp"
 
 #include <d3d12.h>
-#include "d3d12/D3D12Device.hpp"
-#include "d3d12/D3D12CommandList.hpp"
+#include "d3d12_deprecated/D3D12Device.hpp"
+#include "d3d12_deprecated/D3D12CommandList.hpp"
 
 using namespace Eternal::Graphics;
 

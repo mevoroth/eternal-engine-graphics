@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{4be9c4fb-a198-44ee-9012-2b24014beb42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="d3d11">
       <UniqueIdentifier>{8b9c15b3-5db9-4a77-8acc-932bcb87c2d5}</UniqueIdentifier>
     </Filter>
@@ -28,6 +25,12 @@
     <Filter Include="Vulkan">
       <UniqueIdentifier>{cbd7f7d3-0270-41b2-b4a6-b9591a0a3b99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics_deprecated">
+      <UniqueIdentifier>{4be9c4fb-a198-44ee-9012-2b24014beb42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{2e3ca534-bdc7-43d3-a353-6c354cfe7fe5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\d3d11\D3D11Device.hpp">
@@ -39,23 +42,8 @@
     <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Device.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Renderer.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Texture.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\MaterialProperty.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11InputLayout.hpp">
       <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Shader.hpp">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Shader.hpp">
       <Filter>d3d11</Filter>
@@ -69,14 +57,8 @@
     <ClInclude Include="include\d3d11\D3D11GeometryShader.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\BlendState.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11BlendState.hpp">
       <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Viewport.hpp">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Viewport.hpp">
       <Filter>d3d11</Filter>
@@ -127,20 +109,11 @@
     <ClInclude Include="include\d3d10\D3D10Texture.hpp">
       <Filter>d3d10</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Context.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Context.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Constant.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Constant.hpp">
       <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Resource.hpp">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Resource.hpp">
       <Filter>d3d11</Filter>
@@ -151,20 +124,8 @@
     <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\VertexBuffer.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\IndexBuffer.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\InputLayout.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp">
       <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\ShaderFactory.hpp">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11Sampler.hpp">
       <Filter>d3d11</Filter>
@@ -175,23 +136,11 @@
     <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\DepthTest.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d11\D3D11DepthStencil.hpp">
       <Filter>d3d11</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11DepthStencilBuffer.hpp">
       <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\StencilTest.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Comparison.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\StructuredBuffer.hpp">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d11\D3D11StructuredBuffer.hpp">
       <Filter>d3d11</Filter>
@@ -199,119 +148,17 @@
     <ClInclude Include="include\Window\Window.hpp">
       <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\DeviceFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\RendererFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\ShaderFactoryFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Format.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\RenderTargetFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\ConstantFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\ViewportFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\SamplerFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\DepthStencil.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\DepthStencilFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\BlendStateFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\TextureFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\VertexBufferFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\IndexBufferFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\StructuredBufferFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Sampler.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Resource.hpp">
       <Filter>NextGenGraphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\View.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\ShaderType.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\CommandQueue.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\SwapChain.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Fence.hpp">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Device.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\CommandList.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\CommandAllocator.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\RootSignature.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\CommandQueueFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\SwapChainFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\FenceFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp">
       <Filter>NextGenGraphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Heap.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\DescriptorHeap.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Pipeline.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\RootSignatureFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\RenderPass.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\HeapFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\ResourceFactory.hpp">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\NextGenGraphics\SamplerFactory.hpp">
       <Filter>NextGenGraphics</Filter>
@@ -319,35 +166,11 @@
     <ClInclude Include="include\NextGenGraphics\DeviceFactory.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\PipelineFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\InputLayoutFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\RenderPassFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\DescriptorHeapFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\ShaderFactory.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\CommandAllocatorFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Context.hpp">
       <Filter>NextGenGraphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\ContextFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\CommandListFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\DescriptorTable.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\NextGenGraphics\Types.hpp">
       <Filter>NextGenGraphics</Filter>
@@ -493,6 +316,186 @@
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\CommandAllocator.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\CommandAllocatorFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\CommandList.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\CommandListFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\CommandQueue.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\CommandQueueFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Comparison.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Constant.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\ConstantFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Context.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\ContextFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\DepthStencil.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\DepthStencilFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\DepthTest.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\DescriptorHeap.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\DescriptorHeapFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\DescriptorTable.h">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Device.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\DeviceFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Fence.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\FenceFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Format.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Heap.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\HeapFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\IndexBuffer.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\IndexBufferFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\InputLayout.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\InputLayoutFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\MaterialProperty.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Pipeline.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\PipelineFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Renderer.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\RendererFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\RenderPass.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\RenderPassFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\RenderTargetFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Resource.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\ResourceFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\RootSignature.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\RootSignatureFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Sampler.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\SamplerFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Shader.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\ShaderFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\ShaderFactoryFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\ShaderType.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\StencilTest.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\StructuredBuffer.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\StructuredBufferFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\SwapChain.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\SwapChainFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Texture.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\TextureFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\VertexBuffer.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\VertexBufferFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\View.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\Viewport.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics_deprecated\ViewportFactory.hpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\BlendState.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\BlendStateFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -504,17 +507,8 @@
     <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Texture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\MaterialProperty.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11InputLayout.cpp">
       <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Shader.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d11\D3D11VertexShader.cpp">
       <Filter>d3d11</Filter>
@@ -528,23 +522,11 @@
     <ClCompile Include="src\d3d11\D3D11PixelShader.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\BlendState.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Renderer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11Viewport.cpp">
       <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Viewport.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Device.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d10\D3D10Renderer.cpp">
       <Filter>d3d10</Filter>
@@ -591,9 +573,6 @@
     <ClCompile Include="src\d3d11\D3D11Resource.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\ShaderFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
@@ -615,68 +594,14 @@
     <ClCompile Include="src\d3d11\D3D11StructuredBuffer.cpp">
       <Filter>d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\DeviceFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\RendererFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\ShaderFactoryFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\RenderTargetFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\ConstantFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\ViewportFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\SamplerFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\DepthStencilFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\TextureFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\StructuredBufferFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Window\Window.cpp">
       <Filter>Window</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\CommandQueueFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\SwapChainFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\FenceFactory.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp">
       <Filter>NextGenGraphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\RootSignatureFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Heap.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\NextGenGraphics\Resource.cpp">
       <Filter>NextGenGraphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\HeapFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\ResourceFactory.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp">
       <Filter>NextGenGraphics</Filter>
@@ -684,59 +609,11 @@
     <ClCompile Include="src\NextGenGraphics\DeviceFactory.cpp">
       <Filter>NextGenGraphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\PipelineFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\InputLayoutFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\RenderPassFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\DescriptorHeapFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\NextGenGraphics\ShaderFactory.cpp">
       <Filter>NextGenGraphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\DescriptorHeap.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Sampler.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\View.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\CommandList.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\CommandAllocatorFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\NextGenGraphics\ContextFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\NextGenGraphics\Context.cpp">
       <Filter>NextGenGraphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\CommandListFactory.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\RenderPass.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\SwapChain.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\DepthTest.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\StencilTest.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\DepthStencil.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\NextGenGraphics\Types\MemoryType.cpp">
       <Filter>NextGenGraphics\Types</Filter>
@@ -857,6 +734,129 @@
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorTable.cpp">
       <Filter>d3d12_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\CommandAllocatorFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\CommandList.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\CommandListFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\CommandQueueFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\ConstantFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\DepthStencil.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\DepthStencilFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\DepthTest.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\DescriptorHeap.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\DescriptorHeapFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\Device.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\DeviceFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\FenceFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\Heap.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\HeapFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\InputLayoutFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\MaterialProperty.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\PipelineFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\Renderer.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\RendererFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\RenderPass.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\RenderPassFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\RenderTargetFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\ResourceFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\RootSignatureFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\Sampler.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\SamplerFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\Shader.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\ShaderFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\ShaderFactoryFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\StencilTest.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\StructuredBufferFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\SwapChain.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\SwapChainFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\Texture.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\TextureFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\View.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\Viewport.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics_deprecated\ViewportFactory.cpp">
+      <Filter>Graphics_deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\BlendState.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

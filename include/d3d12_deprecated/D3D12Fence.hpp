@@ -1,7 +1,7 @@
 #ifndef _D3D12_FENCE_HPP_
 #define _D3D12_FENCE_HPP_
 
-#include "Graphics/Fence.hpp"
+#include "Graphics_deprecated/Fence.hpp"
 
 struct ID3D12Fence;
 

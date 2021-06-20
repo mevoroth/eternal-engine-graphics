@@ -1,8 +1,8 @@
 #ifndef _D3D12_DESCRIPTOR_HEAP_HPP_
 #define _D3D12_DESCRIPTOR_HEAP_HPP_
 
-#include "Graphics/DescriptorHeap.hpp"
-#include "Graphics/RootSignature.hpp"
+#include "Graphics_deprecated/DescriptorHeap.hpp"
+#include "Graphics_deprecated/RootSignature.hpp"
 #include <d3d12.h>
 
 struct ID3D12DescriptorHeap;

@@ -1,7 +1,7 @@
 #ifndef _VULKAN_DESCRIPTOR_HPP_
 #define _VULKAN_DESCRIPTOR_HPP_
 
-#include "Graphics/DescriptorHeap.hpp"
+#include "Graphics_deprecated/DescriptorHeap.hpp"
 #include "Container/RingBuffer.hpp"
 
 struct VkDescriptorPool_T;

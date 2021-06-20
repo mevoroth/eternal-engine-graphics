@@ -1,7 +1,7 @@
 #ifndef _D3D11_STRUCTURED_BUFFER_HPP_
 #define _D3D11_STRUCTURED_BUFFER_HPP_
 
-#include "Graphics/StructuredBuffer.hpp"
+#include "Graphics_deprecated/StructuredBuffer.hpp"
 #include "d3d11/D3D11Buffer.hpp"
 #include "d3d11/ID3D11ShaderResource.hpp"
 

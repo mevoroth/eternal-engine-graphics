@@ -1,8 +1,8 @@
-#include "Vulkan/VulkanInputLayout.hpp"
+#include "Vulkan_deprecated/VulkanInputLayout.hpp"
 
 #include <vulkan/vulkan.h>
-#include "Graphics/InputLayout.hpp"
-#include "Vulkan/VulkanFormat.hpp"
+#include "Graphics_deprecated/InputLayout.hpp"
+#include "Vulkan_deprecated/VulkanFormat.hpp"
 #include "Log/Log.hpp"
 
 namespace Eternal

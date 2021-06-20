@@ -1,7 +1,7 @@
 #ifndef _VULKAN_SAMPLER_HPP_
 #define _VULKAN_SAMPLER_HPP_
 
-#include "Graphics/Sampler.hpp"
+#include "Graphics_deprecated/Sampler.hpp"
 
 struct VkSampler_T;
 

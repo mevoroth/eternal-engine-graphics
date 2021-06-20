@@ -2,7 +2,7 @@
 #define _D3D11_TEXTURE_HPP_
 
 #include <d3d11.h>
-#include "Graphics/Texture.hpp"
+#include "Graphics_deprecated/Texture.hpp"
 #include "d3d11/D3D11Resource.hpp"
 #include "d3d11/ID3D11ShaderResource.hpp"
 

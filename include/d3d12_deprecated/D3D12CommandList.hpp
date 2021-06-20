@@ -1,7 +1,7 @@
 #ifndef _D3D12_COMMAND_LIST_HPP_
 #define _D3D12_COMMAND_LIST_HPP_
 
-#include "Graphics/CommandList.hpp"
+#include "Graphics_deprecated/CommandList.hpp"
 
 #include <d3d12.h>
 

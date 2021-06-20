@@ -7,7 +7,7 @@
 #define WIN32_EXTRA_LEAN
 #include <Windows.h>
 
-#include "Graphics\Device.hpp"
+#include "Graphics_deprecated/Device.hpp"
 
 using namespace std;
 

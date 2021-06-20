@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vulkan/vulkan.hpp>
-#include "Graphics/Shader.hpp"
+#include "Graphics_deprecated/Shader.hpp"
 
 struct VkShaderModule_T;
 

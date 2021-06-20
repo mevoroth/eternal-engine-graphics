@@ -1,7 +1,7 @@
 #ifndef _D3D12_COMMAND_ALLOCATOR_HPP_
 #define _D3D12_COMMAND_ALLOCATOR_HPP_
 
-#include "Graphics/CommandAllocator.hpp"
+#include "Graphics_deprecated/CommandAllocator.hpp"
 
 struct ID3D12CommandAllocator;
 

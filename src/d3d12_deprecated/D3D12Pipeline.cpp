@@ -1,19 +1,19 @@
-#include "d3d12/D3D12Pipeline.hpp"
+#include "d3d12_deprecated/D3D12Pipeline.hpp"
 
 #include <d3d12.h>
 
-#include "Graphics/Viewport.hpp"
-#include "Graphics/DepthStencil.hpp"
-#include "Graphics/DepthTest.hpp"
-#include "Graphics/StencilTest.hpp"
-#include "d3d12/D3D12Device.hpp"
-#include "d3d12/D3D12InputLayout.hpp"
-#include "d3d12/D3D12Shader.hpp"
-#include "d3d12/D3D12BlendState.hpp"
-#include "d3d12/D3D12RootSignature.hpp"
-#include "d3d12/D3D12RenderPass.hpp"
-#include "d3d12/D3D12View.hpp"
-#include "d3d12/D3D12Format.hpp"
+#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics_deprecated/DepthStencil.hpp"
+#include "Graphics_deprecated/DepthTest.hpp"
+#include "Graphics_deprecated/StencilTest.hpp"
+#include "d3d12_deprecated/D3D12Device.hpp"
+#include "d3d12_deprecated/D3D12InputLayout.hpp"
+#include "d3d12_deprecated/D3D12Shader.hpp"
+#include "d3d12_deprecated/D3D12BlendState.hpp"
+#include "d3d12_deprecated/D3D12RootSignature.hpp"
+#include "d3d12_deprecated/D3D12RenderPass.hpp"
+#include "d3d12_deprecated/D3D12View.hpp"
+#include "d3d12_deprecated/D3D12Format.hpp"
 
 using namespace Eternal::Graphics;
 

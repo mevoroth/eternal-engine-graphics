@@ -1,6 +1,6 @@
-#include "Vulkan/VulkanCommandAllocator.hpp"
+#include "Vulkan_deprecated/VulkanCommandAllocator.hpp"
 
-#include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
 
 using namespace Eternal::Graphics;
 

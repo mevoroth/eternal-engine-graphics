@@ -1,7 +1,7 @@
 #ifndef _D3D12_HEAP_HPP_
 #define _D3D12_HEAP_HPP_
 
-#include "Graphics/Heap.hpp"
+#include "Graphics_deprecated/Heap.hpp"
 
 enum D3D12_HEAP_TYPE;
 enum D3D12_CPU_PAGE_PROPERTY;

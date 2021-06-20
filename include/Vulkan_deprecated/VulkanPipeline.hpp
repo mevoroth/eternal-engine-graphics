@@ -2,7 +2,7 @@
 #define _VULKAN_PIPELINE_HPP_
 
 #include <vulkan/vulkan.hpp>
-#include "Graphics/Pipeline.hpp"
+#include "Graphics_deprecated/Pipeline.hpp"
 
 struct VkPipeline_T;
 

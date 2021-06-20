@@ -1,7 +1,7 @@
 #ifndef _VULKAN_COMMAND_ALLOCATOR_HPP_
 #define _VULKAN_COMMAND_ALLOCATOR_HPP_
 
-#include "Graphics/CommandAllocator.hpp"
+#include "Graphics_deprecated/CommandAllocator.hpp"
 
 struct VkCommandPool_T;
 struct VkSemaphore_T;

@@ -1,6 +1,6 @@
-#include "Vulkan/VulkanBuffer.hpp"
+#include "Vulkan_deprecated/VulkanBuffer.hpp"
 
-#include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
 
 using namespace Eternal::Graphics;
 

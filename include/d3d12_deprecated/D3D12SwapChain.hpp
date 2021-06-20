@@ -1,7 +1,7 @@
 #ifndef _D3D12_SWAP_CHAIN_HPP_
 #define _D3D12_SWAP_CHAIN_HPP_
 
-#include "Graphics/SwapChain.hpp"
+#include "Graphics_deprecated/SwapChain.hpp"
 
 struct IDXGISwapChain;
 struct IDXGISwapChain3;

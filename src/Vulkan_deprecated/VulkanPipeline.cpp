@@ -1,14 +1,14 @@
-#include "Vulkan/VulkanPipeline.hpp"
+#include "Vulkan_deprecated/VulkanPipeline.hpp"
 
-#include "Graphics/Viewport.hpp"
-#include "Graphics/DepthStencil.hpp"
+#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics_deprecated/DepthStencil.hpp"
 #include "Graphics/BlendState.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/VulkanRootSignature.hpp"
-#include "Vulkan/VulkanRenderPass.hpp"
-#include "Vulkan/VulkanShader.hpp"
-#include "Vulkan/VulkanInputLayout.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanRootSignature.hpp"
+#include "Vulkan_deprecated/VulkanRenderPass.hpp"
+#include "Vulkan_deprecated/VulkanShader.hpp"
+#include "Vulkan_deprecated/VulkanInputLayout.hpp"
 
 using namespace Eternal::Graphics;
 

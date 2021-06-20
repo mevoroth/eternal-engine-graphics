@@ -2,8 +2,8 @@
 
 #include "NextGenGraphics/Types/DeviceType.hpp"
 #include "NextGenGraphics/Device.hpp"
-#include "d3d12/D3D12Sampler.hpp"
-#include "Vulkan/VulkanSampler.hpp"
+#include "d3d12_deprecated/D3D12Sampler.hpp"
+#include "Vulkan_deprecated/VulkanSampler.hpp"
 
 namespace Eternal
 {

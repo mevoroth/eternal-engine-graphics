@@ -1,12 +1,12 @@
-#include "Vulkan/VulkanView.hpp"
+#include "Vulkan_deprecated/VulkanView.hpp"
 
-#include "Graphics/View.hpp"
-#include "Graphics/Format.hpp"
+#include "Graphics_deprecated/View.hpp"
+#include "Graphics_deprecated/Format.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/VulkanResource.hpp"
-#include "Vulkan/VulkanFormat.hpp"
-#include "Vulkan/VulkanDescriptorHeap.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanResource.hpp"
+#include "Vulkan_deprecated/VulkanFormat.hpp"
+#include "Vulkan_deprecated/VulkanDescriptorHeap.hpp"
 
 using namespace Eternal::Graphics;
 

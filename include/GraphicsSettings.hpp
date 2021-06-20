@@ -1,7 +1,9 @@
 #ifndef _GRAPHICS_SETTINGS_HPP_
 #define _GRAPHICS_SETTINGS_HPP_
 
+#ifndef ETERNAL_USE_DXMATH_TYPES
 #define ETERNAL_USE_DXMATH_TYPES
+#endif
 
 #define FRAME_LAG					(2)
 #define MAX_VERTICES_BUFFERS		(8)

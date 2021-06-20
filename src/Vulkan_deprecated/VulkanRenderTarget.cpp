@@ -1,8 +1,8 @@
-#include "Vulkan/VulkanRenderTarget.hpp"
+#include "Vulkan_deprecated/VulkanRenderTarget.hpp"
 
-#include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/VulkanView.hpp"
-#include "Vulkan/VulkanRenderPass.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanView.hpp"
+#include "Vulkan_deprecated/VulkanRenderPass.hpp"
 
 using namespace std;
 using namespace Eternal::Graphics;

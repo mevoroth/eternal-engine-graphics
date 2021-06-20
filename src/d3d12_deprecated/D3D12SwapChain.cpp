@@ -4,7 +4,7 @@
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include "Window/Window.hpp"
-#include "Graphics/Format.hpp"
+#include "Graphics_deprecated/Format.hpp"
 #include "d3d12_deprecated/D3D12Device.hpp"
 #include "d3d12_deprecated/D3D12CommandQueue.hpp"
 #include "d3d12_deprecated/D3D12DescriptorHeap.hpp"
@@ -12,8 +12,8 @@
 #include "d3d12_deprecated/D3D12View.hpp"
 #include "d3d12_deprecated/D3D12RenderPass.hpp"
 #include "NextGenGraphics/Context.hpp"
-#include "Graphics/Viewport.hpp"
-#include "Graphics/RenderPassFactory.hpp"
+#include "Graphics_deprecated/Viewport.hpp"
+#include "Graphics_deprecated/RenderPassFactory.hpp"
 
 using namespace Eternal::Graphics;
 

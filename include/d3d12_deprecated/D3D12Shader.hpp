@@ -3,7 +3,7 @@
 
 #include <string>
 #include <d3d12.h>
-#include "Graphics/Shader.hpp"
+#include "Graphics_deprecated/Shader.hpp"
 
 namespace Eternal
 {

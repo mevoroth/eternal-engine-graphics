@@ -1,9 +1,9 @@
-#include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
 
 #include <algorithm>
 #include "Window/Window.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan/VulkanCommandQueue.hpp"
+#include "Vulkan_deprecated/VulkanCommandQueue.hpp"
 
 using namespace Eternal::Graphics;
 

@@ -1,7 +1,7 @@
 #ifndef _D3D12_ROOT_SIGNATURE_HPP_
 #define _D3D12_ROOT_SIGNATURE_HPP_
 
-#include "Graphics/RootSignature.hpp"
+#include "Graphics_deprecated/RootSignature.hpp"
 
 struct ID3D12RootSignature;
 

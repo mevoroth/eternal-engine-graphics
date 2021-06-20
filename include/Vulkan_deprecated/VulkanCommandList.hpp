@@ -1,7 +1,7 @@
 #ifndef _VULKAN_COMMAND_LIST_HPP_
 #define _VULKAN_COMMAND_LIST_HPP_
 
-#include "Graphics/CommandList.hpp"
+#include "Graphics_deprecated/CommandList.hpp"
 
 struct VkCommandBuffer_T;
 struct VkPipelineLayout_T;

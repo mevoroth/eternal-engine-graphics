@@ -1,7 +1,7 @@
-#include "Vulkan/VulkanSampler.hpp"
+#include "Vulkan_deprecated/VulkanSampler.hpp"
 
 #include <float.h>
-#include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
 
 using namespace Eternal::Graphics;
 

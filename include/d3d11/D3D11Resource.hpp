@@ -1,7 +1,7 @@
 #ifndef _D3D11_RESOURCE_HPP_
 #define _D3D11_RESOURCE_HPP_
 
-#include "Graphics/Resource.hpp"
+#include "Graphics_deprecated/Resource.hpp"
 
 struct ID3D11ShaderResourceView;
 struct ID3D11Resource;

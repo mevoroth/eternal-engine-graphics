@@ -2,7 +2,7 @@
 #define _VULKAN_RENDER_PASS_HPP_
 
 #include <vulkan/vulkan.hpp>
-#include "Graphics/RenderPass.hpp"
+#include "Graphics_deprecated/RenderPass.hpp"
 
 namespace Eternal
 {

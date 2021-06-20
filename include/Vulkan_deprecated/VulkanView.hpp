@@ -2,7 +2,7 @@
 #define _VULKAN_VIEW_HPP_
 
 #include <vulkan/vulkan.hpp>
-#include "Graphics/View.hpp"
+#include "Graphics_deprecated/View.hpp"
 
 namespace Eternal
 {

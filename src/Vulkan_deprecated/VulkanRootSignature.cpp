@@ -1,9 +1,9 @@
-#include "Vulkan/VulkanRootSignature.hpp"
+#include "Vulkan_deprecated/VulkanRootSignature.hpp"
 
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan/VulkanSampler.hpp"
-#include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan/VulkanDescriptorHeap.hpp"
+#include "Vulkan_deprecated/VulkanSampler.hpp"
+#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan_deprecated/VulkanDescriptorHeap.hpp"
 
 using namespace std;
 using namespace Eternal::Graphics;

@@ -1,12 +1,12 @@
-#include "d3d12/D3D12Resource.hpp"
+#include "d3d12_deprecated/D3D12Resource.hpp"
 
 #include <d3d12.h>
-#include "d3d12/D3D12Device.hpp"
-#include "d3d12/D3D12SwapChain.hpp"
-#include "d3d12/D3D12Heap.hpp"
-#include "d3d12/D3D12CommandList.hpp"
-#include "d3d12/D3D12View.hpp"
-#include "d3d12/D3D12Format.hpp"
+#include "d3d12_deprecated/D3D12Device.hpp"
+#include "d3d12_deprecated/D3D12SwapChain.hpp"
+#include "d3d12_deprecated/D3D12Heap.hpp"
+#include "d3d12_deprecated/D3D12CommandList.hpp"
+#include "d3d12_deprecated/D3D12View.hpp"
+#include "d3d12_deprecated/D3D12Format.hpp"
 
 using namespace Eternal::Graphics;
 

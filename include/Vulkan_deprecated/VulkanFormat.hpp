@@ -2,7 +2,7 @@
 #define _VULKAN_FORMAT_HPP_
 
 #include <vulkan/vulkan.hpp>
-#include "Graphics/Format.hpp"
+#include "Graphics_deprecated/Format.hpp"
 
 namespace Eternal
 {
