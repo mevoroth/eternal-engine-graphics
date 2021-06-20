@@ -54,7 +54,7 @@ namespace Eternal
 			virtual DeviceType GetDeviceType() const override { return DeviceType::VULKAN; }
 
 		private:
-			vector<vk::Queue>						_VulkanQueues;
+			vector<vk::Queue>					_VulkanQueues;
 			vk::PhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;
 			vk::DebugReportCallbackEXT			_DebugReportCallback;
 			vk::DebugUtilsMessengerEXT			_DebugUtilsMessengerCallback;

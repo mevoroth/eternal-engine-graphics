@@ -1,5 +1,4 @@
-#ifndef _SHADER_FACTORY_HPP_
-#define _SHADER_FACTORY_HPP_
+#pragma once
 
 #include <string>
 
@@ -34,5 +33,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif
