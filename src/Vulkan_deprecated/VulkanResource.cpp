@@ -1,10 +1,10 @@
 #include "Vulkan_deprecated/VulkanResource.hpp"
 
 #include "Vulkan_deprecated/VulkanView.hpp"
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan_deprecated/VulkanHeap.hpp"
 #include "Vulkan_deprecated/VulkanFormat.hpp"
-#include "Vulkan_deprecated/VulkanCommandList.hpp"
+#include "Vulkan/VulkanCommandList.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -140,7 +140,7 @@ View* VulkanResource::CreateRenderTargetView(_In_ Device& DeviceObj, _In_ Descri
 
 View* VulkanResource::CreateDepthStencilView(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeapObj, _In_ const Format& FormatObj)
 {
-	ETERNAL_ASSERT(FormatObj == FORMAT_D32);
+	ETERNAL_ASSERT(FormatObj == Format::FORMAT_D32);
 	return CreateView(DeviceObj, DescriptorHeapObj, TEXTURE_VIEW_TYPE_2D, FormatObj);
 }
 

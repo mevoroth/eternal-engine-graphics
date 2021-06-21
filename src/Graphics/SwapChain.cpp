@@ -1,4 +1,4 @@
-#include "Graphics_deprecated/SwapChain.hpp"
+#include "Graphics/SwapChain.hpp"
 
 #include "Window/Window.hpp"
 

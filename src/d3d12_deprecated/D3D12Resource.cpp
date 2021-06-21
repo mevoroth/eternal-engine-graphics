@@ -2,11 +2,11 @@
 
 #include <d3d12.h>
 #include "d3d12/D3D12Device.hpp"
-#include "d3d12_deprecated/D3D12SwapChain.hpp"
+#include "d3d12/D3D12SwapChain.hpp"
 #include "d3d12_deprecated/D3D12Heap.hpp"
 #include "d3d12_deprecated/D3D12CommandList.hpp"
 #include "d3d12_deprecated/D3D12View.hpp"
-#include "d3d12_deprecated/D3D12Format.hpp"
+#include "d3d12/D3D12Format.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -21,7 +21,7 @@ D3D12Resource::D3D12Resource(Device& DeviceObj, _In_ Heap& HeapObj, _In_ const R
 	ResourceDesc.Height				= Height;
 	ResourceDesc.DepthOrArraySize	= Depth;
 	ResourceDesc.MipLevels			= MipCount;
-	ResourceDesc.Format				= D3D12_FORMATS[FormatObj];
+	ResourceDesc.Format				= D3D12_FORMATS[static_cast<int32_t>(FormatObj)];
 	ResourceDesc.SampleDesc.Count	= 1;
 	ResourceDesc.SampleDesc.Quality	= 0;
 	ResourceDesc.Layout				= D3D12_TEXTURE_LAYOUT_64KB_UNDEFINED_SWIZZLE;

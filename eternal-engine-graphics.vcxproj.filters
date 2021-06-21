@@ -232,9 +232,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanSampler.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanSwapChain.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanUtils.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
@@ -257,9 +254,6 @@
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12Fence.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12Format.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12Heap.hpp">
@@ -287,9 +281,6 @@
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12ShaderFactory.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12SwapChain.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12View.hpp">
@@ -341,9 +332,6 @@
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\FenceFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Format.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\Heap.hpp">
@@ -416,12 +404,6 @@
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\StructuredBufferFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\SwapChain.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\SwapChainFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\Texture.hpp">
@@ -513,6 +495,24 @@
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanDevice.hpp">
       <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\SwapChainFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\SwapChain.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12SwapChain.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Format.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Format.hpp">
+      <Filter>d3d12</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -675,9 +675,6 @@
     <ClCompile Include="src\Vulkan_deprecated\VulkanSampler.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanSwapChain.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanView.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
@@ -718,9 +715,6 @@
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12ShaderFactory.cpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12SwapChain.cpp">
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12View.cpp">
@@ -810,12 +804,6 @@
     <ClCompile Include="src\Graphics_deprecated\StructuredBufferFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\SwapChain.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\SwapChainFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\Texture.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
@@ -889,6 +877,18 @@
       <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanDevice.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SwapChainFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SwapChain.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12SwapChain.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>

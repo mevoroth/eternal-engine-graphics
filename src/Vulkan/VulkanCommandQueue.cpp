@@ -16,7 +16,7 @@ VulkanCommandQueue::~VulkanCommandQueue()
 {
 }
 
-void VulkanCommandQueue::SubmitCommandLists(_In_ GraphicsContext& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
+void VulkanCommandQueue::SubmitCommandLists(_In_ GraphicsContext& Context, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
 {
 	
 	//vk::SubmitInfo SubmitInfo(
@@ -35,7 +35,7 @@ void VulkanCommandQueue::SubmitCommandLists(_In_ GraphicsContext& GfxContext, _I
 	//	uint32_t                                         signalSemaphoreCount_ = {},
 	//	const VULKAN_HPP_NAMESPACE::Semaphore * pSignalSemaphores_ = {}) VULKAN_HPP_NOEXCEPT
 
-	VulkanGraphicsContext& VulkanGfxContext = static_cast<VulkanGraphicsContext&>(GfxContext);
+	VulkanGraphicsContext& VulkanGfxContext = static_cast<VulkanGraphicsContext&>(Context);
 	vk::Semaphore CurrentFrameSemaphore = VulkanGfxContext.GetCurrentFrameSemaphore();
 	vk::Semaphore SubmitCompletionSemaphore = VulkanGfxContext.GetSubmitCompletionSemaphore();
 
@@ -43,7 +43,7 @@ void VulkanCommandQueue::SubmitCommandLists(_In_ GraphicsContext& GfxContext, _I
 
 	vector<vk::CommandBuffer> VulkanCommandLists;
 	VulkanCommandLists.resize(CommandListsCount);
-	for (int32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
+	for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
 	{
 		VulkanCommandLists[CommandListIndex] = static_cast<VulkanCommandList*>(CommandLists[CommandListIndex])->GetVulkanCommandBuffer();
 	}
@@ -51,11 +51,11 @@ void VulkanCommandQueue::SubmitCommandLists(_In_ GraphicsContext& GfxContext, _I
 	vk::SubmitInfo SubmitInfo(
 		1, &CurrentFrameSemaphore,
 		&WaitDestStageMask,
-		CommandListsCount, VulkanCommandLists.data()
+		CommandListsCount, VulkanCommandLists.data(),
 		1, &SubmitCompletionSemaphore
 	);
 
-	Vulkan::VerifySuccess(
-		_CommandQueue.submit(1, &SubmitInfo)
-	);
+	//Vulkan::VerifySuccess(
+	//	_CommandQueue.submit(1, &SubmitInfo, )
+	//);
 }

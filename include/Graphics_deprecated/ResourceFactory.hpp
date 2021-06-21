@@ -7,7 +7,7 @@ namespace Eternal
 	{
 		enum BufferType;
 		enum TextureType;
-		enum Format;
+		enum class Format;
 		enum ResourceDimension;
 		enum class TransitionState;
 

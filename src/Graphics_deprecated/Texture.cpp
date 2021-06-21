@@ -1,6 +1,6 @@
 #include "Graphics_deprecated/Texture.hpp"
 
-#include "Graphics_deprecated/Format.hpp"
+#include "Graphics/Format.hpp"
 
 using namespace Eternal::Graphics;
 

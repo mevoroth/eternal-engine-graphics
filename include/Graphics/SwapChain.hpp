@@ -31,15 +31,16 @@ namespace Eternal
 
 			//virtual Resource& GetBackBuffer(_In_ uint32_t BackBufferIndex) = 0;
 			//virtual View& GetBackBufferView(_In_ uint32_t BackBufferIndex) = 0;
-			virtual uint32_t GetBackBuffersFrameCount() const = 0;
-			virtual RenderPass& GetMainRenderPass() = 0;
 
-			const Viewport& GetMainViewport() const		{ return _BackBufferViewport; }
-			BlendState& GetBackBufferBlendState()		{ return _BackBufferBlendState; }
+			//virtual uint32_t GetBackBuffersFrameCount() const = 0;
+			//virtual RenderPass& GetMainRenderPass() = 0;
+
+			//const Viewport& GetMainViewport() const		{ return _BackBufferViewport; }
+			//BlendState& GetBackBufferBlendState()		{ return _BackBufferBlendState; }
 
 		private:
 			Viewport	_BackBufferViewport;
-			BlendState	_BackBufferBlendState;
+			//BlendState	_BackBufferBlendState;
 		};
 	}
 }

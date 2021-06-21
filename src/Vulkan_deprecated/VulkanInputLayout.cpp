@@ -23,11 +23,11 @@ namespace Eternal
 			{
 				_VertexInputAttributeDescriptions[DataTypeIndex] = vk::VertexInputAttributeDescription(
 					0, DataTypeIndex,
-					VULKAN_FORMATS[VERTEX_FORMATS[DataType[DataTypeIndex]]],
+					VULKAN_FORMATS[static_cast<int32_t>(VERTEX_FORMATS[DataType[DataTypeIndex]])],
 					AttributeOffset
 				);
 
-				AttributeOffset += VULKAN_FORMAT_SIZES[VERTEX_FORMATS[DataType[DataTypeIndex]]];
+				AttributeOffset += VULKAN_FORMAT_SIZES[static_cast<int32_t>(VERTEX_FORMATS[DataType[DataTypeIndex]])];
 			}
 
 			_VertexInputBindingDescriptions.resize(1);

@@ -1,7 +1,7 @@
 #ifndef _INPUT_LAYOUT_HPP_
 #define _INPUT_LAYOUT_HPP_
 
-#include "Graphics_deprecated/Format.hpp"
+#include "Graphics/Format.hpp"
 
 namespace Eternal
 {
@@ -32,15 +32,15 @@ namespace Eternal
 
 		const Format VERTEX_FORMATS[] =
 		{
-			FORMAT_RGBA32323232,
-			FORMAT_RGBA8888,
-			FORMAT_RGBA8888,
-			FORMAT_RGBA32323232,
-			FORMAT_RGBA32323232,
-			FORMAT_RG3232,
+			Format::FORMAT_RGBA32323232,
+			Format::FORMAT_RGBA8888,
+			Format::FORMAT_RGBA8888,
+			Format::FORMAT_RGBA32323232,
+			Format::FORMAT_RGBA32323232,
+			Format::FORMAT_RG3232,
 
 			// Imgui Format
-			FORMAT_RG3232
+			Format::FORMAT_RG3232
 		};
 
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VERTEX_FORMATS) == InputLayout::VERTEX_DATA_TYPE_COUNT, "Vertex Formats implementation not complete");

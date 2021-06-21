@@ -4,8 +4,9 @@
 #include "NextGenGraphics/Device.hpp"
 #include "NextGenGraphics/Context.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
-
-#include "Graphics_deprecated/SwapChainFactory.hpp"
+#include "Graphics/CommandUtils.h"
+#include "Graphics/SwapChainFactory.hpp"
+#include "Graphics/CommandQueueFactory.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -49,12 +50,25 @@ namespace Eternal
 		{
 			_Window.Create(CreateInformation.Arguments.WindowEventsHandler);
 
-			_Device = CreateDevice(*this, CreateInformation.Settings.Driver);
-			_SwapChain = CreateSwapChain(*this);
+			_Device			= CreateDevice(*this, CreateInformation.Settings.Driver);
+			_SwapChain		= CreateSwapChain(*this);
+
+			_GraphicsQueue	= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHIC);
+			_ComputeQueue	= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
+			_CopyQueue		= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COPY);
 		}
 
 		GraphicsContext::~GraphicsContext()
 		{
+			delete _GraphicsQueue;
+			_GraphicsQueue = nullptr;
+
+			delete _ComputeQueue;
+			_ComputeQueue = nullptr;
+			
+			delete _CopyQueue;
+			_CopyQueue = nullptr;
+
 			delete _SwapChain;
 			_SwapChain = nullptr;
 

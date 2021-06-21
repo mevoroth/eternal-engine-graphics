@@ -14,6 +14,6 @@ namespace Eternal
 			D3D12_COMMAND_LIST_TYPE_COPY
 		};
 		
-		static_assert(ETERNAL_ARRAYSIZE(D3D12_COMMAND_LIST_TYPES) == int32_t(CommandType::COMMAND_TYPE_COUNT), "Mismatch between abstraction and d3d12 command types");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_COMMAND_LIST_TYPES) == static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT), "Mismatch between abstraction and d3d12 command types");
 	}
 }

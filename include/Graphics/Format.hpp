@@ -1,11 +1,10 @@
-#ifndef _FORMAT_HPP_
-#define _FORMAT_HPP_
+#pragma once
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		enum Format
+		enum class Format
 		{
 			FORMAT_BGRA8888		= 0,
 			FORMAT_RGBA8888		= 1,
@@ -18,5 +17,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

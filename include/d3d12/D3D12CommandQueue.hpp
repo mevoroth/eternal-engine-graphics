@@ -21,6 +21,8 @@ namespace Eternal
 
 			virtual void SubmitCommandLists(_In_ GraphicsContext& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount) override;
 
+			inline ID3D12CommandQueue* GetD3D12CommandQueue() { return _CommandQueue; }
+
 		private:
 			ID3D12CommandQueue*				_CommandQueue		= nullptr;
 			D3D12_COMMAND_LIST_TYPE			_CommandQueueType	= D3D12_COMMAND_LIST_TYPE_DIRECT;

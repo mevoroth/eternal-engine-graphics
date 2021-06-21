@@ -1,9 +1,9 @@
 #include "Vulkan_deprecated/VulkanView.hpp"
 
 #include "Graphics_deprecated/View.hpp"
-#include "Graphics_deprecated/Format.hpp"
+#include "Graphics/Format.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan_deprecated/VulkanResource.hpp"
 #include "Vulkan_deprecated/VulkanFormat.hpp"
 #include "Vulkan_deprecated/VulkanDescriptorHeap.hpp"

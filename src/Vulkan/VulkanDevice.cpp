@@ -1,4 +1,4 @@
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 
 #include <algorithm>
 #include "Window/Window.hpp"

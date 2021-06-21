@@ -2,7 +2,7 @@
 #define _D3D12_FORMAT_HPP_
 
 #include <d3d12.h>
-#include "Graphics_deprecated/Format.hpp"
+#include "Graphics/Format.hpp"
 
 namespace Eternal
 {
@@ -30,8 +30,8 @@ namespace Eternal
 			4
 		};
 
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_FORMATS) == FORMAT_COUNT, "D3D12 Formats declaration not complete");
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_FORMAT_SIZES) == FORMAT_COUNT, "D3D12 Format Sizes declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_FORMATS) == int32_t(Format::FORMAT_COUNT), "D3D12 Formats declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_FORMAT_SIZES) == int32_t(Format::FORMAT_COUNT), "D3D12 Format Sizes declaration not complete");
 	}
 }
 

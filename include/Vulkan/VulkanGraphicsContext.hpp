@@ -11,9 +11,6 @@ namespace Eternal
 		class VulkanGraphicsContext : public GraphicsContext
 		{
 		public:
-			static constexpr int32_t FrameBufferingCount = 2;
-
-
 			VulkanGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 
 			virtual void UpdateGraphicsContext() override;

@@ -1,6 +1,6 @@
 #include "d3d12/D3D12CommandQueue.hpp"
 
-#include "Graphics_deprecated/SwapChain.hpp"
+#include "Graphics/SwapChain.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandList.hpp"
 #include "d3d12/D3D12Utils.hpp"
@@ -33,11 +33,11 @@ namespace Eternal
 			_CommandQueue = nullptr;
 		}
 
-		void D3D12CommandQueue::SubmitCommandLists(_In_ GraphicsContext& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
+		void D3D12CommandQueue::SubmitCommandLists(_In_ GraphicsContext& Context, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
 		{
 			vector<ID3D12CommandList*> D3D12CommandLists;
 			D3D12CommandLists.resize(CommandListsCount);
-			for (int32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
+			for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
 			{
 				D3D12CommandLists[CommandListIndex] = static_cast<D3D12CommandList*>(CommandLists[CommandListIndex])->GetD3D12CommandList();
 			}

@@ -1,22 +1,14 @@
-#include "Vulkan_deprecated/VulkanSwapChain.hpp"
+#include "Vulkan/VulkanSwapChain.hpp"
 
 #include "Window/Window.hpp"
-#include "Graphics_deprecated/View.hpp"
-#include "Graphics_deprecated/Format.hpp"
-#include "Graphics/BlendState.hpp"
-#include "Graphics/BlendStateFactory.hpp"
 #include "Graphics_deprecated/RenderPassFactory.hpp"
 #include "NextGenGraphics/Context.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan_deprecated/VulkanDevice.hpp"
-#include "Vulkan_deprecated/VulkanRenderTarget.hpp"
-#include "Vulkan_deprecated/VulkanResource.hpp"
-#include "Vulkan_deprecated/VulkanView.hpp"
-#include "Vulkan_deprecated/VulkanRenderPass.hpp"
-#include "Vulkan_deprecated/VulkanFence.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
-#include "Vulkan_deprecated/VulkanCommandAllocator.hpp"
-#include "Vulkan_deprecated/VulkanContext.hpp"
+
+#include "Graphics/Format.hpp"
+#include "Vulkan_deprecated/VulkanView.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -79,12 +71,14 @@ namespace Eternal
 	}
 }
 
-VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
-	: SwapChain(WindowObj)
+VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& Context)
+	: SwapChain(Context.GetWindow())
 {
 	using namespace Vulkan;
 
-	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(DeviceObj);
+	Window& WindowObj = Context.GetWindow();
+
+	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(Context.GetDevice());
 	VulkanPrivate::EternalDispatchLoader EternalLoader(VulkanDeviceObj);
 
 	vk::Win32SurfaceCreateInfoKHR Win32SurfaceInfo(
@@ -146,41 +140,15 @@ VulkanSwapChain::VulkanSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj)
 	uint32_t BackBuffersCount = 0u;
 	VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, static_cast<vk::Image*>(nullptr)));
 
-	//std::vector<vk::Image> BackBuffers;
-	//BackBuffers.resize(BackBuffersCount);
 	_BackBufferImages.resize(BackBuffersCount);
 	VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, _BackBufferImages.data()));
 
-	//_BackBuffers.resize(BackBuffersCount);
 	_BackBufferViews.resize(BackBuffersCount);
-	//_AcquireSemaphores.resize(BackBuffersCount);
 
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < _BackBufferImages.size(); ++BackBufferIndex)
 	{
-		_BackBufferViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, _BackBufferImages[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, FORMAT_BGRA8888);
-		//_BackBuffers[BackBufferIndex] = new VulkanResource(BackBuffers[BackBufferIndex]);
-		
-		//VkSemaphoreCreateInfo SemaphoreInfo;
-		//SemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-		//SemaphoreInfo.pNext = nullptr;
-		//SemaphoreInfo.flags = 0;
-
-		//Result = vkCreateSemaphore(VulkanDeviceObj.GetVulkanDevice(), &SemaphoreInfo, nullptr, &_AcquireSemaphores[BackBufferIndex]);
-		//ETERNAL_ASSERT(!Result);
+		_BackBufferViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, _BackBufferImages[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, Format::FORMAT_BGRA8888);
 	}
-
-	//vector<View*> RenderTargets;
-	//RenderTargets.resize(1);
-
-	//vector<BlendState*> BlendStates;
-	//BlendStates.push_back(&GetBackBufferBlendState());
-
-	//_RenderPasses.resize(GetBackBuffersFrameCount());
-	//for (uint32_t RenderPassIndex = 0; RenderPassIndex < GetBackBuffersFrameCount(); ++RenderPassIndex)
-	//{
-	//	RenderTargets[0]				= _BackBufferViews[RenderPassIndex];
-	//	_RenderPasses[RenderPassIndex]	= static_cast<VulkanRenderPass*>(CreateRenderPass(DeviceObj, GetMainViewport(), RenderTargets, BlendStates));
-	//}
 }
 
 void VulkanSwapChain::Present()
@@ -200,62 +168,3 @@ void VulkanSwapChain::Present()
 	//Vulkan::VerifySuccess(VulkanQueue.presentKHR(&PresentInfo));
 
 }
-
-//void VulkanSwapChain::AcquireFrame(_In_ Device& DeviceObj, _Inout_ Context& GfxContext)
-//{
-//	//uint32_t FrameIndex;
-//
-//	//VkFence		FrameFence		= static_cast<VulkanFence*>(GfxContext.GetFrameFence())->GetVulkanFence();
-//	//VkSemaphore	FrameSemaphore	= static_cast<VulkanContext&>(GfxContext).GetFrameSemaphore();
-//
-//	//VkResult Result = vkAcquireNextImageKHR(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice(), _SwapChain, UINT64_MAX, FrameSemaphore, VK_NULL_HANDLE, &FrameIndex);
-//	//ETERNAL_ASSERT(!Result);
-//	//ETERNAL_ASSERT(_FrameIndex == FrameIndex);
-//
-//	//GfxContext.SetFrameIndex(FrameIndex);
-//	//GfxContext.SetFrameRenderPass(_RenderPasses[FrameIndex]);
-//	//GfxContext.SetFrameBackBuffer(_BackBuffers[FrameIndex]);
-//}
-
-uint32_t VulkanSwapChain::GetBackBuffersFrameCount() const
-{
-	return (uint32_t)_BackBuffers.size();
-}
-
-//VkSemaphore_T*& VulkanSwapChain::GetAcquireSemaphore(_In_ uint32_t ResourceIndex)
-//{
-//	ETERNAL_ASSERT(ResourceIndex < _AcquireSemaphores.size());
-//	return _AcquireSemaphores[ResourceIndex];
-//}
-
-RenderPass& VulkanSwapChain::GetMainRenderPass()
-{
-	return *_RenderPasses[0];
-}
-
-//void VulkanSwapChain::Present(_In_ Device& DeviceObj, _In_ CommandQueue& CommandQueueObj, _Inout_ Context& GfxContext)
-//{
-//	//uint32_t ImageIndex			= GfxContext.GetFrameIndex();
-//	//VulkanContext& VkContext	= static_cast<VulkanContext&>(GfxContext);
-//	//VkResult PresentInfoResult;
-//
-//	//VkPresentInfoKHR PresentInfo;
-//	//PresentInfo.sType					= VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-//	//PresentInfo.pNext					= nullptr;
-//	//PresentInfo.waitSemaphoreCount		= (uint32_t)VkContext.GetFrameCommandListSemaphores().size();
-//	//PresentInfo.pWaitSemaphores			= VkContext.GetFrameCommandListSemaphores().data();
-//	//PresentInfo.swapchainCount			= 1;
-//	//PresentInfo.pSwapchains				= &_SwapChain;
-//	//PresentInfo.pImageIndices			= &ImageIndex;
-//	//PresentInfo.pResults				= &PresentInfoResult;
-//
-//	////char test[256];
-//	////sprintf_s(test, "[VulkanSwapChain::Present] FENCE: %d\n", ResourceIndex);
-//	////OutputDebugString(test);
-//
-//	//VkResult Result = vkQueuePresentKHR(static_cast<VulkanCommandQueue&>(CommandQueueObj).GetVulkanCommandQueue(), &PresentInfo);
-//	//ETERNAL_ASSERT(!PresentInfoResult);
-//	//ETERNAL_ASSERT(!Result);
-//
-//	//_FrameIndex = (_FrameIndex + 1) % _BackBuffers.size();
-//}

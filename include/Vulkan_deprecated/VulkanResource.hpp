@@ -10,7 +10,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum Format;
+		enum class Format;
 		enum TextureView;
 		enum class TransitionState;
 		class Device;

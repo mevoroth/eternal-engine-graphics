@@ -5,7 +5,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum Format;
+		enum class Format;
 		enum TextureView;
 		class View;
 		class Device;

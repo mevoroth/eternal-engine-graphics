@@ -1,6 +1,6 @@
 #include "Graphics_deprecated/TextureFactory.hpp"
 
-#include "Graphics_deprecated/Format.hpp"
+#include "Graphics/Format.hpp"
 #include "d3d11/D3D11Texture.hpp"
 
 namespace Eternal

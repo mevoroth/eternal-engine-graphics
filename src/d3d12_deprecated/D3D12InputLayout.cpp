@@ -1,6 +1,6 @@
 #include "d3d12_deprecated/D3D12InputLayout.hpp"
 
-#include "d3d12_deprecated/D3D12Format.hpp"
+#include "d3d12/D3D12Format.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -22,7 +22,7 @@ D3D12InputLayout::D3D12InputLayout(_In_ const VertexDataType DataType[], _In_ ui
 	{
 		_Input[DataTypeIndex].SemanticName			= D3D12_INPUT_SEMANTICS[DataType[DataTypeIndex]];
 		_Input[DataTypeIndex].SemanticIndex			= 0;
-		_Input[DataTypeIndex].Format				= D3D12_FORMATS[VERTEX_FORMATS[DataType[DataTypeIndex]]];
+		_Input[DataTypeIndex].Format				= D3D12_FORMATS[static_cast<int32_t>(VERTEX_FORMATS[DataType[DataTypeIndex]])];
 		_Input[DataTypeIndex].InputSlot				= 0;
 		_Input[DataTypeIndex].AlignedByteOffset		= D3D12_APPEND_ALIGNED_ELEMENT;
 		_Input[DataTypeIndex].InputSlotClass		= D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;

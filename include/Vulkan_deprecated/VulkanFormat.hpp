@@ -2,7 +2,7 @@
 #define _VULKAN_FORMAT_HPP_
 
 #include <vulkan/vulkan.hpp>
-#include "Graphics_deprecated/Format.hpp"
+#include "Graphics/Format.hpp"
 
 namespace Eternal
 {
@@ -30,8 +30,8 @@ namespace Eternal
 			4
 		};
 
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMATS) == FORMAT_COUNT, "Vulkan Formats declaration not complete");
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMAT_SIZES) == FORMAT_COUNT, "Vulkan Format Sizes declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMATS) == static_cast<int32_t>(Format::FORMAT_COUNT), "Vulkan Formats declaration not complete");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMAT_SIZES) == static_cast<int32_t>(Format::FORMAT_COUNT), "Vulkan Format Sizes declaration not complete");
 	}
 }
 

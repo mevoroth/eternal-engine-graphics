@@ -4,7 +4,7 @@
 #include "Graphics/Viewport.hpp"
 #include "NextGenGraphics/Context.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan_deprecated/VulkanView.hpp"
 #include "Vulkan_deprecated/VulkanFormat.hpp"
 

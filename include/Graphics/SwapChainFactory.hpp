@@ -1,5 +1,4 @@
-#ifndef _SWAP_CHAIN_FACTORY_HPP_
-#define _SWAP_CHAIN_FACTORY_HPP_
+#pragma once
 
 namespace Eternal
 {
@@ -11,9 +10,6 @@ namespace Eternal
 		class CommandQueue;
 		class GraphicsContext;
 
-		SwapChain* CreateSwapChain(_In_ Device& DeviceObj, _In_ Window& WindowObj, _In_ CommandQueue& CommandQueueObj);
 		SwapChain* CreateSwapChain(_In_ GraphicsContext& Context);
 	}
 }
-
-#endif
