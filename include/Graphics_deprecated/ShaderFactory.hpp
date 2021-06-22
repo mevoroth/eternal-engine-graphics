@@ -29,7 +29,7 @@ namespace Eternal
 			virtual void Recompile() = 0;
 
 		private:
-			static ShaderFactory* _Inst;
+			static ShaderFactory* _Instance;
 		};
 	}
 }

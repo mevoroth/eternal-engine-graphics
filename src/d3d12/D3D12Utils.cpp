@@ -1,8 +1,6 @@
 #include "d3d12/D3D12Utils.hpp"
 #include "Graphics/CommandUtils.h"
 
-#include <d3d12.h>
-
 namespace Eternal
 {
 	namespace Graphics
@@ -15,5 +13,13 @@ namespace Eternal
 		};
 		
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_COMMAND_LIST_TYPES) == static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT), "Mismatch between abstraction and d3d12 command types");
+
+		namespace D3D12
+		{
+			void VerifySuccess(const HRESULT& HResult)
+			{
+				ETERNAL_ASSERT(HResult == S_OK);
+			}
+		}
 	}
 }

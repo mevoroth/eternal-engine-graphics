@@ -92,6 +92,7 @@ namespace Eternal
 VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 {
 	using namespace Vulkan;
+	using namespace Eternal::Graphics::Vulkan;
 
 	memset(&_PhysicalDeviceMemoryProperties, 0x0, sizeof(VkPhysicalDeviceMemoryProperties));
 
@@ -250,7 +251,40 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 
 	std::vector<vk::QueueFamilyProperties> QueueFamilyProperties = _PhysicalDevice.getQueueFamilyProperties();
 
-	ETERNAL_ASSERT(QueueFamilyProperties[GetQueueFamilyIndex()].queueFlags & vk::QueueFlagBits::eGraphics); // Assume main device has graphics queue
+	std::vector<uint32_t> QueueIndices;
+	QueueIndices.resize(QueueFamilyProperties.size());
+	for (int32_t QueueIndex = 0; QueueIndex < QueueIndices.size(); ++QueueIndex)
+	{
+		QueueIndices[QueueIndex] = 0;
+	}
+
+	for (int32_t QueueFamilyPropertyIndex = 0; QueueFamilyPropertyIndex < QueueFamilyProperties.size(); ++QueueFamilyPropertyIndex)
+	{
+		if (_QueueFamilyIndexGraphics == InvalidQueueFamilyIndex
+			&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eGraphics))
+		{
+			_QueueFamilyIndexGraphics = QueueFamilyPropertyIndex;
+			_QueueIndexGraphics = QueueIndices[QueueFamilyPropertyIndex]++;
+		}
+
+		if (_QueueFamilyIndexCompute == InvalidQueueFamilyIndex
+			&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eCompute))
+		{
+			_QueueFamilyIndexCompute = QueueFamilyPropertyIndex;
+			_QueueIndexCompute = QueueIndices[QueueFamilyPropertyIndex]++;
+		}
+
+		if (_QueueFamilyIndexCopy == InvalidQueueFamilyIndex
+			&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eTransfer))
+		{
+			_QueueFamilyIndexCopy = QueueFamilyPropertyIndex;
+			_QueueIndexCopy = QueueIndices[QueueFamilyPropertyIndex]++;
+		}
+	}
+
+	ETERNAL_ASSERT(_QueueFamilyIndexGraphics != InvalidQueueFamilyIndex);
+	ETERNAL_ASSERT(_QueueFamilyIndexCompute != InvalidQueueFamilyIndex);
+	ETERNAL_ASSERT(_QueueFamilyIndexCopy != InvalidQueueFamilyIndex);
 
 	vk::PhysicalDeviceFeatures PhysicalDeviceFeatures;
 	_PhysicalDevice.getFeatures(&PhysicalDeviceFeatures);
@@ -287,12 +321,6 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	VerifySuccess(_PhysicalDevice.createDevice(&DeviceInfo, nullptr, &_Device));
 
 	_PhysicalDevice.getMemoryProperties(&_PhysicalDeviceMemoryProperties);
-
-	//_VulkanQueues.resize(VulkanQueueCount);
-	//for (uint32_t VulkanQueueIndex = 0; VulkanQueueIndex < VulkanQueueCount; ++VulkanQueueIndex)
-	//{
-	//	_Device.getQueue(GetQueueFamilyIndex(), VulkanQueueIndex, &_VulkanQueues[VulkanQueueCount - VulkanQueueIndex - 1]);
-	//}
 }
 
 vk::Device& VulkanDevice::GetVulkanDevice()

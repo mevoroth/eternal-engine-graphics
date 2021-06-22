@@ -6,17 +6,21 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class Resource;
-		class Device;
+		class CommandAllocator;
 
 		class CommandList
 		{
 		public:
-			CommandList(_In_ Device& DeviceObj, _In_ const CommandType& Type);
+			CommandList(_In_ CommandAllocator& InCommandAllocator);
 			virtual ~CommandList();
 
+			virtual void Begin() = 0;
+			virtual void End() = 0;
+
+			inline CommandAllocator& GetCommandAllocator() { return _CommandAllocator; }
+
 		private:
-			CommandType _CommandType = CommandType::COMMAND_TYPE_GRAPHIC;
+			CommandAllocator& _CommandAllocator;
 		};
 	}
 }

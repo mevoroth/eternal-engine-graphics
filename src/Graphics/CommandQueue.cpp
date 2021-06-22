@@ -4,7 +4,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		CommandQueue::CommandQueue(_In_ Device& DeviceObj, _In_ const CommandType& Type)
+		CommandQueue::CommandQueue(_In_ const CommandType& Type)
 			: _CommandType(Type)
 		{
 		}

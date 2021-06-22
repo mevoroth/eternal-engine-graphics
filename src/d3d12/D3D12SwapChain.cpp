@@ -4,14 +4,14 @@
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include "Window/Window.hpp"
-#include "Graphics_deprecated/Format.hpp"
+#include "Graphics/Format.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "d3d12_deprecated/D3D12DescriptorHeap.hpp"
 #include "d3d12_deprecated/D3D12Resource.hpp"
 #include "d3d12_deprecated/D3D12View.hpp"
 #include "d3d12_deprecated/D3D12RenderPass.hpp"
-#include "NextGenGraphics/Context.hpp"
+#include "Graphics/Context.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics_deprecated/RenderPassFactory.hpp"
 
@@ -62,7 +62,12 @@ D3D12SwapChain::~D3D12SwapChain()
 	_SwapChain = nullptr;
 }
 
-void D3D12SwapChain::Present()
+void D3D12SwapChain::Acquire(GraphicsContext& Context)
 {
-	ETERNAL_BREAK();
+	Context.GetCurrentFrameIndex() = _SwapChain3->GetCurrentBackBufferIndex();
+}
+
+void D3D12SwapChain::Present(GraphicsContext& Context)
+{
+	_SwapChain->Present(0, 0);
 }

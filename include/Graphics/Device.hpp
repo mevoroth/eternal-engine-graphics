@@ -1,11 +1,11 @@
-#ifndef _DEVICE_HPP_
-#define _DEVICE_HPP_
+#pragma once
 
 namespace Eternal
 {
 	namespace Graphics
 	{
 		enum class DeviceType;
+		class CommandList;
 
 		class Device
 		{
@@ -15,5 +15,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

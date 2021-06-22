@@ -5,7 +5,7 @@
 #define WIN32_EXTRA_LEAN
 #include <Windows.h>
 
-#include "NextGenGraphics/Types/DeviceType.hpp"
+#include "Graphics/Types/DeviceType.hpp"
 
 namespace Eternal
 {

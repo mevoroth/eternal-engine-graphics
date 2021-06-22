@@ -6,8 +6,9 @@
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
-
+#include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Graphics/Format.hpp"
+
 #include "Vulkan_deprecated/VulkanView.hpp"
 
 using namespace Eternal::Graphics;
@@ -151,20 +152,37 @@ VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& Context)
 	}
 }
 
-void VulkanSwapChain::Present()
+void VulkanSwapChain::Acquire(GraphicsContext& Context)
 {
-	//VULKAN_HPP_CONSTEXPR PresentInfoKHR(uint32_t                                   waitSemaphoreCount_ = {},
-	//	const VULKAN_HPP_NAMESPACE::Semaphore * pWaitSemaphores_ = {},
-	//	uint32_t                                   swapchainCount_ = {},
-	//	const VULKAN_HPP_NAMESPACE::SwapchainKHR * pSwapchains_ = {},
-	//	const uint32_t * pImageIndices_ = {},
-	//	VULKAN_HPP_NAMESPACE::Result * pResults_ = {}) VULKAN_HPP_NOEXCEPT
+	VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);
 
-	//vk::PresentInfoKHR PresentInfo(
-	//	1, &ReleaseSemaphore,
-	//	1, &SwapChainObj,
-	//	&ImageIndex
-	//);
-	//Vulkan::VerifySuccess(VulkanQueue.presentKHR(&PresentInfo));
+	Vulkan::VerifySuccess(
+		static_cast<VulkanDevice&>(Context.GetDevice()).GetVulkanDevice().acquireNextImageKHR(
+			GetSwapChain(),
+			UINT64_MAX,
+			GfxContext.GetCurrentFrameSemaphore(),
+			nullptr,
+			&GfxContext.GetCurrentFrameIndex()
+		)
+	);
+}
 
+void VulkanSwapChain::Present(GraphicsContext& Context)
+{
+	VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);
+
+	VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue());
+
+	vk::Semaphore* SubmitCompletionSemaphore = VkCommandQueue.GetSubmitCompletionSemaphoreAndReset();
+
+	vk::PresentInfoKHR PresentInfo(
+		SubmitCompletionSemaphore ? 1 : 0, SubmitCompletionSemaphore,
+		1, &GetSwapChain(),
+		&GfxContext.GetCurrentFrameIndex()
+	);
+	Vulkan::VerifySuccess(
+		static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue()).GetVulkanCommandQueue().presentKHR(
+			&PresentInfo
+		)
+	);
 }

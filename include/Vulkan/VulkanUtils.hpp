@@ -2,7 +2,7 @@
 
 #include <vulkan/vulkan.hpp>
 #include "Graphics/StencilTest.hpp"
-#include "NextGenGraphics/Types/MemoryType.hpp"
+#include "Graphics/Types/MemoryType.hpp"
 
 namespace Eternal
 {
@@ -14,6 +14,9 @@ namespace Eternal
 
 		namespace Vulkan
 		{
+			static constexpr uint32_t InvalidQueueFamilyIndex = ~0;
+			static constexpr uint32_t InvalidQueueIndex = ~0;
+
 			void VerifySuccess(const vk::Result& VulkanResult);
 			vk::StencilOpState CreateStencilOpState(const StencilTest& InStencilTest, const StencilTest::FaceOperator& InFaceOperator);
 			vk::LogicOp ConvertLogicOpToVulkanLogicOp(const LogicOp& InLogicOp);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NextGenGraphics/Context.hpp"
+#include "Graphics/Context.hpp"
 #include <array>
 #include <vulkan/vulkan.hpp>
 
@@ -12,17 +12,15 @@ namespace Eternal
 		{
 		public:
 			VulkanGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
+			~VulkanGraphicsContext();
 
 			virtual void UpdateGraphicsContext() override;
 
-			vk::Semaphore GetCurrentFrameSemaphore() { return _AcquireFrameSemaphores[CurrentFrameIndex]; }
-			vk::Semaphore GetSubmitCompletionSemaphore() { return _SubmitCompletionSemaphore; }
+			vk::Semaphore& GetCurrentFrameSemaphore() { return _AcquireFrameSemaphores[GetCurrentFrameIndex()]; }
 
 		private:
 
 			std::array<vk::Semaphore, FrameBufferingCount> _AcquireFrameSemaphores;
-			vk::Semaphore _SubmitCompletionSemaphore;
-			int32_t CurrentFrameIndex = 0;
 		};
 	}
 }

@@ -12,8 +12,6 @@ namespace Eternal
 	{
 		SwapChain* CreateSwapChain(_In_ GraphicsContext& Context)
 		{
-			//return CreateSwapChain(Context.GetDevice(), Context.GetWindow(), Context.GetGraphicsQueue());
-
 			LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating SwapChain");
 			switch (Context.GetDevice().GetDeviceType())
 			{
@@ -21,7 +19,6 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new D3D12SwapChain(Context);
 #endif
-
 			case DeviceType::VULKAN:
 				return new VulkanSwapChain(Context);
 

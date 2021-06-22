@@ -1,5 +1,4 @@
-#ifndef _SHADER_TYPE_HPP_
-#define _SHADER_TYPE_HPP_
+#pragma once
 
 namespace Eternal
 {
@@ -17,5 +16,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

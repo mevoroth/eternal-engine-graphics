@@ -2,6 +2,7 @@
 
 #include <d3d12.h>
 #include <DXGI1_4.h>
+#include "d3d12/D3D12Utils.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -18,8 +19,11 @@ IDXGIFactory4* D3D12Device::_DXGIFactory	= nullptr;
 
 void D3D12Device::Initialize()
 {
-	HRESULT hr = CreateDXGIFactory2(ETERNAL_D3D12_DXGIFLAG, __uuidof(IDXGIFactory4), (void**)&_DXGIFactory);
-	ETERNAL_ASSERT(hr == S_OK);
+	HRESULT hr = S_OK;
+
+	D3D12::VerifySuccess(
+		CreateDXGIFactory2(ETERNAL_D3D12_DXGIFLAG, __uuidof(IDXGIFactory4), (void**)&_DXGIFactory)
+	);
 
 #ifdef ETERNAL_DEBUG
 	// Enable the D3D12 debug layer
@@ -79,6 +83,8 @@ IDXGIFactory4* D3D12Device::GetDXGIFactory()
 
 D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 {
+	using namespace Eternal::Graphics::D3D12;
+
 	ETERNAL_ASSERT(_DXGIFactory);
 	HRESULT hr = _DXGIFactory->EnumAdapters1(DeviceIndex, &_DXGIAdapter);
 	
@@ -89,14 +95,17 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 		return;
 	}
 	
-	hr = D3D12CreateDevice(_DXGIAdapter, D3D_FEATURE_LEVEL_12_0, __uuidof(ID3D12Device), (void**)&_Device);
-	ETERNAL_ASSERT(hr == S_OK);
+	VerifySuccess(
+		D3D12CreateDevice(_DXGIAdapter, D3D_FEATURE_LEVEL_12_0, __uuidof(ID3D12Device5), (void**)&_Device5)
+	);
+	_Device = _Device5;
 	ETERNAL_ASSERT(_Device);
 
 #ifdef ETERNAL_DEBUG
 	DXGI_ADAPTER_DESC1 DXGIAdapterDesc1;
-	hr = _DXGIAdapter->GetDesc1(&DXGIAdapterDesc1);
-	ETERNAL_ASSERT(hr == S_OK); // Break here for debug info on device
+	VerifySuccess(
+		_DXGIAdapter->GetDesc1(&DXGIAdapterDesc1)
+	); // Break here for debug info on device
 
 	//hr = _Device->QueryInterface(__uuidof(ID3D12InfoQueue), (void**)_InfoQueue);
 	//ETERNAL_ASSERT(hr == S_OK);
@@ -122,13 +131,15 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 #endif
 
 	D3D12_FEATURE_DATA_D3D12_OPTIONS FeatureD3D12Options;
-	hr = _Device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &FeatureD3D12Options, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS));
-	ETERNAL_ASSERT(hr == S_OK);
+	VerifySuccess(
+		_Device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &FeatureD3D12Options, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS))
+	);
 
 	D3D12_FEATURE_DATA_ARCHITECTURE FeatureArchitecture;
 	FeatureArchitecture.NodeIndex = DeviceIndex;
-	hr = _Device->CheckFeatureSupport(D3D12_FEATURE_ARCHITECTURE, &FeatureArchitecture, sizeof(D3D12_FEATURE_DATA_ARCHITECTURE));
-	ETERNAL_ASSERT(hr == S_OK);
+	VerifySuccess(
+		_Device->CheckFeatureSupport(D3D12_FEATURE_ARCHITECTURE, &FeatureArchitecture, sizeof(D3D12_FEATURE_DATA_ARCHITECTURE))
+	);
 
 	D3D_FEATURE_LEVEL FeatureLevels[] =
 	{
@@ -145,8 +156,9 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 	D3D12_FEATURE_DATA_FEATURE_LEVELS FeatureFeatureLevels;
 	FeatureFeatureLevels.NumFeatureLevels			= ETERNAL_ARRAYSIZE(FeatureLevels);
 	FeatureFeatureLevels.pFeatureLevelsRequested	= FeatureLevels;
-	hr = _Device->CheckFeatureSupport(D3D12_FEATURE_FEATURE_LEVELS, &FeatureFeatureLevels, sizeof(D3D12_FEATURE_DATA_FEATURE_LEVELS));
-	ETERNAL_ASSERT(hr == S_OK);
+	VerifySuccess(
+		_Device->CheckFeatureSupport(D3D12_FEATURE_FEATURE_LEVELS, &FeatureFeatureLevels, sizeof(D3D12_FEATURE_DATA_FEATURE_LEVELS))
+	);
 
 	DXGI_FORMAT Formats[]
 	{
@@ -294,7 +306,6 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 		{
 			for (uint32_t SampleCountLog2 = 0; SampleCountLog2 < SampleCountMaxLog2; ++SampleCountLog2)
 			{
-				
 				uint32_t Key = ((FormatType * MultisampleQualityFlagsCount) + MultisampleQualityFlag) * SampleCountMaxLog2 + SampleCountLog2;
 				FeatureMultisampleQualityLevels[Key].Format			= (DXGI_FORMAT)Formats[FormatType];
 				FeatureMultisampleQualityLevels[Key].Flags			= (D3D12_MULTISAMPLE_QUALITY_LEVEL_FLAGS)MultisampleQualityFlag;
@@ -313,8 +324,9 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 		FeatureFormatInfos[FormatType].Format	= (DXGI_FORMAT)Formats[FormatType];
 		if (!(FeatureFormatSupports[FormatType].Support1 == D3D12_FORMAT_SUPPORT1_NONE && FeatureFormatSupports[FormatType].Support2 == D3D12_FORMAT_SUPPORT2_NONE))
 		{
-			hr = _Device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_INFO, &FeatureFormatInfos[FormatType], sizeof(D3D12_FEATURE_DATA_FORMAT_INFO));
-			ETERNAL_ASSERT(hr == S_OK);
+			VerifySuccess(
+				_Device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_INFO, &FeatureFormatInfos[FormatType], sizeof(D3D12_FEATURE_DATA_FORMAT_INFO))
+			);
 		}
 		else
 		{
@@ -323,8 +335,9 @@ D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 	}
 
 	D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT FeatureGpuVirtualAddressSupport;
-	hr = _Device->CheckFeatureSupport(D3D12_FEATURE_GPU_VIRTUAL_ADDRESS_SUPPORT, &FeatureGpuVirtualAddressSupport, sizeof(D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT));
-	ETERNAL_ASSERT(hr == S_OK);
+	VerifySuccess(
+		_Device->CheckFeatureSupport(D3D12_FEATURE_GPU_VIRTUAL_ADDRESS_SUPPORT, &FeatureGpuVirtualAddressSupport, sizeof(D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT))
+	);
 
 	_DeviceMask = 1 << DeviceIndex;
 

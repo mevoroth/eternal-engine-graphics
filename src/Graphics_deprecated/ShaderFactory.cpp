@@ -2,16 +2,16 @@
 
 using namespace Eternal::Graphics;
 
-ShaderFactory* ShaderFactory::_Inst = nullptr;
+ShaderFactory* ShaderFactory::_Instance = nullptr;
 
 ShaderFactory::ShaderFactory()
 {
-	ETERNAL_ASSERT(!_Inst);
-	_Inst = this;
+	ETERNAL_ASSERT(!_Instance);
+	_Instance = this;
 }
 
 ShaderFactory* ShaderFactory::Get()
 {
-	ETERNAL_ASSERT(_Inst);
-	return _Inst;
+	ETERNAL_ASSERT(_Instance);
+	return _Instance;
 }

@@ -6,7 +6,7 @@ namespace Eternal
 	{
 		GraphicsMemoryFlag operator|(const GraphicsMemoryFlag& A, const GraphicsMemoryFlag& B)
 		{
-			return GraphicsMemoryFlag(int(A) | int(B));
+			return GraphicsMemoryFlag(int32_t(A) | int32_t(B));
 		}
 	}
 }

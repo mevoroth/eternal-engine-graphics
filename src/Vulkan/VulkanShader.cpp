@@ -4,7 +4,7 @@
 #include <shaderc/shaderc.h>
 #include "NextGenGraphics/Context.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include "Graphics/ShaderType.hpp"
 #include "File/FilePath.hpp"
 #include "File/File.hpp"
@@ -62,13 +62,13 @@ static void IncludeReleaser(void* UserData, shaderc_include_result* IncludeResul
 	delete IncludeResult;
 }
 
-VulkanShader::VulkanShader(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines /* = vector<string>() */)
+VulkanShader::VulkanShader(_In_ Device& InDevice, _In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines /* = vector<string>() */)
 	: Shader(Name)
 {
 #ifdef ETERNAL_DEBUG
-	_CompileFile(DeviceObj, Source, Type, Defines);
+	_CompileFile(InDevice, Source, Type, Defines);
 #else
-	_LoadFile(DeviceObj, Source);
+	_LoadFile(InDevice, Source);
 #endif
 }
 
@@ -80,13 +80,13 @@ VulkanShader::VulkanShader(_In_ GraphicsContext& Context, const ShaderCreateInfo
 {
 }
 
-void VulkanShader::_CompileFile(_In_ Device& DeviceObj, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines)
+void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines)
 {
 	using namespace Vulkan;
 
 	ETERNAL_ASSERT(!(Defines.size() % 2));
 
-	const uint32_t VulkanVersion = static_cast<VulkanDevice&>(DeviceObj).GetVulkanVersion();
+	const uint32_t VulkanVersion = static_cast<VulkanDevice&>(InDevice).GetVulkanVersion();
 
 	std::vector<char> ShaderSourceCode;
 	string FullPathSrc = FilePath::Find(Source, FileType::SHADERS);
@@ -169,7 +169,7 @@ void VulkanShader::_CompileFile(_In_ Device& DeviceObj, _In_ const string& Sourc
 		reinterpret_cast<const uint32_t*>(ShaderByteCode)
 	);
 
-	VerifySuccess(static_cast<VulkanDevice&>(DeviceObj).GetVulkanDevice().createShaderModule(&ShaderModuleInfo, nullptr, &_ShaderModule));
+	VerifySuccess(static_cast<VulkanDevice&>(InDevice).GetVulkanDevice().createShaderModule(&ShaderModuleInfo, nullptr, &_ShaderModule));
 
 	shaderc_result_release(CompilationResult);
 }

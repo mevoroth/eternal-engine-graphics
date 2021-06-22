@@ -18,15 +18,20 @@ namespace Eternal
 					VkDevice.createSemaphore(&SemaphoreInfo, nullptr, &_AcquireFrameSemaphores[AcquireSemaphoreIndex])
 				);
 			}
+		}
 
-			Vulkan::VerifySuccess(
-				VkDevice.createSemaphore(&SemaphoreInfo, nullptr, &_SubmitCompletionSemaphore)
-			);
+		VulkanGraphicsContext::~VulkanGraphicsContext()
+		{
+			vk::Device& VkDevice = static_cast<VulkanDevice&>(GetDevice()).GetVulkanDevice();
+			for (int32_t AcquireSemaphoreIndex = 0; AcquireSemaphoreIndex < _AcquireFrameSemaphores.size(); ++AcquireSemaphoreIndex)
+			{
+				VkDevice.destroySemaphore(_AcquireFrameSemaphores[AcquireSemaphoreIndex]);
+			}
 		}
 
 		void VulkanGraphicsContext::UpdateGraphicsContext()
 		{
-			CurrentFrameIndex = (CurrentFrameIndex + 1) % FrameBufferingCount;
+			//CurrentFrameIndex = (CurrentFrameIndex + 1) % FrameBufferingCount;
 		}
 	}
 }

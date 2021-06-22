@@ -1,5 +1,4 @@
-#ifndef _COMMAND_ALLOCATOR_HPP_
-#define _COMMAND_ALLOCATOR_HPP_
+#pragma once
 
 namespace Eternal
 {
@@ -12,5 +11,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

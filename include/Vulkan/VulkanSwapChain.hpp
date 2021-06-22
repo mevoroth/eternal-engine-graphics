@@ -14,13 +14,15 @@ namespace Eternal
 		class Device;
 		class CommandQueue;
 		class GraphicsContext;
+		class View;
 
 		class VulkanSwapChain : public SwapChain
 		{
 		public:
 			VulkanSwapChain(_In_ GraphicsContext& Context);
 
-			virtual void Present() override;
+			virtual void Acquire(GraphicsContext& Context) override;
+			virtual void Present(GraphicsContext& Context) override;
 
 			vk::SwapchainKHR& GetSwapChain() { return _SwapChain; }
 			vk::SurfaceKHR& GetSurface() { return _Surface; }

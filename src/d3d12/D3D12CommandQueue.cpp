@@ -5,25 +5,23 @@
 #include "d3d12/D3D12CommandList.hpp"
 #include "d3d12/D3D12Utils.hpp"
 
-#include "d3d12_deprecated/D3D12CommandAllocator.hpp"
-
 namespace Eternal
 {
 	namespace Graphics
 	{
-		D3D12CommandQueue::D3D12CommandQueue(_In_ Device& DeviceObj, _In_ const CommandType& Type)
-			: CommandQueue(DeviceObj, Type)
+		D3D12CommandQueue::D3D12CommandQueue(_In_ Device& InDevice, _In_ const CommandType& Type)
+			: CommandQueue(Type)
 			, _CommandQueueType(D3D12_COMMAND_LIST_TYPES[uint32_t(Type)])
 		{
-			D3D12Device& D3D12DeviceObj = static_cast<D3D12Device&>(DeviceObj);
+			D3D12Device& InD3D12Device = static_cast<D3D12Device&>(InDevice);
 
 			D3D12_COMMAND_QUEUE_DESC CommandQueueDesc;
 			CommandQueueDesc.Type		= _CommandQueueType;
 			CommandQueueDesc.Priority	= D3D12_COMMAND_QUEUE_PRIORITY_HIGH;
 			CommandQueueDesc.Flags		= D3D12_COMMAND_QUEUE_FLAG_NONE;
-			CommandQueueDesc.NodeMask	= D3D12DeviceObj.GetDeviceMask();
+			CommandQueueDesc.NodeMask	= InD3D12Device.GetDeviceMask();
 
-			HRESULT hr = D3D12DeviceObj.GetD3D12Device()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
+			HRESULT hr = InD3D12Device.GetD3D12Device()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
 			ETERNAL_ASSERT(hr == S_OK);
 		}
 

@@ -2,7 +2,7 @@
 
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan_deprecated/VulkanSampler.hpp"
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan_deprecated/VulkanDescriptorHeap.hpp"
 
 using namespace std;

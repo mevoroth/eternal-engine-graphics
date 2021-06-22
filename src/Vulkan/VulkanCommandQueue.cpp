@@ -3,41 +3,56 @@
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VUlkanCommandList.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
+#include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan/VulkanFence.hpp"
 
 using namespace Eternal::Graphics;
 using namespace std;
 
-VulkanCommandQueue::VulkanCommandQueue(_In_ Device& DeviceObj, _In_ const CommandType& Type)
-	: CommandQueue(DeviceObj, Type)
+VulkanCommandQueue::VulkanCommandQueue(_In_ Device& InDevice, _In_ const CommandType& Type)
+	: CommandQueue(Type)
+	, _Device(InDevice)
 {
+	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(InDevice);
+	vk::Device& VkDevice = VulkanDeviceObj.GetVulkanDevice();
+
+	uint32_t QueueFamilyIndices[] = {
+		VulkanDeviceObj.GetQueueFamilyIndexGraphics(),
+		VulkanDeviceObj.GetQueueFamilyIndexCompute(),
+		VulkanDeviceObj.GetQueueFamilyIndexCopy()
+	};
+	
+	uint32_t QueueIndices[] = {
+		VulkanDeviceObj.GetQueueIndexGraphics(),
+		VulkanDeviceObj.GetQueueIndexCompute(),
+		VulkanDeviceObj.GetQueueIndexCopy()
+	};
+
+	_QueueFamilyIndex	= QueueFamilyIndices[static_cast<int32_t>(Type)];
+	_QueueIndex			= QueueIndices[static_cast<int32_t>(Type)];
+
+	VkDevice.getQueue(
+		_QueueFamilyIndex,
+		_QueueIndex,
+		&_CommandQueue
+	);
+
+	vk::SemaphoreCreateInfo SemaphoreInfo;
+	Vulkan::VerifySuccess(
+		VkDevice.createSemaphore(&SemaphoreInfo, nullptr, &_SubmitCompletionSemaphore)
+	);
 }
 
 VulkanCommandQueue::~VulkanCommandQueue()
 {
+	vk::Device& VkDevice = static_cast<VulkanDevice&>(_Device).GetVulkanDevice();
+	VkDevice.destroySemaphore(_SubmitCompletionSemaphore);
 }
 
 void VulkanCommandQueue::SubmitCommandLists(_In_ GraphicsContext& Context, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
 {
-	
-	//vk::SubmitInfo SubmitInfo(
-	//	1, &CurrentSemaphore,
-	//	&WaitDestStageMask,
-	//	HasRequests ? 2 : 1, HasRequests ? SubmitCmdList : &VulkanCommandBuffer,
-	//	1, &ReleaseSemaphore
-	//);
-	//Vulkan::VerifySuccess(VulkanQueue.submit(1, &SubmitInfo, SubmitFence));
-
-	//SubmitInfo(uint32_t                                         waitSemaphoreCount_ = {},
-	//	const VULKAN_HPP_NAMESPACE::Semaphore * pWaitSemaphores_ = {},
-	//	const VULKAN_HPP_NAMESPACE::PipelineStageFlags * pWaitDstStageMask_ = {},
-	//	uint32_t                                         commandBufferCount_ = {},
-	//	const VULKAN_HPP_NAMESPACE::CommandBuffer * pCommandBuffers_ = {},
-	//	uint32_t                                         signalSemaphoreCount_ = {},
-	//	const VULKAN_HPP_NAMESPACE::Semaphore * pSignalSemaphores_ = {}) VULKAN_HPP_NOEXCEPT
-
 	VulkanGraphicsContext& VulkanGfxContext = static_cast<VulkanGraphicsContext&>(Context);
 	vk::Semaphore CurrentFrameSemaphore = VulkanGfxContext.GetCurrentFrameSemaphore();
-	vk::Semaphore SubmitCompletionSemaphore = VulkanGfxContext.GetSubmitCompletionSemaphore();
 
 	vk::PipelineStageFlags WaitDestStageMask = vk::PipelineStageFlagBits::eAllGraphics;
 
@@ -52,10 +67,25 @@ void VulkanCommandQueue::SubmitCommandLists(_In_ GraphicsContext& Context, _In_ 
 		1, &CurrentFrameSemaphore,
 		&WaitDestStageMask,
 		CommandListsCount, VulkanCommandLists.data(),
-		1, &SubmitCompletionSemaphore
+		1, &_SubmitCompletionSemaphore
 	);
 
-	//Vulkan::VerifySuccess(
-	//	_CommandQueue.submit(1, &SubmitInfo, )
-	//);
+	VulkanFence& VkFence = static_cast<VulkanFence&>(Context.GetSubmitFence());
+
+	Vulkan::VerifySuccess(
+		_CommandQueue.submit(1, &SubmitInfo, VkFence.GetVulkanFence())
+	);
+
+	_HasSubmittedCommandLists = VulkanCommandLists.size() > 0;
+}
+
+vk::Semaphore* VulkanCommandQueue::GetSubmitCompletionSemaphoreAndReset()
+{
+	vk::Semaphore* OutSemaphore = nullptr;
+	if (_HasSubmittedCommandLists)
+	{
+		OutSemaphore = &_SubmitCompletionSemaphore;
+	}
+	_HasSubmittedCommandLists = false;
+	return OutSemaphore;
 }
