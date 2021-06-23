@@ -8,7 +8,7 @@
 
 using namespace Eternal::Graphics;
 
-D3D12RenderTarget::D3D12RenderTarget(_In_ ID3D12Resource* BackBuffer)
-	: D3D12Resource(BackBuffer)
-{
-}
+//D3D12RenderTarget::D3D12RenderTarget(_In_ ID3D12Resource* BackBuffer)
+//	: D3D12Resource(BackBuffer)
+//{
+//}
