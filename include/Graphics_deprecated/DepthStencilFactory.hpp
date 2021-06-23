@@ -5,11 +5,11 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class DepthStencil;
-		class DepthTest;
-		class StencilTest;
+		//class DepthStencil;
+		//class DepthTest;
+		//class StencilTest;
 
-		DepthStencil* CreateDepthStencil(_In_ const DepthTest& DepthTestState, _In_ const StencilTest& StencilTestState);
+		//DepthStencil* CreateDepthStencil(_In_ const DepthTest& DepthTestState, _In_ const StencilTest& StencilTestState);
 	}
 }
 
