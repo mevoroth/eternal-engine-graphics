@@ -1,8 +1,8 @@
 #include "Graphics/SwapChainFactory.hpp"
 
 #include "Log/Log.hpp"
-#include "NextGenGraphics/Context.hpp"
-#include "NextGenGraphics/Device.hpp"
+#include "Graphics/Context.hpp"
+#include "Graphics/Device.hpp"
 #include "d3d12/D3D12SwapChain.hpp"
 #include "Vulkan/VulkanSwapChain.hpp"
 
@@ -12,7 +12,7 @@ namespace Eternal
 	{
 		SwapChain* CreateSwapChain(_In_ GraphicsContext& Context)
 		{
-			LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating SwapChain");
+			LogWrite(LogInfo, LogGraphics, "[Graphics::CreateDevice]Creating SwapChain");
 			switch (Context.GetDevice().GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12

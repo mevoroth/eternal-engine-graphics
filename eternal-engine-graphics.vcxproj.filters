@@ -514,6 +514,12 @@
     <ClInclude Include="include\Graphics\ShaderFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Resource.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12Resource.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\d3d11\D3D11Device.cpp">
@@ -887,6 +893,12 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\ShaderFactory.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Resource.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Resource.cpp">
+      <Filter>d3d12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

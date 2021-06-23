@@ -2,11 +2,12 @@
 
 #include "Window/Window.hpp"
 #include "Graphics_deprecated/RenderPassFactory.hpp"
-#include "NextGenGraphics/Context.hpp"
+#include "Graphics/Context.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
+#include "Vulkan/VulkanResource.hpp"
 #include "Graphics/Format.hpp"
 
 #include "Vulkan_deprecated/VulkanView.hpp"
@@ -141,15 +142,31 @@ VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& Context)
 	uint32_t BackBuffersCount = 0u;
 	VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, static_cast<vk::Image*>(nullptr)));
 
-	_BackBufferImages.resize(BackBuffersCount);
-	VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, _BackBufferImages.data()));
+	ETERNAL_ASSERT(BackBuffersCount == GraphicsContext::FrameBufferingCount);
+
+	_BackBuffers.resize(BackBuffersCount);
+	vector<vk::Image> BackBufferImages;
+	BackBufferImages.resize(BackBuffersCount);
+	VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, BackBufferImages.data()));
+
+	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffersCount; ++BackBufferIndex)
+	{
+		std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
+		VulkanResourceBackBufferCreateInformation CreateInformation(
+			Context.GetDevice(),
+			BackBufferName,
+			BackBufferImages[BackBufferIndex]
+		);
+
+		_BackBuffers[BackBufferIndex] = new VulkanResource(CreateInformation);
+	}
 
 	_BackBufferViews.resize(BackBuffersCount);
 
-	for (uint32_t BackBufferIndex = 0; BackBufferIndex < _BackBufferImages.size(); ++BackBufferIndex)
-	{
-		_BackBufferViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, _BackBufferImages[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, Format::FORMAT_BGRA8888);
-	}
+	//for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffersCount; ++BackBufferIndex)
+	//{
+	//	_BackBufferViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, _BackBufferImages[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, Format::FORMAT_BGRA8888);
+	//}
 }
 
 void VulkanSwapChain::Acquire(GraphicsContext& Context)

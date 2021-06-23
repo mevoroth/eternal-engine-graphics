@@ -10,18 +10,22 @@ namespace Eternal
 		class Device;
 		class Window;
 		class GraphicsContext;
+		class Resource;
 
 		class SwapChain
 		{
 		public:
 			SwapChain(_In_ Window& WindowObj);
-			virtual ~SwapChain() {}
+			virtual ~SwapChain();
 
 			virtual void Acquire(GraphicsContext& Context) = 0;
 			virtual void Present(GraphicsContext& Context) = 0;
 
+		protected:
+			std::vector<Resource*>	_BackBuffers;
+
 		private:
-			Viewport	_BackBufferViewport;
+			Viewport				_BackBufferViewport;
 		};
 	}
 }

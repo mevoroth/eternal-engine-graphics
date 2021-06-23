@@ -27,11 +27,9 @@ namespace Eternal
 			vk::SwapchainKHR& GetSwapChain() { return _SwapChain; }
 			vk::SurfaceKHR& GetSurface() { return _Surface; }
 			const vector<View*>& GetBackBufferViews() const { return _BackBufferViews; }
-			const vector<vk::Image>& GetBackBufferImages() const { return _BackBufferImages; }
 
 		private:
 			vector<View*>				_BackBufferViews;
-			vector<vk::Image>			_BackBufferImages;
 			vk::SurfaceKHR				_Surface;
 			vk::SwapchainKHR			_SwapChain;
 			uint32_t					_FrameIndex	= 0u;
