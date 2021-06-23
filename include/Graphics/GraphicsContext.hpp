@@ -37,6 +37,8 @@ namespace Eternal
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 			virtual ~GraphicsContext();
 
+			virtual void Initialize();
+
 			virtual void UpdateGraphicsContext() {}
 
 			Device& GetDevice() { return *_Device; }

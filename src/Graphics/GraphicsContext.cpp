@@ -2,6 +2,7 @@
 
 #include "Graphics/DeviceFactory.hpp"
 #include "Graphics/Device.hpp"
+#include "d3d12/D3D12GraphicsContext.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Graphics/CommandUtils.h"
 #include "Graphics/SwapChainFactory.hpp"
@@ -23,20 +24,26 @@ namespace Eternal
 	{
 		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
 		{
+			GraphicsContext* Context = nullptr;
+
 			switch (CreateInformation.Settings.Driver)
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
-				return new GraphicsContext(CreateInformation);
+				Context = new D3D12GraphicsContext(CreateInformation);
+				break;
 #endif
 			case DeviceType::VULKAN:
-				return new VulkanGraphicsContext(CreateInformation);
+				Context = new VulkanGraphicsContext(CreateInformation);
+				break;
 
 			default:
 				ETERNAL_BREAK();
-				return nullptr;
 			}
 
+			Context->Initialize();
+
+			return Context;
 		}
 
 		void DestroyGraphicsContext(GraphicsContext*& Context)
@@ -63,8 +70,6 @@ namespace Eternal
 			_ComputeQueue	= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
 			_CopyQueue		= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COPY);
 
-			_SwapChain		= CreateSwapChain(*this);
-
 			_SubmitFence	= CreateFence(*_Device);
 
 			for (int32_t CommandAllocatorFrameIndex = 0; CommandAllocatorFrameIndex < FrameBufferingCount; ++CommandAllocatorFrameIndex)
@@ -77,6 +82,9 @@ namespace Eternal
 
 		GraphicsContext::~GraphicsContext()
 		{
+			delete _SwapChain;
+			_SwapChain = nullptr;
+
 			for (int32_t CommandTypeIndex = 0; CommandTypeIndex < _CommandAllocators.size(); ++CommandTypeIndex)
 			{
 				for (int32_t CommandAllocatorFrameIndex = 0; CommandAllocatorFrameIndex < FrameBufferingCount; ++CommandAllocatorFrameIndex)
@@ -89,9 +97,6 @@ namespace Eternal
 			delete _SubmitFence;
 			_SubmitFence = nullptr;
 
-			delete _SwapChain;
-			_SwapChain = nullptr;
-
 			delete _CopyQueue;
 			_CopyQueue = nullptr;
 
@@ -103,6 +108,11 @@ namespace Eternal
 
 			delete _Device;
 			_Device = nullptr;
+		}
+
+		void GraphicsContext::Initialize()
+		{
+			_SwapChain = CreateSwapChain(*this);
 		}
 
 		CommandQueue& GraphicsContext::GetGraphicsQueue()
