@@ -11,7 +11,7 @@ namespace Eternal
 
 		enum class ViewType
 		{
-			VIEW_UNKNOWN,
+			VIEW_UNKNOWN = 0,
 			VIEW_INDEX_BUFFER,
 			VIEW_VERTEX_BUFFER,
 			VIEW_CONSTANT_BUFFER,
@@ -23,7 +23,7 @@ namespace Eternal
 
 		enum class ViewShaderResourceType
 		{
-			VIEW_SHADER_RESOURCE_UNKNOWN, // StructuredBuffer
+			VIEW_SHADER_RESOURCE_UNKNOWN = 0, // StructuredBuffer
 			VIEW_SHADER_RESOURCE_BUFFER,
 			VIEW_SHADER_RESOURCE_TEXTURE_1D,
 			VIEW_SHADER_RESOURCE_TEXTURE_1D_ARRAY,
@@ -36,7 +36,7 @@ namespace Eternal
 
 		enum class ViewUnorderedAccessType
 		{
-			VIEW_UNORDERED_ACCESS_UNKNOWN, // RWStructuredBuffer
+			VIEW_UNORDERED_ACCESS_UNKNOWN = 0, // RWStructuredBuffer
 			VIEW_UNORDERED_ACCESS_BUFFER,
 			VIEW_UNORDERED_ACCESS_TEXTURE_1D,
 			VIEW_UNORDERED_ACCESS_TEXTURE_1D_ARRAY,
@@ -47,17 +47,24 @@ namespace Eternal
 
 		enum class ViewRenderTargetType
 		{
-			VIEW_RENDER_TARGET_UNKOWN,
+			VIEW_RENDER_TARGET_UNKOWN = 0,
 			VIEW_RENDER_TARGET_BUFFER,
 			VIEW_RENDER_TARGET_TEXTURE_1D,
 			VIEW_RENDER_TARGET_TEXTURE_1D_ARRAY,
-			VIEW_RENDET_TARGET_TEXTURE_2D,
-			VIEW_RENDET_TARGET_TEXTURE_2D_ARRAY,
-			VIEW_RENDET_TARGET_TEXTURE_3D
+			VIEW_RENDER_TARGET_TEXTURE_2D,
+			VIEW_RENDER_TARGET_TEXTURE_2D_ARRAY,
+			VIEW_RENDER_TARGET_TEXTURE_3D,
+			VIEW_RENDER_TARGET_COUNT
 		};
 
 		union ViewMetaData
 		{
+			struct
+			{
+				static constexpr uint32_t Size = 2;
+				uint64_t Dummy[Size] = {};
+			} Dummy;
+
 			// RTV
 			struct
 			{
@@ -97,6 +104,17 @@ namespace Eternal
 				uint32_t FirstWSlice		= 0;
 				uint32_t WSize				= 0;
 			} RenderTargetViewTexture3D;
+
+			ViewMetaData()
+				: Dummy()
+			{
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewBuffer), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewTexture1D), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewTexture1DArray), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewTexture2D), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewTexture2DArray), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewTexture3D), "Dummy must encapsulates all sub structures");
+			}
 		};
 
 		struct ViewCreateInformation
@@ -134,6 +152,9 @@ namespace Eternal
 		public:
 			View(_In_ const ViewCreateInformation& InViewCreateInformation);
 			virtual ~View() {}
+
+		protected:
+			const ViewCreateInformation& GetViewCreateInformation() const { return _ViewCreateInformation; }
 
 		private:
 			ViewCreateInformation _ViewCreateInformation;

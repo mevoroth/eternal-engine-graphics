@@ -9,7 +9,8 @@ namespace Eternal
 		class VulkanView : public View
 		{
 		public:
-			//VulkanView();
+			VulkanView(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation);
+			~VulkanView();
 		};
 	}
 }
