@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="d3d11">
-      <UniqueIdentifier>{8b9c15b3-5db9-4a77-8acc-932bcb87c2d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="d3d10">
-      <UniqueIdentifier>{015fb133-e049-4630-9b11-25bfbccbf082}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Window">
       <UniqueIdentifier>{4024bae6-7f51-46a6-924d-cdf144f8b90d}</UniqueIdentifier>
     </Filter>
@@ -36,118 +30,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\d3d11\D3D11Device.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Renderer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11RenderTarget.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11InputLayout.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Shader.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11VertexShader.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11PixelShader.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11GeometryShader.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11BlendState.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Viewport.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\GraphicsSettings.hpp" />
-    <ClInclude Include="include\d3d10\D3D10BlendState.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10Camera.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10Device.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10GeometryShader.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10InputLayout.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10OrthographicCamera.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10PixelShader.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10Renderer.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10RenderTarget.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10Shader.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10VertexShader.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10Viewport.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10PerspectiveCamera.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Texture.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d10\D3D10Texture.hpp">
-      <Filter>d3d10</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Context.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Constant.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Resource.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11VertexBuffer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11IndexBuffer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11ShaderFactory.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Sampler.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11Buffer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\ID3D11ShaderResource.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11DepthStencil.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11DepthStencilBuffer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d11\D3D11StructuredBuffer.hpp">
-      <Filter>d3d11</Filter>
-    </ClInclude>
     <ClInclude Include="include\Window\Window.hpp">
       <Filter>Window</Filter>
     </ClInclude>
@@ -196,9 +79,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanRenderTarget.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanResource.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanRootSignature.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
@@ -232,9 +112,6 @@
     <ClInclude Include="include\d3d12_deprecated\D3D12RenderTarget.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12Resource.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12RootSignature.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
@@ -242,9 +119,6 @@
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12ShaderFactory.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12View.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
@@ -527,102 +401,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\d3d11\D3D11Device.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Renderer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11RenderTarget.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11InputLayout.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11VertexShader.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Shader.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11GeometryShader.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11PixelShader.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11BlendState.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Viewport.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10Renderer.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10Shader.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10GeometryShader.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10PixelShader.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10VertexShader.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10Viewport.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10RenderTarget.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10InputLayout.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10Device.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10BlendState.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10OrthographicCamera.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d10\D3D10PerspectiveCamera.cpp">
-      <Filter>d3d10</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Texture.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Context.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Resource.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11ShaderFactory.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Sampler.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Constant.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11Buffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11DepthStencil.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11DepthStencilBuffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d11\D3D11StructuredBuffer.cpp">
-      <Filter>d3d11</Filter>
-    </ClCompile>
     <ClCompile Include="src\Window\Window.cpp">
       <Filter>Window</Filter>
     </ClCompile>
@@ -659,9 +437,6 @@
     <ClCompile Include="src\Vulkan_deprecated\VulkanRenderTarget.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanResource.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanRootSignature.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
@@ -689,9 +464,6 @@
     <ClCompile Include="src\d3d12_deprecated\D3D12RenderTarget.cpp">
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12Resource.cpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12RootSignature.cpp">
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
@@ -699,9 +471,6 @@
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12ShaderFactory.cpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12View.cpp">
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanUtils.cpp">
@@ -914,6 +683,9 @@
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Format.cpp">
       <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanView.cpp">
+      <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
