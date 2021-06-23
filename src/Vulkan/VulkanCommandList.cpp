@@ -5,15 +5,6 @@
 
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
-#include "Vulkan_deprecated/VulkanPipeline.hpp"
-#include "Vulkan_deprecated/VulkanRenderTarget.hpp"
-#include "Vulkan_deprecated/VulkanRenderPass.hpp"
-#include "Vulkan_deprecated/VulkanRootSignature.hpp"
-#include "Vulkan_deprecated/VulkanResource.hpp"
-#include "Vulkan_deprecated/VulkanHeap.hpp"
-#include "Vulkan_deprecated/VulkanView.hpp"
-#include "Vulkan_deprecated/VulkanDescriptorHeap.hpp"
-#include "Vulkan_deprecated/VulkanDescriptorTable.h"
 
 using namespace Eternal::Graphics;
 

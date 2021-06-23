@@ -4,7 +4,7 @@
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "Vulkan/VulkanDevice.hpp"
-#include "Graphics/Context.hpp"
+#include "Graphics/GraphicsContext.hpp"
 
 namespace Eternal
 {

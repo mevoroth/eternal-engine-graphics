@@ -328,9 +328,6 @@
     <ClInclude Include="include\Graphics_deprecated\Resource.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\ResourceFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\RootSignature.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
@@ -493,9 +490,6 @@
     <ClInclude Include="include\Graphics\View.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Context.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\Device.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -518,6 +512,17 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12\D3D12Resource.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanResource.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanView.hpp" />
+    <ClInclude Include="include\d3d12\D3D12GraphicsContext.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\GraphicsContext.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12View.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
   </ItemGroup>
@@ -753,9 +758,6 @@
     <ClCompile Include="src\Graphics_deprecated\RenderTargetFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\ResourceFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\RootSignatureFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
@@ -882,9 +884,6 @@
     <ClCompile Include="src\Graphics\CommandListFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Context.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\DeviceFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -898,6 +897,22 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12Resource.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanResource.cpp" />
+    <ClCompile Include="src\Graphics\View.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\GraphicsContext.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12View.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12GraphicsContext.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Format.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
   </ItemGroup>

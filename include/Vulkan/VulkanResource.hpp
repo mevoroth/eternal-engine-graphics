@@ -29,6 +29,9 @@ namespace Eternal
 			VulkanResource(_In_ const VulkanResourceBackBufferCreateInformation& InResourceCreateInformation);
 			virtual ~VulkanResource();
 
+			vk::Image& GetVulkanImage();
+			vk::Buffer& GetVulkanBuffer();
+
 		private:
 			union VulkanResourceMetaData
 			{

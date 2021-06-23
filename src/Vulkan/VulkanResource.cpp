@@ -25,5 +25,17 @@ namespace Eternal
 				break;
 			}
 		}
+
+		vk::Image& VulkanResource::GetVulkanImage()
+		{
+			ETERNAL_ASSERT(_VulkanResourceType == VulkanResourceType::IMAGE);
+			return _VulkanResourceMetaData.ImageResource;
+		}
+
+		vk::Buffer& VulkanResource::GetVulkanBuffer()
+		{
+			ETERNAL_ASSERT(_VulkanResourceType == VulkanResourceType::BUFFER);
+			return _VulkanResourceMetaData.BufferResource;
+		}
 	}
 }

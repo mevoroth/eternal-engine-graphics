@@ -9,7 +9,7 @@
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Resource.hpp"
-#include "Graphics/Context.hpp"
+#include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Viewport.hpp"
 
 using namespace Eternal::Graphics;

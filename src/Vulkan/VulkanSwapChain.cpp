@@ -2,15 +2,13 @@
 
 #include "Window/Window.hpp"
 #include "Graphics_deprecated/RenderPassFactory.hpp"
-#include "Graphics/Context.hpp"
+#include "Graphics/GraphicsContext.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Vulkan/VulkanResource.hpp"
 #include "Graphics/Format.hpp"
-
-#include "Vulkan_deprecated/VulkanView.hpp"
 
 using namespace Eternal::Graphics;
 

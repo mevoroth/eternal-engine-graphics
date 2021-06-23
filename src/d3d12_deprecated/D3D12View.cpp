@@ -74,7 +74,7 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 	, _DescriptorHeap(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj))
 {
 	D3D12_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
-	ShaderResourceViewDesc.Format					= D3D12_FORMATS[static_cast<int32_t>(FormatObj)];
+	ShaderResourceViewDesc.Format					= D3D12_FORMATS[static_cast<int32_t>(FormatObj)].Format;
 	ShaderResourceViewDesc.Shader4ComponentMapping	= D3D12_ENCODE_SHADER_4_COMPONENT_MAPPING(D3D12_SHADER_COMPONENT_MAPPING_FROM_MEMORY_COMPONENT_0, D3D12_SHADER_COMPONENT_MAPPING_FROM_MEMORY_COMPONENT_1, D3D12_SHADER_COMPONENT_MAPPING_FROM_MEMORY_COMPONENT_2, D3D12_SHADER_COMPONENT_MAPPING_FROM_MEMORY_COMPONENT_3);
 	BuildSrvDescription(ViewType, ShaderResourceViewDesc);
 
@@ -96,7 +96,7 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 	if (FormatObj == Format::FORMAT_D32)
 	{
 		D3D12_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc;
-		DepthStencilViewDesc.Format				= D3D12_FORMATS[static_cast<int32_t>(FormatObj)];
+		DepthStencilViewDesc.Format				= D3D12_FORMATS[static_cast<int32_t>(FormatObj)].Format;
 		DepthStencilViewDesc.ViewDimension		= D3D12_DSV_DIMENSION_TEXTURE2D;
 		DepthStencilViewDesc.Flags				= D3D12_DSV_FLAG_NONE;
 		DepthStencilViewDesc.Texture2D.MipSlice = 0;
@@ -110,7 +110,7 @@ D3D12View::D3D12View(_In_ Device& DeviceObj, _In_ DescriptorHeap& DescriptorHeap
 	else
 	{
 		D3D12_RENDER_TARGET_VIEW_DESC RenderTargetViewDesc;
-		RenderTargetViewDesc.Format					= D3D12_FORMATS[static_cast<int32_t>(FormatObj)];
+		RenderTargetViewDesc.Format					= D3D12_FORMATS[static_cast<int32_t>(FormatObj)].Format;
 		RenderTargetViewDesc.Texture2D.MipSlice		= 0;
 		RenderTargetViewDesc.Texture2D.PlaneSlice	= 0; // See D3D12_FEATURE_DATA_FORMAT_INFO value in D3D12Device.cpp
 

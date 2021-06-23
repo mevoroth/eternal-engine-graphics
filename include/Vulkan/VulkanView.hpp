@@ -9,7 +9,7 @@ namespace Eternal
 		class VulkanView : public View
 		{
 		public:
-			VulkanView();
+			//VulkanView();
 		};
 	}
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Context.hpp"
+#include "Graphics/GraphicsContext.hpp"
 #include <array>
 #include <vulkan/vulkan.hpp>
 

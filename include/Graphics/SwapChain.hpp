@@ -21,6 +21,8 @@ namespace Eternal
 			virtual void Acquire(GraphicsContext& Context) = 0;
 			virtual void Present(GraphicsContext& Context) = 0;
 
+			std::vector<Resource*>& GetBackBuffers() { return _BackBuffers; }
+
 		protected:
 			std::vector<Resource*>	_BackBuffers;
 

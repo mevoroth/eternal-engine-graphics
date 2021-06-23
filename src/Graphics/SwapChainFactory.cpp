@@ -1,7 +1,7 @@
 #include "Graphics/SwapChainFactory.hpp"
 
 #include "Log/Log.hpp"
-#include "Graphics/Context.hpp"
+#include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12SwapChain.hpp"
 #include "Vulkan/VulkanSwapChain.hpp"

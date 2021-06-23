@@ -32,6 +32,8 @@ namespace Eternal
 			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceSource& InResourceSource);
 			virtual ~Resource() {}
 
+			inline bool IsMultisample() const { return _Multisample; }
+
 		protected:
 			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }
 			inline ResourceSource GetResourceSource() const { return _ResourceSource; }
@@ -39,6 +41,7 @@ namespace Eternal
 		private:
 			ResourceSource				_ResourceSource = ResourceSource::UNKNOWN; // Used to track down type of resource
 			ResourceCreateInformation	_ResourceCreateInformation;
+			bool						_Multisample = false;
 		};
 	}
 }

@@ -1,8 +1,7 @@
-#include "NextGenGraphics/Context.hpp"
+#include "Graphics/GraphicsContext.hpp"
 
-#include "NextGenGraphics/DeviceFactory.hpp"
-#include "NextGenGraphics/Device.hpp"
-#include "NextGenGraphics/Context.hpp"
+#include "Graphics/DeviceFactory.hpp"
+#include "Graphics/Device.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Graphics/CommandUtils.h"
 #include "Graphics/SwapChainFactory.hpp"

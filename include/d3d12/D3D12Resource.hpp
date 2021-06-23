@@ -24,8 +24,10 @@ namespace Eternal
 			D3D12Resource(_In_ const D3D12ResourceBackBufferCreateInformation& InResourceCreateInformation); // Back buffer
 			virtual ~D3D12Resource();
 
+			inline ID3D12Resource* GetD3D12Resource() { return _Resource; }
+
 		private:
-			ID3D12Resource* _Resource = nullptr;
+			ID3D12Resource*	_Resource		= nullptr;
 		};
 	}
 }

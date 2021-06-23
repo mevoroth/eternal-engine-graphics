@@ -4,7 +4,7 @@
 #include "Graphics/Format.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan_deprecated/VulkanResource.hpp"
+#include "Vulkan/VulkanResource.hpp"
 #include "Vulkan_deprecated/VulkanFormat.hpp"
 #include "Vulkan_deprecated/VulkanDescriptorHeap.hpp"
 

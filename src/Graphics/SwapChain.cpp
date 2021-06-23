@@ -1,6 +1,7 @@
 #include "Graphics/SwapChain.hpp"
 
 #include "Window/Window.hpp"
+#include "Graphics/Resource.hpp"
 
 namespace Eternal
 {
