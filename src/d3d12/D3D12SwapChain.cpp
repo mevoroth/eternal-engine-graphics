@@ -9,6 +9,8 @@
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Resource.hpp"
+#include "d3d12/D3D12View.hpp"
+#include "Graphics/View.hpp"
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Viewport.hpp"
 
@@ -61,6 +63,7 @@ D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& Context)
 	ETERNAL_ASSERT(SwapChainDesc.BufferCount == _BackBuffersCount);
 
 	_BackBuffers.resize(_BackBuffersCount);
+	_BackBufferRenderTargetViews.resize(_BackBuffersCount);
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < _BackBuffersCount; ++BackBufferIndex)
 	{
 		ID3D12Resource* BackBufferResource = nullptr;
@@ -75,14 +78,30 @@ D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& Context)
 
 		ETERNAL_ASSERT(BackBufferResource);
 
-		std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
-		D3D12ResourceBackBufferCreateInformation CreateInformation(
-			Context.GetDevice(),
-			BackBufferName,
-			BackBufferResource
-		);
+		// Resource
+		{
+			std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
+			D3D12ResourceBackBufferCreateInformation CreateInformation(
+				Context.GetDevice(),
+				BackBufferName,
+				BackBufferResource
+			);
 
-		_BackBuffers[BackBufferIndex] = new D3D12Resource(CreateInformation);
+			_BackBuffers[BackBufferIndex] = new D3D12Resource(CreateInformation);
+		}
+
+		// View
+		{
+			ViewMetaData MetaData;
+			RenderTargetViewCreateInformation CreateInformation(
+				Context,
+				*_BackBuffers[BackBufferIndex],
+				MetaData,
+				Format::FORMAT_RGBA8888,
+				ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D
+			);
+			_BackBufferRenderTargetViews[BackBufferIndex] = new D3D12View(CreateInformation);
+		}
 	}
 }
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Graphics/Viewport.hpp"
-#include "Graphics/BlendState.hpp"
 
 namespace Eternal
 {
@@ -11,6 +10,7 @@ namespace Eternal
 		class Window;
 		class GraphicsContext;
 		class Resource;
+		class View;
 
 		class SwapChain
 		{
@@ -22,9 +22,11 @@ namespace Eternal
 			virtual void Present(GraphicsContext& Context) = 0;
 
 			std::vector<Resource*>& GetBackBuffers() { return _BackBuffers; }
+			std::vector<View*>& GetBackBufferRenderTargetViews() { return _BackBufferRenderTargetViews; }
 
 		protected:
 			std::vector<Resource*>	_BackBuffers;
+			std::vector<View*>		_BackBufferRenderTargetViews;
 
 		private:
 			Viewport				_BackBufferViewport;
