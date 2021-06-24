@@ -1,4 +1,4 @@
-#include "Graphics_deprecated/RenderPass.hpp"
+#include "Graphics/RenderPass.hpp"
 
 #include "GraphicsSettings.hpp"
 
