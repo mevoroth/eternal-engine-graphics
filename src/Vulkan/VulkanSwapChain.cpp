@@ -168,7 +168,7 @@ VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& Context)
 				Context,
 				*_BackBuffers[BackBufferIndex],
 				MetaData,
-				Format::FORMAT_RGBA8888,
+				Format::FORMAT_BGRA8888,
 				ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D
 			);
 

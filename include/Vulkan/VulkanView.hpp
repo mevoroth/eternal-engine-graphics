@@ -15,7 +15,12 @@ namespace Eternal
 			VulkanView(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation);
 			~VulkanView();
 
+			vk::ImageView& GetVulkanImageView();
+			vk::BufferView& GetVulkanBufferView();
+
 		private:
+			VulkanResourceType GetVulkanResourceType();
+
 			union VulkanViewMetaData
 			{
 				VulkanViewMetaData()

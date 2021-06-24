@@ -25,15 +25,11 @@ VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const Ren
 	VulkanAttachmentReferences.resize(CreateInformation.RenderTargets.size());
 	AttachmentViews.resize(CreateInformation.RenderTargets.size());
 	
-	ETERNAL_BREAK();
-	// NEED TO FIX FORMAT
-	// NEED TO FIX ATTACHMENT_VIEWS
-
 	for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < GetRenderTargets().size(); ++RenderTargetIndex)
 	{
 		VulkanAttachments[RenderTargetIndex] = vk::AttachmentDescription(
 			vk::AttachmentDescriptionFlagBits(),
-			VULKAN_FORMATS[0].Format,//VULKAN_FORMATS[int(static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetFormat())],
+			VULKAN_FORMATS[static_cast<int32_t>(GetRenderTargets()[RenderTargetIndex]->GetViewFormat())].Format,
 			vk::SampleCountFlagBits::e1,
 			vk::AttachmentLoadOp::eDontCare
 		).setFinalLayout(
@@ -42,7 +38,7 @@ VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const Ren
 
 		VulkanAttachmentReferences[RenderTargetIndex] = vk::AttachmentReference(RenderTargetIndex, vk::ImageLayout::eColorAttachmentOptimal);
 
-		//AttachmentViews[RenderTargetIndex] = static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetImageView();
+		AttachmentViews[RenderTargetIndex] = static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetVulkanImageView();
 	}
 
 	vk::AttachmentReference DepthStencilAttachmentReference;
@@ -70,7 +66,9 @@ VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const Ren
 		0, nullptr
 	);
 
-	VerifySuccess(Device.createRenderPass(&RenderPassInfo, nullptr, &_RenderPass));
+	VerifySuccess(
+		Device.createRenderPass(&RenderPassInfo, nullptr, &_RenderPass)
+	);
 
 	vk::FramebufferCreateInfo FrameBufferInfo(
 		vk::FramebufferCreateFlagBits(),
@@ -82,10 +80,14 @@ VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const Ren
 		1
 	);
 	
-	VerifySuccess(Device.createFramebuffer(&FrameBufferInfo, nullptr, &_FrameBuffer));
+	VerifySuccess(
+		Device.createFramebuffer(&FrameBufferInfo, nullptr, &_FrameBuffer)
+	);
 }
 
 VulkanRenderPass::~VulkanRenderPass()
 {
-	static_cast<VulkanDevice&>(_Device).GetVulkanDevice().destroyRenderPass(_RenderPass, nullptr);
+	vk::Device& VkDevice = static_cast<VulkanDevice&>(_Device).GetVulkanDevice();
+	VkDevice.destroyRenderPass(_RenderPass);
+	VkDevice.destroyFramebuffer(_FrameBuffer);
 }

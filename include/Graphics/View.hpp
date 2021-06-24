@@ -153,6 +153,8 @@ namespace Eternal
 			View(_In_ const ViewCreateInformation& InViewCreateInformation);
 			virtual ~View() {}
 
+			Format GetViewFormat() const { return _ViewCreateInformation.GraphicsFormat; }
+			
 		protected:
 			const ViewCreateInformation& GetViewCreateInformation() const { return _ViewCreateInformation; }
 

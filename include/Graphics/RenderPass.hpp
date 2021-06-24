@@ -1,5 +1,4 @@
-#ifndef _RENDER_PASS_HPP_
-#define _RENDER_PASS_HPP_
+#pragma once
 
 #include "Graphics/BlendState.hpp"
 #include "Graphics/Viewport.hpp"
@@ -52,5 +51,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif
