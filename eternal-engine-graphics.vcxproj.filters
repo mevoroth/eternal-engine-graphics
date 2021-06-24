@@ -73,9 +73,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanPipeline.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanRenderPass.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanRenderTarget.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
@@ -101,9 +98,6 @@
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12Pipeline.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12RenderPass.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12RenderTarget.hpp">
@@ -399,6 +393,9 @@
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12RenderPass.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -431,9 +428,6 @@
     <ClCompile Include="src\Vulkan_deprecated\VulkanPipeline.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanRenderPass.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanRenderTarget.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
@@ -453,9 +447,6 @@
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12Pipeline.cpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12RenderPass.cpp">
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12RenderTarget.cpp">
@@ -686,6 +677,9 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanFormat.cpp">
       <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12RenderPass.cpp">
+      <Filter>d3d12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

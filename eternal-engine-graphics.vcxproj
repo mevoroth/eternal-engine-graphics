@@ -26,6 +26,7 @@
     <ClInclude Include="include\d3d12\D3D12Fence.hpp" />
     <ClInclude Include="include\d3d12\D3D12Format.hpp" />
     <ClInclude Include="include\d3d12\D3D12GraphicsContext.hpp" />
+    <ClInclude Include="include\d3d12\D3D12RenderPass.hpp" />
     <ClInclude Include="include\d3d12\D3D12Resource.hpp" />
     <ClInclude Include="include\d3d12\D3D12Shader.hpp" />
     <ClInclude Include="include\d3d12\D3D12SwapChain.hpp" />
@@ -37,7 +38,6 @@
     <ClInclude Include="include\d3d12_deprecated\D3D12Heap.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12InputLayout.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12Pipeline.hpp" />
-    <ClInclude Include="include\d3d12_deprecated\D3D12RenderPass.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12RenderTarget.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12RootSignature.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12Sampler.hpp" />
@@ -149,7 +149,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanHeap.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanInputLayout.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanPipeline.hpp" />
-    <ClInclude Include="include\Vulkan_deprecated\VulkanRenderPass.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanRenderTarget.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanRootSignature.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanSampler.hpp" />
@@ -163,6 +162,7 @@
     <ClCompile Include="src\d3d12\D3D12Fence.cpp" />
     <ClCompile Include="src\d3d12\D3D12Format.cpp" />
     <ClCompile Include="src\d3d12\D3D12GraphicsContext.cpp" />
+    <ClCompile Include="src\d3d12\D3D12RenderPass.cpp" />
     <ClCompile Include="src\d3d12\D3D12Resource.cpp" />
     <ClCompile Include="src\d3d12\D3D12Shader.cpp" />
     <ClCompile Include="src\d3d12\D3D12SwapChain.cpp" />
@@ -173,7 +173,6 @@
     <ClCompile Include="src\d3d12_deprecated\D3D12Heap.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12InputLayout.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12Pipeline.cpp" />
-    <ClCompile Include="src\d3d12_deprecated\D3D12RenderPass.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12RenderTarget.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12RootSignature.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12Sampler.cpp" />
@@ -257,7 +256,6 @@
     <ClCompile Include="src\Vulkan_deprecated\VulkanHeap.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanInputLayout.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanPipeline.cpp" />
-    <ClCompile Include="src\Vulkan_deprecated\VulkanRenderPass.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanRenderTarget.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanRootSignature.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanSampler.cpp" />
