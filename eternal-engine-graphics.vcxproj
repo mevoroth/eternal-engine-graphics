@@ -101,7 +101,6 @@
     <ClInclude Include="include\Graphics_deprecated\RendererFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\RenderPass.hpp" />
     <ClInclude Include="include\Graphics_deprecated\RenderPassFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\RenderTargetFactory.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -127,7 +126,6 @@
     <ClInclude Include="include\Graphics_deprecated\ViewportFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp" />
-    <ClInclude Include="include\NextGenGraphics\Resource.hpp" />
     <ClInclude Include="include\NextGenGraphics\SamplerFactory.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
@@ -147,7 +145,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanContext.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorHeap.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorTable.h" />
-    <ClInclude Include="include\Vulkan_deprecated\VulkanFormat.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanHeap.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanInputLayout.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanPipeline.hpp" />
@@ -219,7 +216,6 @@
     <ClCompile Include="src\Graphics_deprecated\RendererFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\RenderPass.cpp" />
     <ClCompile Include="src\Graphics_deprecated\RenderPassFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\RenderTargetFactory.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -239,7 +235,6 @@
     <ClCompile Include="src\Graphics_deprecated\View.cpp" />
     <ClCompile Include="src\Graphics_deprecated\ViewportFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp" />
-    <ClCompile Include="src\NextGenGraphics\Resource.cpp" />
     <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandList.cpp" />

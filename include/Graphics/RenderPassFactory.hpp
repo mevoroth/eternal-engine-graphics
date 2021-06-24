@@ -1,5 +1,4 @@
-#ifndef _RENDER_PASS_FACTORY_HPP_
-#define _RENDER_PASS_FACTORY_HPP_
+#pragma once
 
 #include "Graphics/BlendState.hpp"
 
@@ -16,5 +15,3 @@ namespace Eternal
 		RenderPass* CreateRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation);
 	}
 }
-
-#endif

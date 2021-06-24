@@ -1,4 +1,4 @@
-#include "Vulkan_deprecated/VulkanRenderPass.hpp"
+#include "Vulkan/VulkanRenderPass.hpp"
 
 #include "Graphics/Format.hpp"
 #include "Graphics/Viewport.hpp"
@@ -29,7 +29,7 @@ VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const Ren
 	{
 		VulkanAttachments[RenderTargetIndex] = vk::AttachmentDescription(
 			vk::AttachmentDescriptionFlagBits(),
-			VULKAN_FORMATS[static_cast<int32_t>(GetRenderTargets()[RenderTargetIndex]->GetViewFormat())].Format,
+			VULKAN_FORMATS[static_cast<int32_t>(GetRenderTargets()[RenderTargetIndex].RenderTarget->GetViewFormat())].Format,
 			vk::SampleCountFlagBits::e1,
 			vk::AttachmentLoadOp::eDontCare
 		).setFinalLayout(
@@ -38,7 +38,7 @@ VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const Ren
 
 		VulkanAttachmentReferences[RenderTargetIndex] = vk::AttachmentReference(RenderTargetIndex, vk::ImageLayout::eColorAttachmentOptimal);
 
-		AttachmentViews[RenderTargetIndex] = static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetVulkanImageView();
+		AttachmentViews[RenderTargetIndex] = static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex].RenderTarget)->GetVulkanImageView();
 	}
 
 	vk::AttachmentReference DepthStencilAttachmentReference;

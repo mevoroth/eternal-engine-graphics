@@ -1,8 +1,8 @@
 #include "Graphics/CommandQueueFactory.hpp"
 
 #include "Log/Log.hpp"
-#include "NextGenGraphics/Types/DeviceType.hpp"
-#include "NextGenGraphics/Device.hpp"
+#include "Graphics/Types/DeviceType.hpp"
+#include "Graphics/Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
 

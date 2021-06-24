@@ -1,10 +1,10 @@
-#include "Graphics_deprecated/RenderPassFactory.hpp"
+#include "Graphics/RenderPassFactory.hpp"
 
-#include "NextGenGraphics/Context.hpp"
-#include "NextGenGraphics/Types/DeviceType.hpp"
-#include "NextGenGraphics/Device.hpp"
-#include "Vulkan_deprecated/VulkanRenderPass.hpp"
-#include "d3d12_deprecated/D3D12RenderPass.hpp"
+#include "Graphics/GraphicsContext.hpp"
+#include "Graphics/Types/DeviceType.hpp"
+#include "Graphics/Device.hpp"
+#include "Vulkan/VulkanRenderPass.hpp"
+#include "d3d12/D3D12RenderPass.hpp"
 
 namespace Eternal
 {

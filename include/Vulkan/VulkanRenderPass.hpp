@@ -1,8 +1,7 @@
-#ifndef _VULKAN_RENDER_PASS_HPP_
-#define _VULKAN_RENDER_PASS_HPP_
+#pragma once
 
+#include "Graphics/RenderPass.hpp"
 #include <vulkan/vulkan.hpp>
-#include "Graphics_deprecated/RenderPass.hpp"
 
 namespace Eternal
 {
@@ -10,9 +9,6 @@ namespace Eternal
 	{
 		using namespace std;
 		class Device;
-		class View;
-		class BlendState;
-		class Viewport;
 		class GraphicsContext;
 
 		class VulkanRenderPass : public RenderPass
@@ -31,5 +27,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

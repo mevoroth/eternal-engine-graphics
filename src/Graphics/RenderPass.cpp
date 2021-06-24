@@ -2,15 +2,27 @@
 
 #include "GraphicsSettings.hpp"
 
-using namespace Eternal::Graphics;
-
-RenderPass::RenderPass(_In_ const RenderPassCreateInformation& CreateInformation)
-	: _RenderTargets(CreateInformation.RenderTargets)
-	, _BlendStates(CreateInformation.BlendStates)
-	, _LogicBlend(CreateInformation.LogicBlend)
-	, _Viewport(CreateInformation.Viewport)
-	, _DepthStencilRenderTarget(CreateInformation.DepthStencilRenderTarget)
+namespace Eternal
 {
-	ETERNAL_ASSERT(_RenderTargets.size() < MAX_RENDER_TARGETS);
-	ETERNAL_ASSERT(_RenderTargets.size() == _BlendStates.size());
+	namespace Graphics
+	{
+		const RenderTargetOperator RenderTargetOperator::NoLoad_NoStore	(LoadOperator::NO_LOAD,	StoreOperator::NO_STORE);
+		const RenderTargetOperator RenderTargetOperator::NoLoad_Store	(LoadOperator::NO_LOAD,	StoreOperator::STORE);
+		const RenderTargetOperator RenderTargetOperator::NoLoad_Resolve	(LoadOperator::NO_LOAD,	StoreOperator::RESOLVE);
+		const RenderTargetOperator RenderTargetOperator::Load_NoStore	(LoadOperator::LOAD,	StoreOperator::NO_STORE);
+		const RenderTargetOperator RenderTargetOperator::Load_Store		(LoadOperator::LOAD,	StoreOperator::STORE);
+		const RenderTargetOperator RenderTargetOperator::Load_Resolve	(LoadOperator::LOAD,	StoreOperator::RESOLVE);
+		const RenderTargetOperator RenderTargetOperator::Clear_NoStore	(LoadOperator::CLEAR,	StoreOperator::NO_STORE);
+		const RenderTargetOperator RenderTargetOperator::Clear_Store	(LoadOperator::CLEAR,	StoreOperator::STORE);
+		const RenderTargetOperator RenderTargetOperator::Clear_Resolve	(LoadOperator::CLEAR,	StoreOperator::RESOLVE);
+
+		RenderPass::RenderPass(_In_ const RenderPassCreateInformation& CreateInformation)
+			: _RenderTargets(CreateInformation.RenderTargets)
+			, _LogicBlend(CreateInformation.LogicBlend)
+			, _Viewport(CreateInformation.Viewport)
+			, _DepthStencilRenderTarget(CreateInformation.DepthStencilRenderTarget)
+		{
+			ETERNAL_ASSERT(_RenderTargets.size() < MAX_RENDER_TARGETS);
+		}
+	}
 }

@@ -34,9 +34,6 @@
     <ClInclude Include="include\Window\Window.hpp">
       <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="include\NextGenGraphics\Resource.hpp">
-      <Filter>NextGenGraphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
@@ -59,9 +56,6 @@
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorTable.h">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanFormat.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanHeap.hpp">
@@ -179,9 +173,6 @@
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\RendererFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\RenderPass.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\RenderPassFactory.hpp">
@@ -414,9 +405,6 @@
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp">
       <Filter>NextGenGraphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\NextGenGraphics\Resource.cpp">
-      <Filter>NextGenGraphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp">
       <Filter>NextGenGraphics</Filter>
     </ClCompile>
@@ -514,9 +502,6 @@
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\RendererFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\RenderPass.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\RenderPassFactory.cpp">
