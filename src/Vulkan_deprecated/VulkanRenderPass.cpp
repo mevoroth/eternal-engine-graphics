@@ -1,12 +1,12 @@
 #include "Vulkan_deprecated/VulkanRenderPass.hpp"
 
-#include "Graphics_deprecated/Format.hpp"
+#include "Graphics/Format.hpp"
 #include "Graphics/Viewport.hpp"
-#include "NextGenGraphics/Context.hpp"
+#include "Graphics/GraphicsContext.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
-#include "Vulkan_deprecated/VulkanView.hpp"
-#include "Vulkan_deprecated/VulkanFormat.hpp"
+#include "Vulkan/VulkanView.hpp"
+#include "Vulkan/VulkanFormat.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -25,11 +25,15 @@ VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const Ren
 	VulkanAttachmentReferences.resize(CreateInformation.RenderTargets.size());
 	AttachmentViews.resize(CreateInformation.RenderTargets.size());
 	
+	ETERNAL_BREAK();
+	// NEED TO FIX FORMAT
+	// NEED TO FIX ATTACHMENT_VIEWS
+
 	for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < GetRenderTargets().size(); ++RenderTargetIndex)
 	{
 		VulkanAttachments[RenderTargetIndex] = vk::AttachmentDescription(
 			vk::AttachmentDescriptionFlagBits(),
-			VULKAN_FORMATS[int(static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetFormat())],
+			VULKAN_FORMATS[0].Format,//VULKAN_FORMATS[int(static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetFormat())],
 			vk::SampleCountFlagBits::e1,
 			vk::AttachmentLoadOp::eDontCare
 		).setFinalLayout(
@@ -38,7 +42,7 @@ VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const Ren
 
 		VulkanAttachmentReferences[RenderTargetIndex] = vk::AttachmentReference(RenderTargetIndex, vk::ImageLayout::eColorAttachmentOptimal);
 
-		AttachmentViews[RenderTargetIndex] = static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetImageView();
+		//AttachmentViews[RenderTargetIndex] = static_cast<VulkanView*>(GetRenderTargets()[RenderTargetIndex])->GetImageView();
 	}
 
 	vk::AttachmentReference DepthStencilAttachmentReference;

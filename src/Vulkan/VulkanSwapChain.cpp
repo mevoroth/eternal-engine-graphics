@@ -8,6 +8,7 @@
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Vulkan/VulkanResource.hpp"
+#include "Vulkan/VulkanView.hpp"
 #include "Graphics/Format.hpp"
 
 using namespace Eternal::Graphics;
@@ -143,28 +144,37 @@ VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& Context)
 	ETERNAL_ASSERT(BackBuffersCount == GraphicsContext::FrameBufferingCount);
 
 	_BackBuffers.resize(BackBuffersCount);
+	_BackBufferRenderTargetViews.resize(BackBuffersCount);
 	vector<vk::Image> BackBufferImages;
 	BackBufferImages.resize(BackBuffersCount);
 	VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, BackBufferImages.data()));
 
 	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffersCount; ++BackBufferIndex)
 	{
-		std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
-		VulkanResourceBackBufferCreateInformation CreateInformation(
-			Context.GetDevice(),
-			BackBufferName,
-			BackBufferImages[BackBufferIndex]
-		);
+		{
+			std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
+			VulkanResourceBackBufferCreateInformation CreateInformation(
+				Context.GetDevice(),
+				BackBufferName,
+				BackBufferImages[BackBufferIndex]
+			);
 
-		_BackBuffers[BackBufferIndex] = new VulkanResource(CreateInformation);
+			_BackBuffers[BackBufferIndex] = new VulkanResource(CreateInformation);
+		}
+
+		{
+			ViewMetaData MetaData;
+			RenderTargetViewCreateInformation CreateInformation(
+				Context,
+				*_BackBuffers[BackBufferIndex],
+				MetaData,
+				Format::FORMAT_RGBA8888,
+				ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D
+			);
+
+			_BackBufferRenderTargetViews[BackBufferIndex] = new VulkanView(CreateInformation);
+		}
 	}
-
-	_BackBufferViews.resize(BackBuffersCount);
-
-	//for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffersCount; ++BackBufferIndex)
-	//{
-	//	_BackBufferViews[BackBufferIndex] = new VulkanView(VulkanDeviceObj, _BackBufferImages[BackBufferIndex], TEXTURE_VIEW_TYPE_2D, Format::FORMAT_BGRA8888);
-	//}
 }
 
 void VulkanSwapChain::Acquire(GraphicsContext& Context)

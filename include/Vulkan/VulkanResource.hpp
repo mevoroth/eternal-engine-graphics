@@ -29,6 +29,7 @@ namespace Eternal
 			VulkanResource(_In_ const VulkanResourceBackBufferCreateInformation& InResourceCreateInformation);
 			virtual ~VulkanResource();
 
+			inline VulkanResourceType GetVulkanResourceType() { return _VulkanResourceType; }
 			vk::Image& GetVulkanImage();
 			vk::Buffer& GetVulkanBuffer();
 

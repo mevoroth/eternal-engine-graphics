@@ -85,9 +85,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanSampler.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanView.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12BlendState.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
@@ -399,6 +396,9 @@
     <ClInclude Include="include\d3d12\D3D12View.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanFormat.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -441,9 +441,6 @@
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanSampler.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanView.cpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorHeap.cpp">
@@ -685,6 +682,9 @@
       <Filter>d3d12</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanView.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanFormat.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>

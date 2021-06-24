@@ -133,6 +133,7 @@
     <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp" />
     <ClInclude Include="include\Vulkan\VulkanDevice.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
     <ClInclude Include="include\Vulkan\VulkanGraphicsContext.hpp" />
     <ClInclude Include="include\Vulkan\VulkanResource.hpp" />
     <ClInclude Include="include\Vulkan\VulkanShader.hpp" />
@@ -152,9 +153,6 @@
     <ClInclude Include="include\Vulkan_deprecated\VulkanRenderTarget.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanRootSignature.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanSampler.hpp" />
-    <ClInclude Include="include\Vulkan_deprecated\VulkanView.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +244,7 @@
     <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp" />
     <ClCompile Include="src\Vulkan\VulkanDevice.cpp" />
     <ClCompile Include="src\Vulkan\VulkanFence.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanFormat.cpp" />
     <ClCompile Include="src\Vulkan\VulkanGraphicsContext.cpp" />
     <ClCompile Include="src\Vulkan\VulkanResource.cpp" />
     <ClCompile Include="src\Vulkan\VulkanShader.cpp" />
@@ -262,9 +261,6 @@
     <ClCompile Include="src\Vulkan_deprecated\VulkanRenderTarget.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanRootSignature.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanSampler.cpp" />
-    <ClCompile Include="src\Vulkan_deprecated\VulkanView.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
