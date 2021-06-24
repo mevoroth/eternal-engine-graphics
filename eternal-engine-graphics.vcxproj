@@ -63,6 +63,7 @@
     <ClInclude Include="include\Graphics\Fence.hpp" />
     <ClInclude Include="include\Graphics\FenceFactory.hpp" />
     <ClInclude Include="include\Graphics\Format.hpp" />
+    <ClInclude Include="include\Graphics\RenderPass.hpp" />
     <ClInclude Include="include\Graphics\Resource.hpp" />
     <ClInclude Include="include\Graphics\Shader.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
     <ClInclude Include="include\Vulkan\VulkanGraphicsContext.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp" />
     <ClInclude Include="include\Vulkan\VulkanResource.hpp" />
     <ClInclude Include="include\Vulkan\VulkanShader.hpp" />
     <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp" />
@@ -191,6 +193,7 @@
     <ClCompile Include="src\Graphics\DepthTest.cpp" />
     <ClCompile Include="src\Graphics\DeviceFactory.cpp" />
     <ClCompile Include="src\Graphics\FenceFactory.cpp" />
+    <ClCompile Include="src\Graphics\RenderPass.cpp" />
     <ClCompile Include="src\Graphics\Resource.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
@@ -245,6 +248,7 @@
     <ClCompile Include="src\Vulkan\VulkanFence.cpp" />
     <ClCompile Include="src\Vulkan\VulkanFormat.cpp" />
     <ClCompile Include="src\Vulkan\VulkanGraphicsContext.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp" />
     <ClCompile Include="src\Vulkan\VulkanResource.cpp" />
     <ClCompile Include="src\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp" />

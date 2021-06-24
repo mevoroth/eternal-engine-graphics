@@ -379,8 +379,12 @@
     <ClInclude Include="include\d3d12\D3D12Resource.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan\VulkanResource.hpp" />
-    <ClInclude Include="include\Vulkan\VulkanView.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanResource.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanView.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
     <ClInclude Include="include\d3d12\D3D12GraphicsContext.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
@@ -395,6 +399,12 @@
     </ClInclude>
     <ClInclude Include="include\d3d12\D3D12RenderPass.hpp">
       <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\RenderPass.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanRenderPass.hpp">
+      <Filter>Vulkan</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -656,7 +666,9 @@
     <ClCompile Include="src\d3d12\D3D12Resource.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan\VulkanResource.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanResource.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
     <ClCompile Include="src\Graphics\View.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -680,6 +692,12 @@
     </ClCompile>
     <ClCompile Include="src\d3d12\D3D12RenderPass.cpp">
       <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\RenderPass.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanRenderPass.cpp">
+      <Filter>Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
