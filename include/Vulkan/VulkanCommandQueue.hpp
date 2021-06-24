@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Graphics/CommandQueue.hpp"
-#include <vulkan/vulkan.hpp>
+#include "Vulkan/VulkanHeader.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 
 namespace Eternal

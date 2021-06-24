@@ -1,6 +1,6 @@
 #include "d3d12_deprecated/D3D12Sampler.hpp"
 
-#include "d3d12_deprecated/D3D12Device.hpp"
+#include "d3d12/D3D12Device.hpp"
 #include "d3d12_deprecated/D3D12DescriptorHeap.hpp"
 
 using namespace Eternal::Graphics;

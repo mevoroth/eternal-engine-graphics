@@ -5,6 +5,7 @@
 
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
+#include "Vulkan/VulkanRenderPass.hpp"
 
 namespace Eternal
 {
@@ -166,7 +167,15 @@ namespace Eternal
 
 		void VulkanCommandList::BeginRenderPass(RenderPass& InRenderPass)
 		{
-
+			vk::RenderPassBeginInfo RenderPassInfo(
+				static_cast<VulkanRenderPass&>(InRenderPass).GetVulkanRenderPass(),
+				static_cast<VulkanRenderPass&>(InRenderPass).GetFrameBuffer(),
+				Vulkan::ConvertViewportToRect2D(InRenderPass.GetViewport()),
+				0, nullptr
+			);
+			_CommandBuffer.beginRenderPass(
+				&RenderPassInfo, vk::SubpassContents::eInline
+			);
 		}
 
 		void VulkanCommandList::EndRenderPass()

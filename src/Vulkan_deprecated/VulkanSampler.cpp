@@ -1,8 +1,5 @@
 #include "Vulkan_deprecated/VulkanSampler.hpp"
 
-#include <float.h>
-#include "Vulkan_deprecated/VulkanDevice.hpp"
-
 using namespace Eternal::Graphics;
 
 VulkanSampler::VulkanSampler(_In_ Device& DeviceObj, _In_ bool MINLinear, _In_ bool MAGLinear, _In_ bool MIPLinear, _In_ const AddressMode& U, _In_ const AddressMode& V, _In_ const AddressMode& W)

@@ -12,16 +12,18 @@ namespace Eternal
 
 		struct ShaderCreateInformation
 		{
-			ShaderCreateInformation(const ShaderType& Stage, const char* Name, const char* FileName)
+			ShaderCreateInformation(const ShaderType& Stage, const char* Name, const char* FileName, const vector<string>& Defines = vector<string>())
 				: Stage(Stage)
 				, Name(Name)
 				, FileName(FileName)
+				, Defines(Defines)
 			{
 			}
 
 			const ShaderType& Stage;
 			const char* Name = nullptr;
 			const char* FileName = nullptr;
+			const vector<string> Defines;
 		};
 
 		class Shader

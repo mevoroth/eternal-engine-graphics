@@ -1,8 +1,8 @@
 #ifndef _VULKAN_ROOT_SIGNATURE_HPP_
 #define _VULKAN_ROOT_SIGNATURE_HPP_
 
-#include <vulkan/vulkan.hpp>
 #include "Graphics_deprecated/RootSignature.hpp"
+#include "Vulkan/VulkanHeader.hpp"
 
 namespace Eternal
 {

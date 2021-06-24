@@ -119,18 +119,30 @@ namespace Eternal
 
 		struct ViewCreateInformation
 		{
-			ViewCreateInformation(_In_ GraphicsContext& InContext, _In_ Resource& InResource, _In_ const ViewMetaData& InViewMetaData, _In_ const Format& InFormat, _In_ const ViewType& InViewType)
+			static constexpr uint32_t ComponentsCount = 4;
+			static constexpr float DefaultClearValue[ComponentsCount] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+			ViewCreateInformation(
+				_In_ GraphicsContext& InContext,
+				_In_ Resource& InResource,
+				_In_ const ViewMetaData& InViewMetaData,
+				_In_ const Format& InFormat,
+				_In_ const ViewType& InViewType,
+				_In_ const float InClearValue[ComponentsCount] = DefaultClearValue
+			)
 				: Context(InContext)
 				, GraphicsResource(InResource)
 				, MetaData(InViewMetaData)
 				, GraphicsFormat(InFormat)
 				, ResourceViewType(InViewType)
 			{
+				memcpy(ClearValue, InClearValue, sizeof(float) * ComponentsCount);
 			}
 
 			GraphicsContext&		Context;
 			Resource&				GraphicsResource;
 			ViewMetaData			MetaData;
+			float					ClearValue[ComponentsCount]		= { 0.0f, 0.0f, 0.0f, 0.0f };
 			Format					GraphicsFormat					= Format::FORMAT_INVALID;
 			ViewType				ResourceViewType				= ViewType::VIEW_UNKNOWN;
 			ViewShaderResourceType	ResourceViewShaderResourceType	= ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN;
@@ -140,8 +152,22 @@ namespace Eternal
 
 		struct RenderTargetViewCreateInformation : public ViewCreateInformation
 		{
-			RenderTargetViewCreateInformation(_In_ GraphicsContext& InContext, _In_ Resource& InResource, _In_ const ViewMetaData& InViewMetaData, _In_ const Format& InFormat, _In_ const ViewRenderTargetType& InViewRenderTargetType)
-				: ViewCreateInformation(InContext, InResource, InViewMetaData, InFormat, ViewType::VIEW_RENDER_TARGET)
+			RenderTargetViewCreateInformation(
+				_In_ GraphicsContext& InContext,
+				_In_ Resource& InResource,
+				_In_ const ViewMetaData& InViewMetaData,
+				_In_ const Format& InFormat,
+				_In_ const ViewRenderTargetType& InViewRenderTargetType,
+				_In_ const float InClearValue[ComponentsCount] = DefaultClearValue
+			)
+				: ViewCreateInformation(
+					InContext,
+					InResource,
+					InViewMetaData,
+					InFormat,
+					ViewType::VIEW_RENDER_TARGET,
+					InClearValue
+				)
 			{
 				ResourceViewRenderTargetType = InViewRenderTargetType;
 			}
@@ -153,7 +179,12 @@ namespace Eternal
 			View(_In_ const ViewCreateInformation& InViewCreateInformation);
 			virtual ~View() {}
 
+			Resource& GetResource() { return _ViewCreateInformation.GraphicsResource; }
 			Format GetViewFormat() const { return _ViewCreateInformation.GraphicsFormat; }
+			void GetClearValue(float OutValue[ViewCreateInformation::ComponentsCount]) const
+			{
+				memcpy(OutValue, GetViewCreateInformation().ClearValue, sizeof(float) * ViewCreateInformation::ComponentsCount);
+			}
 			
 		protected:
 			const ViewCreateInformation& GetViewCreateInformation() const { return _ViewCreateInformation; }

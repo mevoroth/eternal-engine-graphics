@@ -32,8 +32,8 @@ BlendState::BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const
 {
 }
 
-LogicBlend::LogicBlend(_In_ const LogicOp& LogicOpObj)
+LogicBlend::LogicBlend(_In_ const LogicOp& InLogicOp)
 	: _Enabled(true)
-	, _LogicOp(LogicOpObj)
+	, _LogicOp(InLogicOp)
 {
 }

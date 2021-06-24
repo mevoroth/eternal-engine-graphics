@@ -1,10 +1,8 @@
 #pragma once
 
-#include <string>
-#include <vulkan/vulkan.hpp>
 #include "Graphics/Shader.hpp"
-
-struct VkShaderModule_T;
+#include "Vulkan/VulkanHeader.hpp"
+#include <string>
 
 namespace Eternal
 {
@@ -19,11 +17,12 @@ namespace Eternal
 		class VulkanShader : public Shader
 		{
 		public:
-			VulkanShader(_In_ Device& InDevice, _In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines = vector<string>());
 			VulkanShader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation);
 			vk::ShaderModule& GetVulkanShader();
 
 		private:
+			VulkanShader(_In_ Device& InDevice, _In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines = vector<string>());
+
 			void _CompileFile(_In_ Device& InDevice, _In_ const string& Src, _In_ const ShaderType& Type, _In_ const vector<string>& Defines);
 
 			vk::ShaderModule _ShaderModule;

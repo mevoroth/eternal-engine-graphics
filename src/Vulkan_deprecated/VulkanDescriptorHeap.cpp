@@ -1,8 +1,8 @@
 #include "Vulkan_deprecated/VulkanDescriptorHeap.hpp"
 
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan_deprecated/VulkanRootSignature.hpp"
-#include "Vulkan_deprecated/VulkanView.hpp"
+#include "Vulkan/VulkanView.hpp"
 #include "Vulkan_deprecated/VulkanDescriptorTable.h"
 
 using namespace std;

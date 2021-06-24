@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vulkan/vulkan.hpp>
 #include "Graphics/Format.hpp"
+#include "Vulkan/VulkanHeader.hpp"
 
 namespace Eternal
 {

@@ -93,10 +93,12 @@ namespace Eternal
 				break;
 			}
 
+			_D3D12CPUDescriptorHandle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateRenderTargetViewDescriptor(_ViewHandle);
+
 			InD3DDevice->CreateRenderTargetView(
 				static_cast<D3D12Resource&>(InViewCreateInformation.GraphicsResource).GetD3D12Resource(),
 				&D3D12RenderTargetViewDesc,
-				static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateRenderTargetViewDescriptor(_ViewHandle)
+				_D3D12CPUDescriptorHandle
 			);
 		}
 

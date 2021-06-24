@@ -33,16 +33,24 @@ const char* D3D12_SHADER_PROFILES[] =
 
 ID3DInclude* D3D12Shader::_IncludeHandler = new D3D12Include();
 
-D3D12Shader::D3D12Shader(_In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines /* = vector<string>() */)
+D3D12Shader::D3D12Shader(_In_ const string& Name, _In_ const string& FileName, _In_ const ShaderType& Stage, _In_ const vector<string>& Defines /* = vector<string>() */)
 	: Shader(Name)
 	, _Program(nullptr)
 {
 	ETERNAL_ASSERT(_IncludeHandler);
 #if defined(ETERNAL_DEBUG) && defined(ETERNAL_USE_DEBUG_SHADERS)
-	_CompileFile(Source, D3D12_SHADER_ENTRIES[int(Type)], D3D12_SHADER_PROFILES[int(Type)], Defines);
+	_CompileFile(FileName, D3D12_SHADER_ENTRIES[static_cast<int32_t>(Stage)], D3D12_SHADER_PROFILES[static_cast<int32_t>(Stage)], Defines);
 #else
-	_LoadFile(Source + ".cso");
+	_LoadFile(FileName + ".cso");
 #endif
+}
+
+D3D12Shader::D3D12Shader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation)
+	: D3D12Shader(CreateInformation.Name,
+				  CreateInformation.FileName,
+				  CreateInformation.Stage,
+				  CreateInformation.Defines)
+{
 }
 
 D3D12Shader::~D3D12Shader()
@@ -51,13 +59,13 @@ D3D12Shader::~D3D12Shader()
 	_Program = nullptr;
 }
 
-void D3D12Shader::_CompileFile(_In_ const string& Source, _In_ const char* Entry, _In_ const char* Profile, _In_ const vector<string>& Defines)
+void D3D12Shader::_CompileFile(_In_ const string& FileName, _In_ const char* Entry, _In_ const char* Profile, _In_ const vector<string>& Defines)
 {
 	ETERNAL_ASSERT(!(Defines.size() % 2)); // Force value for defines
 
 	ID3DBlob* Errors = nullptr;
 
-	string FullPathSource = FilePath::Find(Source, FileType::SHADERS);
+	string FullPathSource = FilePath::Find(FileName, FileType::SHADERS);
 
 	vector<D3D_SHADER_MACRO> Macros;
 	Macros.resize((Defines.size() / 2) + 1);

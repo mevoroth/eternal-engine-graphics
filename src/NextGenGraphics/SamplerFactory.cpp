@@ -1,7 +1,7 @@
 #include "NextGenGraphics/SamplerFactory.hpp"
 
-#include "NextGenGraphics/Types/DeviceType.hpp"
-#include "NextGenGraphics/Device.hpp"
+#include "Graphics/Types/DeviceType.hpp"
+#include "Graphics/Device.hpp"
 #include "d3d12_deprecated/D3D12Sampler.hpp"
 #include "Vulkan_deprecated/VulkanSampler.hpp"
 

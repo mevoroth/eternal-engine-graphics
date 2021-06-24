@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vulkan/vulkan.hpp>
 #include "Graphics/StencilTest.hpp"
 #include "Graphics/Types/MemoryType.hpp"
+#include "Vulkan/VulkanHeader.hpp"
 
 namespace Eternal
 {

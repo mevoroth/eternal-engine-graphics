@@ -1,7 +1,7 @@
 #include "Graphics/CommandListFactory.hpp"
 
-#include "NextGenGraphics/Types/DeviceType.hpp"
-#include "NextGenGraphics/Device.hpp"
+#include "Graphics/Types/DeviceType.hpp"
+#include "Graphics/Device.hpp"
 #include "d3d12/D3D12CommandList.hpp"
 #include "Vulkan/VulkanCommandList.hpp"
 

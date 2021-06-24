@@ -1,7 +1,7 @@
 #include "Vulkan_deprecated/VulkanHeap.hpp"
 
 #include <cstring>
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include <algorithm>
 
 using namespace Eternal::Graphics;

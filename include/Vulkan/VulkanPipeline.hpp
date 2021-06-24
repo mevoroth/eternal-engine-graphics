@@ -1,8 +1,7 @@
-#ifndef _VULKAN_PIPELINE_HPP_
-#define _VULKAN_PIPELINE_HPP_
+#pragma once
 
-#include <vulkan/vulkan.hpp>
 #include "Graphics_deprecated/Pipeline.hpp"
+#include "Vulkan/VulkanHeader.hpp"
 
 struct VkPipeline_T;
 
@@ -24,5 +23,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

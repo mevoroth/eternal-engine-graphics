@@ -1,4 +1,4 @@
-#include "NextGenGraphics/Types/MemoryType.hpp"
+#include "Graphics/Types/MemoryType.hpp"
 
 namespace Eternal
 {

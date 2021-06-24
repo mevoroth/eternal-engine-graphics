@@ -10,24 +10,23 @@ namespace Eternal
 
 		enum class ShaderType;
 
-		class Device;
 		class Shader;
+		class GraphicsContext;
+		struct ShaderCreateInformation;
 
 		class ShaderFactory
 		{
 		public:
-			static ShaderFactory* Get();
-
 			ShaderFactory();
 			virtual ~ShaderFactory();
 
-			Shader* GetShader(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines = vector<string>());
+			Shader* GetShader(_In_ GraphicsContext& Context, _In_ const ShaderCreateInformation& CreateInformation);
 
 		private:
 			static ShaderFactory* _Instance;
 
 			Shader* _Find(_In_ const string& Name);
-			Shader* _Create(_In_ Device& DeviceObj, _In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines);
+			Shader* _Create(_In_ GraphicsContext& Context, _In_ const ShaderCreateInformation& CreateInformation);
 
 			vector<Shader*>	_Shaders;
 		};

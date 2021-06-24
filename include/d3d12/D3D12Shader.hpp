@@ -11,6 +11,7 @@ namespace Eternal
 		using namespace std;
 
 		enum class ShaderType;
+		class GraphicsContext;
 
 		class D3D12Shader : public Shader
 		{
@@ -24,7 +25,7 @@ namespace Eternal
 		public:
 			static ID3DInclude* GetIncludeHandler() { return _IncludeHandler; }
 
-			D3D12Shader(_In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines = vector<string>());
+			D3D12Shader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation);
 			virtual ~D3D12Shader();
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& ShaderObj);
 
@@ -34,6 +35,9 @@ namespace Eternal
 
 			void _CompileFile(_In_ const string& Source, _In_ const char* Entry, _In_ const char* Profile, _In_ const vector<string>& Defines);
 			void _LoadFile(const string& ShaderFile);
+
+		private:
+			D3D12Shader(_In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines = vector<string>());
 		};
 	}
 }

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Graphics/GraphicsContext.hpp"
+#include "Vulkan/VulkanHeader.hpp"
 #include <array>
-#include <vulkan/vulkan.hpp>
 
 namespace Eternal
 {

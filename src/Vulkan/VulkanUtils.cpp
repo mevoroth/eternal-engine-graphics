@@ -1,9 +1,9 @@
 #include "Vulkan/VulkanUtils.hpp"
 
 #include <algorithm>
-#include <vulkan/vulkan.hpp>
 #include "Graphics_deprecated/RootSignature.hpp"
 #include "Graphics/Viewport.hpp"
+#include "Vulkan/VulkanHeader.hpp"
 
 namespace Eternal
 {

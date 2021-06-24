@@ -1,13 +1,13 @@
-#include "Vulkan_deprecated/VulkanPipeline.hpp"
+#include "Vulkan/VulkanPipeline.hpp"
 
-#include "Graphics_deprecated/Viewport.hpp"
-#include "Graphics_deprecated/DepthStencil.hpp"
+#include "Graphics/Viewport.hpp"
+#include "Graphics/DepthStencil.hpp"
 #include "Graphics/BlendState.hpp"
 #include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan_deprecated/VulkanDevice.hpp"
+#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan_deprecated/VulkanRootSignature.hpp"
-#include "Vulkan_deprecated/VulkanRenderPass.hpp"
-#include "Vulkan_deprecated/VulkanShader.hpp"
+#include "Vulkan/VulkanRenderPass.hpp"
+#include "Vulkan/VulkanShader.hpp"
 #include "Vulkan_deprecated/VulkanInputLayout.hpp"
 
 using namespace Eternal::Graphics;
@@ -19,12 +19,12 @@ VulkanPipeline::VulkanPipeline(Device& InDevice, const PipelineCreateInformation
 
 	vk::Device& Device = static_cast<VulkanDevice&>(InDevice).GetVulkanDevice();
 	
-	vk::PipelineCacheCreateInfo PipelineCacheInfo(
-		vk::PipelineCacheCreateFlagBits(),
-		0, nullptr
-	);
-	vk::PipelineCache _PipelineCache;
-	VerifySuccess(Device.createPipelineCache(&PipelineCacheInfo, nullptr, &_PipelineCache));
+	//vk::PipelineCacheCreateInfo PipelineCacheInfo(
+	//	vk::PipelineCacheCreateFlagBits(),
+	//	0, nullptr
+	//);
+	//vk::PipelineCache _PipelineCache;
+	//VerifySuccess(Device.createPipelineCache(&PipelineCacheInfo, nullptr, &_PipelineCache));
 
 	vk::PipelineShaderStageCreateInfo ShaderStages[] =
 	{
@@ -109,7 +109,7 @@ VulkanPipeline::VulkanPipeline(Device& InDevice, const PipelineCreateInformation
 	
 	for (int TargetIndex = 0; TargetIndex < InCreateInformation.RenderPass.GetRenderTargets().size(); ++TargetIndex)
 	{
-		const BlendState& CurrentBlendState = InCreateInformation.RenderPass.GetBlendStates()[TargetIndex];
+		const BlendState& CurrentBlendState = InCreateInformation.RenderPass.GetRenderTargets()[TargetIndex].RenderTargetBlendState;
 
 		ColorBlendAttachmentStates[TargetIndex] = vk::PipelineColorBlendAttachmentState(
 			CurrentBlendState.IsEnabled(),
@@ -153,7 +153,7 @@ VulkanPipeline::VulkanPipeline(Device& InDevice, const PipelineCreateInformation
 	);
 
 	VerifySuccess(Device.createGraphicsPipelines(
-		_PipelineCache,
+		nullptr,
 		1, &PipelineInfo,
 		nullptr,
 		&_Pipeline

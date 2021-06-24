@@ -2,7 +2,7 @@
 
 using namespace Eternal::Graphics;
 
-D3D12DescriptorTable::D3D12DescriptorTable(_In_ DescriptorHeap& DescriptorHeapObj)
-	: _Handle(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj).GetBase())
-{
-}
+//D3D12DescriptorTable::D3D12DescriptorTable(_In_ DescriptorHeap& DescriptorHeapObj)
+//	: _Handle(static_cast<D3D12DescriptorHeap&>(DescriptorHeapObj).GetBase())
+//{
+//}

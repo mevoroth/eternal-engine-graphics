@@ -1,8 +1,8 @@
 #include "d3d12_deprecated/D3D12DescriptorHeap.hpp"
 
 #include <d3d12.h>
-#include "d3d12_deprecated/D3D12Device.hpp"
-#include "d3d12_deprecated/D3D12View.hpp"
+#include "d3d12/D3D12Device.hpp"
+#include "d3d12/D3D12View.hpp"
 #include "d3d12_deprecated/D3D12DescriptorTable.hpp"
 
 using namespace Eternal::Graphics;
@@ -82,7 +82,8 @@ D3D12DescriptorHeap::~D3D12DescriptorHeap()
 
 DescriptorTable* D3D12DescriptorHeap::CreateView(_In_ Device& DeviceObj)
 {
-	return new D3D12DescriptorTable(*this);
+	//return new D3D12DescriptorTable(*this);
+	return nullptr;
 }
 
 DescriptorHeapHandle D3D12DescriptorHeap::Reserve(_In_ uint32_t Slot)

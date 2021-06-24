@@ -1,5 +1,7 @@
 #include "d3d12/D3D12Utils.hpp"
 #include "Graphics/CommandUtils.h"
+#include "Graphics/BlendState.hpp"
+#include "Graphics/RenderPass.hpp"
 
 namespace Eternal
 {
@@ -13,6 +15,46 @@ namespace Eternal
 		};
 		
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_COMMAND_LIST_TYPES) == static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT), "Mismatch between abstraction and d3d12 command types");
+
+		const D3D12_LOGIC_OP D3D12_LOGIC_OPS[] =
+		{
+			D3D12_LOGIC_OP_CLEAR,
+			D3D12_LOGIC_OP_SET,
+			D3D12_LOGIC_OP_COPY,
+			D3D12_LOGIC_OP_COPY_INVERTED,
+			D3D12_LOGIC_OP_NOOP,
+			D3D12_LOGIC_OP_INVERT,
+			D3D12_LOGIC_OP_AND,
+			D3D12_LOGIC_OP_NAND,
+			D3D12_LOGIC_OP_OR,
+			D3D12_LOGIC_OP_NOR,
+			D3D12_LOGIC_OP_XOR,
+			D3D12_LOGIC_OP_EQUIV,
+			D3D12_LOGIC_OP_AND_REVERSE,
+			D3D12_LOGIC_OP_AND_INVERTED,
+			D3D12_LOGIC_OP_OR_REVERSE,
+			D3D12_LOGIC_OP_OR_INVERTED
+		};
+
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_LOGIC_OPS) == static_cast<int32_t>(LogicOp::LOGIC_OP_COUNT), "Mismatch between abstraction and d3d12 logic operators");
+
+		const D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE D3D12_LOAD_OPS[] =
+		{
+			D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_NO_ACCESS,
+			D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_PRESERVE,
+			D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_CLEAR
+		};
+
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_LOAD_OPS) == static_cast<int32_t>(LoadOperator::COUNT), "Mismatch between abstraction and d3d12 beginning access type");
+		
+		const D3D12_RENDER_PASS_ENDING_ACCESS_TYPE D3D12_STORE_OPS[] =
+		{
+			D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_NO_ACCESS,
+			D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_PRESERVE,
+			D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_RESOLVE
+		};
+
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_STORE_OPS) == static_cast<int32_t>(StoreOperator::COUNT), "Mismatch between abstraction and d3d12 ending access type");
 
 		namespace D3D12
 		{

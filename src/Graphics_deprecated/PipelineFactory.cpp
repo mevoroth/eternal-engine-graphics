@@ -1,10 +1,10 @@
 #include "Graphics_deprecated/PipelineFactory.hpp"
 
-#include "NextGenGraphics/Context.hpp"
-#include "NextGenGraphics/Types/DeviceType.hpp"
-#include "NextGenGraphics/Device.hpp"
-#include "d3d12_deprecated/D3D12Pipeline.hpp"
-#include "Vulkan_deprecated/VulkanPipeline.hpp"
+#include "Graphics/GraphicsContext.hpp"
+#include "Graphics/Types/DeviceType.hpp"
+#include "Graphics/Device.hpp"
+#include "d3d12/D3D12Pipeline.hpp"
+#include "Vulkan/VulkanPipeline.hpp"
 
 namespace Eternal
 {

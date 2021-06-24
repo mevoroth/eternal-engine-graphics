@@ -1,7 +1,7 @@
 #include "Graphics_deprecated/HeapFactory.hpp"
 
-#include "NextGenGraphics/Types/DeviceType.hpp"
-#include "NextGenGraphics/Device.hpp"
+#include "Graphics/Types/DeviceType.hpp"
+#include "Graphics/Device.hpp"
 #include "d3d12_deprecated/D3D12Heap.hpp"
 #include "Vulkan_deprecated/VulkanHeap.hpp"
 

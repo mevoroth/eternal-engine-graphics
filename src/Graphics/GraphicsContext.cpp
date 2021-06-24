@@ -15,6 +15,7 @@
 #include "Graphics/CommandAllocator.hpp"
 #include "Graphics/CommandListFactory.hpp"
 #include "Graphics/CommandList.hpp"
+#include "Graphics/ShaderFactory.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -78,10 +79,15 @@ namespace Eternal
 				_CommandAllocators[static_cast<int32_t>(CommandType::COMMAND_TYPE_COMPUTE)][CommandAllocatorFrameIndex]	= CreateCommandAllocator(*_Device, *_ComputeQueue);
 				_CommandAllocators[static_cast<int32_t>(CommandType::COMMAND_TYPE_COPY)][CommandAllocatorFrameIndex]	= CreateCommandAllocator(*_Device, *_CopyQueue);
 			}
+
+			_ShaderFactory	= new ShaderFactory();
 		}
 
 		GraphicsContext::~GraphicsContext()
 		{
+			delete _ShaderFactory;
+			_ShaderFactory = nullptr;
+
 			delete _SwapChain;
 			_SwapChain = nullptr;
 

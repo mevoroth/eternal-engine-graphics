@@ -17,6 +17,7 @@ namespace Eternal
 		class Fence;
 		class CommandAllocator;
 		class CommandList;
+		class ShaderFactory;
 
 		struct GraphicsContextCreateInformation
 		{
@@ -54,6 +55,8 @@ namespace Eternal
 
 			Fence& GetSubmitFence() { return *_SubmitFence; }
 
+			ShaderFactory& GetShaderFactory() { return *_ShaderFactory; }
+
 			uint32_t& GetCurrentFrameIndex() { return CurrentFrameIndex; }
 
 		private:
@@ -72,6 +75,8 @@ namespace Eternal
 				std::array<CommandAllocator*, FrameBufferingCount>,
 				int32_t(CommandType::COMMAND_TYPE_COUNT)
 			> _CommandAllocators;
+
+			ShaderFactory* _ShaderFactory	= nullptr;
 
 			uint32_t CurrentFrameIndex		= 0;
 		};

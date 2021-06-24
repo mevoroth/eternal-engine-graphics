@@ -65,14 +65,14 @@ namespace Eternal
 					break;
 				}
 
-				vk::ImageViewCreateInfo CreateInfo(
-					vk::ImageViewCreateFlagBits(),
-					VkResource.GetVulkanImage(),
-					VULKAN_IMAGE_VIEW_TYPES[static_cast<int32_t>(InViewCreateInformation.ResourceViewRenderTargetType)],
-					VULKAN_FORMATS[static_cast<int32_t>(InViewCreateInformation.GraphicsFormat)].Format,
-					vk::ComponentMapping(),
-					SubresourceRange
-				);
+				vk::ImageViewCreateInfo CreateInfo;
+				CreateInfo.flags			= vk::ImageViewCreateFlagBits();
+				CreateInfo.image			= VkResource.GetVulkanImage();
+				CreateInfo.viewType			= VULKAN_IMAGE_VIEW_TYPES[static_cast<int32_t>(InViewCreateInformation.ResourceViewRenderTargetType)];
+				CreateInfo.format			= VULKAN_FORMATS[static_cast<int32_t>(InViewCreateInformation.GraphicsFormat)].Format;
+				CreateInfo.components		= vk::ComponentMapping();
+				CreateInfo.subresourceRange	= SubresourceRange;
+				
 				Vulkan::VerifySuccess(
 					VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
 				);

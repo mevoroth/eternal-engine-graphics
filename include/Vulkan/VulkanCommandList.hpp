@@ -3,7 +3,7 @@
 #include "Graphics/CommandList.hpp"
 #include "Graphics/CommandUtils.h"
 #include "Vulkan/VulkanCommandAllocator.hpp"
-#include <vulkan/vulkan.hpp>
+#include "Vulkan/VulkanHeader.hpp"
 
 enum VkImageLayout;
 

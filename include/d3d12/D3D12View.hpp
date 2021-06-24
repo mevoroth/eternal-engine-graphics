@@ -2,8 +2,7 @@
 
 #include "Graphics/View.hpp"
 #include "Bit/BitField.hpp"
-
-enum D3D12_RTV_DIMENSION;
+#include <d3d12.h>
 
 namespace Eternal
 {
@@ -19,8 +18,11 @@ namespace Eternal
 			D3D12View(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation);
 			~D3D12View();
 
+			D3D12_CPU_DESCRIPTOR_HANDLE GetD3D12CPUDescriptorHandle() const { return _D3D12CPUDescriptorHandle; }
+
 		private:
-			Handle _ViewHandle = Handle::InvalidHandle;
+			Handle _ViewHandle	= Handle::InvalidHandle;
+			D3D12_CPU_DESCRIPTOR_HANDLE	_D3D12CPUDescriptorHandle;
 		};
 	}
 }

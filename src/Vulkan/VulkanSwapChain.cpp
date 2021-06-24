@@ -1,7 +1,7 @@
 #include "Vulkan/VulkanSwapChain.hpp"
 
 #include "Window/Window.hpp"
-#include "Graphics_deprecated/RenderPassFactory.hpp"
+#include "Graphics/RenderPassFactory.hpp"
 #include "Graphics/GraphicsContext.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"

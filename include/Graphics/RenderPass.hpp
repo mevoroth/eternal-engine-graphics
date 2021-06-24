@@ -16,14 +16,16 @@ namespace Eternal
 		{
 			NO_LOAD,
 			LOAD,
-			CLEAR
+			CLEAR,
+			COUNT
 		};
 
 		enum class StoreOperator
 		{
 			NO_STORE,
 			STORE,
-			RESOLVE
+			RESOLVE,
+			COUNT
 		};
 
 		struct RenderTargetOperator
@@ -64,9 +66,16 @@ namespace Eternal
 
 		struct RenderPassCreateInformation
 		{
-			RenderPassCreateInformation(_In_ const Viewport& InViewport, _In_ const vector<RenderTargetInformation>& InRenderTargets, _In_ View* InDepthStencilRenderTarget = nullptr, _In_ const LogicBlend& InLogicBlend = LogicBlendNone)
+			RenderPassCreateInformation(
+				_In_ const Viewport& InViewport,
+				_In_ const vector<RenderTargetInformation>& InRenderTargets,
+				_In_ View* InDepthStencilRenderTarget = nullptr,
+				_In_ const RenderTargetOperator& InDepthStencilOperator = RenderTargetOperator::NoLoad_NoStore,
+				_In_ const LogicBlend& InLogicBlend = LogicBlendNone
+			)
 				: RenderTargets(InRenderTargets)
 				, LogicBlend(InLogicBlend)
+				, DepthStencilOperator(InDepthStencilOperator)
 				, Viewport(InViewport)
 				, DepthStencilRenderTarget(InDepthStencilRenderTarget)
 			{
@@ -74,6 +83,7 @@ namespace Eternal
 
 			vector<RenderTargetInformation> RenderTargets;
 			LogicBlend LogicBlend;
+			RenderTargetOperator DepthStencilOperator;
 			const Viewport& Viewport;
 			View* DepthStencilRenderTarget;
 		};
@@ -84,16 +94,14 @@ namespace Eternal
 			RenderPass(_In_ const RenderPassCreateInformation& CreateInformation);
 			virtual ~RenderPass() {}
 
-			const vector<RenderTargetInformation>&	GetRenderTargets() const	{ return _RenderTargets; }
-			const LogicBlend&			GetLogicBlend() const					{ return _LogicBlend; }
-			const Viewport&				GetViewport() const						{ return _Viewport; }
-			const View*					GetDepthStencilRenderTarget() const		{ return _DepthStencilRenderTarget; }
+			const vector<RenderTargetInformation>&	GetRenderTargets() const			{ return _CreateInformation.RenderTargets; }
+			const LogicBlend&						GetLogicBlend() const				{ return _CreateInformation.LogicBlend; }
+			const Viewport&							GetViewport() const					{ return _CreateInformation.Viewport; }
+			const View*								GetDepthStencilRenderTarget() const	{ return _CreateInformation.DepthStencilRenderTarget; }
+			const RenderTargetOperator&				GetDepthStencilOperator() const		{ return _CreateInformation.DepthStencilOperator; }
 
 		private:
-			vector<RenderTargetInformation>	_RenderTargets;
-			LogicBlend						_LogicBlend;
-			const Viewport&					_Viewport;
-			View*							_DepthStencilRenderTarget = nullptr;
+			RenderPassCreateInformation _CreateInformation;
 		};
 	}
 }

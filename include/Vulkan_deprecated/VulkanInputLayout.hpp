@@ -1,8 +1,8 @@
 #ifndef _VULKAN_INPUT_LAYOUT_HPP_
 #define _VULKAN_INPUT_LAYOUT_HPP_
 
-#include <vulkan/vulkan.hpp>
 #include "Graphics_deprecated/InputLayout.hpp"
+#include "Vulkan/VulkanHeader.hpp"
 
 struct VkVertexInputAttributeDescription;
 struct VkVertexInputBindingDescription;

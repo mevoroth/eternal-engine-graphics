@@ -17,12 +17,9 @@ namespace Eternal
 		const RenderTargetOperator RenderTargetOperator::Clear_Resolve	(LoadOperator::CLEAR,	StoreOperator::RESOLVE);
 
 		RenderPass::RenderPass(_In_ const RenderPassCreateInformation& CreateInformation)
-			: _RenderTargets(CreateInformation.RenderTargets)
-			, _LogicBlend(CreateInformation.LogicBlend)
-			, _Viewport(CreateInformation.Viewport)
-			, _DepthStencilRenderTarget(CreateInformation.DepthStencilRenderTarget)
+			: _CreateInformation(CreateInformation)
 		{
-			ETERNAL_ASSERT(_RenderTargets.size() < MAX_RENDER_TARGETS);
+			ETERNAL_ASSERT(_CreateInformation.RenderTargets.size() < MAX_RENDER_TARGETS);
 		}
 	}
 }
