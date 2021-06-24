@@ -19,6 +19,9 @@ namespace Eternal
 
 			virtual void Begin() override;
 			virtual void End() override;
+			
+			virtual void BeginRenderPass(RenderPass& InRenderPass) override;
+			virtual void EndRenderPass() override;
 
 			inline ID3D12CommandList* GetD3D12CommandList() { return _GraphicCommandList5; }
 			inline D3D12CommandAllocator& GetD3D12CommandAllocator() { return static_cast<D3D12CommandAllocator&>(GetCommandAllocator()); }

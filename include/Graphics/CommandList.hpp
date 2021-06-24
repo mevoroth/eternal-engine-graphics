@@ -7,6 +7,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		class CommandAllocator;
+		class RenderPass;
 
 		class CommandList
 		{
@@ -16,6 +17,9 @@ namespace Eternal
 
 			virtual void Begin() = 0;
 			virtual void End() = 0;
+
+			virtual void BeginRenderPass(RenderPass& InRenderPass) = 0;
+			virtual void EndRenderPass() = 0;
 
 			inline CommandAllocator& GetCommandAllocator() { return _CommandAllocator; }
 

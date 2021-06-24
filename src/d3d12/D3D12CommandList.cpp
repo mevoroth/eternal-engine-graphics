@@ -45,5 +45,15 @@ namespace Eternal
 		{
 			_GraphicCommandList5->Close();
 		}
+
+		void D3D12CommandList::BeginRenderPass(RenderPass& InRenderPass)
+		{
+
+		}
+
+		void D3D12CommandList::EndRenderPass()
+		{
+			_GraphicCommandList5->EndRenderPass();
+		}
 	}
 }

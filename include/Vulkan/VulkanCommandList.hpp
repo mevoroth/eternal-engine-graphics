@@ -26,6 +26,9 @@ namespace Eternal
 			virtual void Begin() override;
 			virtual void End() override;
 
+			virtual void BeginRenderPass(RenderPass& InRenderPass) override;
+			virtual void EndRenderPass() override;
+
 			inline vk::CommandBuffer& GetVulkanCommandBuffer() { return _CommandBuffer; }
 			inline VulkanCommandAllocator& GetVulkanCommandAllocator() { return static_cast<VulkanCommandAllocator&>(GetCommandAllocator()); }
 
