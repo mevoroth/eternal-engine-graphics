@@ -11,7 +11,7 @@ namespace Eternal
 	{
 		D3D12CommandQueue::D3D12CommandQueue(_In_ Device& InDevice, _In_ const CommandType& Type)
 			: CommandQueue(Type)
-			, _CommandQueueType(D3D12_COMMAND_LIST_TYPES[uint32_t(Type)])
+			, _CommandQueueType(D3D12::ConvertCommandTypeToD3D12CommandListType(Type))
 		{
 			D3D12Device& InD3D12Device = static_cast<D3D12Device&>(InDevice);
 
@@ -21,8 +21,13 @@ namespace Eternal
 			CommandQueueDesc.Flags		= D3D12_COMMAND_QUEUE_FLAG_NONE;
 			CommandQueueDesc.NodeMask	= InD3D12Device.GetDeviceMask();
 
-			HRESULT hr = InD3D12Device.GetD3D12Device()->CreateCommandQueue(&CommandQueueDesc, __uuidof(ID3D12CommandQueue), (void**)&_CommandQueue);
-			ETERNAL_ASSERT(hr == S_OK);
+			D3D12::VerifySuccess(
+				InD3D12Device.GetD3D12Device()->CreateCommandQueue(
+					&CommandQueueDesc,
+					__uuidof(ID3D12CommandQueue),
+					(void**)&_CommandQueue
+				)
+			);
 		}
 
 		D3D12CommandQueue::~D3D12CommandQueue()

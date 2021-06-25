@@ -1,6 +1,6 @@
 #include "d3d12/D3D12CommandList.hpp"
 
-#include <vector>
+#include <array>
 #include <d3d12.h>
 #include "Graphics/RenderPass.hpp"
 #include "d3d12/D3D12Device.hpp"
@@ -17,12 +17,14 @@ namespace Eternal
 		D3D12CommandList::D3D12CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
 			: CommandList(InCommandAllocator)
 		{
+			using namespace Eternal::Graphics::D3D12;
+
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
 			D3D12CommandAllocator& InD3DCommandAllocator = static_cast<D3D12CommandAllocator&>(InCommandAllocator);
-			D3D12::VerifySuccess(
+			VerifySuccess(
 				InD3DDevice.GetD3D12Device()->CreateCommandList(
 					InD3DDevice.GetDeviceMask(),
-					D3D12_COMMAND_LIST_TYPES[static_cast<int32_t>(InD3DCommandAllocator.GetCommandType())],
+					ConvertCommandTypeToD3D12CommandListType(InD3DCommandAllocator.GetCommandType()),
 					InD3DCommandAllocator.GetD3D12CommandAllocator(),
 					nullptr,
 					__uuidof(ID3D12GraphicsCommandList5),
@@ -53,16 +55,20 @@ namespace Eternal
 
 		void D3D12CommandList::BeginRenderPass(RenderPass& InRenderPass)
 		{
-			std::vector<D3D12_RENDER_PASS_RENDER_TARGET_DESC> RenderPassRenderTargetsDescs;
-			RenderPassRenderTargetsDescs.resize(InRenderPass.GetRenderTargets().size());
+			using namespace Eternal::Graphics::D3D12;
+
+			static constexpr D3D12_RENDER_PASS_RENDER_TARGET_DESC DefaultRenderPassRenderTargetDesc = {};
+
+			std::array<D3D12_RENDER_PASS_RENDER_TARGET_DESC, MAX_RENDER_TARGETS> RenderPassRenderTargetsDescs;
+			RenderPassRenderTargetsDescs.fill(DefaultRenderPassRenderTargetDesc);
 			for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < InRenderPass.GetRenderTargets().size(); ++RenderTargetIndex)
 			{
 				const RenderTargetInformation& CurrentRenderTarget = InRenderPass.GetRenderTargets()[RenderTargetIndex];
 
 				RenderPassRenderTargetsDescs[RenderTargetIndex].cpuDescriptor			= static_cast<D3D12View*>(CurrentRenderTarget.RenderTarget)->GetD3D12CPUDescriptorHandle();
 
-				RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Type	= D3D12_LOAD_OPS[static_cast<int32_t>(CurrentRenderTarget.Operator.LoadOp)];
-				if (CurrentRenderTarget.Operator.LoadOp == LoadOperator::CLEAR)
+				RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(CurrentRenderTarget.Operator.Load);
+				if (CurrentRenderTarget.Operator.Load == LoadOperator::CLEAR)
 				{
 					RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Format	= D3D12_FORMATS[static_cast<int32_t>(CurrentRenderTarget.RenderTarget->GetViewFormat())].Format;
 					CurrentRenderTarget.RenderTarget->GetClearValue(
@@ -70,39 +76,39 @@ namespace Eternal
 					);
 				}
 
-				RenderPassRenderTargetsDescs[RenderTargetIndex].EndingAccess.Type	= D3D12_STORE_OPS[static_cast<int32_t>(CurrentRenderTarget.Operator.StoreOp)];
+				RenderPassRenderTargetsDescs[RenderTargetIndex].EndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(CurrentRenderTarget.Operator.Store);
 
-				if (CurrentRenderTarget.Operator.StoreOp == StoreOperator::RESOLVE)
+				if (CurrentRenderTarget.Operator.Store == StoreOperator::RESOLVE)
 				{
 					ETERNAL_BREAK(); // Not implemented yet
 				}
 			}
 
-			LoadOperator DepthStencilLoadOperator = InRenderPass.GetDepthStencilOperator().LoadOp;
-			StoreOperator DepthStencilStoreOperator = InRenderPass.GetDepthStencilOperator().StoreOp;
+			LoadOperator DepthStencilLoadOperator = InRenderPass.GetDepthStencilOperator().Load;
+			StoreOperator DepthStencilStoreOperator = InRenderPass.GetDepthStencilOperator().Store;
 
 			D3D12_RENDER_PASS_DEPTH_STENCIL_DESC RenderPassDepthStencilDesc;
 			RenderPassDepthStencilDesc.cpuDescriptor				= static_cast<const D3D12View*>(InRenderPass.GetDepthStencilRenderTarget())->GetD3D12CPUDescriptorHandle();
-			RenderPassDepthStencilDesc.DepthBeginningAccess.Type	= D3D12_LOAD_OPS[static_cast<int32_t>(DepthStencilLoadOperator)];
+			RenderPassDepthStencilDesc.DepthBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
 			if (DepthStencilLoadOperator == LoadOperator::CLEAR)
 			{
 				RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.Format					= D3D12_FORMATS[static_cast<int32_t>(InRenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format;
 				RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Depth		= 0.0f;
 				RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
 			}
-			RenderPassDepthStencilDesc.StencilBeginningAccess.Type	= D3D12_LOAD_OPS[static_cast<int32_t>(DepthStencilLoadOperator)];
+			RenderPassDepthStencilDesc.StencilBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
 			if (DepthStencilLoadOperator == LoadOperator::CLEAR)
 			{
 				RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.Format				= D3D12_FORMATS[static_cast<int32_t>(InRenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format;
 				RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Depth	= 0.0f;
 				RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
 			}
-			RenderPassDepthStencilDesc.DepthEndingAccess.Type		= D3D12_STORE_OPS[static_cast<int32_t>(InRenderPass.GetDepthStencilOperator().StoreOp)];
+			RenderPassDepthStencilDesc.DepthEndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(InRenderPass.GetDepthStencilOperator().Store);
 			if (DepthStencilStoreOperator == StoreOperator::RESOLVE)
 			{
 				ETERNAL_BREAK();
 			}
-			RenderPassDepthStencilDesc.StencilEndingAccess.Type		= D3D12_STORE_OPS[static_cast<int32_t>(InRenderPass.GetDepthStencilOperator().StoreOp)];
+			RenderPassDepthStencilDesc.StencilEndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(InRenderPass.GetDepthStencilOperator().Store);
 			if (DepthStencilStoreOperator == StoreOperator::RESOLVE)
 			{
 				ETERNAL_BREAK();

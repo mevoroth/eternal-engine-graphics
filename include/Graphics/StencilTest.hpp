@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Comparison.hpp"
+#include "Graphics/ComparisonFunction.hpp"
 
 namespace Eternal
 {
@@ -23,18 +23,18 @@ namespace Eternal
 			struct FaceOperator
 			{
 				FaceOperator() {}
-				FaceOperator(const StencilOperator& Fail, const StencilOperator& FailDepth, const StencilOperator& Pass, const Comparison& ComparisonOp)
-					: Fail(Fail)
-					, FailDepth(FailDepth)
-					, Pass(Pass)
-					, ComparisonOp(ComparisonOp)
+				FaceOperator(const StencilOperator& InFail, const StencilOperator& InFailDepth, const StencilOperator& InPass, const ComparisonFunction& InComparison)
+					: Fail(InFail)
+					, FailDepth(InFailDepth)
+					, Pass(InPass)
+					, Comparison(InComparison)
 				{
 				}
 
-				StencilOperator Fail		= StencilOperator::STENCIL_OPERATOR_KEEP;
-				StencilOperator FailDepth	= StencilOperator::STENCIL_OPERATOR_KEEP;
-				StencilOperator Pass		= StencilOperator::STENCIL_OPERATOR_KEEP;
-				Comparison ComparisonOp		= Comparison::COMPARISON_ALWAYS;
+				StencilOperator Fail			= StencilOperator::STENCIL_OPERATOR_KEEP;
+				StencilOperator FailDepth		= StencilOperator::STENCIL_OPERATOR_KEEP;
+				StencilOperator Pass			= StencilOperator::STENCIL_OPERATOR_KEEP;
+				ComparisonFunction Comparison	= ComparisonFunction::COMPARISON_FUNCTION_ALWAYS;
 			};
 
 			StencilTest() {}

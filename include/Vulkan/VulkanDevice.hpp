@@ -36,10 +36,8 @@ namespace Eternal
 
 			VulkanDevice(_In_ Window& WindowObj);
 
-			uint32_t GetQueueFamilyIndex()
-			{
-				return 0;
-			}
+			virtual uint32_t GetDeviceMask() const override { return 0x1; }
+			virtual DeviceType GetDeviceType() const override { return DeviceType::VULKAN; }
 
 			vk::Device& GetVulkanDevice();
 			vk::PhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
@@ -54,9 +52,7 @@ namespace Eternal
 			uint32_t GetQueueIndexGraphics() const { return _QueueIndexGraphics; }
 			uint32_t GetQueueIndexCompute() const { return _QueueIndexCompute; }
 			uint32_t GetQueueIndexCopy() const { return _QueueIndexCopy; }
-
-			virtual uint32_t GetDeviceMask() const override { return 0x1; }
-			virtual DeviceType GetDeviceType() const override { return DeviceType::VULKAN; }
+			uint32_t GetPushConstantMaxSize() const;
 
 		private:
 			vk::PhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;

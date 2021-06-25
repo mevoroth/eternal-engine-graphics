@@ -219,6 +219,8 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		ETERNAL_ASSERT(_PhysicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu);
 	}
 
+
+
 	uint32_t ExtensionsCount;
 	VerifySuccess(_PhysicalDevice.enumerateDeviceExtensionProperties(nullptr, &ExtensionsCount, static_cast<vk::ExtensionProperties*>(nullptr)));
 	
@@ -258,7 +260,7 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 		QueueIndices[QueueIndex] = 0;
 	}
 
-	for (int32_t QueueFamilyPropertyIndex = 0; QueueFamilyPropertyIndex < QueueFamilyProperties.size(); ++QueueFamilyPropertyIndex)
+	for (uint32_t QueueFamilyPropertyIndex = 0; QueueFamilyPropertyIndex < QueueFamilyProperties.size(); ++QueueFamilyPropertyIndex)
 	{
 		if (_QueueFamilyIndexGraphics == InvalidQueueFamilyIndex
 			&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eGraphics))
@@ -289,30 +291,39 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 	vk::PhysicalDeviceFeatures PhysicalDeviceFeatures;
 	_PhysicalDevice.getFeatures(&PhysicalDeviceFeatures);
 	
-	uint32_t VulkanQueueCount = QueueFamilyProperties[GetQueueFamilyIndex()].queueCount;
-
-	vector<float> QueuePriorities;
-	QueuePriorities.resize(VulkanQueueCount);
-	for (uint32_t QueuePriorityIndex = 0; QueuePriorityIndex < VulkanQueueCount; ++QueuePriorityIndex)
-	{
-		QueuePriorities[QueuePriorityIndex] = 0.0f;
-	}
-
 	const char* VulkanDeviceExtensions[] =
 	{
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
 
-	vk::DeviceQueueCreateInfo DeviceQueueInfo(
-		vk::DeviceQueueCreateFlagBits(),
-		0,
-		VulkanQueueCount,
-		QueuePriorities.data()
-	);
+	vector<vk::DeviceQueueCreateInfo> DeviceQueueCreateInfos;
+	vector<vector<float>> Priorities;
+
+	for (uint32_t QueueFamilyIndex = 0; QueueFamilyIndex < QueueIndices.size(); ++QueueFamilyIndex)
+	{
+		if (QueueIndices[QueueFamilyIndex] > 0)
+		{
+			vector<float> QueueFamilyPriorities;
+			QueueFamilyPriorities.resize(QueueIndices[QueueFamilyIndex]);
+			for (uint32_t QueueIndex = 0; QueueIndex < QueueIndices[QueueFamilyIndex]; ++QueueIndex)
+			{
+				QueueFamilyPriorities[QueueIndex] = static_cast<float>(QueueIndices[QueueFamilyIndex] - QueueIndex - 1) / static_cast<float>(QueueIndices[QueueFamilyIndex] - 1);
+			}
+			Priorities.push_back(QueueFamilyPriorities);
+
+			DeviceQueueCreateInfos.push_back(
+				vk::DeviceQueueCreateInfo(
+					vk::DeviceQueueCreateFlagBits(),
+					QueueFamilyIndex,
+					static_cast<uint32_t>(Priorities.front().size()), Priorities.front().data()
+				)
+			);
+		}
+	}
 
 	vk::DeviceCreateInfo DeviceInfo(
 		vk::DeviceCreateFlagBits(),
-		1, &DeviceQueueInfo,
+		static_cast<uint32_t>(DeviceQueueCreateInfos.size()), DeviceQueueCreateInfos.data(),
 		ETERNAL_ARRAYSIZE(VulkanValidationLayers), VulkanValidationLayers,
 		ETERNAL_ARRAYSIZE(VulkanDeviceExtensions), VulkanDeviceExtensions,
 		static_cast<vk::PhysicalDeviceFeatures*>(nullptr)
@@ -326,6 +337,11 @@ VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
 vk::Device& VulkanDevice::GetVulkanDevice()
 {
 	return _Device;
+}
+
+uint32_t VulkanDevice::GetPushConstantMaxSize() const
+{
+	return _PhysicalDeviceProperties.limits.maxPushConstantsSize;
 }
 
 uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const

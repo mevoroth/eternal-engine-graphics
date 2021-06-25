@@ -10,9 +10,11 @@ using namespace Eternal::Graphics;
 D3D12CommandAllocator::D3D12CommandAllocator(_In_ Device& InDevice, _In_ const CommandQueue& InCommandQueue)
 	: _CommandType(InCommandQueue.GetCommandType())
 {
-	D3D12::VerifySuccess(
+	using namespace Eternal::Graphics::D3D12;
+
+	VerifySuccess(
 		static_cast<D3D12Device&>(InDevice).GetD3D12Device()->CreateCommandAllocator(
-			D3D12_COMMAND_LIST_TYPES[static_cast<int32_t>(_CommandType)],
+			ConvertCommandTypeToD3D12CommandListType(_CommandType),
 			__uuidof(ID3D12CommandAllocator),
 			(void**)&_CommandAllocator
 		)

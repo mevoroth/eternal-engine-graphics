@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Comparison.hpp"
+#include "Graphics/ComparisonFunction.hpp"
 
 namespace Eternal
 {
@@ -11,14 +11,14 @@ namespace Eternal
 		public:
 			enum class Mask
 			{
-				ZERO	= 0,
-				ALL		= 1
+				MASK_ZERO	= 0,
+				MASK_ALL		= 1
 			};
 			DepthTest() {};
-			DepthTest(const Mask& MaskValue, const Comparison& ComparisonOp)
+			DepthTest(const Mask& MaskValue, const ComparisonFunction& InComparison)
 				: _Enabled(true)
 				, _Mask(MaskValue)
-				, _ComparisonOp(ComparisonOp)
+				, _Comparison(InComparison)
 			{
 			}
 
@@ -32,17 +32,17 @@ namespace Eternal
 			}
 			inline bool IsWriteEnabled() const
 			{
-				return _Mask == Mask::ALL;
+				return _Mask == Mask::MASK_ALL;
 			}
-			inline Comparison GetComparisonOperator() const
+			inline ComparisonFunction GetComparisonFunction() const
 			{
-				return _ComparisonOp;
+				return _Comparison;
 			}
 
 		private:
 			bool _Enabled				= false;
-			Mask _Mask					= Mask::ZERO;
-			Comparison _ComparisonOp	= Comparison::COMPARISON_LESS;
+			Mask _Mask					= Mask::MASK_ZERO;
+			ComparisonFunction _Comparison	= ComparisonFunction::COMPARISON_FUNCTION_LESS;
 		};
 
 		extern const DepthTest DepthTestNone;

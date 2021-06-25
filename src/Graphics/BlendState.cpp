@@ -9,31 +9,31 @@ namespace Eternal
 		const LogicBlend LogicBlendNone;
 		const BlendState BlendStateNone;
 		const BlendState BlendStateAlphaBlend(
-			Blend::BLEND_SRC_ALPHA,
-			Blend::BLEND_INV_SRC_ALPHA,
-			BlendOp::BLEND_OP_ADD,
-			Blend::BLEND_SRC_ALPHA,
-			Blend::BLEND_INV_SRC_ALPHA,
-			BlendOp::BLEND_OP_ADD,
+			Blend::BLEND_SOURCE_ALPHA,
+			Blend::BLEND_INVERSE_SOURCE_ALPHA,
+			BlendOperator::BLEND_OPERATOR_ADD,
+			Blend::BLEND_SOURCE_ALPHA,
+			Blend::BLEND_INVERSE_SOURCE_ALPHA,
+			BlendOperator::BLEND_OPERATOR_ADD,
 			BlendChannel::BLEND_CHANNEL_ALL
 		);
 	}
 }
 
-BlendState::BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOp& BlendColorOp, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOp& BlendAlphaOp, _In_ const BlendChannel& BlendChannelObj)
+BlendState::BlendState(_In_ const Blend& InSource, _In_ const Blend& InDestination, _In_ const BlendOperator& InBlendColorOperator, _In_ const Blend& InSourceAlpha, _In_ const Blend& InDestinationAlpha, _In_ const BlendOperator& InBlendAlphaOperator, _In_ const BlendChannel& InBlendChannel)
 	: _Enabled(true)
-	, _Src(Src)
-	, _Dest(Dest)
-	, _BlendOp(BlendColorOp)
-	, _SrcAlpha(SrcAlpha)
-	, _DestAlpha(DestAlpha)
-	, _BlendAlphaOp(BlendAlphaOp)
-	, _BlendChannel(BlendChannelObj)
+	, _Source(InSource)
+	, _Destination(InDestination)
+	, _BlendOperator(InBlendColorOperator)
+	, _SourceAlpha(InSourceAlpha)
+	, _DestinationAlpha(InDestinationAlpha)
+	, _BlendAlphaOperator(InBlendAlphaOperator)
+	, _BlendChannel(InBlendChannel)
 {
 }
 
-LogicBlend::LogicBlend(_In_ const LogicOp& InLogicOp)
+LogicBlend::LogicBlend(_In_ const LogicOperator& InLogicOperator)
 	: _Enabled(true)
-	, _LogicOp(InLogicOp)
+	, _LogicOp(InLogicOperator)
 {
 }

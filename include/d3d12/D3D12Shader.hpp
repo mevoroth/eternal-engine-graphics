@@ -27,7 +27,7 @@ namespace Eternal
 
 			D3D12Shader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation);
 			virtual ~D3D12Shader();
-			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& ShaderObj);
+			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode);
 
 		protected:
 			static ID3DInclude* _IncludeHandler;

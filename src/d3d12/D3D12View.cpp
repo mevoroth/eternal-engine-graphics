@@ -93,12 +93,12 @@ namespace Eternal
 				break;
 			}
 
-			_D3D12CPUDescriptorHandle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateRenderTargetViewDescriptor(_ViewHandle);
+			_D3D12Handle.D3D12CPUDescriptorHandle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateRenderTargetViewDescriptor(_D3D12Handle.DescriptorHandle);
 
 			InD3DDevice->CreateRenderTargetView(
 				static_cast<D3D12Resource&>(InViewCreateInformation.GraphicsResource).GetD3D12Resource(),
 				&D3D12RenderTargetViewDesc,
-				_D3D12CPUDescriptorHandle
+				_D3D12Handle.D3D12CPUDescriptorHandle
 			);
 		}
 
@@ -107,7 +107,7 @@ namespace Eternal
 			switch (GetViewCreateInformation().ResourceViewType)
 			{
 			case ViewType::VIEW_RENDER_TARGET:
-				static_cast<D3D12GraphicsContext&>(GetViewCreateInformation().Context).ReleaseRenderTargetViewDescriptor(_ViewHandle);
+				static_cast<D3D12GraphicsContext&>(GetViewCreateInformation().Context).ReleaseRenderTargetViewDescriptor(_D3D12Handle.DescriptorHandle);
 				break;
 			}
 		}

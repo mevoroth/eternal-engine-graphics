@@ -105,10 +105,10 @@ void D3D12Shader::_LoadFile(_In_ const string& ShaderFile)
 	ETERNAL_BREAK();
 }
 
-void D3D12Shader::GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& ShaderObj)
+void D3D12Shader::GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode)
 {
-	ShaderObj.pShaderBytecode = _Program->GetBufferPointer();
-	ShaderObj.BytecodeLength = _Program->GetBufferSize();
+	OutShaderByteCode.pShaderBytecode = _Program->GetBufferPointer();
+	OutShaderByteCode.BytecodeLength = _Program->GetBufferSize();
 }
 
 STDMETHODIMP D3D12Shader::D3D12Include::Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes)

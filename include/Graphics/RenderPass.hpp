@@ -41,13 +41,13 @@ namespace Eternal
 			static const RenderTargetOperator Clear_Resolve;
 
 			RenderTargetOperator(const LoadOperator& InLoadOperator, const StoreOperator& InStoreOperator)
-				: LoadOp(InLoadOperator)
-				, StoreOp(InStoreOperator)
+				: Load(InLoadOperator)
+				, Store(InStoreOperator)
 			{
 			}
 
-			LoadOperator LoadOp		= LoadOperator::NO_LOAD;
-			StoreOperator StoreOp	= StoreOperator::NO_STORE;
+			LoadOperator Load	= LoadOperator::NO_LOAD;
+			StoreOperator Store	= StoreOperator::NO_STORE;
 		};
 
 		struct RenderTargetInformation
@@ -91,17 +91,17 @@ namespace Eternal
 		class RenderPass
 		{
 		public:
-			RenderPass(_In_ const RenderPassCreateInformation& CreateInformation);
+			RenderPass(_In_ const RenderPassCreateInformation& InRenderPassCreateInformation);
 			virtual ~RenderPass() {}
 
-			const vector<RenderTargetInformation>&	GetRenderTargets() const			{ return _CreateInformation.RenderTargets; }
-			const LogicBlend&						GetLogicBlend() const				{ return _CreateInformation.LogicBlend; }
-			const Viewport&							GetViewport() const					{ return _CreateInformation.Viewport; }
-			const View*								GetDepthStencilRenderTarget() const	{ return _CreateInformation.DepthStencilRenderTarget; }
-			const RenderTargetOperator&				GetDepthStencilOperator() const		{ return _CreateInformation.DepthStencilOperator; }
+			const vector<RenderTargetInformation>&	GetRenderTargets() const			{ return _RenderPassCreateInformation.RenderTargets; }
+			const LogicBlend&						GetLogicBlend() const				{ return _RenderPassCreateInformation.LogicBlend; }
+			const Viewport&							GetViewport() const					{ return _RenderPassCreateInformation.Viewport; }
+			const View*								GetDepthStencilRenderTarget() const	{ return _RenderPassCreateInformation.DepthStencilRenderTarget; }
+			const RenderTargetOperator&				GetDepthStencilOperator() const		{ return _RenderPassCreateInformation.DepthStencilOperator; }
 
 		private:
-			RenderPassCreateInformation _CreateInformation;
+			RenderPassCreateInformation _RenderPassCreateInformation;
 		};
 	}
 }

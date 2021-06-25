@@ -22,12 +22,12 @@ D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& Context)
 {
 	using namespace Eternal::Graphics::D3D12;
 
-	Window& WindowObj = Context.GetWindow();
+	Window& InWindow = Context.GetWindow();
 
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 
-	SwapChainDesc.BufferDesc.Width						= WindowObj.GetWidth();
-	SwapChainDesc.BufferDesc.Height						= WindowObj.GetHeight();
+	SwapChainDesc.BufferDesc.Width						= InWindow.GetWidth();
+	SwapChainDesc.BufferDesc.Height						= InWindow.GetHeight();
 	SwapChainDesc.BufferDesc.RefreshRate.Numerator		= 60;
 	SwapChainDesc.BufferDesc.RefreshRate.Denominator	= 1;
 	SwapChainDesc.BufferDesc.Scaling					= DXGI_MODE_SCALING_STRETCHED;
@@ -39,8 +39,8 @@ D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& Context)
 	SwapChainDesc.SampleDesc.Quality					= 0;
 	SwapChainDesc.BufferUsage							= DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	SwapChainDesc.BufferCount							= _BackBuffersCount;
-	SwapChainDesc.OutputWindow							= WindowObj.GetWindowHandler();
-	SwapChainDesc.Windowed								= WindowObj.GetWindowed() ? TRUE : FALSE;
+	SwapChainDesc.OutputWindow							= InWindow.GetWindowHandler();
+	SwapChainDesc.Windowed								= InWindow.GetWindowed() ? TRUE : FALSE;
 	SwapChainDesc.SwapEffect							= DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 	SwapChainDesc.Flags									= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
 
@@ -52,10 +52,13 @@ D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& Context)
 		_SwapChain->QueryInterface(&_SwapChain3)
 	);
 	
+	VerifySuccess(
+		_SwapChain3->SetMaximumFrameLatency(_BackBuffersCount)
+	);
 	//hr = _SwapChain3->GetMaximumFrameLatency(&_BackBuffersCount);
 	//ETERNAL_ASSERT(hr == S_OK);
 
-	//hr = _DXGIFactory->MakeWindowAssociation(WindowObj.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
+	//hr = _DXGIFactory->MakeWindowAssociation(InWindow.GetWindowHandler(), DXGI_MWA_NO_ALT_ENTER);
 	//ETERNAL_ASSERT(hr == S_OK);
 
 	memset(&SwapChainDesc, 0x0, sizeof(DXGI_SWAP_CHAIN_DESC));

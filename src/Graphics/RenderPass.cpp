@@ -16,10 +16,10 @@ namespace Eternal
 		const RenderTargetOperator RenderTargetOperator::Clear_Store	(LoadOperator::CLEAR,	StoreOperator::STORE);
 		const RenderTargetOperator RenderTargetOperator::Clear_Resolve	(LoadOperator::CLEAR,	StoreOperator::RESOLVE);
 
-		RenderPass::RenderPass(_In_ const RenderPassCreateInformation& CreateInformation)
-			: _CreateInformation(CreateInformation)
+		RenderPass::RenderPass(_In_ const RenderPassCreateInformation& InRenderPassCreateInformation)
+			: _RenderPassCreateInformation(InRenderPassCreateInformation)
 		{
-			ETERNAL_ASSERT(_CreateInformation.RenderTargets.size() < MAX_RENDER_TARGETS);
+			ETERNAL_ASSERT(_RenderPassCreateInformation.RenderTargets.size() < MAX_RENDER_TARGETS);
 		}
 	}
 }

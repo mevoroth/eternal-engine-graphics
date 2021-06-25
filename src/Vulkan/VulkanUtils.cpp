@@ -1,8 +1,10 @@
 #include "Vulkan/VulkanUtils.hpp"
 
 #include <algorithm>
-#include "Graphics_deprecated/RootSignature.hpp"
+#include "Graphics/RootSignature.hpp"
 #include "Graphics/Viewport.hpp"
+#include "Graphics/BlendState.hpp"
+#include "Graphics/Sampler.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 
 namespace Eternal
@@ -11,7 +13,7 @@ namespace Eternal
 	{
 		namespace Vulkan
 		{
-			static constexpr vk::LogicOp VULKAN_LOGIC_OPS[] =
+			static constexpr vk::LogicOp VULKAN_LOGIC_OPERATORS[] =
 			{
 				vk::LogicOp::eClear,
 				vk::LogicOp::eSet,
@@ -30,28 +32,81 @@ namespace Eternal
 				vk::LogicOp::eOrReverse,
 				vk::LogicOp::eOrInverted
 			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_LOGIC_OPERATORS) == static_cast<int32_t>(LogicOperator::LOGIC_OPERATOR_COUNT), "Mismatch between abstraction and vulkan logic operators");
+
+			static constexpr vk::BorderColor VULKAN_BORDER_COLORS[] =
+			{
+				vk::BorderColor::eFloatTransparentBlack,
+				vk::BorderColor::eFloatOpaqueBlack,
+				vk::BorderColor::eFloatOpaqueWhite
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_BORDER_COLORS) == static_cast<int32_t>(BorderColor::BORDER_COLOR_COUNT), "Mismatch between abstraction and vulkan border colors");
 
 			void VerifySuccess(const vk::Result& VulkanResult)
 			{
 				ETERNAL_ASSERT(VulkanResult == vk::Result::eSuccess);
 			}
 
-			vk::StencilOpState CreateStencilOpState(const StencilTest& InStencilTest, const StencilTest::FaceOperator& InFaceOperator)
+			vk::StencilOpState CreateVulkanStencilOperatorState(const StencilTest& InStencilTest, const StencilTest::FaceOperator& InFaceOperator)
 			{
 				return vk::StencilOpState(
 					vk::StencilOp(InFaceOperator.Fail),
 					vk::StencilOp(InFaceOperator.Pass),
 					vk::StencilOp(InFaceOperator.FailDepth),
-					vk::CompareOp(InFaceOperator.ComparisonOp),
-					uint32_t(InStencilTest.GetReadMask()),
-					uint32_t(InStencilTest.GetWriteMask()),
-					uint32_t(InStencilTest.GetReference())
+					ConvertComparisonFunctionToVulkanComparisonOperator(InFaceOperator.Comparison),
+					static_cast<uint32_t>(InStencilTest.GetReadMask()),
+					static_cast<uint32_t>(InStencilTest.GetWriteMask()),
+					static_cast<uint32_t>(InStencilTest.GetReference())
 				);
 			}
 
-			vk::LogicOp ConvertLogicOpToVulkanLogicOp(const LogicOp& InLogicOp)
+			vk::PipelineColorBlendAttachmentState CreateVulkanPipelineColorBlendStateAttachmentState(const BlendState& InBlendState)
 			{
-				return VULKAN_LOGIC_OPS[int(InLogicOp)];
+				return vk::PipelineColorBlendAttachmentState(
+					InBlendState.IsEnabled(),
+					ConvertBlendToVulkanBlendFactor(InBlendState.GetSource()),
+					ConvertBlendToVulkanBlendFactor(InBlendState.GetDestination()),
+					ConvertBlendOperatorToVulkanBlendOperator(InBlendState.GetBlendOperator()),
+					ConvertBlendToVulkanBlendFactor(InBlendState.GetSourceAlpha()),
+					ConvertBlendToVulkanBlendFactor(InBlendState.GetDestinationAlpha()),
+					ConvertBlendOperatorToVulkanBlendOperator(InBlendState.GetBlendAlphaOperator()),
+					ConvertBlendChannelToVulkanColorComponentFlags(InBlendState.GetBlendChannel())
+				);
+			}
+
+			vk::LogicOp ConvertLogicOperatorToVulkanLogicOperator(const LogicOperator& InLogicOperator)
+			{
+				return VULKAN_LOGIC_OPERATORS[static_cast<int32_t>(InLogicOperator)];
+			}
+
+			vk::SamplerAddressMode ConvertAddressModeToVulkanSamplerAddressMode(const AddressMode& InAddressMode)
+			{
+				return static_cast<vk::SamplerAddressMode>(InAddressMode);
+			}
+
+			vk::CompareOp ConvertComparisonFunctionToVulkanComparisonOperator(const ComparisonFunction& InComparisonFunction)
+			{
+				return static_cast<vk::CompareOp>(InComparisonFunction);
+			}
+
+			vk::BlendFactor ConvertBlendToVulkanBlendFactor(const Blend& InBlend)
+			{
+				return static_cast<vk::BlendFactor>(InBlend);
+			}
+
+			vk::BlendOp ConvertBlendOperatorToVulkanBlendOperator(const BlendOperator& InBlendOperator)
+			{
+				return static_cast<vk::BlendOp>(InBlendOperator);
+			}
+
+			vk::ColorComponentFlags ConvertBlendChannelToVulkanColorComponentFlags(const BlendChannel& InBlendChannel)
+			{
+				return static_cast<vk::ColorComponentFlagBits>(InBlendChannel);
+			}
+
+			vk::BorderColor ConvertBorderColorToVulkanBorderColor(const BorderColor& InBorderColor)
+			{
+				return VULKAN_BORDER_COLORS[static_cast<int32_t>(InBorderColor)];
 			}
 
 			vk::ShaderStageFlagBits ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InRootSignatureAccess)

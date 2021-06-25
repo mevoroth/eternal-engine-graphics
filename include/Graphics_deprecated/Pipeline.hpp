@@ -21,34 +21,34 @@ namespace Eternal
 				Shader& InPS,
 				const DepthStencil& InDepthStencil
 			)
-				: RootSignature(InRootSignature)
-				, InputLayout(InInputLayout)
-				, RenderPass(InRenderPass)
+				: PipelineRootSignature(InRootSignature)
+				, PipelineInputLayout(InInputLayout)
+				, PipelineRenderPass(InRenderPass)
 				, VS(InVS)
 				, PS(InPS)
-				, DepthStencil(InDepthStencil)
+				, PipelineDepthStencil(InDepthStencil)
 			{
 			}
 
-			RootSignature& RootSignature;
-			InputLayout& InputLayout;
-			RenderPass& RenderPass;
+			RootSignature& PipelineRootSignature;
+			InputLayout& PipelineInputLayout;
+			RenderPass& PipelineRenderPass;
 			Shader& VS;
 			Shader& PS;
-			const DepthStencil& DepthStencil;
+			const DepthStencil& PipelineDepthStencil;
 		};
 
 		class Pipeline
 		{
 		public:
-			Pipeline(const PipelineCreateInformation& CreateInformation)
-				: _CreateInformation(CreateInformation)
+			Pipeline(const PipelineCreateInformation& InPipelineCreateInformation)
+				: _PipelineCreateInformation(InPipelineCreateInformation)
 			{
 			}
 			virtual ~Pipeline() {}
 
 		private:
-			PipelineCreateInformation _CreateInformation;
+			PipelineCreateInformation _PipelineCreateInformation;
 		};
 	}
 }
