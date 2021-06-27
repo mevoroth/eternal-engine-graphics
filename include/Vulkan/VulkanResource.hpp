@@ -16,7 +16,7 @@ namespace Eternal
 		struct VulkanResourceBackBufferCreateInformation : public ResourceCreateInformation
 		{
 			VulkanResourceBackBufferCreateInformation(_In_ Device& InDevice, _In_ const std::string& InName, _In_ vk::Image InBackBufferResource)
-				: ResourceCreateInformation(InDevice, InName)
+				: ResourceCreateInformation(InDevice, InName, TransitionState::TRANSITION_PRESENT)
 				, BackBufferResource(InBackBufferResource)
 			{
 			}
@@ -29,7 +29,9 @@ namespace Eternal
 			VulkanResource(_In_ const VulkanResourceBackBufferCreateInformation& InResourceCreateInformation);
 			virtual ~VulkanResource();
 
-			inline VulkanResourceType GetVulkanResourceType() { return _VulkanResourceType; }
+			inline VulkanResourceType GetVulkanResourceType() const { return _VulkanResourceType; }
+			const vk::Image& GetVulkanImage() const;
+			const vk::Buffer& GetVulkanBuffer() const;
 			vk::Image& GetVulkanImage();
 			vk::Buffer& GetVulkanBuffer();
 

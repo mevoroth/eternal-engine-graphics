@@ -185,7 +185,7 @@ void VulkanSwapChain::Acquire(GraphicsContext& Context)
 		static_cast<VulkanDevice&>(Context.GetDevice()).GetVulkanDevice().acquireNextImageKHR(
 			GetSwapChain(),
 			UINT64_MAX,
-			GfxContext.GetCurrentFrameSemaphore(),
+			GfxContext.GetNextFrameSemaphore(),
 			nullptr,
 			&GfxContext.GetCurrentFrameIndex()
 		)
@@ -198,10 +198,12 @@ void VulkanSwapChain::Present(GraphicsContext& Context)
 
 	VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue());
 
-	vk::Semaphore* SubmitCompletionSemaphore = VkCommandQueue.GetSubmitCompletionSemaphoreAndReset();
+	vk::Semaphore* SubmitCompletionSemaphores	= nullptr;
+	uint32_t SubmitCompletionSemaphoresCount	= 0;
+	VkCommandQueue.GetSubmitCompletionSemaphoresAndReset(SubmitCompletionSemaphores, SubmitCompletionSemaphoresCount);
 
 	vk::PresentInfoKHR PresentInfo(
-		SubmitCompletionSemaphore ? 1 : 0, SubmitCompletionSemaphore,
+		SubmitCompletionSemaphoresCount, SubmitCompletionSemaphores,
 		1, &GetSwapChain(),
 		&GfxContext.GetCurrentFrameIndex()
 	);

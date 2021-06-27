@@ -17,8 +17,6 @@
 #include "Graphics/CommandList.hpp"
 #include "Graphics/ShaderFactory.hpp"
 
-using namespace Eternal::Graphics;
-
 namespace Eternal
 {
 	namespace Graphics
@@ -71,14 +69,20 @@ namespace Eternal
 			_ComputeQueue	= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
 			_CopyQueue		= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COPY);
 
-			_SubmitFence	= CreateFence(*_Device);
 
-			for (int32_t CommandAllocatorFrameIndex = 0; CommandAllocatorFrameIndex < FrameBufferingCount; ++CommandAllocatorFrameIndex)
+			for (int32_t FrameIndex = 0; FrameIndex < FrameBufferingCount; ++FrameIndex)
 			{
-				_CommandAllocators[static_cast<int32_t>(CommandType::COMMAND_TYPE_GRAPHIC)][CommandAllocatorFrameIndex]	= CreateCommandAllocator(*_Device, *_GraphicsQueue);
-				_CommandAllocators[static_cast<int32_t>(CommandType::COMMAND_TYPE_COMPUTE)][CommandAllocatorFrameIndex]	= CreateCommandAllocator(*_Device, *_ComputeQueue);
-				_CommandAllocators[static_cast<int32_t>(CommandType::COMMAND_TYPE_COPY)][CommandAllocatorFrameIndex]	= CreateCommandAllocator(*_Device, *_CopyQueue);
+				_FrameFences[FrameIndex] = CreateFence(*_Device);
+
+				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_GRAPHIC)]	= CreateCommandAllocator(*_Device, *_GraphicsQueue);
+				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_COMPUTE)]	= CreateCommandAllocator(*_Device, *_ComputeQueue);
+				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_COPY)]	= CreateCommandAllocator(*_Device, *_CopyQueue);
+
+				for (int32_t CommandTypeIndex = 0; CommandTypeIndex < static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT); ++CommandTypeIndex)
+					_CommandListPools[FrameIndex][CommandTypeIndex].reserve(CommandListUsage[CommandTypeIndex]);
 			}
+
+			_CurrentFrameCommandListIndex.fill(0);
 
 			_ShaderFactory	= new ShaderFactory();
 		}
@@ -91,17 +95,24 @@ namespace Eternal
 			delete _SwapChain;
 			_SwapChain = nullptr;
 
-			for (int32_t CommandTypeIndex = 0; CommandTypeIndex < _CommandAllocators.size(); ++CommandTypeIndex)
+			for (int32_t FrameIndex = 0; FrameIndex < FrameBufferingCount; ++FrameIndex)
 			{
-				for (int32_t CommandAllocatorFrameIndex = 0; CommandAllocatorFrameIndex < FrameBufferingCount; ++CommandAllocatorFrameIndex)
+				for (uint32_t CommandTypeIndex = 0; CommandTypeIndex < _CommandAllocators.size(); ++CommandTypeIndex)
 				{
-					delete _CommandAllocators[CommandTypeIndex][CommandAllocatorFrameIndex];
-					_CommandAllocators[CommandTypeIndex][CommandAllocatorFrameIndex] = nullptr;
-				}
-			}
+					vector<CommandList*>& CurrentCommandListPool = _CommandListPools[FrameIndex][CommandTypeIndex];
+					for (uint32_t CommandListIndex = 0; CommandListIndex < CurrentCommandListPool.size(); ++CommandListIndex)
+					{
+						delete CurrentCommandListPool[CommandListIndex];
+						CurrentCommandListPool[CommandListIndex] = nullptr;
+					}
 
-			delete _SubmitFence;
-			_SubmitFence = nullptr;
+					delete _CommandAllocators[FrameIndex][CommandTypeIndex];
+					_CommandAllocators[FrameIndex][CommandTypeIndex] = nullptr;
+				}
+
+				delete _FrameFences[FrameIndex];
+				_FrameFences[FrameIndex] = nullptr;
+			}
 
 			delete _CopyQueue;
 			_CopyQueue = nullptr;
@@ -121,6 +132,26 @@ namespace Eternal
 			_SwapChain = CreateSwapChain(*this);
 		}
 
+		void GraphicsContext::BeginFrame()
+		{
+			GetNextFrameFence().Wait(GetDevice());
+			GetNextFrameFence().Reset(GetDevice());
+			GetSwapChain().Acquire(*this);
+			ResetFrameStates();
+		}
+
+		void GraphicsContext::EndFrame()
+		{
+			GetSwapChain().Present(*this);
+		}
+
+		void GraphicsContext::ResetFrameStates()
+		{
+			_CurrentFrameCommandListIndex.fill(0);
+			for (uint32_t CommandTypeIndex = 0; CommandTypeIndex < _CommandAllocators.size(); ++CommandTypeIndex)
+				_CommandAllocators[_CurrentFrameIndex][CommandTypeIndex]->Reset();
+		}
+
 		CommandQueue& GraphicsContext::GetGraphicsQueue()
 		{
 			ETERNAL_ASSERT(_GraphicsQueue);
@@ -129,7 +160,20 @@ namespace Eternal
 
 		CommandList* GraphicsContext::CreateNewCommandList(const CommandType& Type)
 		{
-			return CreateCommandList(*_Device, *_CommandAllocators[static_cast<int32_t>(Type)][CurrentFrameIndex]);
+			uint32_t TypeInt			= static_cast<int32_t>(Type);
+			uint32_t CommandListIndex	= _CurrentFrameCommandListIndex[TypeInt]++;
+
+			std::vector<CommandList*>& CurrentCommandListPool = _CommandListPools[_CurrentFrameIndex][TypeInt];
+
+			if (CommandListIndex < CurrentCommandListPool.size())
+			{
+				return CurrentCommandListPool[CommandListIndex];
+			}
+
+			CurrentCommandListPool.push_back(
+				CreateCommandList(*_Device, *_CommandAllocators[_CurrentFrameIndex][TypeInt])
+			);
+			return CurrentCommandListPool.back();
 		}
 	}
 }

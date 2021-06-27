@@ -2,8 +2,8 @@
 
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
-#include "d3d12_deprecated/D3D12Heap.hpp"
-#include "Vulkan_deprecated/VulkanHeap.hpp"
+//#include "d3d12_deprecated/D3D12Heap.hpp"
+//#include "Vulkan_deprecated/VulkanHeap.hpp"
 
 namespace Eternal
 {
@@ -13,13 +13,13 @@ namespace Eternal
 		{
 			switch (DeviceObj.GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
-				return new D3D12Heap(DeviceObj, HeapTypeObj, ResourcesCount, InVRAM, VisibleFromCPU, Coherent, Cached);
-#endif
-
-			case DeviceType::VULKAN:
-				return new VulkanHeap(DeviceObj, HeapTypeObj, ResourcesCount, InVRAM, VisibleFromCPU, Coherent, Cached);
+//#ifdef ETERNAL_ENABLE_D3D12
+//			case DeviceType::D3D12:
+//				return new D3D12Heap(DeviceObj, HeapTypeObj, ResourcesCount, InVRAM, VisibleFromCPU, Coherent, Cached);
+//#endif
+//
+//			case DeviceType::VULKAN:
+//				return new VulkanHeap(DeviceObj, HeapTypeObj, ResourcesCount, InVRAM, VisibleFromCPU, Coherent, Cached);
 
 			default:
 				ETERNAL_BREAK();

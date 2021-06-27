@@ -6,6 +6,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class TransitionState;
 		class GraphicsContext;
 		class Resource;
 
@@ -181,6 +182,7 @@ namespace Eternal
 
 			Resource& GetResource() { return _ViewCreateInformation.GraphicsResource; }
 			Format GetViewFormat() const { return _ViewCreateInformation.GraphicsFormat; }
+			const TransitionState& GetResourceTransition() const;
 			void GetClearValue(float OutValue[ViewCreateInformation::ComponentsCount]) const
 			{
 				memcpy(OutValue, GetViewCreateInformation().ClearValue, sizeof(float) * ViewCreateInformation::ComponentsCount);

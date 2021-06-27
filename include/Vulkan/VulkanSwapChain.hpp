@@ -21,8 +21,8 @@ namespace Eternal
 		public:
 			VulkanSwapChain(_In_ GraphicsContext& Context);
 
-			virtual void Acquire(GraphicsContext& Context) override;
-			virtual void Present(GraphicsContext& Context) override;
+			virtual void Acquire(GraphicsContext& Context) override final;
+			virtual void Present(GraphicsContext& Context) override final;
 
 			vk::SwapchainKHR& GetSwapChain() { return _SwapChain; }
 			vk::SurfaceKHR& GetSurface() { return _Surface; }

@@ -37,5 +37,17 @@ namespace Eternal
 			ETERNAL_ASSERT(_VulkanResourceType == VulkanResourceType::BUFFER);
 			return _VulkanResourceMetaData.BufferResource;
 		}
+
+		const vk::Image& VulkanResource::GetVulkanImage() const
+		{
+			ETERNAL_ASSERT(_VulkanResourceType == VulkanResourceType::IMAGE);
+			return _VulkanResourceMetaData.ImageResource;
+		}
+
+		const vk::Buffer& VulkanResource::GetVulkanBuffer() const
+		{
+			ETERNAL_ASSERT(_VulkanResourceType == VulkanResourceType::BUFFER);
+			return _VulkanResourceMetaData.BufferResource;
+		}
 	}
 }

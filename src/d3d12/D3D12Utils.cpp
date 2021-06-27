@@ -4,6 +4,7 @@
 #include "Graphics/Sampler.hpp"
 #include "Graphics/RenderPass.hpp"
 #include "Graphics/RootSignature.hpp"
+#include "Math/Math.hpp"
 
 namespace Eternal
 {
@@ -49,7 +50,7 @@ namespace Eternal
 		static constexpr D3D12_RENDER_PASS_ENDING_ACCESS_TYPE D3D12_STORE_OPERATORS[] =
 		{
 			D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_NO_ACCESS,
-			D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_PRESERVE,
+			D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_DISCARD,
 			D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_RESOLVE
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_STORE_OPERATORS) == static_cast<int32_t>(StoreOperator::COUNT), "Mismatch between abstraction and d3d12 ending access type");
@@ -237,6 +238,61 @@ namespace Eternal
 			D3D12_STATIC_BORDER_COLOR ConvertBorderColorToD3D12StaticBorderColor(_In_ const BorderColor& InBorderColor)
 			{
 				return static_cast<D3D12_STATIC_BORDER_COLOR>(InBorderColor);
+			}
+
+			D3D12_RESOURCE_STATES ConvertTransitionStateToD3D12ResourceStates(const TransitionState& InTransitionState)
+			{
+				// Stream ouput not supported yet
+
+				using namespace Math;
+
+				static constexpr TransitionState CommonTransitionState			= TransitionState::TRANSITION_CPU_READ
+																				| TransitionState::TRANSITION_CPU_WRITE
+																				| TransitionState::TRANSITION_PREINITIALIZED
+																				| TransitionState::TRANSITION_PRESENT;
+
+				static constexpr TransitionState CPUTransitionState				= TransitionState::TRANSITION_CPU_READ
+																				| TransitionState::TRANSITION_CPU_WRITE;
+
+				static constexpr TransitionState VertexAndConstantBufferState	= TransitionState::TRANSITION_VERTEX_BUFFER_READ
+																				| TransitionState::TRANSITION_CONSTANT_BUFFER_READ;
+
+				static constexpr TransitionState ShaderReadState				= TransitionState::TRANSITION_NON_PIXEL_SHADER_READ
+																				| TransitionState::TRANSITION_PIXEL_SHADER_READ;
+
+				if (InTransitionState == TransitionState::TRANSITION_UNDEFINED
+					|| OnlyHasFlags(InTransitionState, CommonTransitionState))
+				{
+					bool HasOnlyCPUFlags	= (InTransitionState & CPUTransitionState) == InTransitionState;
+					bool OnlyOneFlag		= IsPowerOfTwo<uint32_t>(static_cast<uint32_t>(InTransitionState));
+					ETERNAL_ASSERT(HasOnlyCPUFlags || OnlyOneFlag); // Only CPU flags
+					return D3D12_RESOURCE_STATE_COMMON;
+				}
+
+				// Only having non common transition state
+				ETERNAL_ASSERT(OnlyHasFlags(InTransitionState, ~CommonTransitionState));
+
+				if ((InTransitionState & TransitionState::TRANSITION_GENERIC_READ) == TransitionState::TRANSITION_GENERIC_READ)
+					return D3D12_RESOURCE_STATE_GENERIC_READ;
+
+				D3D12_RESOURCE_STATES States = D3D12_RESOURCE_STATE_COMMON;
+
+				if ((InTransitionState & VertexAndConstantBufferState) != TransitionState::TRANSITION_UNDEFINED)
+					States |= D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+
+				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_INDEX_READ);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_INDIRECT)				<< 9);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_READ)			>> 1);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_WRITE)			<< 1);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & ShaderReadState)									>> 2);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_SHADER_WRITE)			>> 3);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_RENDER_TARGET)		>> 5);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_DEPTH_STENCIL_READ)	>> 3);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_DEPTH_STENCIL_WRITE)	>> 5);
+				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_RESOLVE_DESTINATION);
+				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_RESOLVE_SOURCE);
+
+				return States;
 			}
 		}
 	}

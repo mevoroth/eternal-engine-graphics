@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Graphics/CommandUtils.h"
 #include <string>
 
 namespace Eternal
@@ -16,14 +17,16 @@ namespace Eternal
 
 		struct ResourceCreateInformation
 		{
-			ResourceCreateInformation(_In_ Device& InDevice, _In_  const std::string& InName)
+			ResourceCreateInformation(_In_ Device& InDevice, _In_  const std::string& InName, _In_ const TransitionState& InInitialTransitionState)
 				: GfxDevice(InDevice)
 				, Name(InName)
+				, ResourceState(InInitialTransitionState)
 			{
 			}
 
-			Device& GfxDevice;
-			std::string Name;
+			Device&			GfxDevice;
+			std::string		Name;
+			TransitionState	ResourceState	= TransitionState::TRANSITION_UNDEFINED;
 		};
 
 		class Resource
@@ -32,7 +35,9 @@ namespace Eternal
 			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceSource& InResourceSource);
 			virtual ~Resource() {}
 
+			void SetResourceState(const TransitionState& InTransitionState) { _ResourceCreateInformation.ResourceState = InTransitionState; }
 			inline bool IsMultisample() const { return _Multisample; }
+			inline const TransitionState& GetResourceState() const { return _ResourceCreateInformation.ResourceState; }
 
 		protected:
 			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }

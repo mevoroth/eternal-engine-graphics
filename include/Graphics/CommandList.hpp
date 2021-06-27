@@ -12,6 +12,10 @@ namespace Eternal
 		class CommandList
 		{
 		public:
+			static constexpr uint32_t MaxBufferTransitionsPerSubmit		= 32;
+			static constexpr uint32_t MaxTextureTransitionsPerSubmit	= 32;
+			static constexpr uint32_t MaxResourceTransitionsPerSubmit	= MaxBufferTransitionsPerSubmit + MaxTextureTransitionsPerSubmit;
+
 			CommandList(_In_ CommandAllocator& InCommandAllocator);
 			virtual ~CommandList();
 
@@ -20,6 +24,8 @@ namespace Eternal
 
 			virtual void BeginRenderPass(RenderPass& InRenderPass) = 0;
 			virtual void EndRenderPass() = 0;
+
+			virtual void Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) = 0;
 
 			inline CommandAllocator& GetCommandAllocator() { return _CommandAllocator; }
 

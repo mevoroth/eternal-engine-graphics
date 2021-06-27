@@ -17,6 +17,8 @@ namespace Eternal
 			VulkanView(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation);
 			~VulkanView();
 
+			const vk::ImageSubresourceRange& GetVulkanSubresourceRange() const { return _SubresourceRange; }
+
 			vk::ImageView& GetVulkanImageView();
 			vk::BufferView& GetVulkanBufferView();
 
@@ -43,7 +45,8 @@ namespace Eternal
 				vk::BufferView BufferView;
 			};
 
-			VulkanViewMetaData _VulkanViewMetaData;
+			VulkanViewMetaData			_VulkanViewMetaData;
+			vk::ImageSubresourceRange	_SubresourceRange;
 		};
 	}
 }

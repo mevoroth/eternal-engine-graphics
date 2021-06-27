@@ -34,34 +34,34 @@ namespace Eternal
 				ETERNAL_BREAK();
 
 			case VulkanResourceType::IMAGE:
-				vk::ImageSubresourceRange SubresourceRange(
+				_SubresourceRange = vk::ImageSubresourceRange(
 					vk::ImageAspectFlagBits::eColor
 				);
-				SubresourceRange.levelCount = 1;
-				SubresourceRange.layerCount = 1;
+				_SubresourceRange.levelCount = 1;
+				_SubresourceRange.layerCount = 1;
 
 				switch (InViewCreateInformation.ResourceViewRenderTargetType)
 				{
 				case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_1D:
-					SubresourceRange.baseMipLevel	= InViewCreateInformation.MetaData.RenderTargetViewTexture1D.MipSlice;
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.RenderTargetViewTexture1D.MipSlice;
 					break;
 				case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_1D_ARRAY:
-					SubresourceRange.baseMipLevel	= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.MipSlice;
-					SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.FirstArraySlice;
-					SubresourceRange.layerCount		= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.ArraySize;
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.MipSlice;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.FirstArraySlice;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.ArraySize;
 					break;
 				case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D:
-					SubresourceRange.baseMipLevel	= InViewCreateInformation.MetaData.RenderTargetViewTexture2D.MipSlice;
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.RenderTargetViewTexture2D.MipSlice;
 					break;
 				case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D_ARRAY:
-					SubresourceRange.baseMipLevel	= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.MipSlice;
-					SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.FirstArraySlice;
-					SubresourceRange.layerCount		= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.ArraySize;
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.MipSlice;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.FirstArraySlice;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.ArraySize;
 					break;
 				case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_3D:
-					SubresourceRange.baseMipLevel	= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.MipSlice;
-					SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.FirstWSlice;
-					SubresourceRange.layerCount		= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.WSize + 1;
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.MipSlice;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.FirstWSlice;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.WSize + 1;
 					break;
 				}
 
@@ -71,7 +71,7 @@ namespace Eternal
 				CreateInfo.viewType			= VULKAN_IMAGE_VIEW_TYPES[static_cast<int32_t>(InViewCreateInformation.ResourceViewRenderTargetType)];
 				CreateInfo.format			= VULKAN_FORMATS[static_cast<int32_t>(InViewCreateInformation.GraphicsFormat)].Format;
 				CreateInfo.components		= vk::ComponentMapping();
-				CreateInfo.subresourceRange	= SubresourceRange;
+				CreateInfo.subresourceRange	= _SubresourceRange;
 				
 				Vulkan::VerifySuccess(
 					VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)

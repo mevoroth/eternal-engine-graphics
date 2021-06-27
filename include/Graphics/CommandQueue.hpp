@@ -13,9 +13,11 @@ namespace Eternal
 		class CommandQueue
 		{
 		public:
+			static constexpr uint32_t MaxCommandListsPerSubmission = 1024;
+
 			CommandQueue(_In_ const CommandType& Type);
 			virtual ~CommandQueue() {}
-			virtual void SubmitCommandLists(_In_ GraphicsContext& GfxContext, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount) = 0;
+			virtual void SubmitCommandLists(_In_ CommandList* InCommandLists[], _In_ uint32_t InCommandListsCount, _In_ GraphicsContext* InContext = nullptr);
 
 			inline CommandType GetCommandType() const { return _CommandType; }
 

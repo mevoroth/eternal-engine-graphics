@@ -17,11 +17,13 @@ namespace Eternal
 			D3D12CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator);
 			~D3D12CommandList();
 
-			virtual void Begin() override;
-			virtual void End() override;
+			virtual void Begin() override final;
+			virtual void End() override final;
 			
-			virtual void BeginRenderPass(RenderPass& InRenderPass) override;
-			virtual void EndRenderPass() override;
+			virtual void BeginRenderPass(RenderPass& InRenderPass) override final;
+			virtual void EndRenderPass() override final;
+
+			virtual void Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override final;
 
 			inline ID3D12CommandList* GetD3D12CommandList() { return _GraphicCommandList5; }
 			inline D3D12CommandAllocator& GetD3D12CommandAllocator() { return static_cast<D3D12CommandAllocator&>(GetCommandAllocator()); }

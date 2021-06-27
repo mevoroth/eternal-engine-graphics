@@ -4,7 +4,9 @@
 #include "Vulkan/VulkanHeader.hpp"
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
-#include "VUlkan/VulkanUtils.hpp"
+#include "Graphics/CommandUtils.h"
+#include "Vulkan/VulkanUtils.hpp"
+#include <array>
 
 namespace Eternal
 {
@@ -12,6 +14,8 @@ namespace Eternal
 	{
 		using namespace std;
 		class Window;
+
+		using QueueFamilyIndicesType = std::array<uint32_t, static_cast<uint32_t>(CommandType::COMMAND_TYPE_COUNT)>;
 
 		class VulkanDevice : public Device
 		{
@@ -36,8 +40,8 @@ namespace Eternal
 
 			VulkanDevice(_In_ Window& WindowObj);
 
-			virtual uint32_t GetDeviceMask() const override { return 0x1; }
-			virtual DeviceType GetDeviceType() const override { return DeviceType::VULKAN; }
+			virtual uint32_t GetDeviceMask() const override final { return 0x1; }
+			virtual DeviceType GetDeviceType() const override final { return DeviceType::VULKAN; }
 
 			vk::Device& GetVulkanDevice();
 			vk::PhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
@@ -52,6 +56,7 @@ namespace Eternal
 			uint32_t GetQueueIndexGraphics() const { return _QueueIndexGraphics; }
 			uint32_t GetQueueIndexCompute() const { return _QueueIndexCompute; }
 			uint32_t GetQueueIndexCopy() const { return _QueueIndexCopy; }
+			void GetQueueFamilyIndices(QueueFamilyIndicesType& OutQueueFamilyIndices) const;
 			uint32_t GetPushConstantMaxSize() const;
 
 		private:

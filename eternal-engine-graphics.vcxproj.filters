@@ -43,31 +43,10 @@
     <ClInclude Include="include\NextGenGraphics\SamplerFactory.hpp">
       <Filter>NextGenGraphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanBlendState.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorTable.h">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanHeap.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Vulkan_deprecated\VulkanInputLayout.hpp">
       <Filter>Vulkan_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanRenderTarget.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12DescriptorTable.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12Heap.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\d3d12_deprecated\D3D12InputLayout.hpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12ShaderFactory.hpp">
       <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
@@ -366,29 +345,14 @@
     <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp">
       <Filter>NextGenGraphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanHeap.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan_deprecated\VulkanInputLayout.cpp">
       <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanRenderTarget.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12Heap.cpp">
-      <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\d3d12_deprecated\D3D12InputLayout.cpp">
       <Filter>d3d12_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12ShaderFactory.cpp">
-      <Filter>d3d12_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanUtils.cpp">
       <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorTable.cpp">
-      <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\Device.cpp">
       <Filter>Graphics_deprecated</Filter>
@@ -595,6 +559,9 @@
       <Filter>d3d12</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\RootSignatureFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\CommandUtils.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

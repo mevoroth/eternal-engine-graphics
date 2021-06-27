@@ -8,6 +8,7 @@ namespace Eternal
 		{
 		public:
 			virtual ~CommandAllocator() {}
+			virtual void Reset() = 0;
 		};
 	}
 }

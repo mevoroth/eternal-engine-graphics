@@ -30,11 +30,6 @@ namespace Eternal
 			}
 		}
 
-		void VulkanGraphicsContext::UpdateGraphicsContext()
-		{
-			//CurrentFrameIndex = (CurrentFrameIndex + 1) % FrameBufferingCount;
-		}
-
 		void VulkanGraphicsContext::AllocateConstantHandles(_In_ uint32_t ConstantCount, _Out_ vector<Handle>& OutHandles)
 		{
 			OutHandles.resize(ConstantCount);

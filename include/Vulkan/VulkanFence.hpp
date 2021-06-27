@@ -17,8 +17,8 @@ namespace Eternal
 			VulkanFence(_In_ Device& DeviceObj);
 			~VulkanFence();
 
-			virtual void Wait(_In_ Device& DeviceObj) override;
-			virtual void Reset(_In_ Device& DeviceObj) override;
+			virtual void Wait(_In_ Device& DeviceObj) override final;
+			virtual void Reset(_In_ Device& DeviceObj) override final;
 
 			inline vk::Fence& GetVulkanFence() { return _Fence; }
 

@@ -1,11 +1,13 @@
 #include "Vulkan/VulkanUtils.hpp"
 
 #include <algorithm>
+#include "Graphics/CommandUtils.h"
 #include "Graphics/RootSignature.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/BlendState.hpp"
 #include "Graphics/Sampler.hpp"
 #include "Vulkan/VulkanHeader.hpp"
+#include "Math/Math.hpp"
 
 namespace Eternal
 {
@@ -67,6 +69,19 @@ namespace Eternal
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_SHADER_STAGE_FLAGS) == static_cast<int32_t>(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_COUNT), "Mismatch between abstraction and vulkan shader stage flags");
 
+			static constexpr vk::PipelineStageFlagBits VULKAN_COMMAND_TYPES_TO_PIPELINE_STAGE_FLAGS[] =
+			{
+				vk::PipelineStageFlagBits::eAllGraphics,
+				vk::PipelineStageFlagBits::eComputeShader,
+				vk::PipelineStageFlagBits::eHost
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_COMMAND_TYPES_TO_PIPELINE_STAGE_FLAGS) == static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT), "Mismatch between abstraction and vulkan command_types to pipeline stage flags");
+
+			static constexpr TransitionState CPURead_CPUWrite_State		= TransitionState::TRANSITION_CPU_READ
+																		| TransitionState::TRANSITION_CPU_WRITE;
+
+			static constexpr TransitionState CopyRead_CopyWrite_State	= TransitionState::TRANSITION_COPY_READ
+																		| TransitionState::TRANSITION_COPY_WRITE;
 			void VerifySuccess(const vk::Result& VulkanResult)
 			{
 				ETERNAL_ASSERT(VulkanResult == vk::Result::eSuccess);
@@ -167,7 +182,7 @@ namespace Eternal
 				return vk::MemoryPropertyFlagBits(VulkanMemoryPropertyFlags);
 			}
 
-			void VerifyMemoryPropertyFlags(const vk::MemoryPropertyFlagBits& Flags)
+			void VerifyMemoryPropertyFlags(_In_ const vk::MemoryPropertyFlagBits& Flags)
 			{
 				vk::MemoryPropertyFlagBits AllowedMemoryProperties[] =
 				{
@@ -185,7 +200,7 @@ namespace Eternal
 				ETERNAL_ASSERT(std::find(AllowedMemoryProperties, EndAllowedMemoryProperties, Flags) != EndAllowedMemoryProperties);
 			}
 
-			vk::DescriptorType ConvertRootSignatureParameterTypeToVulkanDescriptorType(const RootSignatureParameterType& InRootSignatureParameterType)
+			vk::DescriptorType ConvertRootSignatureParameterTypeToVulkanDescriptorType(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
 			{
 				ETERNAL_ASSERT(InRootSignatureParameterType != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE);
 				return VULKAN_DESCRIPTOR_TYPES[static_cast<int32_t>(InRootSignatureParameterType)];
@@ -195,6 +210,171 @@ namespace Eternal
 			{
 				ETERNAL_ASSERT(InRootSignatureAccess != RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID);
 				return VULKAN_SHADER_STAGE_FLAGS[static_cast<int32_t>(InRootSignatureAccess)];
+			}
+
+			vk::AccessFlagBits& operator|=(_Inout_ vk::AccessFlagBits& InOutAccessFlags, _In_ const vk::AccessFlagBits& InOtherAccessFlags)
+			{
+				InOutAccessFlags = static_cast<vk::AccessFlagBits>(
+					static_cast<uint32_t>(InOutAccessFlags) | static_cast<uint32_t>(InOtherAccessFlags)
+				);
+				return InOutAccessFlags;
+			}
+
+			vk::AccessFlagBits& operator|=(_Inout_ vk::AccessFlagBits& InOutAccessFlags, _In_ const vk::AccessFlags& InOtherAccessFlags)
+			{
+				InOutAccessFlags = static_cast<vk::AccessFlagBits>(
+					static_cast<uint32_t>(InOutAccessFlags) | static_cast<uint32_t>(InOtherAccessFlags)
+					);
+				return InOutAccessFlags;
+			}
+			
+			vk::AccessFlags ConvertTransitionStateToVulkanAccessFlags(_In_ const TransitionState& InTransitionState)
+			{
+				// Resolve destination & resolve source not implemented
+				// Vulkan input attachment read not implemented
+
+				using namespace Math;
+
+
+				static constexpr TransitionState StandaloneState												= TransitionState::TRANSITION_PREINITIALIZED
+																												| TransitionState::TRANSITION_PRESENT;
+
+				static constexpr TransitionState Indirect_IndexRead_VertexBufferRead_ConstantBufferRead_State	= TransitionState::TRANSITION_INDIRECT
+																												| TransitionState::TRANSITION_INDEX_READ
+																												| TransitionState::TRANSITION_VERTEX_BUFFER_READ
+																												| TransitionState::TRANSITION_CONSTANT_BUFFER_READ;
+
+				static constexpr TransitionState NonPixelShaderRead_PixelShaderRead_State						= TransitionState::TRANSITION_NON_PIXEL_SHADER_READ
+																												| TransitionState::TRANSITION_PIXEL_SHADER_READ;
+
+				static constexpr TransitionState DepthStencilRead_DepthStencilWrite_CopyRead_CopyWrite_State	= TransitionState::TRANSITION_DEPTH_STENCIL_READ
+																												| TransitionState::TRANSITION_DEPTH_STENCIL_WRITE
+																												| CopyRead_CopyWrite_State;
+
+				static const vk::AccessFlags ColorAttachmentRead_ColorAttachmentWrite_VulkanAccessFlags			= vk::AccessFlagBits::eColorAttachmentRead
+																												| vk::AccessFlagBits::eColorAttachmentWrite;
+
+				if (InTransitionState == TransitionState::TRANSITION_UNDEFINED
+					|| OnlyHasFlags(InTransitionState, StandaloneState))
+				{
+					if (OnlyHasFlags(InTransitionState, StandaloneState))
+					{
+						ETERNAL_ASSERT(IsPowerOfTwo<uint32_t>(static_cast<uint32_t>(InTransitionState)));
+					}
+					return vk::AccessFlagBits::eNoneKHR;
+				}
+
+				ETERNAL_ASSERT(OnlyHasFlags(InTransitionState, ~StandaloneState));
+
+				if ((InTransitionState & TransitionState::TRANSITION_GENERIC_READ) == TransitionState::TRANSITION_GENERIC_READ)
+					return vk::AccessFlagBits::eMemoryRead;
+
+				vk::AccessFlagBits States = vk::AccessFlagBits::eNoneKHR;
+
+				if ((InTransitionState & NonPixelShaderRead_PixelShaderRead_State) != TransitionState::TRANSITION_UNDEFINED)
+					States |= vk::AccessFlagBits::eShaderRead;
+
+				if ((InTransitionState & TransitionState::TRANSITION_RENDER_TARGET) != TransitionState::TRANSITION_UNDEFINED)
+					States |= ColorAttachmentRead_ColorAttachmentWrite_VulkanAccessFlags;
+
+				States |= static_cast<vk::AccessFlagBits>(InTransitionState & Indirect_IndexRead_VertexBufferRead_ConstantBufferRead_State);
+				States |= static_cast<vk::AccessFlagBits>(InTransitionState & TransitionState::TRANSITION_SHADER_WRITE);
+				States |= static_cast<vk::AccessFlagBits>((InTransitionState & DepthStencilRead_DepthStencilWrite_CopyRead_CopyWrite_State) << 1);
+				States |= static_cast<vk::AccessFlagBits>((InTransitionState & CPURead_CPUWrite_State) >> 1);
+
+				return States;
+			}
+
+			vk::ImageLayout ConvertTransitionStateToVulkanImageLayout(_In_ const TransitionState& InTransitionState)
+			{
+				// Resolve destination & resolve source not implemented
+
+				static constexpr TransitionState NonPixelShaderRead_PixelShaderRead_State	= TransitionState::TRANSITION_NON_PIXEL_SHADER_READ
+																							| TransitionState::TRANSITION_PIXEL_SHADER_READ;
+
+				static constexpr TransitionState GeneralState								= TransitionState::TRANSITION_INDIRECT
+																							| TransitionState::TRANSITION_INDEX_READ
+																							| TransitionState::TRANSITION_VERTEX_BUFFER_READ
+																							| TransitionState::TRANSITION_CONSTANT_BUFFER_READ
+																							| TransitionState::TRANSITION_SHADER_WRITE
+																							//| TransitionState::TRANSITION_RESOLVE_DESTINATION
+																							//| TransitionState::TRANSITION_RESOLVE_SOURCE
+																							| TransitionState::TRANSITION_CPU_READ
+																							| TransitionState::TRANSITION_CPU_WRITE;
+
+				// Process specific states first
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_RENDER_TARGET))
+					return vk::ImageLayout::eColorAttachmentOptimal;
+
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_DEPTH_STENCIL_WRITE))
+					return vk::ImageLayout::eDepthStencilAttachmentOptimal;
+
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_DEPTH_STENCIL_READ))
+					return vk::ImageLayout::eDepthReadOnlyOptimal;
+
+				if (OnlyHasFlags(InTransitionState, NonPixelShaderRead_PixelShaderRead_State))
+					return vk::ImageLayout::eShaderReadOnlyOptimal;
+
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_COPY_READ))
+					return vk::ImageLayout::eTransferSrcOptimal;
+
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_COPY_WRITE))
+					return vk::ImageLayout::eTransferDstOptimal;
+
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_PREINITIALIZED))
+					return vk::ImageLayout::ePreinitialized;
+
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_PRESENT))
+					return vk::ImageLayout::ePresentSrcKHR;
+
+				// Process general states then
+				if (OnlyHasFlags(InTransitionState, GeneralState))
+					return vk::ImageLayout::eGeneral;
+				
+				// Undefined
+				return vk::ImageLayout::eUndefined;
+			}
+
+			static vk::PipelineStageFlagBits ConvertCommandTypeToPipelineStageFlags(_In_ const CommandType& InCommandType)
+			{
+				return VULKAN_COMMAND_TYPES_TO_PIPELINE_STAGE_FLAGS[static_cast<int32_t>(InCommandType)];
+			}
+
+			vk::PipelineStageFlagBits ConvertCommandTypeAndTransitionStateToPipelineStageFlags(_In_ const CommandType& InCommandType, _In_ const TransitionState& InTransitionState)
+			{
+				using namespace Math;
+
+				static constexpr TransitionState GraphicsOnlyState		= TransitionState::TRANSITION_INDIRECT
+																		| TransitionState::TRANSITION_INDEX_READ
+																		| TransitionState::TRANSITION_VERTEX_BUFFER_READ
+																		| TransitionState::TRANSITION_PIXEL_SHADER_READ
+																		| TransitionState::TRANSITION_RENDER_TARGET
+																		| TransitionState::TRANSITION_DEPTH_STENCIL_READ
+																		| TransitionState::TRANSITION_DEPTH_STENCIL_WRITE;
+
+				static constexpr TransitionState UndefinedPipelineState	= TransitionState::TRANSITION_CONSTANT_BUFFER_READ
+																		| TransitionState::TRANSITION_NON_PIXEL_SHADER_READ
+																		| TransitionState::TRANSITION_SHADER_WRITE;
+
+				if (InTransitionState == TransitionState::TRANSITION_UNDEFINED
+					|| OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_PREINITIALIZED))
+					return vk::PipelineStageFlagBits::eHost;
+
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_PRESENT))
+					return vk::PipelineStageFlagBits::eAllGraphics;
+
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_CPU_WRITE))
+				{
+					ETERNAL_ASSERT(InCommandType == CommandType::COMMAND_TYPE_COPY);
+					return vk::PipelineStageFlagBits::eTransfer;
+				}
+
+				vk::PipelineStageFlagBits PipelineStageFlags = vk::PipelineStageFlagBits::eNoneKHR;
+
+				PipelineStageFlags |= ((InTransitionState & GraphicsOnlyState) != TransitionState::TRANSITION_UNDEFINED)		? vk::PipelineStageFlagBits::eAllGraphics				: vk::PipelineStageFlagBits::eNoneKHR;
+				PipelineStageFlags |= ((InTransitionState & UndefinedPipelineState) != TransitionState::TRANSITION_UNDEFINED)	? ConvertCommandTypeToPipelineStageFlags(InCommandType)	: vk::PipelineStageFlagBits::eNoneKHR;
+				
+				return PipelineStageFlags;
 			}
 		}
 	}

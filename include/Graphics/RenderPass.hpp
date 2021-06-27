@@ -31,8 +31,6 @@ namespace Eternal
 		struct RenderTargetOperator
 		{
 			static const RenderTargetOperator NoLoad_NoStore;
-			static const RenderTargetOperator NoLoad_Store;
-			static const RenderTargetOperator NoLoad_Resolve;
 			static const RenderTargetOperator Load_NoStore;
 			static const RenderTargetOperator Load_Store;
 			static const RenderTargetOperator Load_Resolve;

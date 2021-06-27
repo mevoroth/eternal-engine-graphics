@@ -1,5 +1,7 @@
 #include "Graphics/View.hpp"
 
+#include "Graphics/Resource.hpp"
+
 namespace Eternal
 {
 	namespace Graphics
@@ -8,6 +10,11 @@ namespace Eternal
 			: _ViewCreateInformation(InViewCreateInformation)
 		{
 			ETERNAL_ASSERT(InViewCreateInformation.ResourceViewType != ViewType::VIEW_UNKNOWN);
+		}
+
+		const TransitionState& View::GetResourceTransition() const
+		{
+			return GetViewCreateInformation().GraphicsResource.GetResourceState();
 		}
 	}
 }

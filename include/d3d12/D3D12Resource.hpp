@@ -11,7 +11,7 @@ namespace Eternal
 		struct D3D12ResourceBackBufferCreateInformation : public ResourceCreateInformation
 		{
 			D3D12ResourceBackBufferCreateInformation(_In_ Device& InDevice, _In_ const std::string& InName, _In_ ID3D12Resource* InBackBufferResource)
-				: ResourceCreateInformation(InDevice, InName)
+				: ResourceCreateInformation(InDevice, InName, TransitionState::TRANSITION_PRESENT)
 				, BackBufferResource(InBackBufferResource)
 			{
 			}

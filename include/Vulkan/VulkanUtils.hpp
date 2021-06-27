@@ -9,6 +9,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class CommandType;
 		enum class LogicOperator;
 		enum class RootSignatureAccess;
 		enum class RootSignatureParameterType;
@@ -18,6 +19,7 @@ namespace Eternal
 		enum class BlendOperator;
 		enum class BlendChannel;
 		enum class BorderColor;
+		enum class TransitionState;
 		class BlendState;
 		class Viewport;
 
@@ -42,6 +44,17 @@ namespace Eternal
 			void VerifyMemoryPropertyFlags(_In_ const vk::MemoryPropertyFlagBits& Flags);
 			vk::DescriptorType ConvertRootSignatureParameterTypeToVulkanDescriptorType(_In_ const RootSignatureParameterType& InRootSignatureParameterType);
 			vk::ShaderStageFlags ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InAccess);
+			vk::AccessFlags ConvertTransitionStateToVulkanAccessFlags(_In_ const TransitionState& InTransitionState);
+			vk::ImageLayout ConvertTransitionStateToVulkanImageLayout(_In_ const TransitionState& InTransitionState);
+			vk::PipelineStageFlagBits ConvertCommandTypeAndTransitionStateToPipelineStageFlags(_In_ const CommandType& InCommandType, _In_ const TransitionState& InTransitionState);
+
+			inline vk::PipelineStageFlagBits& operator|=(_Inout_ vk::PipelineStageFlagBits& InOutPipelineStageFlags, _In_ const vk::PipelineStageFlagBits& InPipelineStageFlags)
+			{
+				InOutPipelineStageFlags = static_cast<vk::PipelineStageFlagBits>(
+					static_cast<uint32_t>(InOutPipelineStageFlags) | static_cast<uint32_t>(InPipelineStageFlags)
+				);
+				return InOutPipelineStageFlags;
+			}
 		}
 	}
 }

@@ -57,6 +57,8 @@ namespace Eternal
 		{
 			using namespace Eternal::Graphics::D3D12;
 
+			// Cache this in D3D12RenderPass?
+
 			static constexpr D3D12_RENDER_PASS_RENDER_TARGET_DESC DefaultRenderPassRenderTargetDesc = {};
 
 			std::array<D3D12_RENDER_PASS_RENDER_TARGET_DESC, MAX_RENDER_TARGETS> RenderPassRenderTargetsDescs;
@@ -84,40 +86,44 @@ namespace Eternal
 				}
 			}
 
-			LoadOperator DepthStencilLoadOperator = InRenderPass.GetDepthStencilOperator().Load;
-			StoreOperator DepthStencilStoreOperator = InRenderPass.GetDepthStencilOperator().Store;
-
 			D3D12_RENDER_PASS_DEPTH_STENCIL_DESC RenderPassDepthStencilDesc;
-			RenderPassDepthStencilDesc.cpuDescriptor				= static_cast<const D3D12View*>(InRenderPass.GetDepthStencilRenderTarget())->GetD3D12CPUDescriptorHandle();
-			RenderPassDepthStencilDesc.DepthBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
-			if (DepthStencilLoadOperator == LoadOperator::CLEAR)
+
+			if (InRenderPass.GetDepthStencilRenderTarget())
 			{
-				RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.Format					= D3D12_FORMATS[static_cast<int32_t>(InRenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format;
-				RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Depth		= 0.0f;
-				RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
-			}
-			RenderPassDepthStencilDesc.StencilBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
-			if (DepthStencilLoadOperator == LoadOperator::CLEAR)
-			{
-				RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.Format				= D3D12_FORMATS[static_cast<int32_t>(InRenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format;
-				RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Depth	= 0.0f;
-				RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
-			}
-			RenderPassDepthStencilDesc.DepthEndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(InRenderPass.GetDepthStencilOperator().Store);
-			if (DepthStencilStoreOperator == StoreOperator::RESOLVE)
-			{
-				ETERNAL_BREAK();
-			}
-			RenderPassDepthStencilDesc.StencilEndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(InRenderPass.GetDepthStencilOperator().Store);
-			if (DepthStencilStoreOperator == StoreOperator::RESOLVE)
-			{
-				ETERNAL_BREAK();
+				LoadOperator DepthStencilLoadOperator	= InRenderPass.GetDepthStencilOperator().Load;
+				StoreOperator DepthStencilStoreOperator	= InRenderPass.GetDepthStencilOperator().Store;
+
+				RenderPassDepthStencilDesc.cpuDescriptor				= static_cast<const D3D12View*>(InRenderPass.GetDepthStencilRenderTarget())->GetD3D12CPUDescriptorHandle();
+				RenderPassDepthStencilDesc.DepthBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
+				if (DepthStencilLoadOperator == LoadOperator::CLEAR)
+				{
+					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.Format					= D3D12_FORMATS[static_cast<int32_t>(InRenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format;
+					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Depth		= 0.0f;
+					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
+				}
+				RenderPassDepthStencilDesc.StencilBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
+				if (DepthStencilLoadOperator == LoadOperator::CLEAR)
+				{
+					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.Format				= D3D12_FORMATS[static_cast<int32_t>(InRenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format;
+					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Depth	= 0.0f;
+					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
+				}
+				RenderPassDepthStencilDesc.DepthEndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(InRenderPass.GetDepthStencilOperator().Store);
+				if (DepthStencilStoreOperator == StoreOperator::RESOLVE)
+				{
+					ETERNAL_BREAK();
+				}
+				RenderPassDepthStencilDesc.StencilEndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(InRenderPass.GetDepthStencilOperator().Store);
+				if (DepthStencilStoreOperator == StoreOperator::RESOLVE)
+				{
+					ETERNAL_BREAK();
+				}
 			}
 
 			_GraphicCommandList5->BeginRenderPass(
-				static_cast<UINT>(RenderPassRenderTargetsDescs.size()),
-				RenderPassRenderTargetsDescs.data(),
-				&RenderPassDepthStencilDesc,
+				static_cast<UINT>(InRenderPass.GetRenderTargets().size()),
+				InRenderPass.GetRenderTargets().size() > 0 ? RenderPassRenderTargetsDescs.data() : nullptr,
+				InRenderPass.GetDepthStencilRenderTarget() ? &RenderPassDepthStencilDesc : nullptr,
 				D3D12_RENDER_PASS_FLAG_NONE
 			);
 		}
@@ -125,6 +131,36 @@ namespace Eternal
 		void D3D12CommandList::EndRenderPass()
 		{
 			_GraphicCommandList5->EndRenderPass();
+		}
+
+		void D3D12CommandList::Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
+		{
+			using namespace Eternal::Graphics::D3D12;
+
+			static constexpr D3D12_RESOURCE_BARRIER DefaultBarrier = {};
+			std::array<D3D12_RESOURCE_BARRIER, MaxResourceTransitionsPerSubmit> ResourceBarriers;
+			ResourceBarriers.fill(DefaultBarrier);
+
+			for (uint32_t TransitionIndex = 0; TransitionIndex < InResourceTransitionsCount; ++TransitionIndex)
+			{
+				const ResourceTransition& CurrentResourceTransition = InResourceTransitions[TransitionIndex];
+
+				D3D12Resource& D3DResource = static_cast<D3D12Resource&>(CurrentResourceTransition.ResourceToTransition->GetResource());
+
+				ResourceBarriers[TransitionIndex].Type						= D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+				ResourceBarriers[TransitionIndex].Flags						= D3D12_RESOURCE_BARRIER_FLAG_NONE;
+				ResourceBarriers[TransitionIndex].Transition.pResource		= D3DResource.GetD3D12Resource();
+				ResourceBarriers[TransitionIndex].Transition.Subresource	= D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+				ResourceBarriers[TransitionIndex].Transition.StateBefore	= ConvertTransitionStateToD3D12ResourceStates(CurrentResourceTransition.GetBefore());
+				ResourceBarriers[TransitionIndex].Transition.StateAfter		= ConvertTransitionStateToD3D12ResourceStates(CurrentResourceTransition.GetAfter());
+				
+				D3DResource.SetResourceState(CurrentResourceTransition.After);
+			}
+
+			_GraphicCommandList5->ResourceBarrier(
+				InResourceTransitionsCount,
+				ResourceBarriers.data()
+			);
 		}
 	}
 }

@@ -2,128 +2,17 @@
 
 #include "Graphics/Viewport.hpp"
 #include "Graphics/CommandUtils.h"
-
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
+#include "Vulkan/VulkanResource.hpp"
+#include "Vulkan/VulkanView.hpp"
+#include <array>
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		struct VulkanPipelineFlags
-		{
-			VkAccessFlags			AccessFlags;
-			VkPipelineStageFlags	PipelineStageFlags;
-		};
-
-		static const VulkanPipelineFlags PipelineFlags[] =
-		{
-			{ VK_ACCESS_INDIRECT_COMMAND_READ_BIT,							VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT },
-			{ VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT,	VK_PIPELINE_STAGE_TRANSFER_BIT },
-			{
-				VK_ACCESS_INDEX_READ_BIT
-				| VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				| VK_ACCESS_UNIFORM_READ_BIT
-				| VK_ACCESS_INPUT_ATTACHMENT_READ_BIT
-				| VK_ACCESS_SHADER_READ_BIT
-				| VK_ACCESS_SHADER_WRITE_BIT
-				| VK_ACCESS_COLOR_ATTACHMENT_READ_BIT
-				| VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				| VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT
-				| VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-				VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
-				| VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-				//| VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT
-				//| VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT
-				//| VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT
-				| VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				| VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-				| VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-				| VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				| VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
-			},
-			{
-				0x0,
-				VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
-				| VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-				| VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				| VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-				| VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-				| VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			}
-		};
-
-		static inline VkAccessFlags BuildAccessFlags(_In_ const TransitionState& State)
-		{
-			const VkAccessFlags AllAccessFlags =
-				VK_ACCESS_INDIRECT_COMMAND_READ_BIT
-				| VK_ACCESS_INDEX_READ_BIT
-				| VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				| VK_ACCESS_UNIFORM_READ_BIT
-				| VK_ACCESS_INPUT_ATTACHMENT_READ_BIT
-				| VK_ACCESS_SHADER_READ_BIT
-				| VK_ACCESS_SHADER_WRITE_BIT
-				| VK_ACCESS_COLOR_ATTACHMENT_READ_BIT
-				| VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				| VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT
-				| VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT
-				| VK_ACCESS_TRANSFER_READ_BIT
-				| VK_ACCESS_TRANSFER_WRITE_BIT
-				| VK_ACCESS_HOST_READ_BIT
-				| VK_ACCESS_HOST_WRITE_BIT;
-
-			return (VkAccessFlags)(VkAccessFlags(State) & AllAccessFlags);
-		}
-
-		static const VkImageAspectFlagBits BuildImageAspectFlags(_In_ const TransitionState& State)
-		{
-			if ((State & (TransitionState::TRANSITION_DEPTH_STENCIL_READ | TransitionState::TRANSITION_DEPTH_STENCIL_WRITE)) != TransitionState::TRANSITION_UNDEFINED)
-				return VkImageAspectFlagBits(VK_IMAGE_ASPECT_DEPTH_BIT);// | VK_IMAGE_ASPECT_STENCIL_BIT);
-			return VK_IMAGE_ASPECT_COLOR_BIT;
-		}
-
-		VkImageLayout BuildImageLayout(_In_ const TransitionState& State)
-		{
-			if (State == TransitionState::TRANSITION_UNDEFINED)
-				return VK_IMAGE_LAYOUT_UNDEFINED;
-			else if ((State & TransitionState::TRANSITION_RENDER_TARGET_WRITE) != TransitionState::TRANSITION_UNDEFINED)
-				return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-			else if ((State & TransitionState::TRANSITION_DEPTH_STENCIL_WRITE) != TransitionState::TRANSITION_UNDEFINED)
-				return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-			else if ((State & TransitionState::TRANSITION_DEPTH_STENCIL_READ) != TransitionState::TRANSITION_UNDEFINED)
-				return VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-			else if ((State & TransitionState::TRANSITION_COPY_READ) != TransitionState::TRANSITION_UNDEFINED)
-				return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-			else if ((State & TransitionState::TRANSITION_COPY_WRITE) != TransitionState::TRANSITION_UNDEFINED)
-				return VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-			else if ((State & TransitionState::TRANSITION_PRESENT) != TransitionState::TRANSITION_UNDEFINED)
-				return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-			else if ((State & TransitionState::TRANSITION_PREINITIALIZED) != TransitionState::TRANSITION_UNDEFINED)
-				return VK_IMAGE_LAYOUT_PREINITIALIZED;
-			else
-				return VK_IMAGE_LAYOUT_GENERAL;
-			//VK_IMAGE_LAYOUT_PREINITIALIZED
-		}
-
-		static VkPipelineStageFlags BuildPipelineStageFlags(_In_ const TransitionState& State)
-		{
-			const TransitionState TransferState = (TransitionState::TRANSITION_COPY_READ
-				| TransitionState::TRANSITION_COPY_WRITE
-				| TransitionState::TRANSITION_CPU_READ
-				| TransitionState::TRANSITION_CPU_WRITE);
-
-			if ((State & TransferState) != TransitionState::TRANSITION_UNDEFINED)
-				return VK_PIPELINE_STAGE_TRANSFER_BIT;
-			else
-				return VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
-					| VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-					| VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					| VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-					| VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-					| VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-		}
-
 		VulkanCommandList::VulkanCommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
 			: CommandList(InCommandAllocator)
 			, _Device(InDevice)
@@ -181,6 +70,81 @@ namespace Eternal
 		void VulkanCommandList::EndRenderPass()
 		{
 			_CommandBuffer.endRenderPass();
+		}
+
+		void VulkanCommandList::Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
+		{
+			using namespace Eternal::Graphics::Vulkan;
+
+			std::array<vk::BufferMemoryBarrier, MaxBufferTransitionsPerSubmit> BufferTransitions;
+			std::array<vk::ImageMemoryBarrier, MaxTextureTransitionsPerSubmit> ImageTransitions;
+			BufferTransitions.fill(vk::BufferMemoryBarrier());
+			ImageTransitions.fill(vk::ImageMemoryBarrier());
+
+			vk::PipelineStageFlagBits BeforeStages	= vk::PipelineStageFlagBits::eNoneKHR;
+			vk::PipelineStageFlagBits AfterStages	= vk::PipelineStageFlagBits::eNoneKHR;
+
+			QueueFamilyIndicesType QueueFamilyIndices;
+			static_cast<VulkanDevice&>(_Device).GetQueueFamilyIndices(QueueFamilyIndices);
+
+			uint32_t BufferTransitionsCount = 0;
+			uint32_t ImageTransitionsCount = 0;
+
+			for (uint32_t ResourceTransitionIndex = 0; ResourceTransitionIndex < InResourceTransitionsCount; ++ResourceTransitionIndex)
+			{
+				const ResourceTransition& CurrentResourceTransition	= InResourceTransitions[ResourceTransitionIndex];
+				VulkanResource& VkResource							= static_cast<VulkanResource&>(CurrentResourceTransition.ResourceToTransition->GetResource());
+				const VulkanView* ResourceView						= static_cast<VulkanView*>(CurrentResourceTransition.ResourceToTransition);
+				uint32_t BeforeQueueFamilyIndex						= QueueFamilyIndices[static_cast<uint32_t>(CurrentResourceTransition.BeforeCommandType)];
+				uint32_t AfterQueueFamilyIndex						= QueueFamilyIndices[static_cast<uint32_t>(CurrentResourceTransition.AfterCommandType)];
+
+				const TransitionState& BeforeState	= CurrentResourceTransition.GetBefore();
+				const TransitionState& AfterState	= CurrentResourceTransition.GetAfter();
+
+				BeforeStages	|= ConvertCommandTypeAndTransitionStateToPipelineStageFlags(CurrentResourceTransition.BeforeCommandType, BeforeState);
+				AfterStages		|= ConvertCommandTypeAndTransitionStateToPipelineStageFlags(CurrentResourceTransition.BeforeCommandType, AfterState);
+
+				switch (VkResource.GetVulkanResourceType())
+				{
+				case VulkanResourceType::BUFFER:
+				{
+					BufferTransitions[BufferTransitionsCount++] = vk::BufferMemoryBarrier(
+						ConvertTransitionStateToVulkanAccessFlags(BeforeState),
+						ConvertTransitionStateToVulkanAccessFlags(AfterState),
+						BeforeQueueFamilyIndex,
+						AfterQueueFamilyIndex,
+						VkResource.GetVulkanBuffer(),
+						0, VK_WHOLE_SIZE
+					);
+				} break;
+				case VulkanResourceType::IMAGE:
+				{
+					ImageTransitions[ImageTransitionsCount++] = vk::ImageMemoryBarrier(
+						ConvertTransitionStateToVulkanAccessFlags(BeforeState),
+						ConvertTransitionStateToVulkanAccessFlags(AfterState),
+						ConvertTransitionStateToVulkanImageLayout(BeforeState),
+						ConvertTransitionStateToVulkanImageLayout(AfterState),
+						BeforeQueueFamilyIndex,
+						AfterQueueFamilyIndex,
+						VkResource.GetVulkanImage(),
+						ResourceView->GetVulkanSubresourceRange()
+					);
+				} break;
+				}
+
+				VkResource.SetResourceState(AfterState);
+			}
+
+			ETERNAL_ASSERT((BufferTransitionsCount + ImageTransitionsCount) == InResourceTransitionsCount);
+
+			_CommandBuffer.pipelineBarrier(
+				BeforeStages,
+				AfterStages,
+				vk::DependencyFlagBits(),
+				0,  nullptr,
+				BufferTransitionsCount, BufferTransitionsCount > 0 ? BufferTransitions.data() : nullptr,
+				ImageTransitionsCount, ImageTransitionsCount > 0 ? ImageTransitions.data() : nullptr
+			);
 		}
 	}
 }

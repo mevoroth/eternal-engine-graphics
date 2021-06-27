@@ -4,6 +4,7 @@
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandList.hpp"
 #include "d3d12/D3D12Utils.hpp"
+#include <array>
 
 namespace Eternal
 {
@@ -36,17 +37,17 @@ namespace Eternal
 			_CommandQueue = nullptr;
 		}
 
-		void D3D12CommandQueue::SubmitCommandLists(_In_ GraphicsContext& Context, _In_ CommandList* CommandLists[], _In_ uint32_t CommandListsCount)
+		void D3D12CommandQueue::SubmitCommandLists(_In_ CommandList* InCommandLists[], _In_ uint32_t InCommandListsCount, _In_ GraphicsContext* InContext)
 		{
-			vector<ID3D12CommandList*> D3D12CommandLists;
-			D3D12CommandLists.resize(CommandListsCount);
-			for (uint32_t CommandListIndex = 0; CommandListIndex < CommandListsCount; ++CommandListIndex)
-			{
-				D3D12CommandLists[CommandListIndex] = static_cast<D3D12CommandList*>(CommandLists[CommandListIndex])->GetD3D12CommandList();
-			}
+			CommandQueue::SubmitCommandLists(InCommandLists, InCommandListsCount, InContext);
+
+			std::array<ID3D12CommandList*, MaxCommandListsPerSubmission> D3D12CommandLists;
+			D3D12CommandLists.fill(nullptr);
+			for (uint32_t CommandListIndex = 0; CommandListIndex < InCommandListsCount; ++CommandListIndex)
+				D3D12CommandLists[CommandListIndex] = static_cast<D3D12CommandList*>(InCommandLists[CommandListIndex])->GetD3D12CommandList();
 
 			_CommandQueue->ExecuteCommandLists(
-				CommandListsCount,
+				InCommandListsCount,
 				D3D12CommandLists.data()
 			);
 		}

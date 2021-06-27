@@ -35,12 +35,7 @@
     <ClInclude Include="include\d3d12\D3D12SwapChain.hpp" />
     <ClInclude Include="include\d3d12\D3D12Utils.hpp" />
     <ClInclude Include="include\d3d12\D3D12View.hpp" />
-    <ClInclude Include="include\d3d12_deprecated\D3D12DescriptorTable.hpp" />
-    <ClInclude Include="include\d3d12_deprecated\D3D12Heap.hpp" />
     <ClInclude Include="include\d3d12_deprecated\D3D12InputLayout.hpp" />
-    <ClInclude Include="include\d3d12_deprecated\D3D12ShaderFactory.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
@@ -130,11 +125,7 @@
     <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp" />
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp" />
     <ClInclude Include="include\Vulkan\VulkanView.hpp" />
-    <ClInclude Include="include\Vulkan_deprecated\VulkanBlendState.hpp" />
-    <ClInclude Include="include\Vulkan_deprecated\VulkanDescriptorTable.h" />
-    <ClInclude Include="include\Vulkan_deprecated\VulkanHeap.hpp" />
     <ClInclude Include="include\Vulkan_deprecated\VulkanInputLayout.hpp" />
-    <ClInclude Include="include\Vulkan_deprecated\VulkanRenderTarget.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,12 +145,7 @@
     <ClCompile Include="src\d3d12\D3D12SwapChain.cpp" />
     <ClCompile Include="src\d3d12\D3D12Utils.cpp" />
     <ClCompile Include="src\d3d12\D3D12View.cpp" />
-    <ClCompile Include="src\d3d12_deprecated\D3D12DescriptorTable.cpp" />
-    <ClCompile Include="src\d3d12_deprecated\D3D12Heap.cpp" />
     <ClCompile Include="src\d3d12_deprecated\D3D12InputLayout.cpp" />
-    <ClCompile Include="src\d3d12_deprecated\D3D12ShaderFactory.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandAllocatorFactory.cpp" />
@@ -167,6 +153,7 @@
     <ClCompile Include="src\Graphics\CommandListFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandQueue.cpp" />
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp" />
+    <ClCompile Include="src\Graphics\CommandUtils.cpp" />
     <ClCompile Include="src\Graphics\GraphicsContext.cpp" />
     <ClCompile Include="src\Graphics\DepthStencil.cpp" />
     <ClCompile Include="src\Graphics\DepthTest.cpp" />
@@ -222,9 +209,7 @@
     <ClCompile Include="src\Vulkan\VulkanSwapChain.cpp" />
     <ClCompile Include="src\Vulkan\VulkanUtils.cpp" />
     <ClCompile Include="src\Vulkan\VulkanView.cpp" />
-    <ClCompile Include="src\Vulkan_deprecated\VulkanHeap.cpp" />
     <ClCompile Include="src\Vulkan_deprecated\VulkanInputLayout.cpp" />
-    <ClCompile Include="src\Vulkan_deprecated\VulkanRenderTarget.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

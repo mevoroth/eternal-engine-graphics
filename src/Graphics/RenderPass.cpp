@@ -7,8 +7,6 @@ namespace Eternal
 	namespace Graphics
 	{
 		const RenderTargetOperator RenderTargetOperator::NoLoad_NoStore	(LoadOperator::NO_LOAD,	StoreOperator::NO_STORE);
-		const RenderTargetOperator RenderTargetOperator::NoLoad_Store	(LoadOperator::NO_LOAD,	StoreOperator::STORE);
-		const RenderTargetOperator RenderTargetOperator::NoLoad_Resolve	(LoadOperator::NO_LOAD,	StoreOperator::RESOLVE);
 		const RenderTargetOperator RenderTargetOperator::Load_NoStore	(LoadOperator::LOAD,	StoreOperator::NO_STORE);
 		const RenderTargetOperator RenderTargetOperator::Load_Store		(LoadOperator::LOAD,	StoreOperator::STORE);
 		const RenderTargetOperator RenderTargetOperator::Load_Resolve	(LoadOperator::LOAD,	StoreOperator::RESOLVE);
@@ -20,6 +18,7 @@ namespace Eternal
 			: _RenderPassCreateInformation(InRenderPassCreateInformation)
 		{
 			ETERNAL_ASSERT(_RenderPassCreateInformation.RenderTargets.size() < MAX_RENDER_TARGETS);
+			ETERNAL_ASSERT((InRenderPassCreateInformation.RenderTargets.size() + (InRenderPassCreateInformation.DepthStencilRenderTarget ? 1 : 0)) > 0);
 		}
 	}
 }
