@@ -55,12 +55,12 @@ namespace Eternal
 			ID3D12DescriptorHeap* _RenderTargetViewDescriptorHeap	= nullptr;
 			ID3D12DescriptorHeap* _DepthStencilViewDescriptorHeap	= nullptr;
 
-			BitField<MaxConstantBufferViewCount>	_ConstantBufferViewHandles;
-			BitField<MaxShaderResourceViewCount>	_ShaderResourceViewHandles;
-			BitField<MaxUnorderedAccessViewCount>	_UnorderedAccessViewHandles;
-			BitField<MaxSamplerCount>				_SamplerHandles;
-			BitField<MaxRenderTargetViewCount>		_RenderTargetViewHandles;
-			BitField<MaxDepthStencilViewCount>		_DepthStencilViewHandles;
+			StaticBitField<MaxConstantBufferViewCount>	_ConstantBufferViewHandles;
+			StaticBitField<MaxShaderResourceViewCount>	_ShaderResourceViewHandles;
+			StaticBitField<MaxUnorderedAccessViewCount>	_UnorderedAccessViewHandles;
+			StaticBitField<MaxSamplerCount>				_SamplerHandles;
+			StaticBitField<MaxRenderTargetViewCount>	_RenderTargetViewHandles;
+			StaticBitField<MaxDepthStencilViewCount>	_DepthStencilViewHandles;
 		};
 	}
 }

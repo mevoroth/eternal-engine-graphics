@@ -14,12 +14,14 @@ namespace Eternal
 
 		enum class RootSignatureAccess
 		{
-			ROOT_SIGNATURE_ACCESS_ALL = 0,
-			ROOT_SIGNATURE_ACCESS_VS,
+			ROOT_SIGNATURE_ACCESS_VS = 0,
 			ROOT_SIGNATURE_ACCESS_HS,
 			ROOT_SIGNATURE_ACCESS_DS,
 			ROOT_SIGNATURE_ACCESS_GS,
 			ROOT_SIGNATURE_ACCESS_PS,
+			ROOT_SIGNATURE_ACCESS_CS,
+			ROOT_SIGNATURE_ACCESS_COUNT,
+			ROOT_SIGNATURE_ACCESS_INVALID = ROOT_SIGNATURE_ACCESS_COUNT
 		};
 
 		enum class RootSignatureParameterType
@@ -42,41 +44,101 @@ namespace Eternal
 			vector<RootSignatureDescriptorTableParameter> Parameters;
 		};
 
-		struct RootSignatureParameter
+		struct RootSignatureConstants
 		{
-			RootSignatureParameter(_In_ const RootSignatureParameterType& InParameter, _In_ const RootSignatureAccess& InAccess, _In_ uint32_t InRegister)
-				: Parameter(InParameter)
-				, Access(InAccess)
+			RootSignatureConstants(_In_ const RootSignatureAccess& InAccess, _In_ const uint32_t InCount)
+				: Access(InAccess)
+				, Count(InCount)
 			{
 			}
 
-			RootSignatureParameter(_In_ const RootSignatureParameterType& InParameter, _In_ const RootSignatureAccess& InAccess, _In_ uint32_t InRegister, _In_ const RootSignatureDescriptorTable& InDescriptorTable)
+			RootSignatureAccess	Access	= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID;
+			uint32_t			Count	= 0;
+		};
+
+		struct RootSignatureStaticSampler
+		{
+			RootSignatureStaticSampler(_In_ const RootSignatureAccess& InAccess, _In_ Sampler* InStaticSampler)
+				: Access(InAccess)
+				, StaticSampler(InStaticSampler)
+			{
+			}
+
+			RootSignatureAccess	Access			= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID;
+			Sampler*			StaticSampler	= nullptr;
+		};
+
+		struct RootSignatureParameter
+		{
+			RootSignatureParameter(_In_ const RootSignatureParameterType& InParameter, _In_ const RootSignatureAccess& InAccess)
 				: Parameter(InParameter)
+				, Access(InAccess)
+			{
+				ETERNAL_ASSERT(InParameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_INVALID);
+				ETERNAL_ASSERT(InParameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER);
+				ETERNAL_ASSERT(InParameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE);
+			}
+
+			RootSignatureParameter(_In_ const RootSignatureDescriptorTable& InDescriptorTable, _In_ const RootSignatureAccess& InAccess)
+				: Parameter(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE)
 				, Access(InAccess)
 				, DescriptorTable(InDescriptorTable)
 			{
 			}
 
-			bool operator==(_In_ const RootSignatureParameter& Other) const
+			RootSignatureParameter(_In_ Sampler* InSampler, _In_ const RootSignatureAccess& InAccess)
+				: Parameter(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER)
+				, Access(InAccess)
+				, SamplerParameter(InSampler)
 			{
-				return Parameter == Other.Parameter
-					&& Access == Other.Access;
 			}
 
-			RootSignatureParameterType		Parameter	= RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT;
-			RootSignatureAccess				Access		= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_ALL;
-			RootSignatureDescriptorTable	DescriptorTable;
+			bool operator==(_In_ const RootSignatureParameter& InOther) const
+			{
+				return Parameter == InOther.Parameter
+					&& Access == InOther.Access;
+			}
+
+
+			RootSignatureParameterType			Parameter			= RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT;
+			RootSignatureAccess					Access				= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID;
+			RootSignatureDescriptorTable		DescriptorTable;
+			Sampler*							SamplerParameter	= nullptr;
 		};
 
 		struct RootSignatureDescriptorTableParameter : public RootSignatureParameter
 		{
-			RootSignatureDescriptorTableParameter(_In_ const RootSignatureParameterType& InParameter, _In_ const RootSignatureAccess& InAccess, _In_ uint32_t InRegister, _In_ uint32_t InDescriptorCount)
-				: RootSignatureParameter(InParameter, InAccess, InRegister)
+			RootSignatureDescriptorTableParameter(_In_ const RootSignatureParameterType& InParameter, _In_ const RootSignatureAccess& InAccess, _In_ uint32_t InDescriptorCount)
+				: RootSignatureParameter(InParameter, InAccess)
 				, DescriptorCount(InDescriptorCount)
 			{
 			}
 
+			RootSignatureDescriptorTableParameter(_In_ const vector<Sampler*>& InSamplers, _In_ const RootSignatureAccess& InAccess)
+				: RootSignatureParameter(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER, InAccess)
+				, Samplers(InSamplers)
+			{
+			}
+
 			uint32_t						DescriptorCount = 0;
+			vector<Sampler*>				Samplers;
+
+		private:
+			// Forbidden constructors
+			RootSignatureDescriptorTableParameter(_In_ const RootSignatureDescriptorTable& InDescriptorTable, _In_ const RootSignatureAccess& InAccess)
+				: RootSignatureParameter(InDescriptorTable, InAccess)
+			{
+			}
+
+			RootSignatureDescriptorTableParameter(_In_ const RootSignatureParameterType& InParameter, _In_ const RootSignatureAccess& InAccess)
+				: RootSignatureParameter(InParameter, InAccess)
+			{
+			}
+
+			RootSignatureDescriptorTableParameter(_In_ Sampler* InSampler, _In_ const RootSignatureAccess& InAccess)
+				: RootSignatureParameter(InSampler, InAccess)
+			{
+			}
 		};
 
 		struct RootSignatureCreateInformation
@@ -85,13 +147,23 @@ namespace Eternal
 			{
 			}
 
-			RootSignatureCreateInformation(_In_ const vector<RootSignatureParameter>& InParameters, _In_ const vector<Sampler*>& InStaticSamplers)
+			RootSignatureCreateInformation(
+				_In_ const vector<RootSignatureParameter>& InParameters,
+				_In_ const vector<RootSignatureStaticSampler>& InStaticSamplers,
+				_In_ const vector<RootSignatureConstants>& InConstants = vector<RootSignatureConstants>(),
+				bool InHasInputAssembler = false
+			)
+				: Parameters(InParameters)
+				, StaticSamplers(InStaticSamplers)
+				, Constants(InConstants)
+				, HasInputAssembler(InHasInputAssembler)
 			{
 			}
 
-			vector<RootSignatureParameter>	Parameters;
-			vector<Sampler*>				StaticSamplers;
-			bool							HasInputAssembler = false;
+			vector<RootSignatureParameter>		Parameters;
+			vector<RootSignatureStaticSampler>	StaticSamplers;
+			vector<RootSignatureConstants>		Constants;
+			bool								HasInputAssembler = false;
 		};
 
 		class RootSignature

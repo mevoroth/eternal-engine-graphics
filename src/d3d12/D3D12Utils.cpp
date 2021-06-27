@@ -93,7 +93,7 @@ namespace Eternal
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_BLENDS) == static_cast<int32_t>(Blend::BLEND_COUNT), "Mismatch between abstraction and d3d12 blends");
 
-		constexpr D3D12_ROOT_PARAMETER_TYPE D3D12_ROOT_PARAMETER_TYPES[] =
+		static constexpr D3D12_ROOT_PARAMETER_TYPE D3D12_ROOT_PARAMETER_TYPES[] =
 		{
 			D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
 			D3D12_ROOT_PARAMETER_TYPE_SRV,
@@ -107,17 +107,7 @@ namespace Eternal
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_ROOT_PARAMETER_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d12 root parameter types");
 
-		//ROOT_SIGNATURE_PARAMETER_SAMPLER = 0,
-		//	ROOT_SIGNATURE_PARAMETER_TEXTURE,
-		//	ROOT_SIGNATURE_PARAMETER_RW_TEXTURE,
-		//	ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER,
-		//	ROOT_SIGNATURE_PARAMETER_RW_STRUCTURED_BUFFER,
-		//	ROOT_SIGNATURE_PARAMETER_CONSTANT_BUFFER,
-		//	ROOT_SIGNATURE_PARAMETER_BUFFER,
-		//	ROOT_SIGNATURE_PARAMETER_RW_BUFFER,
-		//	ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE,
-		
-		constexpr D3D12_DESCRIPTOR_RANGE_TYPE D3D12_DESCRIPTOR_RANGE_TYPES[] =
+		static constexpr D3D12_DESCRIPTOR_RANGE_TYPE D3D12_DESCRIPTOR_RANGE_TYPES[] =
 		{
 			D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER,
 			D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
@@ -129,6 +119,7 @@ namespace Eternal
 			D3D12_DESCRIPTOR_RANGE_TYPE_UAV,
 			D3D12_DESCRIPTOR_RANGE_TYPE(~0) // Invalid to have descriptor table within descriptor table
 		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_DESCRIPTOR_RANGE_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d121 descriptor ranges types");
 
 		namespace D3D12
 		{
@@ -202,7 +193,9 @@ namespace Eternal
 
 			D3D12_SHADER_VISIBILITY ConvertRootSignatureAccessToD3D12ShaderVisibility(const RootSignatureAccess& InRootSignatureAccess)
 			{
-				return static_cast<D3D12_SHADER_VISIBILITY>(static_cast<int32_t>(InRootSignatureAccess));
+				if (InRootSignatureAccess == RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS)
+					return D3D12_SHADER_VISIBILITY_ALL;
+				return static_cast<D3D12_SHADER_VISIBILITY>(static_cast<int32_t>(InRootSignatureAccess) + 1);
 
 			}
 			D3D12_ROOT_PARAMETER_TYPE ConvertRootSignatureParameterTypeToD3D12RootParameterType(const RootSignatureParameterType& InRootSignatureParameterType)

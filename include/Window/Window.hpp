@@ -1,5 +1,4 @@
-#ifndef _WINDOW_HPP_
-#define _WINDOW_HPP_
+#pragma once
 
 #include <string>
 #define WIN32_LEAN_AND_MEAN
@@ -42,5 +41,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

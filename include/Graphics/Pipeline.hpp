@@ -1,5 +1,4 @@
-#ifndef _PIPELINE_HPP_
-#define _PIPELINE_HPP_
+#pragma once
 
 namespace Eternal
 {
@@ -53,5 +52,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

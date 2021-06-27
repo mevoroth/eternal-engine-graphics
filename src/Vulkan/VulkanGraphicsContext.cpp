@@ -8,6 +8,7 @@ namespace Eternal
 	{
 		VulkanGraphicsContext::VulkanGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
 			: GraphicsContext(CreateInformation)
+			, _ConstantHandles(static_cast<VulkanDevice&>(GetDevice()).GetPushConstantMaxSize())
 		{
 			vk::SemaphoreCreateInfo SemaphoreInfo;
 
@@ -32,6 +33,19 @@ namespace Eternal
 		void VulkanGraphicsContext::UpdateGraphicsContext()
 		{
 			//CurrentFrameIndex = (CurrentFrameIndex + 1) % FrameBufferingCount;
+		}
+
+		void VulkanGraphicsContext::AllocateConstantHandles(_In_ uint32_t ConstantCount, _Out_ vector<Handle>& OutHandles)
+		{
+			OutHandles.resize(ConstantCount);
+			for (uint32_t ConstantIndex = 0; ConstantIndex < ConstantCount; ++ConstantIndex)
+				OutHandles[ConstantIndex] = _ConstantHandles.Pop();
+		}
+
+		void VulkanGraphicsContext::ReleaseConstantHandles(_Inout_ vector<Handle>& InOutHandles)
+		{
+			for (uint32_t HandleIndex = 0; HandleIndex < InOutHandles.size(); ++HandleIndex)
+				_ConstantHandles.Push(InOutHandles[HandleIndex]);
 		}
 	}
 }

@@ -34,11 +34,11 @@ namespace Eternal
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
-				return new D3D12RootSignature(InContext.GetDevice());
+				return new D3D12RootSignature(InContext.GetDevice(), InRootSignatureCreateInformation);
 #endif
 
 			case DeviceType::VULKAN:
-				return new VulkanRootSignature(InContext.GetDevice());
+				return new VulkanRootSignature(InContext, InRootSignatureCreateInformation);
 
 			default:
 				ETERNAL_BREAK();

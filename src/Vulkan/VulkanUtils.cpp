@@ -42,17 +42,42 @@ namespace Eternal
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_BORDER_COLORS) == static_cast<int32_t>(BorderColor::BORDER_COLOR_COUNT), "Mismatch between abstraction and vulkan border colors");
 
+			static constexpr vk::DescriptorType VULKAN_DESCRIPTOR_TYPES[] =
+			{
+				vk::DescriptorType::eSampler,
+				vk::DescriptorType::eSampledImage,
+				vk::DescriptorType::eStorageImage,
+				vk::DescriptorType::eUniformTexelBuffer,
+				vk::DescriptorType::eStorageTexelBuffer,
+				vk::DescriptorType::eUniformBuffer,
+				vk::DescriptorType::eUniformBuffer,
+				vk::DescriptorType::eStorageBuffer,
+				vk::DescriptorType(~0) // Descriptor table doesn't exist on vulkan
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_DESCRIPTOR_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and vulkan descriptor types");
+
+			static constexpr vk::ShaderStageFlags VULKAN_SHADER_STAGE_FLAGS[] =
+			{
+				vk::ShaderStageFlagBits::eVertex,
+				vk::ShaderStageFlagBits::eTessellationControl,
+				vk::ShaderStageFlagBits::eTessellationEvaluation,
+				vk::ShaderStageFlagBits::eGeometry,
+				vk::ShaderStageFlagBits::eFragment,
+				vk::ShaderStageFlagBits::eCompute
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_SHADER_STAGE_FLAGS) == static_cast<int32_t>(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_COUNT), "Mismatch between abstraction and vulkan shader stage flags");
+
 			void VerifySuccess(const vk::Result& VulkanResult)
 			{
 				ETERNAL_ASSERT(VulkanResult == vk::Result::eSuccess);
 			}
 
-			vk::StencilOpState CreateVulkanStencilOperatorState(const StencilTest& InStencilTest, const StencilTest::FaceOperator& InFaceOperator)
+			vk::StencilOpState CreateVulkanStencilOperatorState(_In_ const StencilTest& InStencilTest, _In_ const StencilTest::FaceOperator& InFaceOperator)
 			{
 				return vk::StencilOpState(
-					vk::StencilOp(InFaceOperator.Fail),
-					vk::StencilOp(InFaceOperator.Pass),
-					vk::StencilOp(InFaceOperator.FailDepth),
+					ConvertStencilOperatorToVulkanStencilOperator(InFaceOperator.Fail),
+					ConvertStencilOperatorToVulkanStencilOperator(InFaceOperator.Pass),
+					ConvertStencilOperatorToVulkanStencilOperator(InFaceOperator.FailDepth),
 					ConvertComparisonFunctionToVulkanComparisonOperator(InFaceOperator.Comparison),
 					static_cast<uint32_t>(InStencilTest.GetReadMask()),
 					static_cast<uint32_t>(InStencilTest.GetWriteMask()),
@@ -60,7 +85,7 @@ namespace Eternal
 				);
 			}
 
-			vk::PipelineColorBlendAttachmentState CreateVulkanPipelineColorBlendStateAttachmentState(const BlendState& InBlendState)
+			vk::PipelineColorBlendAttachmentState CreateVulkanPipelineColorBlendStateAttachmentState(_In_ const BlendState& InBlendState)
 			{
 				return vk::PipelineColorBlendAttachmentState(
 					InBlendState.IsEnabled(),
@@ -74,51 +99,44 @@ namespace Eternal
 				);
 			}
 
-			vk::LogicOp ConvertLogicOperatorToVulkanLogicOperator(const LogicOperator& InLogicOperator)
+			vk::LogicOp ConvertLogicOperatorToVulkanLogicOperator(_In_ const LogicOperator& InLogicOperator)
 			{
 				return VULKAN_LOGIC_OPERATORS[static_cast<int32_t>(InLogicOperator)];
 			}
 
-			vk::SamplerAddressMode ConvertAddressModeToVulkanSamplerAddressMode(const AddressMode& InAddressMode)
+			vk::SamplerAddressMode ConvertAddressModeToVulkanSamplerAddressMode(_In_ const AddressMode& InAddressMode)
 			{
 				return static_cast<vk::SamplerAddressMode>(InAddressMode);
 			}
 
-			vk::CompareOp ConvertComparisonFunctionToVulkanComparisonOperator(const ComparisonFunction& InComparisonFunction)
+			vk::CompareOp ConvertComparisonFunctionToVulkanComparisonOperator(_In_ const ComparisonFunction& InComparisonFunction)
 			{
 				return static_cast<vk::CompareOp>(InComparisonFunction);
 			}
 
-			vk::BlendFactor ConvertBlendToVulkanBlendFactor(const Blend& InBlend)
+			vk::StencilOp ConvertStencilOperatorToVulkanStencilOperator(_In_ const StencilTest::StencilOperator& InStencilOperator)
+			{
+				return static_cast<vk::StencilOp>(InStencilOperator);
+			}
+
+			vk::BlendFactor ConvertBlendToVulkanBlendFactor(_In_ const Blend& InBlend)
 			{
 				return static_cast<vk::BlendFactor>(InBlend);
 			}
 
-			vk::BlendOp ConvertBlendOperatorToVulkanBlendOperator(const BlendOperator& InBlendOperator)
+			vk::BlendOp ConvertBlendOperatorToVulkanBlendOperator(_In_ const BlendOperator& InBlendOperator)
 			{
 				return static_cast<vk::BlendOp>(InBlendOperator);
 			}
 
-			vk::ColorComponentFlags ConvertBlendChannelToVulkanColorComponentFlags(const BlendChannel& InBlendChannel)
+			vk::ColorComponentFlags ConvertBlendChannelToVulkanColorComponentFlags(_In_ const BlendChannel& InBlendChannel)
 			{
 				return static_cast<vk::ColorComponentFlagBits>(InBlendChannel);
 			}
 
-			vk::BorderColor ConvertBorderColorToVulkanBorderColor(const BorderColor& InBorderColor)
+			vk::BorderColor ConvertBorderColorToVulkanBorderColor(_In_ const BorderColor& InBorderColor)
 			{
 				return VULKAN_BORDER_COLORS[static_cast<int32_t>(InBorderColor)];
-			}
-
-			vk::ShaderStageFlagBits ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InRootSignatureAccess)
-			{
-				int RootSignatureAccessInt = int(InRootSignatureAccess);
-				return vk::ShaderStageFlagBits(
-					int(RootSignatureAccessInt & int(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_VS) ? int(vk::ShaderStageFlagBits::eVertex)					: 0) |
-					int(RootSignatureAccessInt & int(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_HS) ? int(vk::ShaderStageFlagBits::eTessellationControl)	: 0) |
-					int(RootSignatureAccessInt & int(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_DS) ? int(vk::ShaderStageFlagBits::eTessellationEvaluation)	: 0) |
-					int(RootSignatureAccessInt & int(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_GS) ? int(vk::ShaderStageFlagBits::eGeometry)				: 0) |
-					int(RootSignatureAccessInt & int(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_PS) ? int(vk::ShaderStageFlagBits::eFragment)				: 0)
-				);
 			}
 
 			vk::Rect2D ConvertViewportToRect2D(_In_ const Viewport& InViewport)
@@ -165,6 +183,18 @@ namespace Eternal
 				};
 				vk::MemoryPropertyFlagBits* EndAllowedMemoryProperties = AllowedMemoryProperties + ETERNAL_ARRAYSIZE(AllowedMemoryProperties);
 				ETERNAL_ASSERT(std::find(AllowedMemoryProperties, EndAllowedMemoryProperties, Flags) != EndAllowedMemoryProperties);
+			}
+
+			vk::DescriptorType ConvertRootSignatureParameterTypeToVulkanDescriptorType(const RootSignatureParameterType& InRootSignatureParameterType)
+			{
+				ETERNAL_ASSERT(InRootSignatureParameterType != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE);
+				return VULKAN_DESCRIPTOR_TYPES[static_cast<int32_t>(InRootSignatureParameterType)];
+			}
+
+			vk::ShaderStageFlags ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InRootSignatureAccess)
+			{
+				ETERNAL_ASSERT(InRootSignatureAccess != RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID);
+				return VULKAN_SHADER_STAGE_FLAGS[static_cast<int32_t>(InRootSignatureAccess)];
 			}
 		}
 	}

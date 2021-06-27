@@ -341,7 +341,8 @@ vk::Device& VulkanDevice::GetVulkanDevice()
 
 uint32_t VulkanDevice::GetPushConstantMaxSize() const
 {
-	return _PhysicalDeviceProperties.limits.maxPushConstantsSize;
+	static constexpr uint32_t ByteTo32Bits = 4;
+	return _PhysicalDeviceProperties.limits.maxPushConstantsSize / ByteTo32Bits;
 }
 
 uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const

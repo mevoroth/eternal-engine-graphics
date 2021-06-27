@@ -13,7 +13,7 @@
 using namespace Eternal::Graphics;
 using namespace Eternal::File;
 
-static const shaderc_shader_kind SHADER_KINDS[] =
+static constexpr shaderc_shader_kind SHADER_KINDS[] =
 {
 	shaderc_glsl_vertex_shader,
 	shaderc_glsl_tess_control_shader,
