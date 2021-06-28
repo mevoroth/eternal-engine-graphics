@@ -50,16 +50,22 @@ namespace Eternal
 
 		struct RenderTargetInformation
 		{
-			RenderTargetInformation(const BlendState& InRenderTargetBlendState, RenderTargetOperator InOperator, View* InRenderTarget)
+			static constexpr uint32_t ComponentCount	=				 4;
+			static constexpr float DefaultClearValue[ComponentCount]	= { 0.0f };
+
+			RenderTargetInformation(const BlendState& InRenderTargetBlendState, RenderTargetOperator InOperator, View* InRenderTarget, const float InClearValue[ComponentCount] = DefaultClearValue)
 				: RenderTargetBlendState(InRenderTargetBlendState)
 				, Operator(InOperator)
 				, RenderTarget(InRenderTarget)
 			{
+				for (int32_t ValueIndex = 0; ValueIndex < ComponentCount; ++ValueIndex)
+					ClearValue[ValueIndex] = InClearValue[ValueIndex];
 			}
 
 			BlendState				RenderTargetBlendState;
 			RenderTargetOperator	Operator;
 			View*					RenderTarget = nullptr;
+			float					ClearValue[ComponentCount] = { 0.0f };
 		};
 
 		struct RenderPassCreateInformation

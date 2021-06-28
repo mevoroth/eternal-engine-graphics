@@ -17,8 +17,8 @@ namespace Eternal
 			VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation);
 			~VulkanRenderPass();
 
-			vk::RenderPass& GetVulkanRenderPass() { return _RenderPass; }
-			vk::Framebuffer& GetFrameBuffer() { return _FrameBuffer; }
+			const vk::RenderPass& GetVulkanRenderPass() const { return _RenderPass; }
+			const vk::Framebuffer& GetFrameBuffer() const { return _FrameBuffer; }
 
 		private:
 			Device&			_Device;
