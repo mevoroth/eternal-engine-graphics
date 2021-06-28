@@ -1,5 +1,4 @@
-#ifndef _INPUT_LAYOUT_HPP_
-#define _INPUT_LAYOUT_HPP_
+#pragma once
 
 #include "Graphics/Format.hpp"
 
@@ -46,5 +45,3 @@ namespace Eternal
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VERTEX_FORMATS) == InputLayout::VERTEX_DATA_TYPE_COUNT, "Vertex Formats implementation not complete");
 	}
 }
-
-#endif

@@ -1,7 +1,6 @@
-#include "Vulkan_deprecated/VulkanInputLayout.hpp"
+#include "Vulkan/VulkanInputLayout.hpp"
 
-#include <vulkan/vulkan.h>
-#include "Graphics_deprecated/InputLayout.hpp"
+#include "Graphics/InputLayout.hpp"
 #include "Vulkan/VulkanFormat.hpp"
 #include "Log/Log.hpp"
 

@@ -1,18 +1,18 @@
-#include "Graphics_deprecated/InputLayoutFactory.hpp"
+#include "Graphics/InputLayoutFactory.hpp"
 
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
-#include "d3d12_deprecated/D3D12InputLayout.hpp"
-#include "Vulkan_deprecated/VulkanInputLayout.hpp"
+#include "d3d12/D3D12InputLayout.hpp"
+#include "Vulkan/VulkanInputLayout.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		InputLayout* CreateInputLayout(_In_ Device& DeviceObj,  _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t DataTypeCount)
+		static InputLayout* CreateInputLayout(_In_ Device& InDevice,  _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t DataTypeCount)
 		{
-			switch (DeviceObj.GetDeviceType())
+			switch (InDevice.GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:

@@ -1,7 +1,6 @@
-#ifndef _VULKAN_INPUT_LAYOUT_HPP_
-#define _VULKAN_INPUT_LAYOUT_HPP_
+#pragma once
 
-#include "Graphics_deprecated/InputLayout.hpp"
+#include "Graphics/InputLayout.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 
 struct VkVertexInputAttributeDescription;
@@ -36,5 +35,3 @@ namespace Eternal
 		extern const VulkanInputLayout VulkanEmptyInputLayout;
 	}
 }
-
-#endif

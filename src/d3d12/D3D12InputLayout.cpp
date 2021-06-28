@@ -1,4 +1,4 @@
-#include "d3d12_deprecated/D3D12InputLayout.hpp"
+#include "d3d12/D3D12InputLayout.hpp"
 
 #include "d3d12/D3D12Format.hpp"
 

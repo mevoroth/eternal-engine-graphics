@@ -1,9 +1,8 @@
-#ifndef _D3D12_INPUT_LAYOUT_HPP_
-#define _D3D12_INPUT_LAYOUT_HPP_
+#pragma once
 
 #include <d3d12.h>
 
-#include "Graphics_deprecated/InputLayout.hpp"
+#include "Graphics/InputLayout.hpp"
 
 using namespace std;
 
@@ -23,5 +22,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif
