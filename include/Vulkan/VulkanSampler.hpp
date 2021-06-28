@@ -16,7 +16,7 @@ namespace Eternal
 			VulkanSampler(_In_ GraphicsContext& InContext, _In_ const SamplerCreateInformation& InSamplerCreateInformation);
 			~VulkanSampler();
 			
-			vk::Sampler& GetVulkanSampler() { return _Sampler; }
+			const vk::Sampler& GetVulkanSampler() const { return _Sampler; }
 
 		private:
 			Device&		_Device;
