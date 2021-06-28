@@ -20,6 +20,8 @@ namespace Eternal
 		enum class BlendChannel;
 		enum class BorderColor;
 		enum class TransitionState;
+		enum class LoadOperator;
+		enum class StoreOperator;
 		class BlendState;
 		class Viewport;
 
@@ -40,6 +42,8 @@ namespace Eternal
 			vk::ColorComponentFlags ConvertBlendChannelToVulkanColorComponentFlags(_In_ const BlendChannel& InBlendChannel);
 			vk::BorderColor ConvertBorderColorToVulkanBorderColor(_In_ const BorderColor& InBorderColor);
 			vk::Rect2D ConvertViewportToRect2D(_In_ const Viewport& InViewport);
+			vk::AttachmentLoadOp ConvertLoadOperatorToVulkanAttachmentLoadOperator(_In_ const LoadOperator& InLoadOperator);
+			vk::AttachmentStoreOp ConvertStoreOperatorToVulkanAttachmentStoreOperator(_In_ const StoreOperator& InStoreOperator);
 			vk::MemoryPropertyFlagBits ConvertGraphicsMemoryFlagsToMemoryPropertyFlags(_In_ const GraphicsMemoryFlag& InMemoryFlags);
 			void VerifyMemoryPropertyFlags(_In_ const vk::MemoryPropertyFlagBits& Flags);
 			vk::DescriptorType ConvertRootSignatureParameterTypeToVulkanDescriptorType(_In_ const RootSignatureParameterType& InRootSignatureParameterType);

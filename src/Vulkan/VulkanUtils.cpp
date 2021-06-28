@@ -6,6 +6,7 @@
 #include "Graphics/Viewport.hpp"
 #include "Graphics/BlendState.hpp"
 #include "Graphics/Sampler.hpp"
+#include "Graphics/RenderPass.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 #include "Math/Math.hpp"
 
@@ -75,7 +76,23 @@ namespace Eternal
 				vk::PipelineStageFlagBits::eComputeShader,
 				vk::PipelineStageFlagBits::eHost
 			};
-			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_COMMAND_TYPES_TO_PIPELINE_STAGE_FLAGS) == static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT), "Mismatch between abstraction and vulkan command_types to pipeline stage flags");
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_COMMAND_TYPES_TO_PIPELINE_STAGE_FLAGS) == static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT), "Mismatch between abstraction and vulkan command types to pipeline stage flags");
+
+			static constexpr vk::AttachmentLoadOp VULKAN_ATTACHMENT_LOAD_OPERATORS[] =
+			{
+				vk::AttachmentLoadOp::eDontCare,
+				vk::AttachmentLoadOp::eLoad,
+				vk::AttachmentLoadOp::eClear
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_ATTACHMENT_LOAD_OPERATORS) == static_cast<int32_t>(LoadOperator::COUNT), "Mismatch between abstraction and vulkan attachment load operators");
+
+			static constexpr vk::AttachmentStoreOp VULKAN_ATTACHMENT_STORE_OPERATORS[] =
+			{
+				vk::AttachmentStoreOp::eDontCare,
+				vk::AttachmentStoreOp::eStore,
+				vk::AttachmentStoreOp::eStore
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_ATTACHMENT_STORE_OPERATORS) == static_cast<int32_t>(StoreOperator::COUNT), "Mismatch between abstraction and vulkan attachment store operators");
 
 			static constexpr TransitionState CPURead_CPUWrite_State		= TransitionState::TRANSITION_CPU_READ
 																		| TransitionState::TRANSITION_CPU_WRITE;
@@ -160,6 +177,16 @@ namespace Eternal
 					vk::Offset2D(InViewport.GetX(), InViewport.GetY()),
 					vk::Extent2D(InViewport.GetWidth(), InViewport.GetHeight())
 				);
+			}
+
+			vk::AttachmentLoadOp ConvertLoadOperatorToVulkanAttachmentLoadOperator(_In_ const LoadOperator& InLoadOperator)
+			{
+				return VULKAN_ATTACHMENT_LOAD_OPERATORS[static_cast<int32_t>(InLoadOperator)];
+			}
+
+			vk::AttachmentStoreOp ConvertStoreOperatorToVulkanAttachmentStoreOperator(_In_ const StoreOperator& InStoreOperator)
+			{
+				return VULKAN_ATTACHMENT_STORE_OPERATORS[static_cast<int32_t>(InStoreOperator)];
 			}
 
 			vk::MemoryPropertyFlagBits ConvertGraphicsMemoryFlagsToMemoryPropertyFlags(_In_ const GraphicsMemoryFlag& InMemoryFlags)
