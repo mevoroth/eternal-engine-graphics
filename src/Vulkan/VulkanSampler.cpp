@@ -24,7 +24,7 @@ namespace Eternal
 				ConvertAddressModeToVulkanSamplerAddressMode(GetW()),
 				GetMipLODBias(),
 				IsAnisotropic(),
-				GetMaxAnisotropy(),
+				static_cast<float>(GetMaxAnisotropy()),
 				IsComparisonEnabled(),
 				ConvertComparisonFunctionToVulkanComparisonOperator(GetComparisonFunction()),
 				GetMinLOD(),
