@@ -75,6 +75,8 @@ namespace Eternal
 		{
 			using namespace Eternal::Graphics::D3D12;
 			
+			static constexpr D3D12_DESCRIPTOR_RANGE1 DefaultDescriptorRange = {};
+
 			const vector<RootSignatureConstants>& InConstants			= InRootSignatureCreateInformation.Constants;
 			const vector<RootSignatureParameter>& InParameters			= InRootSignatureCreateInformation.Parameters;
 			const vector<RootSignatureStaticSampler>& InStaticSamplers	= InRootSignatureCreateInformation.StaticSamplers;
@@ -92,9 +94,7 @@ namespace Eternal
 
 			Flags |= InRootSignatureCreateInformation.HasInputAssembler ? D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT : D3D12_ROOT_SIGNATURE_FLAG_NONE;
 
-			D3D12_ROOT_SIGNATURE_DESC RootSignatureDesc;
-			
-			vector<D3D12_ROOT_PARAMETER> Parameters;
+			vector<D3D12_ROOT_PARAMETER1> Parameters;
 			Parameters.resize(InRootSignatureCreateInformation.Parameters.size() + InRootSignatureCreateInformation.Constants.size());
 			vector<D3D12_STATIC_SAMPLER_DESC> StaticSamplers;
 			StaticSamplers.resize(InRootSignatureCreateInformation.StaticSamplers.size());
@@ -112,6 +112,9 @@ namespace Eternal
 				Parameters[ConstantsIndex].ShaderVisibility				= ConvertRootSignatureAccessToD3D12ShaderVisibility(CurrentAccess);
 			}
 
+			vector<D3D12_DESCRIPTOR_RANGE1> DescriptorRanges;
+			DescriptorRanges.reserve(Parameters.size());
+
 			for (uint32_t ParameterIndex = 0; ParameterIndex < InParameters.size(); ++ParameterIndex)
 			{
 				const RootSignatureAccess& CurrentAccess = InParameters[ParameterIndex].Access;
@@ -126,11 +129,14 @@ namespace Eternal
 				{
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER:
 				{
-					D3D12_DESCRIPTOR_RANGE DescriptorRange;
+					DescriptorRanges.push_back(DefaultDescriptorRange);
+
+					D3D12_DESCRIPTOR_RANGE1& DescriptorRange = DescriptorRanges.back();
 					DescriptorRange.RangeType							= D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
 					DescriptorRange.BaseShaderRegister					= RegisterIndex;
 					DescriptorRange.RegisterSpace						= 0;
 					DescriptorRange.OffsetInDescriptorsFromTableStart	= D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+					DescriptorRange.Flags								= D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
 
 					const RootSignatureParameter& CurrentSamplerParameter = InParameters[ParameterIndex];
 
@@ -144,6 +150,10 @@ namespace Eternal
 					const uint32_t NumDescriptors = NextParameterIndex - ParameterIndex;
 
 					DescriptorRange.NumDescriptors						= NumDescriptors;
+					
+					Parameters[ParameterIndex].DescriptorTable.NumDescriptorRanges	= 1;
+					Parameters[ParameterIndex].DescriptorTable.pDescriptorRanges	= &DescriptorRange;
+
 					RegisterIndex	+= NumDescriptors;
 					ParameterIndex	= NextParameterIndex - 1;
 				} break;
@@ -152,26 +162,27 @@ namespace Eternal
 				{
 					const vector<RootSignatureDescriptorTableParameter>& DescriptorTableLayout = InParameters[ParameterIndex].DescriptorTable.Parameters;
 
-					vector<D3D12_DESCRIPTOR_RANGE> DescriptorRanges;
-					DescriptorRanges.resize(DescriptorTableLayout.size());
+					uint32_t DescriptorRangeFirst = static_cast<uint32_t>(DescriptorRanges.size());
 
 					for (uint32_t DescriptorTableIndex = 0; DescriptorTableIndex < DescriptorTableLayout.size(); ++DescriptorTableIndex)
 					{
 						ETERNAL_ASSERT(DescriptorTableLayout[DescriptorTableIndex].Parameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE);
 
-						D3D12_DESCRIPTOR_RANGE& CurrentDescriptorRange				= DescriptorRanges[DescriptorTableIndex];
+						DescriptorRanges.push_back(DefaultDescriptorRange);
+
+						D3D12_DESCRIPTOR_RANGE1& CurrentDescriptorRange				= DescriptorRanges.back();
 						CurrentDescriptorRange.RangeType							= ConvertRootSignatureParameterTypeToD3D12DescriptorRangeType(DescriptorTableLayout[DescriptorTableIndex].Parameter);
 						CurrentDescriptorRange.NumDescriptors						= DescriptorTableLayout[DescriptorTableIndex].DescriptorCount;
 						CurrentDescriptorRange.BaseShaderRegister					= RegisterIndex;
 						CurrentDescriptorRange.RegisterSpace						= 0;
+						CurrentDescriptorRange.Flags								= D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
 						CurrentDescriptorRange.OffsetInDescriptorsFromTableStart	= D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 						RegisterIndex += DescriptorTableLayout[DescriptorTableIndex].DescriptorCount;
 					}
 
-					Parameters[ParameterIndex].ParameterType						= D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-					Parameters[ParameterIndex].DescriptorTable.NumDescriptorRanges	= static_cast<UINT>(DescriptorRanges.size());
-					Parameters[ParameterIndex].DescriptorTable.pDescriptorRanges	= DescriptorRanges.data();
+					Parameters[ParameterIndex].DescriptorTable.NumDescriptorRanges	= static_cast<UINT>(DescriptorRanges.size() - DescriptorRangeFirst);
+					Parameters[ParameterIndex].DescriptorTable.pDescriptorRanges	= &DescriptorRanges[DescriptorRangeFirst];
 				} break;
 
 				default:
@@ -195,12 +206,14 @@ namespace Eternal
 				StaticSamplers[StaticSamplerIndex].RegisterSpace	= 0;
 				StaticSamplers[StaticSamplerIndex].ShaderVisibility	= ConvertRootSignatureAccessToD3D12ShaderVisibility(CurrentAccess);
 			}
-
-			RootSignatureDesc.NumParameters		= static_cast<UINT>(Parameters.size());
-			RootSignatureDesc.pParameters		= Parameters.data();
-			RootSignatureDesc.NumStaticSamplers	= static_cast<UINT>(StaticSamplers.size());
-			RootSignatureDesc.pStaticSamplers	= StaticSamplers.data();
-			RootSignatureDesc.Flags				= Flags;
+			
+			D3D12_VERSIONED_ROOT_SIGNATURE_DESC RootVersionedSignatureDesc;
+			RootVersionedSignatureDesc.Version						= D3D_ROOT_SIGNATURE_VERSION_1_1;
+			RootVersionedSignatureDesc.Desc_1_1.NumParameters		= static_cast<UINT>(Parameters.size());
+			RootVersionedSignatureDesc.Desc_1_1.pParameters			= Parameters.data();
+			RootVersionedSignatureDesc.Desc_1_1.NumStaticSamplers	= static_cast<UINT>(StaticSamplers.size());
+			RootVersionedSignatureDesc.Desc_1_1.pStaticSamplers		= StaticSamplers.data();
+			RootVersionedSignatureDesc.Desc_1_1.Flags				= Flags;
 
 #ifdef ETERNAL_DEBUG
 			// Check inconsistent root signature (graphics and compute at the same time)
@@ -221,7 +234,7 @@ namespace Eternal
 
 			HRESULT hr;
 			VerifySuccess(
-				hr = D3D12SerializeRootSignature(&RootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &RootSignatureBlob, &ErrorBlob)
+				hr = D3D12SerializeVersionedRootSignature(&RootVersionedSignatureDesc, &RootSignatureBlob, &ErrorBlob)
 			);
 
 			if (hr != S_OK)
@@ -229,11 +242,6 @@ namespace Eternal
 				std::string ErrorMessage(static_cast<char*>(ErrorBlob->GetBufferPointer()), ErrorBlob->GetBufferSize());
 				LogWrite(LogError, LogGraphics, ErrorMessage);
 				ETERNAL_BREAK();
-			}
-
-			{
-				std::string RootSignatureContent(static_cast<char*>(RootSignatureBlob->GetBufferPointer()), RootSignatureBlob->GetBufferSize());
-				LogWrite(LogInfo, LogGraphics, RootSignatureContent);
 			}
 
 			VerifySuccess(
@@ -246,8 +254,17 @@ namespace Eternal
 				)
 			);
 
-			RootSignatureBlob->Release();
-			ErrorBlob->Release();
+			if (RootSignatureBlob)
+			{
+				RootSignatureBlob->Release();
+				RootSignatureBlob = nullptr;
+			}
+
+			if (ErrorBlob)
+			{
+				ErrorBlob->Release();
+				ErrorBlob = nullptr;
+			}
 		}
 
 		D3D12RootSignature::~D3D12RootSignature()
