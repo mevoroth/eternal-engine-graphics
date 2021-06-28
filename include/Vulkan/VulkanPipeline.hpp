@@ -19,7 +19,7 @@ namespace Eternal
 				_In_ const PipelineCreateInformation& InPipelineCreateInformation
 			);
 
-			vk::Pipeline& GetVulkanPipeline() { return _Pipeline; }
+			const vk::Pipeline& GetVulkanPipeline() const { return _Pipeline; }
 
 		private:
 			vk::Pipeline _Pipeline;

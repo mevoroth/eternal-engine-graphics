@@ -9,6 +9,7 @@ namespace Eternal
 	{
 		class CommandAllocator;
 		class RenderPass;
+		class Pipeline;
 
 		class CommandList
 		{
@@ -27,6 +28,10 @@ namespace Eternal
 			virtual void EndRenderPass() = 0;
 
 			virtual void Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) = 0;
+
+			virtual void SetGraphicsPipeline(_In_ const Pipeline& InPipeline) = 0;
+			virtual void DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount = 1, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t FirstInstance = 0) = 0;
+			virtual void DrawIndexedInstanced(_In_ uint32_t InIndexCountPerInstance, _In_ uint32_t InInstanceCount = 1, _In_ uint32_t InFirstIndex = 0, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t InFirstInstance = 0) = 0;
 
 			inline CommandAllocator& GetCommandAllocator() { return _CommandAllocator; }
 

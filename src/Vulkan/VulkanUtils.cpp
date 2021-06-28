@@ -7,8 +7,10 @@
 #include "Graphics/BlendState.hpp"
 #include "Graphics/Sampler.hpp"
 #include "Graphics/RenderPass.hpp"
+#include "Graphics/Pipeline.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 #include "Math/Math.hpp"
+#include <cstdlib>
 
 namespace Eternal
 {
@@ -93,6 +95,52 @@ namespace Eternal
 				vk::AttachmentStoreOp::eStore
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_ATTACHMENT_STORE_OPERATORS) == static_cast<int32_t>(StoreOperator::COUNT), "Mismatch between abstraction and vulkan attachment store operators");
+
+			static constexpr vk::PrimitiveTopology VULKAN_PRIMITIVE_TOPOLOGIES[] =
+			{
+				vk::PrimitiveTopology::ePointList,
+				vk::PrimitiveTopology::eLineList,
+				vk::PrimitiveTopology::eLineStrip,
+				vk::PrimitiveTopology::eTriangleList,
+				vk::PrimitiveTopology::eTriangleStrip,
+				vk::PrimitiveTopology::eLineListWithAdjacency,
+				vk::PrimitiveTopology::eLineStripWithAdjacency,
+				vk::PrimitiveTopology::eTriangleListWithAdjacency,
+				vk::PrimitiveTopology::eTriangleStripWithAdjacency,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList,
+				vk::PrimitiveTopology::ePatchList
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_PRIMITIVE_TOPOLOGIES) == static_cast<int32_t>(PrimitiveTopology::PRIMITIVE_TOPOLOGY_COUNT), "Mismatch between abstraction and vulkan primitive topologies");
 
 			static constexpr TransitionState CPURead_CPUWrite_State		= TransitionState::TRANSITION_CPU_READ
 																		| TransitionState::TRANSITION_CPU_WRITE;
@@ -402,6 +450,11 @@ namespace Eternal
 				PipelineStageFlags |= ((InTransitionState & UndefinedPipelineState) != TransitionState::TRANSITION_UNDEFINED)	? ConvertCommandTypeToPipelineStageFlags(InCommandType)	: vk::PipelineStageFlagBits::eNoneKHR;
 				
 				return PipelineStageFlags;
+			}
+
+			vk::PrimitiveTopology ConvertPrimitiveTopologyToVulkanPrimitiveTopology(const PrimitiveTopology& InPrimitiveTopology)
+			{
+				return VULKAN_PRIMITIVE_TOPOLOGIES[static_cast<uint32_t>(InPrimitiveTopology)];
 			}
 		}
 	}

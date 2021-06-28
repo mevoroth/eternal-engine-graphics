@@ -1,7 +1,5 @@
 #include "d3d12/D3D12Pipeline.hpp"
 
-#include <d3d12.h>
-
 #include "Graphics/Viewport.hpp"
 #include "Graphics/DepthStencil.hpp"
 #include "Graphics/DepthTest.hpp"
@@ -14,6 +12,7 @@
 #include "d3d12/D3D12View.hpp"
 #include "d3d12/D3D12Format.hpp"
 #include "d3d12/D3D12Utils.hpp"
+#include <string>
 
 namespace Eternal
 {
@@ -26,7 +25,8 @@ namespace Eternal
 			_In_ const PipelineCreateInformation& InPipelineCreateInformation
 		)
 			: Pipeline(InPipelineCreateInformation)
-			, _RootSignature(InPipelineCreateInformation.PipelineRootSignature)
+			, _RootSignature(static_cast<D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature))
+			, _PrimitiveTopology(ConvertPrimitiveTopologyToD3D12PrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology))
 		{
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
 
@@ -38,7 +38,7 @@ namespace Eternal
 			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements = static_cast<D3D12InputLayout&>(InPipelineCreateInformation.PipelineInputLayout).GetInputElements();
 			PipelineStateDesc.InputLayout.pInputElementDescs	= InputElements.size() ? InputElements.data() : nullptr;
 			PipelineStateDesc.InputLayout.NumElements			= static_cast<UINT>(InputElements.size());
-			PipelineStateDesc.pRootSignature					= static_cast<D3D12RootSignature&>(_RootSignature).GetD3D12RootSignature();
+			PipelineStateDesc.pRootSignature					= _RootSignature.GetD3D12RootSignature();
 	
 			static_cast<D3D12Shader&>(InPipelineCreateInformation.VS).GetD3D12Shader(PipelineStateDesc.VS);
 			static_cast<D3D12Shader&>(InPipelineCreateInformation.PS).GetD3D12Shader(PipelineStateDesc.PS);
@@ -57,7 +57,7 @@ namespace Eternal
 
 			PipelineStateDesc.RasterizerState.FillMode				= D3D12_FILL_MODE_SOLID;
 			PipelineStateDesc.RasterizerState.CullMode				= D3D12_CULL_MODE_BACK;
-			PipelineStateDesc.RasterizerState.FrontCounterClockwise	= FALSE;
+			PipelineStateDesc.RasterizerState.FrontCounterClockwise	= TRUE;
 			PipelineStateDesc.RasterizerState.DepthBias				= 0;
 			PipelineStateDesc.RasterizerState.DepthBiasClamp		= 0.0f;
 			PipelineStateDesc.RasterizerState.SlopeScaledDepthBias	= 0.f;
@@ -108,7 +108,7 @@ namespace Eternal
 			PipelineStateDesc.NumRenderTargets					= static_cast<UINT>(InRenderTargets.size());
 
 			PipelineStateDesc.IBStripCutValue					= D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
-			PipelineStateDesc.PrimitiveTopologyType				= D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+			PipelineStateDesc.PrimitiveTopologyType				= ConvertPrimitiveTopologyToD3D12PrimitiveTopologyType(InPipelineCreateInformation.PipelinePrimitiveTopology);
 
 			const View* DepthStencilView						= InPipelineCreateInformation.PipelineRenderPass.GetDepthStencilRenderTarget();
 			PipelineStateDesc.DSVFormat							= DepthStencilView ? ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format : DXGI_FORMAT_UNKNOWN;
@@ -130,6 +130,12 @@ namespace Eternal
 					__uuidof(ID3D12PipelineState),
 					(void**)&_PipelineState
 				)
+			);
+
+			std::string PipelineStateName = "VS_" + InPipelineCreateInformation.VS.GetName() + " PS_" + InPipelineCreateInformation.PS.GetName();
+			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
+			VerifySuccess(
+				_PipelineState->SetName(UTF8PipelineStateName.c_str())
 			);
 		}
 	}

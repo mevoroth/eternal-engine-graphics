@@ -7,6 +7,7 @@
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanResource.hpp"
 #include "Vulkan/VulkanView.hpp"
+#include "Vulkan/VulkanPipeline.hpp"
 #include <array>
 
 namespace Eternal
@@ -158,6 +159,35 @@ namespace Eternal
 				0,  nullptr,
 				BufferTransitionsCount, BufferTransitionsCount > 0 ? BufferTransitions.data() : nullptr,
 				ImageTransitionsCount, ImageTransitionsCount > 0 ? ImageTransitions.data() : nullptr
+			);
+		}
+
+		void VulkanCommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
+		{
+			_CommandBuffer.bindPipeline(
+				vk::PipelineBindPoint::eGraphics,
+				static_cast<const VulkanPipeline&>(InPipeline).GetVulkanPipeline()
+			);
+		}
+
+		void VulkanCommandList::DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
+		{
+			_CommandBuffer.draw(
+				InVertexCountPerInstance,
+				InInstanceCount,
+				InFirstVertex,
+				InFirstInstance
+			);
+		}
+
+		void VulkanCommandList::DrawIndexedInstanced(_In_ uint32_t InIndexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstIndex /* = 0 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
+		{
+			_CommandBuffer.drawIndexed(
+				InIndexCountPerInstance,
+				InInstanceCount,
+				InFirstIndex,
+				InFirstVertex,
+				InFirstInstance
 			);
 		}
 	}

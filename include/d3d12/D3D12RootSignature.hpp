@@ -42,7 +42,7 @@ namespace Eternal
 			
 			~D3D12RootSignature();
 
-			ID3D12RootSignature* GetD3D12RootSignature() { return _RootSignature; }
+			ID3D12RootSignature* GetD3D12RootSignature() const { return _RootSignature; }
 
 		private:
 			ID3D12RootSignature* _RootSignature = nullptr;

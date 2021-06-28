@@ -59,7 +59,7 @@ VulkanPipeline::VulkanPipeline(
 
 	vk::PipelineInputAssemblyStateCreateInfo InputAssemblyStateInfo(
 		vk::PipelineInputAssemblyStateCreateFlagBits(),
-		vk::PrimitiveTopology::eTriangleList
+		ConvertPrimitiveTopologyToVulkanPrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology)
 	);
 
 	vk::PipelineTessellationStateCreateInfo TessellationStateInfo;
@@ -72,13 +72,10 @@ VulkanPipeline::VulkanPipeline(
 		vk::CullModeFlagBits::eBack
 	).setLineWidth(1.0f);
 
-	const Viewport& Viewport = InPipelineCreateInformation.PipelineRenderPass.GetViewport();
 
 	vk::Viewport ViewportInfo(
 		float(Viewport.GetX()),
-		float(Viewport.GetY()),
 		float(Viewport.GetWidth()),
-		float(Viewport.GetHeight()),
 		0.0f, 1.0f
 	);
 

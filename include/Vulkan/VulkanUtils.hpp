@@ -22,6 +22,7 @@ namespace Eternal
 		enum class TransitionState;
 		enum class LoadOperator;
 		enum class StoreOperator;
+		enum class PrimitiveTopology;
 		class BlendState;
 		class Viewport;
 
@@ -51,6 +52,7 @@ namespace Eternal
 			vk::AccessFlagBits ConvertTransitionStateToVulkanAccessFlags(_In_ const TransitionState& InTransitionState);
 			vk::ImageLayout ConvertTransitionStateToVulkanImageLayout(_In_ const TransitionState& InTransitionState);
 			vk::PipelineStageFlagBits ConvertCommandTypeAndTransitionStateToPipelineStageFlags(_In_ const CommandType& InCommandType, _In_ const TransitionState& InTransitionState);
+			vk::PrimitiveTopology ConvertPrimitiveTopologyToVulkanPrimitiveTopology(const PrimitiveTopology& InPrimitiveTopology);
 
 			inline vk::PipelineStageFlagBits& operator|=(_Inout_ vk::PipelineStageFlagBits& InOutPipelineStageFlags, _In_ const vk::PipelineStageFlagBits& InPipelineStageFlags)
 			{

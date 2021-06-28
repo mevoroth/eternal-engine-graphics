@@ -26,6 +26,7 @@ namespace Eternal
 		enum class StencilOperator;
 		enum class RootSignatureAccess;
 		enum class RootSignatureParameterType;
+		enum class PrimitiveTopology;
 
 		constexpr D3D12_RENDER_TARGET_BLEND_DESC	DefaultD3D12RenderTargetBlendDesc =
 		{
@@ -67,6 +68,8 @@ namespace Eternal
 			void ConvertBorderColorToFloats(_In_ const BorderColor& InBorderColor, _Out_ float OutColor[4]);
 			D3D12_STATIC_BORDER_COLOR ConvertBorderColorToD3D12StaticBorderColor(_In_ const BorderColor& InBorderColor);
 			D3D12_RESOURCE_STATES ConvertTransitionStateToD3D12ResourceStates(const TransitionState& InTransitionState);
+			D3D12_PRIMITIVE_TOPOLOGY_TYPE ConvertPrimitiveTopologyToD3D12PrimitiveTopologyType(const PrimitiveTopology& InPrimitiveTopology);
+			D3D12_PRIMITIVE_TOPOLOGY ConvertPrimitiveTopologyToD3D12PrimitiveTopology(const PrimitiveTopology& InPrimitiveTopology);
 		}
 	}
 }

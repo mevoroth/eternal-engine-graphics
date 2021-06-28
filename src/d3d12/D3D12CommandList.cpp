@@ -9,6 +9,8 @@
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Format.hpp"
 #include "d3d12/D3D12Resource.hpp"
+#include "d3d12/D3D12Pipeline.hpp"
+#include "d3d12/D3D12RootSignature.hpp"
 
 namespace Eternal
 {
@@ -128,6 +130,30 @@ namespace Eternal
 				DepthStencilView ? &RenderPassDepthStencilDesc : nullptr,
 				D3D12_RENDER_PASS_FLAG_NONE
 			);
+
+			const Viewport& InViewport = InRenderPass.GetViewport();
+			D3D12_VIEWPORT ViewportInformation;
+
+			ViewportInformation.TopLeftX	= InViewport.GetX();
+			ViewportInformation.TopLeftY	= InViewport.GetY();
+			ViewportInformation.Width		= InViewport.GetWidth();
+			ViewportInformation.Height		= InViewport.GetHeight();
+			ViewportInformation.MinDepth	= 0.0f;
+			ViewportInformation.MaxDepth	= 1.0f;
+
+			_GraphicCommandList5->RSSetViewports(
+				1, &ViewportInformation
+			);
+
+			D3D12_RECT ScissorRectangle;
+			ScissorRectangle.left			= InViewport.GetX();
+			ScissorRectangle.top			= InViewport.GetY();
+			ScissorRectangle.right			= InViewport.GetWidth();
+			ScissorRectangle.bottom			= InViewport.GetHeight();
+
+			_GraphicCommandList5->RSSetScissorRects(
+				1, &ScissorRectangle
+			);
 		}
 
 		void D3D12CommandList::EndRenderPass()
@@ -162,6 +188,41 @@ namespace Eternal
 			_GraphicCommandList5->ResourceBarrier(
 				InResourceTransitionsCount,
 				ResourceBarriers.data()
+			);
+		}
+
+		void D3D12CommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
+		{
+			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
+			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
+
+			_GraphicCommandList5->SetGraphicsRootSignature(
+				InD3DRootSignature.GetD3D12RootSignature()
+			);
+			_GraphicCommandList5->SetPipelineState(
+				InD3DPipeline.GetD3D12PipelineState()
+			);
+			_GraphicCommandList5->IASetPrimitiveTopology(InD3DPipeline.GetD3D12PrimitiveTopology());
+		}
+
+		void D3D12CommandList::DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
+		{
+			_GraphicCommandList5->DrawInstanced(
+				InVertexCountPerInstance,
+				InInstanceCount,
+				InFirstVertex,
+				InFirstInstance
+			);
+		}
+
+		void D3D12CommandList::DrawIndexedInstanced(_In_ uint32_t InIndexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstIndex /* = 0 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
+		{
+			_GraphicCommandList5->DrawIndexedInstanced(
+				InIndexCountPerInstance,
+				InInstanceCount,
+				InFirstIndex,
+				InFirstVertex,
+				InFirstInstance
 			);
 		}
 	}
