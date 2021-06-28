@@ -53,7 +53,7 @@ namespace Eternal
 			_GraphicCommandList5->Close();
 		}
 
-		void D3D12CommandList::BeginRenderPass(RenderPass& InRenderPass)
+		void D3D12CommandList::BeginRenderPass(_In_ const RenderPass& InRenderPass)
 		{
 			using namespace Eternal::Graphics::D3D12;
 
@@ -73,9 +73,7 @@ namespace Eternal
 				if (CurrentRenderTarget.Operator.Load == LoadOperator::CLEAR)
 				{
 					RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Format	= D3D12_FORMATS[static_cast<int32_t>(CurrentRenderTarget.RenderTarget->GetViewFormat())].Format;
-					CurrentRenderTarget.RenderTarget->GetClearValue(
-						RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Color
-					);
+					memcpy(RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Color, CurrentRenderTarget.ClearValue, sizeof(float) * ETERNAL_ARRAYSIZE(CurrentRenderTarget.ClearValue));
 				}
 
 				RenderPassRenderTargetsDescs[RenderTargetIndex].EndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(CurrentRenderTarget.Operator.Store);

@@ -20,7 +20,7 @@ namespace Eternal
 			virtual void Begin() override final;
 			virtual void End() override final;
 			
-			virtual void BeginRenderPass(RenderPass& InRenderPass) override final;
+			virtual void BeginRenderPass(_In_ const RenderPass& InRenderPass) override final;
 			virtual void EndRenderPass() override final;
 
 			virtual void Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override final;

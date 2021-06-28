@@ -54,13 +54,27 @@ namespace Eternal
 			_CommandBuffer.end();
 		}
 
-		void VulkanCommandList::BeginRenderPass(RenderPass& InRenderPass)
+		void VulkanCommandList::BeginRenderPass(const RenderPass& InRenderPass)
 		{
+			std::array<vk::ClearValue, MAX_RENDER_TARGETS> ClearValues;
+			ClearValues.fill(vk::ClearValue());
+			std::array<vk::ClearColorValue, MAX_RENDER_TARGETS> ClearColorValues;
+
+			const vector<RenderTargetInformation>& InRenderTargets = InRenderPass.GetRenderTargets();
+			for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < InRenderTargets.size(); ++RenderTargetIndex)
+			{
+				memcpy(ClearColorValues[RenderTargetIndex].float32.data(), InRenderTargets[RenderTargetIndex].ClearValue, sizeof(float) * ClearColorValues[RenderTargetIndex].float32.size());
+				
+				ClearValues[RenderTargetIndex] = vk::ClearValue(
+					ClearColorValues[RenderTargetIndex]
+				);
+			}
+
 			vk::RenderPassBeginInfo RenderPassInfo(
-				static_cast<VulkanRenderPass&>(InRenderPass).GetVulkanRenderPass(),
-				static_cast<VulkanRenderPass&>(InRenderPass).GetFrameBuffer(),
+				static_cast<const VulkanRenderPass&>(InRenderPass).GetVulkanRenderPass(),
+				static_cast<const VulkanRenderPass&>(InRenderPass).GetFrameBuffer(),
 				Vulkan::ConvertViewportToRect2D(InRenderPass.GetViewport()),
-				0, nullptr
+				static_cast<uint32_t>(InRenderTargets.size()), ClearValues.data()
 			);
 			_CommandBuffer.beginRenderPass(
 				&RenderPassInfo, vk::SubpassContents::eInline

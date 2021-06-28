@@ -24,10 +24,10 @@ namespace Eternal
 			virtual void Begin() override final;
 			virtual void End() override final;
 
-			virtual void BeginRenderPass(RenderPass& InRenderPass) override final;
+			virtual void BeginRenderPass(const RenderPass& InRenderPass) override final;
 			virtual void EndRenderPass() override final;
 
-			virtual void Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override;
+			virtual void Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override final;
 
 			inline vk::CommandBuffer& GetVulkanCommandBuffer() { return _CommandBuffer; }
 			inline VulkanCommandAllocator& GetVulkanCommandAllocator() { return static_cast<VulkanCommandAllocator&>(GetCommandAllocator()); }
