@@ -34,22 +34,7 @@
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
       <Filter>Vulkan</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Constant.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Context.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\ContextFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\DescriptorTable.h">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Device.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Fence.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\Heap.hpp">
@@ -58,49 +43,7 @@
     <ClInclude Include="include\Graphics_deprecated\HeapFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\IndexBuffer.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\IndexBufferFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\MaterialProperty.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Pipeline.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Renderer.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\RendererFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\RenderTargetFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Resource.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\ShaderFactoryFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\StructuredBuffer.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\StructuredBufferFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\Texture.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\VertexBuffer.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\VertexBufferFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\ViewportFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\BlendState.hpp">
@@ -117,9 +60,6 @@
     </ClInclude>
     <ClInclude Include="include\Graphics\DepthStencil.hpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\DepthStencilFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\Viewport.hpp">
       <Filter>Graphics</Filter>
@@ -325,6 +265,9 @@
     <ClInclude Include="include\Graphics\PipelineFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Pipeline.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -336,37 +279,13 @@
     <ClCompile Include="src\Vulkan\VulkanUtils.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\Device.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\Heap.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\HeapFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\MaterialProperty.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\Renderer.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\RendererFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\RenderTargetFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\ShaderFactoryFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\StructuredBufferFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\Texture.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\ViewportFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\BlendState.cpp">
@@ -383,9 +302,6 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\DepthStencil.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\DepthStencilFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Viewport.cpp">
       <Filter>Graphics</Filter>
@@ -553,6 +469,9 @@
       <Filter>d3d12</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\PipelineFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\InputLayout.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

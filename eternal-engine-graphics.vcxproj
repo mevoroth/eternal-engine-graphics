@@ -57,6 +57,7 @@
     <ClInclude Include="include\Graphics\Format.hpp" />
     <ClInclude Include="include\Graphics\InputLayout.hpp" />
     <ClInclude Include="include\Graphics\InputLayoutFactory.hpp" />
+    <ClInclude Include="include\Graphics\Pipeline.hpp" />
     <ClInclude Include="include\Graphics\PipelineFactory.hpp" />
     <ClInclude Include="include\Graphics\RenderPass.hpp" />
     <ClInclude Include="include\Graphics\RenderPassFactory.hpp" />
@@ -76,36 +77,10 @@
     <ClInclude Include="include\Graphics\Types\MemoryType.hpp" />
     <ClInclude Include="include\Graphics\View.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\Constant.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\Context.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\ContextFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\DepthStencilFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\DescriptorTable.h" />
-    <ClInclude Include="include\Graphics_deprecated\Device.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\Fence.hpp" />
     <ClInclude Include="include\Graphics_deprecated\Heap.hpp" />
     <ClInclude Include="include\Graphics_deprecated\HeapFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\IndexBuffer.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\IndexBufferFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\MaterialProperty.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\Pipeline.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\Renderer.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\RendererFactory.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\RenderTargetFactory.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Resource.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\ShaderFactoryFactory.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\StructuredBuffer.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\StructuredBufferFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\Texture.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\VertexBuffer.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\VertexBufferFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\ViewportFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
@@ -158,6 +133,7 @@
     <ClCompile Include="src\Graphics\DepthTest.cpp" />
     <ClCompile Include="src\Graphics\DeviceFactory.cpp" />
     <ClCompile Include="src\Graphics\FenceFactory.cpp" />
+    <ClCompile Include="src\Graphics\InputLayout.cpp" />
     <ClCompile Include="src\Graphics\InputLayoutFactory.cpp" />
     <ClCompile Include="src\Graphics\PipelineFactory.cpp" />
     <ClCompile Include="src\Graphics\RenderPass.cpp" />
@@ -173,24 +149,9 @@
     <ClCompile Include="src\Graphics\Types\MemoryType.cpp" />
     <ClCompile Include="src\Graphics\View.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\DepthStencilFactory.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\Device.cpp" />
     <ClCompile Include="src\Graphics_deprecated\Heap.cpp" />
     <ClCompile Include="src\Graphics_deprecated\HeapFactory.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\MaterialProperty.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\Renderer.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\RendererFactory.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\RenderTargetFactory.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\ShaderFactoryFactory.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\StructuredBufferFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\Texture.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\ViewportFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandList.cpp" />
