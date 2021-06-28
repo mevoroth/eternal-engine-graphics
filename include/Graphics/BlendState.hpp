@@ -81,7 +81,6 @@ namespace Eternal
 		public:
 			BlendState() {}
 			BlendState(_In_ const Blend& Src, _In_ const Blend& Dest, _In_ const BlendOperator& BlendColorOp, _In_ const Blend& SrcAlpha, _In_ const Blend& DestAlpha, _In_ const BlendOperator& BlendAlphaOp, _In_ const BlendChannel& BlendChannelObj);
-			virtual ~BlendState() {}
 
 			inline bool IsEnabled() const								{ return _Enabled; }
 			inline const Blend& GetSource() const						{ return _Source; }
