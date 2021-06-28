@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics_deprecated/Pipeline.hpp"
+#include "Graphics/Pipeline.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 
 struct VkPipeline_T;
@@ -14,7 +14,10 @@ namespace Eternal
 		class VulkanPipeline : public Pipeline
 		{
 		public:
-			VulkanPipeline(Device& InDevice, const PipelineCreateInformation& CreateInformation);
+			VulkanPipeline(
+				_In_ Device& InDevice,
+				_In_ const PipelineCreateInformation& InPipelineCreateInformation
+			);
 
 			vk::Pipeline& GetVulkanPipeline() { return _Pipeline; }
 

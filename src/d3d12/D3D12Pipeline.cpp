@@ -22,26 +22,26 @@ namespace Eternal
 		using namespace Eternal::Graphics::D3D12;
 
 		D3D12Pipeline::D3D12Pipeline(
-			Device& InDevice,
-			const PipelineCreateInformation& CreateInformation
+			_In_ Device& InDevice,
+			_In_ const PipelineCreateInformation& InPipelineCreateInformation
 		)
-			: Pipeline(CreateInformation)
-			, _RootSignature(CreateInformation.PipelineRootSignature)
+			: Pipeline(InPipelineCreateInformation)
+			, _RootSignature(InPipelineCreateInformation.PipelineRootSignature)
 		{
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
 
-			const DepthTest& InDepthTest = CreateInformation.PipelineDepthStencil.GetDepthTest();
-			const StencilTest& InStencilTest = CreateInformation.PipelineDepthStencil.GetStencilTest();
+			const DepthTest& InDepthTest		= InPipelineCreateInformation.PipelineDepthStencil.GetDepthTest();
+			const StencilTest& InStencilTest	= InPipelineCreateInformation.PipelineDepthStencil.GetStencilTest();
 
 			D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc;
 
-			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements = static_cast<D3D12InputLayout&>(CreateInformation.PipelineInputLayout).GetInputElements();
+			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements = static_cast<D3D12InputLayout&>(InPipelineCreateInformation.PipelineInputLayout).GetInputElements();
 			PipelineStateDesc.InputLayout.pInputElementDescs	= InputElements.size() ? InputElements.data() : nullptr;
 			PipelineStateDesc.InputLayout.NumElements			= static_cast<UINT>(InputElements.size());
 			PipelineStateDesc.pRootSignature					= static_cast<D3D12RootSignature&>(_RootSignature).GetD3D12RootSignature();
 	
-			static_cast<D3D12Shader&>(CreateInformation.VS).GetD3D12Shader(PipelineStateDesc.VS);
-			static_cast<D3D12Shader&>(CreateInformation.PS).GetD3D12Shader(PipelineStateDesc.PS);
+			static_cast<D3D12Shader&>(InPipelineCreateInformation.VS).GetD3D12Shader(PipelineStateDesc.VS);
+			static_cast<D3D12Shader&>(InPipelineCreateInformation.PS).GetD3D12Shader(PipelineStateDesc.PS);
 			PipelineStateDesc.GS.pShaderBytecode	= nullptr;
 			PipelineStateDesc.GS.BytecodeLength		= 0;
 			PipelineStateDesc.DS.pShaderBytecode	= nullptr;
@@ -85,50 +85,46 @@ namespace Eternal
 			PipelineStateDesc.BlendState.AlphaToCoverageEnable	= FALSE;
 			PipelineStateDesc.BlendState.IndependentBlendEnable	= TRUE;
 
-			const LogicBlend& InLogicBlend = CreateInformation.PipelineRenderPass.GetLogicBlend();
+			const LogicBlend& InLogicBlend = InPipelineCreateInformation.PipelineRenderPass.GetLogicBlend();
+			const vector<RenderTargetInformation>& InRenderTargets = InPipelineCreateInformation.PipelineRenderPass.GetRenderTargets();
 
 			uint32_t RenderTargetIndex = 0;
-			for (; RenderTargetIndex < CreateInformation.PipelineRenderPass.GetRenderTargets().size(); ++RenderTargetIndex)
+			for (; RenderTargetIndex < InRenderTargets.size(); ++RenderTargetIndex)
 			{
-				PipelineStateDesc.BlendState.RenderTarget[RenderTargetIndex] = CreateD3D12RenderTargetBlendDesc(
-					CreateInformation.PipelineRenderPass.GetRenderTargets()[RenderTargetIndex].RenderTargetBlendState,
+				PipelineStateDesc.BlendState.RenderTarget[RenderTargetIndex]	= CreateD3D12RenderTargetBlendDesc(
+					InRenderTargets[RenderTargetIndex].RenderTargetBlendState,
 					InLogicBlend
 				);
+				PipelineStateDesc.RTVFormats[RenderTargetIndex]					= ConvertFormatToD3D12Format(InRenderTargets[RenderTargetIndex].RenderTarget->GetViewFormat()).Format;
 			}
 
 			// Fill-in unused rendertargets
 			for (; RenderTargetIndex < ETERNAL_ARRAYSIZE(PipelineStateDesc.BlendState.RenderTarget); ++RenderTargetIndex)
-				PipelineStateDesc.BlendState.RenderTarget[RenderTargetIndex] = DefaultD3D12RenderTargetBlendDesc;
-
-			PipelineStateDesc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
-
-			PipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-
-			D3D12RenderPass& InD3D12RenderPass = static_cast<D3D12RenderPass&>(CreateInformation.PipelineRenderPass);
-			PipelineStateDesc.NumRenderTargets = static_cast<UINT>(InD3D12RenderPass.GetRenderTargets().size());
-			RenderTargetIndex = 0;
-			for (; RenderTargetIndex < static_cast<D3D12RenderPass&>(CreateInformation.PipelineRenderPass).GetRenderTargets().size(); ++RenderTargetIndex)
 			{
-				PipelineStateDesc.RTVFormats[RenderTargetIndex] = D3D12_FORMATS[static_cast<int32_t>(InD3D12RenderPass.GetRenderTargets()[RenderTargetIndex].RenderTarget->GetViewFormat())].Format;
+				PipelineStateDesc.BlendState.RenderTarget[RenderTargetIndex]	= DefaultD3D12RenderTargetBlendDesc;
+				PipelineStateDesc.RTVFormats[RenderTargetIndex]					= DXGI_FORMAT_UNKNOWN;
 			}
-			for (; RenderTargetIndex < ETERNAL_ARRAYSIZE(PipelineStateDesc.RTVFormats); ++RenderTargetIndex)
-			{
-				PipelineStateDesc.RTVFormats[RenderTargetIndex] = DXGI_FORMAT_UNKNOWN;
-			}
-			PipelineStateDesc.DSVFormat	= InD3D12RenderPass.GetDepthStencilRenderTarget() ? D3D12_FORMATS[static_cast<int32_t>(InD3D12RenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format : DXGI_FORMAT_UNKNOWN;
+
+			PipelineStateDesc.NumRenderTargets					= static_cast<UINT>(InRenderTargets.size());
+
+			PipelineStateDesc.IBStripCutValue					= D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
+			PipelineStateDesc.PrimitiveTopologyType				= D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+
+			const View* DepthStencilView						= InPipelineCreateInformation.PipelineRenderPass.GetDepthStencilRenderTarget();
+			PipelineStateDesc.DSVFormat							= DepthStencilView ? ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format : DXGI_FORMAT_UNKNOWN;
 	
-			PipelineStateDesc.SampleDesc.Count		= 1;
-			PipelineStateDesc.SampleDesc.Quality	= 0;
-			PipelineStateDesc.SampleMask			= UINT_MAX;
+			PipelineStateDesc.SampleDesc.Count					= 1;
+			PipelineStateDesc.SampleDesc.Quality				= 0;
+			PipelineStateDesc.SampleMask						= UINT_MAX;
 
-			PipelineStateDesc.NodeMask				= InD3DDevice.GetDeviceMask();
+			PipelineStateDesc.NodeMask							= InD3DDevice.GetDeviceMask();
 
 			PipelineStateDesc.CachedPSO.pCachedBlob				= nullptr;
 			PipelineStateDesc.CachedPSO.CachedBlobSizeInBytes	= 0;
 
-			PipelineStateDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+			PipelineStateDesc.Flags								= D3D12_PIPELINE_STATE_FLAG_NONE;
 
-			D3D12::VerifySuccess(
+			VerifySuccess(
 				InD3DDevice.GetD3D12Device()->CreateGraphicsPipelineState(
 					&PipelineStateDesc,
 					__uuidof(ID3D12PipelineState),
