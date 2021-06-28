@@ -8,7 +8,7 @@
 #include "Vulkan/VulkanRootSignature.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanShader.hpp"
-#include "Vulkan_deprecated/VulkanInputLayout.hpp"
+#include "Vulkan/VulkanInputLayout.hpp"
 
 using namespace Eternal::Graphics;
 

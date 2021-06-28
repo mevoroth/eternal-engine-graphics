@@ -1,4 +1,4 @@
-#include "Graphics_deprecated/PipelineFactory.hpp"
+#include "Graphics/PipelineFactory.hpp"
 
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Types/DeviceType.hpp"
@@ -10,17 +10,17 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		Pipeline* CreatePipeline(_In_ GraphicsContext& Context, _In_ const PipelineCreateInformation& CreateInformation)
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation)
 		{
-			switch (Context.GetDevice().GetDeviceType())
+			switch (InContext.GetDevice().GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
-				return new D3D12Pipeline(Context.GetDevice(), CreateInformation);
+				return new D3D12Pipeline(InContext.GetDevice(), InPipelineCreateInformation);
 #endif
 
 			case DeviceType::VULKAN:
-				return new VulkanPipeline(Context.GetDevice(), CreateInformation);
+				return new VulkanPipeline(InContext.GetDevice(), InPipelineCreateInformation);
 
 			default:
 				ETERNAL_BREAK();
