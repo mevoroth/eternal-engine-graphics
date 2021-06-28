@@ -268,6 +268,12 @@
     <ClInclude Include="include\Graphics\Pipeline.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanViewport.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ViewportFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -472,6 +478,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\InputLayout.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ViewportFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

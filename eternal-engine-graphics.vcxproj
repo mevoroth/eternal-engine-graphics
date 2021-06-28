@@ -77,6 +77,7 @@
     <ClInclude Include="include\Graphics\Types\MemoryType.hpp" />
     <ClInclude Include="include\Graphics\View.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
+    <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
     <ClInclude Include="include\Graphics_deprecated\DescriptorTable.h" />
     <ClInclude Include="include\Graphics_deprecated\Heap.hpp" />
     <ClInclude Include="include\Graphics_deprecated\HeapFactory.hpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="include\Vulkan\VulkanSwapChain.hpp" />
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp" />
     <ClInclude Include="include\Vulkan\VulkanView.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanViewport.hpp" />
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +151,7 @@
     <ClCompile Include="src\Graphics\Types\MemoryType.cpp" />
     <ClCompile Include="src\Graphics\View.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
+    <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\Heap.cpp" />
     <ClCompile Include="src\Graphics_deprecated\HeapFactory.cpp" />
     <ClCompile Include="src\Graphics_deprecated\Texture.cpp" />
