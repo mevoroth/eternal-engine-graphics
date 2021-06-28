@@ -41,7 +41,7 @@ namespace Eternal
 				InD3DDevice->CreateDescriptorHeap(
 					&SamplerDescriptorHeapDesc,
 					__uuidof(ID3D12DescriptorHeap),
-					(void**)&_CBV_SRV_UAV_DescriptorHeap
+					(void**)&_SamplerDescriptorHeap
 				)
 			);
 
