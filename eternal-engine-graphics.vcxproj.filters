@@ -7,12 +7,6 @@
     <Filter Include="NextGenGraphics">
       <UniqueIdentifier>{ec393388-7bed-46d1-b272-835f9135b4d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Vulkan_deprecated">
-      <UniqueIdentifier>{ff1ff517-f3a5-4b5f-8c70-cb8fd7fb4706}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="d3d12_deprecated">
-      <UniqueIdentifier>{16e4b1e5-700a-4ebb-8d36-5aa4d71913e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Vulkan">
       <UniqueIdentifier>{cbd7f7d3-0270-41b2-b4a6-b9591a0a3b99}</UniqueIdentifier>
     </Filter>
@@ -34,20 +28,8 @@
     <ClInclude Include="include\Window\Window.hpp">
       <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="include\NextGenGraphics\RenderTarget.hpp">
-      <Filter>NextGenGraphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp">
       <Filter>NextGenGraphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\NextGenGraphics\SamplerFactory.hpp">
-      <Filter>NextGenGraphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vulkan_deprecated\VulkanInputLayout.hpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\d3d12_deprecated\D3D12InputLayout.hpp">
-      <Filter>d3d12_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
       <Filter>Vulkan</Filter>
@@ -82,19 +64,10 @@
     <ClInclude Include="include\Graphics_deprecated\IndexBufferFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\InputLayout.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\InputLayoutFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\MaterialProperty.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\Pipeline.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\PipelineFactory.hpp">
       <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics_deprecated\Renderer.hpp">
@@ -334,6 +307,24 @@
     <ClInclude Include="include\Graphics\RootSignatureFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\SamplerFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\InputLayout.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\InputLayoutFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanInputLayout.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12InputLayout.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\PipelineFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -341,15 +332,6 @@
     </ClCompile>
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp">
       <Filter>NextGenGraphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\NextGenGraphics\SamplerFactory.cpp">
-      <Filter>NextGenGraphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan_deprecated\VulkanInputLayout.cpp">
-      <Filter>Vulkan_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\d3d12_deprecated\D3D12InputLayout.cpp">
-      <Filter>d3d12_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanUtils.cpp">
       <Filter>Vulkan</Filter>
@@ -363,13 +345,7 @@
     <ClCompile Include="src\Graphics_deprecated\HeapFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\InputLayoutFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\MaterialProperty.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\PipelineFactory.cpp">
       <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics_deprecated\Renderer.cpp">
@@ -562,6 +538,21 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\CommandUtils.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SamplerFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\InputLayoutFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanInputLayout.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12InputLayout.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\PipelineFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
