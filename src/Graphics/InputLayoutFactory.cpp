@@ -10,7 +10,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		static InputLayout* CreateInputLayout(_In_ Device& InDevice,  _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t DataTypeCount)
+		static InputLayout* CreateInputLayout(_In_ Device& InDevice,  _In_ const VertexDataType DataType[], _In_ uint32_t DataTypeCount)
 		{
 			switch (InDevice.GetDeviceType())
 			{
@@ -28,7 +28,7 @@ namespace Eternal
 			}
 		}
 
-		InputLayout* CreateInputLayout(_In_ GraphicsContext& Context, _In_ const InputLayout::VertexDataType DataType[], _In_ uint32_t DataTypeCount)
+		InputLayout* CreateInputLayout(_In_ GraphicsContext& Context, _In_ const VertexDataType DataType[], _In_ uint32_t DataTypeCount)
 		{
 			return CreateInputLayout(Context.GetDevice(), DataType, DataTypeCount);
 		}
