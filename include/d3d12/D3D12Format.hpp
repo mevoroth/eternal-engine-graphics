@@ -8,6 +8,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class Format;
+
 		struct D3D12Format
 		{
 			D3D12Format(const DXGI_FORMAT& InFormat, uint32_t InSize)
@@ -20,6 +22,6 @@ namespace Eternal
 			uint32_t	Size;
 		};
 
-		extern const D3D12Format D3D12_FORMATS[];
+		const D3D12Format& ConvertFormatToD3D12Format(const Format& InFormat);
 	}
 }

@@ -11,8 +11,8 @@ namespace Eternal
 		public:
 			virtual ~Fence() {}
 
-			virtual void Wait(_In_ Device& DeviceObj) = 0;
-			virtual void Reset(_In_ Device& DeviceObj) = 0;
+			virtual void Wait(_In_ Device& InDevice) = 0;
+			virtual void Reset(_In_ Device& InDevice) = 0;
 		};
 	}
 }

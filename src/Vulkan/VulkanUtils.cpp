@@ -59,7 +59,7 @@ namespace Eternal
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_DESCRIPTOR_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and vulkan descriptor types");
 
-			static constexpr vk::ShaderStageFlags VULKAN_SHADER_STAGE_FLAGS[] =
+			static constexpr vk::ShaderStageFlagBits VULKAN_SHADER_STAGE_FLAGS[] =
 			{
 				vk::ShaderStageFlagBits::eVertex,
 				vk::ShaderStageFlagBits::eTessellationControl,
@@ -161,7 +161,7 @@ namespace Eternal
 				return static_cast<vk::BlendOp>(InBlendOperator);
 			}
 
-			vk::ColorComponentFlags ConvertBlendChannelToVulkanColorComponentFlags(_In_ const BlendChannel& InBlendChannel)
+			vk::ColorComponentFlagBits ConvertBlendChannelToVulkanColorComponentFlags(_In_ const BlendChannel& InBlendChannel)
 			{
 				return static_cast<vk::ColorComponentFlagBits>(InBlendChannel);
 			}
@@ -233,7 +233,7 @@ namespace Eternal
 				return VULKAN_DESCRIPTOR_TYPES[static_cast<int32_t>(InRootSignatureParameterType)];
 			}
 
-			vk::ShaderStageFlags ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InRootSignatureAccess)
+			vk::ShaderStageFlagBits ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InRootSignatureAccess)
 			{
 				ETERNAL_ASSERT(InRootSignatureAccess != RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID);
 				return VULKAN_SHADER_STAGE_FLAGS[static_cast<int32_t>(InRootSignatureAccess)];
@@ -255,7 +255,7 @@ namespace Eternal
 				return InOutAccessFlags;
 			}
 			
-			vk::AccessFlags ConvertTransitionStateToVulkanAccessFlags(_In_ const TransitionState& InTransitionState)
+			vk::AccessFlagBits ConvertTransitionStateToVulkanAccessFlags(_In_ const TransitionState& InTransitionState)
 			{
 				// Resolve destination & resolve source not implemented
 				// Vulkan input attachment read not implemented

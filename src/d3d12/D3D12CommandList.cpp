@@ -63,16 +63,19 @@ namespace Eternal
 
 			std::array<D3D12_RENDER_PASS_RENDER_TARGET_DESC, MAX_RENDER_TARGETS> RenderPassRenderTargetsDescs;
 			RenderPassRenderTargetsDescs.fill(DefaultRenderPassRenderTargetDesc);
-			for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < InRenderPass.GetRenderTargets().size(); ++RenderTargetIndex)
+
+			const vector<RenderTargetInformation>& InRenderTargets = InRenderPass.GetRenderTargets();
+
+			for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < InRenderTargets.size(); ++RenderTargetIndex)
 			{
-				const RenderTargetInformation& CurrentRenderTarget = InRenderPass.GetRenderTargets()[RenderTargetIndex];
+				const RenderTargetInformation& CurrentRenderTarget = InRenderTargets[RenderTargetIndex];
 
 				RenderPassRenderTargetsDescs[RenderTargetIndex].cpuDescriptor			= static_cast<D3D12View*>(CurrentRenderTarget.RenderTarget)->GetD3D12CPUDescriptorHandle();
 
 				RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(CurrentRenderTarget.Operator.Load);
 				if (CurrentRenderTarget.Operator.Load == LoadOperator::CLEAR)
 				{
-					RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Format	= D3D12_FORMATS[static_cast<int32_t>(CurrentRenderTarget.RenderTarget->GetViewFormat())].Format;
+					RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Format	= ConvertFormatToD3D12Format(CurrentRenderTarget.RenderTarget->GetViewFormat()).Format;
 					memcpy(RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Color, CurrentRenderTarget.ClearValue, sizeof(float) * ETERNAL_ARRAYSIZE(CurrentRenderTarget.ClearValue));
 				}
 
@@ -86,23 +89,24 @@ namespace Eternal
 
 			D3D12_RENDER_PASS_DEPTH_STENCIL_DESC RenderPassDepthStencilDesc;
 
-			if (InRenderPass.GetDepthStencilRenderTarget())
+			const View* DepthStencilView = InRenderPass.GetDepthStencilRenderTarget();
+			if (DepthStencilView)
 			{
 				LoadOperator DepthStencilLoadOperator	= InRenderPass.GetDepthStencilOperator().Load;
 				StoreOperator DepthStencilStoreOperator	= InRenderPass.GetDepthStencilOperator().Store;
 
-				RenderPassDepthStencilDesc.cpuDescriptor				= static_cast<const D3D12View*>(InRenderPass.GetDepthStencilRenderTarget())->GetD3D12CPUDescriptorHandle();
+				RenderPassDepthStencilDesc.cpuDescriptor				= static_cast<const D3D12View*>(DepthStencilView)->GetD3D12CPUDescriptorHandle();
 				RenderPassDepthStencilDesc.DepthBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
 				if (DepthStencilLoadOperator == LoadOperator::CLEAR)
 				{
-					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.Format					= D3D12_FORMATS[static_cast<int32_t>(InRenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format;
+					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.Format					= ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format;
 					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Depth		= 0.0f;
 					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
 				}
 				RenderPassDepthStencilDesc.StencilBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
 				if (DepthStencilLoadOperator == LoadOperator::CLEAR)
 				{
-					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.Format				= D3D12_FORMATS[static_cast<int32_t>(InRenderPass.GetDepthStencilRenderTarget()->GetViewFormat())].Format;
+					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.Format				= ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format;
 					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Depth	= 0.0f;
 					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
 				}
@@ -119,9 +123,9 @@ namespace Eternal
 			}
 
 			_GraphicCommandList5->BeginRenderPass(
-				static_cast<UINT>(InRenderPass.GetRenderTargets().size()),
-				InRenderPass.GetRenderTargets().size() > 0 ? RenderPassRenderTargetsDescs.data() : nullptr,
-				InRenderPass.GetDepthStencilRenderTarget() ? &RenderPassDepthStencilDesc : nullptr,
+				static_cast<UINT>(InRenderTargets.size()),
+				InRenderTargets.size() > 0 ? RenderPassRenderTargetsDescs.data() : nullptr,
+				DepthStencilView ? &RenderPassDepthStencilDesc : nullptr,
 				D3D12_RENDER_PASS_FLAG_NONE
 			);
 		}

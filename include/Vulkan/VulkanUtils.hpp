@@ -39,7 +39,7 @@ namespace Eternal
 			vk::StencilOp ConvertStencilOperatorToVulkanStencilOperator(_In_ const StencilTest::StencilOperator& InStencilOperator);
 			vk::BlendFactor ConvertBlendToVulkanBlendFactor(_In_ const Blend& InBlend);
 			vk::BlendOp ConvertBlendOperatorToVulkanBlendOperator(_In_ const BlendOperator& InBlendOperator);
-			vk::ColorComponentFlags ConvertBlendChannelToVulkanColorComponentFlags(_In_ const BlendChannel& InBlendChannel);
+			vk::ColorComponentFlagBits ConvertBlendChannelToVulkanColorComponentFlags(_In_ const BlendChannel& InBlendChannel);
 			vk::BorderColor ConvertBorderColorToVulkanBorderColor(_In_ const BorderColor& InBorderColor);
 			vk::Rect2D ConvertViewportToRect2D(_In_ const Viewport& InViewport);
 			vk::AttachmentLoadOp ConvertLoadOperatorToVulkanAttachmentLoadOperator(_In_ const LoadOperator& InLoadOperator);
@@ -47,8 +47,8 @@ namespace Eternal
 			vk::MemoryPropertyFlagBits ConvertGraphicsMemoryFlagsToMemoryPropertyFlags(_In_ const GraphicsMemoryFlag& InMemoryFlags);
 			void VerifyMemoryPropertyFlags(_In_ const vk::MemoryPropertyFlagBits& Flags);
 			vk::DescriptorType ConvertRootSignatureParameterTypeToVulkanDescriptorType(_In_ const RootSignatureParameterType& InRootSignatureParameterType);
-			vk::ShaderStageFlags ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InAccess);
-			vk::AccessFlags ConvertTransitionStateToVulkanAccessFlags(_In_ const TransitionState& InTransitionState);
+			vk::ShaderStageFlagBits ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InAccess);
+			vk::AccessFlagBits ConvertTransitionStateToVulkanAccessFlags(_In_ const TransitionState& InTransitionState);
 			vk::ImageLayout ConvertTransitionStateToVulkanImageLayout(_In_ const TransitionState& InTransitionState);
 			vk::PipelineStageFlagBits ConvertCommandTypeAndTransitionStateToPipelineStageFlags(_In_ const CommandType& InCommandType, _In_ const TransitionState& InTransitionState);
 

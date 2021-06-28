@@ -30,7 +30,7 @@ namespace Eternal
 			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
 
 			D3D12_RENDER_TARGET_VIEW_DESC D3D12RenderTargetViewDesc;
-			D3D12RenderTargetViewDesc.Format		= D3D12_FORMATS[static_cast<int32_t>(InViewCreateInformation.GraphicsFormat)].Format;
+			D3D12RenderTargetViewDesc.Format		= ConvertFormatToD3D12Format(InViewCreateInformation.GraphicsFormat).Format;
 			D3D12RenderTargetViewDesc.ViewDimension	= D3D12_RTV_DIMENSIONS[static_cast<int32_t>(InViewCreateInformation.ResourceViewRenderTargetType)];
 			
 			switch (InViewCreateInformation.ResourceViewRenderTargetType)
@@ -39,27 +39,29 @@ namespace Eternal
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D_ARRAY:
 				if (InViewCreateInformation.GraphicsResource.IsMultisample())
 				{
-					D3D12RenderTargetViewDesc.ViewDimension = D3D12_RTV_DIMENSION(D3D12RenderTargetViewDesc.ViewDimension + (D3D12_RTV_DIMENSION_TEXTURE2DMS - D3D12_RTV_DIMENSION_TEXTURE2D));
+					D3D12RenderTargetViewDesc.ViewDimension = static_cast<D3D12_RTV_DIMENSION>(D3D12RenderTargetViewDesc.ViewDimension + (D3D12_RTV_DIMENSION_TEXTURE2DMS - D3D12_RTV_DIMENSION_TEXTURE2D));
 				}
 				break;
 			}
+
+			const ViewMetaData& InMetaData = InViewCreateInformation.MetaData;
 
 			switch (InViewCreateInformation.ResourceViewRenderTargetType)
 			{
 			//case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_UNKNOWN:
 			case  ViewRenderTargetType::VIEW_RENDER_TARGET_BUFFER:
-				D3D12RenderTargetViewDesc.Buffer.FirstElement							= InViewCreateInformation.MetaData.RenderTargetViewBuffer.FirstElement;
-				D3D12RenderTargetViewDesc.Buffer.NumElements							= InViewCreateInformation.MetaData.RenderTargetViewBuffer.NumElements;
+				D3D12RenderTargetViewDesc.Buffer.FirstElement							= InMetaData.RenderTargetViewBuffer.FirstElement;
+				D3D12RenderTargetViewDesc.Buffer.NumElements							= InMetaData.RenderTargetViewBuffer.NumElements;
 				break;
 
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_1D:
-				D3D12RenderTargetViewDesc.Texture1D.MipSlice							= InViewCreateInformation.MetaData.RenderTargetViewTexture1D.MipSlice;
+				D3D12RenderTargetViewDesc.Texture1D.MipSlice							= InMetaData.RenderTargetViewTexture1D.MipSlice;
 				break;
 
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_1D_ARRAY:
-				D3D12RenderTargetViewDesc.Texture1DArray.MipSlice						= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.MipSlice;
-				D3D12RenderTargetViewDesc.Texture1DArray.FirstArraySlice				= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.FirstArraySlice;
-				D3D12RenderTargetViewDesc.Texture1DArray.ArraySize						= InViewCreateInformation.MetaData.RenderTargetViewTexture1DArray.ArraySize;
+				D3D12RenderTargetViewDesc.Texture1DArray.MipSlice						= InMetaData.RenderTargetViewTexture1DArray.MipSlice;
+				D3D12RenderTargetViewDesc.Texture1DArray.FirstArraySlice				= InMetaData.RenderTargetViewTexture1DArray.FirstArraySlice;
+				D3D12RenderTargetViewDesc.Texture1DArray.ArraySize						= InMetaData.RenderTargetViewTexture1DArray.ArraySize;
 				break;
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D:
 				if (InViewCreateInformation.GraphicsResource.IsMultisample())
@@ -68,28 +70,28 @@ namespace Eternal
 				}
 				else
 				{
-					D3D12RenderTargetViewDesc.Texture2D.MipSlice						= InViewCreateInformation.MetaData.RenderTargetViewTexture2D.MipSlice;
-					D3D12RenderTargetViewDesc.Texture2D.PlaneSlice						= InViewCreateInformation.MetaData.RenderTargetViewTexture2D.PlaneSlice;
+					D3D12RenderTargetViewDesc.Texture2D.MipSlice						= InMetaData.RenderTargetViewTexture2D.MipSlice;
+					D3D12RenderTargetViewDesc.Texture2D.PlaneSlice						= InMetaData.RenderTargetViewTexture2D.PlaneSlice;
 				}
 				break;
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D_ARRAY:
 				if (InViewCreateInformation.GraphicsResource.IsMultisample())
 				{
-					D3D12RenderTargetViewDesc.Texture2DMSArray.FirstArraySlice			= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.FirstArraySlice;
-					D3D12RenderTargetViewDesc.Texture2DMSArray.ArraySize				= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.ArraySize;
+					D3D12RenderTargetViewDesc.Texture2DMSArray.FirstArraySlice			= InMetaData.RenderTargetViewTexture2DArray.FirstArraySlice;
+					D3D12RenderTargetViewDesc.Texture2DMSArray.ArraySize				= InMetaData.RenderTargetViewTexture2DArray.ArraySize;
 				}
 				else
 				{
-					D3D12RenderTargetViewDesc.Texture2DArray.MipSlice					= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.MipSlice;
-					D3D12RenderTargetViewDesc.Texture2DArray.FirstArraySlice			= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.FirstArraySlice;
-					D3D12RenderTargetViewDesc.Texture2DArray.ArraySize					= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.ArraySize;
-					D3D12RenderTargetViewDesc.Texture2DArray.PlaneSlice					= InViewCreateInformation.MetaData.RenderTargetViewTexture2DArray.PlaneSlice;
+					D3D12RenderTargetViewDesc.Texture2DArray.MipSlice					= InMetaData.RenderTargetViewTexture2DArray.MipSlice;
+					D3D12RenderTargetViewDesc.Texture2DArray.FirstArraySlice			= InMetaData.RenderTargetViewTexture2DArray.FirstArraySlice;
+					D3D12RenderTargetViewDesc.Texture2DArray.ArraySize					= InMetaData.RenderTargetViewTexture2DArray.ArraySize;
+					D3D12RenderTargetViewDesc.Texture2DArray.PlaneSlice					= InMetaData.RenderTargetViewTexture2DArray.PlaneSlice;
 				}
 				break;
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_3D:
-				D3D12RenderTargetViewDesc.Texture3D.MipSlice							= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.MipSlice;
-				D3D12RenderTargetViewDesc.Texture3D.FirstWSlice							= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.FirstWSlice;
-				D3D12RenderTargetViewDesc.Texture3D.WSize								= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.WSize;
+				D3D12RenderTargetViewDesc.Texture3D.MipSlice							= InMetaData.RenderTargetViewTexture3D.MipSlice;
+				D3D12RenderTargetViewDesc.Texture3D.FirstWSlice							= InMetaData.RenderTargetViewTexture3D.FirstWSlice;
+				D3D12RenderTargetViewDesc.Texture3D.WSize								= InMetaData.RenderTargetViewTexture3D.WSize;
 				break;
 			}
 
