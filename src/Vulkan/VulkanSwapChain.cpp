@@ -11,8 +11,6 @@
 #include "Vulkan/VulkanView.hpp"
 #include "Graphics/Format.hpp"
 
-using namespace Eternal::Graphics;
-
 namespace Eternal
 {
 	namespace Graphics
@@ -69,147 +67,147 @@ namespace Eternal
 				PFN_vkGetSwapchainImagesKHR						_vkGetSwapchainImagesKHR;
 			};
 		}
-	}
-}
 
-VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& Context)
-	: SwapChain(Context.GetWindow())
-{
-	using namespace Vulkan;
-
-	Window& WindowObj = Context.GetWindow();
-
-	VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(Context.GetDevice());
-	VulkanPrivate::EternalDispatchLoader EternalLoader(VulkanDeviceObj);
-
-	vk::Win32SurfaceCreateInfoKHR Win32SurfaceInfo(
-		vk::Win32SurfaceCreateFlagBitsKHR(),
-		WindowObj.GetHInstance(),
-		WindowObj.GetWindowHandler()
-	);
-
-	vk::Instance& VulkanInstance = VulkanDeviceObj.GetInstance();
-	VerifySuccess(VulkanInstance.createWin32SurfaceKHR(&Win32SurfaceInfo, nullptr, &_Surface));
-
-	vk::PhysicalDevice& VulkanPhysicalDevice = VulkanDeviceObj.GetPhysicalDevice();
-	std::vector<vk::Bool32> SupportPresents;
-	SupportPresents.resize(VulkanDeviceObj.GetQueueFamilyPropertiesCount());
-	for (uint32_t QueueFamilyIndex = 0; QueueFamilyIndex < VulkanDeviceObj.GetQueueFamilyPropertiesCount(); ++QueueFamilyIndex)
-	{
-		VerifySuccess(VulkanPhysicalDevice.getSurfaceSupportKHR(QueueFamilyIndex, _Surface, &SupportPresents[QueueFamilyIndex], EternalLoader));
-	}
-
-	uint32_t FormatsCount = 0u;
-	VerifySuccess(VulkanPhysicalDevice.getSurfaceFormatsKHR(_Surface, &FormatsCount, static_cast<vk::SurfaceFormatKHR*>(nullptr), EternalLoader));
-
-	std::vector<vk::SurfaceFormatKHR> Formats;
-	Formats.resize(FormatsCount);
-	VerifySuccess(VulkanPhysicalDevice.getSurfaceFormatsKHR(_Surface, &FormatsCount, Formats.data(), EternalLoader));
-
-	vk::SurfaceCapabilitiesKHR SurfaceCapabilities;
-	VerifySuccess(VulkanPhysicalDevice.getSurfaceCapabilitiesKHR(_Surface, &SurfaceCapabilities, EternalLoader));
-
-	uint32_t PresentModesCount = 0u;
-	VerifySuccess(VulkanPhysicalDevice.getSurfacePresentModesKHR(_Surface, &PresentModesCount, static_cast<vk::PresentModeKHR*>(nullptr), EternalLoader));
-
-	std::vector<vk::PresentModeKHR> PresentModes;
-	PresentModes.resize(PresentModesCount);
-	VerifySuccess(VulkanPhysicalDevice.getSurfacePresentModesKHR(_Surface, &PresentModesCount, PresentModes.data(), EternalLoader));
-
-	vk::SwapchainCreateInfoKHR SwapChainInfo(
-		vk::SwapchainCreateFlagBitsKHR(),
-		_Surface,
-		SurfaceCapabilities.minImageCount,
-		Formats[0].format,
-		Formats[0].colorSpace,
-		SurfaceCapabilities.currentExtent,
-		1,
-		vk::ImageUsageFlagBits::eColorAttachment,
-		vk::SharingMode::eExclusive,
-		0, nullptr,
-		vk::SurfaceTransformFlagBitsKHR::eIdentity,
-		vk::CompositeAlphaFlagBitsKHR::eOpaque,
-		PresentModes[0],
-		true
-	);
-
-	vk::Device& VulkanDevice = VulkanDeviceObj.GetVulkanDevice();
-	VerifySuccess(VulkanDevice.createSwapchainKHR(&SwapChainInfo, nullptr, &_SwapChain));
-
-	vk::PhysicalDeviceMemoryProperties PhysicalDeviceMemoryProperties = VulkanPhysicalDevice.getMemoryProperties();
-
-	uint32_t BackBuffersCount = 0u;
-	VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, static_cast<vk::Image*>(nullptr)));
-
-	ETERNAL_ASSERT(BackBuffersCount == GraphicsContext::FrameBufferingCount);
-
-	_BackBuffers.resize(BackBuffersCount);
-	_BackBufferRenderTargetViews.resize(BackBuffersCount);
-	vector<vk::Image> BackBufferImages;
-	BackBufferImages.resize(BackBuffersCount);
-	VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, BackBufferImages.data()));
-
-	for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffersCount; ++BackBufferIndex)
-	{
+		VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& Context)
+			: SwapChain()
 		{
-			std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
-			VulkanResourceBackBufferCreateInformation CreateInformation(
-				Context.GetDevice(),
-				BackBufferName,
-				BackBufferImages[BackBufferIndex]
+			using namespace Vulkan;
+
+			Window& InWindow = Context.GetWindow();
+
+			VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(Context.GetDevice());
+			VulkanPrivate::EternalDispatchLoader EternalLoader(VulkanDeviceObj);
+
+			vk::Win32SurfaceCreateInfoKHR Win32SurfaceInfo(
+				vk::Win32SurfaceCreateFlagBitsKHR(),
+				InWindow.GetHInstance(),
+				InWindow.GetWindowHandler()
 			);
 
-			_BackBuffers[BackBufferIndex] = new VulkanResource(CreateInformation);
-		}
+			vk::Instance& VulkanInstance = VulkanDeviceObj.GetInstance();
+			VerifySuccess(VulkanInstance.createWin32SurfaceKHR(&Win32SurfaceInfo, nullptr, &_Surface));
 
-		{
-			ViewMetaData MetaData;
-			RenderTargetViewCreateInformation CreateInformation(
-				Context,
-				*_BackBuffers[BackBufferIndex],
-				MetaData,
-				Format::FORMAT_BGRA8888,
-				ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D
+			vk::PhysicalDevice& VulkanPhysicalDevice = VulkanDeviceObj.GetPhysicalDevice();
+			std::vector<vk::Bool32> SupportPresents;
+			SupportPresents.resize(VulkanDeviceObj.GetQueueFamilyPropertiesCount());
+			for (uint32_t QueueFamilyIndex = 0; QueueFamilyIndex < VulkanDeviceObj.GetQueueFamilyPropertiesCount(); ++QueueFamilyIndex)
+			{
+				VerifySuccess(VulkanPhysicalDevice.getSurfaceSupportKHR(QueueFamilyIndex, _Surface, &SupportPresents[QueueFamilyIndex], EternalLoader));
+			}
+
+			uint32_t FormatsCount = 0u;
+			VerifySuccess(VulkanPhysicalDevice.getSurfaceFormatsKHR(_Surface, &FormatsCount, static_cast<vk::SurfaceFormatKHR*>(nullptr), EternalLoader));
+
+			std::vector<vk::SurfaceFormatKHR> Formats;
+			Formats.resize(FormatsCount);
+			VerifySuccess(VulkanPhysicalDevice.getSurfaceFormatsKHR(_Surface, &FormatsCount, Formats.data(), EternalLoader));
+
+			vk::SurfaceCapabilitiesKHR SurfaceCapabilities;
+			VerifySuccess(VulkanPhysicalDevice.getSurfaceCapabilitiesKHR(_Surface, &SurfaceCapabilities, EternalLoader));
+
+			uint32_t PresentModesCount = 0u;
+			VerifySuccess(VulkanPhysicalDevice.getSurfacePresentModesKHR(_Surface, &PresentModesCount, static_cast<vk::PresentModeKHR*>(nullptr), EternalLoader));
+
+			std::vector<vk::PresentModeKHR> PresentModes;
+			PresentModes.resize(PresentModesCount);
+			VerifySuccess(VulkanPhysicalDevice.getSurfacePresentModesKHR(_Surface, &PresentModesCount, PresentModes.data(), EternalLoader));
+
+			vk::SwapchainCreateInfoKHR SwapChainInfo(
+				vk::SwapchainCreateFlagBitsKHR(),
+				_Surface,
+				SurfaceCapabilities.minImageCount,
+				Formats[0].format,
+				Formats[0].colorSpace,
+				SurfaceCapabilities.currentExtent,
+				1,
+				vk::ImageUsageFlagBits::eColorAttachment,
+				vk::SharingMode::eExclusive,
+				0, nullptr,
+				vk::SurfaceTransformFlagBitsKHR::eIdentity,
+				vk::CompositeAlphaFlagBitsKHR::eOpaque,
+				PresentModes[0],
+				true
 			);
 
-			_BackBufferRenderTargetViews[BackBufferIndex] = new VulkanView(CreateInformation);
+			vk::Device& VulkanDevice = VulkanDeviceObj.GetVulkanDevice();
+			VerifySuccess(VulkanDevice.createSwapchainKHR(&SwapChainInfo, nullptr, &_SwapChain));
+
+			vk::PhysicalDeviceMemoryProperties PhysicalDeviceMemoryProperties = VulkanPhysicalDevice.getMemoryProperties();
+
+			uint32_t BackBuffersCount = 0u;
+			VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, static_cast<vk::Image*>(nullptr)));
+
+			ETERNAL_ASSERT(BackBuffersCount == GraphicsContext::FrameBufferingCount);
+
+			_BackBuffers.resize(BackBuffersCount);
+			_BackBufferRenderTargetViews.resize(BackBuffersCount);
+			vector<vk::Image> BackBufferImages;
+			BackBufferImages.resize(BackBuffersCount);
+			VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, BackBufferImages.data()));
+
+			for (uint32_t BackBufferIndex = 0; BackBufferIndex < BackBuffersCount; ++BackBufferIndex)
+			{
+				{
+					std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
+					VulkanResourceBackBufferCreateInformation CreateInformation(
+						Context.GetDevice(),
+						BackBufferName,
+						BackBufferImages[BackBufferIndex]
+					);
+
+					_BackBuffers[BackBufferIndex] = new VulkanResource(CreateInformation);
+				}
+
+				{
+					ViewMetaData MetaData;
+					RenderTargetViewCreateInformation CreateInformation(
+						Context,
+						*_BackBuffers[BackBufferIndex],
+						MetaData,
+						Format::FORMAT_BGRA8888,
+						ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D
+					);
+
+					_BackBufferRenderTargetViews[BackBufferIndex] = new VulkanView(CreateInformation);
+				}
+			}
+		}
+
+		void VulkanSwapChain::Acquire(GraphicsContext& Context)
+		{
+			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);
+
+			Vulkan::VerifySuccess(
+				static_cast<VulkanDevice&>(Context.GetDevice()).GetVulkanDevice().acquireNextImageKHR(
+					GetSwapChain(),
+					UINT64_MAX,
+					GfxContext.GetNextFrameSemaphore(),
+					nullptr,
+					&GfxContext.GetCurrentFrameIndex()
+				)
+			);
+		}
+
+		void VulkanSwapChain::Present(GraphicsContext& Context)
+		{
+			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);
+
+			VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue());
+
+			vk::Semaphore* SubmitCompletionSemaphores	= nullptr;
+			uint32_t SubmitCompletionSemaphoresCount	= 0;
+			VkCommandQueue.GetSubmitCompletionSemaphoresAndReset(SubmitCompletionSemaphores, SubmitCompletionSemaphoresCount);
+
+			vk::PresentInfoKHR PresentInfo(
+				SubmitCompletionSemaphoresCount, SubmitCompletionSemaphores,
+				1, &GetSwapChain(),
+				&GfxContext.GetCurrentFrameIndex()
+			);
+			Vulkan::VerifySuccess(
+				static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue()).GetVulkanCommandQueue().presentKHR(
+					&PresentInfo
+				)
+			);
 		}
 	}
-}
-
-void VulkanSwapChain::Acquire(GraphicsContext& Context)
-{
-	VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);
-
-	Vulkan::VerifySuccess(
-		static_cast<VulkanDevice&>(Context.GetDevice()).GetVulkanDevice().acquireNextImageKHR(
-			GetSwapChain(),
-			UINT64_MAX,
-			GfxContext.GetNextFrameSemaphore(),
-			nullptr,
-			&GfxContext.GetCurrentFrameIndex()
-		)
-	);
-}
-
-void VulkanSwapChain::Present(GraphicsContext& Context)
-{
-	VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);
-
-	VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue());
-
-	vk::Semaphore* SubmitCompletionSemaphores	= nullptr;
-	uint32_t SubmitCompletionSemaphoresCount	= 0;
-	VkCommandQueue.GetSubmitCompletionSemaphoresAndReset(SubmitCompletionSemaphores, SubmitCompletionSemaphoresCount);
-
-	vk::PresentInfoKHR PresentInfo(
-		SubmitCompletionSemaphoresCount, SubmitCompletionSemaphores,
-		1, &GetSwapChain(),
-		&GfxContext.GetCurrentFrameIndex()
-	);
-	Vulkan::VerifySuccess(
-		static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue()).GetVulkanCommandQueue().presentKHR(
-			&PresentInfo
-		)
-	);
 }

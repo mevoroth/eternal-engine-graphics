@@ -52,7 +52,7 @@ namespace Eternal
 			Device& GetDevice() { return *_Device; }
 			Window& GetWindow() { return _Window; }
 			SwapChain& GetSwapChain() { return *_SwapChain; }
-			Viewport& GetMainViewport() { return _MainViewportFullScreen; }
+			Viewport& GetMainViewport() { return *_MainViewportFullScreen; }
 
 			CommandQueue& GetGraphicsQueue();
 			CommandQueue& GetComputeQueue() { return *_ComputeQueue; }
@@ -61,7 +61,7 @@ namespace Eternal
 			CommandList* CreateNewCommandList(const CommandType& Type);
 
 			Fence& GetCurrentFrameFence() { return *_FrameFences[GetCurrentFrameIndex()]; }
-			Fence& GetNextFrameFence() { return *_FrameFences[(GetCurrentFrameIndex() + 1) % _FrameFences.size()]; }
+			Fence& GetNextFrameFence() { return *_FrameFences[(GetCurrentFrameIndex() + 1) % static_cast<uint32_t>(_FrameFences.size())]; }
 
 			ShaderFactory& GetShaderFactory() { return *_ShaderFactory; }
 
@@ -83,17 +83,17 @@ namespace Eternal
 			std::array<Fence*, FrameBufferingCount>										_FrameFences;
 
 			Window _Window;
-			Viewport _MainViewportFullScreen;
-			Device* _Device					= nullptr;
-			SwapChain* _SwapChain			= nullptr;
+			Viewport* _MainViewportFullScreen	= nullptr;
+			Device* _Device						= nullptr;
+			SwapChain* _SwapChain				= nullptr;
 
-			CommandQueue* _GraphicsQueue	= nullptr;
-			CommandQueue* _ComputeQueue		= nullptr;
-			CommandQueue* _CopyQueue		= nullptr;
+			CommandQueue* _GraphicsQueue		= nullptr;
+			CommandQueue* _ComputeQueue			= nullptr;
+			CommandQueue* _CopyQueue			= nullptr;
 
-			ShaderFactory* _ShaderFactory	= nullptr;
+			ShaderFactory* _ShaderFactory		= nullptr;
 
-			uint32_t _CurrentFrameIndex		= ~0; // During first frame, this will be set correct within range
+			uint32_t _CurrentFrameIndex			= ~0; // During first frame, this will be set correct within range
 		};
 
 		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);

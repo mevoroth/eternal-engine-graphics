@@ -7,30 +7,18 @@ namespace Eternal
 		class Viewport
 		{
 		public:
-			Viewport(_In_ int X, _In_ int Y, _In_ int Width, _In_ int Height);
+			Viewport(_In_ int32_t InX, _In_ int32_t InY, _In_ int32_t InWidth, _In_ int32_t InHeight);
 
-			inline int GetX() const
-			{
-				return _X;
-			}
-			inline int GetY() const
-			{
-				return _Y;
-			}
-			inline int GetWidth() const
-			{
-				return _Width;
-			}
-			inline int GetHeight() const
-			{
-				return _Height;
-			}
+			inline int32_t GetX() const { return _X; }
+			inline int32_t GetY() const { return _Y; }
+			inline int32_t GetWidth() const { return _Width; }
+			inline int32_t GetHeight() const { return _Height; }
 
 		private:
-			int _X;
-			int _Y;
-			int _Width;
-			int _Height;
+			int32_t _X;
+			int32_t _Y;
+			int32_t _Width;
+			int32_t _Height;
 		};
 	}
 }

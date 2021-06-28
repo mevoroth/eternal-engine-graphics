@@ -16,6 +16,7 @@
 #include "Graphics/CommandListFactory.hpp"
 #include "Graphics/CommandList.hpp"
 #include "Graphics/ShaderFactory.hpp"
+#include "Graphics/ViewportFactory.hpp"
 
 namespace Eternal
 {
@@ -58,16 +59,16 @@ namespace Eternal
 					  CreateInformation.Arguments.ClassName,
 					  CreateInformation.Settings.Width,
 					  CreateInformation.Settings.Height)
-			, _MainViewportFullScreen(0, 0,
-									  CreateInformation.Settings.Width, CreateInformation.Settings.Height)
 		{
 			_Window.Create(CreateInformation.Arguments.WindowEventsHandler);
 
-			_Device			= CreateDevice(*this, CreateInformation.Settings.Driver);
+			_Device					= CreateDevice(*this, CreateInformation.Settings.Driver);
 
-			_GraphicsQueue	= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHIC);
-			_ComputeQueue	= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
-			_CopyQueue		= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COPY);
+			_MainViewportFullScreen	= CreateInvertedViewport(*this, 0, 0, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+
+			_GraphicsQueue			= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHIC);
+			_ComputeQueue			= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
+			_CopyQueue				= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COPY);
 
 
 			for (int32_t FrameIndex = 0; FrameIndex < FrameBufferingCount; ++FrameIndex)

@@ -15,7 +15,7 @@ namespace Eternal
 		class SwapChain
 		{
 		public:
-			SwapChain(_In_ Window& WindowObj);
+			SwapChain();
 			virtual ~SwapChain();
 
 			virtual void Acquire(GraphicsContext& Context) = 0;
@@ -27,9 +27,6 @@ namespace Eternal
 		protected:
 			std::vector<Resource*>	_BackBuffers;
 			std::vector<View*>		_BackBufferRenderTargetViews;
-
-		private:
-			Viewport				_BackBufferViewport;
 		};
 	}
 }

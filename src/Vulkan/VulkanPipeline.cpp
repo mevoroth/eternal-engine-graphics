@@ -9,6 +9,7 @@
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanShader.hpp"
 #include "Vulkan/VulkanInputLayout.hpp"
+#include "Vulkan/VulkanViewport.hpp"
 
 using namespace Eternal::Graphics;
 
@@ -72,10 +73,13 @@ VulkanPipeline::VulkanPipeline(
 		vk::CullModeFlagBits::eBack
 	).setLineWidth(1.0f);
 
+	const VulkanViewport& Viewport = static_cast<const VulkanViewport&>(InPipelineCreateInformation.PipelineRenderPass.GetViewport());
 
 	vk::Viewport ViewportInfo(
 		float(Viewport.GetX()),
+		float(Viewport.GetInvertedY()),
 		float(Viewport.GetWidth()),
+		float(Viewport.GetInvertedHeight()),
 		0.0f, 1.0f
 	);
 

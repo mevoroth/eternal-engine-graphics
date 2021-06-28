@@ -20,7 +20,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& Context)
-			: SwapChain(Context.GetWindow())
+			: SwapChain()
 			, _BackBuffersCount(GraphicsContext::FrameBufferingCount)
 		{
 			using namespace Eternal::Graphics::D3D12;
