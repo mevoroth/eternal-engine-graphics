@@ -29,6 +29,9 @@ namespace Eternal
 					(void**)&_CBV_SRV_UAV_DescriptorHeap
 				)
 			);
+			VerifySuccess(
+				_CBV_SRV_UAV_DescriptorHeap->SetName(L"CBV_SRV_UAV_DescriptorHeap")
+			);
 
 			// Sampler
 			D3D12_DESCRIPTOR_HEAP_DESC SamplerDescriptorHeapDesc;
@@ -43,6 +46,9 @@ namespace Eternal
 					__uuidof(ID3D12DescriptorHeap),
 					(void**)&_SamplerDescriptorHeap
 				)
+			);
+			VerifySuccess(
+				_CBV_SRV_UAV_DescriptorHeap->SetName(L"Sampler_DescriptorHeap")
 			);
 
 			// RTV
@@ -59,6 +65,9 @@ namespace Eternal
 					(void**)&_RenderTargetViewDescriptorHeap
 				)
 			);
+			VerifySuccess(
+				_CBV_SRV_UAV_DescriptorHeap->SetName(L"RenderTargetView_DescriptorHeap")
+			);
 
 			// DSV
 			D3D12_DESCRIPTOR_HEAP_DESC DepthStencilViewDescriptorHeapDesc;
@@ -73,6 +82,9 @@ namespace Eternal
 					__uuidof(ID3D12DescriptorHeap),
 					(void**)&_DepthStencilViewDescriptorHeap
 				)
+			);
+			VerifySuccess(
+				_DepthStencilViewDescriptorHeap->SetName(L"DepthStencilView_DescriptorHeap")
 			);
 
 			_CBV_SRV_UAV_DescriptorHandleIncrementSize		= InD3DDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);

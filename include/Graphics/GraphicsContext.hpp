@@ -43,7 +43,7 @@ namespace Eternal
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 			virtual ~GraphicsContext();
 
-			virtual void Initialize();
+			void Initialize();
 
 			void BeginFrame();
 			void EndFrame();

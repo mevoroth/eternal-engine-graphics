@@ -17,7 +17,7 @@ namespace Eternal
 			D3D12CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator);
 			~D3D12CommandList();
 
-			virtual void Begin() override final;
+			virtual void Begin(_In_ GraphicsContext& InContext) override final;
 			virtual void End() override final;
 			
 			virtual void BeginRenderPass(_In_ const RenderPass& InRenderPass) override final;

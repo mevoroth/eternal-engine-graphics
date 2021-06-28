@@ -21,7 +21,7 @@ namespace Eternal
 			VulkanCommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator);
 			~VulkanCommandList();
 
-			virtual void Begin() override final;
+			virtual void Begin(_In_ GraphicsContext& InContext) override final;
 			virtual void End() override final;
 
 			virtual void BeginRenderPass(const RenderPass& InRenderPass) override final;

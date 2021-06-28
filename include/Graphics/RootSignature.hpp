@@ -41,6 +41,11 @@ namespace Eternal
 
 		struct RootSignatureDescriptorTable
 		{
+			RootSignatureDescriptorTable(_In_ const vector<RootSignatureDescriptorTableParameter>& InParameters = vector<RootSignatureDescriptorTableParameter>())
+				: Parameters(InParameters)
+			{
+			}
+
 			vector<RootSignatureDescriptorTableParameter> Parameters;
 		};
 

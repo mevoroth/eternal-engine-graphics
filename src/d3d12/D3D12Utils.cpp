@@ -123,6 +123,20 @@ namespace Eternal
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_DESCRIPTOR_RANGE_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d121 descriptor ranges types");
 
+		static constexpr D3D12RegisterType D3D12_REGISTER_TYPES[] =
+		{
+			D3D12RegisterType::D3D12_REGISTER_TYPE_SAMPLER,
+			D3D12RegisterType::D3D12_REGISTER_TYPE_SRV,
+			D3D12RegisterType::D3D12_REGISTER_TYPE_UAV,
+			D3D12RegisterType::D3D12_REGISTER_TYPE_SRV,
+			D3D12RegisterType::D3D12_REGISTER_TYPE_UAV,
+			D3D12RegisterType::D3D12_REGISTER_TYPE_CBV,
+			D3D12RegisterType::D3D12_REGISTER_TYPE_SRV,
+			D3D12RegisterType::D3D12_REGISTER_TYPE_UAV,
+			D3D12RegisterType::D3D12_REGISTER_TYPE_INVALID
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_REGISTER_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d12 register types");
+
 		static constexpr D3D12_PRIMITIVE_TOPOLOGY_TYPE D3D12_PRIMITIVE_TOPOLOGY_TYPES[] =
 		{
 			D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT,
@@ -285,21 +299,32 @@ namespace Eternal
 				return static_cast<D3D12_STENCIL_OP>(static_cast<int32_t>(InStencilOperator) + 1);
 			}
 
-			D3D12_SHADER_VISIBILITY ConvertRootSignatureAccessToD3D12ShaderVisibility(const RootSignatureAccess& InRootSignatureAccess)
+			D3D12_SHADER_VISIBILITY ConvertRootSignatureAccessToD3D12ShaderVisibility(_In_ const RootSignatureAccess& InRootSignatureAccess)
 			{
 				if (InRootSignatureAccess == RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS)
 					return D3D12_SHADER_VISIBILITY_ALL;
 				return static_cast<D3D12_SHADER_VISIBILITY>(static_cast<int32_t>(InRootSignatureAccess) + 1);
 
 			}
-			D3D12_ROOT_PARAMETER_TYPE ConvertRootSignatureParameterTypeToD3D12RootParameterType(const RootSignatureParameterType& InRootSignatureParameterType)
+			D3D12_ROOT_PARAMETER_TYPE ConvertRootSignatureParameterTypeToD3D12RootParameterType(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
 			{
 				return D3D12_ROOT_PARAMETER_TYPES[static_cast<int32_t>(InRootSignatureParameterType)];
 			}
 
-			D3D12_DESCRIPTOR_RANGE_TYPE ConvertRootSignatureParameterTypeToD3D12DescriptorRangeType(const RootSignatureParameterType& InRootSignatureParameterType)
+			D3D12_DESCRIPTOR_RANGE_TYPE ConvertRootSignatureParameterTypeToD3D12DescriptorRangeType(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
 			{
 				return D3D12_DESCRIPTOR_RANGE_TYPES[static_cast<int32_t>(InRootSignatureParameterType)];
+			}
+
+			const D3D12RegisterType& ConvertRootSignatureParameterTypeToD3D12RegisterType(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
+			{
+				ETERNAL_ASSERT(InRootSignatureParameterType != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE);
+				return D3D12_REGISTER_TYPES[static_cast<int32_t>(InRootSignatureParameterType)];
+			}
+
+			uint32_t ConvertRootSignatureParameterTypeToD3D12RegisterTypeUInt(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
+			{
+				return static_cast<uint32_t>(ConvertRootSignatureParameterTypeToD3D12RegisterType(InRootSignatureParameterType));
 			}
 
 			void ConvertBorderColorToFloats(_In_ const BorderColor& InBorderColor, _Out_ float OutColor[4])
@@ -333,7 +358,7 @@ namespace Eternal
 				return static_cast<D3D12_STATIC_BORDER_COLOR>(InBorderColor);
 			}
 
-			D3D12_RESOURCE_STATES ConvertTransitionStateToD3D12ResourceStates(const TransitionState& InTransitionState)
+			D3D12_RESOURCE_STATES ConvertTransitionStateToD3D12ResourceStates(_In_ const TransitionState& InTransitionState)
 			{
 				// Stream ouput not supported yet
 
@@ -388,12 +413,12 @@ namespace Eternal
 				return States;
 			}
 
-			D3D12_PRIMITIVE_TOPOLOGY_TYPE ConvertPrimitiveTopologyToD3D12PrimitiveTopologyType(const PrimitiveTopology& InPrimitiveTopology)
+			D3D12_PRIMITIVE_TOPOLOGY_TYPE ConvertPrimitiveTopologyToD3D12PrimitiveTopologyType(_In_ const PrimitiveTopology& InPrimitiveTopology)
 			{
 				return D3D12_PRIMITIVE_TOPOLOGY_TYPES[static_cast<int32_t>(InPrimitiveTopology)];
 			}
 
-			D3D12_PRIMITIVE_TOPOLOGY ConvertPrimitiveTopologyToD3D12PrimitiveTopology(const PrimitiveTopology& InPrimitiveTopology)
+			D3D12_PRIMITIVE_TOPOLOGY ConvertPrimitiveTopologyToD3D12PrimitiveTopology(_In_ const PrimitiveTopology& InPrimitiveTopology)
 			{
 				return D3D12_PRIMITIVE_TOPOLOGIES[static_cast<int32_t>(InPrimitiveTopology)];
 			}

@@ -10,6 +10,7 @@ namespace Eternal
 		class CommandAllocator;
 		class RenderPass;
 		class Pipeline;
+		class GraphicsContext;
 
 		class CommandList
 		{
@@ -21,7 +22,7 @@ namespace Eternal
 			CommandList(_In_ CommandAllocator& InCommandAllocator);
 			virtual ~CommandList();
 
-			virtual void Begin() = 0;
+			virtual void Begin(_In_ GraphicsContext& InContext) = 0;
 			virtual void End() = 0;
 
 			virtual void BeginRenderPass(const RenderPass& InRenderPass) = 0;

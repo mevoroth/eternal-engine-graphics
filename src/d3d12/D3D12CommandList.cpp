@@ -11,6 +11,7 @@
 #include "d3d12/D3D12Resource.hpp"
 #include "d3d12/D3D12Pipeline.hpp"
 #include "d3d12/D3D12RootSignature.hpp"
+#include "d3d12/D3D12GraphicsContext.hpp"
 
 namespace Eternal
 {
@@ -42,11 +43,22 @@ namespace Eternal
 			_GraphicCommandList5 = nullptr;
 		}
 
-		void D3D12CommandList::Begin()
+		void D3D12CommandList::Begin(_In_ GraphicsContext& InContext)
 		{
 			_GraphicCommandList5->Reset(
 				GetD3D12CommandAllocator().GetD3D12CommandAllocator(),
 				nullptr
+			);
+
+			D3D12GraphicsContext& InD3DContext = static_cast<D3D12GraphicsContext&>(InContext);
+			ID3D12DescriptorHeap* DescriptorHeaps[] =
+			{
+				InD3DContext.GetCBV_SRV_UAV_DescriptorHeap(),
+				InD3DContext.GetSamplerDescriptorHeap()
+			};
+			_GraphicCommandList5->SetDescriptorHeaps(
+				ETERNAL_ARRAYSIZE(DescriptorHeaps),
+				DescriptorHeaps
 			);
 		}
 

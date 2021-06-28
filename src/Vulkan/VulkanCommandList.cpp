@@ -39,7 +39,7 @@ namespace Eternal
 			);
 		}
 
-		void VulkanCommandList::Begin()
+		void VulkanCommandList::Begin(_In_ GraphicsContext& InContext)
 		{
 			vk::CommandBufferInheritanceInfo CommandBufferInheritanceInfo;
 			vk::CommandBufferBeginInfo CommandBufferBeginInfo(
