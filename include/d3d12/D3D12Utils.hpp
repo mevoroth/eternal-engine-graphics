@@ -27,7 +27,7 @@ namespace Eternal
 		enum class RootSignatureAccess;
 		enum class RootSignatureParameterType;
 
-		constexpr D3D12_RENDER_TARGET_BLEND_DESC	DEFAULT_D3D12_RENDER_TARGET_BLEND_DESC =
+		constexpr D3D12_RENDER_TARGET_BLEND_DESC	DefaultD3D12RenderTargetBlendDesc =
 		{
 			/*BlendEnable=*/ FALSE,
 			/*LogicOpEnable=*/ FALSE,
@@ -38,7 +38,7 @@ namespace Eternal
 			D3D12_BLEND_ZERO,
 			D3D12_BLEND_OP_ADD,
 			D3D12_LOGIC_OP_NOOP,
-			0xFF
+			D3D12_COLOR_WRITE_ENABLE_ALL
 		};
 		constexpr D3D12_COLOR_WRITE_ENABLE		D3D12_COLOR_WRITE_ENABLE_NONE = static_cast<D3D12_COLOR_WRITE_ENABLE>(0);
 

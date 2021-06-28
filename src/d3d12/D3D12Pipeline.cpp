@@ -7,7 +7,7 @@
 #include "Graphics/DepthTest.hpp"
 #include "Graphics/StencilTest.hpp"
 #include "d3d12/D3D12Device.hpp"
-#include "d3d12_deprecated/D3D12InputLayout.hpp"
+#include "d3d12/D3D12InputLayout.hpp"
 #include "d3d12/D3D12Shader.hpp"
 #include "d3d12/D3D12RootSignature.hpp"
 #include "d3d12/D3D12RenderPass.hpp"
@@ -98,7 +98,7 @@ namespace Eternal
 
 			// Fill-in unused rendertargets
 			for (; RenderTargetIndex < ETERNAL_ARRAYSIZE(PipelineStateDesc.BlendState.RenderTarget); ++RenderTargetIndex)
-				PipelineStateDesc.BlendState.RenderTarget[RenderTargetIndex] = DEFAULT_D3D12_RENDER_TARGET_BLEND_DESC;
+				PipelineStateDesc.BlendState.RenderTarget[RenderTargetIndex] = DefaultD3D12RenderTargetBlendDesc;
 
 			PipelineStateDesc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
 
