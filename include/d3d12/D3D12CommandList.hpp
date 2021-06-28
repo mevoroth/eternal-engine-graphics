@@ -23,7 +23,7 @@ namespace Eternal
 			virtual void BeginRenderPass(_In_ const RenderPass& InRenderPass) override final;
 			virtual void EndRenderPass() override final;
 
-			virtual void Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override final;
+			virtual void Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override final;
 
 			virtual void SetGraphicsPipeline(_In_ const Pipeline& InPipeline) override final;
 			virtual void DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount = 0, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t InFirstInstance = 0) override final;

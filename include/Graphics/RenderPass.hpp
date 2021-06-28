@@ -38,7 +38,7 @@ namespace Eternal
 			static const RenderTargetOperator Clear_Store;
 			static const RenderTargetOperator Clear_Resolve;
 
-			RenderTargetOperator(const LoadOperator& InLoadOperator, const StoreOperator& InStoreOperator)
+			RenderTargetOperator(_In_ const LoadOperator& InLoadOperator, _In_ const StoreOperator& InStoreOperator)
 				: Load(InLoadOperator)
 				, Store(InStoreOperator)
 			{
@@ -50,22 +50,16 @@ namespace Eternal
 
 		struct RenderTargetInformation
 		{
-			static constexpr uint32_t ComponentCount	=				 4;
-			static constexpr float DefaultClearValue[ComponentCount]	= { 0.0f };
-
-			RenderTargetInformation(const BlendState& InRenderTargetBlendState, RenderTargetOperator InOperator, View* InRenderTarget, const float InClearValue[ComponentCount] = DefaultClearValue)
+			RenderTargetInformation(_In_ const BlendState& InRenderTargetBlendState, _In_ const RenderTargetOperator& InOperator, _In_ View* InRenderTarget)
 				: RenderTargetBlendState(InRenderTargetBlendState)
 				, Operator(InOperator)
 				, RenderTarget(InRenderTarget)
 			{
-				for (int32_t ValueIndex = 0; ValueIndex < ComponentCount; ++ValueIndex)
-					ClearValue[ValueIndex] = InClearValue[ValueIndex];
 			}
 
 			BlendState				RenderTargetBlendState;
 			RenderTargetOperator	Operator;
 			View*					RenderTarget = nullptr;
-			float					ClearValue[ComponentCount] = { 0.0f };
 		};
 
 		struct RenderPassCreateInformation

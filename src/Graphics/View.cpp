@@ -16,5 +16,10 @@ namespace Eternal
 		{
 			return GetViewCreateInformation().GraphicsResource.GetResourceState();
 		}
+
+		ResourceType View::GetResourceType() const
+		{
+			return GetViewCreateInformation().GraphicsResource.GetResourceType();
+		}
 	}
 }

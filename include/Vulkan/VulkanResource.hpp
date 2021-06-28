@@ -16,7 +16,7 @@ namespace Eternal
 		struct VulkanResourceBackBufferCreateInformation : public ResourceCreateInformation
 		{
 			VulkanResourceBackBufferCreateInformation(_In_ Device& InDevice, _In_ const std::string& InName, _In_ vk::Image InBackBufferResource)
-				: ResourceCreateInformation(InDevice, InName, TransitionState::TRANSITION_PRESENT)
+				: ResourceCreateInformation(InDevice, InName, ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY, TransitionState::TRANSITION_PRESENT)
 				, BackBufferResource(InBackBufferResource)
 			{
 			}
@@ -26,10 +26,20 @@ namespace Eternal
 		class VulkanResource : public Resource
 		{
 		public:
+			/**
+			 * Back buffer
+			 */
 			VulkanResource(_In_ const VulkanResourceBackBufferCreateInformation& InResourceCreateInformation);
+			/**
+			 * Texture
+			 */
+			VulkanResource(_In_ const TextureResourceCreateInformation& InResourceCreateInformation);
+			/**
+			 * Buffer
+			 */
+			VulkanResource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation);
 			virtual ~VulkanResource();
 
-			inline VulkanResourceType GetVulkanResourceType() const { return _VulkanResourceType; }
 			const vk::Image& GetVulkanImage() const;
 			const vk::Buffer& GetVulkanBuffer() const;
 			vk::Image& GetVulkanImage();
@@ -46,11 +56,13 @@ namespace Eternal
 					: BufferResource(InBufferResource)
 				{
 				}
+				VulkanResourceMetaData()
+				{
+				}
 
 				vk::Image ImageResource;
 				vk::Buffer BufferResource;
 			};
-			VulkanResourceType		_VulkanResourceType = VulkanResourceType::BUFFER;
 			VulkanResourceMetaData	_VulkanResourceMetaData;
 		};
 	}

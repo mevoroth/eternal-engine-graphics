@@ -5,6 +5,7 @@
 #include "Graphics/RenderPass.hpp"
 #include "Graphics/RootSignature.hpp"
 #include "Graphics/Pipeline.hpp"
+#include "Graphics/Resource.hpp"
 #include "Math/Math.hpp"
 
 namespace Eternal
@@ -229,6 +230,46 @@ namespace Eternal
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_PRIMITIVE_TOPOLOGIES) == static_cast<int32_t>(PrimitiveTopology::PRIMITIVE_TOPOLOGY_COUNT), "Mismatch between abstraction and d3d12 primitive topologies");
 
+		static constexpr D3D12_HEAP_TYPE D3D12_HEAP_TYPES[] =
+		{
+			D3D12_HEAP_TYPE_DEFAULT,
+			D3D12_HEAP_TYPE_UPLOAD,
+			D3D12_HEAP_TYPE_READBACK
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_HEAP_TYPES) == static_cast<int32_t>(ResourceMemoryType::RESOURCE_MEMORY_TYPE_COUNT), "Mismatch between abstraction and d3d12 heap types");
+
+		static constexpr D3D12_CPU_PAGE_PROPERTY D3D12_CPU_PAGE_PROPERTIES[] =
+		{
+			D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
+			D3D12_CPU_PAGE_PROPERTY_WRITE_COMBINE,
+			D3D12_CPU_PAGE_PROPERTY_WRITE_BACK
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_CPU_PAGE_PROPERTIES) == static_cast<int32_t>(ResourceMemoryType::RESOURCE_MEMORY_TYPE_COUNT), "Mismatch between abstraction and d3d12 cpu page properties");
+
+		//RESOURCE_DIMENSION_UNKNOWN,
+		//	RESOURCE_DIMENSION_BUFFER,
+		//	RESOURCE_DIMENSION_TEXTURE_1D,
+		//	RESOURCE_DIMENSION_TEXTURE_1D_ARRAY,
+		//	RESOURCE_DIMENSION_TEXTURE_2D,
+		//	RESOURCE_DIMENSION_TEXTURE_2D_ARRAY,
+		//	RESOURCE_DIMENSION_TEXTURE_3D,
+		//	RESOURCE_DIMENSION_TEXTURE_CUBE,
+		//	RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY,
+
+		static constexpr D3D12_RESOURCE_DIMENSION D3D12_RESOURCE_DIMENSIONS[] =
+		{
+			D3D12_RESOURCE_DIMENSION_UNKNOWN,
+			D3D12_RESOURCE_DIMENSION_BUFFER,
+			D3D12_RESOURCE_DIMENSION_TEXTURE1D,
+			D3D12_RESOURCE_DIMENSION_TEXTURE2D,
+			D3D12_RESOURCE_DIMENSION_TEXTURE2D,
+			D3D12_RESOURCE_DIMENSION_TEXTURE2D,
+			D3D12_RESOURCE_DIMENSION_TEXTURE3D,
+			D3D12_RESOURCE_DIMENSION_TEXTURE2D,
+			D3D12_RESOURCE_DIMENSION_TEXTURE2D
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_RESOURCE_DIMENSIONS) == static_cast<int32_t>(ResourceDimension::RESOURCE_DIMENSION_COUNT), "Mismatch between abstraction and d3d12 resource dimensions");
+		
 		namespace D3D12
 		{
 			void VerifySuccess(_In_ const HRESULT& HResult)
@@ -402,7 +443,7 @@ namespace Eternal
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_INDIRECT)				<< 9);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_READ)			>> 1);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_WRITE)			<< 1);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & ShaderReadState)									>> 2);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & ShaderReadState)									<< 2);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_SHADER_WRITE)			>> 3);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_RENDER_TARGET)		>> 5);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_DEPTH_STENCIL_READ)	>> 3);
@@ -421,6 +462,38 @@ namespace Eternal
 			D3D12_PRIMITIVE_TOPOLOGY ConvertPrimitiveTopologyToD3D12PrimitiveTopology(_In_ const PrimitiveTopology& InPrimitiveTopology)
 			{
 				return D3D12_PRIMITIVE_TOPOLOGIES[static_cast<int32_t>(InPrimitiveTopology)];
+			}
+
+			D3D12_HEAP_TYPE ConvertResourceMemoryTypeToD3D12HeapType(_In_ const ResourceMemoryType& InResourceMemoryType)
+			{
+				return D3D12_HEAP_TYPES[static_cast<int32_t>(InResourceMemoryType)];
+			}
+
+			D3D12_CPU_PAGE_PROPERTY ConvertResourceMemoryTypeToD3D12CPUPageProperty(_In_ const ResourceMemoryType& InResourceMemoryType)
+			{
+				return D3D12_CPU_PAGE_PROPERTIES[static_cast<int32_t>(InResourceMemoryType)];
+			}
+
+			D3D12_RESOURCE_DIMENSION ConvertResourceDimensionToD3D12ResourceDimension(_In_ const ResourceDimension& InResourceDimension)
+			{
+				return D3D12_RESOURCE_DIMENSIONS[static_cast<int32_t>(InResourceDimension)];
+			}
+
+			D3D12_RESOURCE_FLAGS ConvertResourceUsageToD3D12ResourceFlags(_In_ const ResourceUsage& InResourceFlags)
+			{
+				D3D12_RESOURCE_FLAGS D3D12ResourceFlags = D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
+
+				D3D12ResourceFlags |= static_cast<D3D12_RESOURCE_FLAGS>(
+					InResourceFlags & (
+						ResourceUsage::RESOURCE_USAGE_RENDER_TARGET |
+						ResourceUsage::RESOURCE_USAGE_DEPTH_STENCIL |
+						ResourceUsage::RESOURCE_USAGE_UNORDERED_ACCESS
+					)
+				);
+
+				D3D12ResourceFlags &= ((InResourceFlags & ResourceUsage::RESOURCE_USAGE_SHADER_RESOURCE) != ResourceUsage::RESOURCE_USAGE_NONE) ? ~D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE : ~D3D12_RESOURCE_FLAG_NONE;
+				
+				return D3D12ResourceFlags;
 			}
 		}
 	}

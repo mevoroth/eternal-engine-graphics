@@ -4,7 +4,10 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class ResourceUsage;
+
 		class View;
+		class Resource;
 
 		enum class TransitionState
 		{
@@ -45,6 +48,13 @@ namespace Eternal
 			COMMAND_TYPE_COUNT
 		};
 
+		enum class TransitionFlags
+		{
+			TRANSITION_FLAGS_NONE			= 0x0,
+			TRANSITION_FLAGS_NEEDS_RESOLVE	= 0x1,
+			TRANSITION_FLAGS_RESOURCE		= 0x2
+		};
+
 		inline constexpr TransitionState operator|(_In_ const TransitionState& InLeftTransitionState, _In_ const TransitionState& InRightTransitionState)
 		{
 			return static_cast<TransitionState>(
@@ -80,6 +90,13 @@ namespace Eternal
 			);
 		}
 
+		TransitionFlags operator|(const TransitionFlags& InLeftTransitionFlags, const TransitionFlags& InRightTransitionFlags);
+		TransitionFlags operator&(const TransitionFlags& InLeftTransitionFlags, const TransitionFlags& InRightTransitionFlags);
+		TransitionFlags& operator&=(TransitionFlags& InOutTransitionFlags, const TransitionFlags& InOtherTransitionFlags);
+		TransitionFlags operator~(const TransitionFlags& InTransitionFlags);
+		ResourceUsage operator|(const ResourceUsage& InLeftResourceUsage, const ResourceUsage& InRightResourceUsage);
+		ResourceUsage operator&(const ResourceUsage& InLeftResourceUsage, const ResourceUsage& InRightResourceUsage);
+
 		inline bool OnlyHasFlags(_In_ const TransitionState& InTransitionState, _In_ const TransitionState& InFilterState)
 		{
 			TransitionState InTransitionStateIncludingInFilterState = (InTransitionState & InFilterState);
@@ -98,7 +115,7 @@ namespace Eternal
 				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHIC,
 				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHIC
 			)
-				: ResourceToTransition(InView)
+				: ViewToTransition(InView)
 				, Before(InBefore)
 				, After(InAfter)
 				, BeforeCommandType(InBeforeCommandType)
@@ -113,13 +130,28 @@ namespace Eternal
 				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHIC
 			);
 
+			ResourceTransition(
+				_In_ Resource* InResource,
+				_In_ const TransitionState& InAfter,
+				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHIC,
+				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHIC
+			);
+
 			ResourceTransition() {}
 
+			const Resource& GetResource() const;
+			Resource& GetResource();
 			const TransitionState& GetBefore() const;
 			const TransitionState& GetAfter() const;
+			bool IsResource() const;
 
-			bool NeedsResolve					= false;
-			View* ResourceToTransition			= nullptr;
+			TransitionFlags Flags				= TransitionFlags::TRANSITION_FLAGS_NONE;
+			union
+			{
+				void* Dummy						= nullptr;
+				View* ViewToTransition;
+				Resource* ResourceToTransition;
+			};
 			TransitionState Before				= TransitionState::TRANSITION_UNDEFINED;
 			TransitionState After				= TransitionState::TRANSITION_UNDEFINED;
 			CommandType		BeforeCommandType	= CommandType::COMMAND_TYPE_GRAPHIC;

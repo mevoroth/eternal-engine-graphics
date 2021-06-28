@@ -64,7 +64,7 @@ namespace Eternal
 			const vector<RenderTargetInformation>& InRenderTargets = InRenderPass.GetRenderTargets();
 			for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < InRenderTargets.size(); ++RenderTargetIndex)
 			{
-				memcpy(ClearColorValues[RenderTargetIndex].float32.data(), InRenderTargets[RenderTargetIndex].ClearValue, sizeof(float) * ClearColorValues[RenderTargetIndex].float32.size());
+				memcpy(ClearColorValues[RenderTargetIndex].float32.data(), InRenderTargets[RenderTargetIndex].RenderTarget->GetResource().GetClearValue(), sizeof(float) * ClearColorValues[RenderTargetIndex].float32.size());
 				
 				ClearValues[RenderTargetIndex] = vk::ClearValue(
 					ClearColorValues[RenderTargetIndex]
@@ -87,9 +87,19 @@ namespace Eternal
 			_CommandBuffer.endRenderPass();
 		}
 
-		void VulkanCommandList::Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
+		void VulkanCommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
 			using namespace Eternal::Graphics::Vulkan;
+			//VULKAN_HPP_CONSTEXPR ImageSubresourceRange(VULKAN_HPP_NAMESPACE::ImageAspectFlags aspectMask_ = {},
+			//	uint32_t                               baseMipLevel_ = {},
+			//	uint32_t                               levelCount_ = {},
+			//	uint32_t                               baseArrayLayer_ = {},
+			//	uint32_t layerCount_ = {}) VULKAN_HPP_NOEXCEPT
+			static constexpr vk::ImageSubresourceRange DefaultImageSubresourceRange(
+				vk::ImageAspectFlagBits::eColor,
+				1, 0,
+				1, 0
+			);
 
 			std::array<vk::BufferMemoryBarrier, MaxBufferTransitionsPerSubmit> BufferTransitions;
 			std::array<vk::ImageMemoryBarrier, MaxTextureTransitionsPerSubmit> ImageTransitions;
@@ -107,9 +117,9 @@ namespace Eternal
 
 			for (uint32_t ResourceTransitionIndex = 0; ResourceTransitionIndex < InResourceTransitionsCount; ++ResourceTransitionIndex)
 			{
-				const ResourceTransition& CurrentResourceTransition	= InResourceTransitions[ResourceTransitionIndex];
-				VulkanResource& VkResource							= static_cast<VulkanResource&>(CurrentResourceTransition.ResourceToTransition->GetResource());
-				const VulkanView* ResourceView						= static_cast<VulkanView*>(CurrentResourceTransition.ResourceToTransition);
+				ResourceTransition& CurrentResourceTransition		= InResourceTransitions[ResourceTransitionIndex];
+				VulkanResource& VkResource							= static_cast<VulkanResource&>(CurrentResourceTransition.GetResource());
+				const VulkanView* ResourceView						= CurrentResourceTransition.IsResource() ? nullptr : static_cast<VulkanView*>(CurrentResourceTransition.ViewToTransition);
 				uint32_t BeforeQueueFamilyIndex						= QueueFamilyIndices[static_cast<uint32_t>(CurrentResourceTransition.BeforeCommandType)];
 				uint32_t AfterQueueFamilyIndex						= QueueFamilyIndices[static_cast<uint32_t>(CurrentResourceTransition.AfterCommandType)];
 
@@ -119,9 +129,9 @@ namespace Eternal
 				BeforeStages	|= ConvertCommandTypeAndTransitionStateToPipelineStageFlags(CurrentResourceTransition.BeforeCommandType, BeforeState);
 				AfterStages		|= ConvertCommandTypeAndTransitionStateToPipelineStageFlags(CurrentResourceTransition.BeforeCommandType, AfterState);
 
-				switch (VkResource.GetVulkanResourceType())
+				switch (VkResource.GetResourceType())
 				{
-				case VulkanResourceType::BUFFER:
+				case ResourceType::RESOURCE_TYPE_TEXTURE:
 				{
 					BufferTransitions[BufferTransitionsCount++] = vk::BufferMemoryBarrier(
 						ConvertTransitionStateToVulkanAccessFlags(BeforeState),
@@ -132,7 +142,7 @@ namespace Eternal
 						0, VK_WHOLE_SIZE
 					);
 				} break;
-				case VulkanResourceType::IMAGE:
+				case ResourceType::RESOURCE_TYPE_BUFFER:
 				{
 					ImageTransitions[ImageTransitionsCount++] = vk::ImageMemoryBarrier(
 						ConvertTransitionStateToVulkanAccessFlags(BeforeState),

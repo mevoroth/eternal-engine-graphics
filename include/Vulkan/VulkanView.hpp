@@ -7,8 +7,6 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum class VulkanResourceType;
-
 		extern const vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES[];
 		
 		class VulkanView : public View
@@ -23,8 +21,6 @@ namespace Eternal
 			vk::BufferView& GetVulkanBufferView();
 
 		private:
-			VulkanResourceType GetVulkanResourceType();
-
 			union VulkanViewMetaData
 			{
 				VulkanViewMetaData()

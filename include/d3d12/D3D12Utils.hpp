@@ -27,6 +27,9 @@ namespace Eternal
 		enum class RootSignatureAccess;
 		enum class RootSignatureParameterType;
 		enum class PrimitiveTopology;
+		enum class ResourceMemoryType;
+		enum class ResourceUsage;
+		enum class ResourceDimension;
 
 		enum class D3D12RegisterType
 		{
@@ -82,6 +85,10 @@ namespace Eternal
 			D3D12_RESOURCE_STATES ConvertTransitionStateToD3D12ResourceStates(_In_ const TransitionState& InTransitionState);
 			D3D12_PRIMITIVE_TOPOLOGY_TYPE ConvertPrimitiveTopologyToD3D12PrimitiveTopologyType(_In_ const PrimitiveTopology& InPrimitiveTopology);
 			D3D12_PRIMITIVE_TOPOLOGY ConvertPrimitiveTopologyToD3D12PrimitiveTopology(_In_ const PrimitiveTopology& InPrimitiveTopology);
+			D3D12_HEAP_TYPE ConvertResourceMemoryTypeToD3D12HeapType(_In_ const ResourceMemoryType& InResourceMemoryType);
+			D3D12_CPU_PAGE_PROPERTY ConvertResourceMemoryTypeToD3D12CPUPageProperty(_In_ const ResourceMemoryType& InResourceMemoryType);
+			D3D12_RESOURCE_DIMENSION ConvertResourceDimensionToD3D12ResourceDimension(_In_ const ResourceDimension& InResourceDimension);
+			D3D12_RESOURCE_FLAGS ConvertResourceUsageToD3D12ResourceFlags(_In_ const ResourceUsage& InResourceFlags);
 		}
 	}
 }

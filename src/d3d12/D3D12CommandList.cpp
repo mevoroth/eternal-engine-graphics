@@ -90,7 +90,11 @@ namespace Eternal
 				if (CurrentRenderTarget.Operator.Load == LoadOperator::CLEAR)
 				{
 					RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Format	= ConvertFormatToD3D12Format(CurrentRenderTarget.RenderTarget->GetViewFormat()).Format;
-					memcpy(RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Color, CurrentRenderTarget.ClearValue, sizeof(float) * ETERNAL_ARRAYSIZE(CurrentRenderTarget.ClearValue));
+					memcpy(
+						RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Color,
+						CurrentRenderTarget.RenderTarget->GetResource().GetClearValue(),
+						sizeof(float) * ETERNAL_ARRAYSIZE(CurrentRenderTarget.RenderTarget->GetResource().GetClearValue())
+					);
 				}
 
 				RenderPassRenderTargetsDescs[RenderTargetIndex].EndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(CurrentRenderTarget.Operator.Store);
@@ -146,10 +150,10 @@ namespace Eternal
 			const Viewport& InViewport = InRenderPass.GetViewport();
 			D3D12_VIEWPORT ViewportInformation;
 
-			ViewportInformation.TopLeftX	= InViewport.GetX();
-			ViewportInformation.TopLeftY	= InViewport.GetY();
-			ViewportInformation.Width		= InViewport.GetWidth();
-			ViewportInformation.Height		= InViewport.GetHeight();
+			ViewportInformation.TopLeftX	= static_cast<FLOAT>(InViewport.GetX());
+			ViewportInformation.TopLeftY	= static_cast<FLOAT>(InViewport.GetY());
+			ViewportInformation.Width		= static_cast<FLOAT>(InViewport.GetWidth());
+			ViewportInformation.Height		= static_cast<FLOAT>(InViewport.GetHeight());
 			ViewportInformation.MinDepth	= 0.0f;
 			ViewportInformation.MaxDepth	= 1.0f;
 
@@ -173,7 +177,7 @@ namespace Eternal
 			_GraphicCommandList5->EndRenderPass();
 		}
 
-		void D3D12CommandList::Transition(_In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
+		void D3D12CommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
 			using namespace Eternal::Graphics::D3D12;
 
@@ -183,9 +187,9 @@ namespace Eternal
 
 			for (uint32_t TransitionIndex = 0; TransitionIndex < InResourceTransitionsCount; ++TransitionIndex)
 			{
-				const ResourceTransition& CurrentResourceTransition = InResourceTransitions[TransitionIndex];
+				ResourceTransition& CurrentResourceTransition = InResourceTransitions[TransitionIndex];
 
-				D3D12Resource& D3DResource = static_cast<D3D12Resource&>(CurrentResourceTransition.ResourceToTransition->GetResource());
+				D3D12Resource& D3DResource = static_cast<D3D12Resource&>(CurrentResourceTransition.GetResource());
 
 				ResourceBarriers[TransitionIndex].Type						= D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 				ResourceBarriers[TransitionIndex].Flags						= D3D12_RESOURCE_BARRIER_FLAG_NONE;

@@ -6,6 +6,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class ResourceType;
 		enum class TransitionState;
 		class GraphicsContext;
 		class Resource;
@@ -176,6 +177,7 @@ namespace Eternal
 			const Resource& GetResource() const { return _ViewCreateInformation.GraphicsResource; }
 			Format GetViewFormat() const { return _ViewCreateInformation.GraphicsFormat; }
 			const TransitionState& GetResourceTransition() const;
+			ResourceType GetResourceType() const;
 			
 		protected:
 			const ViewCreateInformation& GetViewCreateInformation() const { return _ViewCreateInformation; }

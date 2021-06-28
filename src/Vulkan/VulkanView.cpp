@@ -28,12 +28,10 @@ namespace Eternal
 			vk::Device& VkDevice = static_cast<VulkanDevice&>(InViewCreateInformation.Context.GetDevice()).GetVulkanDevice();
 			VulkanResource& VkResource = static_cast<VulkanResource&>(InViewCreateInformation.GraphicsResource);
 
-			switch (static_cast<VulkanResource&>(InViewCreateInformation.GraphicsResource).GetVulkanResourceType())
+			switch (GetResourceType())
 			{
-			case VulkanResourceType::BUFFER:
-				ETERNAL_BREAK();
-
-			case VulkanResourceType::IMAGE:
+			case ResourceType::RESOURCE_TYPE_TEXTURE:
+			{
 				_SubresourceRange = vk::ImageSubresourceRange(
 					vk::ImageAspectFlagBits::eColor
 				);
@@ -76,6 +74,10 @@ namespace Eternal
 				Vulkan::VerifySuccess(
 					VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
 				);
+			} break;
+
+			default:
+				ETERNAL_BREAK(); // Invalid resource type
 				break;
 			}
 		}
@@ -84,31 +86,30 @@ namespace Eternal
 		{
 			vk::Device& VkDevice = static_cast<VulkanDevice&>(GetViewCreateInformation().Context.GetDevice()).GetVulkanDevice();
 
-			switch (GetVulkanResourceType())
+			switch (GetResourceType())
 			{
-			case VulkanResourceType::BUFFER:
+			case ResourceType::RESOURCE_TYPE_BUFFER:
 				VkDevice.destroyBufferView(_VulkanViewMetaData.BufferView);
 				break;
 
-			case VulkanResourceType::IMAGE:
+			case ResourceType::RESOURCE_TYPE_TEXTURE:
 				VkDevice.destroyImageView(_VulkanViewMetaData.ImageView);
-			}
-		}
+				break;
 
-		VulkanResourceType VulkanView::GetVulkanResourceType()
-		{
-			return static_cast<VulkanResource&>(GetViewCreateInformation().GraphicsResource).GetVulkanResourceType();
+			default:
+				ETERNAL_BREAK(); // Invalid resource type
+			}
 		}
 
 		vk::ImageView& VulkanView::GetVulkanImageView()
 		{
-			ETERNAL_ASSERT(GetVulkanResourceType() == VulkanResourceType::IMAGE);
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
 			return _VulkanViewMetaData.ImageView;
 		}
 
 		vk::BufferView& VulkanView::GetVulkanBufferView()
 		{
-			ETERNAL_ASSERT(GetVulkanResourceType() == VulkanResourceType::BUFFER);
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER);
 			return _VulkanViewMetaData.BufferView;
 		}
 	}

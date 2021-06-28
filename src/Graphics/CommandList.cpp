@@ -13,7 +13,7 @@ namespace Eternal
 		{
 		}
 
-		ResourceTransitionScope::ResourceTransitionScope(_In_ CommandList& InCommandList, _In_ const ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
+		ResourceTransitionScope::ResourceTransitionScope(_In_ CommandList& InCommandList, _In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 			: _CommandList(InCommandList)
 			, _ResourceTransitionsCount(InResourceTransitionsCount)
 		{
@@ -25,7 +25,7 @@ namespace Eternal
 			{
 				_ReverseTransitions[TransitionIndex] = InResourceTransitions[TransitionIndex];
 
-				_ReverseTransitions[TransitionIndex].NeedsResolve	= false;
+				_ReverseTransitions[TransitionIndex].Flags			&= ~TransitionFlags::TRANSITION_FLAGS_NEEDS_RESOLVE;
 				_ReverseTransitions[TransitionIndex].Before			= InResourceTransitions[TransitionIndex].GetAfter();
 				_ReverseTransitions[TransitionIndex].After			= InResourceTransitions[TransitionIndex].GetBefore();
 			}

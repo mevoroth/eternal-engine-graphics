@@ -62,6 +62,7 @@
     <ClInclude Include="include\Graphics\RenderPass.hpp" />
     <ClInclude Include="include\Graphics\RenderPassFactory.hpp" />
     <ClInclude Include="include\Graphics\Resource.hpp" />
+    <ClInclude Include="include\Graphics\ResourceFactory.hpp" />
     <ClInclude Include="include\Graphics\RootSignature.hpp" />
     <ClInclude Include="include\Graphics\RootSignatureFactory.hpp" />
     <ClInclude Include="include\Graphics\Sampler.hpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="src\Graphics\RenderPass.cpp" />
     <ClCompile Include="src\Graphics\RenderPassFactory.cpp" />
     <ClCompile Include="src\Graphics\Resource.cpp" />
+    <ClCompile Include="src\Graphics\ResourceFactory.cpp" />
     <ClCompile Include="src\Graphics\RootSignatureFactory.cpp" />
     <ClCompile Include="src\Graphics\SamplerFactory.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
