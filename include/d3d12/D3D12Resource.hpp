@@ -18,7 +18,7 @@ namespace Eternal
 			ID3D12Resource* BackBufferResource = nullptr;
 		};
 
-		class D3D12Resource : public Resource
+		class D3D12Resource final : public Resource
 		{
 		public:
 			/**
@@ -35,7 +35,10 @@ namespace Eternal
 			D3D12Resource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation);
 			virtual ~D3D12Resource();
 
-			inline ID3D12Resource* GetD3D12Resource() { return _Resource; }
+			virtual void* Map(_In_ const MapRange& InMapRange) override final;
+			virtual void Unmap(_In_ const MapRange& InMapRange) override final;
+
+			inline ID3D12Resource* GetD3D12Resource() const { return _Resource; }
 
 		private:
 			void _SetName();

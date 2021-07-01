@@ -15,8 +15,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		VulkanCommandList::VulkanCommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
-			: CommandList(InCommandAllocator)
-			, _Device(InDevice)
+			: CommandList(InDevice, InCommandAllocator)
 		{
 			vk::CommandBufferAllocateInfo CommandBufferAllocateInfo(
 				static_cast<VulkanCommandAllocator&>(InCommandAllocator).GetVulkanCommandPool(),
@@ -24,7 +23,7 @@ namespace Eternal
 				1
 			);
 			Vulkan::VerifySuccess(
-				static_cast<VulkanDevice&>(InDevice).GetVulkanDevice().allocateCommandBuffers(
+				GetVulkanDevice().GetVulkanDevice().allocateCommandBuffers(
 					&CommandBufferAllocateInfo,
 					&_CommandBuffer
 				)
@@ -33,7 +32,7 @@ namespace Eternal
 
 		VulkanCommandList::~VulkanCommandList()
 		{
-			static_cast<VulkanDevice&>(_Device).GetVulkanDevice().freeCommandBuffers(
+			GetVulkanDevice().GetVulkanDevice().freeCommandBuffers(
 				GetVulkanCommandAllocator().GetVulkanCommandPool(),
 				1, &_CommandBuffer
 			);
@@ -90,11 +89,7 @@ namespace Eternal
 		void VulkanCommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
 			using namespace Eternal::Graphics::Vulkan;
-			//VULKAN_HPP_CONSTEXPR ImageSubresourceRange(VULKAN_HPP_NAMESPACE::ImageAspectFlags aspectMask_ = {},
-			//	uint32_t                               baseMipLevel_ = {},
-			//	uint32_t                               levelCount_ = {},
-			//	uint32_t                               baseArrayLayer_ = {},
-			//	uint32_t layerCount_ = {}) VULKAN_HPP_NOEXCEPT
+
 			static constexpr vk::ImageSubresourceRange DefaultImageSubresourceRange(
 				vk::ImageAspectFlagBits::eColor,
 				1, 0,
@@ -110,7 +105,7 @@ namespace Eternal
 			vk::PipelineStageFlagBits AfterStages	= vk::PipelineStageFlagBits::eNoneKHR;
 
 			QueueFamilyIndicesType QueueFamilyIndices;
-			static_cast<VulkanDevice&>(_Device).GetQueueFamilyIndices(QueueFamilyIndices);
+			GetVulkanDevice().GetQueueFamilyIndices(QueueFamilyIndices);
 
 			uint32_t BufferTransitionsCount = 0;
 			uint32_t ImageTransitionsCount = 0;
@@ -180,6 +175,11 @@ namespace Eternal
 			);
 		}
 
+		void VulkanCommandList::SetGraphicsDescriptorTable(_In_ DescriptorTable& InDescriptorTable)
+		{
+			ETERNAL_BREAK();
+		}
+
 		void VulkanCommandList::DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
 		{
 			_CommandBuffer.draw(
@@ -199,6 +199,11 @@ namespace Eternal
 				InFirstVertex,
 				InFirstInstance
 			);
+		}
+
+		void VulkanCommandList::CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+			ETERNAL_BREAK();
 		}
 	}
 }

@@ -109,110 +109,103 @@ namespace Eternal
 		}
 
 		template<typename BitFieldHandles>
-		static D3D12_CPU_DESCRIPTOR_HANDLE AllocateDescriptor(_In_ BitFieldHandles& Handles, ID3D12DescriptorHeap* DescriptorHeap, uint32_t IncrementSize, uint32_t Offset, _Out_ Handle& OutHandle)
+		static D3D12Handle AllocateDescriptor(_In_ BitFieldHandles& Handles, _In_ ID3D12DescriptorHeap* DescriptorHeap, _In_ uint32_t IncrementSize, _In_ uint32_t Offset = 0)
 		{
-			OutHandle = Handles.Pop();
-			
-			D3D12_CPU_DESCRIPTOR_HANDLE OutCPUHandle = DescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-			OutCPUHandle.ptr += IncrementSize * (Offset + OutHandle);
+			D3D12Handle Handle;
 
-			return OutCPUHandle;
+			Handle.DescriptorHandle				= Handles.Pop();
+			Handle.D3D12CPUDescriptorHandle		= DescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+			Handle.D3D12GPUDescriptorHandle		= DescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+			Handle.D3D12CPUDescriptorHandle.ptr	+= IncrementSize * (Offset + Handle.DescriptorHandle);
+			Handle.D3D12GPUDescriptorHandle.ptr	+= IncrementSize * (Offset + Handle.DescriptorHandle);
+
+			return Handle;
 		}
 
-		D3D12_CPU_DESCRIPTOR_HANDLE D3D12GraphicsContext::AllocateConstantBufferViewDescriptor(_Out_ Handle& OutHandle)
+		D3D12Handle D3D12GraphicsContext::AllocateConstantBufferViewDescriptor()
 		{
 			return AllocateDescriptor(
 				_ConstantBufferViewHandles,
 				_CBV_SRV_UAV_DescriptorHeap,
-				_CBV_SRV_UAV_DescriptorHandleIncrementSize,
-				0,
-				OutHandle
+				_CBV_SRV_UAV_DescriptorHandleIncrementSize
 			);
 		}
 
-		D3D12_CPU_DESCRIPTOR_HANDLE D3D12GraphicsContext::AllocateShaderResourceViewDescriptor(_Out_ Handle& OutHandle)
+		D3D12Handle D3D12GraphicsContext::AllocateShaderResourceViewDescriptor()
 		{
 			return AllocateDescriptor(
 				_ShaderResourceViewHandles,
 				_CBV_SRV_UAV_DescriptorHeap,
 				_CBV_SRV_UAV_DescriptorHandleIncrementSize,
-				MaxConstantBufferViewCount,
-				OutHandle
+				MaxConstantBufferViewCount
 			);
 		}
 
-		D3D12_CPU_DESCRIPTOR_HANDLE D3D12GraphicsContext::AllocateUnorderedAccessViewDescriptor(_Out_ Handle& OutHandle)
+		D3D12Handle D3D12GraphicsContext::AllocateUnorderedAccessViewDescriptor()
 		{
 			return AllocateDescriptor(
 				_UnorderedAccessViewHandles,
 				_CBV_SRV_UAV_DescriptorHeap,
 				_CBV_SRV_UAV_DescriptorHandleIncrementSize,
-				MaxConstantBufferViewCount + MaxShaderResourceViewCount,
-				OutHandle
+				MaxConstantBufferViewCount + MaxShaderResourceViewCount
 			);
 		}
 
-		D3D12_CPU_DESCRIPTOR_HANDLE D3D12GraphicsContext::AllocateSamplerDescriptor(_Out_ Handle& OutHandle)
+		D3D12Handle D3D12GraphicsContext::AllocateSamplerDescriptor()
 		{
 			return AllocateDescriptor(
 				_SamplerHandles,
 				_SamplerDescriptorHeap,
-				_SamplerDescriptorHandleIncrementSize,
-				0,
-				OutHandle
+				_SamplerDescriptorHandleIncrementSize
 			);
 		}
 
-		D3D12_CPU_DESCRIPTOR_HANDLE D3D12GraphicsContext::AllocateRenderTargetViewDescriptor(_Out_ Handle& OutHandle)
+		D3D12Handle D3D12GraphicsContext::AllocateRenderTargetViewDescriptor()
 		{
 			return AllocateDescriptor(
 				_RenderTargetViewHandles,
 				_RenderTargetViewDescriptorHeap,
-				_RenderTargetViewDescriptorHandleIncrementSize,
-				0,
-				OutHandle
+				_RenderTargetViewDescriptorHandleIncrementSize
 			);
 		}
 
-		D3D12_CPU_DESCRIPTOR_HANDLE D3D12GraphicsContext::AllocateDepthStencilViewDescriptor(_Out_ Handle& OutHandle)
+		D3D12Handle D3D12GraphicsContext::AllocateDepthStencilViewDescriptor()
 		{
 			return AllocateDescriptor(
 				_DepthStencilViewHandles,
 				_DepthStencilViewDescriptorHeap,
-				_DepthStencilViewDescriptorHandleIncrementSize,
-				0,
-				OutHandle
+				_DepthStencilViewDescriptorHandleIncrementSize
 			);
 		}
 
-		void D3D12GraphicsContext::ReleaseConstantBufferViewDescriptor(_Inout_ Handle& InOutHandle)
+		void D3D12GraphicsContext::ReleaseConstantBufferViewDescriptor(_Inout_ D3D12Handle& InOutHandle)
 		{
-			_ConstantBufferViewHandles.Push(InOutHandle);
+			_ConstantBufferViewHandles.Push(InOutHandle.DescriptorHandle);
 		}
 
-		void D3D12GraphicsContext::ReleaseShaderResourceViewDescriptor(_Inout_ Handle& InOutHandle)
+		void D3D12GraphicsContext::ReleaseShaderResourceViewDescriptor(_Inout_ D3D12Handle& InOutHandle)
 		{
-			_ShaderResourceViewHandles.Push(InOutHandle);
+			_ShaderResourceViewHandles.Push(InOutHandle.DescriptorHandle);
 		}
 
-		void D3D12GraphicsContext::ReleaseUnorderedAccessViewDescriptor(_Inout_ Handle& InOutHandle)
+		void D3D12GraphicsContext::ReleaseUnorderedAccessViewDescriptor(_Inout_ D3D12Handle& InOutHandle)
 		{
-			_UnorderedAccessViewHandles.Push(InOutHandle);
+			_UnorderedAccessViewHandles.Push(InOutHandle.DescriptorHandle);
 		}
 
-		void D3D12GraphicsContext::ReleaseSamplerDescriptor(_Inout_ Handle& InOutHandle)
+		void D3D12GraphicsContext::ReleaseSamplerDescriptor(_Inout_ D3D12Handle& InOutHandle)
 		{
-			_SamplerHandles.Push(InOutHandle);
+			_SamplerHandles.Push(InOutHandle.DescriptorHandle);
 		}
 
-		void D3D12GraphicsContext::ReleaseRenderTargetViewDescriptor(_Inout_ Handle& InOutHandle)
+		void D3D12GraphicsContext::ReleaseRenderTargetViewDescriptor(_Inout_ D3D12Handle& InOutHandle)
 		{
-			_RenderTargetViewHandles.Push(InOutHandle);
+			_RenderTargetViewHandles.Push(InOutHandle.DescriptorHandle);
 		}
 
-		void D3D12GraphicsContext::ReleaseDepthStencilViewDescriptor(_Inout_ Handle& InOutHandle)
+		void D3D12GraphicsContext::ReleaseDepthStencilViewDescriptor(_Inout_ D3D12Handle& InOutHandle)
 		{
-			_DepthStencilViewHandles.Push(InOutHandle);
+			_DepthStencilViewHandles.Push(InOutHandle.DescriptorHandle);
 		}
 	}
 }

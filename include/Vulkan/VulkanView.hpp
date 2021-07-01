@@ -9,7 +9,7 @@ namespace Eternal
 	{
 		extern const vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES[];
 		
-		class VulkanView : public View
+		class VulkanView final : public View
 		{
 		public:
 			VulkanView(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation);

@@ -15,12 +15,14 @@ namespace Eternal
 		VulkanResource::VulkanResource(_In_ const TextureResourceCreateInformation& InResourceCreateInformation)
 			: Resource(InResourceCreateInformation, ResourceType::RESOURCE_TYPE_TEXTURE)
 		{
+			ETERNAL_BREAK();
 			//_VulkanResourceMetaData = 
 		}
 
 		VulkanResource::VulkanResource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
 			: Resource(InResourceCreateInformation, ResourceType::RESOURCE_TYPE_BUFFER)
 		{
+			ETERNAL_BREAK();
 		}
 
 		VulkanResource::~VulkanResource()
@@ -36,6 +38,17 @@ namespace Eternal
 				VkDevice.destroyBuffer(_VulkanResourceMetaData.BufferResource);
 				break;
 			}
+		}
+
+		void* VulkanResource::Map(_In_ const MapRange& InMapRange)
+		{
+			ETERNAL_BREAK();
+			return nullptr;
+		}
+
+		void VulkanResource::Unmap(_In_ const MapRange& InMapRange)
+		{
+			ETERNAL_BREAK();
 		}
 
 		vk::Image& VulkanResource::GetVulkanImage()

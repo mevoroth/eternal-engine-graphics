@@ -46,6 +46,8 @@ namespace Eternal
 			{
 			}
 
+			bool operator==(_In_ const RootSignatureDescriptorTable& InOtherRootSignatureRootDescriptorTable) const;
+
 			vector<RootSignatureDescriptorTableParameter> Parameters;
 		};
 
@@ -55,6 +57,12 @@ namespace Eternal
 				: Access(InAccess)
 				, Count(InCount)
 			{
+			}
+
+			inline bool operator==(_In_ const RootSignatureConstants& InOtherConstants) const
+			{
+				return Access == InOtherConstants.Access
+					&& Count == InOtherConstants.Count;
 			}
 
 			RootSignatureAccess	Access	= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID;
@@ -67,6 +75,12 @@ namespace Eternal
 				: Access(InAccess)
 				, StaticSampler(InStaticSampler)
 			{
+			}
+
+			inline bool operator==(_In_ const RootSignatureStaticSampler& InOtherStaticSampler) const
+			{
+				return Access == InOtherStaticSampler.Access
+					&& StaticSampler == InOtherStaticSampler.StaticSampler;
 			}
 
 			RootSignatureAccess	Access			= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID;
@@ -98,12 +112,7 @@ namespace Eternal
 			{
 			}
 
-			bool operator==(_In_ const RootSignatureParameter& InOther) const
-			{
-				return Parameter == InOther.Parameter
-					&& Access == InOther.Access;
-			}
-
+			bool operator==(_In_ const RootSignatureParameter& InOther) const;
 
 			RootSignatureParameterType			Parameter			= RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT;
 			RootSignatureAccess					Access				= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID;
@@ -111,11 +120,11 @@ namespace Eternal
 			Sampler*							SamplerParameter	= nullptr;
 		};
 
-		struct RootSignatureDescriptorTableParameter : public RootSignatureParameter
+		struct RootSignatureDescriptorTableParameter final : public RootSignatureParameter
 		{
-			RootSignatureDescriptorTableParameter(_In_ const RootSignatureParameterType& InParameter, _In_ const RootSignatureAccess& InAccess, _In_ uint32_t InDescriptorCount)
+			RootSignatureDescriptorTableParameter(_In_ const RootSignatureParameterType& InParameter, _In_ const RootSignatureAccess& InAccess, _In_ uint32_t InDescriptorsCount)
 				: RootSignatureParameter(InParameter, InAccess)
-				, DescriptorCount(InDescriptorCount)
+				, DescriptorsCount(InDescriptorsCount)
 			{
 			}
 
@@ -125,7 +134,9 @@ namespace Eternal
 			{
 			}
 
-			uint32_t						DescriptorCount = 0;
+			bool operator==(_In_ const RootSignatureDescriptorTableParameter& InOtherRootSignatureDescriptorTableParameter) const;
+
+			uint32_t						DescriptorsCount = 0;
 			vector<Sampler*>				Samplers;
 
 		private:
@@ -181,6 +192,8 @@ namespace Eternal
 
 			RootSignature() {}
 
+			const RootSignatureCreateInformation& GetCreateInformation() const { return _CreateInformation; }
+			bool operator==(_In_ const RootSignature& InOtherRootSignature) const;
 			virtual ~RootSignature() {}
 
 		private:

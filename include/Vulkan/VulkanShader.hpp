@@ -14,7 +14,7 @@ namespace Eternal
 		class GraphicsContext;
 		enum class ShaderType;
 
-		class VulkanShader : public Shader
+		class VulkanShader final : public Shader
 		{
 		public:
 			VulkanShader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation);

@@ -12,7 +12,7 @@ namespace Eternal
 		class Device;
 		class CommandQueue;
 
-		class D3D12CommandAllocator : public CommandAllocator
+		class D3D12CommandAllocator final : public CommandAllocator
 		{
 		public:
 			D3D12CommandAllocator(_In_ Device& InDevice, _In_ const CommandQueue& InCommandQueue);

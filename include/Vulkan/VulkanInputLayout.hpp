@@ -12,7 +12,7 @@ namespace Eternal
 	{
 		using namespace std;
 
-		class VulkanInputLayout : public InputLayout
+		class VulkanInputLayout final : public InputLayout
 		{
 		public:
 			VulkanInputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t DataTypeCount);

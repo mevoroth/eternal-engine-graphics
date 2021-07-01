@@ -33,7 +33,8 @@ namespace Eternal
 			VIEW_SHADER_RESOURCE_TEXTURE_2D_ARRAY,
 			VIEW_SHADER_RESOURCE_TEXTURE_3D,
 			VIEW_SHADER_RESOURCE_TEXTURE_CUBE,
-			VIEW_SHADER_RESOURCE_TEXTURE_CUBE_ARRAY
+			VIEW_SHADER_RESOURCE_TEXTURE_CUBE_ARRAY,
+			VIEW_SHADER_RESOURCE_COUNT
 		};
 
 		enum class ViewUnorderedAccessType
@@ -44,7 +45,8 @@ namespace Eternal
 			VIEW_UNORDERED_ACCESS_TEXTURE_1D_ARRAY,
 			VIEW_UNORDERED_ACCESS_TEXTURE_2D,
 			VIEW_UNORDERED_ACCESS_TEXTURE_2D_ARRAY,
-			VIEW_UNORDERED_ACCESS_TEXTURE_3D
+			VIEW_UNORDERED_ACCESS_TEXTURE_3D,
+			VIEW_UNORDERED_ACCESS_COUNT
 		};
 
 		enum class ViewRenderTargetType
@@ -61,51 +63,120 @@ namespace Eternal
 
 		union ViewMetaData
 		{
-			struct
-			{
-				static constexpr uint32_t Size = 2;
-				uint64_t Dummy[Size] = {};
-			} Dummy;
-
+			//////////////////////////////////////////////////////////////////////////
 			// RTV
 			struct
 			{
-				uint64_t FirstElement		= 0;
-				uint32_t NumElements		= 0;
+				uint64_t FirstElement			= 0;
+				uint32_t NumElements			= 0;
 			} RenderTargetViewBuffer;
 
 			struct
 			{
-				uint32_t MipSlice			= 0;
+				uint32_t MipSlice				= 0;
 			} RenderTargetViewTexture1D;
 
 			struct
 			{
-				uint32_t MipSlice			= 0;
-				uint32_t FirstArraySlice	= 0;
-				uint32_t ArraySize			= 0;
+				uint32_t MipSlice				= 0;
+				uint32_t FirstArraySlice		= 0;
+				uint32_t ArraySize				= 0;
 			} RenderTargetViewTexture1DArray;
 
 			struct
 			{
-				uint32_t MipSlice			= 0;
-				uint32_t PlaneSlice			= 0;
+				uint32_t MipSlice				= 0;
+				uint32_t PlaneSlice				= 0;
 			} RenderTargetViewTexture2D;
 
 			struct
 			{
-				uint32_t MipSlice			= 0;
-				uint32_t FirstArraySlice	= 0;
-				uint32_t ArraySize			= 0;
-				uint32_t PlaneSlice			= 0;
+				uint32_t MipSlice				= 0;
+				uint32_t FirstArraySlice		= 0;
+				uint32_t ArraySize				= 0;
+				uint32_t PlaneSlice				= 0;
 			} RenderTargetViewTexture2DArray;
 
 			struct
 			{
-				uint32_t MipSlice			= 0;
-				uint32_t FirstWSlice		= 0;
-				uint32_t WSize				= 0;
+				uint32_t MipSlice				= 0;
+				uint32_t FirstWSlice			= 0;
+				uint32_t WSize					= 0;
 			} RenderTargetViewTexture3D;
+
+			//////////////////////////////////////////////////////////////////////////
+			// CBV
+			struct
+			{
+				uint32_t BufferOffset			= 0;
+				uint32_t BufferSize				= 0;
+			} ConstantBufferView;
+
+			//////////////////////////////////////////////////////////////////////////
+			// SRV
+			struct
+			{
+				uint64_t FirstElement			= 0;
+				uint32_t NumElements			= 0;
+				uint32_t StructureByteStride	= 0;
+			} ShaderResourceViewBuffer;
+
+			struct
+			{
+				uint32_t MostDetailedMip		= 0;
+				uint32_t MipLevels				= 0;
+				float ResourceMinLODClamp		= 0.0f;
+			} ShaderResourceViewTexture1D;
+
+			struct
+			{
+				uint32_t MostDetailedMip		= 0;
+				uint32_t MipLevels				= 0;
+				uint32_t FirstArraySlice		= 0;
+				uint32_t ArraySize				= 0;
+				float ResourceMinLODClamp		= 0.0f;
+			} ShaderResourceViewTexture1DArray;
+
+			struct
+			{
+				uint32_t MostDetailedMip		= 0;
+				uint32_t MipLevels				= 0;
+				uint32_t PlaneSlice				= 0;
+				float ResourceMinLODClamp		= 0.0f;
+			} ShaderResourceViewTexture2D;
+
+			struct
+			{
+				uint32_t MostDetailedMip		= 0;
+				uint32_t MipLevels				= 0;
+				uint32_t FirstArraySlice		= 0;
+				uint32_t ArraySize				= 0;
+				uint32_t PlaneSlice				= 0;
+				float ResourceMinLODClamp		= 0.0f;
+			} ShaderResourceViewTexture2DArray;
+
+			struct
+			{
+				uint32_t MostDetailedMip		= 0;
+				uint32_t MipLevels				= 0;
+				float ResourceMinLODClamp		= 0.0f;
+			} ShaderResourceViewTexture3D;
+
+			struct
+			{
+				uint32_t MostDetailedMip		= 0;
+				uint32_t MipLevels				= 0;
+				float ResourceMinLODClamp		= 0.0f;
+			} ShaderResourceViewTextureCube;
+
+			struct
+			{
+				uint32_t MostDetailedMip		= 0;
+				uint32_t MipLevels				= 0;
+				uint32_t First2DArrayFace		= 0;
+				uint32_t NumCubes				= 0;
+				float ResourceMinLODClamp		= 0.0f;
+			} ShaderResourceViewTextureCubeArray;
 
 			ViewMetaData()
 				: Dummy()
@@ -116,7 +187,23 @@ namespace Eternal
 				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewTexture2D), "Dummy must encapsulates all sub structures");
 				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewTexture2DArray), "Dummy must encapsulates all sub structures");
 				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(RenderTargetViewTexture3D), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ConstantBufferView), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewBuffer), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTexture1D), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTexture1DArray), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTexture2D), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTexture2DArray), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTexture3D), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTextureCube), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTextureCubeArray), "Dummy must encapsulates all sub structures");
 			}
+
+		private:
+			struct
+			{
+				static constexpr uint32_t Size = 3;
+				uint64_t Dummy[Size] = {};
+			} Dummy;
 		};
 
 		struct ViewCreateInformation
@@ -164,6 +251,46 @@ namespace Eternal
 				)
 			{
 				ResourceViewRenderTargetType = InViewRenderTargetType;
+			}
+		};
+
+		struct ConstantBufferViewCreateInformation : public ViewCreateInformation
+		{
+			ConstantBufferViewCreateInformation(
+				_In_ GraphicsContext& InContext,
+				_In_ Resource& InResource,
+				_In_ const ViewMetaData& InViewMetaData,
+				_In_ const Format& InFormat = Format::FORMAT_UNKNOWN
+			)
+				: ViewCreateInformation(
+					InContext,
+					InResource,
+					InViewMetaData,
+					InFormat,
+					ViewType::VIEW_CONSTANT_BUFFER
+				)
+			{
+			}
+		};
+
+		struct ShaderResourceViewCreateInformation : public ViewCreateInformation
+		{
+			ShaderResourceViewCreateInformation(
+				_In_ GraphicsContext& InContext,
+				_In_ Resource& InResource,
+				_In_ const ViewMetaData& InViewMetaData,
+				_In_ const Format& InFormat,
+				_In_ const ViewShaderResourceType& InViewShaderResourceType
+			)
+				: ViewCreateInformation(
+					InContext,
+					InResource,
+					InViewMetaData,
+					InFormat,
+					ViewType::VIEW_SHADER_RESOURCE
+				)
+			{
+				ResourceViewShaderResourceType = InViewShaderResourceType;
 			}
 		};
 

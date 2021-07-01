@@ -11,7 +11,7 @@ namespace Eternal
 		class Device;
 		class D3D12CommandQueue;
 
-		class D3D12Fence : public Fence
+		class D3D12Fence final : public Fence
 		{
 		public:
 			static constexpr uint64_t InvalidFenceValue = ~0ull;

@@ -6,7 +6,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class VulkanViewport : public Viewport
+		class VulkanViewport final : public Viewport
 		{
 		public:
 			VulkanViewport(_In_ int32_t InX, _In_ int32_t InY, _In_ int32_t InWidth, _In_ int32_t InHeight, _In_ bool InIsHeightInverted = false)

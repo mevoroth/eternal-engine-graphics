@@ -2,7 +2,9 @@
 
 #include <array>
 #include <d3d12.h>
+#include <d3dx12.h>
 #include "Graphics/RenderPass.hpp"
+#include "Graphics/DescriptorTable.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
 #include "d3d12/D3D12View.hpp"
@@ -11,6 +13,7 @@
 #include "d3d12/D3D12Resource.hpp"
 #include "d3d12/D3D12Pipeline.hpp"
 #include "d3d12/D3D12RootSignature.hpp"
+#include "d3d12/D3D12Sampler.hpp"
 #include "d3d12/D3D12GraphicsContext.hpp"
 
 namespace Eternal
@@ -18,7 +21,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		D3D12CommandList::D3D12CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
-			: CommandList(InCommandAllocator)
+			: CommandList(InDevice, InCommandAllocator)
 		{
 			using namespace Eternal::Graphics::D3D12;
 
@@ -219,6 +222,137 @@ namespace Eternal
 				InD3DPipeline.GetD3D12PipelineState()
 			);
 			_GraphicCommandList5->IASetPrimitiveTopology(InD3DPipeline.GetD3D12PrimitiveTopology());
+			_CurrentRootSignature = &InD3DRootSignature;
+		}
+
+		inline static void SetGraphicsDescriptorTable(_In_ ID3D12GraphicsCommandList5* InOutCommandList, _In_ uint32_t RootParameterIndex, _In_ const D3D12_GPU_DESCRIPTOR_HANDLE& InHandle)
+		{
+			InOutCommandList->SetGraphicsRootDescriptorTable(RootParameterIndex, InHandle);
+		}
+
+		void D3D12CommandList::SetGraphicsDescriptorTable(_In_ DescriptorTable& InDescriptorTable)
+		{
+			ETERNAL_ASSERT(_CurrentRootSignature && *_CurrentRootSignature == InDescriptorTable.GetRootSignature());
+			//ETERNAL_ASSERT(_CurrentRootSignature && _CurrentRootSignature == &InDescriptorTable.GetRootSignature()); Faster but limiting possibilities
+			
+			const RootSignatureCreateInformation& DescriptorTableLayout	= _CurrentRootSignature->GetCreateInformation();
+			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
+			const vector<RootSignatureParameter>& Parameters			= DescriptorTableLayout.Parameters;
+			
+			const vector<DescriptorTableConstants>& InConstants			= static_cast<const DescriptorTable&>(InDescriptorTable).GetConstants();
+			const vector<DescriptorTableResource>& InResources			= static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
+			const vector<const Sampler*>& InStaticSamplers				= static_cast<const DescriptorTable&>(InDescriptorTable).GetStaticSamplers();
+			ResourcesDirtyFlagsType& InConstantsDirtyFlags				= InDescriptorTable.GetConstantsDirtyFlags();
+			ResourcesDirtyFlagsType& InResourcesDirtyFlags				= InDescriptorTable.GetResourcesDirtyFlags();
+			ResourcesDirtyFlagsType& InStaticSamplersDirtyFlags			= InDescriptorTable.GetStaticSamplersDirtyFlags();
+
+			uint32_t RootParameterIndex = 0;
+			for (uint32_t ConstantIndex = 0; ConstantIndex < Constants.size(); ++ConstantIndex, ++RootParameterIndex)
+			{
+				if (InConstantsDirtyFlags.IsSet(ConstantIndex))
+				{
+					_GraphicCommandList5->SetGraphicsRoot32BitConstants(
+						RootParameterIndex,
+						static_cast<UINT>(InConstants[ConstantIndex].Constants.size()),
+						InConstants[ConstantIndex].Constants.data(),
+						RootParameterIndex
+					);
+				}
+			}
+
+			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex, ++RootParameterIndex)
+			{
+				const RootSignatureParameter& CurrentParameter = Parameters[ParameterIndex];
+
+				D3D12_GPU_DESCRIPTOR_HANDLE DescriptorTableHandle = {};
+
+				switch (CurrentParameter.Parameter)
+				{
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER:
+				{
+					DescriptorTableHandle = static_cast<const D3D12Sampler*>(InResources[ParameterIndex].ResourceSampler)->GetD3D12GPUDescriptorHandle();
+				} break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_TEXTURE:
+				{
+					DescriptorTableHandle = static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12GPUDescriptorHandle();
+				} break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_TEXTURE:
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER:
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_STRUCTURED_BUFFER:
+					ETERNAL_BREAK(); // Not implemented yet
+					break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_CONSTANT_BUFFER:
+				{
+					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
+					{
+						_GraphicCommandList5->SetGraphicsRootConstantBufferView(
+							RootParameterIndex,
+							static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12OffsettedConstantBuffer()
+						);
+						InResourcesDirtyFlags.Unset(ParameterIndex);
+					}
+				} break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_BUFFER:
+					ETERNAL_BREAK(); // Not implemented yet
+					break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE:
+				{
+					D3D12_GPU_DESCRIPTOR_HANDLE SubResourceTableDescriptorHandle = {};
+					switch (CurrentParameter.DescriptorTable.Parameters[0].Parameter)
+					{
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER:
+					{
+						SubResourceTableDescriptorHandle = static_cast<const D3D12Sampler*>(InResources[ParameterIndex].ResourceDescriptorTable->GetResources()[0].ResourceSampler)->GetD3D12GPUDescriptorHandle();
+					} break;
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_TEXTURE:
+					{
+						SubResourceTableDescriptorHandle = static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceDescriptorTable->GetResources()[0].ResourceView)->GetD3D12GPUDescriptorHandle();
+					} break;
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_TEXTURE:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_STRUCTURED_BUFFER:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_CONSTANT_BUFFER:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_BUFFER:
+						ETERNAL_BREAK();
+						break;
+					}
+					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
+					{
+						_GraphicCommandList5->SetGraphicsRootDescriptorTable(
+							RootParameterIndex,
+							SubResourceTableDescriptorHandle
+						);
+						InResourcesDirtyFlags.Unset(ParameterIndex);
+					}
+				} break;
+				}
+
+				if (DescriptorTableHandle.ptr)
+				{
+					bool IsDirty = InResourcesDirtyFlags.IsSet(ParameterIndex);
+					InResourcesDirtyFlags.Unset(ParameterIndex);
+					uint32_t NextParameterIndex = ParameterIndex + 1;
+					while (NextParameterIndex < Parameters.size()
+						&& Parameters[NextParameterIndex] == CurrentParameter)
+					{
+						IsDirty |= InResourcesDirtyFlags.IsSet(NextParameterIndex);
+						InResourcesDirtyFlags.Unset(NextParameterIndex);
+						++NextParameterIndex;
+					}
+
+					if (IsDirty)
+					{
+						_GraphicCommandList5->SetGraphicsRootDescriptorTable(
+							RootParameterIndex,
+							DescriptorTableHandle
+						);
+					}
+
+					ParameterIndex = NextParameterIndex - 1;
+				}
+			}
 		}
 
 		void D3D12CommandList::DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
@@ -239,6 +373,197 @@ namespace Eternal
 				InFirstIndex,
 				InFirstVertex,
 				InFirstInstance
+			);
+		}
+
+		void D3D12CommandList::CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+			switch (InDestinationResource.GetResourceType())
+			{
+			case ResourceType::RESOURCE_TYPE_BUFFER:
+			{
+				_CopyResourceToBuffer(InDestinationResource, InSourceResource, InCopyRegion);
+			} break;
+			case ResourceType::RESOURCE_TYPE_TEXTURE:
+			{
+				_CopyResourceToTexture(InDestinationResource, InSourceResource, InCopyRegion);
+			} break;
+			}
+		}
+
+		void D3D12CommandList::_CopyResourceToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+			switch (InSourceResource.GetResourceType())
+			{
+			case ResourceType::RESOURCE_TYPE_BUFFER:
+			{
+				_GraphicCommandList5->CopyBufferRegion(
+					static_cast<const D3D12Resource&>(InDestinationResource).GetD3D12Resource(),
+					InCopyRegion.Buffer.DestinationOffset,
+					static_cast<const D3D12Resource&>(InSourceResource).GetD3D12Resource(),
+					InCopyRegion.Buffer.SourceOffset,
+					InCopyRegion.Buffer.Size
+				);
+			} break;
+			case ResourceType::RESOURCE_TYPE_TEXTURE:
+			{
+				const D3D12Resource& InD3DDestinationResource = static_cast<const D3D12Resource&>(InDestinationResource);
+
+				D3D12_PLACED_SUBRESOURCE_FOOTPRINT Footprint	= {};
+				UINT NumRows									= 0;
+				UINT64 RowSizeInBytes							= 0;
+				UINT64 TotalBytes								= 0;
+
+				D3D12_RESOURCE_DESC DestinationResourceDesc = InD3DDestinationResource.GetD3D12Resource()->GetDesc();
+				GetD3D12Device().GetD3D12Device()->GetCopyableFootprints(
+					&DestinationResourceDesc,
+					0, 1, InCopyRegion.BufferFromTexture.DestinationOffset,
+					&Footprint,
+					&NumRows,
+					&RowSizeInBytes,
+					&TotalBytes
+				);
+				
+				D3D12_TEXTURE_COPY_LOCATION	DestinationTextureCopyLocation;
+				DestinationTextureCopyLocation.pResource		= InD3DDestinationResource.GetD3D12Resource();
+				DestinationTextureCopyLocation.Type				= D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+				DestinationTextureCopyLocation.PlacedFootprint	= Footprint;
+
+				D3D12_TEXTURE_COPY_LOCATION SourceTextureCopyLocation;
+				SourceTextureCopyLocation.pResource				= static_cast<const D3D12Resource&>(InDestinationResource).GetD3D12Resource();
+				SourceTextureCopyLocation.Type					= D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+				SourceTextureCopyLocation.SubresourceIndex		= D3D12CalcSubresource(
+					InCopyRegion.BufferFromTexture.SourceMIPIndex,
+					InCopyRegion.BufferFromTexture.Source.GetArraySlice(InSourceResource.GetResourceDimension()),
+					InCopyRegion.BufferFromTexture.Source.GetPlaneSlice(InSourceResource.GetResourceDimension()),
+					InSourceResource.GetMIPLevels(),
+					InSourceResource.GetArraySize()
+				);
+
+				const Position3D& InSourcePosition	= InCopyRegion.BufferFromTexture.Source;
+				const Extent3D& InSourceExtent		= InCopyRegion.BufferFromTexture.SourceExtent;
+
+				D3D12_BOX SourceBox;
+				SourceBox.left		= InSourcePosition.X;
+				SourceBox.top		= InSourcePosition.Y;
+				SourceBox.front		= InSourcePosition.Z;
+				SourceBox.right		= InSourceExtent.Width;
+				SourceBox.bottom	= InSourceExtent.Height;
+				SourceBox.back		= InSourceExtent.Depth;
+
+				_GraphicCommandList5->CopyTextureRegion(
+					&DestinationTextureCopyLocation,
+					0, 0, 0,
+					&SourceTextureCopyLocation,
+					&SourceBox
+				);
+			} break;
+			}
+
+		}
+
+		void D3D12CommandList::_CopyResourceToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+			uint32_t SubresourceIndex				= 0;
+			const Position3D& DestinationPosition	= InSourceResource.GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER ? InCopyRegion.TextureFromBuffer.Destination : InCopyRegion.Texture.Destination;
+			switch (InSourceResource.GetResourceType())
+			{
+			case ResourceType::RESOURCE_TYPE_BUFFER:
+			{
+				SubresourceIndex = D3D12CalcSubresource(
+					InCopyRegion.TextureFromBuffer.DestinationMIPIndex,
+					InCopyRegion.TextureFromBuffer.Destination.GetArraySlice(InDestinationResource.GetResourceDimension()),
+					InCopyRegion.TextureFromBuffer.Destination.GetPlaneSlice(InDestinationResource.GetResourceDimension()),
+					InDestinationResource.GetMIPLevels(),
+					InDestinationResource.GetArraySize()
+				);
+			} break;
+			case ResourceType::RESOURCE_TYPE_TEXTURE:
+			{
+				SubresourceIndex = D3D12CalcSubresource(
+					InCopyRegion.Texture.DestinationMIPIndex,
+					InCopyRegion.Texture.Destination.GetArraySlice(InDestinationResource.GetResourceDimension()),
+					InCopyRegion.Texture.Destination.GetPlaneSlice(InDestinationResource.GetResourceDimension()),
+					InDestinationResource.GetMIPLevels(),
+					InDestinationResource.GetArraySize()
+				);
+			} break;
+			}
+			ID3D12Resource* InD3DDestinationResource = static_cast<const D3D12Resource&>(InDestinationResource).GetD3D12Resource();
+
+			D3D12_TEXTURE_COPY_LOCATION DestinationTextureCopyLocation;
+			DestinationTextureCopyLocation.pResource		= InD3DDestinationResource;
+			DestinationTextureCopyLocation.Type				= D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+			DestinationTextureCopyLocation.SubresourceIndex	= SubresourceIndex;
+
+			const D3D12Resource& InD3DSourceResource = static_cast<const D3D12Resource&>(InSourceResource);
+
+			D3D12_BOX					SourceBox;
+			D3D12_TEXTURE_COPY_LOCATION	SourceTextureCopyLocation;
+			SourceTextureCopyLocation.pResource				= InD3DSourceResource.GetD3D12Resource();
+			switch (InSourceResource.GetResourceType())
+			{
+			case ResourceType::RESOURCE_TYPE_BUFFER:
+			{
+				D3D12_PLACED_SUBRESOURCE_FOOTPRINT Footprint	= {};
+				UINT NumRows									= 0;
+				UINT64 RowSizeInBytes							= 0;
+				UINT64 TotalBytes								= 0;
+
+				D3D12_RESOURCE_DESC DestinationResourceDesc	= InD3DDestinationResource->GetDesc();
+				GetD3D12Device().GetD3D12Device()->GetCopyableFootprints(
+					&DestinationResourceDesc,
+					0, 1, InCopyRegion.TextureFromBuffer.SourceOffset,
+					&Footprint,
+					&NumRows,
+					&RowSizeInBytes,
+					&TotalBytes
+				);
+				
+				Footprint.Footprint.Format					= ConvertFormatToD3D12Format(InDestinationResource.GetFormat()).Format;
+
+				SourceTextureCopyLocation.Type				= D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+				SourceTextureCopyLocation.PlacedFootprint	= Footprint;
+
+				uint32_t SourceStride = Footprint.Footprint.RowPitch / Footprint.Footprint.Width;
+
+				SourceBox.left		= (Footprint.Offset % RowSizeInBytes) / SourceStride;
+				SourceBox.top		= (Footprint.Offset / RowSizeInBytes) / SourceStride;
+				SourceBox.front		= 0;
+				SourceBox.right		= Footprint.Footprint.Width;
+				SourceBox.bottom	= Footprint.Footprint.Height;
+				SourceBox.back		= Footprint.Footprint.Depth;
+			} break;
+			case ResourceType::RESOURCE_TYPE_TEXTURE:
+			{
+				SourceTextureCopyLocation.Type					= D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+				SourceTextureCopyLocation.SubresourceIndex		= D3D12CalcSubresource(
+					InCopyRegion.Texture.SourceMIPIndex,
+					InCopyRegion.Texture.Source.GetArraySlice(InSourceResource.GetResourceDimension()),
+					InCopyRegion.Texture.Source.GetPlaneSlice(InSourceResource.GetResourceDimension()),
+					InSourceResource.GetMIPLevels(),
+					InSourceResource.GetArraySize()
+				);
+
+				const Position3D& InSourcePosition	= InCopyRegion.Texture.Source;
+				const Extent3D InSourceExtent		= InCopyRegion.Texture.Extent;
+
+				SourceBox.left		= InSourcePosition.X;
+				SourceBox.top		= InSourcePosition.Y;
+				SourceBox.front		= InSourcePosition.Z;
+				SourceBox.right		= InSourceExtent.Width;
+				SourceBox.bottom	= InSourceExtent.Height;
+				SourceBox.back		= InSourceExtent.Depth;
+			} break;
+			}
+
+			_GraphicCommandList5->CopyTextureRegion(
+				&DestinationTextureCopyLocation,
+				DestinationPosition.X,
+				DestinationPosition.Y,
+				DestinationPosition.Z,
+				&SourceTextureCopyLocation,
+				&SourceBox
 			);
 		}
 	}

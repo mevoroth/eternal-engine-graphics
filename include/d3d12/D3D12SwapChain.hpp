@@ -9,14 +9,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		using namespace std;
-
 		class Device;
 		class Window;
 		class CommandQueue;
 		class GraphicsContext;
 
-		class D3D12SwapChain : public SwapChain
+		class D3D12SwapChain final : public SwapChain
 		{
 		public:
 			D3D12SwapChain(_In_ GraphicsContext& Context);

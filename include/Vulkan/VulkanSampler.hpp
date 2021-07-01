@@ -10,7 +10,7 @@ namespace Eternal
 		class Device;
 		class GraphicsContext;
 
-		class VulkanSampler : public Sampler
+		class VulkanSampler final : public Sampler
 		{
 		public:
 			VulkanSampler(_In_ GraphicsContext& InContext, _In_ const SamplerCreateInformation& InSamplerCreateInformation);

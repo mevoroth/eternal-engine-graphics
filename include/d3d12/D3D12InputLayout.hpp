@@ -12,7 +12,7 @@ namespace Eternal
 	{
 		struct D3D12Format;
 
-		class D3D12InputLayout : public InputLayout
+		class D3D12InputLayout final : public InputLayout
 		{
 		public:
 			D3D12InputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t DataTypeCount);

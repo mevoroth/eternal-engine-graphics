@@ -85,7 +85,7 @@ namespace Eternal
 			};
 		}
 
-		VulkanDevice::VulkanDevice(_In_ Window& WindowObj)
+		VulkanDevice::VulkanDevice(_In_ Window& InWindow)
 		{
 			using namespace Vulkan;
 			using namespace Eternal::Graphics::Vulkan;
@@ -145,7 +145,7 @@ namespace Eternal
 
 			_VulkanVersion = VK_API_VERSION_1_2; // Vulkan version
 			vk::ApplicationInfo ApplicationInfo(
-				WindowObj.GetClassName().c_str(),
+				InWindow.GetClassName().c_str(),
 				0,
 				"EternalEngine",
 				0,

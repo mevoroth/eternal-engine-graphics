@@ -10,7 +10,7 @@ namespace Eternal
 		class Device;
 		class CommandQueue;
 
-		class VulkanCommandAllocator : public CommandAllocator
+		class VulkanCommandAllocator final : public CommandAllocator
 		{
 		public:
 			VulkanCommandAllocator(_In_ Device& InDevice, _In_ const CommandQueue& InCommandQueue);

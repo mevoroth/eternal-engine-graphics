@@ -266,33 +266,33 @@ namespace Eternal
 				const RootSignatureAccess& CurrentAccess				= InParameters[DescriptorTableIndex].Access;
 				const RootSignatureParameterType& CurrentParameterType	= InParameters[DescriptorTableIndex].Parameter;
 
-				uint32_t DescriptorCount = InParameters[DescriptorTableIndex].DescriptorCount;
+				uint32_t DescriptorsCount = InParameters[DescriptorTableIndex].DescriptorsCount;
 
 				if (CurrentParameterType == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER)
 				{
 					Samplers.push_back(vector<vk::Sampler>());
 					vector<vk::Sampler>& SamplerEntry = Samplers.back();
 
-					DescriptorCount = static_cast<uint32_t>(InParameters[DescriptorTableIndex].Samplers.size());
-					SamplerEntry.resize(DescriptorCount);
+					DescriptorsCount = static_cast<uint32_t>(InParameters[DescriptorTableIndex].Samplers.size());
+					SamplerEntry.resize(DescriptorsCount);
 
 					const vector<Sampler*>& CurrentSamplers = InParameters[DescriptorTableIndex].Samplers;
 
-					for (uint32_t SamplerIndex = 0; SamplerIndex < DescriptorCount; ++SamplerIndex)
+					for (uint32_t SamplerIndex = 0; SamplerIndex < DescriptorsCount; ++SamplerIndex)
 						SamplerEntry[SamplerIndex] = static_cast<VulkanSampler*>(CurrentSamplers[SamplerIndex])->GetVulkanSampler();
 				}
 
 				Bindings[DescriptorTableIndex] = vk::DescriptorSetLayoutBinding(
 					InOutRegisterIndices[static_cast<int32_t>(CurrentAccess)],
 					ConvertRootSignatureParameterTypeToVulkanDescriptorType(CurrentParameterType),
-					DescriptorCount,
+					DescriptorsCount,
 					ConvertRootSignatureAccessToShaderStageFlags(CurrentAccess),
 					CurrentParameterType == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER
 						? Samplers.back().data()
 						: nullptr
 				);
 
-				InOutRegisterIndices[static_cast<int32_t>(CurrentAccess)] += DescriptorCount;
+				InOutRegisterIndices[static_cast<int32_t>(CurrentAccess)] += DescriptorsCount;
 			}
 
 			_DescriptorSetLayouts.push_back(vk::DescriptorSetLayout());

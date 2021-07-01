@@ -11,7 +11,7 @@ namespace Eternal
 		class Device;
 		class GraphicsContext;
 
-		class VulkanRenderPass : public RenderPass
+		class VulkanRenderPass final : public RenderPass
 		{
 		public:
 			VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation);

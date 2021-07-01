@@ -99,7 +99,7 @@ namespace Eternal
 		static constexpr D3D12_ROOT_PARAMETER_TYPE D3D12_ROOT_PARAMETER_TYPES[] =
 		{
 			D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
-			D3D12_ROOT_PARAMETER_TYPE_SRV,
+			D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
 			D3D12_ROOT_PARAMETER_TYPE_UAV,
 			D3D12_ROOT_PARAMETER_TYPE_SRV,
 			D3D12_ROOT_PARAMETER_TYPE_UAV,
@@ -441,8 +441,8 @@ namespace Eternal
 
 				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_INDEX_READ);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_INDIRECT)				<< 9);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_READ)			>> 1);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_WRITE)			<< 1);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_READ)			<< 1);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_WRITE)			>> 1);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & ShaderReadState)									<< 2);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_SHADER_WRITE)			>> 3);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_RENDER_TARGET)		>> 5);

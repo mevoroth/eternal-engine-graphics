@@ -6,6 +6,7 @@ namespace Eternal
 	{
 		const VulkanFormat VULKAN_FORMATS[] =
 		{
+			VulkanFormat(vk::Format::eUndefined,			0),
 			VulkanFormat(vk::Format::eB8G8R8A8Unorm,		4),
 			VulkanFormat(vk::Format::eR8G8B8A8Unorm,		4),
 			VulkanFormat(vk::Format::eR32G32B32A32Sfloat,	16),

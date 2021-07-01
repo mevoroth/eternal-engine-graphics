@@ -5,9 +5,13 @@ namespace Eternal
 	namespace Graphics
 	{
 		enum class ResourceUsage;
+		enum class ResourceDimension;
 
 		class View;
 		class Resource;
+
+		//////////////////////////////////////////////////////////////////////////
+		// Resource transition
 
 		enum class TransitionState
 		{
@@ -158,18 +162,151 @@ namespace Eternal
 			CommandType		AfterCommandType	= CommandType::COMMAND_TYPE_GRAPHIC;
 		};
 
+		//////////////////////////////////////////////////////////////////////////
+		// Copy
+
 		struct Position3D
 		{
-			int X	= 0;
-			int Y	= 0;
-			int Z	= 0;
+			static const Position3D Zero;
+
+			uint32_t X	= 0;
+			uint32_t Y	= 0;
+			uint32_t Z	= 0;
+
+			uint32_t GetArraySlice(_In_ const ResourceDimension& InResourceDimension) const;
+			uint32_t GetPlaneSlice(_In_ const ResourceDimension& InResourceDimension) const;
 		};
 
-		struct Extent
+		struct Extent3D
 		{
-			int Width	= 0;
-			int Height	= 0;
-			int Depth	= 0;
+			Extent3D(_In_ uint32_t InWidth = 1, _In_ uint32_t InHeight = 1, _In_ uint32_t InDepth = 1)
+				: Width(InWidth)
+				, Height(InHeight)
+				, Depth(InDepth)
+			{
+			}
+
+			uint32_t Width	= 1;
+			uint32_t Height	= 1;
+			uint32_t Depth	= 1;
+		};
+
+		struct TextureRegion
+		{
+			TextureRegion(
+				_In_ const Extent3D& InExtent,
+				_In_ uint32_t InDestinationMIPIndex = 0,
+				_In_ uint32_t InSourceMIPIndex = 0,
+				_In_ const Position3D& InDestinationPosition = Position3D::Zero,
+				_In_ const Position3D& InSourcePosition = Position3D::Zero
+			)
+				: Destination(InDestinationPosition)
+				, DestinationMIPIndex(InDestinationMIPIndex)
+				, Source(InSourcePosition)
+				, SourceMIPIndex(InSourceMIPIndex)
+				, Extent(InExtent)
+			{
+			}
+
+			Position3D	Destination;
+			uint32_t	DestinationMIPIndex	= 0;
+			Position3D	Source;
+			uint32_t	SourceMIPIndex		= 0;
+			Extent3D	Extent;
+		};
+
+		struct BufferRegion
+		{
+			BufferRegion(
+				_In_ uint32_t InSize,
+				_In_ uint32_t InDestinationOffset = 0,
+				_In_ uint32_t InSourceOffset = 0
+			)
+				: DestinationOffset(InDestinationOffset)
+				, SourceOffset(InSourceOffset)
+				, Size(InSize)
+			{
+			}
+
+			uint32_t DestinationOffset	= 0;
+			uint32_t SourceOffset		= 0;
+			uint32_t Size				= 0;
+		};
+
+		struct BufferFromTextureRegion
+		{
+			BufferFromTextureRegion(
+				_In_ uint32_t InDestinationSize,
+				_In_ const Extent3D& InSourceExtent,
+				_In_ const Position3D& InSourcePosition = Position3D::Zero,
+				_In_ const uint32_t InDestinationOffset = 0,
+				_In_ const uint32_t InSourceMIPIndex = 0
+			)
+				: Source(InSourcePosition)
+				, SourceMIPIndex(InSourceMIPIndex)
+				, SourceExtent(InSourceExtent)
+				, DestinationOffset(InDestinationOffset)
+				, DestinationSize(InDestinationSize)
+			{
+			}
+
+			Position3D	Source;
+			uint32_t	SourceMIPIndex		= 0;
+			Extent3D	SourceExtent;
+			uint32_t	DestinationOffset	= 0;
+			uint32_t	DestinationSize		= 0;
+		};
+
+		struct TextureFromBufferRegion
+		{
+			TextureFromBufferRegion(
+				_In_ const Extent3D& InDestinationExtent,
+				_In_ uint32_t InSourceSize,
+				_In_ const Position3D& InDestinationPosition = Position3D::Zero,
+				_In_ const uint32_t InSourceOffset = 0,
+				_In_ const uint32_t InDestinationMIPIndex = 0
+			)
+				: Destination(InDestinationPosition)
+				, DestinationMIPIndex(InDestinationMIPIndex)
+				, DestinationExtent(InDestinationExtent)
+				, SourceOffset(InSourceOffset)
+				, SourceSize(InSourceSize)
+			{
+			}
+
+			Position3D	Destination;
+			uint32_t	DestinationMIPIndex	= 0;
+			Extent3D	DestinationExtent;
+			uint32_t	SourceOffset		= 0;
+			uint32_t	SourceSize			= 0;
+		};
+
+		union CopyRegion
+		{
+			CopyRegion(_In_ const BufferRegion& InBufferRegion)
+				: Buffer(InBufferRegion)
+			{
+			}
+
+			CopyRegion(_In_ const TextureRegion& InTextureRegion)
+				: Texture(InTextureRegion)
+			{
+			}
+
+			CopyRegion(_In_ const BufferFromTextureRegion& InBufferFromTextureRegion)
+				: BufferFromTexture(InBufferFromTextureRegion)
+			{
+			}
+
+			CopyRegion(_In_ const TextureFromBufferRegion& InTextureFromBuffer)
+				: TextureFromBuffer(InTextureFromBuffer)
+			{
+			}
+
+			TextureRegion Texture;
+			BufferRegion Buffer;
+			BufferFromTextureRegion BufferFromTexture;
+			TextureFromBufferRegion TextureFromBuffer;
 		};
 	}
 }

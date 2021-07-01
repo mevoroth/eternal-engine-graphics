@@ -21,7 +21,7 @@ namespace Eternal
 	{
 		class Window;
 
-		class D3D12Device : public Device
+		class D3D12Device final : public Device
 		{
 		public:
 			static void Initialize();

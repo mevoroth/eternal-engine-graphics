@@ -11,7 +11,7 @@ namespace Eternal
 	{
 		class Device;
 
-		class VulkanPipeline : public Pipeline
+		class VulkanPipeline final : public Pipeline
 		{
 		public:
 			VulkanPipeline(

@@ -23,7 +23,7 @@ namespace Eternal
 			vk::Image BackBufferResource;
 		};
 
-		class VulkanResource : public Resource
+		class VulkanResource final : public Resource
 		{
 		public:
 			/**
@@ -39,6 +39,9 @@ namespace Eternal
 			 */
 			VulkanResource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation);
 			virtual ~VulkanResource();
+
+			virtual void* Map(_In_ const MapRange& InMapRange) override final;
+			virtual void Unmap(_In_ const MapRange& InMapRange) override final;
 
 			const vk::Image& GetVulkanImage() const;
 			const vk::Buffer& GetVulkanBuffer() const;

@@ -4,8 +4,9 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		CommandList::CommandList(_In_ CommandAllocator& InCommandAllocator)
-			: _CommandAllocator(InCommandAllocator)
+		CommandList::CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
+			: _Device(InDevice)
+			, _CommandAllocator(InCommandAllocator)
 		{
 		}
 

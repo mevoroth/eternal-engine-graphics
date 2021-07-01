@@ -10,9 +10,6 @@
     <Filter Include="Vulkan">
       <UniqueIdentifier>{cbd7f7d3-0270-41b2-b4a6-b9591a0a3b99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics_deprecated">
-      <UniqueIdentifier>{4be9c4fb-a198-44ee-9012-2b24014beb42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{2e3ca534-bdc7-43d3-a353-6c354cfe7fe5}</UniqueIdentifier>
     </Filter>
@@ -33,18 +30,6 @@
     </ClInclude>
     <ClInclude Include="include\Vulkan\VulkanUtils.hpp">
       <Filter>Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\DescriptorTable.h">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Heap.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\HeapFactory.hpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics_deprecated\Texture.hpp">
-      <Filter>Graphics_deprecated</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics\BlendState.hpp">
       <Filter>Graphics</Filter>
@@ -277,6 +262,12 @@
     <ClInclude Include="include\Graphics\ResourceFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\DescriptorTable.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ViewFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -287,15 +278,6 @@
     </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanUtils.cpp">
       <Filter>Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\Heap.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\HeapFactory.cpp">
-      <Filter>Graphics_deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics_deprecated\Texture.cpp">
-      <Filter>Graphics_deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\BlendState.cpp">
       <Filter>Graphics</Filter>
@@ -420,9 +402,6 @@
     <ClCompile Include="src\d3d12\D3D12GraphicsContext.cpp">
       <Filter>d3d12</Filter>
     </ClCompile>
-    <ClCompile Include="src\d3d12\D3D12Format.cpp">
-      <Filter>d3d12</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan\VulkanView.cpp">
       <Filter>Vulkan</Filter>
     </ClCompile>
@@ -487,6 +466,18 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\ResourceFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12Format.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\DescriptorTable.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\RootSignature.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ViewFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,6 +2,7 @@
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Format.hpp"
+#include "d3dx12.h"
 #include <d3d12.h>
 #include <string>
 
@@ -32,7 +33,7 @@ namespace Eternal
 			
 			D3D12_HEAP_PROPERTIES D3D12HeapProperties;
 			D3D12HeapProperties.Type					= ConvertResourceMemoryTypeToD3D12HeapType(InResourceCreateInformation.MemoryType);
-			D3D12HeapProperties.CPUPageProperty			= ConvertResourceMemoryTypeToD3D12CPUPageProperty(InResourceCreateInformation.MemoryType);
+			D3D12HeapProperties.CPUPageProperty			= D3D12_CPU_PAGE_PROPERTY_UNKNOWN;//ConvertResourceMemoryTypeToD3D12CPUPageProperty(InResourceCreateInformation.MemoryType);
 			D3D12HeapProperties.MemoryPoolPreference	= D3D12_MEMORY_POOL_UNKNOWN;
 			D3D12HeapProperties.CreationNodeMask		= InD3DDevice.GetDeviceMask();
 			D3D12HeapProperties.VisibleNodeMask			= InD3DDevice.GetDeviceMask();
@@ -162,6 +163,51 @@ namespace Eternal
 			std::wstring UTF8String(GetResourceCreateInformation().Name.begin(), GetResourceCreateInformation().Name.end());
 			VerifySuccess(
 				_Resource->SetName(UTF8String.c_str())
+			);
+		}
+
+		void* D3D12Resource::Map(_In_ const MapRange& InMapRange)
+		{
+			D3D12_RANGE D3DMapRange;
+			D3DMapRange.Begin	= InMapRange.MapOffset;
+			D3DMapRange.End		= InMapRange.MapSize;
+
+			void* OutData = nullptr;
+
+			VerifySuccess(
+				_Resource->Map(
+					//D3D12CalcSubresource(
+					//	InMapRange.MIPIndex,
+					//	InMapRange.ArraySlice,
+					//	InMapRange.PlaneSlice,
+					//	GetMIPLevels(),
+					//	GetArraySize()
+					//),
+					0,
+					&D3DMapRange,
+					&OutData
+				)
+			);
+
+			return OutData;
+		}
+
+		void D3D12Resource::Unmap(_In_ const MapRange& InMapRange)
+		{
+			D3D12_RANGE D3DWrittenRange;
+			D3DWrittenRange.Begin	= InMapRange.MapOffset;
+			D3DWrittenRange.End		= InMapRange.MapSize;
+
+			_Resource->Unmap(
+				//D3D12CalcSubresource(
+				//	InMapRange.MIPIndex,
+				//	InMapRange.ArraySlice,
+				//	InMapRange.PlaneSlice,
+				//	GetMIPLevels(),
+				//	GetArraySize()
+				//),
+				0,
+				&D3DWrittenRange
 			);
 		}
 	}

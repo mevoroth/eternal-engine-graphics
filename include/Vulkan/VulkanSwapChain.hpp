@@ -16,7 +16,7 @@ namespace Eternal
 		class GraphicsContext;
 		class View;
 
-		class VulkanSwapChain : public SwapChain
+		class VulkanSwapChain final : public SwapChain
 		{
 		public:
 			VulkanSwapChain(_In_ GraphicsContext& Context);

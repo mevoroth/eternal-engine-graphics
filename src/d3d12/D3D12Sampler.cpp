@@ -30,7 +30,7 @@ namespace Eternal
 				SamplerDesc.MinLOD			= GetMinLOD();
 				SamplerDesc.MaxLOD			= GetMaxLOD();
 
-				_D3D12Handle.D3D12CPUDescriptorHandle = static_cast<D3D12GraphicsContext&>(InContext).AllocateSamplerDescriptor(_D3D12Handle.DescriptorHandle);
+				_D3D12Handle = static_cast<D3D12GraphicsContext&>(InContext).AllocateSamplerDescriptor();
 				static_cast<D3D12Device&>(InContext.GetDevice()).GetD3D12Device()->CreateSampler(
 					&SamplerDesc,
 					_D3D12Handle.D3D12CPUDescriptorHandle

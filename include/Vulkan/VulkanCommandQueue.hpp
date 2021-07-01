@@ -14,7 +14,7 @@ namespace Eternal
 		class Device;
 		class CommandList;
 
-		class VulkanCommandQueue : public CommandQueue
+		class VulkanCommandQueue final : public CommandQueue
 		{
 		public:
 			VulkanCommandQueue(_In_ Device& InDevice, _In_ const CommandType& Type);

@@ -10,7 +10,7 @@ namespace Eternal
 		class Device;
 		class D3D12RootSignature;
 
-		class D3D12Pipeline : public Pipeline
+		class D3D12Pipeline final : public Pipeline
 		{
 		public:
 			D3D12Pipeline(

@@ -17,7 +17,7 @@ namespace Eternal
 
 		using QueueFamilyIndicesType = std::array<uint32_t, static_cast<uint32_t>(CommandType::COMMAND_TYPE_COUNT)>;
 
-		class VulkanDevice : public Device
+		class VulkanDevice final : public Device
 		{
 		public:
 			static VKAPI_ATTR VkBool32 VKAPI_CALL DebugReport(
@@ -38,7 +38,7 @@ namespace Eternal
 				void*                                            pUserData
 			);
 
-			VulkanDevice(_In_ Window& WindowObj);
+			VulkanDevice(_In_ Window& InWindow);
 
 			virtual uint32_t GetDeviceMask() const override final { return 0x1; }
 			virtual DeviceType GetDeviceType() const override final { return DeviceType::VULKAN; }

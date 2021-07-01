@@ -11,11 +11,12 @@ namespace Eternal
 		class Device;
 		class GraphicsContext;
 
-		class D3D12Sampler : public Sampler
+		class D3D12Sampler final : public Sampler
 		{
 		public:
 			D3D12Sampler(_In_ GraphicsContext& InContext, _In_ const SamplerCreateInformation& InSamplerCreateInformation);
 
+			const D3D12_GPU_DESCRIPTOR_HANDLE& GetD3D12GPUDescriptorHandle() const { return _D3D12Handle.D3D12GPUDescriptorHandle; }
 			void GetD3D12StaticSampler(_Out_ D3D12_STATIC_SAMPLER_DESC& StaticSamplerDesc) const;
 
 		private:

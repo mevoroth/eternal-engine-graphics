@@ -13,7 +13,7 @@ namespace Eternal
 		using namespace std;
 		using namespace Eternal::Bit;
 
-		class VulkanGraphicsContext : public GraphicsContext
+		class VulkanGraphicsContext final : public GraphicsContext
 		{
 		public:
 			VulkanGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
@@ -28,7 +28,7 @@ namespace Eternal
 		private:
 
 			std::array<vk::Semaphore, FrameBufferingCount>	_AcquireFrameSemaphores;
-			DynamicBitField<>								_ConstantHandles;
+			DynamicHandlePool<>								_ConstantHandles;
 		};
 	}
 }

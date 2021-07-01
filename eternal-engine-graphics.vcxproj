@@ -47,6 +47,7 @@
     <ClInclude Include="include\Graphics\CommandList.hpp" />
     <ClInclude Include="include\Graphics\CommandQueue.hpp" />
     <ClInclude Include="include\Graphics\ComparisonFunction.hpp" />
+    <ClInclude Include="include\Graphics\DescriptorTable.hpp" />
     <ClInclude Include="include\Graphics\GraphicsContext.hpp" />
     <ClInclude Include="include\Graphics\DepthStencil.hpp" />
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
@@ -77,12 +78,9 @@
     <ClInclude Include="include\Graphics\Types\DeviceType.hpp" />
     <ClInclude Include="include\Graphics\Types\MemoryType.hpp" />
     <ClInclude Include="include\Graphics\View.hpp" />
+    <ClInclude Include="include\Graphics\ViewFactory.hpp" />
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\DescriptorTable.h" />
-    <ClInclude Include="include\Graphics_deprecated\Heap.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\HeapFactory.hpp" />
-    <ClInclude Include="include\Graphics_deprecated\Texture.hpp" />
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
@@ -131,6 +129,7 @@
     <ClCompile Include="src\Graphics\CommandQueue.cpp" />
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandUtils.cpp" />
+    <ClCompile Include="src\Graphics\DescriptorTable.cpp" />
     <ClCompile Include="src\Graphics\GraphicsContext.cpp" />
     <ClCompile Include="src\Graphics\DepthStencil.cpp" />
     <ClCompile Include="src\Graphics\DepthTest.cpp" />
@@ -143,6 +142,7 @@
     <ClCompile Include="src\Graphics\RenderPassFactory.cpp" />
     <ClCompile Include="src\Graphics\Resource.cpp" />
     <ClCompile Include="src\Graphics\ResourceFactory.cpp" />
+    <ClCompile Include="src\Graphics\RootSignature.cpp" />
     <ClCompile Include="src\Graphics\RootSignatureFactory.cpp" />
     <ClCompile Include="src\Graphics\SamplerFactory.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
@@ -152,11 +152,9 @@
     <ClCompile Include="src\Graphics\SwapChainFactory.cpp" />
     <ClCompile Include="src\Graphics\Types\MemoryType.cpp" />
     <ClCompile Include="src\Graphics\View.cpp" />
+    <ClCompile Include="src\Graphics\ViewFactory.cpp" />
     <ClCompile Include="src\Graphics\Viewport.cpp" />
     <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\Heap.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\HeapFactory.cpp" />
-    <ClCompile Include="src\Graphics_deprecated\Texture.cpp" />
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandList.cpp" />
@@ -230,7 +228,7 @@
     <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.2.176.1\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.2.176.1\Include;$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>D:\Code\VulkanSDK\1.2.176.1\Include;$(IncludePath)</IncludePath>

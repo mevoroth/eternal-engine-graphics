@@ -2,6 +2,7 @@
 
 #include "Graphics/GraphicsContext.hpp"
 #include "Bit/BitField.hpp"
+#include "d3d12/D3D12Utils.hpp"
 
 struct ID3D12DescriptorHeap;
 struct D3D12_CPU_DESCRIPTOR_HANDLE;
@@ -12,7 +13,7 @@ namespace Eternal
 	{
 		using namespace Eternal::Bit;
 
-		class D3D12GraphicsContext : public GraphicsContext
+		class D3D12GraphicsContext final : public GraphicsContext
 		{
 		public:
 			static constexpr uint32_t MaxConstantBufferViewCount	= 2048;
@@ -25,19 +26,19 @@ namespace Eternal
 			D3D12GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 			~D3D12GraphicsContext();
 
-			D3D12_CPU_DESCRIPTOR_HANDLE AllocateConstantBufferViewDescriptor(_Out_ Handle& OutHandle);
-			D3D12_CPU_DESCRIPTOR_HANDLE AllocateShaderResourceViewDescriptor(_Out_ Handle& OutHandle);
-			D3D12_CPU_DESCRIPTOR_HANDLE AllocateUnorderedAccessViewDescriptor(_Out_ Handle& OutHandle);
-			D3D12_CPU_DESCRIPTOR_HANDLE AllocateSamplerDescriptor(_Out_ Handle& OutHandle);
-			D3D12_CPU_DESCRIPTOR_HANDLE AllocateRenderTargetViewDescriptor(_Out_ Handle& OutHandle);
-			D3D12_CPU_DESCRIPTOR_HANDLE AllocateDepthStencilViewDescriptor(_Out_ Handle& OutHandle);
+			D3D12Handle AllocateConstantBufferViewDescriptor();
+			D3D12Handle AllocateShaderResourceViewDescriptor();
+			D3D12Handle AllocateUnorderedAccessViewDescriptor();
+			D3D12Handle AllocateSamplerDescriptor();
+			D3D12Handle AllocateRenderTargetViewDescriptor();
+			D3D12Handle AllocateDepthStencilViewDescriptor();
 
-			void ReleaseConstantBufferViewDescriptor(_Inout_ Handle& InOutHandle);
-			void ReleaseShaderResourceViewDescriptor(_Inout_ Handle& InOutHandle);
-			void ReleaseUnorderedAccessViewDescriptor(_Inout_ Handle& InOutHandle);
-			void ReleaseSamplerDescriptor(_Inout_ Handle& InOutHandle);
-			void ReleaseRenderTargetViewDescriptor(_Inout_ Handle& InOutHandle);
-			void ReleaseDepthStencilViewDescriptor(_Inout_ Handle& InOutHandle);
+			void ReleaseConstantBufferViewDescriptor(_Inout_ D3D12Handle& InOutHandle);
+			void ReleaseShaderResourceViewDescriptor(_Inout_ D3D12Handle& InOutHandle);
+			void ReleaseUnorderedAccessViewDescriptor(_Inout_ D3D12Handle& InOutHandle);
+			void ReleaseSamplerDescriptor(_Inout_ D3D12Handle& InOutHandle);
+			void ReleaseRenderTargetViewDescriptor(_Inout_ D3D12Handle& InOutHandle);
+			void ReleaseDepthStencilViewDescriptor(_Inout_ D3D12Handle& InOutHandle);
 
 			inline ID3D12DescriptorHeap* GetCBV_SRV_UAV_DescriptorHeap() { return _CBV_SRV_UAV_DescriptorHeap; }
 			inline ID3D12DescriptorHeap* GetSamplerDescriptorHeap() { return _SamplerDescriptorHeap; }
@@ -55,12 +56,12 @@ namespace Eternal
 			ID3D12DescriptorHeap* _RenderTargetViewDescriptorHeap	= nullptr;
 			ID3D12DescriptorHeap* _DepthStencilViewDescriptorHeap	= nullptr;
 
-			StaticBitField<MaxConstantBufferViewCount>	_ConstantBufferViewHandles;
-			StaticBitField<MaxShaderResourceViewCount>	_ShaderResourceViewHandles;
-			StaticBitField<MaxUnorderedAccessViewCount>	_UnorderedAccessViewHandles;
-			StaticBitField<MaxSamplerCount>				_SamplerHandles;
-			StaticBitField<MaxRenderTargetViewCount>	_RenderTargetViewHandles;
-			StaticBitField<MaxDepthStencilViewCount>	_DepthStencilViewHandles;
+			StaticHandlePool<MaxConstantBufferViewCount>	_ConstantBufferViewHandles;
+			StaticHandlePool<MaxShaderResourceViewCount>	_ShaderResourceViewHandles;
+			StaticHandlePool<MaxUnorderedAccessViewCount>	_UnorderedAccessViewHandles;
+			StaticHandlePool<MaxSamplerCount>				_SamplerHandles;
+			StaticHandlePool<MaxRenderTargetViewCount>		_RenderTargetViewHandles;
+			StaticHandlePool<MaxDepthStencilViewCount>		_DepthStencilViewHandles;
 		};
 	}
 }

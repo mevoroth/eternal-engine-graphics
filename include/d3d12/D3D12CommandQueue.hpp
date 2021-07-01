@@ -12,7 +12,7 @@ namespace Eternal
 		class Device;
 		class CommandList;
 
-		class D3D12CommandQueue : public CommandQueue
+		class D3D12CommandQueue final : public CommandQueue
 		{
 		public:
 			D3D12CommandQueue(_In_ Device& DeviceObj, _In_ const CommandType& Type = CommandType::COMMAND_TYPE_GRAPHIC);

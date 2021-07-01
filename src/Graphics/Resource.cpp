@@ -37,5 +37,42 @@ namespace Eternal
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
 			return _ResourceCreateInformation.TextureInformation.ClearValue;
 		}
+
+		const ResourceDimension& Resource::GetResourceDimension() const
+		{
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+			return _ResourceCreateInformation.TextureInformation.Dimension;
+		}
+
+		uint32_t Resource::GetMIPLevels() const
+		{
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+			return _ResourceCreateInformation.TextureInformation.MIPLevels;
+		}
+
+		uint32_t Resource::GetArraySize() const
+		{
+			switch (GetResourceDimension())
+			{
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D_ARRAY:
+				return _ResourceCreateInformation.TextureInformation.Height;
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D_ARRAY:
+				return _ResourceCreateInformation.TextureInformation.DepthOrArraySize;
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY:
+				return _ResourceCreateInformation.TextureInformation.DepthOrArraySize / 6;
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_3D:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE:
+			default:
+				return 1;
+				break;
+			}
+		}
+
+		const Format& Resource::GetFormat() const
+		{
+			return GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE ? _ResourceCreateInformation.TextureInformation.ResourceFormat : _ResourceCreateInformation.BufferInformation.ResourceFormat;
+		}
 	}
 }

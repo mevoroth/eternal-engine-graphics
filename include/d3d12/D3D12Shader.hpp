@@ -13,7 +13,7 @@ namespace Eternal
 		enum class ShaderType;
 		class GraphicsContext;
 
-		class D3D12Shader : public Shader
+		class D3D12Shader final : public Shader
 		{
 			class D3D12Include : public ID3DInclude
 			{

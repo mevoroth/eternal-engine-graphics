@@ -60,6 +60,7 @@ namespace Eternal
 		{
 			Handle						DescriptorHandle			= Handle::InvalidHandle;
 			D3D12_CPU_DESCRIPTOR_HANDLE	D3D12CPUDescriptorHandle	= { 0 };
+			D3D12_GPU_DESCRIPTOR_HANDLE	D3D12GPUDescriptorHandle	= { 0 };
 		};
 
 		namespace D3D12

@@ -10,7 +10,7 @@ namespace Eternal
 
 		class View;
 
-		class D3D12RenderPass : public RenderPass
+		class D3D12RenderPass final : public RenderPass
 		{
 		public:
 			D3D12RenderPass(_In_ const RenderPassCreateInformation& CreateInformation);

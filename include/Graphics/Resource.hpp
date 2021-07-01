@@ -52,6 +52,24 @@ namespace Eternal
 			RESOURCE_TYPE_BACK_BUFFER	= 0x4 | RESOURCE_TYPE_TEXTURE
 		};
 		
+		struct MapRange
+		{
+			MapRange(_In_ uint32_t InMapSize, _In_ uint32_t InMapOffset = 0, _In_ uint32_t InMIPIndex = 0, _In_ uint32_t InPlaneSlice = 0, _In_ uint32_t InArraySlice = 0)
+				: MapSize(InMapSize)
+				, MapOffset(InMapOffset)
+				, MIPIndex(InMIPIndex)
+				, PlaneSlice(InPlaneSlice)
+				, ArraySlice(InArraySlice)
+			{
+			}
+			
+			uint32_t MapSize	= 0;
+			uint32_t MapOffset	= 0;
+			uint32_t MIPIndex	= 0;
+			uint32_t PlaneSlice	= 0;
+			uint32_t ArraySlice	= 0;
+		};
+
 		// TODO: Add multisample resource
 		struct TextureCreateInformation
 		{
@@ -197,11 +215,18 @@ namespace Eternal
 			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType);
 			virtual ~Resource() {}
 
-			inline void SetResourceState(const TransitionState& InTransitionState) { _ResourceCreateInformation.ResourceState = InTransitionState; }
+			virtual void* Map(_In_ const MapRange& InMapRange) = 0;
+			virtual void Unmap(_In_ const MapRange& InMapRange) = 0;
+
+			inline void SetResourceState(_In_ const TransitionState& InTransitionState) { _ResourceCreateInformation.ResourceState = InTransitionState; }
 			inline bool IsMultisample() const { return _Multisample; }
 			inline const TransitionState& GetResourceState() const { return _ResourceCreateInformation.ResourceState; }
+			const ResourceDimension& GetResourceDimension() const;
+			uint32_t GetMIPLevels() const;
+			uint32_t GetArraySize() const;
 			ResourceType GetResourceType() const;
 			const float* GetClearValue() const;
+			const Format& GetFormat() const;
 
 		protected:
 			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }

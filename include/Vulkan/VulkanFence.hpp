@@ -11,7 +11,7 @@ namespace Eternal
 		
 		class Device;
 
-		class VulkanFence : public Fence
+		class VulkanFence final : public Fence
 		{
 		public:
 			VulkanFence(_In_ Device& DeviceObj);

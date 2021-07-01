@@ -16,7 +16,7 @@ namespace Eternal
 		class GraphicsContext;
 		class Device;
 
-		class VulkanRootSignature : public RootSignature
+		class VulkanRootSignature final : public RootSignature
 		{
 		public:
 			using RegisterIndicesContainer = std::array<uint32_t, static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT)>;

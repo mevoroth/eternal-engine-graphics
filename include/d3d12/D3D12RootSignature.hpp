@@ -34,9 +34,11 @@ namespace Eternal
 		class Sampler;
 		class DescriptorHeap;
 
-		class D3D12RootSignature : public RootSignature
+		class D3D12RootSignature final : public RootSignature
 		{
 		public:
+			static constexpr uint32_t DescriptorRangesMaxCount		= 1024;
+
 			D3D12RootSignature(_In_ Device& InDevice);
 			D3D12RootSignature(_In_ Device& InDevice, _In_ const RootSignatureCreateInformation& InRootSignatureCreateInformation);
 			
