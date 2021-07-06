@@ -20,14 +20,31 @@ namespace Eternal
 			RESOURCE_MEMORY_TYPE_INVALID = RESOURCE_MEMORY_TYPE_COUNT
 		};
 
-		enum class ResourceUsage
+		enum class TextureResourceUsage
 		{
-			RESOURCE_USAGE_NONE							= 0x0,
-			RESOURCE_USAGE_RENDER_TARGET				= 0x1,
-			RESOURCE_USAGE_DEPTH_STENCIL				= 0x2,
-			RESOURCE_USAGE_UNORDERED_ACCESS				= 0x4,
-			RESOURCE_USAGE_SHADER_RESOURCE				= 0x8,
-			RESOURCE_USAGE_RENDER_TARGET_DEPTH_STENCIL	= RESOURCE_USAGE_RENDER_TARGET | RESOURCE_USAGE_DEPTH_STENCIL
+			TEXTURE_RESOURCE_USAGE_NONE				= 0x0,
+			TEXTURE_RESOURCE_USAGE_RENDER_TARGET	= 0x1,
+			TEXTURE_RESOURCE_USAGE_DEPTH_STENCIL	= 0x2,
+			TEXTURE_RESOURCE_USAGE_UNORDERED_ACCESS	= 0x4,
+			TEXTURE_RESOURCE_USAGE_SHADER_RESOURCE	= 0x8,
+			TEXTURE_RESOURCE_USAGE_COPY_READ		= 0x10,
+			TEXTURE_RESOURCE_USAGE_COPY_WRITE		= 0x20
+		};
+		static constexpr TextureResourceUsage TextureResourceUsageRenderTargetDepthStencil = TextureResourceUsage::TEXTURE_RESOURCE_USAGE_RENDER_TARGET | TextureResourceUsage::TEXTURE_RESOURCE_USAGE_DEPTH_STENCIL;
+
+		enum class BufferResourceUsage
+		{
+			BUFFER_RESOURCE_USAGE_NONE					= 0x0,
+			BUFFER_RESOURCE_USAGE_COPY_READ				= 0x1,
+			BUFFER_RESOURCE_USAGE_COPY_WRITE			= 0x2,
+			BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER		= 0x4,
+			BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER	= 0x8,
+			BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER		= 0x10,
+			BUFFER_RESOURCE_USAGE_BUFFER				= 0x20,
+			BUFFER_RESOURCE_USAGE_RW_BUFFER				= 0x40,
+			BUFFER_RESOURCE_USAGE_INDEX_BUFFER			= 0x80,
+			BUFFER_RESOURCE_USAGE_VERTEX_BUFFER			= 0x100,
+			BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER		= 0x200
 		};
 
 		enum class ResourceDimension
@@ -79,7 +96,7 @@ namespace Eternal
 			TextureCreateInformation(
 				_In_ const ResourceDimension& InResourceDimension,
 				_In_ const Format& InFormat,
-				_In_ const ResourceUsage& InResourceUsage,
+				_In_ const TextureResourceUsage& InResourceUsage,
 				_In_ uint32_t InWidth,
 				_In_ uint32_t InHeight = 1,
 				_In_ uint32_t InDepthOrArraySize = 1,
@@ -104,7 +121,7 @@ namespace Eternal
 			float ClearValue[ComponentCount]	= { 0.0f };
 			ResourceDimension Dimension			= ResourceDimension::RESOURCE_DIMENSION_UNKNOWN;
 			Format ResourceFormat				= Format::FORMAT_INVALID;
-			ResourceUsage Usage					= ResourceUsage::RESOURCE_USAGE_NONE;
+			TextureResourceUsage Usage			= TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE;
 			uint32_t Width						= 1;
 			uint32_t Height						= 1;
 			uint32_t DepthOrArraySize			= 1;
@@ -115,19 +132,37 @@ namespace Eternal
 		{
 			BufferCreateInformation(
 				_In_ const Format& InFormat,
-				_In_ const ResourceUsage& InResourceUsage,
+				_In_ const BufferResourceUsage& InResourceUsage,
 				_In_ uint32_t InSize
 			)
 				: ResourceFormat(InFormat)
 				, Usage(InResourceUsage)
 				, Size(InSize)
 			{
-				ETERNAL_ASSERT((InResourceUsage & ResourceUsage::RESOURCE_USAGE_RENDER_TARGET_DEPTH_STENCIL) == ResourceUsage::RESOURCE_USAGE_NONE);
 			}
 
-			Format ResourceFormat	= Format::FORMAT_INVALID;
-			ResourceUsage Usage		= ResourceUsage::RESOURCE_USAGE_NONE;
-			uint32_t Size			= 1;
+			Format ResourceFormat		= Format::FORMAT_INVALID;
+			BufferResourceUsage Usage	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE;
+			uint32_t Size				= 1;
+			uint32_t Stride				= 0;
+		};
+
+		struct VertexBufferCreateInformation : public BufferCreateInformation
+		{
+			VertexBufferCreateInformation(
+				_In_ const Format& InFormat,
+				_In_ const BufferResourceUsage& InResourceUsage,
+				_In_ uint32_t InSize,
+				_In_ uint32_t InStride
+			)
+				: BufferCreateInformation(
+					InFormat,
+					InResourceUsage,
+					InSize
+				)
+			{
+				Stride = InStride;
+			}
 		};
 
 		struct ResourceCreateInformation
@@ -212,7 +247,6 @@ namespace Eternal
 		class Resource
 		{
 		public:
-			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType);
 			virtual ~Resource() {}
 
 			virtual void* Map(_In_ const MapRange& InMapRange) = 0;
@@ -224,11 +258,14 @@ namespace Eternal
 			const ResourceDimension& GetResourceDimension() const;
 			uint32_t GetMIPLevels() const;
 			uint32_t GetArraySize() const;
+			uint32_t GetBufferSize() const;
+			uint32_t GetBufferStride() const;
 			ResourceType GetResourceType() const;
 			const float* GetClearValue() const;
 			const Format& GetFormat() const;
 
 		protected:
+			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType);
 			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }
 
 		private:

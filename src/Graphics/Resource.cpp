@@ -70,6 +70,18 @@ namespace Eternal
 			}
 		}
 
+		uint32_t Resource::GetBufferSize() const
+		{
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER);
+			return _ResourceCreateInformation.BufferInformation.Size;
+		}
+
+		uint32_t Resource::GetBufferStride() const
+		{
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER);
+			return _ResourceCreateInformation.BufferInformation.Stride;
+		}
+
 		const Format& Resource::GetFormat() const
 		{
 			return GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE ? _ResourceCreateInformation.TextureInformation.ResourceFormat : _ResourceCreateInformation.BufferInformation.ResourceFormat;

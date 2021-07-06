@@ -19,11 +19,10 @@ namespace Eternal
 			);
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() const { return _PipelineState; }
-			const D3D12RootSignature& GetRootSignature() const { return _RootSignature; }
-			const D3D12_PRIMITIVE_TOPOLOGY& GetD3D12PrimitiveTopology() const { return _PrimitiveTopology; }
+			const D3D12RootSignature& GetD3D12RootSignature() const;
+			inline const D3D12_PRIMITIVE_TOPOLOGY& GetD3D12PrimitiveTopology() const { return _PrimitiveTopology; }
 
 		private:
-			D3D12RootSignature&		_RootSignature;
 			ID3D12PipelineState*	_PipelineState		= nullptr;
 			D3D_PRIMITIVE_TOPOLOGY	_PrimitiveTopology	= D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 		};

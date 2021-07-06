@@ -101,7 +101,7 @@ namespace Eternal
 					ViewMetaData MetaData;
 					RenderTargetViewCreateInformation CreateInformation(
 						Context,
-						*_BackBuffers[BackBufferIndex],
+						_BackBuffers[BackBufferIndex],
 						MetaData,
 						Format::FORMAT_RGBA8888,
 						ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D

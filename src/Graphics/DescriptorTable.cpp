@@ -5,15 +5,26 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		DescriptorTable::DescriptorTable(_In_ const RootSignature& InRootSignature)
+		DescriptorTable::DescriptorTable(_In_ const RootSignature* InRootSignature)
 			: _RootSignature(InRootSignature)
 		{
-			GetConstants().resize(InRootSignature.GetCreateInformation().Constants.size());
-			GetConstantsDirtyFlags().Resize(InRootSignature.GetCreateInformation().Constants.size());
-			GetResources().resize(InRootSignature.GetCreateInformation().Parameters.size());
-			GetResourcesDirtyFlags().Resize(InRootSignature.GetCreateInformation().Parameters.size());
-			GetStaticSamplers().resize(InRootSignature.GetCreateInformation().StaticSamplers.size());
-			GetStaticSamplersDirtyFlags().Resize(InRootSignature.GetCreateInformation().StaticSamplers.size());
+			ETERNAL_ASSERT(InRootSignature);
+			GetConstants().resize(InRootSignature->GetCreateInformation().Constants.size());
+			GetConstantsDirtyFlags().Resize(static_cast<uint32_t>(InRootSignature->GetCreateInformation().Constants.size()));
+			GetResources().resize(InRootSignature->GetCreateInformation().Parameters.size());
+			GetResourcesDirtyFlags().Resize(static_cast<uint32_t>(InRootSignature->GetCreateInformation().Parameters.size()));
+			GetStaticSamplers().resize(InRootSignature->GetCreateInformation().StaticSamplers.size());
+			GetStaticSamplersDirtyFlags().Resize(static_cast<uint32_t>(InRootSignature->GetCreateInformation().StaticSamplers.size()));
+		}
+
+		DescriptorTable::DescriptorTable(_In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable)
+		{
+			uint32_t ParametersCount = 0;
+			for (uint32_t DescriptorTableIndex = 0; DescriptorTableIndex < InRootSignatureDescriptorTable.Parameters.size(); ++DescriptorTableIndex)
+				ParametersCount += InRootSignatureDescriptorTable.Parameters[DescriptorTableIndex].DescriptorsCount;
+			
+			GetResources().resize(ParametersCount);
+			GetResourcesDirtyFlags().Resize(ParametersCount);
 		}
 
 		template<> void DescriptorTable::SetDescriptor<Sampler>(_In_ uint32_t InSlot, _In_ const Sampler* InDescriptor)

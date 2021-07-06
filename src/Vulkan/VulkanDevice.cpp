@@ -341,6 +341,11 @@ namespace Eternal
 			return _PhysicalDeviceProperties.limits.maxPushConstantsSize / ByteTo32Bits;
 		}
 
+		uint32_t VulkanDevice::GetNonCoherentMemoryAtomicSize() const
+		{
+			return _PhysicalDeviceProperties.limits.nonCoherentAtomSize;
+		}
+
 		uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const
 		{
 			uint32_t MemoryTypeIndex = 0;

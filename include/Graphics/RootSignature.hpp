@@ -1,6 +1,9 @@
 #pragma once
 
+#include "Graphics/ShaderType.hpp"
+#include "Graphics/Types/HLSLTypes.hpp"
 #include <vector>
+#include <array>
 
 namespace Eternal
 {
@@ -11,6 +14,13 @@ namespace Eternal
 		struct RootSignatureDescriptorTableParameter;
 		
 		class Sampler;
+		class DescriptorTable;
+		class GraphicsContext;
+
+		static constexpr uint32_t ShaderTypeCount = static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT);
+		using RegisterIndicesContainer = std::array<uint32_t, ShaderTypeCount>;
+		using RegisterIndicesPerTypeContainer = std::array<uint32_t, static_cast<int32_t>(HLSLRegisterType::HLSL_REGISTER_TYPE_COUNT)>;
+		using RegisterIndicesPerTypePerShaderContainer = std::array<RegisterIndicesPerTypeContainer, ShaderTypeCount>;
 
 		enum class RootSignatureAccess
 		{
@@ -94,7 +104,6 @@ namespace Eternal
 				, Access(InAccess)
 			{
 				ETERNAL_ASSERT(InParameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_INVALID);
-				ETERNAL_ASSERT(InParameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER);
 				ETERNAL_ASSERT(InParameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE);
 			}
 
@@ -105,19 +114,11 @@ namespace Eternal
 			{
 			}
 
-			RootSignatureParameter(_In_ Sampler* InSampler, _In_ const RootSignatureAccess& InAccess)
-				: Parameter(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER)
-				, Access(InAccess)
-				, SamplerParameter(InSampler)
-			{
-			}
-
 			bool operator==(_In_ const RootSignatureParameter& InOther) const;
 
 			RootSignatureParameterType			Parameter			= RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT;
 			RootSignatureAccess					Access				= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID;
 			RootSignatureDescriptorTable		DescriptorTable;
-			Sampler*							SamplerParameter	= nullptr;
 		};
 
 		struct RootSignatureDescriptorTableParameter final : public RootSignatureParameter
@@ -128,16 +129,9 @@ namespace Eternal
 			{
 			}
 
-			RootSignatureDescriptorTableParameter(_In_ const vector<Sampler*>& InSamplers, _In_ const RootSignatureAccess& InAccess)
-				: RootSignatureParameter(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER, InAccess)
-				, Samplers(InSamplers)
-			{
-			}
-
 			bool operator==(_In_ const RootSignatureDescriptorTableParameter& InOtherRootSignatureDescriptorTableParameter) const;
 
 			uint32_t						DescriptorsCount = 0;
-			vector<Sampler*>				Samplers;
 
 		private:
 			// Forbidden constructors
@@ -150,11 +144,6 @@ namespace Eternal
 				: RootSignatureParameter(InParameter, InAccess)
 			{
 			}
-
-			RootSignatureDescriptorTableParameter(_In_ Sampler* InSampler, _In_ const RootSignatureAccess& InAccess)
-				: RootSignatureParameter(InSampler, InAccess)
-			{
-			}
 		};
 
 		struct RootSignatureCreateInformation
@@ -165,7 +154,7 @@ namespace Eternal
 
 			RootSignatureCreateInformation(
 				_In_ const vector<RootSignatureParameter>& InParameters,
-				_In_ const vector<RootSignatureStaticSampler>& InStaticSamplers,
+				_In_ const vector<RootSignatureStaticSampler>& InStaticSamplers = vector<RootSignatureStaticSampler>(),
 				_In_ const vector<RootSignatureConstants>& InConstants = vector<RootSignatureConstants>(),
 				bool InHasInputAssembler = false
 			)
@@ -185,16 +174,22 @@ namespace Eternal
 		class RootSignature
 		{
 		public:
+
+			virtual ~RootSignature() {}
+
+			void CreateDescriptorTables(_In_ GraphicsContext& InContext, _Out_ vector<DescriptorTable*>& OutDescriptorTables);
+			DescriptorTable* CreateRootDescriptorTable(_In_ GraphicsContext& InContext) const;
+			DescriptorTable* CreateSubDescriptorTable(_In_ GraphicsContext& InContext, _In_ uint32_t SubDescriptorTableIndex) const;
+
+			const RootSignatureCreateInformation& GetCreateInformation() const { return _CreateInformation; }
+			bool operator==(_In_ const RootSignature& InOtherRootSignature) const;
+
+		protected:
 			RootSignature(_In_ const RootSignatureCreateInformation& InRootSignatureCreateInformation)
 				: _CreateInformation(InRootSignatureCreateInformation)
 			{
 			}
-
 			RootSignature() {}
-
-			const RootSignatureCreateInformation& GetCreateInformation() const { return _CreateInformation; }
-			bool operator==(_In_ const RootSignature& InOtherRootSignature) const;
-			virtual ~RootSignature() {}
 
 		private:
 			RootSignatureCreateInformation _CreateInformation;

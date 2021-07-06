@@ -25,7 +25,6 @@ namespace Eternal
 			_In_ const PipelineCreateInformation& InPipelineCreateInformation
 		)
 			: Pipeline(InPipelineCreateInformation)
-			, _RootSignature(static_cast<D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature))
 			, _PrimitiveTopology(ConvertPrimitiveTopologyToD3D12PrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology))
 		{
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
@@ -35,10 +34,10 @@ namespace Eternal
 
 			D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc;
 
-			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements = static_cast<D3D12InputLayout&>(InPipelineCreateInformation.PipelineInputLayout).GetInputElements();
-			PipelineStateDesc.InputLayout.pInputElementDescs	= InputElements.size() ? InputElements.data() : nullptr;
-			PipelineStateDesc.InputLayout.NumElements			= static_cast<UINT>(InputElements.size());
-			PipelineStateDesc.pRootSignature					= _RootSignature.GetD3D12RootSignature();
+			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements	= static_cast<D3D12InputLayout&>(InPipelineCreateInformation.PipelineInputLayout).GetD3D12InputElements();
+			PipelineStateDesc.InputLayout.pInputElementDescs		= InputElements.size() ? InputElements.data() : nullptr;
+			PipelineStateDesc.InputLayout.NumElements				= static_cast<UINT>(InputElements.size());
+			PipelineStateDesc.pRootSignature						= static_cast<const D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
 	
 			static_cast<D3D12Shader&>(InPipelineCreateInformation.VS).GetD3D12Shader(PipelineStateDesc.VS);
 			static_cast<D3D12Shader&>(InPipelineCreateInformation.PS).GetD3D12Shader(PipelineStateDesc.PS);
@@ -137,6 +136,11 @@ namespace Eternal
 			VerifySuccess(
 				_PipelineState->SetName(UTF8PipelineStateName.c_str())
 			);
+		}
+
+		const D3D12RootSignature& D3D12Pipeline::GetD3D12RootSignature() const
+		{
+			return static_cast<const D3D12RootSignature&>(GetRootSignature());
 		}
 	}
 }

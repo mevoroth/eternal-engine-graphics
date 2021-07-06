@@ -20,7 +20,7 @@ namespace Eternal
 #endif
 
 			case DeviceType::VULKAN:
-				return new VulkanRootSignature(InContext.GetDevice());
+				return new VulkanRootSignature(InContext);
 
 			default:
 				ETERNAL_BREAK();

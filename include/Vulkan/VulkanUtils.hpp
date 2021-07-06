@@ -23,6 +23,13 @@ namespace Eternal
 		enum class LoadOperator;
 		enum class StoreOperator;
 		enum class PrimitiveTopology;
+		enum class BufferResourceUsage;
+		enum class TextureResourceUsage;
+		enum class ResourceMemoryType;
+		enum class ResourceDimension;
+		enum class ShaderTypeFlags;
+		enum class HLSLRegisterType;
+
 		class BlendState;
 		class Viewport;
 
@@ -46,13 +53,20 @@ namespace Eternal
 			vk::AttachmentLoadOp ConvertLoadOperatorToVulkanAttachmentLoadOperator(_In_ const LoadOperator& InLoadOperator);
 			vk::AttachmentStoreOp ConvertStoreOperatorToVulkanAttachmentStoreOperator(_In_ const StoreOperator& InStoreOperator);
 			vk::MemoryPropertyFlagBits ConvertGraphicsMemoryFlagsToMemoryPropertyFlags(_In_ const GraphicsMemoryFlag& InMemoryFlags);
-			void VerifyMemoryPropertyFlags(_In_ const vk::MemoryPropertyFlagBits& Flags);
 			vk::DescriptorType ConvertRootSignatureParameterTypeToVulkanDescriptorType(_In_ const RootSignatureParameterType& InRootSignatureParameterType);
 			vk::ShaderStageFlagBits ConvertRootSignatureAccessToShaderStageFlags(_In_ const RootSignatureAccess& InAccess);
 			vk::AccessFlagBits ConvertTransitionStateToVulkanAccessFlags(_In_ const TransitionState& InTransitionState);
 			vk::ImageLayout ConvertTransitionStateToVulkanImageLayout(_In_ const TransitionState& InTransitionState);
 			vk::PipelineStageFlagBits ConvertCommandTypeAndTransitionStateToPipelineStageFlags(_In_ const CommandType& InCommandType, _In_ const TransitionState& InTransitionState);
-			vk::PrimitiveTopology ConvertPrimitiveTopologyToVulkanPrimitiveTopology(const PrimitiveTopology& InPrimitiveTopology);
+			vk::PrimitiveTopology ConvertPrimitiveTopologyToVulkanPrimitiveTopology(_In_ const PrimitiveTopology& InPrimitiveTopology);
+			vk::BufferUsageFlagBits ConvertBufferResourceUsageToVulkanBufferUsageFlags(_In_ const BufferResourceUsage& InBufferResourceUsage);
+			vk::ImageUsageFlagBits ConvertTextureResourceUsageToVulkanImageUsageFlags(_In_ const TextureResourceUsage& InTextureResourceUsage);
+			void VerifyMemoryPropertyFlags(_In_ const vk::MemoryPropertyFlagBits& Flags);
+			vk::MemoryPropertyFlagBits ConvertResourceMemoryTypeToMemoryPropertyFlagBits(_In_ const ResourceMemoryType& InResourceMemoryType);
+			vk::ImageCreateFlagBits ConvertResourceDimensionToVulkanImageCreateFlags(_In_ const ResourceDimension& InResourceDimension);
+			vk::ImageType ConvertResourceDimensionToVulkanImageType(_In_ const ResourceDimension& InResourceDimension);
+			vk::ShaderStageFlagBits ConvertShaderTypeFlagsToVulkanShaderStageFlags(_In_ const ShaderTypeFlags& InShaderTypeFlags);
+			uint32_t ConvertHLSLRegisterTypeToVulkanShaderBindingBase(const HLSLRegisterType& InHLSLRegisterType);
 
 			inline vk::PipelineStageFlagBits& operator|=(_Inout_ vk::PipelineStageFlagBits& InOutPipelineStageFlags, _In_ const vk::PipelineStageFlagBits& InPipelineStageFlags)
 			{

@@ -2,40 +2,56 @@
 
 #include "Graphics/InputLayout.hpp"
 #include "Vulkan/VulkanFormat.hpp"
-#include "Log/Log.hpp"
+#include "Vulkan/VulkanUtils.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
-		const VulkanInputLayout VulkanEmptyInputLayout(nullptr, 0);
-
-		VulkanInputLayout::VulkanInputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t DataTypeCount)
+		static const vk::VertexInputRate ConvertVertexStreamFrequencyToVulkanVertexInputRate(_In_ const VertexStreamFrequency& InVertexStreamFrequency)
 		{
-			//if (!DataTypeCount) // No input layout
-			//	return;
+			return static_cast<vk::VertexInputRate>(InVertexStreamFrequency);
+		}
 
-			//_VertexInputAttributeDescriptions.resize(DataTypeCount);
+		VulkanInputLayout::VulkanInputLayout(_In_ const vector<VertexStreamBase>& InVertexStreams)
+			: InputLayout(InVertexStreams)
+		{
+			if (InVertexStreams.size() == 0)
+				return;
 
-			//uint32_t AttributeOffset = 0u;
-			//for (uint32_t DataTypeIndex = 0; DataTypeIndex < DataTypeCount; ++DataTypeIndex)
-			//{
-			//	_VertexInputAttributeDescriptions[DataTypeIndex] = vk::VertexInputAttributeDescription(
-			//		0, DataTypeIndex,
-			//		VULKAN_FORMATS[static_cast<int32_t>(VERTEX_FORMATS[DataType[DataTypeIndex]])],
-			//		AttributeOffset
-			//	);
+			uint32_t TotalElementsCount = 0;
+			for (uint32_t VertexStreamIndex = 0; VertexStreamIndex < InVertexStreams.size(); ++VertexStreamIndex)
+				TotalElementsCount += InVertexStreams[VertexStreamIndex].GetElements().size();
 
-			//	AttributeOffset += VULKAN_FORMAT_SIZES[static_cast<int32_t>(VERTEX_FORMATS[DataType[DataTypeIndex]])];
-			//}
+			_VertexInputAttributeDescriptions.reserve(TotalElementsCount);
+			_VertexInputBindingDescriptions.resize(InVertexStreams.size());
+			for (uint32_t VertexStreamIndex = 0; VertexStreamIndex < InVertexStreams.size(); ++VertexStreamIndex)
+			{
+				_VertexInputBindingDescriptions[VertexStreamIndex] = vk::VertexInputBindingDescription(
+					VertexStreamIndex,
+					InVertexStreams[VertexStreamIndex].GetStreamStride(),
+					ConvertVertexStreamFrequencyToVulkanVertexInputRate(InVertexStreams[VertexStreamIndex].GetVertexStreamFrequency())
+				);
 
-			//_VertexInputBindingDescriptions.resize(1);
-			//_VertexInputBindingDescriptions[0] = vk::VertexInputBindingDescription(
-			//	0, AttributeOffset,
-			//	vk::VertexInputRate::eVertex
-			//);
+				uint32_t VertexAttributeOffset = 0;
+				const vector<VertexStreamElement>& Elements = InVertexStreams[VertexStreamIndex].GetElements();
+				for (uint32_t ElementIndex = 0; Elements.size(); ++ElementIndex)
+				{
+					_VertexInputAttributeDescriptions.push_back(vk::VertexInputAttributeDescription());
+					vk::VertexInputAttributeDescription& CurrentVertexInputAttributeDescription = _VertexInputAttributeDescriptions.back();
 
-			//LogWrite(LogError, LogGraphics, "[VulkanInputLayout::VulkanInputLayout]Not implemented!");
+					const VulkanFormat& VertexFormat = ConvertFormatToVulkanFormat(Elements[ElementIndex].VertexFormat);
+
+					CurrentVertexInputAttributeDescription = vk::VertexInputAttributeDescription(
+						ElementIndex,
+						VertexStreamIndex,
+						VertexFormat.Format,
+						VertexAttributeOffset
+					);
+
+					VertexAttributeOffset += VertexFormat.Size;
+				}
+			}
 		}
 	}
 }

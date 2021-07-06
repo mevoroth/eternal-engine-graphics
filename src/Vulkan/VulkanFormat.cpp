@@ -4,7 +4,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		const VulkanFormat VULKAN_FORMATS[] =
+		static const VulkanFormat VULKAN_FORMATS[] =
 		{
 			VulkanFormat(vk::Format::eUndefined,			0),
 			VulkanFormat(vk::Format::eB8G8R8A8Unorm,		4),
@@ -17,5 +17,10 @@ namespace Eternal
 		};
 
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMATS) == static_cast<int32_t>(Format::FORMAT_COUNT), "Vulkan Formats declaration not complete");
+
+		const VulkanFormat& ConvertFormatToVulkanFormat(_In_ const Format& InFormat)
+		{
+			return VULKAN_FORMATS[static_cast<int32_t>(InFormat)];
+		}
 	}
 }

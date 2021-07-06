@@ -6,8 +6,6 @@
 #include "Vulkan/VulkanCommandAllocator.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 
-enum VkImageLayout;
-
 namespace Eternal
 {
 	namespace Graphics
@@ -19,6 +17,9 @@ namespace Eternal
 		class VulkanCommandList final : public CommandList
 		{
 		public:
+			static constexpr vk::ShaderStageFlagBits InvalidShaderStages = vk::ShaderStageFlagBits(~0);
+			static constexpr uint32_t MaxDescriptorSetsCount = 128;
+
 			VulkanCommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator);
 			~VulkanCommandList();
 
@@ -30,8 +31,10 @@ namespace Eternal
 
 			virtual void Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override final;
 
+			virtual void SetViewport(_In_ const Viewport& InViewport) override final;
 			virtual void SetGraphicsPipeline(_In_ const Pipeline& InPipeline) override final;
-			virtual void SetGraphicsDescriptorTable(_In_ DescriptorTable& InDescriptorTable) override final;
+			virtual void SetVertexBuffers(_In_ const Resource* InVertexBuffers[], _In_ uint32_t InBufferCount = 1, _In_ uint32_t InFirstVertexBuffer = 0, _In_ VertexBufferParameters InParameters[] = {}) override final;
+			virtual void SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable) override final;
 			virtual void DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount = 0, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t InFirstInstance = 0) override final;
 			virtual void DrawIndexedInstanced(_In_ uint32_t InIndexCountPerInstance, _In_ uint32_t InInstanceCount = 1, _In_ uint32_t InFirstIndex = 0, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t InFirstInstance = 0) override final;
 
@@ -42,7 +45,12 @@ namespace Eternal
 			inline VulkanDevice& GetVulkanDevice() { return static_cast<VulkanDevice&>(GetDevice()); }
 
 		private:
-			vk::CommandBuffer	_CommandBuffer;
+			void _CopyBufferToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
+			void _CopyTextureToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
+			void _CopyBufferToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
+			void _CopyTextureToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
+			vk::CommandBuffer		_CommandBuffer;
+			vk::ShaderStageFlagBits	_CurrentShaderStages = InvalidShaderStages;
 		};
 	}
 }

@@ -1,5 +1,10 @@
 #include "Graphics/RootSignature.hpp"
 
+#include "Graphics/Device.hpp"
+#include "Graphics/Types/DeviceType.hpp"
+#include "Graphics/GraphicsContext.hpp"
+#include "Vulkan/VulkanDescriptorTable.hpp"
+
 namespace Eternal
 {
 	namespace Graphics
@@ -20,9 +25,6 @@ namespace Eternal
 			bool IsEqual = Parameter == InOther.Parameter
 						&& Access == InOther.Access;
 
-			if (Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER)
-				IsEqual &= SamplerParameter == InOther.SamplerParameter;
-
 			if (Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE)
 				IsEqual &= DescriptorTable == InOther.DescriptorTable;
 
@@ -35,15 +37,6 @@ namespace Eternal
 
 			bool IsEqual = static_cast<const RootSignatureParameter&>(*this) == static_cast<const RootSignatureParameter&>(InOtherRootSignatureDescriptorTableParameter);
 			IsEqual &= DescriptorsCount == InOtherRootSignatureDescriptorTableParameter.DescriptorsCount;
-			if (Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER)
-			{
-				IsEqual &= Samplers.size() == InOtherRootSignatureDescriptorTableParameter.Samplers.size();
-				if (IsEqual)
-				{
-					for (uint32_t SamplerIndex = 0; SamplerIndex < Samplers.size(); ++SamplerIndex)
-						IsEqual &= Samplers[SamplerIndex] == InOtherRootSignatureDescriptorTableParameter.Samplers[SamplerIndex];
-				}
-			}
 			return IsEqual;
 		}
 
@@ -81,6 +74,100 @@ namespace Eternal
 			}
 
 			return IsEqual;
+		}
+
+		DescriptorTable* RootSignature::CreateRootDescriptorTable(_In_ GraphicsContext& InContext) const
+		{
+			switch (InContext.GetDevice().GetDeviceType())
+			{
+#ifdef ETERNAL_ENABLE_D3D12
+			case DeviceType::D3D12:
+				return new DescriptorTable(this);
+#endif
+				
+			case DeviceType::VULKAN:
+				return new VulkanDescriptorTable(InContext, this);
+
+			default:
+				ETERNAL_BREAK();
+				return nullptr;
+				break;
+			}
+		}
+
+		DescriptorTable* RootSignature::CreateSubDescriptorTable(_In_ GraphicsContext& InContext, _In_ uint32_t SubDescriptorTableIndex) const
+		{
+			const vector<RootSignatureParameter>& Parameters = _CreateInformation.Parameters;
+			uint32_t DescriptorTableCount = 0;
+			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex)
+			{
+				if (Parameters[ParameterIndex].Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE)
+				{
+					if (DescriptorTableCount++ == SubDescriptorTableIndex)
+					{
+						switch (InContext.GetDevice().GetDeviceType())
+						{
+#ifdef ETERNAL_ENABLE_D3D12
+						case DeviceType::D3D12:
+							return new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
+#endif
+
+						case DeviceType::VULKAN:
+							return new VulkanDescriptorTable(
+								InContext,
+								Parameters[ParameterIndex].DescriptorTable,
+								*this,
+								SubDescriptorTableIndex
+							);
+
+						default:
+							ETERNAL_BREAK();
+							return nullptr;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		void RootSignature::CreateDescriptorTables(_In_ GraphicsContext& InContext, _Out_ vector<DescriptorTable*>& OutDescriptorTables)
+		{
+			const vector<RootSignatureParameter>& Parameters = _CreateInformation.Parameters;
+			uint32_t DescriptorTableCount = 0;
+			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex)
+			{
+				if (Parameters[ParameterIndex].Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE)
+					++DescriptorTableCount;
+			}
+			OutDescriptorTables.resize(
+				DescriptorTableCount
+				+ (Parameters.size() > DescriptorTableCount ? 1 : 0)
+			);
+
+			DescriptorTableCount = 0;
+			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex)
+			{
+				if (Parameters[ParameterIndex].Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE)
+				{
+					DescriptorTable* Table = nullptr;
+					switch (InContext.GetDevice().GetDeviceType())
+					{
+#ifdef ETERNAL_ENABLE_D3D12
+					case DeviceType::D3D12:
+						Table = new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
+#endif
+
+					case DeviceType::VULKAN:
+						Table = new VulkanDescriptorTable(
+							InContext,
+							Parameters[ParameterIndex].DescriptorTable,
+							*this,
+							DescriptorTableCount++
+						);
+					}
+					OutDescriptorTables.push_back(Table);
+				}
+			}
 		}
 	}
 }

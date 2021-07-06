@@ -7,16 +7,18 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		extern const vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES[];
-		
 		class VulkanView final : public View
 		{
 		public:
 			VulkanView(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation);
+			VulkanView(_In_ const ConstantBufferViewCreateInformation& InViewCreateInformation);
+			VulkanView(_In_ const ShaderResourceViewCreateInformation& InViewCreateInformation);
 			~VulkanView();
 
 			const vk::ImageSubresourceRange& GetVulkanSubresourceRange() const { return _SubresourceRange; }
 
+			const vk::ImageView& GetVulkanImageView() const;
+			const vk::BufferView& GetVulkanBufferView() const;
 			vk::ImageView& GetVulkanImageView();
 			vk::BufferView& GetVulkanBufferView();
 

@@ -64,7 +64,7 @@ namespace Eternal
 
 			_Device					= CreateDevice(*this, CreateInformation.Settings.Driver);
 
-			_MainViewportFullScreen	= CreateInvertedViewport(*this, 0, 0, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+			_MainViewportFullScreen	= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
 
 			_GraphicsQueue			= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHIC);
 			_ComputeQueue			= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
@@ -175,6 +175,12 @@ namespace Eternal
 				CreateCommandList(*_Device, *_CommandAllocators[_CurrentFrameIndex][TypeInt])
 			);
 			return CurrentCommandListPool.back();
+		}
+
+		Shader* GraphicsContext::GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation)
+		{
+			ETERNAL_ASSERT(_ShaderFactory);
+			return _ShaderFactory->GetShader(*this, InShaderCreateInformation);
 		}
 	}
 }

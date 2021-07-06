@@ -1,14 +1,17 @@
 #pragma once
 
+#include "Graphics/DepthStencil.hpp"
+
 namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class ShaderTypeFlags;
+
 		class RootSignature;
 		class InputLayout;
 		class RenderPass;
 		class Shader;
-		class DepthStencil;
 		class Viewport;
 
 		enum class PrimitiveTopology
@@ -60,23 +63,14 @@ namespace Eternal
 		struct PipelineCreateInformation
 		{
 			PipelineCreateInformation(
-				RootSignature& InRootSignature,
-				InputLayout& InInputLayout,
-				RenderPass& InRenderPass,
-				Shader& InVS,
-				Shader& InPS,
-				const DepthStencil& InDepthStencil,
-				const PrimitiveTopology& InPrimitiveTopology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
-			)
-				: PipelineRootSignature(InRootSignature)
-				, PipelineInputLayout(InInputLayout)
-				, PipelineRenderPass(InRenderPass)
-				, VS(InVS)
-				, PS(InPS)
-				, PipelineDepthStencil(InDepthStencil)
-				, PipelinePrimitiveTopology(InPrimitiveTopology)
-			{
-			}
+				_In_ RootSignature& InRootSignature,
+				_In_ InputLayout& InInputLayout,
+				_In_ RenderPass& InRenderPass,
+				_In_ Shader& InVS,
+				_In_ Shader& InPS,
+				_In_ const DepthStencil& InDepthStencil = DepthStencilNoneNone,
+				_In_ const PrimitiveTopology& InPrimitiveTopology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
+			);
 
 			RootSignature&		PipelineRootSignature;
 			InputLayout&		PipelineInputLayout;
@@ -85,16 +79,22 @@ namespace Eternal
 			Shader&				PS;
 			const DepthStencil&	PipelineDepthStencil;
 			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+			ShaderTypeFlags		PipelineShaderTypes;
 		};
 
 		class Pipeline
 		{
 		public:
+			virtual ~Pipeline() {}
+
+			const ShaderTypeFlags& GetShaderTypes() const { return _PipelineCreateInformation.PipelineShaderTypes; }
+			const RootSignature& GetRootSignature() const { return _PipelineCreateInformation.PipelineRootSignature; }
+
+		protected:
 			Pipeline(const PipelineCreateInformation& InPipelineCreateInformation)
 				: _PipelineCreateInformation(InPipelineCreateInformation)
 			{
 			}
-			virtual ~Pipeline() {}
 
 		private:
 			PipelineCreateInformation _PipelineCreateInformation;

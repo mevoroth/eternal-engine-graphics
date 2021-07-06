@@ -36,20 +36,6 @@ namespace Eternal
 			);
 		}
 		
-		ResourceUsage operator|(const ResourceUsage& InLeftResourceUsage, const ResourceUsage& InRightResourceUsage)
-		{
-			return static_cast<ResourceUsage>(
-				static_cast<uint32_t>(InLeftResourceUsage) | static_cast<uint32_t>(InRightResourceUsage)
-			);
-		}
-
-		ResourceUsage operator&(const ResourceUsage& InLeftResourceUsage, const ResourceUsage& InRightResourceUsage)
-		{
-			return static_cast<ResourceUsage>(
-				static_cast<uint32_t>(InLeftResourceUsage) & static_cast<uint32_t>(InRightResourceUsage)
-			);
-		}
-
 		//////////////////////////////////////////////////////////////////////////
 		// ResourceTransition
 

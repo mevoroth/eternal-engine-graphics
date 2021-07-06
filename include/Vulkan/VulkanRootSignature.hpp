@@ -16,23 +16,27 @@ namespace Eternal
 		class GraphicsContext;
 		class Device;
 
+		static constexpr uint32_t ByteTo32Bits = 4;
+
 		class VulkanRootSignature final : public RootSignature
 		{
 		public:
-			using RegisterIndicesContainer = std::array<uint32_t, static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT)>;
 
-			VulkanRootSignature(_In_ Device& InDevice);
+			VulkanRootSignature(_In_ GraphicsContext& InContext);
 			VulkanRootSignature(_In_ GraphicsContext& InContext, _In_ const RootSignatureCreateInformation& InRootSignatureCreateInformation);
 			virtual ~VulkanRootSignature();
 
-			inline vk::PipelineLayout& GetPipelineLayout() { return _PipelineLayout; }
+			inline const vk::PipelineLayout& GetVulkanPipelineLayout() const { return _PipelineLayout; }
+			inline const vector<vk::PushConstantRange>& GetVulkanPushConstantRanges() const { return _PushConstantRanges; }
+			inline const vector<vk::DescriptorSetLayout>& GetVulkanDescriptorSetLayouts() const { return _DescriptorSetLayouts; }
 
 		private:
-			void _CreateDescriptorSetLayout(_In_ const RootSignatureDescriptorTable& InDescriptorTable, _Inout_ RegisterIndicesContainer& InOutRegisterIndices);
+			void _CreateDescriptorSetLayout(_In_ const RootSignatureDescriptorTable& InDescriptorTable);
 
-			Device&							_Device;
+			GraphicsContext&				_Context;
 			vk::PipelineLayout				_PipelineLayout;
 			vector<vk::DescriptorSetLayout>	_DescriptorSetLayouts;
+			vector<vk::PushConstantRange>	_PushConstantRanges;
 			vector<Handle>					_ConstantHandles;
 		};
 	}

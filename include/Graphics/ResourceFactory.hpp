@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Graphics/MultiBuffered.hpp"
+
 namespace Eternal
 {
 	namespace Graphics
@@ -10,5 +12,6 @@ namespace Eternal
 
 		Resource* CreateTexture(_In_ const TextureResourceCreateInformation& InResourceCreateInformation);
 		Resource* CreateBuffer(_In_ const BufferResourceCreateInformation& InResourceCreateInformation);
+		MultiBuffered<Resource> CreateMultiBufferedBuffer(_In_ const BufferResourceCreateInformation& InResourceCreateInformation);
 	}
 }

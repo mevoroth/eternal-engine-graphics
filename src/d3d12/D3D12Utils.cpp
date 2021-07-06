@@ -124,20 +124,6 @@ namespace Eternal
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_DESCRIPTOR_RANGE_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d121 descriptor ranges types");
 
-		static constexpr D3D12RegisterType D3D12_REGISTER_TYPES[] =
-		{
-			D3D12RegisterType::D3D12_REGISTER_TYPE_SAMPLER,
-			D3D12RegisterType::D3D12_REGISTER_TYPE_SRV,
-			D3D12RegisterType::D3D12_REGISTER_TYPE_UAV,
-			D3D12RegisterType::D3D12_REGISTER_TYPE_SRV,
-			D3D12RegisterType::D3D12_REGISTER_TYPE_UAV,
-			D3D12RegisterType::D3D12_REGISTER_TYPE_CBV,
-			D3D12RegisterType::D3D12_REGISTER_TYPE_SRV,
-			D3D12RegisterType::D3D12_REGISTER_TYPE_UAV,
-			D3D12RegisterType::D3D12_REGISTER_TYPE_INVALID
-		};
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_REGISTER_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d12 register types");
-
 		static constexpr D3D12_PRIMITIVE_TOPOLOGY_TYPE D3D12_PRIMITIVE_TOPOLOGY_TYPES[] =
 		{
 			D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT,
@@ -246,16 +232,6 @@ namespace Eternal
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_CPU_PAGE_PROPERTIES) == static_cast<int32_t>(ResourceMemoryType::RESOURCE_MEMORY_TYPE_COUNT), "Mismatch between abstraction and d3d12 cpu page properties");
 
-		//RESOURCE_DIMENSION_UNKNOWN,
-		//	RESOURCE_DIMENSION_BUFFER,
-		//	RESOURCE_DIMENSION_TEXTURE_1D,
-		//	RESOURCE_DIMENSION_TEXTURE_1D_ARRAY,
-		//	RESOURCE_DIMENSION_TEXTURE_2D,
-		//	RESOURCE_DIMENSION_TEXTURE_2D_ARRAY,
-		//	RESOURCE_DIMENSION_TEXTURE_3D,
-		//	RESOURCE_DIMENSION_TEXTURE_CUBE,
-		//	RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY,
-
 		static constexpr D3D12_RESOURCE_DIMENSION D3D12_RESOURCE_DIMENSIONS[] =
 		{
 			D3D12_RESOURCE_DIMENSION_UNKNOWN,
@@ -355,17 +331,6 @@ namespace Eternal
 			D3D12_DESCRIPTOR_RANGE_TYPE ConvertRootSignatureParameterTypeToD3D12DescriptorRangeType(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
 			{
 				return D3D12_DESCRIPTOR_RANGE_TYPES[static_cast<int32_t>(InRootSignatureParameterType)];
-			}
-
-			const D3D12RegisterType& ConvertRootSignatureParameterTypeToD3D12RegisterType(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
-			{
-				ETERNAL_ASSERT(InRootSignatureParameterType != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE);
-				return D3D12_REGISTER_TYPES[static_cast<int32_t>(InRootSignatureParameterType)];
-			}
-
-			uint32_t ConvertRootSignatureParameterTypeToD3D12RegisterTypeUInt(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
-			{
-				return static_cast<uint32_t>(ConvertRootSignatureParameterTypeToD3D12RegisterType(InRootSignatureParameterType));
 			}
 
 			void ConvertBorderColorToFloats(_In_ const BorderColor& InBorderColor, _Out_ float OutColor[4])
@@ -479,20 +444,39 @@ namespace Eternal
 				return D3D12_RESOURCE_DIMENSIONS[static_cast<int32_t>(InResourceDimension)];
 			}
 
-			D3D12_RESOURCE_FLAGS ConvertResourceUsageToD3D12ResourceFlags(_In_ const ResourceUsage& InResourceFlags)
+			D3D12_RESOURCE_FLAGS ConvertTextureResourceUsageToD3D12ResourceFlags(_In_ const TextureResourceUsage& InResourceFlags)
 			{
 				D3D12_RESOURCE_FLAGS D3D12ResourceFlags = D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
 
 				D3D12ResourceFlags |= static_cast<D3D12_RESOURCE_FLAGS>(
 					InResourceFlags & (
-						ResourceUsage::RESOURCE_USAGE_RENDER_TARGET |
-						ResourceUsage::RESOURCE_USAGE_DEPTH_STENCIL |
-						ResourceUsage::RESOURCE_USAGE_UNORDERED_ACCESS
+						TextureResourceUsage::TEXTURE_RESOURCE_USAGE_RENDER_TARGET |
+						TextureResourceUsage::TEXTURE_RESOURCE_USAGE_DEPTH_STENCIL |
+						TextureResourceUsage::TEXTURE_RESOURCE_USAGE_UNORDERED_ACCESS
 					)
 				);
 
-				D3D12ResourceFlags &= ((InResourceFlags & ResourceUsage::RESOURCE_USAGE_SHADER_RESOURCE) != ResourceUsage::RESOURCE_USAGE_NONE) ? ~D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE : ~D3D12_RESOURCE_FLAG_NONE;
+				D3D12ResourceFlags &= ((InResourceFlags & TextureResourceUsage::TEXTURE_RESOURCE_USAGE_SHADER_RESOURCE) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE) ? ~D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE : ~D3D12_RESOURCE_FLAG_NONE;
 				
+				return D3D12ResourceFlags;
+			}
+
+			D3D12_RESOURCE_FLAGS ConvertBufferResourceUsageToD3D12ResourceFlags(_In_ const BufferResourceUsage& InResourceFlags)
+			{
+				D3D12_RESOURCE_FLAGS D3D12ResourceFlags = D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
+
+				static constexpr BufferResourceUsage CopyRead_StructuredBuffer_ConstantBuffer_Buffer	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_READ
+																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER
+																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER
+																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_BUFFER;
+
+				static constexpr BufferResourceUsage RWStructuredBuffer_RWBuffer_IndirectBuffer			= BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER
+																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_BUFFER
+																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER;
+				
+				D3D12ResourceFlags &= ((InResourceFlags & CopyRead_StructuredBuffer_ConstantBuffer_Buffer) != BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE) ? ~D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE : ~D3D12_RESOURCE_FLAG_NONE;
+				D3D12ResourceFlags |= ((InResourceFlags & RWStructuredBuffer_RWBuffer_IndirectBuffer) != BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE) ? D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS : D3D12_RESOURCE_FLAG_NONE;
+
 				return D3D12ResourceFlags;
 			}
 		}

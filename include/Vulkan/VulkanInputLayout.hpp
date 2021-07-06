@@ -15,21 +15,14 @@ namespace Eternal
 		class VulkanInputLayout final : public InputLayout
 		{
 		public:
-			VulkanInputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t DataTypeCount);
+			VulkanInputLayout(_In_ const vector<VertexStreamBase>& InVertexStreams);
 
-			const vector<vk::VertexInputAttributeDescription>& GetVertexInputAttributeDescriptions()
-			{
-				return _VertexInputAttributeDescriptions;
-			}
-
-			const vector<vk::VertexInputBindingDescription>& GetVertexInputBindingDescriptions()
-			{
-				return _VertexInputBindingDescriptions;
-			}
+			const vector<vk::VertexInputAttributeDescription>& GetVertexInputAttributeDescriptions() const { return _VertexInputAttributeDescriptions; }
+			const vector<vk::VertexInputBindingDescription>& GetVertexInputBindingDescriptions() const { return _VertexInputBindingDescriptions; }
 
 		private:
 			vector<vk::VertexInputAttributeDescription>	_VertexInputAttributeDescriptions;
-			vector<vk::VertexInputBindingDescription>		_VertexInputBindingDescriptions;
+			vector<vk::VertexInputBindingDescription>	_VertexInputBindingDescriptions;
 		};
 
 		extern const VulkanInputLayout VulkanEmptyInputLayout;

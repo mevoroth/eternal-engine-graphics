@@ -12,14 +12,26 @@ namespace Eternal
 			ETERNAL_ASSERT(InViewCreateInformation.ResourceViewType != ViewType::VIEW_UNKNOWN);
 		}
 
+		Resource& View::GetResource()
+		{
+			ETERNAL_ASSERT(_ViewCreateInformation.GraphicsResource);
+			return *_ViewCreateInformation.GraphicsResource;
+		}
+
+		const Resource& View::GetResource() const
+		{
+			ETERNAL_ASSERT(_ViewCreateInformation.GraphicsResource);
+			return *_ViewCreateInformation.GraphicsResource;
+		}
+
 		const TransitionState& View::GetResourceTransition() const
 		{
-			return GetViewCreateInformation().GraphicsResource.GetResourceState();
+			return GetResource().GetResourceState();
 		}
 
 		ResourceType View::GetResourceType() const
 		{
-			return GetViewCreateInformation().GraphicsResource.GetResourceType();
+			return GetResource().GetResourceType();
 		}
 	}
 }

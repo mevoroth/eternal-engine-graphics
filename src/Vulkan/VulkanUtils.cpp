@@ -8,7 +8,10 @@
 #include "Graphics/Sampler.hpp"
 #include "Graphics/RenderPass.hpp"
 #include "Graphics/Pipeline.hpp"
+#include "Graphics/Resource.hpp"
+#include "Graphics/ShaderType.hpp"
 #include "Vulkan/VulkanHeader.hpp"
+#include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Math/Math.hpp"
 #include <cstdlib>
 
@@ -142,6 +145,36 @@ namespace Eternal
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_PRIMITIVE_TOPOLOGIES) == static_cast<int32_t>(PrimitiveTopology::PRIMITIVE_TOPOLOGY_COUNT), "Mismatch between abstraction and vulkan primitive topologies");
 
+			static constexpr vk::MemoryPropertyFlagBits VULKAN_MEMORY_PROPERTY_FLAGS[] =
+			{
+				vk::MemoryPropertyFlagBits::eDeviceLocal,
+				vk::MemoryPropertyFlagBits::eHostVisible,
+				static_cast<vk::MemoryPropertyFlagBits>(static_cast<uint32_t>(vk::MemoryPropertyFlagBits::eHostVisible) | static_cast<uint32_t>(vk::MemoryPropertyFlagBits::eHostCached))
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_MEMORY_PROPERTY_FLAGS) == static_cast<int32_t>(ResourceMemoryType::RESOURCE_MEMORY_TYPE_COUNT), "Mismatch between abstraction and vulkan memory property flags");
+
+			static constexpr vk::ImageType VULKAN_IMAGE_TYPES[] =
+			{
+				vk::ImageType::e1D,
+				vk::ImageType::e1D,
+				vk::ImageType::e1D,
+				vk::ImageType::e1D,
+				vk::ImageType::e2D,
+				vk::ImageType::e2D,
+				vk::ImageType::e3D,
+				vk::ImageType::e2D,
+				vk::ImageType::e2D
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_TYPES) == static_cast<int32_t>(ResourceDimension::RESOURCE_DIMENSION_COUNT), "Mismatch between abstraction and vulkan image types");
+
+			static constexpr uint32_t VULKAN_SHADER_REGISTER_OFFSETS[] =
+			{
+				VulkanGraphicsContext::ShaderRegisterShaderResourcesOffset,
+				VulkanGraphicsContext::ShaderRegisterConstantBuffersOffset,
+				VulkanGraphicsContext::ShaderRegisterUnorderedAccessesOffset,
+				VulkanGraphicsContext::ShaderRegisterSamplersOffset
+			};
+
 			static constexpr TransitionState CPURead_CPUWrite_State		= TransitionState::TRANSITION_CPU_READ
 																		| TransitionState::TRANSITION_CPU_WRITE;
 
@@ -239,6 +272,7 @@ namespace Eternal
 
 			vk::MemoryPropertyFlagBits ConvertGraphicsMemoryFlagsToMemoryPropertyFlags(_In_ const GraphicsMemoryFlag& InMemoryFlags)
 			{
+				ETERNAL_BREAK(); // Deprecated
 				int VulkanMemoryPropertyFlags = 0x0;
 				int MemoryFlagsInt = int(InMemoryFlags);
 
@@ -273,6 +307,11 @@ namespace Eternal
 				};
 				vk::MemoryPropertyFlagBits* EndAllowedMemoryProperties = AllowedMemoryProperties + ETERNAL_ARRAYSIZE(AllowedMemoryProperties);
 				ETERNAL_ASSERT(std::find(AllowedMemoryProperties, EndAllowedMemoryProperties, Flags) != EndAllowedMemoryProperties);
+			}
+
+			vk::MemoryPropertyFlagBits ConvertResourceMemoryTypeToMemoryPropertyFlagBits(_In_ const ResourceMemoryType& InResourceMemoryType)
+			{
+				return VULKAN_MEMORY_PROPERTY_FLAGS[static_cast<int32_t>(InResourceMemoryType)];
 			}
 
 			vk::DescriptorType ConvertRootSignatureParameterTypeToVulkanDescriptorType(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
@@ -438,9 +477,8 @@ namespace Eternal
 				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_PRESENT))
 					return vk::PipelineStageFlagBits::eAllGraphics;
 
-				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_CPU_WRITE))
+				if (OnlyHasFlags(InTransitionState, TransitionState::TRANSITION_COPY_WRITE))
 				{
-					ETERNAL_ASSERT(InCommandType == CommandType::COMMAND_TYPE_COPY);
 					return vk::PipelineStageFlagBits::eTransfer;
 				}
 
@@ -455,6 +493,95 @@ namespace Eternal
 			vk::PrimitiveTopology ConvertPrimitiveTopologyToVulkanPrimitiveTopology(const PrimitiveTopology& InPrimitiveTopology)
 			{
 				return VULKAN_PRIMITIVE_TOPOLOGIES[static_cast<uint32_t>(InPrimitiveTopology)];
+			}
+
+
+
+			vk::BufferUsageFlagBits ConvertBufferResourceUsageToVulkanBufferUsageFlags(_In_ const BufferResourceUsage& InBufferResourceUsage)
+			{
+				static constexpr BufferResourceUsage CopyRead_CopyWrite_StructuredBuffer_RWStructuredBuffer_ConstantBuffer_Usage	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_READ
+																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_WRITE
+																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER
+																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER
+																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER;
+
+				static constexpr BufferResourceUsage Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer						= BufferResourceUsage::BUFFER_RESOURCE_USAGE_BUFFER
+																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_BUFFER
+																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDEX_BUFFER
+																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_VERTEX_BUFFER
+																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER;
+
+				return static_cast<vk::BufferUsageFlagBits>(
+					(InBufferResourceUsage & CopyRead_CopyWrite_StructuredBuffer_RWStructuredBuffer_ConstantBuffer_Usage) |
+					((InBufferResourceUsage & Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer) << 1)
+				);
+			}
+			
+			vk::ImageUsageFlagBits& operator|=(_Inout_ vk::ImageUsageFlagBits& InOutImageUsageFlags, _In_ const vk::ImageUsageFlagBits& InOtherImageUsageFlags)
+			{
+				InOutImageUsageFlags = static_cast<vk::ImageUsageFlagBits>(
+					static_cast<uint32_t>(InOutImageUsageFlags) | static_cast<uint32_t>(InOtherImageUsageFlags)
+				);
+				return InOutImageUsageFlags;
+			}
+
+			vk::ImageUsageFlagBits ConvertTextureResourceUsageToVulkanImageUsageFlags(_In_ const TextureResourceUsage& InTextureResourceUsage)
+			{
+				static constexpr vk::ImageUsageFlagBits ImageUsageFlagsNone = static_cast<vk::ImageUsageFlagBits>(0);
+
+				vk::ImageUsageFlagBits Flags = ImageUsageFlagsNone;
+
+				Flags |= (InTextureResourceUsage & TextureResourceUsage::TEXTURE_RESOURCE_USAGE_RENDER_TARGET) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE		? vk::ImageUsageFlagBits::eColorAttachment			: ImageUsageFlagsNone;
+				Flags |= (InTextureResourceUsage & TextureResourceUsage::TEXTURE_RESOURCE_USAGE_DEPTH_STENCIL) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE		? vk::ImageUsageFlagBits::eDepthStencilAttachment	: ImageUsageFlagsNone;
+				Flags |= (InTextureResourceUsage & TextureResourceUsage::TEXTURE_RESOURCE_USAGE_UNORDERED_ACCESS) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE	? vk::ImageUsageFlagBits::eStorage					: ImageUsageFlagsNone;
+				Flags |= (InTextureResourceUsage & TextureResourceUsage::TEXTURE_RESOURCE_USAGE_SHADER_RESOURCE) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE	? vk::ImageUsageFlagBits::eSampled					: ImageUsageFlagsNone;
+				Flags |= (InTextureResourceUsage & TextureResourceUsage::TEXTURE_RESOURCE_USAGE_COPY_READ) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE			? vk::ImageUsageFlagBits::eTransferSrc				: ImageUsageFlagsNone;
+				Flags |= (InTextureResourceUsage & TextureResourceUsage::TEXTURE_RESOURCE_USAGE_COPY_WRITE) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE		? vk::ImageUsageFlagBits::eTransferDst				: ImageUsageFlagsNone;
+
+				return Flags;
+			}
+
+			vk::ImageCreateFlagBits& operator|=(_Inout_ vk::ImageCreateFlagBits& InOutImageCreateFlags, _In_ const vk::ImageCreateFlagBits& InOtherImageCreateFlags)
+			{
+				InOutImageCreateFlags = static_cast<vk::ImageCreateFlagBits>(
+					static_cast<uint32_t>(InOutImageCreateFlags) | static_cast<uint32_t>(InOtherImageCreateFlags)
+				);
+				return InOutImageCreateFlags;
+			}
+
+			vk::ImageCreateFlagBits ConvertResourceDimensionToVulkanImageCreateFlags(_In_ const ResourceDimension& InResourceDimension)
+			{
+				vk::ImageCreateFlagBits ImageCreateFlags = vk::ImageCreateFlagBits::eMutableFormat;
+
+				if (InResourceDimension == ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D_ARRAY
+					|| InResourceDimension == ResourceDimension::RESOURCE_DIMENSION_TEXTURE_3D
+					|| InResourceDimension == ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE
+					|| InResourceDimension == ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY)
+				{
+					ImageCreateFlags |= vk::ImageCreateFlagBits::e2DArrayCompatible;
+					ImageCreateFlags |= vk::ImageCreateFlagBits::eCubeCompatible;
+				}
+
+				return ImageCreateFlags;
+			}
+
+			vk::ImageType ConvertResourceDimensionToVulkanImageType(_In_ const ResourceDimension& InResourceDimension)
+			{
+				ETERNAL_ASSERT(InResourceDimension >= ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D);
+				return VULKAN_IMAGE_TYPES[static_cast<int32_t>(InResourceDimension)];
+			}
+
+			vk::ShaderStageFlagBits ConvertShaderTypeFlagsToVulkanShaderStageFlags(_In_ const ShaderTypeFlags& InShaderTypeFlags)
+			{
+				if (InShaderTypeFlags == ShaderTypeFlags::CS)
+					return vk::ShaderStageFlagBits::eCompute;
+
+				return static_cast<vk::ShaderStageFlagBits>(InShaderTypeFlags);
+			}
+
+			uint32_t ConvertHLSLRegisterTypeToVulkanShaderBindingBase(const HLSLRegisterType& InHLSLRegisterType)
+			{
+				return VULKAN_SHADER_REGISTER_OFFSETS[static_cast<int32_t>(InHLSLRegisterType)];
 			}
 		}
 	}

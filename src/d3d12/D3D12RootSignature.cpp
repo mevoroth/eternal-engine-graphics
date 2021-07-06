@@ -8,6 +8,7 @@
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Sampler.hpp"
 #include "Graphics/ShaderType.hpp"
+#include "Graphics/Types/HLSLTypes.hpp"
 #include "Math/Math.hpp"
 #include "Log/Log.hpp"
 
@@ -82,10 +83,7 @@ namespace Eternal
 			const vector<RootSignatureParameter>& InParameters			= InRootSignatureCreateInformation.Parameters;
 			const vector<RootSignatureStaticSampler>& InStaticSamplers	= InRootSignatureCreateInformation.StaticSamplers;
 
-			std::array<
-				std::array<uint32_t, static_cast<int32_t>(D3D12RegisterType::D3D12_REGISTER_TYPE_COUNT)>,
-				static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT)
-			> RegisterIndices;
+			RegisterIndicesPerTypePerShaderContainer RegisterIndices;
 			for (uint32_t ShaderTypeIndex = 0; ShaderTypeIndex < RegisterIndices.size(); ++ShaderTypeIndex)
 			{
 				for (uint32_t RegisterIndex = 0; RegisterIndex < RegisterIndices[ShaderTypeIndex].size(); ++RegisterIndex)
@@ -93,7 +91,7 @@ namespace Eternal
 			}
 			
 #ifdef ETERNAL_DEBUG
-			std::array<uint32_t, static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT)> DebugRegisterCount;
+			RegisterIndicesContainer DebugRegisterCount;
 			DebugRegisterCount.fill(0);
 #endif
 
@@ -122,7 +120,7 @@ namespace Eternal
 				D3D12_ROOT_PARAMETER1& CurrentRootParameter = Parameters.back();
 
 				CurrentRootParameter.ParameterType				= D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-				CurrentRootParameter.Constants.ShaderRegister	= RegisterIndices[static_cast<int32_t>(CurrentAccess)][static_cast<int32_t>(D3D12RegisterType::D3D12_REGISTER_TYPE_CBV)]++;
+				CurrentRootParameter.Constants.ShaderRegister	= RegisterIndices[static_cast<int32_t>(CurrentAccess)][static_cast<int32_t>(HLSLRegisterType::HLSL_REGISTER_TYPE_CBV)]++;
 				CurrentRootParameter.Constants.RegisterSpace	= 0;
 				CurrentRootParameter.Constants.Num32BitValues	= InConstants[ConstantsIndex].Count;
 				CurrentRootParameter.ShaderVisibility			= ConvertRootSignatureAccessToD3D12ShaderVisibility(CurrentAccess);
@@ -145,11 +143,11 @@ namespace Eternal
 				Parameters.push_back(DefaultRootParameter);
 				D3D12_ROOT_PARAMETER1& CurrentRootParameter = Parameters.back();
 
-				std::array<uint32_t, static_cast<int32_t>(D3D12RegisterType::D3D12_REGISTER_TYPE_COUNT)>& RegisterIndexPerType = RegisterIndices[static_cast<int32_t>(CurrentAccess)];
+				RegisterIndicesPerTypeContainer& RegisterIndexPerType = RegisterIndices[static_cast<int32_t>(CurrentAccess)];
 #ifdef ETERNAL_DEBUG
 				uint32_t& DebugRegisterCountType = DebugRegisterCount[static_cast<int32_t>(CurrentAccess)];
 #endif
-				uint32_t RegisterTypeUint = ConvertRootSignatureParameterTypeToD3D12RegisterTypeUInt(InParameters[ParameterIndex].Parameter);
+				uint32_t RegisterTypeUint = ConvertRootSignatureParameterTypeToHLSLRegisterTypeUInt(InParameters[ParameterIndex].Parameter);
 
 				CurrentRootParameter.ParameterType	= ConvertRootSignatureParameterTypeToD3D12RootParameterType(InParameters[ParameterIndex].Parameter);
 				switch (InParameters[ParameterIndex].Parameter)
@@ -160,32 +158,17 @@ namespace Eternal
 					DescriptorRanges.push_back(DefaultDescriptorRange);
 					D3D12_DESCRIPTOR_RANGE1& DescriptorRange = DescriptorRanges.back();
 					DescriptorRange.RangeType							= ConvertRootSignatureParameterTypeToD3D12DescriptorRangeType(InParameters[ParameterIndex].Parameter);
-					DescriptorRange.BaseShaderRegister					= RegisterIndexPerType[RegisterTypeUint];
+					DescriptorRange.BaseShaderRegister					= RegisterIndexPerType[RegisterTypeUint]++;
 					DescriptorRange.RegisterSpace						= 0;
 					DescriptorRange.OffsetInDescriptorsFromTableStart	= D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 					DescriptorRange.Flags								= D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
-
-					const RootSignatureParameter& CurrentParameterGroup = InParameters[ParameterIndex];
-
-					uint32_t NextParameterIndex = ParameterIndex + 1;
-					while (NextParameterIndex < InParameters.size()
-						&& InParameters[NextParameterIndex] == CurrentParameterGroup)
-					{
-						++NextParameterIndex;
-					}
-
-					const uint32_t NumDescriptors = NextParameterIndex - ParameterIndex;
-
-					DescriptorRange.NumDescriptors						= NumDescriptors;
+					DescriptorRange.NumDescriptors						= 1;
 					
 					CurrentRootParameter.DescriptorTable.NumDescriptorRanges	= 1;
 					CurrentRootParameter.DescriptorTable.pDescriptorRanges		= &DescriptorRange;
-
-					RegisterIndexPerType[RegisterTypeUint]	+= NumDescriptors;
 #ifdef ETERNAL_DEBUG
-					DebugRegisterCountType += NumDescriptors;
+					DebugRegisterCountType++;
 #endif
-					ParameterIndex	= NextParameterIndex - 1;
 				} break;
 
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE:
@@ -197,16 +180,14 @@ namespace Eternal
 					for (uint32_t DescriptorTableIndex = 0; DescriptorTableIndex < DescriptorTableLayout.size(); ++DescriptorTableIndex)
 					{
 						const RootSignatureParameterType& CurrentParameter = DescriptorTableLayout[DescriptorTableIndex].Parameter;
-						uint32_t RegisterType = ConvertRootSignatureParameterTypeToD3D12RegisterTypeUInt(CurrentParameter);
+						uint32_t RegisterType = ConvertRootSignatureParameterTypeToHLSLRegisterTypeUInt(CurrentParameter);
 						ETERNAL_ASSERT(CurrentParameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE);
 
 						DescriptorRanges.push_back(DefaultDescriptorRange);
 
 						D3D12_DESCRIPTOR_RANGE1& CurrentDescriptorRange				= DescriptorRanges.back();
 						CurrentDescriptorRange.RangeType							= ConvertRootSignatureParameterTypeToD3D12DescriptorRangeType(CurrentParameter);
-						CurrentDescriptorRange.NumDescriptors						= CurrentParameter != RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER
-																						? DescriptorTableLayout[DescriptorTableIndex].DescriptorsCount
-																						: DescriptorTableLayout[DescriptorTableIndex].Samplers.size();
+						CurrentDescriptorRange.NumDescriptors						= DescriptorTableLayout[DescriptorTableIndex].DescriptorsCount;
 						CurrentDescriptorRange.BaseShaderRegister					= RegisterIndexPerType[RegisterType];
 						CurrentDescriptorRange.RegisterSpace						= 0;
 						CurrentDescriptorRange.Flags								= D3D12_DESCRIPTOR_RANGE_FLAG_NONE;
@@ -224,7 +205,7 @@ namespace Eternal
 
 				default:
 				{
-					CurrentRootParameter.Descriptor.ShaderRegister	= RegisterIndexPerType[ConvertRootSignatureParameterTypeToD3D12RegisterTypeUInt(InParameters[ParameterIndex].Parameter)]++;
+					CurrentRootParameter.Descriptor.ShaderRegister	= RegisterIndexPerType[ConvertRootSignatureParameterTypeToHLSLRegisterTypeUInt(InParameters[ParameterIndex].Parameter)]++;
 					CurrentRootParameter.Descriptor.RegisterSpace	= 0;
 #ifdef ETERNAL_DEBUG
 					++DebugRegisterCountType;
@@ -242,7 +223,7 @@ namespace Eternal
 				AllowStage(Flags, CurrentAccess);
 
 				static_cast<D3D12Sampler*>(InStaticSamplers[StaticSamplerIndex].StaticSampler)->GetD3D12StaticSampler(StaticSamplers[StaticSamplerIndex]);
-				StaticSamplers[StaticSamplerIndex].ShaderRegister	= RegisterIndices[static_cast<int32_t>(CurrentAccess)][static_cast<int32_t>(D3D12RegisterType::D3D12_REGISTER_TYPE_SAMPLER)]++;
+				StaticSamplers[StaticSamplerIndex].ShaderRegister	= RegisterIndices[static_cast<int32_t>(CurrentAccess)][static_cast<int32_t>(HLSLRegisterType::HLSL_REGISTER_TYPE_SAMPLER)]++;
 				StaticSamplers[StaticSamplerIndex].RegisterSpace	= 0;
 				StaticSamplers[StaticSamplerIndex].ShaderVisibility	= ConvertRootSignatureAccessToD3D12ShaderVisibility(CurrentAccess);
 

@@ -83,15 +83,15 @@ namespace Eternal
 		class Sampler
 		{
 		public:
+			virtual ~Sampler() {}
+
+		protected:
 			Sampler() {}
 			Sampler(_In_ const SamplerCreateInformation& InSamplerCreateInformation)
 				: _SamplerCreateInformation(InSamplerCreateInformation)
 			{
 			}
 
-			virtual ~Sampler() {}
-
-		protected:
 			bool IsStatic() const { return _SamplerCreateInformation.IsStatic; }
 
 			bool IsComparisonEnabled() const { return _SamplerCreateInformation.ComparisonEnabled; }

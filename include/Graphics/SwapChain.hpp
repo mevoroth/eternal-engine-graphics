@@ -1,11 +1,14 @@
 #pragma once
 
 #include "Graphics/Viewport.hpp"
+#include <vector>
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace std;
+
 		class Device;
 		class Window;
 		class GraphicsContext;
@@ -15,18 +18,19 @@ namespace Eternal
 		class SwapChain
 		{
 		public:
-			SwapChain();
 			virtual ~SwapChain();
 
 			virtual void Acquire(GraphicsContext& Context) = 0;
 			virtual void Present(GraphicsContext& Context) = 0;
 
-			std::vector<Resource*>& GetBackBuffers() { return _BackBuffers; }
-			std::vector<View*>& GetBackBufferRenderTargetViews() { return _BackBufferRenderTargetViews; }
+			vector<Resource*>& GetBackBuffers() { return _BackBuffers; }
+			vector<View*>& GetBackBufferRenderTargetViews() { return _BackBufferRenderTargetViews; }
 
 		protected:
-			std::vector<Resource*>	_BackBuffers;
-			std::vector<View*>		_BackBufferRenderTargetViews;
+			SwapChain();
+
+			vector<Resource*>	_BackBuffers;
+			vector<View*>		_BackBufferRenderTargetViews;
 		};
 	}
 }

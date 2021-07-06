@@ -30,6 +30,14 @@ namespace Eternal
 			}
 		}
 
+		template<typename ResourceCreateInformationType>
+		static MultiBuffered<Resource> CreateMultiBufferedResource(_In_ GraphicsContext& InContext, _In_ const ResourceCreateInformationType& InResourceCreateInformation)
+		{
+			return MultiBuffered<Resource>(InContext, [&InResourceCreateInformation]() {
+				return CreateResource(InResourceCreateInformation);
+			});
+		}
+
 		Resource* CreateTexture(_In_ const TextureResourceCreateInformation& InResourceCreateInformation)
 		{
 			return CreateResource(InResourceCreateInformation);
@@ -38,6 +46,11 @@ namespace Eternal
 		Resource* CreateBuffer(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
 		{
 			return CreateResource(InResourceCreateInformation);
+		}
+
+		MultiBuffered<Resource> CreateMultiBufferedBuffer(_In_ GraphicsContext& InContext, _In_ const BufferResourceCreateInformation& InResourceCreateInformation)
+		{
+			return CreateMultiBufferedResource(InContext, InResourceCreateInformation);
 		}
 	}
 }

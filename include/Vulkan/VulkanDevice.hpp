@@ -58,6 +58,7 @@ namespace Eternal
 			uint32_t GetQueueIndexCopy() const { return _QueueIndexCopy; }
 			void GetQueueFamilyIndices(QueueFamilyIndicesType& OutQueueFamilyIndices) const;
 			uint32_t GetPushConstantMaxSize() const;
+			uint32_t GetNonCoherentMemoryAtomicSize() const;
 
 		private:
 			vk::PhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;

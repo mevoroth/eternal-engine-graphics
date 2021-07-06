@@ -89,7 +89,6 @@ namespace Eternal
 		class RenderPass
 		{
 		public:
-			RenderPass(_In_ const RenderPassCreateInformation& InRenderPassCreateInformation);
 			virtual ~RenderPass() {}
 
 			const vector<RenderTargetInformation>&	GetRenderTargets() const			{ return _RenderPassCreateInformation.RenderTargets; }
@@ -97,6 +96,9 @@ namespace Eternal
 			const Viewport&							GetViewport() const					{ return _RenderPassCreateInformation.Viewport; }
 			const View*								GetDepthStencilRenderTarget() const	{ return _RenderPassCreateInformation.DepthStencilRenderTarget; }
 			const RenderTargetOperator&				GetDepthStencilOperator() const		{ return _RenderPassCreateInformation.DepthStencilOperator; }
+
+		protected:
+			RenderPass(_In_ const RenderPassCreateInformation& InRenderPassCreateInformation);
 
 		private:
 			RenderPassCreateInformation _RenderPassCreateInformation;

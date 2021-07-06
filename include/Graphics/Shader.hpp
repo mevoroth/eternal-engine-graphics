@@ -29,9 +29,11 @@ namespace Eternal
 		class Shader
 		{
 		public:
-			Shader(_In_ const string& Name);
 			virtual ~Shader() {}
 			const string& GetName() const;
+
+		protected:
+			Shader(_In_ const string& Name);
 
 		private:
 			string _Name;

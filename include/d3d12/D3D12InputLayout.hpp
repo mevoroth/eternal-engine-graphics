@@ -15,12 +15,12 @@ namespace Eternal
 		class D3D12InputLayout final : public InputLayout
 		{
 		public:
-			D3D12InputLayout(_In_ const VertexDataType DataType[], _In_ uint32_t DataTypeCount);
+			D3D12InputLayout(_In_ const vector<VertexStreamBase>& InVertexStreams);
 
-			const vector<D3D12_INPUT_ELEMENT_DESC>& GetInputElements() const { return _Input; }
+			const vector<D3D12_INPUT_ELEMENT_DESC>& GetD3D12InputElements() const { return _InputElements; }
 
 		private:
-			vector<D3D12_INPUT_ELEMENT_DESC> _Input;
+			vector<D3D12_INPUT_ELEMENT_DESC> _InputElements;
 		};
 
 		const D3D12Format& ConvertVertexDataTypeToD3D12Format(const VertexDataType& InVertexDataType);

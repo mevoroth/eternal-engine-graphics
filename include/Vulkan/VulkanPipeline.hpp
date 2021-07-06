@@ -3,8 +3,6 @@
 #include "Graphics/Pipeline.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 
-struct VkPipeline_T;
-
 namespace Eternal
 {
 	namespace Graphics

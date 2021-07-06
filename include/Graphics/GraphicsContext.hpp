@@ -11,6 +11,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		struct ShaderCreateInformation;
+
 		class Device;
 		class SwapChain;
 		class CommandQueue;
@@ -18,6 +20,7 @@ namespace Eternal
 		class CommandAllocator;
 		class CommandList;
 		class ShaderFactory;
+		class Shader;
 
 		struct GraphicsContextCreateInformation
 		{
@@ -40,7 +43,6 @@ namespace Eternal
 				256
 			};
 
-			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 			virtual ~GraphicsContext();
 
 			void Initialize();
@@ -63,9 +65,12 @@ namespace Eternal
 			Fence& GetCurrentFrameFence() { return *_FrameFences[GetCurrentFrameIndex()]; }
 			Fence& GetNextFrameFence() { return *_FrameFences[(GetCurrentFrameIndex() + 1) % static_cast<uint32_t>(_FrameFences.size())]; }
 
-			ShaderFactory& GetShaderFactory() { return *_ShaderFactory; }
+			Shader* GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation);
 
 			uint32_t& GetCurrentFrameIndex() { return _CurrentFrameIndex; }
+
+		protected:
+			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 
 		private:
 

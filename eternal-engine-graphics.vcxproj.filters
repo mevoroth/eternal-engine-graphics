@@ -34,9 +34,6 @@
     <ClInclude Include="include\Graphics\BlendState.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\BlendStateFactory.hpp">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\DepthTest.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -268,6 +265,18 @@
     <ClInclude Include="include\Graphics\ViewFactory.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vulkan\VulkanDescriptorTable.hpp">
+      <Filter>Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Types\HLSLTypes.hpp">
+      <Filter>Graphics\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\GraphicsInclude.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\MultiBuffered.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -280,9 +289,6 @@
       <Filter>Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\BlendState.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\BlendStateFactory.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\DepthTest.cpp">
@@ -479,6 +485,18 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\ViewFactory.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Pipeline.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ShaderType.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\VulkanDescriptorTable.cpp">
+      <Filter>Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Types\HLSLTypes.cpp">
+      <Filter>Graphics\Types</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

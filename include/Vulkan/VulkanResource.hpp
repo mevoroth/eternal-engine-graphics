@@ -67,6 +67,7 @@ namespace Eternal
 				vk::Buffer BufferResource;
 			};
 			VulkanResourceMetaData	_VulkanResourceMetaData;
+			vk::DeviceMemory		_ResourceMemory;
 		};
 	}
 }

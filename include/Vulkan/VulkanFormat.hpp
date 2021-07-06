@@ -19,6 +19,6 @@ namespace Eternal
 			uint32_t	Size;
 		};
 
-		extern const VulkanFormat VULKAN_FORMATS[];
+		const VulkanFormat& ConvertFormatToVulkanFormat(_In_ const Format& InFormat);
 	}
 }

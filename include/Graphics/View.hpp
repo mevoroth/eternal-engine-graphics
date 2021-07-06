@@ -208,9 +208,19 @@ namespace Eternal
 
 		struct ViewCreateInformation
 		{
+			GraphicsContext&		Context;
+			Resource*				GraphicsResource;
+			ViewMetaData			MetaData;
+			Format					GraphicsFormat					= Format::FORMAT_INVALID;
+			ViewType				ResourceViewType				= ViewType::VIEW_UNKNOWN;
+			ViewShaderResourceType	ResourceViewShaderResourceType	= ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN;
+			ViewUnorderedAccessType	ResourceViewUnorderedAccessType	= ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_UNKNOWN;
+			ViewRenderTargetType	ResourceViewRenderTargetType	= ViewRenderTargetType::VIEW_RENDER_TARGET_UNKOWN;
+
+		protected:
 			ViewCreateInformation(
 				_In_ GraphicsContext& InContext,
-				_In_ Resource& InResource,
+				_In_ Resource* InResource,
 				_In_ const ViewMetaData& InViewMetaData,
 				_In_ const Format& InFormat,
 				_In_ const ViewType& InViewType
@@ -222,22 +232,13 @@ namespace Eternal
 				, ResourceViewType(InViewType)
 			{
 			}
-
-			GraphicsContext&		Context;
-			Resource&				GraphicsResource;
-			ViewMetaData			MetaData;
-			Format					GraphicsFormat					= Format::FORMAT_INVALID;
-			ViewType				ResourceViewType				= ViewType::VIEW_UNKNOWN;
-			ViewShaderResourceType	ResourceViewShaderResourceType	= ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN;
-			ViewUnorderedAccessType	ResourceViewUnorderedAccessType	= ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_UNKNOWN;
-			ViewRenderTargetType	ResourceViewRenderTargetType	= ViewRenderTargetType::VIEW_RENDER_TARGET_UNKOWN;
 		};
 
 		struct RenderTargetViewCreateInformation : public ViewCreateInformation
 		{
 			RenderTargetViewCreateInformation(
 				_In_ GraphicsContext& InContext,
-				_In_ Resource& InResource,
+				_In_ Resource* InResource,
 				_In_ const ViewMetaData& InViewMetaData,
 				_In_ const Format& InFormat,
 				_In_ const ViewRenderTargetType& InViewRenderTargetType
@@ -258,7 +259,7 @@ namespace Eternal
 		{
 			ConstantBufferViewCreateInformation(
 				_In_ GraphicsContext& InContext,
-				_In_ Resource& InResource,
+				_In_ Resource* InResource,
 				_In_ const ViewMetaData& InViewMetaData,
 				_In_ const Format& InFormat = Format::FORMAT_UNKNOWN
 			)
@@ -277,7 +278,7 @@ namespace Eternal
 		{
 			ShaderResourceViewCreateInformation(
 				_In_ GraphicsContext& InContext,
-				_In_ Resource& InResource,
+				_In_ Resource* InResource,
 				_In_ const ViewMetaData& InViewMetaData,
 				_In_ const Format& InFormat,
 				_In_ const ViewShaderResourceType& InViewShaderResourceType
@@ -297,16 +298,17 @@ namespace Eternal
 		class View
 		{
 		public:
-			View(_In_ const ViewCreateInformation& InViewCreateInformation);
 			virtual ~View() {}
 
-			Resource& GetResource() { return _ViewCreateInformation.GraphicsResource; }
-			const Resource& GetResource() const { return _ViewCreateInformation.GraphicsResource; }
+			Resource& GetResource();
+			const Resource& GetResource() const;
 			Format GetViewFormat() const { return _ViewCreateInformation.GraphicsFormat; }
 			const TransitionState& GetResourceTransition() const;
 			ResourceType GetResourceType() const;
+			const ViewMetaData& GetViewMetaData() const { return _ViewCreateInformation.MetaData; }
 			
 		protected:
+			View(_In_ const ViewCreateInformation& InViewCreateInformation);
 			const ViewCreateInformation& GetViewCreateInformation() const { return _ViewCreateInformation; }
 
 		private:

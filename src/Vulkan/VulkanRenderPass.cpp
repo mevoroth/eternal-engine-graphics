@@ -36,7 +36,7 @@ namespace Eternal
 
 				VulkanAttachments[RenderTargetIndex] = vk::AttachmentDescription(
 					vk::AttachmentDescriptionFlagBits(),
-					VULKAN_FORMATS[static_cast<int32_t>(CurrentRenderTarget->GetViewFormat())].Format,
+					ConvertFormatToVulkanFormat(CurrentRenderTarget->GetViewFormat()).Format,
 					vk::SampleCountFlagBits::e1,
 					ConvertLoadOperatorToVulkanAttachmentLoadOperator(CurrentRenderTargetInformation.Operator.Load),
 					ConvertStoreOperatorToVulkanAttachmentStoreOperator(CurrentRenderTargetInformation.Operator.Store),

@@ -45,11 +45,11 @@ namespace Eternal
 			, _Program(nullptr)
 		{
 			ETERNAL_ASSERT(_IncludeHandler);
-		#if defined(ETERNAL_DEBUG) && defined(ETERNAL_USE_DEBUG_SHADERS)
+#if defined(ETERNAL_DEBUG) && defined(ETERNAL_USE_DEBUG_SHADERS)
 			_CompileFile(FileName, D3D12_SHADER_ENTRIES[static_cast<int32_t>(Stage)], D3D12_SHADER_PROFILES[static_cast<int32_t>(Stage)], Defines);
-		#else
+#else
 			_LoadFile(FileName + ".cso");
-		#endif
+#endif
 		}
 
 		D3D12Shader::D3D12Shader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation)
@@ -74,17 +74,28 @@ namespace Eternal
 
 			string FullPathSource = FilePath::Find(FileName, FileType::SHADERS);
 
+			uint32_t MacrosCount = static_cast<uint32_t>(Defines.size()) / 2;
 			vector<D3D_SHADER_MACRO> Macros;
-			Macros.resize((Defines.size() / 2) + 1);
-			uint32_t DefineIndex = 0;
-			for (; DefineIndex < Macros.size() - 1; ++DefineIndex)
+			Macros.reserve(MacrosCount + 256);
+			for (uint32_t DefineIndex = 0; DefineIndex < MacrosCount; ++DefineIndex)
 			{
-				Macros[DefineIndex].Name		= Defines[DefineIndex * 2].c_str();
-				Macros[DefineIndex].Definition	= Defines[DefineIndex * 2 + 1].c_str();
+				Macros.push_back({});
+				D3D_SHADER_MACRO& CurrentMacro = Macros.back();
+
+				CurrentMacro.Name		= Defines[DefineIndex * 2].c_str();
+				CurrentMacro.Definition	= Defines[DefineIndex * 2 + 1].c_str();
 			}
+
+			D3D_SHADER_MACRO PlatformMacro;
+			PlatformMacro.Name			= "PLATFORM_DX12";
+			PlatformMacro.Definition	= "1";
+			Macros.push_back(PlatformMacro);
+
 			// Empty macro (eq. end of array)
-			Macros[DefineIndex].Name		= nullptr;
-			Macros[DefineIndex].Definition	= nullptr;
+			D3D_SHADER_MACRO EndOfArrayMacro;
+			EndOfArrayMacro.Name		= nullptr;
+			EndOfArrayMacro.Definition	= nullptr;
+			Macros.push_back(EndOfArrayMacro);
 
 			HRESULT hr = D3DCompileFromFile(
 				wstring(FullPathSource.cbegin(), FullPathSource.cend()).c_str(),
@@ -104,6 +115,12 @@ namespace Eternal
 				const char* Error = (LPCSTR)Errors->GetBufferPointer();
 				OutputDebugString(Error);
 				ETERNAL_BREAK();
+			}
+
+			if (Errors)
+			{
+				Errors->Release();
+				Errors = nullptr;
 			}
 		}
 

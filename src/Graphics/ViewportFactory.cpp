@@ -9,12 +9,12 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		Viewport* CreateViewport(_In_ GraphicsContext& InContext, _In_ int32_t InX, _In_ int32_t InY, _In_ int32_t InWidth, _In_ int32_t InHeight)
+		Viewport* CreateViewport(_In_ GraphicsContext& InContext, _In_ int32_t InWidth, _In_ int32_t InHeight, _In_ int32_t InX, _In_ int32_t InY)
 		{
 			return new Viewport(InX, InY, InWidth, InHeight);
 		}
 
-		Viewport* CreateInvertedViewport(_In_ GraphicsContext& InContext, _In_ int32_t InX, _In_ int32_t InY, _In_ int32_t InWidth, _In_ int32_t InHeight)
+		Viewport* CreateInvertedViewport(_In_ GraphicsContext& InContext, _In_ int32_t InWidth, _In_ int32_t InHeight, _In_ int32_t InX, _In_ int32_t InY)
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{

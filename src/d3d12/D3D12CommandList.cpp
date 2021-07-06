@@ -1,6 +1,5 @@
 #include "d3d12/D3D12CommandList.hpp"
 
-#include <array>
 #include <d3d12.h>
 #include <d3dx12.h>
 #include "Graphics/RenderPass.hpp"
@@ -15,6 +14,7 @@
 #include "d3d12/D3D12RootSignature.hpp"
 #include "d3d12/D3D12Sampler.hpp"
 #include "d3d12/D3D12GraphicsContext.hpp"
+#include <array>
 
 namespace Eternal
 {
@@ -72,6 +72,8 @@ namespace Eternal
 
 		void D3D12CommandList::BeginRenderPass(_In_ const RenderPass& InRenderPass)
 		{
+			CommandList::BeginRenderPass(InRenderPass);
+
 			using namespace Eternal::Graphics::D3D12;
 
 			// Cache this in D3D12RenderPass?
@@ -151,18 +153,7 @@ namespace Eternal
 			);
 
 			const Viewport& InViewport = InRenderPass.GetViewport();
-			D3D12_VIEWPORT ViewportInformation;
-
-			ViewportInformation.TopLeftX	= static_cast<FLOAT>(InViewport.GetX());
-			ViewportInformation.TopLeftY	= static_cast<FLOAT>(InViewport.GetY());
-			ViewportInformation.Width		= static_cast<FLOAT>(InViewport.GetWidth());
-			ViewportInformation.Height		= static_cast<FLOAT>(InViewport.GetHeight());
-			ViewportInformation.MinDepth	= 0.0f;
-			ViewportInformation.MaxDepth	= 1.0f;
-
-			_GraphicCommandList5->RSSetViewports(
-				1, &ViewportInformation
-			);
+			SetViewport(InViewport);
 
 			D3D12_RECT ScissorRectangle;
 			ScissorRectangle.left			= InViewport.GetX();
@@ -177,6 +168,8 @@ namespace Eternal
 
 		void D3D12CommandList::EndRenderPass()
 		{
+			CommandList::EndRenderPass();
+
 			_GraphicCommandList5->EndRenderPass();
 		}
 
@@ -210,6 +203,22 @@ namespace Eternal
 			);
 		}
 
+		void D3D12CommandList::SetViewport(_In_ const Viewport& InViewport)
+		{
+			D3D12_VIEWPORT ViewportInformation;
+
+			ViewportInformation.TopLeftX	= static_cast<FLOAT>(InViewport.GetX());
+			ViewportInformation.TopLeftY	= static_cast<FLOAT>(InViewport.GetY());
+			ViewportInformation.Width		= static_cast<FLOAT>(InViewport.GetWidth());
+			ViewportInformation.Height		= static_cast<FLOAT>(InViewport.GetHeight());
+			ViewportInformation.MinDepth	= 0.0f;
+			ViewportInformation.MaxDepth	= 1.0f;
+
+			_GraphicCommandList5->RSSetViewports(
+				1, &ViewportInformation
+			);
+		}
+
 		void D3D12CommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
@@ -222,20 +231,39 @@ namespace Eternal
 				InD3DPipeline.GetD3D12PipelineState()
 			);
 			_GraphicCommandList5->IASetPrimitiveTopology(InD3DPipeline.GetD3D12PrimitiveTopology());
-			_CurrentRootSignature = &InD3DRootSignature;
+			SetCurrentRootSignature(&InD3DRootSignature);
 		}
 
-		inline static void SetGraphicsDescriptorTable(_In_ ID3D12GraphicsCommandList5* InOutCommandList, _In_ uint32_t RootParameterIndex, _In_ const D3D12_GPU_DESCRIPTOR_HANDLE& InHandle)
+		void D3D12CommandList::SetVertexBuffers(_In_ const Resource* InVertexBuffers[], _In_ uint32_t InBufferCount /* = 1 */, _In_ uint32_t InFirstVertexBuffer /* = 0 */, _In_ VertexBufferParameters InParameters[] /* = */)
 		{
-			InOutCommandList->SetGraphicsRootDescriptorTable(RootParameterIndex, InHandle);
+			ETERNAL_ASSERT((InFirstVertexBuffer + InBufferCount) <= MaxVertexBuffers);
+			std::array<D3D12_VERTEX_BUFFER_VIEW, MaxVertexBuffers> D3D12VertexBufferViews;
+			D3D12VertexBufferViews.fill({});
+
+			uint32_t CurrentBufferIndex = 0;
+			for (uint32_t VertexBufferIndex = 0; VertexBufferIndex < InBufferCount; ++VertexBufferIndex)
+			{
+				D3D12_VERTEX_BUFFER_VIEW& CurrentD3D12VertexBufferView = D3D12VertexBufferViews[CurrentBufferIndex++];
+
+				const D3D12Resource* CurrentD3D12Resource = static_cast<const D3D12Resource*>(InVertexBuffers[VertexBufferIndex]);
+				CurrentD3D12VertexBufferView.BufferLocation		= CurrentD3D12Resource->GetD3D12Resource()->GetGPUVirtualAddress() + (InParameters ? InParameters[VertexBufferIndex].Offset : 0);
+				CurrentD3D12VertexBufferView.SizeInBytes		= CurrentD3D12Resource->GetBufferSize();
+				CurrentD3D12VertexBufferView.StrideInBytes		= CurrentD3D12Resource->GetBufferStride();
+			}
+
+			_GraphicCommandList5->IASetVertexBuffers(
+				InFirstVertexBuffer,
+				InBufferCount,
+				D3D12VertexBufferViews.data()
+			);
 		}
 
-		void D3D12CommandList::SetGraphicsDescriptorTable(_In_ DescriptorTable& InDescriptorTable)
+		void D3D12CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
-			ETERNAL_ASSERT(_CurrentRootSignature && *_CurrentRootSignature == InDescriptorTable.GetRootSignature());
-			//ETERNAL_ASSERT(_CurrentRootSignature && _CurrentRootSignature == &InDescriptorTable.GetRootSignature()); Faster but limiting possibilities
+			ETERNAL_ASSERT(GetCurrentSignature() && *GetCurrentSignature() == *InDescriptorTable.GetRootSignature());
+			//ETERNAL_ASSERT(_CurrentRootSignature && GetCurrentSignature() == InDescriptorTable.GetRootSignature()); Faster but limiting possibilities
 			
-			const RootSignatureCreateInformation& DescriptorTableLayout	= _CurrentRootSignature->GetCreateInformation();
+			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
 			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
 			const vector<RootSignatureParameter>& Parameters			= DescriptorTableLayout.Parameters;
 			
@@ -333,15 +361,6 @@ namespace Eternal
 				{
 					bool IsDirty = InResourcesDirtyFlags.IsSet(ParameterIndex);
 					InResourcesDirtyFlags.Unset(ParameterIndex);
-					uint32_t NextParameterIndex = ParameterIndex + 1;
-					while (NextParameterIndex < Parameters.size()
-						&& Parameters[NextParameterIndex] == CurrentParameter)
-					{
-						IsDirty |= InResourcesDirtyFlags.IsSet(NextParameterIndex);
-						InResourcesDirtyFlags.Unset(NextParameterIndex);
-						++NextParameterIndex;
-					}
-
 					if (IsDirty)
 					{
 						_GraphicCommandList5->SetGraphicsRootDescriptorTable(
@@ -349,8 +368,6 @@ namespace Eternal
 							DescriptorTableHandle
 						);
 					}
-
-					ParameterIndex = NextParameterIndex - 1;
 				}
 			}
 		}
@@ -527,8 +544,8 @@ namespace Eternal
 
 				uint32_t SourceStride = Footprint.Footprint.RowPitch / Footprint.Footprint.Width;
 
-				SourceBox.left		= (Footprint.Offset % RowSizeInBytes) / SourceStride;
-				SourceBox.top		= (Footprint.Offset / RowSizeInBytes) / SourceStride;
+				SourceBox.left		= static_cast<UINT>((Footprint.Offset % RowSizeInBytes) / SourceStride);
+				SourceBox.top		= static_cast<UINT>((Footprint.Offset / RowSizeInBytes) / SourceStride);
 				SourceBox.front		= 0;
 				SourceBox.right		= Footprint.Footprint.Width;
 				SourceBox.bottom	= Footprint.Footprint.Height;

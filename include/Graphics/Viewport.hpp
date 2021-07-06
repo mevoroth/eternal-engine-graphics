@@ -15,10 +15,10 @@ namespace Eternal
 			inline int32_t GetHeight() const { return _Height; }
 
 		private:
-			int32_t _X;
-			int32_t _Y;
-			int32_t _Width;
-			int32_t _Height;
+			int32_t _X		= 0;
+			int32_t _Y		= 0;
+			int32_t _Width	= 0;
+			int32_t _Height	= 0;
 		};
 	}
 }

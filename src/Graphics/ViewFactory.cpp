@@ -11,17 +11,18 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		View* CreateConstantBufferView(_In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation)
+		template<typename ViewCreateInformationType>
+		static View* CreateView(_In_ const ViewCreateInformationType& InViewCreateInformation)
 		{
-			switch (InConstantBufferViewCreateInformation.Context.GetDevice().GetDeviceType())
+			switch (InViewCreateInformation.Context.GetDevice().GetDeviceType())
 #ifdef ETERNAL_ENABLE_D3D12
 			{
 			case DeviceType::D3D12:
-				return new D3D12View(InConstantBufferViewCreateInformation);
+				return new D3D12View(InViewCreateInformation);
 #endif
 
 			case DeviceType::VULKAN:
-				
+				return new VulkanView(InViewCreateInformation);
 
 			default:
 				ETERNAL_BREAK();
@@ -29,22 +30,29 @@ namespace Eternal
 			}
 		}
 
+		template<typename ViewCreateInformationType>
+		static MultiBuffered<View> CreateMultiBufferedBufferView(_In_ const ViewCreateInformationType& InViewCreateInformation, _In_ MultiBuffered<Resource>& InResources)
+		{
+			uint32_t ResourceIndex = 0;
+			return MultiBuffered<View>(InViewCreateInformation.Context, [&InViewCreateInformation, &ResourceIndex, &InResources]() {
+				const_cast<ViewCreateInformationType&>(InViewCreateInformation).GraphicsResource = InResources[ResourceIndex++];
+				return CreateView(InViewCreateInformation);
+			});
+		}
+
+		View* CreateConstantBufferView(_In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation)
+		{
+			return CreateView(InConstantBufferViewCreateInformation);
+		}
+
 		View* CreateShaderResourceView(_In_ const ShaderResourceViewCreateInformation& InShaderResourceViewCreateInformation)
 		{
-			switch (InShaderResourceViewCreateInformation.Context.GetDevice().GetDeviceType())
-#ifdef ETERNAL_ENABLE_D3D12
-			{
-			case DeviceType::D3D12:
-				return new D3D12View(InShaderResourceViewCreateInformation);
-#endif
+			return CreateView(InShaderResourceViewCreateInformation);
+		}
 
-			case DeviceType::VULKAN:
-
-
-			default:
-				ETERNAL_BREAK();
-				return nullptr;
-			}
+		MultiBuffered<View> CreateMultiBufferedConstantBufferView(_In_ MultiBuffered<Resource>& InResources, _In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation)
+		{
+			return CreateMultiBufferedBufferView(InConstantBufferViewCreateInformation, InResources);
 		}
 	}
 }

@@ -10,6 +10,6 @@ namespace Eternal
 		class GraphicsContext;
 		class Device;
 
-		InputLayout* CreateInputLayout(_In_ GraphicsContext& Context, _In_ const VertexDataType DataType[] = nullptr, _In_ uint32_t DataTypeCount = 0);
+		InputLayout* CreateInputLayout(_In_ GraphicsContext& InContext, _In_ const vector<VertexStreamBase>& InVertexStreams = vector<VertexStreamBase>());
 	}
 }

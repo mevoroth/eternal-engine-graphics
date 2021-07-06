@@ -2,18 +2,25 @@
 
 #include "Graphics/Viewport.hpp"
 #include "Graphics/CommandUtils.h"
+#include "Graphics/RootSignature.hpp"
+#include "Graphics/DescriptorTable.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
 #include "Vulkan/VulkanRenderPass.hpp"
 #include "Vulkan/VulkanResource.hpp"
 #include "Vulkan/VulkanView.hpp"
 #include "Vulkan/VulkanPipeline.hpp"
+#include "Vulkan/VulkanRootSignature.hpp"
+#include "Vulkan/VulkanDescriptorTable.hpp"
+#include "Vulkan/VulkanViewport.hpp"
 #include <array>
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace Eternal::Graphics::Vulkan;
+
 		VulkanCommandList::VulkanCommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
 			: CommandList(InDevice, InCommandAllocator)
 		{
@@ -22,7 +29,7 @@ namespace Eternal
 				vk::CommandBufferLevel::ePrimary,
 				1
 			);
-			Vulkan::VerifySuccess(
+			VerifySuccess(
 				GetVulkanDevice().GetVulkanDevice().allocateCommandBuffers(
 					&CommandBufferAllocateInfo,
 					&_CommandBuffer
@@ -56,6 +63,8 @@ namespace Eternal
 
 		void VulkanCommandList::BeginRenderPass(const RenderPass& InRenderPass)
 		{
+			CommandList::BeginRenderPass(InRenderPass);
+
 			std::array<vk::ClearValue, MAX_RENDER_TARGETS> ClearValues;
 			ClearValues.fill(vk::ClearValue());
 			std::array<vk::ClearColorValue, MAX_RENDER_TARGETS> ClearColorValues;
@@ -73,7 +82,7 @@ namespace Eternal
 			vk::RenderPassBeginInfo RenderPassInfo(
 				static_cast<const VulkanRenderPass&>(InRenderPass).GetVulkanRenderPass(),
 				static_cast<const VulkanRenderPass&>(InRenderPass).GetFrameBuffer(),
-				Vulkan::ConvertViewportToRect2D(InRenderPass.GetViewport()),
+				ConvertViewportToRect2D(InRenderPass.GetViewport()),
 				static_cast<uint32_t>(InRenderTargets.size()), ClearValues.data()
 			);
 			_CommandBuffer.beginRenderPass(
@@ -83,17 +92,18 @@ namespace Eternal
 
 		void VulkanCommandList::EndRenderPass()
 		{
+			CommandList::EndRenderPass();
+
 			_CommandBuffer.endRenderPass();
+			_CurrentShaderStages = InvalidShaderStages;
 		}
 
 		void VulkanCommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
-			using namespace Eternal::Graphics::Vulkan;
-
 			static constexpr vk::ImageSubresourceRange DefaultImageSubresourceRange(
 				vk::ImageAspectFlagBits::eColor,
-				1, 0,
-				1, 0
+				0, 1,
+				0, 1
 			);
 
 			std::array<vk::BufferMemoryBarrier, MaxBufferTransitionsPerSubmit> BufferTransitions;
@@ -122,22 +132,11 @@ namespace Eternal
 				const TransitionState& AfterState	= CurrentResourceTransition.GetAfter();
 
 				BeforeStages	|= ConvertCommandTypeAndTransitionStateToPipelineStageFlags(CurrentResourceTransition.BeforeCommandType, BeforeState);
-				AfterStages		|= ConvertCommandTypeAndTransitionStateToPipelineStageFlags(CurrentResourceTransition.BeforeCommandType, AfterState);
+				AfterStages		|= ConvertCommandTypeAndTransitionStateToPipelineStageFlags(CurrentResourceTransition.AfterCommandType, AfterState);
 
 				switch (VkResource.GetResourceType())
 				{
 				case ResourceType::RESOURCE_TYPE_TEXTURE:
-				{
-					BufferTransitions[BufferTransitionsCount++] = vk::BufferMemoryBarrier(
-						ConvertTransitionStateToVulkanAccessFlags(BeforeState),
-						ConvertTransitionStateToVulkanAccessFlags(AfterState),
-						BeforeQueueFamilyIndex,
-						AfterQueueFamilyIndex,
-						VkResource.GetVulkanBuffer(),
-						0, VK_WHOLE_SIZE
-					);
-				} break;
-				case ResourceType::RESOURCE_TYPE_BUFFER:
 				{
 					ImageTransitions[ImageTransitionsCount++] = vk::ImageMemoryBarrier(
 						ConvertTransitionStateToVulkanAccessFlags(BeforeState),
@@ -147,7 +146,18 @@ namespace Eternal
 						BeforeQueueFamilyIndex,
 						AfterQueueFamilyIndex,
 						VkResource.GetVulkanImage(),
-						ResourceView->GetVulkanSubresourceRange()
+						ResourceView ? ResourceView->GetVulkanSubresourceRange() : DefaultImageSubresourceRange
+					);
+				} break;
+				case ResourceType::RESOURCE_TYPE_BUFFER:
+				{
+					BufferTransitions[BufferTransitionsCount++] = vk::BufferMemoryBarrier(
+						ConvertTransitionStateToVulkanAccessFlags(BeforeState),
+						ConvertTransitionStateToVulkanAccessFlags(AfterState),
+						BeforeQueueFamilyIndex,
+						AfterQueueFamilyIndex,
+						VkResource.GetVulkanBuffer(),
+						0, VK_WHOLE_SIZE
 					);
 				} break;
 				}
@@ -167,17 +177,144 @@ namespace Eternal
 			);
 		}
 
+		void VulkanCommandList::SetViewport(_In_ const Viewport& InViewport)
+		{
+			const VulkanViewport& InVkViewport = static_cast<const VulkanViewport&>(InViewport);
+			vk::Viewport ViewportInfo(
+				static_cast<float>(InVkViewport.GetX()),
+				static_cast<float>(InVkViewport.GetInvertedY()),
+				static_cast<float>(InVkViewport.GetWidth()),
+				static_cast<float>(InVkViewport.GetInvertedHeight()),
+				0.0f, 1.0f
+			);
+
+			_CommandBuffer.setViewport(
+				0, 1, &ViewportInfo
+			);
+		}
+
 		void VulkanCommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
 			_CommandBuffer.bindPipeline(
 				vk::PipelineBindPoint::eGraphics,
 				static_cast<const VulkanPipeline&>(InPipeline).GetVulkanPipeline()
 			);
+			SetCurrentRootSignature(&InPipeline.GetRootSignature());
+			_CurrentShaderStages = ConvertShaderTypeFlagsToVulkanShaderStageFlags(InPipeline.GetShaderTypes());
 		}
 
-		void VulkanCommandList::SetGraphicsDescriptorTable(_In_ DescriptorTable& InDescriptorTable)
+		void VulkanCommandList::SetVertexBuffers(_In_ const Resource* InVertexBuffers[], _In_ uint32_t InBufferCount /* = 1 */, _In_ uint32_t InFirstVertexBuffer /* = 0 */, _In_ VertexBufferParameters InParameters[] /* = */)
 		{
-			ETERNAL_BREAK();
+			ETERNAL_ASSERT((InFirstVertexBuffer + InBufferCount) <= MaxVertexBuffers);
+			std::array<vk::Buffer, MaxVertexBuffers> InVkBuffers;
+			std::array<vk::DeviceSize, MaxVertexBuffers> InOffsets;
+
+			uint32_t CurrentBufferIndex = 0;
+			for (uint32_t VertexBufferIndex = 0; VertexBufferIndex < InBufferCount; ++VertexBufferIndex)
+			{
+				InVkBuffers[CurrentBufferIndex]	= static_cast<const VulkanResource*>(InVertexBuffers[CurrentBufferIndex])->GetVulkanBuffer();
+				InOffsets[CurrentBufferIndex]	= InParameters ? InParameters[CurrentBufferIndex].Offset : 0;
+				++CurrentBufferIndex;
+			}
+
+			_CommandBuffer.bindVertexBuffers(
+				InFirstVertexBuffer,
+				InBufferCount,
+				InVkBuffers.data(),
+				InOffsets.data()
+			);
+		}
+		
+		void VulkanCommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
+			ETERNAL_ASSERT(GetCurrentSignature() && *GetCurrentSignature() == *InDescriptorTable.GetRootSignature());
+			//ETERNAL_ASSERT(_CurrentRootSignature && GetCurrentSignature() == InDescriptorTable.GetRootSignature()); Faster but limiting possibilities
+			
+			const VulkanRootSignature& VkRootSignature					= *static_cast<const VulkanRootSignature*>(GetCurrentSignature());
+			const vk::PipelineLayout& CurrentPipelineLayout				= VkRootSignature.GetVulkanPipelineLayout();
+
+			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
+			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
+			const vector<RootSignatureParameter>& Parameters			= DescriptorTableLayout.Parameters;
+			
+			const vector<DescriptorTableConstants>& InConstants			= static_cast<const DescriptorTable&>(InDescriptorTable).GetConstants();
+			const vector<DescriptorTableResource>& InResources			= static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
+			const vector<const Sampler*>& InStaticSamplers				= static_cast<const DescriptorTable&>(InDescriptorTable).GetStaticSamplers();
+			ResourcesDirtyFlagsType& InConstantsDirtyFlags				= InDescriptorTable.GetConstantsDirtyFlags();
+			ResourcesDirtyFlagsType& InResourcesDirtyFlags				= InDescriptorTable.GetResourcesDirtyFlags();
+			ResourcesDirtyFlagsType& InStaticSamplersDirtyFlags			= InDescriptorTable.GetStaticSamplersDirtyFlags();
+
+			//////////////////////////////////////////////////////////////////////////
+			// Constants
+
+			const vector<vk::PushConstantRange>& ConstantRanges			= VkRootSignature.GetVulkanPushConstantRanges();
+
+			uint32_t ConstantRangeIndex = 0;
+			for (uint32_t ConstantIndex = 0; ConstantIndex < Constants.size(); ++ConstantIndex)
+			{
+				if (InConstantsDirtyFlags.IsSet(ConstantIndex))
+				{
+					uint32_t ConstantOffset	= 0;
+					uint32_t ConstantCount	= Constants[ConstantIndex].Count;
+					while (ConstantOffset < ConstantCount)
+					{
+						const vk::PushConstantRange& ConstantRange = ConstantRanges[ConstantRangeIndex];
+
+						uint32_t ConstantRangeConstantsCount = static_cast<int32_t>(ConstantRange.size - ConstantRange.offset) / ByteTo32Bits;
+					
+						_CommandBuffer.pushConstants(
+							CurrentPipelineLayout,
+							ConstantRange.stageFlags,
+							ConstantRange.offset,
+							ConstantRange.size,
+							&InConstants[ConstantIndex].Constants[ConstantOffset]
+						);
+
+						ConstantOffset += ConstantRangeConstantsCount;
+					}
+				}
+			}
+
+			//////////////////////////////////////////////////////////////////////////
+			// Descriptor sets
+
+			std::array<vk::DescriptorSet, MaxDescriptorSetsCount> DescriptorSets;
+			DescriptorSets.fill(vk::DescriptorSet());
+
+			VulkanDescriptorTable& VkDescriptorTable = static_cast<VulkanDescriptorTable&>(InDescriptorTable);
+
+			uint32_t DescriptorSetCount = 0;
+			VkDescriptorTable.Commit(InContext, Parameters);
+			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex)
+			{
+				if (Parameters[ParameterIndex].Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE)
+				{
+					const vector<DescriptorTableResource>& Resources = static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
+					const VulkanDescriptorTable* VkTable = static_cast<const VulkanDescriptorTable*>(Resources[ParameterIndex].ResourceDescriptorTable);
+					VkTable->Commit(
+						InContext,
+						Parameters[ParameterIndex].DescriptorTable
+					);
+					DescriptorSets[++DescriptorSetCount] = VkTable->GetVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
+				}
+			}
+
+			const vk::DescriptorSet* FirstSetPointer = &DescriptorSets[1];
+			if (Parameters.size() > DescriptorSetCount)
+			{
+				DescriptorSets[0] = VkDescriptorTable.GetVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
+				FirstSetPointer = &DescriptorSets[0];
+				++DescriptorSetCount;
+			}
+			
+			_CommandBuffer.bindDescriptorSets(
+				vk::PipelineBindPoint::eGraphics,
+				CurrentPipelineLayout,
+				0,
+				DescriptorSetCount,
+				FirstSetPointer,
+				0, nullptr
+			);
 		}
 
 		void VulkanCommandList::DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
@@ -203,7 +340,78 @@ namespace Eternal
 
 		void VulkanCommandList::CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
 		{
-			ETERNAL_BREAK();
+			if (InSourceResource.GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER)
+			{
+				if (InDestinationResource.GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER)
+				{
+					_CopyBufferToBuffer(InDestinationResource, InSourceResource, InCopyRegion);
+				}
+				else
+				{
+					ETERNAL_ASSERT(InDestinationResource.GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+					_CopyBufferToTexture(InDestinationResource, InSourceResource, InCopyRegion);
+				}
+			}
+			else
+			{
+				ETERNAL_ASSERT(InSourceResource.GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+				if (InDestinationResource.GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER)
+				{
+					_CopyTextureToBuffer(InDestinationResource, InSourceResource, InCopyRegion);
+				}
+				else
+				{
+					ETERNAL_ASSERT(InDestinationResource.GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+					_CopyTextureToTexture(InDestinationResource, InSourceResource, InCopyRegion);
+				}
+			}
+		}
+
+		void VulkanCommandList::_CopyBufferToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+
+		}
+
+		void VulkanCommandList::_CopyTextureToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+
+		}
+
+		void VulkanCommandList::_CopyBufferToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+			vk::BufferImageCopy BufferToTextureCopy(
+				InCopyRegion.TextureFromBuffer.SourceOffset,
+				InCopyRegion.TextureFromBuffer.DestinationExtent.Width,
+				//InCopyRegion.TextureFromBuffer.SourceSize / InCopyRegion.TextureFromBuffer.DestinationExtent.Height,
+				InCopyRegion.TextureFromBuffer.DestinationExtent.Height,
+				vk::ImageSubresourceLayers(
+					vk::ImageAspectFlagBits::eColor,
+					InCopyRegion.TextureFromBuffer.DestinationMIPIndex,
+					InCopyRegion.TextureFromBuffer.Destination.GetArraySlice(InDestinationResource.GetResourceDimension()),
+					InDestinationResource.GetArraySize()
+				),
+				vk::Offset3D(
+					InCopyRegion.TextureFromBuffer.Destination.X,
+					InCopyRegion.TextureFromBuffer.Destination.Y,
+					InCopyRegion.TextureFromBuffer.Destination.Z
+				),
+				vk::Extent3D(
+					InCopyRegion.TextureFromBuffer.DestinationExtent.Width,
+					InCopyRegion.TextureFromBuffer.DestinationExtent.Height,
+					InCopyRegion.TextureFromBuffer.DestinationExtent.Depth
+				)
+			);
+			_CommandBuffer.copyBufferToImage(
+				static_cast<const VulkanResource&>(InSourceResource).GetVulkanBuffer(),
+				static_cast<const VulkanResource&>(InDestinationResource).GetVulkanImage(),
+				ConvertTransitionStateToVulkanImageLayout(InDestinationResource.GetResourceState()),
+				1, &BufferToTextureCopy
+			);
+		}
+
+		void VulkanCommandList::_CopyTextureToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+
 		}
 	}
 }

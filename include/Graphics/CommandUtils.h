@@ -4,7 +4,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum class ResourceUsage;
+		enum class TextureResourceUsage;
+		enum class BufferResourceUsage;
 		enum class ResourceDimension;
 
 		class View;
@@ -98,8 +99,37 @@ namespace Eternal
 		TransitionFlags operator&(const TransitionFlags& InLeftTransitionFlags, const TransitionFlags& InRightTransitionFlags);
 		TransitionFlags& operator&=(TransitionFlags& InOutTransitionFlags, const TransitionFlags& InOtherTransitionFlags);
 		TransitionFlags operator~(const TransitionFlags& InTransitionFlags);
-		ResourceUsage operator|(const ResourceUsage& InLeftResourceUsage, const ResourceUsage& InRightResourceUsage);
-		ResourceUsage operator&(const ResourceUsage& InLeftResourceUsage, const ResourceUsage& InRightResourceUsage);
+		constexpr TextureResourceUsage operator|(_In_ const TextureResourceUsage& InLeftResourceUsage, _In_ const TextureResourceUsage& InRightResourceUsage)
+		{
+			return static_cast<TextureResourceUsage>(
+				static_cast<uint32_t>(InLeftResourceUsage) | static_cast<uint32_t>(InRightResourceUsage)
+			);
+		}
+		constexpr TextureResourceUsage operator&(_In_ const TextureResourceUsage& InLeftResourceUsage, _In_ const TextureResourceUsage& InRightResourceUsage)
+		{
+			return static_cast<TextureResourceUsage>(
+				static_cast<uint32_t>(InLeftResourceUsage) & static_cast<uint32_t>(InRightResourceUsage)
+			);
+		}
+
+		constexpr BufferResourceUsage operator|(_In_ const BufferResourceUsage& InLeftResourceUsage, _In_ const BufferResourceUsage& InRightResourceUsage)
+		{
+			return static_cast<BufferResourceUsage>(
+				static_cast<uint32_t>(InLeftResourceUsage) | static_cast<uint32_t>(InRightResourceUsage)
+			);
+		}
+		constexpr BufferResourceUsage operator&(_In_ const BufferResourceUsage& InLeftResourceUsage, _In_ const BufferResourceUsage& InRightResourceUsage)
+		{
+			return static_cast<BufferResourceUsage>(
+				static_cast<uint32_t>(InLeftResourceUsage) & static_cast<uint32_t>(InRightResourceUsage)
+			);
+		}
+		inline BufferResourceUsage operator<<(_In_ const BufferResourceUsage& InResourceUsage, _In_ uint32_t BitCount)
+		{
+			return static_cast<BufferResourceUsage>(
+				static_cast<uint32_t>(InResourceUsage) << BitCount
+			);
+		}
 
 		inline bool OnlyHasFlags(_In_ const TransitionState& InTransitionState, _In_ const TransitionState& InFilterState)
 		{
@@ -307,6 +337,11 @@ namespace Eternal
 			BufferRegion Buffer;
 			BufferFromTextureRegion BufferFromTexture;
 			TextureFromBufferRegion TextureFromBuffer;
+		};
+
+		struct VertexBufferParameters
+		{
+			uint32_t Offset = 0;
 		};
 	}
 }

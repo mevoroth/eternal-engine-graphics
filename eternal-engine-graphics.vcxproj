@@ -38,7 +38,6 @@
     <ClInclude Include="include\d3d12\D3D12View.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
-    <ClInclude Include="include\Graphics\BlendStateFactory.hpp" />
     <ClInclude Include="include\Graphics\CommandAllocator.hpp" />
     <ClInclude Include="include\Graphics\CommandAllocatorFactory.hpp" />
     <ClInclude Include="include\Graphics\CommandListFactory.hpp" />
@@ -48,6 +47,7 @@
     <ClInclude Include="include\Graphics\CommandQueue.hpp" />
     <ClInclude Include="include\Graphics\ComparisonFunction.hpp" />
     <ClInclude Include="include\Graphics\DescriptorTable.hpp" />
+    <ClInclude Include="include\Graphics\MultiBuffered.hpp" />
     <ClInclude Include="include\Graphics\GraphicsContext.hpp" />
     <ClInclude Include="include\Graphics\DepthStencil.hpp" />
     <ClInclude Include="include\Graphics\DepthTest.hpp" />
@@ -56,6 +56,7 @@
     <ClInclude Include="include\Graphics\Fence.hpp" />
     <ClInclude Include="include\Graphics\FenceFactory.hpp" />
     <ClInclude Include="include\Graphics\Format.hpp" />
+    <ClInclude Include="include\Graphics\GraphicsInclude.hpp" />
     <ClInclude Include="include\Graphics\InputLayout.hpp" />
     <ClInclude Include="include\Graphics\InputLayoutFactory.hpp" />
     <ClInclude Include="include\Graphics\Pipeline.hpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="include\Graphics\SwapChainFactory.hpp" />
     <ClInclude Include="include\Graphics\Types.hpp" />
     <ClInclude Include="include\Graphics\Types\DeviceType.hpp" />
+    <ClInclude Include="include\Graphics\Types\HLSLTypes.hpp" />
     <ClInclude Include="include\Graphics\Types\MemoryType.hpp" />
     <ClInclude Include="include\Graphics\View.hpp" />
     <ClInclude Include="include\Graphics\ViewFactory.hpp" />
@@ -85,6 +87,7 @@
     <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp" />
+    <ClInclude Include="include\Vulkan\VulkanDescriptorTable.hpp" />
     <ClInclude Include="include\Vulkan\VulkanDevice.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFence.hpp" />
     <ClInclude Include="include\Vulkan\VulkanFormat.hpp" />
@@ -122,7 +125,6 @@
     <ClCompile Include="src\d3d12\D3D12Utils.cpp" />
     <ClCompile Include="src\d3d12\D3D12View.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
-    <ClCompile Include="src\Graphics\BlendStateFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandAllocatorFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandList.cpp" />
     <ClCompile Include="src\Graphics\CommandListFactory.cpp" />
@@ -137,6 +139,7 @@
     <ClCompile Include="src\Graphics\FenceFactory.cpp" />
     <ClCompile Include="src\Graphics\InputLayout.cpp" />
     <ClCompile Include="src\Graphics\InputLayoutFactory.cpp" />
+    <ClCompile Include="src\Graphics\Pipeline.cpp" />
     <ClCompile Include="src\Graphics\PipelineFactory.cpp" />
     <ClCompile Include="src\Graphics\RenderPass.cpp" />
     <ClCompile Include="src\Graphics\RenderPassFactory.cpp" />
@@ -147,9 +150,11 @@
     <ClCompile Include="src\Graphics\SamplerFactory.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
+    <ClCompile Include="src\Graphics\ShaderType.cpp" />
     <ClCompile Include="src\Graphics\StencilTest.cpp" />
     <ClCompile Include="src\Graphics\SwapChain.cpp" />
     <ClCompile Include="src\Graphics\SwapChainFactory.cpp" />
+    <ClCompile Include="src\Graphics\Types\HLSLTypes.cpp" />
     <ClCompile Include="src\Graphics\Types\MemoryType.cpp" />
     <ClCompile Include="src\Graphics\View.cpp" />
     <ClCompile Include="src\Graphics\ViewFactory.cpp" />
@@ -159,6 +164,7 @@
     <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandList.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp" />
+    <ClCompile Include="src\Vulkan\VulkanDescriptorTable.cpp" />
     <ClCompile Include="src\Vulkan\VulkanDevice.cpp" />
     <ClCompile Include="src\Vulkan\VulkanFence.cpp" />
     <ClCompile Include="src\Vulkan\VulkanFormat.cpp" />

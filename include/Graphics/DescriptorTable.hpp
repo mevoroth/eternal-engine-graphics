@@ -10,6 +10,8 @@ namespace Eternal
 		using namespace Eternal::Bit;
 		using namespace std;
 
+		struct RootSignatureDescriptorTable;
+
 		class View;
 		class Sampler;
 		class DescriptorTable;
@@ -51,9 +53,8 @@ namespace Eternal
 
 		class DescriptorTable
 		{
+			friend class RootSignature;
 		public:
-
-			DescriptorTable(_In_ const RootSignature& InRootSignature);
 
 			template<typename DescriptorType>
 			void SetDescriptor(_In_ uint32_t InSlot, _In_ const DescriptorType* InDescriptor);
@@ -67,15 +68,24 @@ namespace Eternal
 			ResourcesDirtyFlagsType& GetConstantsDirtyFlags() { return _ConstantsDirtyFlags; }
 			const ResourcesDirtyFlagsType& GetStaticSamplersDirtyFlags() const { return _StaticSamplersDirtyFlags; }
 			ResourcesDirtyFlagsType& GetStaticSamplersDirtyFlags() { return _StaticSamplersDirtyFlags; }
-			const RootSignature& GetRootSignature() const { return _RootSignature; }
+			const RootSignature* GetRootSignature() const
+			{
+				ETERNAL_ASSERT(_RootSignature);
+				return _RootSignature;
+			}
 
 		protected:
+
+			DescriptorTable(_In_ const RootSignature* InRootSignature);
+			DescriptorTable(_In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable);
+
 			vector<DescriptorTableConstants>& GetConstants() { return _Constants; }
 			vector<DescriptorTableResource>& GetResources() { return _Resources; }
 			vector<const Sampler*>& GetStaticSamplers() { return _StaticSamplers; }
 
 		private:
-			const RootSignature&				_RootSignature;
+
+			const RootSignature*				_RootSignature = nullptr;
 			vector<DescriptorTableConstants>	_Constants;
 			ResourcesDirtyFlagsType				_ConstantsDirtyFlags;
 			vector<DescriptorTableResource>		_Resources;

@@ -28,18 +28,9 @@ namespace Eternal
 		enum class RootSignatureParameterType;
 		enum class PrimitiveTopology;
 		enum class ResourceMemoryType;
-		enum class ResourceUsage;
+		enum class TextureResourceUsage;
+		enum class BufferResourceUsage;
 		enum class ResourceDimension;
-
-		enum class D3D12RegisterType
-		{
-			D3D12_REGISTER_TYPE_SRV = 0,
-			D3D12_REGISTER_TYPE_SAMPLER,
-			D3D12_REGISTER_TYPE_UAV,
-			D3D12_REGISTER_TYPE_CBV,
-			D3D12_REGISTER_TYPE_COUNT,
-			D3D12_REGISTER_TYPE_INVALID = D3D12_REGISTER_TYPE_COUNT
-		};
 
 		constexpr D3D12_RENDER_TARGET_BLEND_DESC	DefaultD3D12RenderTargetBlendDesc =
 		{
@@ -79,8 +70,6 @@ namespace Eternal
 			D3D12_SHADER_VISIBILITY ConvertRootSignatureAccessToD3D12ShaderVisibility(_In_ const RootSignatureAccess& InRootSignatureAccess);
 			D3D12_ROOT_PARAMETER_TYPE ConvertRootSignatureParameterTypeToD3D12RootParameterType(_In_ const RootSignatureParameterType& InRootSignatureParameterType);
 			D3D12_DESCRIPTOR_RANGE_TYPE ConvertRootSignatureParameterTypeToD3D12DescriptorRangeType(_In_ const RootSignatureParameterType& InRootSignatureParameterType);
-			const D3D12RegisterType& ConvertRootSignatureParameterTypeToD3D12RegisterType(_In_ const RootSignatureParameterType& InRootSignatureParameterType);
-			uint32_t ConvertRootSignatureParameterTypeToD3D12RegisterTypeUInt(_In_ const RootSignatureParameterType& InRootSignatureParameterType);
 			void ConvertBorderColorToFloats(_In_ const BorderColor& InBorderColor, _Out_ float OutColor[4]);
 			D3D12_STATIC_BORDER_COLOR ConvertBorderColorToD3D12StaticBorderColor(_In_ const BorderColor& InBorderColor);
 			D3D12_RESOURCE_STATES ConvertTransitionStateToD3D12ResourceStates(_In_ const TransitionState& InTransitionState);
@@ -89,7 +78,8 @@ namespace Eternal
 			D3D12_HEAP_TYPE ConvertResourceMemoryTypeToD3D12HeapType(_In_ const ResourceMemoryType& InResourceMemoryType);
 			D3D12_CPU_PAGE_PROPERTY ConvertResourceMemoryTypeToD3D12CPUPageProperty(_In_ const ResourceMemoryType& InResourceMemoryType);
 			D3D12_RESOURCE_DIMENSION ConvertResourceDimensionToD3D12ResourceDimension(_In_ const ResourceDimension& InResourceDimension);
-			D3D12_RESOURCE_FLAGS ConvertResourceUsageToD3D12ResourceFlags(_In_ const ResourceUsage& InResourceFlags);
+			D3D12_RESOURCE_FLAGS ConvertTextureResourceUsageToD3D12ResourceFlags(_In_ const TextureResourceUsage& InResourceFlags);
+			D3D12_RESOURCE_FLAGS ConvertBufferResourceUsageToD3D12ResourceFlags(_In_ const BufferResourceUsage& InResourceFlags);
 		}
 	}
 }

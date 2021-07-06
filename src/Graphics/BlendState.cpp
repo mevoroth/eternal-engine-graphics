@@ -20,7 +20,15 @@ namespace Eternal
 	}
 }
 
-BlendState::BlendState(_In_ const Blend& InSource, _In_ const Blend& InDestination, _In_ const BlendOperator& InBlendColorOperator, _In_ const Blend& InSourceAlpha, _In_ const Blend& InDestinationAlpha, _In_ const BlendOperator& InBlendAlphaOperator, _In_ const BlendChannel& InBlendChannel)
+BlendState::BlendState(
+	_In_ const Blend& InSource,
+	_In_ const Blend& InDestination,
+	_In_ const BlendOperator& InBlendColorOperator,
+	_In_ const Blend& InSourceAlpha,
+	_In_ const Blend& InDestinationAlpha,
+	_In_ const BlendOperator& InBlendAlphaOperator,
+	_In_ const BlendChannel& InBlendChannel
+)
 	: _Enabled(true)
 	, _Source(InSource)
 	, _Destination(InDestination)

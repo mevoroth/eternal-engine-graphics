@@ -62,7 +62,7 @@ namespace Eternal
 			{
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D:
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D_ARRAY:
-				if (InViewCreateInformation.GraphicsResource.IsMultisample())
+				if (GetResource().IsMultisample())
 				{
 					D3D12RenderTargetViewDesc.ViewDimension = static_cast<D3D12_RTV_DIMENSION>(D3D12RenderTargetViewDesc.ViewDimension + (D3D12_RTV_DIMENSION_TEXTURE2DMS - D3D12_RTV_DIMENSION_TEXTURE2D));
 				}
@@ -91,7 +91,7 @@ namespace Eternal
 			} break;
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D:
 			{
-				if (InViewCreateInformation.GraphicsResource.IsMultisample())
+				if (GetResource().IsMultisample())
 				{
 					D3D12RenderTargetViewDesc.Texture2DMS.UnusedField_NothingToDefine	= 0;
 				}
@@ -103,7 +103,7 @@ namespace Eternal
 			} break;
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D_ARRAY:
 			{
-				if (InViewCreateInformation.GraphicsResource.IsMultisample())
+				if (GetResource().IsMultisample())
 				{
 					D3D12RenderTargetViewDesc.Texture2DMSArray.FirstArraySlice			= InMetaData.RenderTargetViewTexture2DArray.FirstArraySlice;
 					D3D12RenderTargetViewDesc.Texture2DMSArray.ArraySize				= InMetaData.RenderTargetViewTexture2DArray.ArraySize;
@@ -131,7 +131,7 @@ namespace Eternal
 			_D3D12Handle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateRenderTargetViewDescriptor();
 
 			InD3DDevice->CreateRenderTargetView(
-				static_cast<D3D12Resource&>(InViewCreateInformation.GraphicsResource).GetD3D12Resource(),
+				static_cast<D3D12Resource&>(GetResource()).GetD3D12Resource(),
 				&D3D12RenderTargetViewDesc,
 				_D3D12Handle.D3D12CPUDescriptorHandle
 			);
@@ -236,7 +236,7 @@ namespace Eternal
 			_D3D12Handle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateShaderResourceViewDescriptor();
 
 			InD3DDevice->CreateShaderResourceView(
-				static_cast<D3D12Resource&>(InViewCreateInformation.GraphicsResource).GetD3D12Resource(),
+				static_cast<D3D12Resource&>(GetResource()).GetD3D12Resource(),
 				&D3D12ShaderResourceViewDesc,
 				_D3D12Handle.D3D12CPUDescriptorHandle
 			);
@@ -253,6 +253,10 @@ namespace Eternal
 
 			case ViewType::VIEW_CONSTANT_BUFFER:
 				D3DGraphicsContext.ReleaseConstantBufferViewDescriptor(_D3D12Handle);
+				break;
+
+			case ViewType::VIEW_SHADER_RESOURCE:
+				D3DGraphicsContext.ReleaseShaderResourceViewDescriptor(_D3D12Handle);
 				break;
 			}
 		}

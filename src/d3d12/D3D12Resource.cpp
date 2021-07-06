@@ -51,7 +51,7 @@ namespace Eternal
 			D3D12ResourceDesc.SampleDesc.Count		= 1;
 			D3D12ResourceDesc.SampleDesc.Quality	= 0;
 			D3D12ResourceDesc.Layout				= D3D12_TEXTURE_LAYOUT_UNKNOWN;
-			D3D12ResourceDesc.Flags					= ConvertResourceUsageToD3D12ResourceFlags(InTextureInformation.Usage);
+			D3D12ResourceDesc.Flags					= ConvertTextureResourceUsageToD3D12ResourceFlags(InTextureInformation.Usage);
 
 			D3D12_RESOURCE_ALLOCATION_INFO D3D12ResourceAllocationInfo = InD3DDevice.GetD3D12Device()->GetResourceAllocationInfo(
 				InD3DDevice.GetDeviceMask(),
@@ -82,7 +82,7 @@ namespace Eternal
 					D3D12_HEAP_FLAG_NONE,
 					&D3D12ResourceDesc,
 					InitialStates,
-					(InTextureInformation.Usage & ResourceUsage::RESOURCE_USAGE_RENDER_TARGET_DEPTH_STENCIL) != ResourceUsage::RESOURCE_USAGE_NONE ? &ClearValue : nullptr,
+					(InTextureInformation.Usage & TextureResourceUsageRenderTargetDepthStencil) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE ? &ClearValue : nullptr,
 					__uuidof(ID3D12Resource),
 					(void**)&_Resource
 				)
@@ -121,7 +121,7 @@ namespace Eternal
 			D3D12ResourceDesc.SampleDesc.Count		= 1;
 			D3D12ResourceDesc.SampleDesc.Quality	= 0;
 			D3D12ResourceDesc.Layout				= D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-			D3D12ResourceDesc.Flags					= ConvertResourceUsageToD3D12ResourceFlags(InBufferInformation.Usage);
+			D3D12ResourceDesc.Flags					= ConvertBufferResourceUsageToD3D12ResourceFlags(InBufferInformation.Usage);
 
 			switch (InResourceCreateInformation.MemoryType)
 			{

@@ -6,6 +6,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace Eternal::Graphics::Vulkan;
+
 		VulkanGraphicsContext::VulkanGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
 			: GraphicsContext(CreateInformation)
 			, _ConstantHandles(static_cast<VulkanDevice&>(GetDevice()).GetPushConstantMaxSize())
@@ -15,10 +17,35 @@ namespace Eternal
 			vk::Device& VkDevice = static_cast<VulkanDevice&>(GetDevice()).GetVulkanDevice();
 			for (int32_t AcquireSemaphoreIndex = 0; AcquireSemaphoreIndex < _AcquireFrameSemaphores.size(); ++AcquireSemaphoreIndex)
 			{
-				Vulkan::VerifySuccess(
+				VerifySuccess(
 					VkDevice.createSemaphore(&SemaphoreInfo, nullptr, &_AcquireFrameSemaphores[AcquireSemaphoreIndex])
 				);
 			}
+
+			vk::DescriptorPoolSize PoolSizes[] =
+			{
+				vk::DescriptorPoolSize(vk::DescriptorType::eSampler,			MaxSamplersDescriptorCount),
+				vk::DescriptorPoolSize(vk::DescriptorType::eSampledImage,		MaxSampledImageDescriptorCount),
+				vk::DescriptorPoolSize(vk::DescriptorType::eStorageImage,		MaxStorageImageDescriptorCount),
+				vk::DescriptorPoolSize(vk::DescriptorType::eUniformTexelBuffer,	MaxUniformTexelBufferDescriptorCount),
+				vk::DescriptorPoolSize(vk::DescriptorType::eStorageTexelBuffer,	MaxStorageTexelBufferDescriptorCount),
+				vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer,		MaxUniformBufferDescriptorCount),
+				vk::DescriptorPoolSize(vk::DescriptorType::eStorageBuffer,		MaxStorageBufferDescriptorCount)
+			};
+
+			vk::DescriptorPoolCreateInfo DescriptorPoolCreateInfo(
+				vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet,
+				MaxDescriptorSetsCount,
+				ETERNAL_ARRAYSIZE(PoolSizes),
+				PoolSizes
+			);
+			VerifySuccess(
+				VkDevice.createDescriptorPool(
+					&DescriptorPoolCreateInfo,
+					nullptr,
+					&_DescriptorPool
+				)
+			);
 		}
 
 		VulkanGraphicsContext::~VulkanGraphicsContext()
