@@ -14,11 +14,11 @@ namespace Eternal
 	{
 		VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation)
 			: RenderPass(CreateInformation)
-			, _Device(Context.GetDevice())
+			, _Device(static_cast<VulkanDevice&>(Context.GetDevice()))
 		{
 			using namespace Eternal::Graphics::Vulkan;
 
-			vk::Device& Device = static_cast<VulkanDevice&>(Context.GetDevice()).GetVulkanDevice();
+			vk::Device& Device = _Device.GetVulkanDevice();
 
 			vector<vk::AttachmentDescription> VulkanAttachments;
 			vector<vk::AttachmentReference> VulkanAttachmentReferences;
@@ -97,7 +97,7 @@ namespace Eternal
 
 		VulkanRenderPass::~VulkanRenderPass()
 		{
-			vk::Device& VkDevice = static_cast<VulkanDevice&>(_Device).GetVulkanDevice();
+			vk::Device& VkDevice = _Device.GetVulkanDevice();
 			VkDevice.destroyRenderPass(_RenderPass);
 			VkDevice.destroyFramebuffer(_FrameBuffer);
 		}

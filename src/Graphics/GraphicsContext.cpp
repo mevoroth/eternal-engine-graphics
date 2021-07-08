@@ -151,6 +151,11 @@ namespace Eternal
 			_CurrentFrameCommandListIndex.fill(0);
 			for (uint32_t CommandTypeIndex = 0; CommandTypeIndex < _CommandAllocators.size(); ++CommandTypeIndex)
 				_CommandAllocators[_CurrentFrameIndex][CommandTypeIndex]->Reset();
+
+			vector<View*>& ViewsToClear = _ViewsToClear[_CurrentFrameIndex];
+			for (uint32_t ViewIndex = 0; ViewIndex < ViewsToClear.size(); ++ViewIndex)
+				delete ViewsToClear[ViewIndex];
+			ViewsToClear.clear();
 		}
 
 		CommandQueue& GraphicsContext::GetGraphicsQueue()
@@ -181,6 +186,11 @@ namespace Eternal
 		{
 			ETERNAL_ASSERT(_ShaderFactory);
 			return _ShaderFactory->GetShader(*this, InShaderCreateInformation);
+		}
+
+		void GraphicsContext::DelayedDelete(_In_ View* InView)
+		{
+			_ViewsToClear[_CurrentFrameIndex].push_back(InView);
 		}
 	}
 }

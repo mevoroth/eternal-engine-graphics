@@ -48,7 +48,7 @@ namespace Eternal
 			const DescriptorTable*		ResourceDescriptorTable;
 
 		private:
-			void*					_Dummy = nullptr;
+			void*						_Dummy = nullptr;
 		};
 
 		class DescriptorTable
@@ -61,13 +61,10 @@ namespace Eternal
 
 			const vector<DescriptorTableConstants>& GetConstants() const { return _Constants; }
 			const vector<DescriptorTableResource>& GetResources() const { return _Resources; }
-			const vector<const Sampler*>& GetStaticSamplers() const { return _StaticSamplers; }
 			const ResourcesDirtyFlagsType& GetResourcesDirtyFlags() const { return _ResourcesDirtyFlags; }
 			ResourcesDirtyFlagsType& GetResourcesDirtyFlags() { return _ResourcesDirtyFlags; }
 			const ResourcesDirtyFlagsType& GetConstantsDirtyFlags() const { return _ConstantsDirtyFlags; }
 			ResourcesDirtyFlagsType& GetConstantsDirtyFlags() { return _ConstantsDirtyFlags; }
-			const ResourcesDirtyFlagsType& GetStaticSamplersDirtyFlags() const { return _StaticSamplersDirtyFlags; }
-			ResourcesDirtyFlagsType& GetStaticSamplersDirtyFlags() { return _StaticSamplersDirtyFlags; }
 			const RootSignature* GetRootSignature() const
 			{
 				ETERNAL_ASSERT(_RootSignature);
@@ -81,7 +78,6 @@ namespace Eternal
 
 			vector<DescriptorTableConstants>& GetConstants() { return _Constants; }
 			vector<DescriptorTableResource>& GetResources() { return _Resources; }
-			vector<const Sampler*>& GetStaticSamplers() { return _StaticSamplers; }
 
 		private:
 
@@ -90,8 +86,6 @@ namespace Eternal
 			ResourcesDirtyFlagsType				_ConstantsDirtyFlags;
 			vector<DescriptorTableResource>		_Resources;
 			ResourcesDirtyFlagsType				_ResourcesDirtyFlags;
-			vector<const Sampler*>				_StaticSamplers;
-			ResourcesDirtyFlagsType				_StaticSamplersDirtyFlags;
 		};
 	}
 }

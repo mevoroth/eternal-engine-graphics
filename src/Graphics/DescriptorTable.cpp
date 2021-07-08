@@ -13,8 +13,6 @@ namespace Eternal
 			GetConstantsDirtyFlags().Resize(static_cast<uint32_t>(InRootSignature->GetCreateInformation().Constants.size()));
 			GetResources().resize(InRootSignature->GetCreateInformation().Parameters.size());
 			GetResourcesDirtyFlags().Resize(static_cast<uint32_t>(InRootSignature->GetCreateInformation().Parameters.size()));
-			GetStaticSamplers().resize(InRootSignature->GetCreateInformation().StaticSamplers.size());
-			GetStaticSamplersDirtyFlags().Resize(static_cast<uint32_t>(InRootSignature->GetCreateInformation().StaticSamplers.size()));
 		}
 
 		DescriptorTable::DescriptorTable(_In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable)

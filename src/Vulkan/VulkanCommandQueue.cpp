@@ -22,19 +22,18 @@ namespace Eternal
 
 		VulkanCommandQueue::VulkanCommandQueue(_In_ Device& InDevice, _In_ const CommandType& Type)
 			: CommandQueue(Type)
-			, _Device(InDevice)
+			, _Device(static_cast<VulkanDevice&>(InDevice))
 		{
 			int32_t TypeInt = static_cast<int32_t>(Type);
-			VulkanDevice& InVulkanDevice = static_cast<VulkanDevice&>(InDevice);
-			vk::Device& VkDevice = InVulkanDevice.GetVulkanDevice();
+			vk::Device& VkDevice = _Device.GetVulkanDevice();
 
 			QueueFamilyIndicesType QueueFamilyIndices;
-			InVulkanDevice.GetQueueFamilyIndices(QueueFamilyIndices);
+			_Device.GetQueueFamilyIndices(QueueFamilyIndices);
 	
 			uint32_t QueueIndices[] = {
-				InVulkanDevice.GetQueueIndexGraphics(),
-				InVulkanDevice.GetQueueIndexCompute(),
-				InVulkanDevice.GetQueueIndexCopy()
+				_Device.GetQueueIndexGraphics(),
+				_Device.GetQueueIndexCompute(),
+				_Device.GetQueueIndexCopy()
 			};
 
 			_QueueFamilyIndex	= QueueFamilyIndices[TypeInt];
@@ -62,7 +61,7 @@ namespace Eternal
 
 		VulkanCommandQueue::~VulkanCommandQueue()
 		{
-			vk::Device& VkDevice = static_cast<VulkanDevice&>(_Device).GetVulkanDevice();
+			vk::Device& VkDevice = _Device.GetVulkanDevice();
 			
 			for (uint32_t SemaphoreIndex = 0; SemaphoreIndex < _SubmitCompletionSemaphores.size(); ++SemaphoreIndex)
 				VkDevice.destroySemaphore(_SubmitCompletionSemaphores[SemaphoreIndex]);
@@ -94,7 +93,7 @@ namespace Eternal
 				SubmitSemaphore = &_SubmitCompletionSemaphores.back();
 				vk::SemaphoreCreateInfo SemaphoreInfo;
 				VerifySuccess(
-					static_cast<VulkanDevice&>(_Device).GetVulkanDevice().createSemaphore(
+					_Device.GetVulkanDevice().createSemaphore(
 						&SemaphoreInfo,
 						nullptr,
 						SubmitSemaphore

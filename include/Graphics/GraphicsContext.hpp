@@ -49,7 +49,7 @@ namespace Eternal
 
 			void BeginFrame();
 			void EndFrame();
-			void ResetFrameStates();
+			virtual void ResetFrameStates();
 
 			Device& GetDevice() { return *_Device; }
 			Window& GetWindow() { return _Window; }
@@ -60,14 +60,15 @@ namespace Eternal
 			CommandQueue& GetComputeQueue() { return *_ComputeQueue; }
 			CommandQueue& GetCopyQueue() { return *_CopyQueue; }
 
+			Shader* GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation);
 			CommandList* CreateNewCommandList(const CommandType& Type);
 
 			Fence& GetCurrentFrameFence() { return *_FrameFences[GetCurrentFrameIndex()]; }
 			Fence& GetNextFrameFence() { return *_FrameFences[(GetCurrentFrameIndex() + 1) % static_cast<uint32_t>(_FrameFences.size())]; }
 
-			Shader* GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation);
-
 			uint32_t& GetCurrentFrameIndex() { return _CurrentFrameIndex; }
+
+			void DelayedDelete(_In_ View* InView);
 
 		protected:
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
@@ -87,6 +88,8 @@ namespace Eternal
 			std::array<uint32_t, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>	_CurrentFrameCommandListIndex;
 			std::array<Fence*, FrameBufferingCount>										_FrameFences;
 
+			std::array<std::vector<View*>, FrameBufferingCount>							_ViewsToClear;
+
 			Window _Window;
 			Viewport* _MainViewportFullScreen	= nullptr;
 			Device* _Device						= nullptr;
@@ -98,7 +101,7 @@ namespace Eternal
 
 			ShaderFactory* _ShaderFactory		= nullptr;
 
-			uint32_t _CurrentFrameIndex			= ~0; // During first frame, this will be set correct within range
+			uint32_t _CurrentFrameIndex			= FrameBufferingCount - 1; // During first frame, this will be set correct within range
 		};
 
 		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);

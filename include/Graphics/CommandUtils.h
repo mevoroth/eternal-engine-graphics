@@ -12,6 +12,17 @@ namespace Eternal
 		class Resource;
 
 		//////////////////////////////////////////////////////////////////////////
+		// Command type
+
+		enum class CommandType
+		{
+			COMMAND_TYPE_GRAPHIC = 0,
+			COMMAND_TYPE_COMPUTE,
+			COMMAND_TYPE_COPY,
+			COMMAND_TYPE_COUNT
+		};
+
+		//////////////////////////////////////////////////////////////////////////
 		// Resource transition
 
 		enum class TransitionState
@@ -45,14 +56,6 @@ namespace Eternal
 												| TRANSITION_COPY_READ)
 		};
 		
-		enum class CommandType
-		{
-			COMMAND_TYPE_GRAPHIC = 0,
-			COMMAND_TYPE_COMPUTE,
-			COMMAND_TYPE_COPY,
-			COMMAND_TYPE_COUNT
-		};
-
 		enum class TransitionFlags
 		{
 			TRANSITION_FLAGS_NONE			= 0x0,
@@ -124,10 +127,10 @@ namespace Eternal
 				static_cast<uint32_t>(InLeftResourceUsage) & static_cast<uint32_t>(InRightResourceUsage)
 			);
 		}
-		inline BufferResourceUsage operator<<(_In_ const BufferResourceUsage& InResourceUsage, _In_ uint32_t BitCount)
+		inline BufferResourceUsage operator>>(_In_ const BufferResourceUsage& InResourceUsage, _In_ uint32_t BitCount)
 		{
 			return static_cast<BufferResourceUsage>(
-				static_cast<uint32_t>(InResourceUsage) << BitCount
+				static_cast<uint32_t>(InResourceUsage) >> BitCount
 			);
 		}
 
@@ -339,9 +342,27 @@ namespace Eternal
 			TextureFromBufferRegion TextureFromBuffer;
 		};
 
+		//////////////////////////////////////////////////////////////////////////
+		// Index/Vertex buffer
+		enum class IndexBufferType
+		{
+			INDEX_BUFFER_TYPE_16BITS = 0,
+			INDEX_BUFFER_TYPE_32BITS
+		};
+
 		struct VertexBufferParameters
 		{
 			uint32_t Offset = 0;
+		};
+
+		//////////////////////////////////////////////////////////////////////////
+		// Scissor
+		struct ScissorRectangle
+		{
+			int32_t Left	= 0;
+			int32_t Top		= 0;
+			int32_t Right	= 0;
+			int32_t Bottom	= 0;
 		};
 	}
 }

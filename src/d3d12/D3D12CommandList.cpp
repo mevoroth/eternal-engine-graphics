@@ -20,11 +20,11 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace Eternal::Graphics::D3D12;
+
 		D3D12CommandList::D3D12CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
 			: CommandList(InDevice, InCommandAllocator)
 		{
-			using namespace Eternal::Graphics::D3D12;
-
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
 			D3D12CommandAllocator& InD3DCommandAllocator = static_cast<D3D12CommandAllocator&>(InCommandAllocator);
 			VerifySuccess(
@@ -73,8 +73,6 @@ namespace Eternal
 		void D3D12CommandList::BeginRenderPass(_In_ const RenderPass& InRenderPass)
 		{
 			CommandList::BeginRenderPass(InRenderPass);
-
-			using namespace Eternal::Graphics::D3D12;
 
 			// Cache this in D3D12RenderPass?
 
@@ -175,8 +173,6 @@ namespace Eternal
 
 		void D3D12CommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
-			using namespace Eternal::Graphics::D3D12;
-
 			static constexpr D3D12_RESOURCE_BARRIER DefaultBarrier = {};
 			std::array<D3D12_RESOURCE_BARRIER, MaxResourceTransitionsPerSubmit> ResourceBarriers;
 			ResourceBarriers.fill(DefaultBarrier);
@@ -219,6 +215,20 @@ namespace Eternal
 			);
 		}
 
+		void D3D12CommandList::SetScissorRectangle(_In_ const ScissorRectangle& InScissorRectangle)
+		{
+			D3D12_RECT D3D12Rect =
+			{
+				InScissorRectangle.Left,
+				InScissorRectangle.Top,
+				InScissorRectangle.Right,
+				InScissorRectangle.Bottom
+			};
+			_GraphicCommandList5->RSSetScissorRects(
+				1, &D3D12Rect
+			);
+		}
+
 		void D3D12CommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
@@ -232,6 +242,18 @@ namespace Eternal
 			);
 			_GraphicCommandList5->IASetPrimitiveTopology(InD3DPipeline.GetD3D12PrimitiveTopology());
 			SetCurrentRootSignature(&InD3DRootSignature);
+		}
+
+		void D3D12CommandList::SetIndexBuffer(_In_ const Resource& InIndexBuffer, _In_ uint32_t InOffset /* = 0 */, _In_ const IndexBufferType& InIndexBufferType /* = IndexBufferType::INDEX_BUFFER_TYPE_16BITS */)
+		{
+			const D3D12Resource& InD3DIndexBuffer = static_cast<const D3D12Resource&>(InIndexBuffer);
+
+			D3D12_INDEX_BUFFER_VIEW D3D12IndexBufferView;
+			D3D12IndexBufferView.BufferLocation	= InD3DIndexBuffer.GetD3D12Resource()->GetGPUVirtualAddress() + InOffset * ConvertIndexBufferTypeToD3D12Stride(InIndexBufferType);
+			D3D12IndexBufferView.Format			= ConvertIndexBufferTypeToDXGIFormat(InIndexBufferType);
+			D3D12IndexBufferView.SizeInBytes	= InIndexBuffer.GetBufferSize();
+
+			_GraphicCommandList5->IASetIndexBuffer(&D3D12IndexBufferView);
 		}
 
 		void D3D12CommandList::SetVertexBuffers(_In_ const Resource* InVertexBuffers[], _In_ uint32_t InBufferCount /* = 1 */, _In_ uint32_t InFirstVertexBuffer /* = 0 */, _In_ VertexBufferParameters InParameters[] /* = */)
@@ -269,10 +291,8 @@ namespace Eternal
 			
 			const vector<DescriptorTableConstants>& InConstants			= static_cast<const DescriptorTable&>(InDescriptorTable).GetConstants();
 			const vector<DescriptorTableResource>& InResources			= static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
-			const vector<const Sampler*>& InStaticSamplers				= static_cast<const DescriptorTable&>(InDescriptorTable).GetStaticSamplers();
 			ResourcesDirtyFlagsType& InConstantsDirtyFlags				= InDescriptorTable.GetConstantsDirtyFlags();
 			ResourcesDirtyFlagsType& InResourcesDirtyFlags				= InDescriptorTable.GetResourcesDirtyFlags();
-			ResourcesDirtyFlagsType& InStaticSamplersDirtyFlags			= InDescriptorTable.GetStaticSamplersDirtyFlags();
 
 			uint32_t RootParameterIndex = 0;
 			for (uint32_t ConstantIndex = 0; ConstantIndex < Constants.size(); ++ConstantIndex, ++RootParameterIndex)

@@ -371,7 +371,8 @@ namespace Eternal
 				if (InTransitionState == TransitionState::TRANSITION_UNDEFINED
 					|| OnlyHasFlags(InTransitionState, StandaloneState))
 				{
-					if (OnlyHasFlags(InTransitionState, StandaloneState))
+					if (InTransitionState != TransitionState::TRANSITION_UNDEFINED &&
+						OnlyHasFlags(InTransitionState, StandaloneState))
 					{
 						ETERNAL_ASSERT(IsPowerOfTwo<uint32_t>(static_cast<uint32_t>(InTransitionState)));
 					}
@@ -495,8 +496,6 @@ namespace Eternal
 				return VULKAN_PRIMITIVE_TOPOLOGIES[static_cast<uint32_t>(InPrimitiveTopology)];
 			}
 
-
-
 			vk::BufferUsageFlagBits ConvertBufferResourceUsageToVulkanBufferUsageFlags(_In_ const BufferResourceUsage& InBufferResourceUsage)
 			{
 				static constexpr BufferResourceUsage CopyRead_CopyWrite_StructuredBuffer_RWStructuredBuffer_ConstantBuffer_Usage	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_READ
@@ -513,7 +512,7 @@ namespace Eternal
 
 				return static_cast<vk::BufferUsageFlagBits>(
 					(InBufferResourceUsage & CopyRead_CopyWrite_StructuredBuffer_RWStructuredBuffer_ConstantBuffer_Usage) |
-					((InBufferResourceUsage & Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer) << 1)
+					((InBufferResourceUsage & Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer) >> 1)
 				);
 			}
 			
@@ -582,6 +581,11 @@ namespace Eternal
 			uint32_t ConvertHLSLRegisterTypeToVulkanShaderBindingBase(const HLSLRegisterType& InHLSLRegisterType)
 			{
 				return VULKAN_SHADER_REGISTER_OFFSETS[static_cast<int32_t>(InHLSLRegisterType)];
+			}
+
+			vk::IndexType ConvertIndexBufferTypeToVulkanIndexType(_In_ const IndexBufferType& InIndexBufferType)
+			{
+				return static_cast<vk::IndexType>(InIndexBufferType);
 			}
 		}
 	}

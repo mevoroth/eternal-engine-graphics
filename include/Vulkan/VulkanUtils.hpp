@@ -29,6 +29,7 @@ namespace Eternal
 		enum class ResourceDimension;
 		enum class ShaderTypeFlags;
 		enum class HLSLRegisterType;
+		enum class IndexBufferType;
 
 		class BlendState;
 		class Viewport;
@@ -66,7 +67,8 @@ namespace Eternal
 			vk::ImageCreateFlagBits ConvertResourceDimensionToVulkanImageCreateFlags(_In_ const ResourceDimension& InResourceDimension);
 			vk::ImageType ConvertResourceDimensionToVulkanImageType(_In_ const ResourceDimension& InResourceDimension);
 			vk::ShaderStageFlagBits ConvertShaderTypeFlagsToVulkanShaderStageFlags(_In_ const ShaderTypeFlags& InShaderTypeFlags);
-			uint32_t ConvertHLSLRegisterTypeToVulkanShaderBindingBase(const HLSLRegisterType& InHLSLRegisterType);
+			uint32_t ConvertHLSLRegisterTypeToVulkanShaderBindingBase(_In_ const HLSLRegisterType& InHLSLRegisterType);
+			vk::IndexType ConvertIndexBufferTypeToVulkanIndexType(_In_ const IndexBufferType& InIndexBufferType);
 
 			inline vk::PipelineStageFlagBits& operator|=(_Inout_ vk::PipelineStageFlagBits& InOutPipelineStageFlags, _In_ const vk::PipelineStageFlagBits& InPipelineStageFlags)
 			{

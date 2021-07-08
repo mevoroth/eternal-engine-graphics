@@ -31,10 +31,10 @@ namespace Eternal
 		}
 
 		template<typename ViewCreateInformationType>
-		static MultiBuffered<View> CreateMultiBufferedBufferView(_In_ const ViewCreateInformationType& InViewCreateInformation, _In_ MultiBuffered<Resource>& InResources)
+		static MultiBuffered<View>* CreateMultiBufferedBufferView(_In_ const ViewCreateInformationType& InViewCreateInformation, _In_ MultiBuffered<Resource>& InResources)
 		{
 			uint32_t ResourceIndex = 0;
-			return MultiBuffered<View>(InViewCreateInformation.Context, [&InViewCreateInformation, &ResourceIndex, &InResources]() {
+			return new MultiBuffered<View>(InViewCreateInformation.Context, [&InViewCreateInformation, &ResourceIndex, &InResources]() {
 				const_cast<ViewCreateInformationType&>(InViewCreateInformation).GraphicsResource = InResources[ResourceIndex++];
 				return CreateView(InViewCreateInformation);
 			});
@@ -50,7 +50,7 @@ namespace Eternal
 			return CreateView(InShaderResourceViewCreateInformation);
 		}
 
-		MultiBuffered<View> CreateMultiBufferedConstantBufferView(_In_ MultiBuffered<Resource>& InResources, _In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation)
+		MultiBuffered<View>* CreateMultiBufferedConstantBufferView(_In_ MultiBuffered<Resource>& InResources, _In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation)
 		{
 			return CreateMultiBufferedBufferView(InConstantBufferViewCreateInformation, InResources);
 		}

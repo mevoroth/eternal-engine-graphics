@@ -8,6 +8,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		class Device;
+		class VulkanDevice;
 		class CommandQueue;
 
 		class VulkanCommandAllocator final : public CommandAllocator
@@ -21,7 +22,7 @@ namespace Eternal
 			inline vk::CommandPool& GetVulkanCommandPool() { return _CommandPool; }
 
 		private:
-			Device&				_Device;
+			VulkanDevice&		_Device;
 			vk::CommandPool		_CommandPool;
 		};
 	}

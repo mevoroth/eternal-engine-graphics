@@ -209,7 +209,7 @@ namespace Eternal
 		struct ViewCreateInformation
 		{
 			GraphicsContext&		Context;
-			Resource*				GraphicsResource;
+			Resource*				GraphicsResource				= nullptr;
 			ViewMetaData			MetaData;
 			Format					GraphicsFormat					= Format::FORMAT_INVALID;
 			ViewType				ResourceViewType				= ViewType::VIEW_UNKNOWN;

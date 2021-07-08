@@ -1,6 +1,7 @@
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan/VulkanDescriptorTable.hpp"
 
 namespace Eternal
 {
@@ -55,6 +56,14 @@ namespace Eternal
 			{
 				VkDevice.destroySemaphore(_AcquireFrameSemaphores[AcquireSemaphoreIndex]);
 			}
+		}
+
+		void VulkanGraphicsContext::ResetFrameStates()
+		{
+			GraphicsContext::ResetFrameStates();
+
+			for (uint32_t DescriptorTableIndex = 0; DescriptorTableIndex < _DescriptorTables.size(); ++DescriptorTableIndex)
+				_DescriptorTables[DescriptorTableIndex]->Reset(GetCurrentFrameIndex());
 		}
 
 		void VulkanGraphicsContext::AllocateConstantHandles(_In_ uint32_t ConstantCount, _Out_ vector<Handle>& OutHandles)

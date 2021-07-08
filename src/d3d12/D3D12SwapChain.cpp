@@ -103,7 +103,7 @@ namespace Eternal
 						Context,
 						_BackBuffers[BackBufferIndex],
 						MetaData,
-						Format::FORMAT_RGBA8888,
+						Format::FORMAT_RGBA8888_UNORM,
 						ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D
 					);
 					_BackBufferRenderTargetViews[BackBufferIndex] = new D3D12View(CreateInformation);

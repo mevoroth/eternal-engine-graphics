@@ -8,7 +8,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		using namespace std;
-		class Device;
+		class VulkanDevice;
 		class GraphicsContext;
 
 		class VulkanRenderPass final : public RenderPass
@@ -21,7 +21,7 @@ namespace Eternal
 			const vk::Framebuffer& GetFrameBuffer() const { return _FrameBuffer; }
 
 		private:
-			Device&			_Device;
+			VulkanDevice&	_Device;
 			vk::RenderPass	_RenderPass;
 			vk::Framebuffer	_FrameBuffer;
 		};

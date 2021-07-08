@@ -6,12 +6,12 @@
 using namespace Eternal::Graphics;
 
 VulkanFence::VulkanFence(_In_ Device& InDevice)
-	: _Device(InDevice)
+	: _Device(static_cast<VulkanDevice&>(InDevice))
 {
 	vk::FenceCreateInfo FenceInfo(
 		vk::FenceCreateFlagBits::eSignaled
 	);
-	vk::Device& VkDevice = static_cast<VulkanDevice&>(InDevice).GetVulkanDevice();
+	vk::Device& VkDevice = _Device.GetVulkanDevice();
 	Vulkan::VerifySuccess(
 		VkDevice.createFence(&FenceInfo, nullptr, &_Fence)
 	);
@@ -19,14 +19,13 @@ VulkanFence::VulkanFence(_In_ Device& InDevice)
 
 VulkanFence::~VulkanFence()
 {
-	vk::Device& VkDevice = static_cast<VulkanDevice&>(_Device).GetVulkanDevice();
-	VkDevice.destroyFence(_Fence);
+	_Device.GetVulkanDevice().destroyFence(_Fence);
 }
 
 void VulkanFence::Wait(_In_ Device& InDevice)
 {
 	Vulkan::VerifySuccess(
-		static_cast<VulkanDevice&>(InDevice).GetVulkanDevice().waitForFences(
+		_Device.GetVulkanDevice().waitForFences(
 			1, &_Fence, true, UINT64_MAX
 		)
 	);
@@ -35,7 +34,7 @@ void VulkanFence::Wait(_In_ Device& InDevice)
 void VulkanFence::Reset(_In_ Device& InDevice)
 {
 	Vulkan::VerifySuccess(
-		static_cast<VulkanDevice&>(InDevice).GetVulkanDevice().resetFences(
+		_Device.GetVulkanDevice().resetFences(
 			1, &_Fence
 		)
 	);

@@ -7,7 +7,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class Device;
+		class VulkanDevice;
 		class GraphicsContext;
 
 		class VulkanSampler final : public Sampler
@@ -19,8 +19,8 @@ namespace Eternal
 			const vk::Sampler& GetVulkanSampler() const { return _Sampler; }
 
 		private:
-			Device&		_Device;
-			vk::Sampler	_Sampler;
+			VulkanDevice&	_Device;
+			vk::Sampler		_Sampler;
 		};
 	}
 }

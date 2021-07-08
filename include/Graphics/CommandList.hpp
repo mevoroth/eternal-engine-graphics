@@ -50,7 +50,9 @@ namespace Eternal
 			virtual void Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) = 0;
 
 			virtual void SetViewport(_In_ const Viewport& InViewport) = 0;
+			virtual void SetScissorRectangle(_In_ const ScissorRectangle& InScissorRectangle) = 0;
 			virtual void SetGraphicsPipeline(_In_ const Pipeline& InPipeline) = 0;
+			virtual void SetIndexBuffer(_In_ const Resource& InIndexBuffer, _In_ uint32_t InOffset = 0, _In_ const IndexBufferType& InIndexBufferType = IndexBufferType::INDEX_BUFFER_TYPE_16BITS) = 0;
 			virtual void SetVertexBuffers(_In_ const Resource* InVertexBuffers[], _In_ uint32_t InBufferCount = 1, _In_ uint32_t InFirstVertexBuffer = 0, _In_ VertexBufferParameters InParameters[] = {}) = 0;
 			virtual void SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable) = 0;
 			virtual void DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount = 1, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t FirstInstance = 0) = 0;

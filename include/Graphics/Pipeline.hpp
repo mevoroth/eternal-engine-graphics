@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics/DepthStencil.hpp"
+#include "Graphics/RenderPass.hpp"
 
 namespace Eternal
 {
@@ -12,7 +13,6 @@ namespace Eternal
 		class InputLayout;
 		class RenderPass;
 		class Shader;
-		class Viewport;
 
 		enum class PrimitiveTopology
 		{
@@ -87,6 +87,7 @@ namespace Eternal
 		public:
 			virtual ~Pipeline() {}
 
+			const Viewport& GetViewport() const { return static_cast<const RenderPass&>(_PipelineCreateInformation.PipelineRenderPass).GetViewport(); }
 			const ShaderTypeFlags& GetShaderTypes() const { return _PipelineCreateInformation.PipelineShaderTypes; }
 			const RootSignature& GetRootSignature() const { return _PipelineCreateInformation.PipelineRootSignature; }
 

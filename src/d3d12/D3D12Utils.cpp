@@ -479,6 +479,16 @@ namespace Eternal
 
 				return D3D12ResourceFlags;
 			}
+
+			uint32_t ConvertIndexBufferTypeToD3D12Stride(_In_ const IndexBufferType& InIndexBufferType)
+			{
+				return InIndexBufferType == IndexBufferType::INDEX_BUFFER_TYPE_16BITS ? 2 : 4;
+			}
+
+			DXGI_FORMAT ConvertIndexBufferTypeToDXGIFormat(_In_ const IndexBufferType& InIndexBufferType)
+			{
+				return InIndexBufferType == IndexBufferType::INDEX_BUFFER_TYPE_16BITS ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+			}
 		}
 	}
 }

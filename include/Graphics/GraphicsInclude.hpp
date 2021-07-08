@@ -2,6 +2,7 @@
 
 #include "Graphics/BlendState.hpp"
 #include "Graphics/CommandList.hpp"
+#include "Graphics/CommandQueue.hpp"
 #include "Graphics/CommandUtils.h"
 #include "Graphics/ComparisonFunction.hpp"
 #include "Graphics/DepthStencil.hpp"

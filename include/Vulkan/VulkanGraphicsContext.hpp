@@ -13,11 +13,13 @@ namespace Eternal
 		using namespace std;
 		using namespace Eternal::Bit;
 
+		class VulkanDescriptorTable;
+
 		class VulkanGraphicsContext final : public GraphicsContext
 		{
 		public:
 
-			static constexpr uint32_t MaxDescriptorSetsCount				= 16384 * FrameBufferingCount;
+			static constexpr uint32_t MaxDescriptorSetsCount				= 32768 * FrameBufferingCount;
 
 			static constexpr uint32_t MaxSamplersDescriptorCount			= MaxDescriptorSetsCount * 2;
 			static constexpr uint32_t MaxSampledImageDescriptorCount		= MaxDescriptorSetsCount * 8;
@@ -40,8 +42,12 @@ namespace Eternal
 			VulkanGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 			~VulkanGraphicsContext();
 
+			virtual void ResetFrameStates() override final;
+
 			void AllocateConstantHandles(_In_ uint32_t ConstantCount, _Out_ vector<Handle>& OutHandles);
 			void ReleaseConstantHandles(_Inout_ vector<Handle>& InOutHandles);
+			inline void RegisterVulkanDescriptorTable(_In_ VulkanDescriptorTable* InDescriptorTable) { _DescriptorTables.push_back(InDescriptorTable); }
+			inline void UnregisterVulkanDescriptorTable(_In_ VulkanDescriptorTable* InDescriptorTable) { std::remove(_DescriptorTables.begin(), _DescriptorTables.end(), InDescriptorTable); }
 
 			const vk::DescriptorPool& GetVulkanDescriptorPool() const { return _DescriptorPool; }
 			vk::Semaphore& GetCurrentFrameSemaphore() { return _AcquireFrameSemaphores[GetCurrentFrameIndex()]; }
@@ -52,6 +58,7 @@ namespace Eternal
 			std::array<vk::Semaphore, FrameBufferingCount>	_AcquireFrameSemaphores;
 			DynamicHandlePool<>								_ConstantHandles;
 			vk::DescriptorPool								_DescriptorPool;
+			std::vector<VulkanDescriptorTable*>				_DescriptorTables;
 		};
 	}
 }

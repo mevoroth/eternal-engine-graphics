@@ -164,7 +164,7 @@ namespace Eternal
 						Context,
 						_BackBuffers[BackBufferIndex],
 						MetaData,
-						Format::FORMAT_BGRA8888,
+						Format::FORMAT_BGRA8888_UNORM,
 						ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D
 					);
 

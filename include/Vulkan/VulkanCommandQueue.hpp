@@ -12,6 +12,7 @@ namespace Eternal
 		using namespace std;
 
 		class Device;
+		class VulkanDevice;
 		class CommandList;
 
 		class VulkanCommandQueue final : public CommandQueue
@@ -28,7 +29,7 @@ namespace Eternal
 			uint32_t GetQueueIndex() const { return _QueueIndex; }
 
 		private:
-			Device&					_Device;
+			VulkanDevice&			_Device;
 			vk::Queue				_CommandQueue;
 			vector<vk::Semaphore>	_SubmitCompletionSemaphores;
 			uint32_t				_SubmitCount		= 0;

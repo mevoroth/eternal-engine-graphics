@@ -9,7 +9,7 @@ namespace Eternal
 	{
 		using namespace std;
 		
-		class Device;
+		class VulkanDevice;
 
 		class VulkanFence final : public Fence
 		{
@@ -23,8 +23,8 @@ namespace Eternal
 			inline vk::Fence& GetVulkanFence() { return _Fence; }
 
 		private:
-			Device& _Device;
-			vk::Fence _Fence;
+			VulkanDevice&	_Device;
+			vk::Fence		_Fence;
 		};
 	}
 }

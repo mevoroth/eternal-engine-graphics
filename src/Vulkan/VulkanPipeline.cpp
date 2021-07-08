@@ -130,7 +130,24 @@ namespace Eternal
 				ColorBlendAttachmentStates.data()
 			);
 
-			vk::PipelineDynamicStateCreateInfo DynamicStates;
+			vk::DynamicState DynamicStates[] =
+			{
+				vk::DynamicState::eViewport,
+				vk::DynamicState::eScissor,
+				vk::DynamicState::eLineWidth,
+				vk::DynamicState::eDepthBias,
+				vk::DynamicState::eBlendConstants,
+				vk::DynamicState::eDepthBounds,
+				vk::DynamicState::eStencilCompareMask,
+				vk::DynamicState::eStencilWriteMask,
+				vk::DynamicState::eStencilReference
+			};
+
+			vk::PipelineDynamicStateCreateInfo DynamicStateInfos(
+				vk::PipelineDynamicStateCreateFlagBits(),
+				ETERNAL_ARRAYSIZE(DynamicStates),
+				DynamicStates
+			);
 
 			vk::GraphicsPipelineCreateInfo PipelineInfo(
 				vk::PipelineCreateFlagBits(),
@@ -144,7 +161,7 @@ namespace Eternal
 				&MultiSampleStateInfo,
 				&DepthStencilStateInfo,
 				&ColorBlendStateInfo,
-				&DynamicStates,
+				&DynamicStateInfos,
 				static_cast<VulkanRootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetVulkanPipelineLayout(),
 				static_cast<VulkanRenderPass&>(InPipelineCreateInformation.PipelineRenderPass).GetVulkanRenderPass(),
 				0,

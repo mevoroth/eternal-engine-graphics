@@ -193,14 +193,52 @@ namespace Eternal
 			);
 		}
 
+		void VulkanCommandList::SetScissorRectangle(_In_ const ScissorRectangle& InScissorRectangle)
+		{
+			vk::Rect2D VkScissorRectangle(
+				vk::Offset2D(InScissorRectangle.Left, InScissorRectangle.Top),
+				vk::Extent2D(
+					InScissorRectangle.Right - InScissorRectangle.Left,
+					InScissorRectangle.Bottom - InScissorRectangle.Top
+				)
+			);
+			_CommandBuffer.setScissor(
+				0, 1, &VkScissorRectangle
+			);
+		}
+
 		void VulkanCommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
 			_CommandBuffer.bindPipeline(
 				vk::PipelineBindPoint::eGraphics,
 				static_cast<const VulkanPipeline&>(InPipeline).GetVulkanPipeline()
 			);
+
+			const Viewport& InViewport = InPipeline.GetViewport();
+			SetViewport(InViewport);
+
+			ScissorRectangle Scissor =
+			{
+				InViewport.GetX(),
+				InViewport.GetY(),
+				InViewport.GetX() + InViewport.GetWidth(),
+				InViewport.GetY() + InViewport.GetHeight()
+			};
+			SetScissorRectangle(Scissor);
+
 			SetCurrentRootSignature(&InPipeline.GetRootSignature());
 			_CurrentShaderStages = ConvertShaderTypeFlagsToVulkanShaderStageFlags(InPipeline.GetShaderTypes());
+		}
+
+		void VulkanCommandList::SetIndexBuffer(_In_ const Resource& InIndexBuffer, _In_ uint32_t InOffset /* = 0 */, _In_ const IndexBufferType& InIndexBufferType /* = IndexBufferType::INDEX_BUFFER_TYPE_16BITS */)
+		{
+			const VulkanResource& InVkIndexBuffer = static_cast<const VulkanResource&>(InIndexBuffer);
+
+			_CommandBuffer.bindIndexBuffer(
+				InVkIndexBuffer.GetVulkanBuffer(),
+				InOffset,
+				ConvertIndexBufferTypeToVulkanIndexType(InIndexBufferType)
+			);
 		}
 
 		void VulkanCommandList::SetVertexBuffers(_In_ const Resource* InVertexBuffers[], _In_ uint32_t InBufferCount /* = 1 */, _In_ uint32_t InFirstVertexBuffer /* = 0 */, _In_ VertexBufferParameters InParameters[] /* = */)
@@ -239,10 +277,8 @@ namespace Eternal
 			
 			const vector<DescriptorTableConstants>& InConstants			= static_cast<const DescriptorTable&>(InDescriptorTable).GetConstants();
 			const vector<DescriptorTableResource>& InResources			= static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
-			const vector<const Sampler*>& InStaticSamplers				= static_cast<const DescriptorTable&>(InDescriptorTable).GetStaticSamplers();
 			ResourcesDirtyFlagsType& InConstantsDirtyFlags				= InDescriptorTable.GetConstantsDirtyFlags();
 			ResourcesDirtyFlagsType& InResourcesDirtyFlags				= InDescriptorTable.GetResourcesDirtyFlags();
-			ResourcesDirtyFlagsType& InStaticSamplersDirtyFlags			= InDescriptorTable.GetStaticSamplersDirtyFlags();
 
 			//////////////////////////////////////////////////////////////////////////
 			// Constants
@@ -291,7 +327,7 @@ namespace Eternal
 				{
 					const vector<DescriptorTableResource>& Resources = static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
 					const VulkanDescriptorTable* VkTable = static_cast<const VulkanDescriptorTable*>(Resources[ParameterIndex].ResourceDescriptorTable);
-					VkTable->Commit(
+					const_cast<VulkanDescriptorTable*>(VkTable)->Commit(
 						InContext,
 						Parameters[ParameterIndex].DescriptorTable
 					);

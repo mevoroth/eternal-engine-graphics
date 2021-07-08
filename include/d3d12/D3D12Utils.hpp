@@ -31,6 +31,7 @@ namespace Eternal
 		enum class TextureResourceUsage;
 		enum class BufferResourceUsage;
 		enum class ResourceDimension;
+		enum class IndexBufferType;
 
 		constexpr D3D12_RENDER_TARGET_BLEND_DESC	DefaultD3D12RenderTargetBlendDesc =
 		{
@@ -80,6 +81,8 @@ namespace Eternal
 			D3D12_RESOURCE_DIMENSION ConvertResourceDimensionToD3D12ResourceDimension(_In_ const ResourceDimension& InResourceDimension);
 			D3D12_RESOURCE_FLAGS ConvertTextureResourceUsageToD3D12ResourceFlags(_In_ const TextureResourceUsage& InResourceFlags);
 			D3D12_RESOURCE_FLAGS ConvertBufferResourceUsageToD3D12ResourceFlags(_In_ const BufferResourceUsage& InResourceFlags);
+			uint32_t ConvertIndexBufferTypeToD3D12Stride(_In_ const IndexBufferType& InIndexBufferType);
+			DXGI_FORMAT ConvertIndexBufferTypeToDXGIFormat(_In_ const IndexBufferType& InIndexBufferType);
 		}
 	}
 }

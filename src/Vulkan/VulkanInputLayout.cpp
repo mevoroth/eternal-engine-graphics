@@ -35,7 +35,7 @@ namespace Eternal
 
 				uint32_t VertexAttributeOffset = 0;
 				const vector<VertexStreamElement>& Elements = InVertexStreams[VertexStreamIndex].GetElements();
-				for (uint32_t ElementIndex = 0; Elements.size(); ++ElementIndex)
+				for (uint32_t ElementIndex = 0; ElementIndex < Elements.size(); ++ElementIndex)
 				{
 					_VertexInputAttributeDescriptions.push_back(vk::VertexInputAttributeDescription());
 					vk::VertexInputAttributeDescription& CurrentVertexInputAttributeDescription = _VertexInputAttributeDescriptions.back();

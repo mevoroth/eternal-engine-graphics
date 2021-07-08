@@ -12,13 +12,13 @@ namespace Eternal
 		public:
 
 			MultiBuffered()
-				: _Context(*(GraphicsContext*)nullptr)
+				: _Context(nullptr)
 			{
 			}
 
 			template<typename ConstructionFunctor>
 			MultiBuffered(_In_ GraphicsContext& InContext, ConstructionFunctor InConstructResourceFunction)
-				: _Context(InContext)
+				: _Context(&InContext)
 			{
 				for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesCount; ++ResourceIndex)
 					_Resources[ResourceIndex] = InConstructResourceFunction();
@@ -36,19 +36,24 @@ namespace Eternal
 			operator GraphicsResourceType&()
 			{
 				ETERNAL_ASSERT(&_Context != nullptr);
-				return *_Resources[_Context.GetCurrentFrameIndex()];
+				return *_Resources[_Context->GetCurrentFrameIndex()];
 			}
 
-			operator GraphicsResourceType* ()
+			operator GraphicsResourceType*()
 			{
 				ETERNAL_ASSERT(&_Context != nullptr);
-				return _Resources[_Context.GetCurrentFrameIndex()];
+				return _Resources[_Context->GetCurrentFrameIndex()];
+			}
+
+			GraphicsResourceType* operator&()
+			{
+				return _Resources[_Context->GetCurrentFrameIndex()];
 			}
 
 			GraphicsResourceType* operator->()
 			{
 				ETERNAL_ASSERT(&_Context != nullptr);
-				return _Resources[_Context.GetCurrentFrameIndex()];
+				return _Resources[_Context->GetCurrentFrameIndex()];
 			}
 
 			GraphicsResourceType* operator[](size_t Index)
@@ -62,16 +67,16 @@ namespace Eternal
 				if (this == &Other)
 					return *this;
 
-				_Context = std::move(Other._Context);
+				_Context = Other._Context;
 				for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesCount; ++ResourceIndex)
-					_Resources[ResourceIndex] = std::move(Other._Resources[ResourceIndex]);
+					_Resources[ResourceIndex] = Other._Resources[ResourceIndex];
 
 				return *this;
 			}
 
 		private:
-			GraphicsContext&		_Context;
-			GraphicsResourceType*	_Resources[ResourcesCount];
+			GraphicsContext*		_Context					= nullptr;
+			GraphicsResourceType*	_Resources[ResourcesCount]	= { nullptr };
 		};
 	}
 }

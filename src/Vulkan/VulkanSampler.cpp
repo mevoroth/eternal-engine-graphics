@@ -10,7 +10,7 @@ namespace Eternal
 	{
 		VulkanSampler::VulkanSampler(_In_ GraphicsContext& InContext, _In_ const SamplerCreateInformation& InSamplerCreateInformation)
 			: Sampler(InSamplerCreateInformation)
-			, _Device(InContext.GetDevice())
+			, _Device(static_cast<VulkanDevice&>(InContext.GetDevice()))
 		{
 			using namespace Eternal::Graphics::Vulkan;
 
@@ -34,7 +34,7 @@ namespace Eternal
 			);
 
 			VerifySuccess(
-				static_cast<VulkanDevice&>(InContext.GetDevice()).GetVulkanDevice().createSampler(
+				_Device.GetVulkanDevice().createSampler(
 					&SamplerCreateInfo,
 					nullptr,
 					&_Sampler
@@ -44,7 +44,7 @@ namespace Eternal
 
 		VulkanSampler::~VulkanSampler()
 		{
-			static_cast<VulkanDevice&>(_Device).GetVulkanDevice().destroySampler(_Sampler);
+			_Device.GetVulkanDevice().destroySampler(_Sampler);
 		}
 	}
 }
