@@ -30,6 +30,9 @@ namespace Eternal
 		enum class ShaderTypeFlags;
 		enum class HLSLRegisterType;
 		enum class IndexBufferType;
+		enum class FillMode;
+		enum class CullMode;
+		enum class FrontFace;
 
 		class BlendState;
 		class Viewport;
@@ -69,6 +72,9 @@ namespace Eternal
 			vk::ShaderStageFlagBits ConvertShaderTypeFlagsToVulkanShaderStageFlags(_In_ const ShaderTypeFlags& InShaderTypeFlags);
 			uint32_t ConvertHLSLRegisterTypeToVulkanShaderBindingBase(_In_ const HLSLRegisterType& InHLSLRegisterType);
 			vk::IndexType ConvertIndexBufferTypeToVulkanIndexType(_In_ const IndexBufferType& InIndexBufferType);
+			vk::PolygonMode ConvertFillModeToVulkanPolygonMode(_In_ const FillMode& InFillMode);
+			vk::CullModeFlagBits ConvertCullModeToVulkanCullModeFlags(_In_ const CullMode& InCullMode);
+			vk::FrontFace ConvertFrontFaceToVulkanFrontFace(_In_ const FrontFace& InFrontFace);
 
 			inline vk::PipelineStageFlagBits& operator|=(_Inout_ vk::PipelineStageFlagBits& InOutPipelineStageFlags, _In_ const vk::PipelineStageFlagBits& InPipelineStageFlags)
 			{

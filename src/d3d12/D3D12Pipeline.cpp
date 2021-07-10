@@ -54,17 +54,19 @@ namespace Eternal
 			PipelineStateDesc.StreamOutput.NumStrides		= 0;
 			PipelineStateDesc.StreamOutput.RasterizedStream	= 0;
 
-			PipelineStateDesc.RasterizerState.FillMode				= D3D12_FILL_MODE_SOLID;
-			PipelineStateDesc.RasterizerState.CullMode				= D3D12_CULL_MODE_BACK;
-			PipelineStateDesc.RasterizerState.FrontCounterClockwise	= TRUE;
-			PipelineStateDesc.RasterizerState.DepthBias				= 0;
-			PipelineStateDesc.RasterizerState.DepthBiasClamp		= 0.0f;
-			PipelineStateDesc.RasterizerState.SlopeScaledDepthBias	= 0.f;
-			PipelineStateDesc.RasterizerState.DepthClipEnable		= TRUE;
+			const Rasterizer& InRasterizer = InPipelineCreateInformation.PipelineRasterizer;
+
+			PipelineStateDesc.RasterizerState.FillMode				= ConvertFillModeToD3D12FillMode(InRasterizer.GetFillMode());
+			PipelineStateDesc.RasterizerState.CullMode				= ConvertCullModeToD3D12CullMode(InRasterizer.GetCullMode());
+			PipelineStateDesc.RasterizerState.FrontCounterClockwise	= ConvertFrontFaceToD3D12FrontFace(InRasterizer.GetFrontFace());
+			PipelineStateDesc.RasterizerState.DepthBias				= InRasterizer.GetDepthBias();
+			PipelineStateDesc.RasterizerState.DepthBiasClamp		= InRasterizer.GetDepthBiasClamp();
+			PipelineStateDesc.RasterizerState.SlopeScaledDepthBias	= InRasterizer.GetDepthBiasSlopeScale();
+			PipelineStateDesc.RasterizerState.DepthClipEnable		= static_cast<BOOL>(InRasterizer.GetDepthClip());
 			PipelineStateDesc.RasterizerState.MultisampleEnable		= TRUE;
-			PipelineStateDesc.RasterizerState.AntialiasedLineEnable	= FALSE;
+			PipelineStateDesc.RasterizerState.AntialiasedLineEnable	= TRUE;
 			PipelineStateDesc.RasterizerState.ForcedSampleCount		= 0;
-			PipelineStateDesc.RasterizerState.ConservativeRaster	= D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+			PipelineStateDesc.RasterizerState.ConservativeRaster	= D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON;
 
 			PipelineStateDesc.DepthStencilState.DepthEnable						= InDepthTest.IsEnabled() ? TRUE : FALSE;
 			PipelineStateDesc.DepthStencilState.DepthFunc						= ConvertComparisonFunctionToD3D12ComparisonFunction(InDepthTest.GetComparisonFunction());

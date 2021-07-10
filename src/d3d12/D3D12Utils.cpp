@@ -1,6 +1,7 @@
 #include "d3d12/D3D12Utils.hpp"
 #include "Graphics/CommandUtils.h"
 #include "Graphics/BlendState.hpp"
+#include "Graphics/Rasterizer.hpp"
 #include "Graphics/Sampler.hpp"
 #include "Graphics/RenderPass.hpp"
 #include "Graphics/RootSignature.hpp"
@@ -246,6 +247,28 @@ namespace Eternal
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_RESOURCE_DIMENSIONS) == static_cast<int32_t>(ResourceDimension::RESOURCE_DIMENSION_COUNT), "Mismatch between abstraction and d3d12 resource dimensions");
 		
+		static constexpr D3D12_FILL_MODE D3D12_FILL_MODES[] =
+		{
+			D3D12_FILL_MODE_WIREFRAME,
+			D3D12_FILL_MODE_SOLID
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_FILL_MODES) == static_cast<int32_t>(FillMode::FILL_MODE_COUNT), "Mismatch between abstraction and d3d12 fill modes");
+
+		static constexpr D3D12_CULL_MODE D3D12_CULL_MODES[] =
+		{
+			D3D12_CULL_MODE_NONE,
+			D3D12_CULL_MODE_FRONT,
+			D3D12_CULL_MODE_BACK
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_CULL_MODES) == static_cast<int32_t>(CullMode::CULL_MODE_COUNT), "Mismatch between abstraction and d3d12 cull modes");
+
+		static constexpr BOOL D3D12_FRONT_FACES[] =
+		{
+			TRUE,
+			FALSE
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_FRONT_FACES) == static_cast<int32_t>(FrontFace::FRONT_FACE_COUNT), "Mismatch between abstraction and d1d12 front faces");
+
 		namespace D3D12
 		{
 			void VerifySuccess(_In_ const HRESULT& HResult)
@@ -488,6 +511,21 @@ namespace Eternal
 			DXGI_FORMAT ConvertIndexBufferTypeToDXGIFormat(_In_ const IndexBufferType& InIndexBufferType)
 			{
 				return InIndexBufferType == IndexBufferType::INDEX_BUFFER_TYPE_16BITS ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+			}
+
+			D3D12_FILL_MODE ConvertFillModeToD3D12FillMode(_In_ const FillMode& InFillMode)
+			{
+				return D3D12_FILL_MODES[static_cast<int32_t>(InFillMode)];
+			}
+
+			D3D12_CULL_MODE ConvertCullModeToD3D12CullMode(_In_ const CullMode& InCullMode)
+			{
+				return D3D12_CULL_MODES[static_cast<int32_t>(InCullMode)];
+			}
+
+			BOOL ConvertFrontFaceToD3D12FrontFace(_In_ const FrontFace& InFrontFace)
+			{
+				return D3D12_FRONT_FACES[static_cast<int32_t>(InFrontFace)];
 			}
 		}
 	}

@@ -277,6 +277,9 @@
     <ClInclude Include="include\Graphics\MultiBuffered.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Rasterizer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -497,6 +500,9 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\Types\HLSLTypes.cpp">
       <Filter>Graphics\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Rasterizer.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

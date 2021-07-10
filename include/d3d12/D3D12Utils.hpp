@@ -32,6 +32,9 @@ namespace Eternal
 		enum class BufferResourceUsage;
 		enum class ResourceDimension;
 		enum class IndexBufferType;
+		enum class FillMode;
+		enum class CullMode;
+		enum class FrontFace;
 
 		constexpr D3D12_RENDER_TARGET_BLEND_DESC	DefaultD3D12RenderTargetBlendDesc =
 		{
@@ -83,6 +86,9 @@ namespace Eternal
 			D3D12_RESOURCE_FLAGS ConvertBufferResourceUsageToD3D12ResourceFlags(_In_ const BufferResourceUsage& InResourceFlags);
 			uint32_t ConvertIndexBufferTypeToD3D12Stride(_In_ const IndexBufferType& InIndexBufferType);
 			DXGI_FORMAT ConvertIndexBufferTypeToDXGIFormat(_In_ const IndexBufferType& InIndexBufferType);
+			D3D12_FILL_MODE ConvertFillModeToD3D12FillMode(_In_ const FillMode& InFillMode);
+			D3D12_CULL_MODE ConvertCullModeToD3D12CullMode(_In_ const CullMode& InCullMode);
+			BOOL ConvertFrontFaceToD3D12FrontFace(_In_ const FrontFace& InFrontFace);
 		}
 	}
 }

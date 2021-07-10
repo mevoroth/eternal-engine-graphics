@@ -60,6 +60,8 @@ namespace Eternal
 					  CreateInformation.Settings.Width,
 					  CreateInformation.Settings.Height)
 		{
+			static constexpr uint32_t ResourcesToClearInitialCount = 0;
+
 			_Window.Create(CreateInformation.Arguments.WindowEventsHandler);
 
 			_Device					= CreateDevice(*this, CreateInformation.Settings.Driver);
@@ -81,6 +83,10 @@ namespace Eternal
 
 				for (int32_t CommandTypeIndex = 0; CommandTypeIndex < static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT); ++CommandTypeIndex)
 					_CommandListPools[FrameIndex][CommandTypeIndex].reserve(CommandListUsage[CommandTypeIndex]);
+
+
+				_ViewsToClear[FrameIndex].reserve(ResourcesToClearInitialCount);
+				_ResourcesToClear[FrameIndex].reserve(ResourcesToClearInitialCount);
 			}
 
 			_CurrentFrameCommandListIndex.fill(0);
@@ -143,6 +149,34 @@ namespace Eternal
 
 		void GraphicsContext::EndFrame()
 		{
+			uint32_t CopyQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_COPY);
+			uint32_t ComputeQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_COMPUTE);
+			uint32_t GraphicsQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_GRAPHIC);
+			if (_CurrentFrameCommandListIndex[CopyQueueIndex] > 0)
+			{
+				GetCopyQueue().SubmitCommandLists(
+					_CommandListPools[_CurrentFrameIndex][CopyQueueIndex].data(),
+					_CurrentFrameCommandListIndex[CopyQueueIndex]
+				);
+			}
+			
+			if (_CurrentFrameCommandListIndex[ComputeQueueIndex] > 0)
+			{
+				GetComputeQueue().SubmitCommandLists(
+					_CommandListPools[_CurrentFrameIndex][ComputeQueueIndex].data(),
+					_CurrentFrameCommandListIndex[ComputeQueueIndex]
+				);
+			}
+
+			if (_CurrentFrameCommandListIndex[GraphicsQueueIndex] > 0)
+			{
+				GetGraphicsQueue().SubmitCommandLists(
+					_CommandListPools[_CurrentFrameIndex][GraphicsQueueIndex].data(),
+					_CurrentFrameCommandListIndex[GraphicsQueueIndex],
+					this
+				);
+			}
+
 			GetSwapChain().Present(*this);
 		}
 
@@ -156,6 +190,11 @@ namespace Eternal
 			for (uint32_t ViewIndex = 0; ViewIndex < ViewsToClear.size(); ++ViewIndex)
 				delete ViewsToClear[ViewIndex];
 			ViewsToClear.clear();
+
+			vector<Resource*>& ResourcesToClear = _ResourcesToClear[_CurrentFrameIndex];
+			for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesToClear.size(); ++ResourceIndex)
+				delete ResourcesToClear[ResourceIndex];
+			ResourcesToClear.clear();
 		}
 
 		CommandQueue& GraphicsContext::GetGraphicsQueue()
@@ -188,9 +227,14 @@ namespace Eternal
 			return _ShaderFactory->GetShader(*this, InShaderCreateInformation);
 		}
 
-		void GraphicsContext::DelayedDelete(_In_ View* InView)
+		template<> void GraphicsContext::DelayedDelete<View>(_In_ View* InView)
 		{
 			_ViewsToClear[_CurrentFrameIndex].push_back(InView);
+		}
+
+		template<> void GraphicsContext::DelayedDelete<Resource>(_In_ Resource* InResource)
+		{
+			_ResourcesToClear[_CurrentFrameIndex].push_back(InResource);
 		}
 	}
 }

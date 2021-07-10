@@ -68,7 +68,8 @@ namespace Eternal
 
 			uint32_t& GetCurrentFrameIndex() { return _CurrentFrameIndex; }
 
-			void DelayedDelete(_In_ View* InView);
+			template<typename ResourceType>
+			void DelayedDelete(_In_ ResourceType* InResource);
 
 		protected:
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
@@ -87,8 +88,8 @@ namespace Eternal
 
 			std::array<uint32_t, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>	_CurrentFrameCommandListIndex;
 			std::array<Fence*, FrameBufferingCount>										_FrameFences;
-
 			std::array<std::vector<View*>, FrameBufferingCount>							_ViewsToClear;
+			std::array<std::vector<Resource*>, FrameBufferingCount>						_ResourcesToClear;
 
 			Window _Window;
 			Viewport* _MainViewportFullScreen	= nullptr;

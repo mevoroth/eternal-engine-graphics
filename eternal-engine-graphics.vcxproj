@@ -61,6 +61,7 @@
     <ClInclude Include="include\Graphics\InputLayoutFactory.hpp" />
     <ClInclude Include="include\Graphics\Pipeline.hpp" />
     <ClInclude Include="include\Graphics\PipelineFactory.hpp" />
+    <ClInclude Include="include\Graphics\Rasterizer.hpp" />
     <ClInclude Include="include\Graphics\RenderPass.hpp" />
     <ClInclude Include="include\Graphics\RenderPassFactory.hpp" />
     <ClInclude Include="include\Graphics\Resource.hpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="src\Graphics\InputLayoutFactory.cpp" />
     <ClCompile Include="src\Graphics\Pipeline.cpp" />
     <ClCompile Include="src\Graphics\PipelineFactory.cpp" />
+    <ClCompile Include="src\Graphics\Rasterizer.cpp" />
     <ClCompile Include="src\Graphics\RenderPass.cpp" />
     <ClCompile Include="src\Graphics\RenderPassFactory.cpp" />
     <ClCompile Include="src\Graphics\Resource.cpp" />

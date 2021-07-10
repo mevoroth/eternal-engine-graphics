@@ -47,7 +47,7 @@ namespace Eternal
 		public:
 
 			const vector<VertexStreamElement>& GetElements() const { return _Elements; }
-			VertexStreamFrequency GetVertexStreamFrequency() const { return _InstancesCount > 1 ? VertexStreamFrequency::VERTEX_STREAM_FREQUENCY_INSTANCE : VertexStreamFrequency::VERTEX_STREAM_FREQUENCY_INSTANCE; }
+			VertexStreamFrequency GetVertexStreamFrequency() const { return _InstancesCount > 1 ? VertexStreamFrequency::VERTEX_STREAM_FREQUENCY_INSTANCE : VertexStreamFrequency::VERTEX_STREAM_FREQUENCY_VERTEX; }
 			uint32_t GetStreamStride() const { return _StreamStride; }
 
 		protected:

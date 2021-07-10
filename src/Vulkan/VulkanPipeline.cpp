@@ -67,13 +67,22 @@ namespace Eternal
 
 			vk::PipelineTessellationStateCreateInfo TessellationStateInfo;
 
+			const Rasterizer& InRasterizer = InPipelineCreateInformation.PipelineRasterizer;
+			const bool DepthBiasEnabled = InRasterizer.GetDepthBias() != 0 || InRasterizer.GetDepthBiasClamp() != 0.0f || InRasterizer.GetDepthBiasSlopeScale() != 0.0f;
+
 			vk::PipelineRasterizationStateCreateInfo RasterizationStateInfo = vk::PipelineRasterizationStateCreateInfo(
 				vk::PipelineRasterizationStateCreateFlagBits(),
-				/*depthClampEnable_=*/ false,
+				/*depthClampEnable_=*/ !InRasterizer.GetDepthClip(),
 				/*rasterizerDiscardEnable_=*/false,
-				vk::PolygonMode::eFill,
-				vk::CullModeFlagBits::eBack
-			).setLineWidth(1.0f);
+				ConvertFillModeToVulkanPolygonMode(InRasterizer.GetFillMode()),
+				ConvertCullModeToVulkanCullModeFlags(InRasterizer.GetCullMode()),
+				ConvertFrontFaceToVulkanFrontFace(InRasterizer.GetFrontFace()),
+				DepthBiasEnabled,
+				static_cast<float>(InRasterizer.GetDepthBias()),
+				InRasterizer.GetDepthBiasClamp(),
+				InRasterizer.GetDepthBiasSlopeScale(),
+				1.0f
+			);
 
 			const VulkanViewport& Viewport = static_cast<const VulkanViewport&>(InPipelineCreateInformation.PipelineRenderPass.GetViewport());
 

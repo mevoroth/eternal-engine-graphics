@@ -167,6 +167,60 @@ namespace Eternal
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_TYPES) == static_cast<int32_t>(ResourceDimension::RESOURCE_DIMENSION_COUNT), "Mismatch between abstraction and vulkan image types");
 
+			static constexpr vk::BlendFactor VULKAN_BLEND_STATES[] =
+			{
+				vk::BlendFactor::eZero,
+				vk::BlendFactor::eOne,
+
+				// SOURCE
+				vk::BlendFactor::eSrcColor,
+				vk::BlendFactor::eOneMinusSrcColor,
+				vk::BlendFactor::eSrcAlpha,
+				vk::BlendFactor::eOneMinusSrcAlpha,
+
+				// DESTINATION
+				vk::BlendFactor::eDstAlpha,
+				vk::BlendFactor::eOneMinusDstAlpha,
+				vk::BlendFactor::eDstColor,
+				vk::BlendFactor::eOneMinusDstColor,
+
+				vk::BlendFactor::eSrcAlphaSaturate,
+
+				// BLEND FACTOR
+				vk::BlendFactor::eConstantColor,
+				vk::BlendFactor::eOneMinusConstantColor,
+				vk::BlendFactor::eConstantAlpha,
+				vk::BlendFactor::eOneMinusConstantAlpha,
+
+				vk::BlendFactor::eSrc1Color,
+				vk::BlendFactor::eOneMinusSrc1Color,
+				vk::BlendFactor::eSrc1Alpha,
+				vk::BlendFactor::eOneMinusSrc1Alpha
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_BLEND_STATES) == static_cast<int32_t>(Blend::BLEND_COUNT), "Mismatch between abstraction and blend states");
+
+			static constexpr vk::PolygonMode VULKAN_POLYGON_MODES[] =
+			{
+				vk::PolygonMode::eLine,
+				vk::PolygonMode::eFill
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_POLYGON_MODES) == static_cast<int32_t>(FillMode::FILL_MODE_COUNT), "Mismatch between abstraction and vulkan polygon modes");
+
+			static constexpr vk::CullModeFlagBits VULKAN_CULL_MODE_FLAGS[] =
+			{
+				vk::CullModeFlagBits::eNone,
+				vk::CullModeFlagBits::eFront,
+				vk::CullModeFlagBits::eBack
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_CULL_MODE_FLAGS) == static_cast<int32_t>(CullMode::CULL_MODE_COUNT), "Mismatch between abstraction and vulkan cull mode flags");
+
+			static constexpr vk::FrontFace VULKAN_FRONT_FACES[] =
+			{
+				vk::FrontFace::eCounterClockwise,
+				vk::FrontFace::eClockwise
+			};
+			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FRONT_FACES) == static_cast<int32_t>(FrontFace::FRONT_FACE_COUNT), "Mismatch between abstraction and vulkan front faces");
+
 			static constexpr uint32_t VULKAN_SHADER_REGISTER_OFFSETS[] =
 			{
 				VulkanGraphicsContext::ShaderRegisterShaderResourcesOffset,
@@ -234,7 +288,7 @@ namespace Eternal
 
 			vk::BlendFactor ConvertBlendToVulkanBlendFactor(_In_ const Blend& InBlend)
 			{
-				return static_cast<vk::BlendFactor>(InBlend);
+				return VULKAN_BLEND_STATES[static_cast<int32_t>(InBlend)];
 			}
 
 			vk::BlendOp ConvertBlendOperatorToVulkanBlendOperator(_In_ const BlendOperator& InBlendOperator)
@@ -586,6 +640,21 @@ namespace Eternal
 			vk::IndexType ConvertIndexBufferTypeToVulkanIndexType(_In_ const IndexBufferType& InIndexBufferType)
 			{
 				return static_cast<vk::IndexType>(InIndexBufferType);
+			}
+
+			vk::PolygonMode ConvertFillModeToVulkanPolygonMode(_In_ const FillMode& InFillMode)
+			{
+				return VULKAN_POLYGON_MODES[static_cast<int32_t>(InFillMode)];
+			}
+
+			vk::CullModeFlagBits ConvertCullModeToVulkanCullModeFlags(_In_ const CullMode& InCullMode)
+			{
+				return VULKAN_CULL_MODE_FLAGS[static_cast<int32_t>(InCullMode)];
+			}
+
+			vk::FrontFace ConvertFrontFaceToVulkanFrontFace(_In_ const FrontFace& InFrontFace)
+			{
+				return VULKAN_FRONT_FACES[static_cast<int32_t>(InFrontFace)];
 			}
 		}
 	}

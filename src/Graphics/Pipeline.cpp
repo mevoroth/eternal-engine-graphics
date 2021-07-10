@@ -12,7 +12,8 @@ namespace Eternal
 			_In_ RenderPass& InRenderPass,
 			_In_ Shader& InVS,
 			_In_ Shader& InPS,
-			_In_ const DepthStencil& InDepthStencil,
+			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */,
+			_In_ const DepthStencil& InDepthStencil /* = DepthStencilNoneNone */,
 			_In_ const PrimitiveTopology& InPrimitiveTopology /* = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST */
 		)
 			: PipelineRootSignature(InRootSignature)
@@ -21,6 +22,7 @@ namespace Eternal
 			, VS(InVS)
 			, PS(InPS)
 			, PipelineDepthStencil(InDepthStencil)
+			, PipelineRasterizer(InRasterizer)
 			, PipelinePrimitiveTopology(InPrimitiveTopology)
 			, PipelineShaderTypes(ShaderTypeFlags::VS | ShaderTypeFlags::PS)
 		{

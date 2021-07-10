@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics/DepthStencil.hpp"
+#include "Graphics/Rasterizer.hpp"
 #include "Graphics/RenderPass.hpp"
 
 namespace Eternal
@@ -11,7 +12,6 @@ namespace Eternal
 
 		class RootSignature;
 		class InputLayout;
-		class RenderPass;
 		class Shader;
 
 		enum class PrimitiveTopology
@@ -68,6 +68,7 @@ namespace Eternal
 				_In_ RenderPass& InRenderPass,
 				_In_ Shader& InVS,
 				_In_ Shader& InPS,
+				_In_ const Rasterizer& InRasterizer = RasterizerDefault,
 				_In_ const DepthStencil& InDepthStencil = DepthStencilNoneNone,
 				_In_ const PrimitiveTopology& InPrimitiveTopology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			);
@@ -77,7 +78,8 @@ namespace Eternal
 			RenderPass&			PipelineRenderPass;
 			Shader&				VS;
 			Shader&				PS;
-			const DepthStencil&	PipelineDepthStencil;
+			Rasterizer			PipelineRasterizer;
+			DepthStencil		PipelineDepthStencil;
 			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 			ShaderTypeFlags		PipelineShaderTypes;
 		};
