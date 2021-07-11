@@ -3,6 +3,7 @@
 #include <d3d12.h>
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12Utils.hpp"
+#include "Graphics/Fence.hpp"
 
 namespace Eternal
 {
@@ -48,7 +49,7 @@ namespace Eternal
 				)
 			);
 			VerifySuccess(
-				_CBV_SRV_UAV_DescriptorHeap->SetName(L"Sampler_DescriptorHeap")
+				_SamplerDescriptorHeap->SetName(L"Sampler_DescriptorHeap")
 			);
 
 			// RTV
@@ -66,7 +67,7 @@ namespace Eternal
 				)
 			);
 			VerifySuccess(
-				_CBV_SRV_UAV_DescriptorHeap->SetName(L"RenderTargetView_DescriptorHeap")
+				_RenderTargetViewDescriptorHeap->SetName(L"RenderTargetView_DescriptorHeap")
 			);
 
 			// DSV
@@ -95,6 +96,8 @@ namespace Eternal
 
 		D3D12GraphicsContext::~D3D12GraphicsContext()
 		{
+			WaitForAllFences();
+
 			_DepthStencilViewDescriptorHeap->Release();
 			_DepthStencilViewDescriptorHeap = nullptr;
 

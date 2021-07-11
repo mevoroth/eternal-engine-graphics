@@ -61,7 +61,7 @@ namespace Eternal
 			CommandQueue& GetCopyQueue() { return *_CopyQueue; }
 
 			Shader* GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation);
-			CommandList* CreateNewCommandList(const CommandType& Type);
+			CommandList* CreateNewCommandList(_In_ const CommandType& Type, _In_ const std::string& InName);
 
 			Fence& GetCurrentFrameFence() { return *_FrameFences[GetCurrentFrameIndex()]; }
 			Fence& GetNextFrameFence() { return *_FrameFences[(GetCurrentFrameIndex() + 1) % static_cast<uint32_t>(_FrameFences.size())]; }
@@ -73,6 +73,8 @@ namespace Eternal
 
 		protected:
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
+
+			void WaitForAllFences();
 
 		private:
 

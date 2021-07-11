@@ -233,12 +233,14 @@ namespace Eternal
 			switch (GetResourceType())
 			{
 			case ResourceType::RESOURCE_TYPE_BUFFER:
-				VkDevice.destroyBufferView(_VulkanViewMetaData.BufferView);
-				break;
-
+			{
+				if (GetViewCreateInformation().ResourceViewType != ViewType::VIEW_CONSTANT_BUFFER)
+					VkDevice.destroyBufferView(_VulkanViewMetaData.BufferView);
+			} break;
 			case ResourceType::RESOURCE_TYPE_TEXTURE:
+			{
 				VkDevice.destroyImageView(_VulkanViewMetaData.ImageView);
-				break;
+			} break;
 
 			default:
 				ETERNAL_BREAK(); // Invalid resource type

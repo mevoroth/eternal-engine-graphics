@@ -45,8 +45,8 @@ namespace Eternal
 			D3D12ResourceDesc.Alignment				= 0;
 			D3D12ResourceDesc.Width					= InTextureInformation.Width;
 			D3D12ResourceDesc.Height				= InTextureInformation.Height;
-			D3D12ResourceDesc.DepthOrArraySize		= InTextureInformation.DepthOrArraySize;
-			D3D12ResourceDesc.MipLevels				= InTextureInformation.MIPLevels;
+			D3D12ResourceDesc.DepthOrArraySize		= static_cast<UINT16>(InTextureInformation.DepthOrArraySize);
+			D3D12ResourceDesc.MipLevels				= static_cast<UINT16>(InTextureInformation.MIPLevels);
 			D3D12ResourceDesc.Format				= ConvertFormatToD3D12Format(InTextureInformation.ResourceFormat).Format;
 			D3D12ResourceDesc.SampleDesc.Count		= 1;
 			D3D12ResourceDesc.SampleDesc.Quality	= 0;

@@ -90,7 +90,7 @@ namespace Eternal
 					RegisterIndices[ShaderTypeIndex].fill(0);
 			}
 			
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 			RegisterIndicesContainer DebugRegisterCount;
 			DebugRegisterCount.fill(0);
 #endif
@@ -125,7 +125,7 @@ namespace Eternal
 				CurrentRootParameter.Constants.Num32BitValues	= InConstants[ConstantsIndex].Count;
 				CurrentRootParameter.ShaderVisibility			= ConvertRootSignatureAccessToD3D12ShaderVisibility(CurrentAccess);
 
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 				++DebugRegisterCount[static_cast<int32_t>(CurrentAccess)];
 #endif
 			}
@@ -144,7 +144,7 @@ namespace Eternal
 				D3D12_ROOT_PARAMETER1& CurrentRootParameter = Parameters.back();
 
 				RegisterIndicesPerTypeContainer& RegisterIndexPerType = RegisterIndices[static_cast<int32_t>(CurrentAccess)];
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 				uint32_t& DebugRegisterCountType = DebugRegisterCount[static_cast<int32_t>(CurrentAccess)];
 #endif
 				uint32_t RegisterTypeUint = ConvertRootSignatureParameterTypeToHLSLRegisterTypeUInt(InParameters[ParameterIndex].Parameter);
@@ -166,7 +166,7 @@ namespace Eternal
 					
 					CurrentRootParameter.DescriptorTable.NumDescriptorRanges	= 1;
 					CurrentRootParameter.DescriptorTable.pDescriptorRanges		= &DescriptorRange;
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 					DebugRegisterCountType++;
 #endif
 				} break;
@@ -194,7 +194,7 @@ namespace Eternal
 						CurrentDescriptorRange.OffsetInDescriptorsFromTableStart	= D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 						RegisterIndexPerType[RegisterType] += DescriptorTableLayout[DescriptorTableIndex].DescriptorsCount;
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 						DebugRegisterCountType += DescriptorTableLayout[DescriptorTableIndex].DescriptorsCount;
 #endif
 					}
@@ -207,7 +207,7 @@ namespace Eternal
 				{
 					CurrentRootParameter.Descriptor.ShaderRegister	= RegisterIndexPerType[ConvertRootSignatureParameterTypeToHLSLRegisterTypeUInt(InParameters[ParameterIndex].Parameter)]++;
 					CurrentRootParameter.Descriptor.RegisterSpace	= 0;
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 					++DebugRegisterCountType;
 #endif
 				} break;
@@ -240,7 +240,7 @@ namespace Eternal
 			RootVersionedSignatureDesc.Desc_1_1.pStaticSamplers		= StaticSamplers.data();
 			RootVersionedSignatureDesc.Desc_1_1.Flags				= Flags;
 
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 			// Check inconsistent root signature (graphics and compute at the same time)
 			uint32_t GraphicsParameters = 0;
 			uint32_t ComputeParameters = DebugRegisterCount[static_cast<int32_t>(ShaderType::CS)];

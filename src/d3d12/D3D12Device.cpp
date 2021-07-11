@@ -4,7 +4,7 @@
 #include <DXGI1_4.h>
 #include "d3d12/D3D12Utils.hpp"
 
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 #include <dxgidebug.h>
 #define ETERNAL_D3D12_DXGIFLAG	(0x1)
 #else
@@ -15,19 +15,24 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace Eternal::Graphics::D3D12;
+
+#if ETERNAL_DEBUG
 		ID3D12Debug*	D3D12Device::_Debug			= nullptr;
 		IDXGIInfoQueue*	D3D12Device::_DXGIInfoQueue	= nullptr;
+		IDXGIDebug*		D3D12Device::_DXGIDebug		= nullptr;
+#endif
 		IDXGIFactory4* D3D12Device::_DXGIFactory	= nullptr;
 
 		void D3D12Device::Initialize()
 		{
 			HRESULT hr = S_OK;
 
-			D3D12::VerifySuccess(
+			VerifySuccess(
 				CreateDXGIFactory2(ETERNAL_D3D12_DXGIFLAG, __uuidof(IDXGIFactory4), (void**)&_DXGIFactory)
 			);
 
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 			// Enable the D3D12 debug layer
 			hr = D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void**)&_Debug);
 			if (hr == S_OK)
@@ -35,20 +40,22 @@ namespace Eternal
 				_Debug->EnableDebugLayer();
 			}
 
-			//typedef HRESULT(WINAPI * LPDXGIGETDEBUGINTERFACE)(REFIID, void **);
+			HMODULE DXGIDebugLib = LoadLibraryEx("dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+			hr = S_FALSE;
+			if (DXGIDebugLib)
+			{
+				typedef HRESULT(WINAPI * LPDXGIGETDEBUGINTERFACE)(REFIID, void **);
 
-			//LPDXGIGETDEBUGINTERFACE DXGIGetDebugInterface;
+				LPDXGIGETDEBUGINTERFACE DXGIGetDebugInterface;
 
-			//HMODULE DXGIDebugLib = LoadLibraryEx("dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
-			//hr = S_FALSE;
-			//if (DXGIDebugLib)
-			//{
-			//	DXGIGetDebugInterface = reinterpret_cast<LPDXGIGETDEBUGINTERFACE>(
-			//		reinterpret_cast<void*>(GetProcAddress(DXGIDebugLib, "DXGIGetDebugInterface")));
-			//	ETERNAL_ASSERT(DXGIGetDebugInterface);
+				DXGIGetDebugInterface = reinterpret_cast<LPDXGIGETDEBUGINTERFACE>(
+					reinterpret_cast<void*>(GetProcAddress(DXGIDebugLib, "DXGIGetDebugInterface")));
+				ETERNAL_ASSERT(DXGIGetDebugInterface);
 
-			//	hr = DXGIGetDebugInterface(__uuidof(IDXGIInfoQueue), (void**)&_DXGIInfoQueue);
-			//}
+				VerifySuccess(
+					DXGIGetDebugInterface(__uuidof(IDXGIDebug), (void**)&_DXGIDebug)
+				);
+			}
 
 			//if (hr == S_OK)
 			//{
@@ -85,8 +92,6 @@ namespace Eternal
 
 		D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 		{
-			using namespace Eternal::Graphics::D3D12;
-
 			ETERNAL_ASSERT(_DXGIFactory);
 			HRESULT hr = _DXGIFactory->EnumAdapters1(DeviceIndex, &_DXGIAdapter);
 	
@@ -103,7 +108,7 @@ namespace Eternal
 			_Device = _Device5;
 			ETERNAL_ASSERT(_Device);
 
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 			DXGI_ADAPTER_DESC1 DXGIAdapterDesc1;
 			VerifySuccess(
 				_DXGIAdapter->GetDesc1(&DXGIAdapterDesc1)
@@ -346,6 +351,16 @@ namespace Eternal
 			D3D12_HEAP_PROPERTIES DefaultHeapProperties		= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_DEFAULT);
 			D3D12_HEAP_PROPERTIES UploadHeapProperties		= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_UPLOAD);
 			D3D12_HEAP_PROPERTIES ReadbackHeapProperties	= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_READBACK);
+		}
+
+		D3D12Device::~D3D12Device()
+		{
+			_Device->Release();
+#if ETERNAL_DEBUG
+			VerifySuccess(
+				_DXGIDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL)
+			);
+#endif
 		}
 
 		uint32_t D3D12Device::GetDeviceMask() const

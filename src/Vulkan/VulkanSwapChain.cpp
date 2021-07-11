@@ -112,6 +112,18 @@ namespace Eternal
 			PresentModes.resize(PresentModesCount);
 			VerifySuccess(VulkanPhysicalDevice.getSurfacePresentModesKHR(_Surface, &PresentModesCount, PresentModes.data(), EternalLoader));
 
+#if ETERNAL_DEBUG
+			bool HasValidMode = false;
+			for (uint32_t PresentIndex = 0; PresentIndex < PresentModesCount; ++PresentIndex)
+			{
+				if (InWindow.GetVSync())
+					HasValidMode |= PresentModes[PresentIndex] == vk::PresentModeKHR::eMailbox;
+				else
+					HasValidMode |= PresentModes[PresentIndex] == vk::PresentModeKHR::eFifo;
+			}
+			ETERNAL_ASSERT(HasValidMode);
+#endif
+
 			vk::SwapchainCreateInfoKHR SwapChainInfo(
 				vk::SwapchainCreateFlagBitsKHR(),
 				_Surface,
@@ -125,7 +137,7 @@ namespace Eternal
 				0, nullptr,
 				vk::SurfaceTransformFlagBitsKHR::eIdentity,
 				vk::CompositeAlphaFlagBitsKHR::eOpaque,
-				PresentModes[0],
+				InWindow.GetVSync() ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eMailbox,
 				true
 			);
 

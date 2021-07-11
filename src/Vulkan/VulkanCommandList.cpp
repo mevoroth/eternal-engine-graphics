@@ -63,6 +63,7 @@ namespace Eternal
 
 		void VulkanCommandList::BeginRenderPass(const RenderPass& InRenderPass)
 		{
+			ETERNAL_PROFILER(INFO)();
 			CommandList::BeginRenderPass(InRenderPass);
 
 			std::array<vk::ClearValue, MAX_RENDER_TARGETS> ClearValues;
@@ -100,6 +101,7 @@ namespace Eternal
 
 		void VulkanCommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
+			ETERNAL_PROFILER(INFO)();
 			static constexpr vk::ImageSubresourceRange DefaultImageSubresourceRange(
 				vk::ImageAspectFlagBits::eColor,
 				0, 1,
@@ -265,8 +267,8 @@ namespace Eternal
 		
 		void VulkanCommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
-			ETERNAL_ASSERT(GetCurrentSignature() && *GetCurrentSignature() == *InDescriptorTable.GetRootSignature());
-			//ETERNAL_ASSERT(_CurrentRootSignature && GetCurrentSignature() == InDescriptorTable.GetRootSignature()); Faster but limiting possibilities
+			ETERNAL_PROFILER(INFO)();
+			CommandList::SetGraphicsDescriptorTable(InContext, InDescriptorTable);
 			
 			const VulkanRootSignature& VkRootSignature					= *static_cast<const VulkanRootSignature*>(GetCurrentSignature());
 			const vk::PipelineLayout& CurrentPipelineLayout				= VkRootSignature.GetVulkanPipelineLayout();
@@ -376,6 +378,7 @@ namespace Eternal
 
 		void VulkanCommandList::CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
 		{
+			ETERNAL_PROFILER(INFO)();
 			if (InSourceResource.GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER)
 			{
 				if (InDestinationResource.GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER)

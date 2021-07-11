@@ -9,10 +9,11 @@ struct IDXGIAdapter1;
 struct ID3D12Device;
 struct ID3D12Device5;
 
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 struct ID3D12Debug;
 struct IDXGIInfoQueue;
 struct ID3D12InfoQueue;
+struct IDXGIDebug;
 #endif
 
 namespace Eternal
@@ -28,6 +29,7 @@ namespace Eternal
 			static IDXGIFactory4* GetDXGIFactory();
 
 			D3D12Device(_In_ uint32_t DeviceIndex);
+			~D3D12Device();
 
 			virtual uint32_t GetDeviceMask() const override final;
 			virtual DeviceType GetDeviceType() const override final { return DeviceType::D3D12; }
@@ -35,9 +37,10 @@ namespace Eternal
 			inline ID3D12Device* GetD3D12Device() { return _Device; }
 
 		private:
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 			static ID3D12Debug*		_Debug;
 			static IDXGIInfoQueue*	_DXGIInfoQueue;
+			static IDXGIDebug*		_DXGIDebug;
 			ID3D12InfoQueue*		_InfoQueue		= nullptr;
 #endif
 			static IDXGIFactory4*	_DXGIFactory;

@@ -45,7 +45,7 @@ namespace Eternal
 			, _Program(nullptr)
 		{
 			ETERNAL_ASSERT(_IncludeHandler);
-#if defined(ETERNAL_DEBUG) && defined(ETERNAL_USE_DEBUG_SHADERS)
+#if ETERNAL_USE_DEBUG_SHADERS
 			_CompileFile(FileName, D3D12_SHADER_ENTRIES[static_cast<int32_t>(Stage)], D3D12_SHADER_PROFILES[static_cast<int32_t>(Stage)], Defines);
 #else
 			_LoadFile(FileName + ".cso");

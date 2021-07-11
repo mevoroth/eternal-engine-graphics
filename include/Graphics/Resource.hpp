@@ -133,12 +133,18 @@ namespace Eternal
 			BufferCreateInformation(
 				_In_ const Format& InFormat,
 				_In_ const BufferResourceUsage& InResourceUsage,
-				_In_ uint32_t InSize
+				_In_ uint32_t InSize,
+				_In_ uint32_t InStride = 0
 			)
 				: ResourceFormat(InFormat)
 				, Usage(InResourceUsage)
 				, Size(InSize)
+				, Stride(InStride)
 			{
+				if (Stride > 0)
+				{
+					ETERNAL_ASSERT(InFormat == Format::FORMAT_UNKNOWN);
+				}
 			}
 
 			Format ResourceFormat		= Format::FORMAT_INVALID;

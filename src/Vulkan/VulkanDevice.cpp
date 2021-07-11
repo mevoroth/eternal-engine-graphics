@@ -343,7 +343,7 @@ namespace Eternal
 
 		uint32_t VulkanDevice::GetNonCoherentMemoryAtomicSize() const
 		{
-			return _PhysicalDeviceProperties.limits.nonCoherentAtomSize;
+			return static_cast<uint32_t>(_PhysicalDeviceProperties.limits.nonCoherentAtomSize);
 		}
 
 		uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const
@@ -363,7 +363,7 @@ namespace Eternal
 			if (MemoryTypeIndex < MemoryTypeCount)
 				return MemoryTypeIndex;
 
-			return -1;
+			return ~0u;
 		}
 
 		void VulkanDevice::GetQueueFamilyIndices(QueueFamilyIndicesType& OutQueueFamilyIndices) const

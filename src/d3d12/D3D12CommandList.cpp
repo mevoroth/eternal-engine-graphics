@@ -15,6 +15,7 @@
 #include "d3d12/D3D12Sampler.hpp"
 #include "d3d12/D3D12GraphicsContext.hpp"
 #include <array>
+#include <string>
 
 namespace Eternal
 {
@@ -46,6 +47,14 @@ namespace Eternal
 			_GraphicCommandList5 = nullptr;
 		}
 
+		void D3D12CommandList::SetName(_In_ const std::string& InName)
+		{
+			std::wstring InNameUTF8(InName.begin(), InName.end());
+			VerifySuccess(
+				_GraphicCommandList5->SetName(InNameUTF8.c_str())
+			);
+		}
+
 		void D3D12CommandList::Begin(_In_ GraphicsContext& InContext)
 		{
 			_GraphicCommandList5->Reset(
@@ -72,6 +81,7 @@ namespace Eternal
 
 		void D3D12CommandList::BeginRenderPass(_In_ const RenderPass& InRenderPass)
 		{
+			ETERNAL_PROFILER(INFO)();
 			CommandList::BeginRenderPass(InRenderPass);
 
 			// Cache this in D3D12RenderPass?
@@ -173,6 +183,7 @@ namespace Eternal
 
 		void D3D12CommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
+			ETERNAL_PROFILER(INFO)();
 			static constexpr D3D12_RESOURCE_BARRIER DefaultBarrier = {};
 			std::array<D3D12_RESOURCE_BARRIER, MaxResourceTransitionsPerSubmit> ResourceBarriers;
 			ResourceBarriers.fill(DefaultBarrier);
@@ -282,8 +293,8 @@ namespace Eternal
 
 		void D3D12CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
-			ETERNAL_ASSERT(GetCurrentSignature() && *GetCurrentSignature() == *InDescriptorTable.GetRootSignature());
-			//ETERNAL_ASSERT(_CurrentRootSignature && GetCurrentSignature() == InDescriptorTable.GetRootSignature()); Faster but limiting possibilities
+			ETERNAL_PROFILER(INFO)();
+			CommandList::SetGraphicsDescriptorTable(InContext, InDescriptorTable);
 			
 			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
 			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
@@ -305,6 +316,7 @@ namespace Eternal
 						InConstants[ConstantIndex].Constants.data(),
 						RootParameterIndex
 					);
+					InConstantsDirtyFlags.Unset(ConstantIndex);
 				}
 			}
 
@@ -380,13 +392,13 @@ namespace Eternal
 				if (DescriptorTableHandle.ptr)
 				{
 					bool IsDirty = InResourcesDirtyFlags.IsSet(ParameterIndex);
-					InResourcesDirtyFlags.Unset(ParameterIndex);
 					if (IsDirty)
 					{
 						_GraphicCommandList5->SetGraphicsRootDescriptorTable(
 							RootParameterIndex,
 							DescriptorTableHandle
 						);
+						InResourcesDirtyFlags.Unset(ParameterIndex);
 					}
 				}
 			}

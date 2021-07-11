@@ -10,6 +10,7 @@ namespace Eternal
 		class Device
 		{
 		public:
+			virtual ~Device() {}
 			virtual uint32_t GetDeviceMask() const = 0;
 			virtual DeviceType GetDeviceType() const = 0;
 		};

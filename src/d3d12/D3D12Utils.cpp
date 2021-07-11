@@ -289,7 +289,7 @@ namespace Eternal
 				RenderTargetBlendDesc.DestBlendAlpha		= ConvertBlendToD3D12Blend(InBlendState.GetDestinationAlpha());
 				RenderTargetBlendDesc.BlendOpAlpha			= ConvertBlendOperatorToD3D12BlendOperator(InBlendState.GetBlendAlphaOperator());
 				RenderTargetBlendDesc.LogicOp				= ConvertLogicOperatorToD3D12LogicOperator(InLogicBlend.GetLogicOperator());
-				RenderTargetBlendDesc.RenderTargetWriteMask	= ConvertBlendChannelToD3D12ColorWriteEnable(InBlendState.GetBlendChannel());
+				RenderTargetBlendDesc.RenderTargetWriteMask	= static_cast<UINT8>(ConvertBlendChannelToD3D12ColorWriteEnable(InBlendState.GetBlendChannel()));
 
 				return RenderTargetBlendDesc;
 			}

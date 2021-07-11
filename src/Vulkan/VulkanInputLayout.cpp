@@ -21,7 +21,7 @@ namespace Eternal
 
 			uint32_t TotalElementsCount = 0;
 			for (uint32_t VertexStreamIndex = 0; VertexStreamIndex < InVertexStreams.size(); ++VertexStreamIndex)
-				TotalElementsCount += InVertexStreams[VertexStreamIndex].GetElements().size();
+				TotalElementsCount += static_cast<uint32_t>(InVertexStreams[VertexStreamIndex].GetElements().size());
 
 			_VertexInputAttributeDescriptions.reserve(TotalElementsCount);
 			_VertexInputBindingDescriptions.resize(InVertexStreams.size());

@@ -17,6 +17,8 @@
 #include "Graphics/CommandList.hpp"
 #include "Graphics/ShaderFactory.hpp"
 #include "Graphics/ViewportFactory.hpp"
+#include "Graphics/View.hpp"
+#include "Graphics/Resource.hpp"
 
 namespace Eternal
 {
@@ -53,14 +55,18 @@ namespace Eternal
 		}
 
 		GraphicsContext::GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
-			: _Window(CreateInformation.Arguments.hInstance,
-					  CreateInformation.Arguments.nCmdShow,
-					  CreateInformation.Arguments.Name,
-					  CreateInformation.Arguments.ClassName,
-					  CreateInformation.Settings.Width,
-					  CreateInformation.Settings.Height)
+			: _Window(WindowCreateInformation(
+				CreateInformation.Arguments.hInstance,
+				CreateInformation.Arguments.nCmdShow,
+				CreateInformation.Arguments.Name,
+				CreateInformation.Arguments.ClassName,
+				CreateInformation.Settings.Width,
+				CreateInformation.Settings.Height,
+				CreateInformation.Settings.IsVSync,
+				CreateInformation.Settings.IsWindowed
+			))
 		{
-			static constexpr uint32_t ResourcesToClearInitialCount = 0;
+			static constexpr uint32_t ResourcesToClearInitialCount = 256;
 
 			_Window.Create(CreateInformation.Arguments.WindowEventsHandler);
 
@@ -83,7 +89,6 @@ namespace Eternal
 
 				for (int32_t CommandTypeIndex = 0; CommandTypeIndex < static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT); ++CommandTypeIndex)
 					_CommandListPools[FrameIndex][CommandTypeIndex].reserve(CommandListUsage[CommandTypeIndex]);
-
 
 				_ViewsToClear[FrameIndex].reserve(ResourcesToClearInitialCount);
 				_ResourcesToClear[FrameIndex].reserve(ResourcesToClearInitialCount);
@@ -141,9 +146,15 @@ namespace Eternal
 
 		void GraphicsContext::BeginFrame()
 		{
-			GetNextFrameFence().Wait(GetDevice());
-			GetNextFrameFence().Reset(GetDevice());
-			GetSwapChain().Acquire(*this);
+			{
+				ETERNAL_PROFILER(INFO)("Fences");
+				GetNextFrameFence().Wait(GetDevice());
+				GetNextFrameFence().Reset(GetDevice());
+			}
+			{
+				ETERNAL_PROFILER(INFO)("Acquire SwapChain");
+				GetSwapChain().Acquire(*this);
+			}
 			ResetFrameStates();
 		}
 
@@ -154,6 +165,7 @@ namespace Eternal
 			uint32_t GraphicsQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_GRAPHIC);
 			if (_CurrentFrameCommandListIndex[CopyQueueIndex] > 0)
 			{
+				ETERNAL_PROFILER(INFO)("Submit Copy Queue");
 				GetCopyQueue().SubmitCommandLists(
 					_CommandListPools[_CurrentFrameIndex][CopyQueueIndex].data(),
 					_CurrentFrameCommandListIndex[CopyQueueIndex]
@@ -162,6 +174,7 @@ namespace Eternal
 			
 			if (_CurrentFrameCommandListIndex[ComputeQueueIndex] > 0)
 			{
+				ETERNAL_PROFILER(INFO)("Submit Compute Queue");
 				GetComputeQueue().SubmitCommandLists(
 					_CommandListPools[_CurrentFrameIndex][ComputeQueueIndex].data(),
 					_CurrentFrameCommandListIndex[ComputeQueueIndex]
@@ -170,31 +183,41 @@ namespace Eternal
 
 			if (_CurrentFrameCommandListIndex[GraphicsQueueIndex] > 0)
 			{
+				ETERNAL_PROFILER(INFO)("Submit Graphics Queue");
 				GetGraphicsQueue().SubmitCommandLists(
 					_CommandListPools[_CurrentFrameIndex][GraphicsQueueIndex].data(),
 					_CurrentFrameCommandListIndex[GraphicsQueueIndex],
 					this
 				);
 			}
-
-			GetSwapChain().Present(*this);
+			{
+				ETERNAL_PROFILER(INFO)("Present");
+				GetSwapChain().Present(*this);
+			}
 		}
 
 		void GraphicsContext::ResetFrameStates()
 		{
-			_CurrentFrameCommandListIndex.fill(0);
-			for (uint32_t CommandTypeIndex = 0; CommandTypeIndex < _CommandAllocators.size(); ++CommandTypeIndex)
-				_CommandAllocators[_CurrentFrameIndex][CommandTypeIndex]->Reset();
+			ETERNAL_PROFILER(DETAIL)();
+			{
+				ETERNAL_PROFILER(INFO)("CommandAllocators");
+				_CurrentFrameCommandListIndex.fill(0);
+				for (uint32_t CommandTypeIndex = 0; CommandTypeIndex < _CommandAllocators.size(); ++CommandTypeIndex)
+					_CommandAllocators[_CurrentFrameIndex][CommandTypeIndex]->Reset();
+			}
 
-			vector<View*>& ViewsToClear = _ViewsToClear[_CurrentFrameIndex];
-			for (uint32_t ViewIndex = 0; ViewIndex < ViewsToClear.size(); ++ViewIndex)
-				delete ViewsToClear[ViewIndex];
-			ViewsToClear.clear();
+			{
+				ETERNAL_PROFILER(INFO)("Vectors");
+				vector<View*>& ViewsToClear = _ViewsToClear[_CurrentFrameIndex];
+				for (uint32_t ViewIndex = 0; ViewIndex < ViewsToClear.size(); ++ViewIndex)
+					delete ViewsToClear[ViewIndex];
+				ViewsToClear.clear();
 
-			vector<Resource*>& ResourcesToClear = _ResourcesToClear[_CurrentFrameIndex];
-			for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesToClear.size(); ++ResourceIndex)
-				delete ResourcesToClear[ResourceIndex];
-			ResourcesToClear.clear();
+				vector<Resource*>& ResourcesToClear = _ResourcesToClear[_CurrentFrameIndex];
+				for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesToClear.size(); ++ResourceIndex)
+					delete ResourcesToClear[ResourceIndex];
+				ResourcesToClear.clear();
+			}
 		}
 
 		CommandQueue& GraphicsContext::GetGraphicsQueue()
@@ -203,7 +226,7 @@ namespace Eternal
 			return *_GraphicsQueue;
 		}
 
-		CommandList* GraphicsContext::CreateNewCommandList(const CommandType& Type)
+		CommandList* GraphicsContext::CreateNewCommandList(_In_ const CommandType& Type, _In_ const std::string& InName)
 		{
 			uint32_t TypeInt			= static_cast<int32_t>(Type);
 			uint32_t CommandListIndex	= _CurrentFrameCommandListIndex[TypeInt]++;
@@ -212,12 +235,14 @@ namespace Eternal
 
 			if (CommandListIndex < CurrentCommandListPool.size())
 			{
+				CurrentCommandListPool[CommandListIndex]->SetName(InName);
 				return CurrentCommandListPool[CommandListIndex];
 			}
 
 			CurrentCommandListPool.push_back(
 				CreateCommandList(*_Device, *_CommandAllocators[_CurrentFrameIndex][TypeInt])
 			);
+			CurrentCommandListPool.back()->SetName(InName);
 			return CurrentCommandListPool.back();
 		}
 
@@ -235,6 +260,12 @@ namespace Eternal
 		template<> void GraphicsContext::DelayedDelete<Resource>(_In_ Resource* InResource)
 		{
 			_ResourcesToClear[_CurrentFrameIndex].push_back(InResource);
+		}
+
+		void GraphicsContext::WaitForAllFences()
+		{
+			for (int32_t FrameIndex = 0; FrameIndex < FrameBufferingCount; ++FrameIndex)
+				_FrameFences[FrameIndex]->Wait(GetDevice());
 		}
 	}
 }

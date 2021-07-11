@@ -13,35 +13,45 @@ namespace Eternal
 	{
 		struct RenderSettings
 		{
-			RenderSettings(uint32_t Width, uint32_t Height, const DeviceType& Driver)
-				: Width(Width)
-				, Height(Height)
-				, Driver(Driver)
+			RenderSettings(
+				_In_ const DeviceType& InDriver,
+				_In_ uint32_t InWidth,
+				_In_ uint32_t InHeight,
+				_In_ bool InIsVSync = false,
+				_In_ bool InIsWindowed = true
+			)
+				: Driver(InDriver)
+				, Width(InWidth)
+				, Height(InHeight)
+				, IsVSync(InIsVSync)
+				, IsWindowed(InIsWindowed)
 			{}
 
-			DeviceType Driver = DeviceType::VULKAN;
-			uint32_t Width	= 1;
-			uint32_t Height	= 1;
+			DeviceType Driver	= DeviceType::VULKAN;
+			uint32_t Width		= 1;
+			uint32_t Height		= 1;
+			bool IsVSync		= false;
+			bool IsWindowed		= true;
 		};
 
 		struct WindowsArguments
 		{
 			WindowsArguments(
-				HINSTANCE hInstance,
-				HINSTANCE hPrevInstance,
-				LPSTR lpCmdLine,
-				int nCmdShow,
-				const char* Name,
-				const char* ClassName,
-				WNDPROC WindowEventsHandler
+				_In_ HINSTANCE hInInstance,
+				_In_ HINSTANCE hInPrevInstance,
+				_In_ LPSTR lpInCmdLine,
+				_In_ int nInCmdShow,
+				_In_ const char* InName,
+				_In_ const char* InClassName,
+				_In_ WNDPROC InWindowEventsHandler
 			)
-				: hInstance(hInstance)
-				, hPrevInstance(hPrevInstance)
-				, lpCmdLine(lpCmdLine)
-				, nCmdShow(nCmdShow)
-				, Name(Name)
-				, ClassName(ClassName)
-				, WindowEventsHandler(WindowEventsHandler)
+				: hInstance(hInInstance)
+				, hPrevInstance(hInPrevInstance)
+				, lpCmdLine(lpInCmdLine)
+				, nCmdShow(nInCmdShow)
+				, Name(InName)
+				, ClassName(InClassName)
+				, WindowEventsHandler(InWindowEventsHandler)
 			{
 			}
 

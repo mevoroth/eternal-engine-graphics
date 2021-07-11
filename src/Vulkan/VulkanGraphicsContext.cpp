@@ -51,6 +51,8 @@ namespace Eternal
 
 		VulkanGraphicsContext::~VulkanGraphicsContext()
 		{
+			WaitForAllFences();
+
 			vk::Device& VkDevice = static_cast<VulkanDevice&>(GetDevice()).GetVulkanDevice();
 			for (int32_t AcquireSemaphoreIndex = 0; AcquireSemaphoreIndex < _AcquireFrameSemaphores.size(); ++AcquireSemaphoreIndex)
 			{

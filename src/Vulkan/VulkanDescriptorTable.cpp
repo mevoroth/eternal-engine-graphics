@@ -71,6 +71,7 @@ namespace Eternal
 
 		void VulkanDescriptorTable::Commit(_In_ GraphicsContext& InContext, _In_ const vector<RootSignatureParameter>& InRootSignatureParameters)
 		{
+			ETERNAL_PROFILER(INFO)();
 			array<vk::WriteDescriptorSet, MaxWriteDescriptorSets> WriteDescriptorSets;
 			WriteDescriptorSets.fill(vk::WriteDescriptorSet());
 
@@ -160,6 +161,7 @@ namespace Eternal
 
 			if (IsSetCount > 0)
 			{
+				ETERNAL_PROFILER(INFO)("UpdateDescriptorSets");
 				const vk::DescriptorSet& CurrentDescriptorSet = AllocateVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
 
 				for (uint32_t DescriptorSetIndex = 0; DescriptorSetIndex < DescriptorSetsCount; ++DescriptorSetIndex)
@@ -174,6 +176,7 @@ namespace Eternal
 
 		void VulkanDescriptorTable::Commit(_In_ GraphicsContext& InContext, _In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable)
 		{
+			ETERNAL_PROFILER(INFO)();
 			array<vk::WriteDescriptorSet, MaxWriteDescriptorSets> WriteDescriptorSets;
 			WriteDescriptorSets.fill(vk::WriteDescriptorSet());
 
@@ -194,8 +197,6 @@ namespace Eternal
 			uint32_t DescriptorsCount = 0;
 			uint32_t WriteDescriptorsCount = 0;
 			uint32_t IsSetCount = 0;
-
-			const vk::DescriptorSet& CurrentDescriptorSet = AllocateVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
 
 			for (uint32_t ParameterIndex = 0; ParameterIndex < InParameters.size(); ++ParameterIndex)
 			{
@@ -267,6 +268,7 @@ namespace Eternal
 
 			if (IsSetCount > 0)
 			{
+				ETERNAL_PROFILER(INFO)("UpdateDescriptorSets");
 				const vk::DescriptorSet& CurrentDescriptorSet = AllocateVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
 
 				for (uint32_t DescriptorSetIndex = 0; DescriptorSetIndex < WriteDescriptorsCount; ++DescriptorSetIndex)

@@ -170,7 +170,7 @@ namespace Eternal
 					CurrentConstantRange.offset					= static_cast<uint32_t>(InHandle * ByteTo32Bits);
 					OutRangeCount								= 1;
 
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 					ETERNAL_ASSERT(!IsConstantRangeOpen);
 					IsConstantRangeOpen = true;
 #endif
@@ -182,7 +182,7 @@ namespace Eternal
 				auto CloseConstantRange = [&IsConstantRangeOpen](uint32_t InRangeCount, vk::PushConstantRange& InOutConstantRange)
 				{
 					InOutConstantRange.size						= InRangeCount * ByteTo32Bits;
-#ifdef ETERNAL_DEBUG
+#if ETERNAL_DEBUG
 					ETERNAL_ASSERT(IsConstantRangeOpen);
 					IsConstantRangeOpen = false;
 #endif
@@ -204,9 +204,9 @@ namespace Eternal
 						_PushConstantRanges
 					);
 
-					for (uint32_t ConstantIndex = 1; ConstantIndex < CurrentConstantCount; ++ConstantIndex)
+					for (uint32_t NextConstantIndex = 1; NextConstantIndex < CurrentConstantCount; ++NextConstantIndex)
 					{
-						uint32_t CurrentHandleIndex = (HandleIndexOffset + ConstantIndex);
+						uint32_t CurrentHandleIndex = (HandleIndexOffset + NextConstantIndex);
 						ETERNAL_ASSERT(CurrentHandleIndex < _ConstantHandles.size());
 						bool IsContigous = _ConstantHandles[CurrentHandleIndex].IsContigous(PreviousHandle);
 						PreviousHandle = _ConstantHandles[CurrentHandleIndex];

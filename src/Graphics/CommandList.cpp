@@ -1,4 +1,5 @@
 #include "Graphics/CommandList.hpp"
+#include "Graphics/DescriptorTable.hpp"
 
 namespace Eternal
 {
@@ -54,6 +55,15 @@ namespace Eternal
 			ETERNAL_ASSERT((_CommandListState & CommandListState::COMMAND_LIST_STATE_OPENED) == CommandListState::COMMAND_LIST_STATE_OPENED);
 			_CommandListState &= ~CommandListState::COMMAND_LIST_STATE_OPENED;
 			SetCurrentRootSignature(nullptr);
+		}
+
+		void CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
+#if ETERNAL_DEBUG_MATCHING_ROOT_SIGNATURE
+			ETERNAL_ASSERT(GetCurrentSignature() && *GetCurrentSignature() == *InDescriptorTable.GetRootSignature());
+#elif ETERNAL_DEBUG
+			ETERNAL_ASSERT(GetCurrentSignature() && GetCurrentSignature() == InDescriptorTable.GetRootSignature()); // Faster but limiting possibilities
+#endif
 		}
 
 		ResourceTransitionScope::ResourceTransitionScope(_In_ CommandList& InCommandList, _In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)

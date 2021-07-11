@@ -31,7 +31,7 @@ namespace Eternal
 
 			SwapChainDesc.BufferDesc.Width						= InWindow.GetWidth();
 			SwapChainDesc.BufferDesc.Height						= InWindow.GetHeight();
-			SwapChainDesc.BufferDesc.RefreshRate.Numerator		= 60;
+			SwapChainDesc.BufferDesc.RefreshRate.Numerator		= InWindow.GetVSync() ? 0 : 60;
 			SwapChainDesc.BufferDesc.RefreshRate.Denominator	= 1;
 			SwapChainDesc.BufferDesc.Scaling					= DXGI_MODE_SCALING_STRETCHED;
 			SwapChainDesc.BufferDesc.RefreshRate.Denominator	= 1;
@@ -45,7 +45,8 @@ namespace Eternal
 			SwapChainDesc.OutputWindow							= InWindow.GetWindowHandler();
 			SwapChainDesc.Windowed								= InWindow.GetWindowed() ? TRUE : FALSE;
 			SwapChainDesc.SwapEffect							= DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-			SwapChainDesc.Flags									= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
+			SwapChainDesc.Flags									= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT
+																| (InWindow.GetVSync() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : DXGI_SWAP_CHAIN_FLAG(0));
 
 			VerifySuccess(
 				D3D12Device::GetDXGIFactory()->CreateSwapChain(static_cast<D3D12CommandQueue&>(Context.GetGraphicsQueue()).GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain)

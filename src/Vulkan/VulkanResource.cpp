@@ -47,7 +47,7 @@ namespace Eternal
 				vk::ImageTiling::eOptimal,
 				ConvertTextureResourceUsageToVulkanImageUsageFlags(InResourceCreateInformation.TextureInformation.Usage),
 				vk::SharingMode::eExclusive,
-				QueueFamilies.size(),
+				static_cast<uint32_t>(QueueFamilies.size()),
 				QueueFamilies.data()
 			);
 
@@ -96,7 +96,7 @@ namespace Eternal
 				InResourceCreateInformation.BufferInformation.Size,
 				ConvertBufferResourceUsageToVulkanBufferUsageFlags(InResourceCreateInformation.BufferInformation.Usage),
 				vk::SharingMode::eExclusive,
-				QueueFamilies.size(),
+				static_cast<uint32_t>(QueueFamilies.size()),
 				QueueFamilies.data()
 			);
 

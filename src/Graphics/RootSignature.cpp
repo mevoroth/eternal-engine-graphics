@@ -119,15 +119,12 @@ namespace Eternal
 								*this,
 								SubDescriptorTableIndex
 							);
-
-						default:
-							ETERNAL_BREAK();
-							return nullptr;
-							break;
 						}
 					}
 				}
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		void RootSignature::CreateDescriptorTables(_In_ GraphicsContext& InContext, _Out_ vector<DescriptorTable*>& OutDescriptorTables)
