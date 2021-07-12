@@ -8,7 +8,7 @@
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
-using namespace Eternal::File;
+using namespace Eternal::FileSystem;
 using namespace std;
 
 namespace Eternal
@@ -72,7 +72,7 @@ namespace Eternal
 
 			ID3DBlob* Errors = nullptr;
 
-			string FullPathSource = FilePath::Find(FileName, FileType::SHADERS);
+			string FullPathSource = FilePath::Find(FileName, FileType::FILE_TYPE_SHADERS);
 
 			uint32_t MacrosCount = static_cast<uint32_t>(Defines.size()) / 2;
 			vector<D3D_SHADER_MACRO> Macros;
@@ -138,7 +138,7 @@ namespace Eternal
 		STDMETHODIMP D3D12Shader::D3D12Include::Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes)
 		{
 			string IncludeSrc = pFileName;
-			string FullPathSrc = FilePath::Find(IncludeSrc, FileType::SHADERS);
+			string FullPathSrc = FilePath::Find(IncludeSrc, FileType::FILE_TYPE_SHADERS);
 			ifstream IncludedFile(FullPathSrc.c_str(), ios::in | ios::binary | ios::ate);
 	
 			if (!IncludedFile)

@@ -11,7 +11,7 @@
 #include "File/FileFactory.hpp"
 
 using namespace Eternal::Graphics;
-using namespace Eternal::File;
+using namespace Eternal::FileSystem;
 
 static constexpr shaderc_shader_kind SHADER_KINDS[] =
 {
@@ -38,9 +38,9 @@ ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == int(ShaderType::
 static shaderc_include_result* IncludeResolver(void* UserData, const char* RequestedSource, int Type, const char* RequestingSource, size_t IncludeDepth)
 {
 	std::vector<char>* ShaderSourceCode = new std::vector<char>();
-	string FullPathSrc = FilePath::Find(RequestedSource, FileType::SHADERS);
-	Eternal::File::File* ShaderFile = CreateFileHandle(FullPathSrc);
-	ShaderFile->Open(Eternal::File::File::READ);
+	string FullPathSrc = FilePath::Find(RequestedSource, FileType::FILE_TYPE_SHADERS);
+	File* ShaderFile = CreateFileHandle(FullPathSrc);
+	ShaderFile->Open(File::READ);
 	uint64_t ShaderFileSize = ShaderFile->GetFileSize();
 	ShaderSourceCode->resize(ShaderFileSize);
 	ShaderFile->Read((uint8_t*)ShaderSourceCode->data(), ShaderSourceCode->size());
@@ -92,9 +92,9 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 	const uint32_t VulkanVersion = static_cast<VulkanDevice&>(InDevice).GetVulkanVersion();
 
 	std::vector<char> ShaderSourceCode;
-	string FullPathSrc = FilePath::Find(FileName, FileType::SHADERS);
-	Eternal::File::File* ShaderFile = CreateFileHandle(FullPathSrc);
-	ShaderFile->Open(Eternal::File::File::READ);
+	string FullPathSrc = FilePath::Find(FileName, FileType::FILE_TYPE_SHADERS);
+	File* ShaderFile = CreateFileHandle(FullPathSrc);
+	ShaderFile->Open(File::READ);
 	uint64_t ShaderFileSize = ShaderFile->GetFileSize();
 	ShaderSourceCode.resize(ShaderFileSize);
 	ShaderFile->Read((uint8_t*)ShaderSourceCode.data(), ShaderSourceCode.size());

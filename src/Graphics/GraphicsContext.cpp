@@ -48,7 +48,7 @@ namespace Eternal
 			return Context;
 		}
 
-		void DestroyGraphicsContext(GraphicsContext*& Context)
+		void DestroyGraphicsContext(_Inout_ GraphicsContext*& Context)
 		{
 			delete Context;
 			Context = nullptr;

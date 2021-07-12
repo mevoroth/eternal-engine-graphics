@@ -108,6 +108,6 @@ namespace Eternal
 		};
 
 		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
-		void DestroyGraphicsContext(GraphicsContext*& Context);
+		void DestroyGraphicsContext(_Inout_ GraphicsContext*& Context);
 	}
 }
