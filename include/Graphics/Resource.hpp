@@ -274,6 +274,8 @@ namespace Eternal
 			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType);
 			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }
 
+			const ResourceType& GetRawResourceType() const { return _ResourceType; }
+
 		private:
 			ResourceType				_ResourceType = ResourceType::RESOURCE_TYPE_UNKNOWN; // Used to track down type of resource
 			ResourceCreateInformation	_ResourceCreateInformation;

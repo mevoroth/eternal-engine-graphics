@@ -185,6 +185,11 @@ namespace Eternal
 			}
 		}
 
+		VulkanSwapChain::~VulkanSwapChain()
+		{
+
+		}
+
 		void VulkanSwapChain::Acquire(GraphicsContext& Context)
 		{
 			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);

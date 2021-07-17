@@ -136,15 +136,18 @@ namespace Eternal
 		{
 			vk::Device& VkDevice = static_cast<VulkanDevice&>(GetResourceCreateInformation().GfxDevice).GetVulkanDevice();
 			VkDevice.freeMemory(_ResourceMemory);
-			switch (GetResourceType())
+			if (GetRawResourceType() != ResourceType::RESOURCE_TYPE_BACK_BUFFER)
 			{
-			case ResourceType::RESOURCE_TYPE_TEXTURE:
-				VkDevice.destroyImage(_VulkanResourceMetaData.ImageResource);
-				break;
+				switch (GetResourceType())
+				{
+				case ResourceType::RESOURCE_TYPE_TEXTURE:
+					VkDevice.destroyImage(_VulkanResourceMetaData.ImageResource);
+					break;
 
-			case ResourceType::RESOURCE_TYPE_BUFFER:
-				VkDevice.destroyBuffer(_VulkanResourceMetaData.BufferResource);
-				break;
+				case ResourceType::RESOURCE_TYPE_BUFFER:
+					VkDevice.destroyBuffer(_VulkanResourceMetaData.BufferResource);
+					break;
+				}
 			}
 		}
 

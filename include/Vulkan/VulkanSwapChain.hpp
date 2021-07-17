@@ -20,6 +20,7 @@ namespace Eternal
 		{
 		public:
 			VulkanSwapChain(_In_ GraphicsContext& Context);
+			~VulkanSwapChain();
 
 			virtual void Acquire(GraphicsContext& Context) override final;
 			virtual void Present(GraphicsContext& Context) override final;

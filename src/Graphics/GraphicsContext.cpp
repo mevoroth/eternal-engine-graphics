@@ -155,11 +155,32 @@ namespace Eternal
 				ETERNAL_PROFILER(INFO)("Acquire SwapChain");
 				GetSwapChain().Acquire(*this);
 			}
+
 			ResetFrameStates();
+
+			{
+				ETERNAL_PROFILER(INFO)("TransitionBackBufferToRenderTarget");
+				const vector<View*>& BackBufferViews = GetSwapChain().GetBackBufferRenderTargetViews();
+				CommandList* TransitionToRenderTargetCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "TransitionBackBufferToRenderTarget");
+				TransitionToRenderTargetCommandList->Begin(*this);
+				ResourceTransition BackBufferPresentToRenderTarget(BackBufferViews[GetCurrentFrameIndex()], TransitionState::TRANSITION_RENDER_TARGET);
+				TransitionToRenderTargetCommandList->Transition(&BackBufferPresentToRenderTarget, 1);
+				TransitionToRenderTargetCommandList->End();
+			}
 		}
 
 		void GraphicsContext::EndFrame()
 		{
+			{
+				ETERNAL_PROFILER(INFO)("TransitionBackBufferToPresent");
+				const vector<View*>& BackBufferViews = GetSwapChain().GetBackBufferRenderTargetViews();
+				CommandList* TransitionToBackBufferCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "TransitionBackBufferToPresent");
+				ResourceTransition BackBufferRenderTargetToPresent(BackBufferViews[GetCurrentFrameIndex()], TransitionState::TRANSITION_PRESENT);
+				TransitionToBackBufferCommandList->Begin(*this);
+				TransitionToBackBufferCommandList->Transition(&BackBufferRenderTargetToPresent, 1);
+				TransitionToBackBufferCommandList->End();
+			}
+
 			uint32_t CopyQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_COPY);
 			uint32_t ComputeQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_COMPUTE);
 			uint32_t GraphicsQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_GRAPHIC);
