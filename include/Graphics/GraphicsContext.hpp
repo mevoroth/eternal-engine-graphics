@@ -11,6 +11,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace std;
+
 		struct ShaderCreateInformation;
 
 		class Device;
@@ -21,6 +23,7 @@ namespace Eternal
 		class CommandList;
 		class ShaderFactory;
 		class Shader;
+		class GraphicsContext;
 
 		struct GraphicsContextCreateInformation
 		{
@@ -31,6 +34,11 @@ namespace Eternal
 
 			RenderSettings Settings;
 			WindowsArguments Arguments;
+		};
+
+		struct GraphicsCommand
+		{
+			virtual void Execute(_In_ GraphicsContext& InContext) = 0;
 		};
 
 		class GraphicsContext
@@ -71,6 +79,8 @@ namespace Eternal
 			template<typename ResourceType>
 			void DelayedDelete(_In_ ResourceType* InResource);
 
+			void RegisterGraphicsCommands(_In_ vector<GraphicsCommand*>* InCommands);
+
 		protected:
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 
@@ -78,20 +88,22 @@ namespace Eternal
 
 		private:
 
-			std::array<
-				std::array<CommandAllocator*, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>,
+			array<
+				array<CommandAllocator*, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>,
 				FrameBufferingCount
 			> _CommandAllocators;
 
-			std::array<
-				std::array<std::vector<CommandList*>, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>,
+			array<
+				array<vector<CommandList*>, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>,
 				FrameBufferingCount
 			> _CommandListPools;
 
-			std::array<uint32_t, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>	_CurrentFrameCommandListIndex;
-			std::array<Fence*, FrameBufferingCount>										_FrameFences;
-			std::array<std::vector<View*>, FrameBufferingCount>							_ViewsToClear;
-			std::array<std::vector<Resource*>, FrameBufferingCount>						_ResourcesToClear;
+			array<uint32_t, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>	_CurrentFrameCommandListIndex;
+			array<Fence*, FrameBufferingCount>										_FrameFences;
+			array<vector<View*>, FrameBufferingCount>								_ViewsToClear;
+			array<vector<Resource*>, FrameBufferingCount>							_ResourcesToClear;
+
+			vector<GraphicsCommand*>*												_GraphicsCommands = nullptr;
 
 			Window _Window;
 			Viewport* _MainViewportFullScreen	= nullptr;

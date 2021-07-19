@@ -167,6 +167,16 @@ namespace Eternal
 				TransitionToRenderTargetCommandList->Transition(&BackBufferPresentToRenderTarget, 1);
 				TransitionToRenderTargetCommandList->End();
 			}
+
+			{
+				ETERNAL_PROFILER(INFO)("GraphicsCommands");
+				if (_GraphicsCommands)
+				{
+					for (uint32_t CommandIndex = 0, CommandCount = _GraphicsCommands->size(); CommandIndex < CommandCount; ++CommandIndex)
+						(*_GraphicsCommands)[CommandIndex]->Execute(*this);
+					_GraphicsCommands = nullptr;
+				}
+			}
 		}
 
 		void GraphicsContext::EndFrame()
@@ -287,6 +297,11 @@ namespace Eternal
 		{
 			for (int32_t FrameIndex = 0; FrameIndex < FrameBufferingCount; ++FrameIndex)
 				_FrameFences[FrameIndex]->Wait(GetDevice());
+		}
+
+		void GraphicsContext::RegisterGraphicsCommands(_In_ vector<GraphicsCommand *>* InCommands)
+		{
+			_GraphicsCommands = InCommands;
 		}
 	}
 }
