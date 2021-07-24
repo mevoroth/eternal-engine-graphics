@@ -27,5 +27,11 @@ namespace Eternal
 			}
 			return nullptr;
 		}
+
+		void DestroyRenderPass(_Inout_ RenderPass*& InOutRenderPass)
+		{
+			delete InOutRenderPass;
+			InOutRenderPass = nullptr;
+		}
 	}
 }

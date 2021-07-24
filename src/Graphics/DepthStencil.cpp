@@ -8,5 +8,6 @@ namespace Eternal
 	namespace Graphics
 	{
 		const DepthStencil DepthStencilNoneNone(DepthTestNone, StencilTestNone);
+		const DepthStencil DepthStencilTestWriteLessNone(DepthTestTestWriteLess, StencilTestNone);
 	}
 }

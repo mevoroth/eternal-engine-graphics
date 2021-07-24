@@ -194,5 +194,7 @@ namespace Eternal
 		private:
 			RootSignatureCreateInformation _CreateInformation;
 		};
+
+		void DestroyDescriptorTable(_Inout_ DescriptorTable*& InOutDescriptorTable);
 	}
 }

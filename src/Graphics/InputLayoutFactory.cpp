@@ -27,5 +27,11 @@ namespace Eternal
 				return nullptr;
 			}
 		}
+
+		void DestroyInputLayout(_Inout_ InputLayout*& InOutInputLayout)
+		{
+			delete InOutInputLayout;
+			InOutInputLayout = nullptr;
+		}
 	}
 }

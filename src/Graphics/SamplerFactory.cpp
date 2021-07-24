@@ -26,5 +26,11 @@ namespace Eternal
 				return nullptr;
 			}
 		}
+
+		void DestroySampler(_Inout_ Sampler*& InOutSampler)
+		{
+			delete InOutSampler;
+			InOutSampler = nullptr;
+		}
 	}
 }

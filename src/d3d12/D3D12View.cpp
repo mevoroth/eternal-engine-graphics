@@ -122,7 +122,7 @@ namespace Eternal
 				D3D12RenderTargetViewDesc.Texture3D.FirstWSlice							= InMetaData.RenderTargetViewTexture3D.FirstWSlice;
 				D3D12RenderTargetViewDesc.Texture3D.WSize								= InMetaData.RenderTargetViewTexture3D.WSize;
 			} break;
-			case ViewRenderTargetType::VIEW_RENDER_TARGET_UNKOWN:
+			case ViewRenderTargetType::VIEW_RENDER_TARGET_UNKNOWN:
 			{
 				ETERNAL_BREAK();
 			} break;
@@ -240,6 +240,12 @@ namespace Eternal
 				&D3D12ShaderResourceViewDesc,
 				_D3D12Handle.D3D12CPUDescriptorHandle
 			);
+		}
+
+		D3D12View::D3D12View(_In_ const UnorderedAccessViewCreateInformation& InViewCreateInformation)
+			: View(InViewCreateInformation)
+		{
+			ETERNAL_BREAK();
 		}
 
 		D3D12View::~D3D12View()

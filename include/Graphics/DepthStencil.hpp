@@ -32,5 +32,6 @@ namespace Eternal
 		};
 
 		extern const DepthStencil DepthStencilNoneNone;
+		extern const DepthStencil DepthStencilTestWriteLessNone;
 	}
 }

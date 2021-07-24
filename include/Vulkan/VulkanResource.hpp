@@ -40,13 +40,15 @@ namespace Eternal
 			VulkanResource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation);
 			virtual ~VulkanResource();
 
-			virtual void* Map(_In_ const MapRange& InMapRange) override final;
 			virtual void Unmap(_In_ const MapRange& InMapRange) override final;
 
 			const vk::Image& GetVulkanImage() const;
 			const vk::Buffer& GetVulkanBuffer() const;
 			vk::Image& GetVulkanImage();
 			vk::Buffer& GetVulkanBuffer();
+
+		protected:
+			virtual void* Map(_In_ const MapRange& InMapRange) override final;
 
 		private:
 			union VulkanResourceMetaData

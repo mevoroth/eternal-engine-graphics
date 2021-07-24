@@ -18,6 +18,8 @@ namespace Eternal
 				);
 		}
 
+		//////////////////////////////////////////////////////////////////////////
+
 		Resource::Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType)
 			: _ResourceCreateInformation(InResourceCreateInformation)
 			, _ResourceType(InResourceType)

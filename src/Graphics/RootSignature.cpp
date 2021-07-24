@@ -166,5 +166,11 @@ namespace Eternal
 				}
 			}
 		}
+
+		void DestroyDescriptorTable(_Inout_ DescriptorTable*& InOutDescriptorTable)
+		{
+			delete InOutDescriptorTable;
+			InOutDescriptorTable = nullptr;
+		}
 	}
 }

@@ -172,8 +172,14 @@ namespace Eternal
 				ETERNAL_PROFILER(INFO)("GraphicsCommands");
 				if (_GraphicsCommands)
 				{
-					for (uint32_t CommandIndex = 0, CommandCount = _GraphicsCommands->size(); CommandIndex < CommandCount; ++CommandIndex)
-						(*_GraphicsCommands)[CommandIndex]->Execute(*this);
+					CommandList* GraphicsCommandsCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "GraphicsCommands");
+					for (uint32_t CommandIndex = 0, CommandCount = static_cast<uint32_t>(_GraphicsCommands->size()); CommandIndex < CommandCount; ++CommandIndex)
+					{
+						(*_GraphicsCommands)[CommandIndex]->Execute(*this, *GraphicsCommandsCommandList);
+						delete (*_GraphicsCommands)[CommandIndex];
+						(*_GraphicsCommands)[CommandIndex] = nullptr;
+					}
+					_GraphicsCommands->clear();
 					_GraphicsCommands = nullptr;
 				}
 			}

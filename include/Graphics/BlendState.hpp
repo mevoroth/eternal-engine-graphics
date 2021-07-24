@@ -126,6 +126,7 @@ namespace Eternal
 
 		extern const BlendState BlendStateNone;
 		extern const BlendState BlendStateAlphaBlend;
+		extern const BlendState BlendStateAdditive;
 		extern const LogicBlend LogicBlendNone;
 	}
 }

@@ -13,5 +13,6 @@ namespace Eternal
 		struct RenderPassCreateInformation;
 
 		RenderPass* CreateRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation);
+		void DestroyRenderPass(_Inout_ RenderPass*& InOutRenderPass);
 	}
 }

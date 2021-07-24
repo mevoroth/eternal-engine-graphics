@@ -27,5 +27,11 @@ namespace Eternal
 				return nullptr;
 			}
 		}
+
+		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline)
+		{
+			delete InOutPipeline;
+			InOutPipeline = nullptr;
+		}
 	}
 }

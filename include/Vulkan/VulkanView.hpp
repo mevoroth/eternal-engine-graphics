@@ -13,6 +13,8 @@ namespace Eternal
 			VulkanView(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation);
 			VulkanView(_In_ const ConstantBufferViewCreateInformation& InViewCreateInformation);
 			VulkanView(_In_ const ShaderResourceViewCreateInformation& InViewCreateInformation);
+			VulkanView(_In_ const UnorderedAccessViewCreateInformation& InViewCreateInformation);
+			VulkanView(_In_ const DepthStencilViewCreateInformation& InViewCreateInformation);
 			~VulkanView();
 
 			const vk::ImageSubresourceRange& GetVulkanSubresourceRange() const { return _SubresourceRange; }

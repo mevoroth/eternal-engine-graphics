@@ -12,5 +12,6 @@ namespace Eternal
 			_In_ GraphicsContext& InContext,
 			_In_ const PipelineCreateInformation& InPipelineCreateInformation
 		);
+		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline);
 	}
 }

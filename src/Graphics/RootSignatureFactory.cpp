@@ -45,5 +45,11 @@ namespace Eternal
 				return nullptr;
 			}
 		}
+
+		void DestroyRootSignature(_Inout_ RootSignature*& InOutRootSignature)
+		{
+			delete InOutRootSignature;
+			InOutRootSignature = nullptr;
+		}
 	}
 }

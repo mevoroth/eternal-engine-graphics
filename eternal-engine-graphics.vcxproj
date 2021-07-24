@@ -133,6 +133,7 @@
     <ClCompile Include="src\Graphics\CommandQueueFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandUtils.cpp" />
     <ClCompile Include="src\Graphics\DescriptorTable.cpp" />
+    <ClCompile Include="src\Graphics\Format.cpp" />
     <ClCompile Include="src\Graphics\GraphicsContext.cpp" />
     <ClCompile Include="src\Graphics\DepthStencil.cpp" />
     <ClCompile Include="src\Graphics\DepthTest.cpp" />

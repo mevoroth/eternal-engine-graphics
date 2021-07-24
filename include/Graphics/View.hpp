@@ -51,7 +51,7 @@ namespace Eternal
 
 		enum class ViewRenderTargetType
 		{
-			VIEW_RENDER_TARGET_UNKOWN = 0,
+			VIEW_RENDER_TARGET_UNKNOWN = 0,
 			VIEW_RENDER_TARGET_BUFFER,
 			VIEW_RENDER_TARGET_TEXTURE_1D,
 			VIEW_RENDER_TARGET_TEXTURE_1D_ARRAY,
@@ -59,6 +59,16 @@ namespace Eternal
 			VIEW_RENDER_TARGET_TEXTURE_2D_ARRAY,
 			VIEW_RENDER_TARGET_TEXTURE_3D,
 			VIEW_RENDER_TARGET_COUNT
+		};
+
+		enum class ViewDepthStencilType
+		{
+			VIEW_DEPTH_STENCIL_UNKNOWN			= 0,
+			VIEW_DEPTH_STENCIL_TEXTURE_1D,
+			VIEW_DEPTH_STENCIL_TEXTURE_1D_ARRAY,
+			VIEW_DEPTH_STENCIL_TEXTURE_2D,
+			VIEW_DEPTH_STENCIL_TEXTURE_2D_ARRAY,
+			VIEW_DEPTH_STENCIL_COUNT
 		};
 
 		union ViewMetaData
@@ -178,6 +188,74 @@ namespace Eternal
 				float ResourceMinLODClamp		= 0.0f;
 			} ShaderResourceViewTextureCubeArray;
 
+			//////////////////////////////////////////////////////////////////////////
+			// UAV
+			struct
+			{
+				uint32_t FirstElement			= 0;
+				uint32_t NumElements			= 0;
+				uint32_t StructureByteStride	= 0;
+			} UnorderedAccessViewBuffer;
+
+			struct
+			{
+				uint32_t MipSlice				= 0;
+			} UnorderedAccessViewTexture1D;
+
+			struct
+			{
+				uint32_t MipSlice				= 0;
+				uint32_t FirstArraySlice		= 0;
+				uint32_t ArraySize				= 0;
+			} UnorderedAccessViewTexture1DArray;
+
+			struct
+			{
+				uint32_t MipSlice				= 0;
+				uint32_t PlaneSlice				= 0;
+			} UnorderedAccessViewTexture2D;
+
+			struct
+			{
+				uint32_t MipSlice				= 0;
+				uint32_t FirstArraySlice		= 0;
+				uint32_t ArraySize				= 0;
+				uint32_t PlaneSlice				= 0;
+			} UnorderedAccessViewTexture2DArray;
+
+			struct
+			{
+				uint32_t MipSlice				= 0;
+				uint32_t FirstWSlice			= 0;
+				uint32_t WSize					= 0;
+			} UnorderedAccessViewTexture3D;
+
+			//////////////////////////////////////////////////////////////////////////
+			// DSV
+			struct
+			{
+				uint32_t MipSlice				= 0;
+			} DepthStencilViewTexture1D;
+
+			struct
+			{
+				uint32_t MipSlice				= 0;
+				uint32_t FirstArraySlice		= 0;
+				uint32_t ArraySize				= 0;
+			} DepthStencilViewTexture1DArray;
+
+			struct
+			{
+				uint32_t MipSlice				= 0;
+			} DepthStencilViewTexture2D;
+
+			struct
+			{
+				uint32_t MipSlice				= 0;
+				uint32_t FirstArraySlice		= 0;
+				uint32_t ArraySize				= 0;
+			} DepthStencilViewTexture2DArray;
+
 			ViewMetaData()
 				: Dummy()
 			{
@@ -196,6 +274,12 @@ namespace Eternal
 				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTexture3D), "Dummy must encapsulates all sub structures");
 				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTextureCube), "Dummy must encapsulates all sub structures");
 				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(ShaderResourceViewTextureCubeArray), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(UnorderedAccessViewBuffer), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(UnorderedAccessViewTexture1D), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(UnorderedAccessViewTexture1DArray), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(UnorderedAccessViewTexture2D), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(UnorderedAccessViewTexture2DArray), "Dummy must encapsulates all sub structures");
+				ETERNAL_STATIC_ASSERT(sizeof(Dummy) >= sizeof(UnorderedAccessViewTexture3D), "Dummy must encapsulates all sub structures");
 			}
 
 		private:
@@ -215,7 +299,8 @@ namespace Eternal
 			ViewType				ResourceViewType				= ViewType::VIEW_UNKNOWN;
 			ViewShaderResourceType	ResourceViewShaderResourceType	= ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN;
 			ViewUnorderedAccessType	ResourceViewUnorderedAccessType	= ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_UNKNOWN;
-			ViewRenderTargetType	ResourceViewRenderTargetType	= ViewRenderTargetType::VIEW_RENDER_TARGET_UNKOWN;
+			ViewRenderTargetType	ResourceViewRenderTargetType	= ViewRenderTargetType::VIEW_RENDER_TARGET_UNKNOWN;
+			ViewDepthStencilType	ResourceViewDepthStencilType	= ViewDepthStencilType::VIEW_DEPTH_STENCIL_UNKNOWN;
 
 		protected:
 			ViewCreateInformation(
@@ -292,6 +377,48 @@ namespace Eternal
 				)
 			{
 				ResourceViewShaderResourceType = InViewShaderResourceType;
+			}
+		};
+
+		struct UnorderedAccessViewCreateInformation : public ViewCreateInformation
+		{
+			UnorderedAccessViewCreateInformation(
+				_In_ GraphicsContext& InContext,
+				_In_ Resource* InResource,
+				_In_ const ViewMetaData& InViewMetaData,
+				_In_ const Format& InFormat,
+				_In_ const ViewUnorderedAccessType& InViewUnorderedAccessType
+			)
+				: ViewCreateInformation(
+					InContext,
+					InResource,
+					InViewMetaData,
+					InFormat,
+					ViewType::VIEW_UNORDERED_ACCESS
+				)
+			{
+				ResourceViewUnorderedAccessType = InViewUnorderedAccessType;
+			}
+		};
+
+		struct DepthStencilViewCreateInformation : public ViewCreateInformation
+		{
+			DepthStencilViewCreateInformation(
+				_In_ GraphicsContext& InContext,
+				_In_ Resource* InResource,
+				_In_ const ViewMetaData& InViewMetaData,
+				_In_ const Format& InFormat,
+				_In_ const ViewDepthStencilType& InViewDepthStencilType
+			)
+				: ViewCreateInformation(
+					InContext,
+					InResource,
+					InViewMetaData,
+					InFormat,
+					ViewType::VIEW_DEPTH_STENCIL
+				)
+			{
+				ResourceViewDepthStencilType = InViewDepthStencilType;
 			}
 		};
 

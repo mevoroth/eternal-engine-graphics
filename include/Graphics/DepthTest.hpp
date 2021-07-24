@@ -12,7 +12,7 @@ namespace Eternal
 			enum class Mask
 			{
 				MASK_ZERO	= 0,
-				MASK_ALL		= 1
+				MASK_ALL	= 1
 			};
 			DepthTest() {};
 			DepthTest(const Mask& MaskValue, const ComparisonFunction& InComparison)
@@ -46,5 +46,6 @@ namespace Eternal
 		};
 
 		extern const DepthTest DepthTestNone;
+		extern const DepthTest DepthTestTestWriteLess;
 	}
 }

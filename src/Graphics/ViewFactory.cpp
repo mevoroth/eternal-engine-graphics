@@ -50,9 +50,36 @@ namespace Eternal
 			return CreateView(InShaderResourceViewCreateInformation);
 		}
 
+		View* CreateRenderTargetView(_In_ const RenderTargetViewCreateInformation& InRenderTargetViewCreateInformation)
+		{
+			return CreateView(InRenderTargetViewCreateInformation);
+		}
+
+		View* CreateUnorderedAccessView(_In_ const UnorderedAccessViewCreateInformation& InUnorderedAccessViewCreateInformation)
+		{
+			return CreateView(InUnorderedAccessViewCreateInformation);
+		}
+
+		View* CreateDepthStencilView(_In_ const DepthStencilViewCreateInformation& InDepthStencilViewCreateInformation)
+		{
+			return CreateView(InDepthStencilViewCreateInformation);
+		}
+
 		MultiBuffered<View>* CreateMultiBufferedConstantBufferView(_In_ MultiBuffered<Resource>& InResources, _In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation)
 		{
 			return CreateMultiBufferedBufferView(InConstantBufferViewCreateInformation, InResources);
+		}
+
+		void DestroyView(_Inout_ View*& InOutView)
+		{
+			delete InOutView;
+			InOutView = nullptr;
+		}
+
+		void DestroyMultiBufferedView(_Inout_ MultiBuffered<View>*& InOutMultiBufferedView)
+		{
+			delete InOutMultiBufferedView;
+			InOutMultiBufferedView = nullptr;
 		}
 	}
 }

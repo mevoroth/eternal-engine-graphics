@@ -38,7 +38,8 @@ namespace Eternal
 
 		struct GraphicsCommand
 		{
-			virtual void Execute(_In_ GraphicsContext& InContext) = 0;
+			virtual ~GraphicsCommand() {}
+			virtual void Execute(_In_ GraphicsContext& InContext, _In_ CommandList& InCommandList) = 0;
 		};
 
 		class GraphicsContext

@@ -52,5 +52,17 @@ namespace Eternal
 		{
 			return CreateMultiBufferedResource(InContext, InResourceCreateInformation);
 		}
+
+		void DestroyResource(_Inout_ Resource*& InOutResource)
+		{
+			delete InOutResource;
+			InOutResource = nullptr;
+		}
+
+		void DestroyMultiBufferedResource(_Inout_ MultiBuffered<Resource>*& InOutMultiBufferedResource)
+		{
+			delete InOutMultiBufferedResource;
+			InOutMultiBufferedResource = nullptr;
+		}
 	}
 }

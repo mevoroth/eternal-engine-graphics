@@ -28,15 +28,6 @@ namespace Eternal
 			return VULKAN_IMAGE_VIEW_TYPES_RENDER_TARGET[static_cast<int32_t>(InViewRenderTargetType)];
 		}
 
-		//VIEW_SHADER_RESOURCE_UNKNOWN = 0, // StructuredBuffer
-		//	VIEW_SHADER_RESOURCE_BUFFER,
-		//	VIEW_SHADER_RESOURCE_TEXTURE_1D,
-		//	VIEW_SHADER_RESOURCE_TEXTURE_1D_ARRAY,
-		//	VIEW_SHADER_RESOURCE_TEXTURE_2D,
-		//	VIEW_SHADER_RESOURCE_TEXTURE_2D_ARRAY,
-		//	VIEW_SHADER_RESOURCE_TEXTURE_3D,
-		//	VIEW_SHADER_RESOURCE_TEXTURE_CUBE,
-		//	VIEW_SHADER_RESOURCE_TEXTURE_CUBE_ARRAY,
 		static constexpr vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES_SHADER_RESOURCE[] =
 		{
 			vk::ImageViewType(~0),
@@ -95,6 +86,8 @@ namespace Eternal
 			case ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_3D:
 			{
 				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.MipSlice;
+				_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.FirstWSlice;
+				_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.RenderTargetViewTexture3D.WSize;
 			} break;
 			}
 
@@ -143,14 +136,7 @@ namespace Eternal
 			vk::Device& VkDevice = static_cast<VulkanDevice&>(InViewCreateInformation.Context.GetDevice()).GetVulkanDevice();
 			VulkanResource& VkResource = static_cast<VulkanResource&>(GetResource());
 
-			_SubresourceRange = vk::ImageSubresourceRange(
-				vk::ImageAspectFlagBits::eColor
-			);
-			_SubresourceRange.layerCount = 1;
-
-			switch (InViewCreateInformation.ResourceViewShaderResourceType)
-			{
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_BUFFER:
+			if (InViewCreateInformation.ResourceViewShaderResourceType == ViewShaderResourceType::VIEW_SHADER_RESOURCE_BUFFER)
 			{
 				ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER);
 				vk::BufferViewCreateInfo BufferViewCreateInfo(
@@ -163,67 +149,161 @@ namespace Eternal
 				VerifySuccess(
 					VkDevice.createBufferView(&BufferViewCreateInfo, nullptr, &_VulkanViewMetaData.BufferView)
 				);
-			} break;
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_1D:
-			{
-				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1D.MostDetailedMip;
-				_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1D.MipLevels;
-			} break;
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_1D_ARRAY:
-			{
-				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1DArray.MostDetailedMip;
-				_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1DArray.MipLevels;
-				_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.ShaderResourceViewTexture1DArray.FirstArraySlice;
-				_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1DArray.ArraySize;
-			} break;
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_2D:
-			{
-				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2D.MostDetailedMip;
-				_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2D.MipLevels;
-			} break;
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_2D_ARRAY:
-			{
-				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2DArray.MostDetailedMip;
-				_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2DArray.MipLevels;
-				_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.ShaderResourceViewTexture2DArray.FirstArraySlice;
-				_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2DArray.ArraySize;
-			} break;
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_3D:
-			{
-				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture3D.MostDetailedMip;
-				_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture3D.MipLevels;
-			} break;
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_CUBE:
-			{
-				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCube.MostDetailedMip;
-				_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCube.MipLevels;
-				_SubresourceRange.baseArrayLayer	= 0;
-				_SubresourceRange.layerCount		= 6;
-			} break;
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_CUBE_ARRAY:
-			{
-				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCubeArray.MostDetailedMip;
-				_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCubeArray.MipLevels;
-				_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.ShaderResourceViewTextureCubeArray.First2DArrayFace;
-				_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCubeArray.NumCubes * 6;
-			} break;
-			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN:
-			default:
-				ETERNAL_BREAK();
-				break;
 			}
+			else
+			{
+				ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+				_SubresourceRange = vk::ImageSubresourceRange(
+					vk::ImageAspectFlagBits::eColor
+				);
+				_SubresourceRange.layerCount = 1;
 
-			vk::ImageViewCreateInfo CreateInfo;
-			CreateInfo.flags			= vk::ImageViewCreateFlagBits();
-			CreateInfo.image			= VkResource.GetVulkanImage();
-			CreateInfo.viewType			= ConvertViewShaderResourceTypeToVulkanImageViewType(InViewCreateInformation.ResourceViewShaderResourceType);
-			CreateInfo.format			= ConvertFormatToVulkanFormat(InViewCreateInformation.GraphicsFormat).Format;
-			CreateInfo.components		= vk::ComponentMapping();
-			CreateInfo.subresourceRange	= _SubresourceRange;
+				switch (InViewCreateInformation.ResourceViewShaderResourceType)
+				{
+				case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_1D:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1D.MostDetailedMip;
+					_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1D.MipLevels;
+				} break;
+				case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_1D_ARRAY:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1DArray.MostDetailedMip;
+					_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1DArray.MipLevels;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.ShaderResourceViewTexture1DArray.FirstArraySlice;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture1DArray.ArraySize;
+				} break;
+				case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_2D:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2D.MostDetailedMip;
+					_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2D.MipLevels;
+				} break;
+				case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_2D_ARRAY:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2DArray.MostDetailedMip;
+					_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2DArray.MipLevels;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.ShaderResourceViewTexture2DArray.FirstArraySlice;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture2DArray.ArraySize;
+				} break;
+				case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_3D:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTexture3D.MostDetailedMip;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.ShaderResourceViewTexture3D.MipLevels;
+				} break;
+				case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_CUBE:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCube.MostDetailedMip;
+					_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCube.MipLevels;
+					_SubresourceRange.baseArrayLayer	= 0;
+					_SubresourceRange.layerCount		= 6;
+				} break;
+				case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_CUBE_ARRAY:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCubeArray.MostDetailedMip;
+					_SubresourceRange.levelCount		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCubeArray.MipLevels;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.ShaderResourceViewTextureCubeArray.First2DArrayFace;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.ShaderResourceViewTextureCubeArray.NumCubes * 6;
+				} break;
+				case ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN:
+				default:
+					ETERNAL_BREAK();
+					break;
+				}
 
-			VerifySuccess(
-				VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
-			);
+				vk::ImageViewCreateInfo CreateInfo;
+				CreateInfo.flags			= vk::ImageViewCreateFlagBits();
+				CreateInfo.image			= VkResource.GetVulkanImage();
+				CreateInfo.viewType			= ConvertViewShaderResourceTypeToVulkanImageViewType(InViewCreateInformation.ResourceViewShaderResourceType);
+				CreateInfo.format			= ConvertFormatToVulkanFormat(InViewCreateInformation.GraphicsFormat).Format;
+				CreateInfo.components		= vk::ComponentMapping();
+				CreateInfo.subresourceRange	= _SubresourceRange;
+
+				VerifySuccess(
+					VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
+				);
+			}
+		}
+
+		VulkanView::VulkanView(_In_ const UnorderedAccessViewCreateInformation& InViewCreateInformation)
+			: View(InViewCreateInformation)
+		{
+			vk::Device& VkDevice = static_cast<VulkanDevice&>(InViewCreateInformation.Context.GetDevice()).GetVulkanDevice();
+			VulkanResource& VkResource = static_cast<VulkanResource&>(GetResource());
+
+			if (InViewCreateInformation.ResourceViewUnorderedAccessType == ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_BUFFER)
+			{
+				ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER);
+				vk::BufferViewCreateInfo BufferViewCreateInfo(
+					vk::BufferViewCreateFlags(),
+					VkResource.GetVulkanBuffer(),
+					ConvertFormatToVulkanFormat(InViewCreateInformation.GraphicsFormat).Format,
+					InViewCreateInformation.MetaData.UnorderedAccessViewBuffer.FirstElement,
+					InViewCreateInformation.MetaData.UnorderedAccessViewBuffer.NumElements * InViewCreateInformation.MetaData.UnorderedAccessViewBuffer.StructureByteStride
+				);
+				VerifySuccess(
+					VkDevice.createBufferView(&BufferViewCreateInfo, nullptr, &_VulkanViewMetaData.BufferView)
+				);
+			}
+			else
+			{
+				ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+				_SubresourceRange = vk::ImageSubresourceRange(
+					vk::ImageAspectFlagBits::eColor
+				);
+				_SubresourceRange.layerCount = 1;
+				_SubresourceRange.levelCount = 1;
+
+				switch (InViewCreateInformation.ResourceViewUnorderedAccessType)
+				{
+				case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_1D:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture1D.MipSlice;
+				} break;
+				case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_1D_ARRAY:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture1DArray.MipSlice;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.UnorderedAccessViewTexture1DArray.FirstArraySlice;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture1DArray.ArraySize;
+				} break;
+				case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_2D:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture2D.MipSlice;
+				} break;
+				case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_2D_ARRAY:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture2DArray.MipSlice;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.UnorderedAccessViewTexture2DArray.FirstArraySlice;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture2DArray.ArraySize;
+				} break;
+				case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_3D:
+				{
+					_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture3D.MipSlice;
+					_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.UnorderedAccessViewTexture3D.FirstWSlice;
+					_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture3D.WSize;
+				} break;
+				case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_UNKNOWN:
+				default:
+					ETERNAL_BREAK();
+					break;
+				}
+
+				vk::ImageViewCreateInfo CreateInfo;
+				CreateInfo.flags			= vk::ImageViewCreateFlagBits();
+				CreateInfo.image			= VkResource.GetVulkanImage();
+				CreateInfo.viewType			= ConvertViewShaderResourceTypeToVulkanImageViewType(InViewCreateInformation.ResourceViewShaderResourceType);
+				CreateInfo.format			= ConvertFormatToVulkanFormat(InViewCreateInformation.GraphicsFormat).Format;
+				CreateInfo.components		= vk::ComponentMapping();
+				CreateInfo.subresourceRange	= _SubresourceRange;
+
+				VerifySuccess(
+					VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
+				);
+			}
+		}
+
+		VulkanView::VulkanView(_In_ const DepthStencilViewCreateInformation& InViewCreateInformation)
+			: View(InViewCreateInformation)
+		{
+			D3D12_TEX1D_DSV
 		}
 
 		VulkanView::~VulkanView()

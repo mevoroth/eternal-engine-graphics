@@ -17,6 +17,15 @@ namespace Eternal
 			BlendOperator::BLEND_OPERATOR_ADD,
 			BlendChannel::BLEND_CHANNEL_ALL
 		);
+		const BlendState BlendStateAdditive(
+			Blend::BLEND_SOURCE_ALPHA,
+			Blend::BLEND_ONE,
+			BlendOperator::BLEND_OPERATOR_ADD,
+			Blend::BLEND_SOURCE_ALPHA,
+			Blend::BLEND_ONE,
+			BlendOperator::BLEND_OPERATOR_ADD,
+			BlendChannel::BLEND_CHANNEL_ALL
+		);
 	}
 }
 

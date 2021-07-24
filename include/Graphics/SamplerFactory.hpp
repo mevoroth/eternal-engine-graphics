@@ -9,5 +9,6 @@ namespace Eternal
 		class GraphicsContext;
 
 		Sampler* CreateSampler(_In_ GraphicsContext& InContext, _In_ const SamplerCreateInformation& InSamplerCreateInformation);
+		void DestroySampler(_Inout_ Sampler*& InOutSampler);
 	}
 }

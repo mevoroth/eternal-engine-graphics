@@ -10,6 +10,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		class Device;
+		class Resource;
 
 		enum class ResourceMemoryType
 		{
@@ -87,6 +88,29 @@ namespace Eternal
 			uint32_t ArraySlice	= 0;
 		};
 
+		template<typename ResourceStructureType = void>
+		class MapScope
+		{
+		public:
+			MapScope(_In_ Resource& InResource, _In_ const MapRange& InRange)
+				: _Resource(InResource)
+				, _Range(InRange)
+				, _DataPointer(InResource.Map<ResourceStructureType>(InRange))
+			{
+			}
+			~MapScope()
+			{
+				_Resource.Unmap(_Range);
+			}
+
+			ResourceStructureType* GetDataPointer() const { return _DataPointer; }
+
+		private:
+			Resource&				_Resource;
+			const MapRange&			_Range;
+			ResourceStructureType*	_DataPointer = nullptr;
+		};
+
 		// TODO: Add multisample resource
 		struct TextureCreateInformation
 		{
@@ -156,18 +180,31 @@ namespace Eternal
 		struct VertexBufferCreateInformation : public BufferCreateInformation
 		{
 			VertexBufferCreateInformation(
-				_In_ const Format& InFormat,
-				_In_ const BufferResourceUsage& InResourceUsage,
 				_In_ uint32_t InSize,
 				_In_ uint32_t InStride
 			)
 				: BufferCreateInformation(
-					InFormat,
-					InResourceUsage,
+					Format::FORMAT_UNKNOWN,
+					BufferResourceUsage::BUFFER_RESOURCE_USAGE_VERTEX_BUFFER,
+					InSize,
+					InStride
+				)
+			{
+			}
+		};
+
+		struct IndexBufferCreateInformation : public BufferCreateInformation
+		{
+			IndexBufferCreateInformation(
+				_In_ uint32_t InSize,
+				_In_ uint32_t InStride
+			)
+				: BufferCreateInformation(
+					InStride == sizeof(uint16_t) ? Format::FORMAT_R16_UINT : Format::FORMAT_INVALID,
+					BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDEX_BUFFER,
 					InSize
 				)
 			{
-				Stride = InStride;
 			}
 		};
 
@@ -226,7 +263,7 @@ namespace Eternal
 		{
 			TextureResourceCreateInformation(
 				_In_ Device& InDevice,
-				_In_  const std::string& InName,
+				_In_ const std::string& InName,
 				_In_ const TextureCreateInformation& InTextureCreateInformation,
 				_In_ const ResourceMemoryType& InMemoryType,
 				_In_ const TransitionState& InInitialTransitionState = TransitionState::TRANSITION_UNDEFINED
@@ -240,7 +277,7 @@ namespace Eternal
 		{
 			BufferResourceCreateInformation(
 				_In_ Device& InDevice,
-				_In_  const std::string& InName,
+				_In_ const std::string& InName,
 				_In_ const BufferCreateInformation& InBufferCreateInformation,
 				_In_ const ResourceMemoryType& InMemoryType,
 				_In_ const TransitionState& InInitialTransitionState = TransitionState::TRANSITION_UNDEFINED
@@ -255,7 +292,11 @@ namespace Eternal
 		public:
 			virtual ~Resource() {}
 
-			virtual void* Map(_In_ const MapRange& InMapRange) = 0;
+			template<typename ResourceStructureType = void>
+			ResourceStructureType* Map(_In_ const MapRange& InMapRange)
+			{
+				return static_cast<ResourceStructureType*>(Map(InMapRange));
+			}
 			virtual void Unmap(_In_ const MapRange& InMapRange) = 0;
 
 			inline void SetResourceState(_In_ const TransitionState& InTransitionState) { _ResourceCreateInformation.ResourceState = InTransitionState; }
@@ -272,8 +313,9 @@ namespace Eternal
 
 		protected:
 			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType);
-			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }
 
+			virtual void* Map(_In_ const MapRange& InMapRange) = 0;
+			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }
 			const ResourceType& GetRawResourceType() const { return _ResourceType; }
 
 		private:

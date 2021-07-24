@@ -11,5 +11,6 @@ namespace Eternal
 		class Device;
 
 		InputLayout* CreateInputLayout(_In_ GraphicsContext& InContext, _In_ const vector<VertexStreamBase>& InVertexStreams = vector<VertexStreamBase>());
+		void DestroyInputLayout(_Inout_ InputLayout*& InOutInputLayout);
 	}
 }

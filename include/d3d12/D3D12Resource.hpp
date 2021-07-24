@@ -35,10 +35,12 @@ namespace Eternal
 			D3D12Resource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation);
 			virtual ~D3D12Resource();
 
-			virtual void* Map(_In_ const MapRange& InMapRange) override final;
 			virtual void Unmap(_In_ const MapRange& InMapRange) override final;
 
 			inline ID3D12Resource* GetD3D12Resource() const { return _Resource; }
+
+		protected:
+			virtual void* Map(_In_ const MapRange& InMapRange) override final;
 
 		private:
 			void _SetName();
