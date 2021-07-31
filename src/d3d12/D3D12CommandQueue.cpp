@@ -41,6 +41,13 @@ namespace Eternal
 		{
 			CommandQueue::SubmitCommandLists(InCommandLists, InCommandListsCount, InContext);
 
+#if ETERNAL_DEBUG_COMMAND_LIST_SUBMIT
+			for (uint32_t CommandListIndex = 0; CommandListIndex < InCommandListsCount; ++CommandListIndex)
+			{
+				ID3D12CommandList* InD3D12CommandList = static_cast<D3D12CommandList*>(InCommandLists[CommandListIndex])->GetD3D12CommandList();
+				_CommandQueue->ExecuteCommandLists(1, &InD3D12CommandList);
+			}
+#else
 			std::array<ID3D12CommandList*, MaxCommandListsPerSubmission> D3D12CommandLists;
 			D3D12CommandLists.fill(nullptr);
 			for (uint32_t CommandListIndex = 0; CommandListIndex < InCommandListsCount; ++CommandListIndex)
@@ -50,6 +57,7 @@ namespace Eternal
 				InCommandListsCount,
 				D3D12CommandLists.data()
 			);
+#endif
 		}
 	}
 }

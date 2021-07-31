@@ -93,7 +93,7 @@ namespace Eternal
 
 			vk::BufferCreateInfo BufferCreateInformation(
 				vk::BufferCreateFlagBits(),
-				InResourceCreateInformation.BufferInformation.Size,
+				InResourceCreateInformation.BufferInformation.ElementCount * InResourceCreateInformation.BufferInformation.Stride,
 				ConvertBufferResourceUsageToVulkanBufferUsageFlags(InResourceCreateInformation.BufferInformation.Usage),
 				vk::SharingMode::eExclusive,
 				static_cast<uint32_t>(QueueFamilies.size()),

@@ -26,6 +26,9 @@ namespace Eternal
 		class GraphicsContext;
 		class InputLayout;
 		class Sampler;
+		class View;
+		class Resource;
+		class RenderPass;
 
 		struct GraphicsContextCreateInformation
 		{
@@ -41,7 +44,7 @@ namespace Eternal
 		struct GraphicsCommand
 		{
 			virtual ~GraphicsCommand() {}
-			virtual void Execute(_In_ GraphicsContext& InContext, _In_ CommandList& InCommandList) = 0;
+			virtual void Execute(_In_ GraphicsContext& InContext) = 0;
 		};
 
 		class GraphicsContext
@@ -80,6 +83,10 @@ namespace Eternal
 
 			Fence& GetCurrentFrameFence() { return *_FrameFences[GetCurrentFrameIndex()]; }
 			Fence& GetNextFrameFence() { return *_FrameFences[(GetCurrentFrameIndex() + 1) % static_cast<uint32_t>(_FrameFences.size())]; }
+			View& GetCurrentFrameBackBufferView();
+			Resource& GetCurrentFrameBackBuffer();
+			RenderPass& GetCurrentFrameBackBufferRenderPass();
+			RenderPass& GetBackBufferRenderPass();
 
 			uint32_t& GetCurrentFrameIndex() { return _CurrentFrameIndex; }
 
@@ -105,6 +112,7 @@ namespace Eternal
 				FrameBufferingCount
 			> _CommandListPools;
 
+			array<RenderPass*, FrameBufferingCount>									_BackBufferRenderPasses;
 			array<uint32_t, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>	_CurrentFrameCommandListIndex;
 			array<Fence*, FrameBufferingCount>										_FrameFences;
 			array<vector<View*>, FrameBufferingCount>								_ViewsToClear;

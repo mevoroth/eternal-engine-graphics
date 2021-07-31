@@ -49,6 +49,7 @@ namespace Eternal
 
 		void D3D12CommandList::SetName(_In_ const std::string& InName)
 		{
+			CommandList::SetName(InName);
 			std::wstring InNameUTF8(InName.begin(), InName.end());
 			VerifySuccess(
 				_GraphicCommandList5->SetName(InNameUTF8.c_str())

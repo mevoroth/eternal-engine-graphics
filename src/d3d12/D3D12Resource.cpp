@@ -92,12 +92,20 @@ namespace Eternal
 		}
 
 		D3D12Resource::D3D12Resource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
-			: Resource(InResourceCreateInformation, ResourceType::RESOURCE_TYPE_BUFFER)
+			: Resource(
+				InResourceCreateInformation,
+				((InResourceCreateInformation.BufferInformation.Usage & BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER) != BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE
+					? ResourceType::RESOURCE_TYPE_CONSTANT_BUFFER
+					: ResourceType::RESOURCE_TYPE_BUFFER)
+			)
 		{
 			if (InResourceCreateInformation.MemoryType == ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY)
 			{
 				ETERNAL_ASSERT(InResourceCreateInformation.ResourceState != TransitionState::TRANSITION_UNDEFINED)
 			}
+
+			if (GetResourceTypeRaw() == ResourceType::RESOURCE_TYPE_CONSTANT_BUFFER)
+				GetResourceCreateInformation().BufferInformation.Stride = Align<UINT>(GetResourceCreateInformation().BufferInformation.Stride, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InResourceCreateInformation.GfxDevice);
 			
@@ -108,12 +116,12 @@ namespace Eternal
 			D3D12HeapProperties.CreationNodeMask		= InD3DDevice.GetDeviceMask();
 			D3D12HeapProperties.VisibleNodeMask			= InD3DDevice.GetDeviceMask();
 
-			const BufferCreateInformation& InBufferInformation = InResourceCreateInformation.BufferInformation;
+			const BufferCreateInformation& InBufferInformation = GetResourceCreateInformation().BufferInformation;
 
 			D3D12_RESOURCE_DESC D3D12ResourceDesc;
 			D3D12ResourceDesc.Dimension				= D3D12_RESOURCE_DIMENSION_BUFFER;
 			D3D12ResourceDesc.Alignment				= D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
-			D3D12ResourceDesc.Width					= InBufferInformation.Size;
+			D3D12ResourceDesc.Width					= InBufferInformation.Stride * InBufferInformation.ElementCount;
 			D3D12ResourceDesc.Height				= 1;
 			D3D12ResourceDesc.DepthOrArraySize		= 1;
 			D3D12ResourceDesc.MipLevels				= 1;

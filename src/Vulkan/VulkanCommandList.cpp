@@ -413,7 +413,43 @@ namespace Eternal
 
 		void VulkanCommandList::_CopyTextureToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
 		{
+			vk::ImageCopy ImageCopy(
+				vk::ImageSubresourceLayers(
+					vk::ImageAspectFlagBits::eColor,
+					InCopyRegion.Texture.SourceMIPIndex,
+					InCopyRegion.Texture.Source.GetArraySlice(InSourceResource.GetResourceDimension()),
+					InSourceResource.GetArraySize()
+				),
+				vk::Offset3D(
+					InCopyRegion.Texture.Source.X,
+					InCopyRegion.Texture.Source.Y,
+					InCopyRegion.Texture.Source.Z
+				),
+				vk::ImageSubresourceLayers(
+					vk::ImageAspectFlagBits::eColor,
+					InCopyRegion.Texture.DestinationMIPIndex,
+					InCopyRegion.Texture.Destination.GetArraySlice(InDestinationResource.GetResourceDimension()),
+					InDestinationResource.GetArraySize()
+				),
+				vk::Offset3D(
+					InCopyRegion.Texture.Destination.X,
+					InCopyRegion.Texture.Destination.Y,
+					InCopyRegion.Texture.Destination.Z
+				),
+				vk::Extent3D(
+					InCopyRegion.Texture.Extent.Width,
+					InCopyRegion.Texture.Extent.Height,
+					InCopyRegion.Texture.Extent.Depth
+				)
+			);
 
+			_CommandBuffer.copyImage(
+				static_cast<const VulkanResource&>(InSourceResource).GetVulkanImage(),
+				ConvertTransitionStateToVulkanImageLayout(InSourceResource.GetResourceState()),
+				static_cast<const VulkanResource&>(InDestinationResource).GetVulkanImage(),
+				ConvertTransitionStateToVulkanImageLayout(InDestinationResource.GetResourceState()),
+				1, &ImageCopy
+			);
 		}
 
 		void VulkanCommandList::_CopyBufferToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)

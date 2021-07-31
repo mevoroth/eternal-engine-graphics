@@ -118,7 +118,7 @@ namespace Eternal
 			// CBV
 			struct
 			{
-				uint32_t BufferOffset			= 0;
+				uint32_t BufferElementOffset	= 0;
 				uint32_t BufferSize				= 0;
 			} ConstantBufferView;
 

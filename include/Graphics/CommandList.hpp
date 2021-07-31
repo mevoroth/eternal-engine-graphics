@@ -42,7 +42,7 @@ namespace Eternal
 
 			virtual ~CommandList();
 
-			virtual void SetName(_In_ const std::string& InName) = 0;
+			virtual void SetName(_In_ const std::string& InName);
 
 			virtual void Begin(_In_ GraphicsContext& InContext) = 0;
 			virtual void End() = 0;
@@ -76,6 +76,7 @@ namespace Eternal
 			CommandAllocator&		_CommandAllocator;
 			const RootSignature*	_CurrentRootSignature = nullptr;
 			CommandListState		_CommandListState;
+			std::string				_CommandListName;
 		};
 
 		class ResourceTransitionScope

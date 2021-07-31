@@ -1,8 +1,8 @@
 #include "Graphics/SwapChain.hpp"
 
 #include "Window/Window.hpp"
-#include "Graphics/Resource.hpp"
-#include "Graphics/View.hpp"
+#include "Graphics/ViewFactory.hpp"
+#include "Graphics/ResourceFactory.hpp"
 
 namespace Eternal
 {
@@ -16,11 +16,8 @@ namespace Eternal
 		{
 			for (uint32_t BackBufferIndex = 0; BackBufferIndex < _BackBuffers.size(); ++BackBufferIndex)
 			{
-				delete _BackBufferRenderTargetViews[BackBufferIndex];
-				_BackBufferRenderTargetViews[BackBufferIndex] = nullptr;
-
-				delete _BackBuffers[BackBufferIndex];
-				_BackBuffers[BackBufferIndex] = nullptr;
+				DestroyView(_BackBufferRenderTargetViews[BackBufferIndex]);
+				DestroyResource(_BackBuffers[BackBufferIndex]);
 			}
 		}
 	}

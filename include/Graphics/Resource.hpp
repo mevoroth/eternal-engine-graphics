@@ -64,10 +64,11 @@ namespace Eternal
 
 		enum class ResourceType
 		{
-			RESOURCE_TYPE_UNKNOWN		= 0x0,
-			RESOURCE_TYPE_BUFFER		= 0x1,
-			RESOURCE_TYPE_TEXTURE		= 0x2,
-			RESOURCE_TYPE_BACK_BUFFER	= 0x4 | RESOURCE_TYPE_TEXTURE
+			RESOURCE_TYPE_UNKNOWN			= 0x0,
+			RESOURCE_TYPE_BUFFER			= 0x1,
+			RESOURCE_TYPE_TEXTURE			= 0x2,
+			RESOURCE_TYPE_BACK_BUFFER		= 0x4 | RESOURCE_TYPE_TEXTURE,
+			RESOURCE_TYPE_CONSTANT_BUFFER	= 0x8 | RESOURCE_TYPE_BUFFER
 		};
 		
 		struct MapRange
@@ -116,6 +117,7 @@ namespace Eternal
 		{
 			static constexpr uint32_t ComponentCount					= 4;
 			static constexpr float DefaultClearValue[ComponentCount]	= { 0.0f };
+			static constexpr float DefaultClearValueOne[ComponentCount]	= { 1.0f, 1.0f, 1.0f, 1.0f };
 
 			TextureCreateInformation(
 				_In_ const ResourceDimension& InResourceDimension,
@@ -157,37 +159,37 @@ namespace Eternal
 			BufferCreateInformation(
 				_In_ const Format& InFormat,
 				_In_ const BufferResourceUsage& InResourceUsage,
-				_In_ uint32_t InSize,
-				_In_ uint32_t InStride = 0
+				_In_ uint32_t InStride,
+				_In_ uint32_t InElementCount = 1
 			)
 				: ResourceFormat(InFormat)
 				, Usage(InResourceUsage)
-				, Size(InSize)
 				, Stride(InStride)
+				, ElementCount(InElementCount)
 			{
-				if (Stride > 0)
+				if (InFormat == Format::FORMAT_UNKNOWN)
 				{
-					ETERNAL_ASSERT(InFormat == Format::FORMAT_UNKNOWN);
+					ETERNAL_ASSERT(InStride > 0);
 				}
 			}
 
 			Format ResourceFormat		= Format::FORMAT_INVALID;
 			BufferResourceUsage Usage	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE;
-			uint32_t Size				= 1;
 			uint32_t Stride				= 0;
+			uint32_t ElementCount		= 1;
 		};
 
 		struct VertexBufferCreateInformation : public BufferCreateInformation
 		{
 			VertexBufferCreateInformation(
-				_In_ uint32_t InSize,
-				_In_ uint32_t InStride
+				_In_ uint32_t InStride,
+				_In_ uint32_t InElementCount
 			)
 				: BufferCreateInformation(
 					Format::FORMAT_UNKNOWN,
 					BufferResourceUsage::BUFFER_RESOURCE_USAGE_VERTEX_BUFFER,
-					InSize,
-					InStride
+					InStride,
+					InElementCount
 				)
 			{
 			}
@@ -196,13 +198,14 @@ namespace Eternal
 		struct IndexBufferCreateInformation : public BufferCreateInformation
 		{
 			IndexBufferCreateInformation(
-				_In_ uint32_t InSize,
-				_In_ uint32_t InStride
+				_In_ uint32_t InStride,
+				_In_ uint32_t InElementCount
 			)
 				: BufferCreateInformation(
 					InStride == sizeof(uint16_t) ? Format::FORMAT_R16_UINT : Format::FORMAT_INVALID,
 					BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDEX_BUFFER,
-					InSize
+					InStride,
+					InElementCount
 				)
 			{
 			}
@@ -308,6 +311,7 @@ namespace Eternal
 			uint32_t GetBufferSize() const;
 			uint32_t GetBufferStride() const;
 			ResourceType GetResourceType() const;
+			const ResourceType& GetResourceTypeRaw() const { return _ResourceType; }
 			const float* GetClearValue() const;
 			const Format& GetFormat() const;
 

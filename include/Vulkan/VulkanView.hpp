@@ -28,6 +28,8 @@ namespace Eternal
 			union VulkanViewMetaData
 			{
 				VulkanViewMetaData()
+					: ImageView(nullptr)
+					, BufferView(nullptr)
 				{
 				}
 

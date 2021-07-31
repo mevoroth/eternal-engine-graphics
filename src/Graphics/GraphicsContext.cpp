@@ -21,6 +21,8 @@
 #include "Graphics/Resource.hpp"
 #include "Graphics/InputLayoutFactory.hpp"
 #include "Graphics/SamplerFactory.hpp"
+#include "Graphics/RenderPassFactory.hpp"
+#include "Graphics/RenderPass.hpp"
 
 namespace Eternal
 {
@@ -100,31 +102,24 @@ namespace Eternal
 			_MainViewportFullScreen			= CreateViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
 			_BackBufferViewportFullScreen	= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
 			_EmptyInputLayout				= CreateInputLayout(*this);
-			_PointClampSampler				= CreateSampler(*this, SamplerCreateInformation(
-				/*InMINLinear =*/ false,
-				/*InMAGLinear =*/ false,
-				/*InMIPLinear =*/ false,
-				AddressMode::ADDRESS_MODE_CLAMP,
-				AddressMode::ADDRESS_MODE_CLAMP,
-				AddressMode::ADDRESS_MODE_CLAMP
-			));
-			_BilinearClampSampler			= CreateSampler(*this, SamplerCreateInformation(
-				/*InMINLinear =*/ true,
-				/*InMAGLinear =*/ true,
-				/*InMIPLinear =*/ false,
-				AddressMode::ADDRESS_MODE_CLAMP,
-				AddressMode::ADDRESS_MODE_CLAMP,
-				AddressMode::ADDRESS_MODE_CLAMP
-			));
 		}
 
 		GraphicsContext::~GraphicsContext()
 		{
-			delete _ShaderFactory;
-			_ShaderFactory = nullptr;
+			for (uint32_t RenderPassIndex = 0; RenderPassIndex < _BackBufferRenderPasses.size(); ++RenderPassIndex)
+				DestroyRenderPass(_BackBufferRenderPasses[RenderPassIndex]);
 
 			delete _SwapChain;
 			_SwapChain = nullptr;
+
+			DestroySampler(_BilinearClampSampler);
+			DestroySampler(_PointClampSampler);
+			DestroyInputLayout(_EmptyInputLayout);
+			DestroyViewport(_BackBufferViewportFullScreen);
+			DestroyViewport(_MainViewportFullScreen);
+
+			delete _ShaderFactory;
+			_ShaderFactory = nullptr;
 
 			for (int32_t FrameIndex = 0; FrameIndex < FrameBufferingCount; ++FrameIndex)
 			{
@@ -154,16 +149,63 @@ namespace Eternal
 			delete _GraphicsQueue;
 			_GraphicsQueue = nullptr;
 
-			DestroyViewport(_BackBufferViewportFullScreen);
-			DestroyViewport(_MainViewportFullScreen);
-
 			delete _Device;
 			_Device = nullptr;
 		}
 
 		void GraphicsContext::Initialize()
 		{
+			_PointClampSampler = CreateSampler(*this, SamplerCreateInformation(
+				/*InMINLinear =*/ false,
+				/*InMAGLinear =*/ false,
+				/*InMIPLinear =*/ false,
+				AddressMode::ADDRESS_MODE_CLAMP,
+				AddressMode::ADDRESS_MODE_CLAMP,
+				AddressMode::ADDRESS_MODE_CLAMP
+			));
+			_BilinearClampSampler = CreateSampler(*this, SamplerCreateInformation(
+				/*InMINLinear =*/ true,
+				/*InMAGLinear =*/ true,
+				/*InMIPLinear =*/ false,
+				AddressMode::ADDRESS_MODE_CLAMP,
+				AddressMode::ADDRESS_MODE_CLAMP,
+				AddressMode::ADDRESS_MODE_CLAMP
+			));
+
 			_SwapChain = CreateSwapChain(*this);
+
+			for (uint32_t RenderPassIndex = 0; RenderPassIndex < _BackBufferRenderPasses.size(); ++RenderPassIndex)
+			{
+				_BackBufferRenderPasses[RenderPassIndex] = CreateRenderPass(
+					*this,
+					RenderPassCreateInformation(
+						GetBackBufferViewport(),
+						{
+							RenderTargetInformation(BlendStateNone, RenderTargetOperator::Load_Store, _SwapChain->GetBackBufferRenderTargetViews()[RenderPassIndex])
+						}
+					)
+				);
+			}
+		}
+
+		View& GraphicsContext::GetCurrentFrameBackBufferView()
+		{
+			return *_SwapChain->GetBackBufferRenderTargetViews()[GetCurrentFrameIndex()];
+		}
+
+		Resource& GraphicsContext::GetCurrentFrameBackBuffer()
+		{
+			return *_SwapChain->GetBackBuffers()[GetCurrentFrameIndex()];
+		}
+
+		RenderPass& GraphicsContext::GetCurrentFrameBackBufferRenderPass()
+		{
+			return *_BackBufferRenderPasses[GetCurrentFrameIndex()];
+		}
+
+		RenderPass& GraphicsContext::GetBackBufferRenderPass()
+		{
+			return *_BackBufferRenderPasses[0];
 		}
 
 		void GraphicsContext::BeginFrame()
@@ -194,10 +236,9 @@ namespace Eternal
 				ETERNAL_PROFILER(INFO)("GraphicsCommands");
 				if (_GraphicsCommands)
 				{
-					CommandList* GraphicsCommandsCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "GraphicsCommands");
 					for (uint32_t CommandIndex = 0, CommandCount = static_cast<uint32_t>(_GraphicsCommands->size()); CommandIndex < CommandCount; ++CommandIndex)
 					{
-						(*_GraphicsCommands)[CommandIndex]->Execute(*this, *GraphicsCommandsCommandList);
+						(*_GraphicsCommands)[CommandIndex]->Execute(*this);
 						delete (*_GraphicsCommands)[CommandIndex];
 						(*_GraphicsCommands)[CommandIndex] = nullptr;
 					}

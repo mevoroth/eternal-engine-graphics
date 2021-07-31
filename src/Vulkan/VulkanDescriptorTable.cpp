@@ -125,7 +125,7 @@ namespace Eternal
 
 					VkDescriptorBufferInfo				= static_cast<vk::DescriptorBufferInfo*>(&DescriptorBufferInfos[BufferCount++]);
 					VkDescriptorBufferInfo->buffer		= static_cast<const VulkanResource&>(Resources[ParameterIndex].ResourceView->GetResource()).GetVulkanBuffer();
-					VkDescriptorBufferInfo->offset		= MetaData.ConstantBufferView.BufferOffset;
+					VkDescriptorBufferInfo->offset		= MetaData.ConstantBufferView.BufferElementOffset * Resources[ParameterIndex].ResourceView->GetResource().GetBufferStride();
 					VkDescriptorBufferInfo->range		= MetaData.ConstantBufferView.BufferSize;
 				} break;
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:
@@ -232,7 +232,7 @@ namespace Eternal
 						const ViewMetaData& MetaData		= Resources[DescriptorsCount].ResourceView->GetViewMetaData();
 
 						VkDescriptorBufferInfo->buffer		= static_cast<const VulkanResource&>(Resources[DescriptorsCount].ResourceView->GetResource()).GetVulkanBuffer();
-						VkDescriptorBufferInfo->offset		= MetaData.ConstantBufferView.BufferOffset;
+						VkDescriptorBufferInfo->offset		= MetaData.ConstantBufferView.BufferElementOffset * Resources[DescriptorsCount].ResourceView->GetResource().GetBufferStride();
 						VkDescriptorBufferInfo->range		= MetaData.ConstantBufferView.BufferSize;
 					} break;
 					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:

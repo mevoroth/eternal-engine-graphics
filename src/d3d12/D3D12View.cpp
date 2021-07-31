@@ -38,6 +38,16 @@ namespace Eternal
 			D3D12_SRV_DIMENSION_TEXTURECUBEARRAY
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SRV_DIMENSIONS) == static_cast<int32_t>(ViewShaderResourceType::VIEW_SHADER_RESOURCE_COUNT), "Mismatch between abstraction and d3d12 srv dimensions");
+		
+		static constexpr D3D12_DSV_DIMENSION D3D12_DSV_DIMENSIONS[] =
+		{
+			D3D12_DSV_DIMENSION_UNKNOWN,
+			D3D12_DSV_DIMENSION_TEXTURE1D,
+			D3D12_DSV_DIMENSION_TEXTURE1DARRAY,
+			D3D12_DSV_DIMENSION_TEXTURE2D,
+			D3D12_DSV_DIMENSION_TEXTURE2DARRAY,
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_DSV_DIMENSIONS) == static_cast<int32_t>(ViewDepthStencilType::VIEW_DEPTH_STENCIL_COUNT), "Mismatch between abstraction and d3d12 dsv dimensions");
 
 		static D3D12_RTV_DIMENSION ConvertViewRenderTargetTypeToD3D12RenderTargetViewDimension(_In_ const ViewRenderTargetType& InViewRenderTargetType)
 		{
@@ -47,6 +57,11 @@ namespace Eternal
 		static D3D12_SRV_DIMENSION ConvertViewShaderResourceTypeToD3D12ShaderResourceViewDimension(_In_ const ViewShaderResourceType& InViewShaderResourceType)
 		{
 			return D3D12_SRV_DIMENSIONS[static_cast<int32_t>(InViewShaderResourceType)];
+		}
+
+		static D3D12_DSV_DIMENSION ConvertViewDepthStencilTypeToD3D12DepthStencilViewDimension(_In_ const ViewDepthStencilType& InViewDepthStencilType)
+		{
+			return D3D12_DSV_DIMENSIONS[static_cast<int32_t>(InViewDepthStencilType)];
 		}
 
 		D3D12View::D3D12View(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation)
@@ -145,7 +160,8 @@ namespace Eternal
 			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
 
 			D3D12_CONSTANT_BUFFER_VIEW_DESC D3D12ConstantBufferViewDesc;
-			D3D12ConstantBufferViewDesc.BufferLocation	= InViewCreateInformation.MetaData.ConstantBufferView.BufferOffset;
+			D3D12ConstantBufferViewDesc.BufferLocation	= static_cast<D3D12Resource*>(InViewCreateInformation.GraphicsResource)->GetD3D12Resource()->GetGPUVirtualAddress()
+														+ InViewCreateInformation.MetaData.ConstantBufferView.BufferElementOffset * InViewCreateInformation.GraphicsResource->GetBufferStride();
 			D3D12ConstantBufferViewDesc.SizeInBytes		= Align<UINT>(InViewCreateInformation.MetaData.ConstantBufferView.BufferSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 
 			_D3D12Handle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateConstantBufferViewDescriptor();
@@ -251,7 +267,50 @@ namespace Eternal
 		D3D12View::D3D12View(_In_ const DepthStencilViewCreateInformation& InViewCreateInformation)
 			: View(InViewCreateInformation)
 		{
-			ETERNAL_BREAK();
+			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
+
+			D3D12_DEPTH_STENCIL_VIEW_DESC D3D12DepthStencilViewDesc;
+
+			D3D12DepthStencilViewDesc.Format		= ConvertFormatToD3D12Format(InViewCreateInformation.GraphicsFormat).Format;
+			D3D12DepthStencilViewDesc.ViewDimension	= ConvertViewDepthStencilTypeToD3D12DepthStencilViewDimension(InViewCreateInformation.ResourceViewDepthStencilType);
+			D3D12DepthStencilViewDesc.Flags			= D3D12_DSV_FLAG_NONE;
+
+			switch (InViewCreateInformation.ResourceViewDepthStencilType)
+			{
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_TEXTURE_1D:
+			{
+				D3D12DepthStencilViewDesc.Texture1D.MipSlice				= InViewCreateInformation.MetaData.DepthStencilViewTexture1D.MipSlice;
+			} break;
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_TEXTURE_1D_ARRAY:
+			{
+				D3D12DepthStencilViewDesc.Texture1DArray.MipSlice			= InViewCreateInformation.MetaData.DepthStencilViewTexture1DArray.MipSlice;
+				D3D12DepthStencilViewDesc.Texture1DArray.FirstArraySlice	= InViewCreateInformation.MetaData.DepthStencilViewTexture1DArray.FirstArraySlice;
+				D3D12DepthStencilViewDesc.Texture1DArray.ArraySize			= InViewCreateInformation.MetaData.DepthStencilViewTexture1DArray.ArraySize;
+			} break;
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_TEXTURE_2D:
+			{
+				D3D12DepthStencilViewDesc.Texture2D.MipSlice				= InViewCreateInformation.MetaData.DepthStencilViewTexture2D.MipSlice;
+			} break;
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_TEXTURE_2D_ARRAY:
+			{
+				D3D12DepthStencilViewDesc.Texture2DArray.MipSlice			= InViewCreateInformation.MetaData.DepthStencilViewTexture2DArray.MipSlice;
+				D3D12DepthStencilViewDesc.Texture2DArray.FirstArraySlice	= InViewCreateInformation.MetaData.DepthStencilViewTexture2DArray.FirstArraySlice;
+				D3D12DepthStencilViewDesc.Texture2DArray.ArraySize			= InViewCreateInformation.MetaData.DepthStencilViewTexture2DArray.ArraySize;
+			} break;
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_UNKNOWN:
+			default:
+			{
+				ETERNAL_BREAK();
+			} break;
+			}
+
+			_D3D12Handle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateDepthStencilViewDescriptor();
+
+			InD3DDevice->CreateDepthStencilView(
+				static_cast<D3D12Resource&>(GetResource()).GetD3D12Resource(),
+				&D3D12DepthStencilViewDesc,
+				_D3D12Handle.D3D12CPUDescriptorHandle
+			);
 		}
 
 		D3D12View::~D3D12View()
@@ -270,14 +329,20 @@ namespace Eternal
 			case ViewType::VIEW_SHADER_RESOURCE:
 				D3DGraphicsContext.ReleaseShaderResourceViewDescriptor(_D3D12Handle);
 				break;
+
+			case ViewType::VIEW_DEPTH_STENCIL:
+				D3DGraphicsContext.ReleaseDepthStencilViewDescriptor(_D3D12Handle);
+				break;
 			}
 		}
 
 		D3D12_GPU_VIRTUAL_ADDRESS D3D12View::GetD3D12OffsettedConstantBuffer() const
 		{
 			ETERNAL_ASSERT(GetViewCreateInformation().ResourceViewType == ViewType::VIEW_CONSTANT_BUFFER);
+
+			const ViewCreateInformation& ViewInformation = GetViewCreateInformation();
 			return static_cast<const D3D12Resource&>(GetResource()).GetD3D12Resource()->GetGPUVirtualAddress()
-				+ GetViewCreateInformation().MetaData.ConstantBufferView.BufferOffset;
+				+ ViewInformation.MetaData.ConstantBufferView.BufferElementOffset * GetResource().GetBufferStride();
 		}
 	}
 }

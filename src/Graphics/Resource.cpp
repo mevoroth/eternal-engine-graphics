@@ -75,7 +75,7 @@ namespace Eternal
 		uint32_t Resource::GetBufferSize() const
 		{
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER);
-			return _ResourceCreateInformation.BufferInformation.Size;
+			return _ResourceCreateInformation.BufferInformation.ElementCount;
 		}
 
 		uint32_t Resource::GetBufferStride() const
