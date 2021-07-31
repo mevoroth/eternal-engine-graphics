@@ -10,7 +10,7 @@ namespace Eternal
 		class DepthStencil
 		{
 		public:
-			DepthStencil(_In_ const DepthTest& DepthTestState, _In_ const StencilTest& StencilTestState)
+			DepthStencil(_In_ const DepthTest& DepthTestState = DepthTest(), _In_ const StencilTest& StencilTestState = StencilTest())
 				: _DepthTest(DepthTestState)
 				, _StencilTest(StencilTestState)
 			{
@@ -33,5 +33,6 @@ namespace Eternal
 
 		extern const DepthStencil DepthStencilNoneNone;
 		extern const DepthStencil DepthStencilTestWriteLessNone;
+		extern const DepthStencil DepthStencilTestWriteGreaterNone;
 	}
 }

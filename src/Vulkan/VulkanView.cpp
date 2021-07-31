@@ -11,7 +11,7 @@ namespace Eternal
 	{
 		using namespace Eternal::Graphics::Vulkan;
 
-		static constexpr vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES_RENDER_TARGET[] =
+		static constexpr vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES_RENDER_TARGETS[] =
 		{
 			vk::ImageViewType(~0),
 			vk::ImageViewType(~0),
@@ -21,14 +21,14 @@ namespace Eternal
 			vk::ImageViewType::e2DArray,
 			vk::ImageViewType::e3D
 		};
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_VIEW_TYPES_RENDER_TARGET) == static_cast<int32_t>(ViewRenderTargetType::VIEW_RENDER_TARGET_COUNT), "Mismatch between abstraction and vulkan image view types");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_VIEW_TYPES_RENDER_TARGETS) == static_cast<int32_t>(ViewRenderTargetType::VIEW_RENDER_TARGET_COUNT), "Mismatch between abstraction and vulkan image view types");
 
 		vk::ImageViewType ConvertViewRenderTargetTypeToVulkanImageViewType(_In_ const ViewRenderTargetType& InViewRenderTargetType)
 		{
-			return VULKAN_IMAGE_VIEW_TYPES_RENDER_TARGET[static_cast<int32_t>(InViewRenderTargetType)];
+			return VULKAN_IMAGE_VIEW_TYPES_RENDER_TARGETS[static_cast<int32_t>(InViewRenderTargetType)];
 		}
 
-		static constexpr vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES_SHADER_RESOURCE[] =
+		static constexpr vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES_SHADER_RESOURCES[] =
 		{
 			vk::ImageViewType(~0),
 			vk::ImageViewType(~0),
@@ -40,11 +40,26 @@ namespace Eternal
 			vk::ImageViewType::eCube,
 			vk::ImageViewType::eCubeArray
 		};
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_VIEW_TYPES_SHADER_RESOURCE) == static_cast<int32_t>(ViewShaderResourceType::VIEW_SHADER_RESOURCE_COUNT), "Mismatch between abstraction and vulkan image view types");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_VIEW_TYPES_SHADER_RESOURCES) == static_cast<int32_t>(ViewShaderResourceType::VIEW_SHADER_RESOURCE_COUNT), "Mismatch between abstraction and vulkan image view types");
 
 		vk::ImageViewType ConvertViewShaderResourceTypeToVulkanImageViewType(_In_ const ViewShaderResourceType& InViewShaderResourceViewType)
 		{
-			return VULKAN_IMAGE_VIEW_TYPES_SHADER_RESOURCE[static_cast<int32_t>(InViewShaderResourceViewType)];
+			return VULKAN_IMAGE_VIEW_TYPES_SHADER_RESOURCES[static_cast<int32_t>(InViewShaderResourceViewType)];
+		}
+
+		static constexpr vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES_DEPTH_STENCILS[] =
+		{
+			vk::ImageViewType(~0),
+			vk::ImageViewType::e1D,
+			vk::ImageViewType::e1DArray,
+			vk::ImageViewType::e2D,
+			vk::ImageViewType::e2DArray
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_VIEW_TYPES_DEPTH_STENCILS) == static_cast<int32_t>(ViewDepthStencilType::VIEW_DEPTH_STENCIL_COUNT), "Mismatch between abstraction and vulkan image view types");
+
+		vk::ImageViewType ConvertViewDepthStencilTypeToVulkanImageViewType(_In_ const ViewDepthStencilType& InViewDepthStencilType)
+		{
+			return VULKAN_IMAGE_VIEW_TYPES_DEPTH_STENCILS[static_cast<int32_t>(InViewDepthStencilType)];
 		}
 
 		VulkanView::VulkanView(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation)
@@ -303,7 +318,54 @@ namespace Eternal
 		VulkanView::VulkanView(_In_ const DepthStencilViewCreateInformation& InViewCreateInformation)
 			: View(InViewCreateInformation)
 		{
-			D3D12_TEX1D_DSV
+			vk::Device& VkDevice = static_cast<VulkanDevice&>(InViewCreateInformation.Context.GetDevice()).GetVulkanDevice();
+			VulkanResource& VkResource = static_cast<VulkanResource&>(GetResource());
+
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+			_SubresourceRange = vk::ImageSubresourceRange(
+				vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil
+			);
+			_SubresourceRange.layerCount = 1;
+			_SubresourceRange.levelCount = 1;
+
+			switch (InViewCreateInformation.ResourceViewDepthStencilType)
+			{
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_TEXTURE_1D:
+			{
+				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.DepthStencilViewTexture1D.MipSlice;
+			} break;
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_TEXTURE_1D_ARRAY:
+			{
+				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture1DArray.MipSlice;
+				_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.UnorderedAccessViewTexture1DArray.FirstArraySlice;
+				_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture1DArray.ArraySize;
+			} break;
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_TEXTURE_2D:
+			{
+				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture2D.MipSlice;
+			} break;
+			case ViewDepthStencilType::VIEW_DEPTH_STENCIL_TEXTURE_2D_ARRAY:
+			{
+				_SubresourceRange.baseMipLevel		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture2DArray.MipSlice;
+				_SubresourceRange.baseArrayLayer	= InViewCreateInformation.MetaData.UnorderedAccessViewTexture2DArray.FirstArraySlice;
+				_SubresourceRange.layerCount		= InViewCreateInformation.MetaData.UnorderedAccessViewTexture2DArray.ArraySize;
+			} break;
+			default:
+				ETERNAL_BREAK();
+				break;
+			}
+
+			vk::ImageViewCreateInfo CreateInfo;
+			CreateInfo.flags			= vk::ImageViewCreateFlagBits();
+			CreateInfo.image			= VkResource.GetVulkanImage();
+			CreateInfo.viewType			= ConvertViewDepthStencilTypeToVulkanImageViewType(InViewCreateInformation.ResourceViewDepthStencilType);
+			CreateInfo.format			= ConvertFormatToVulkanFormat(InViewCreateInformation.GraphicsFormat).Format;
+			CreateInfo.components		= vk::ComponentMapping();
+			CreateInfo.subresourceRange	= _SubresourceRange;
+
+			VerifySuccess(
+				VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
+			);
 		}
 
 		VulkanView::~VulkanView()

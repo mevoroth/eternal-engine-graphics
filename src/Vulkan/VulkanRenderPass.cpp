@@ -23,11 +23,12 @@ namespace Eternal
 			vector<vk::AttachmentDescription> VulkanAttachments;
 			vector<vk::AttachmentReference> VulkanAttachmentReferences;
 			vector<vk::ImageView> AttachmentViews;
-			VulkanAttachments.resize(CreateInformation.RenderTargets.size());
+			VulkanAttachments.resize(CreateInformation.RenderTargets.size() + (CreateInformation.DepthStencilRenderTarget ? 1 : 0));
 			VulkanAttachmentReferences.resize(CreateInformation.RenderTargets.size());
-			AttachmentViews.resize(CreateInformation.RenderTargets.size());
-	
-			for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < GetRenderTargets().size(); ++RenderTargetIndex)
+			AttachmentViews.resize(CreateInformation.RenderTargets.size() + (CreateInformation.DepthStencilRenderTarget ? 1 : 0));
+			
+			uint32_t RenderTargetIndex = 0;
+			for (; RenderTargetIndex < GetRenderTargets().size(); ++RenderTargetIndex)
 			{
 				const RenderTargetInformation& CurrentRenderTargetInformation	= GetRenderTargets()[RenderTargetIndex];
 				View* CurrentRenderTarget										= CurrentRenderTargetInformation.RenderTarget;
@@ -54,7 +55,19 @@ namespace Eternal
 			View* InDepthStencilRenderTarget = CreateInformation.DepthStencilRenderTarget;
 			if (InDepthStencilRenderTarget)
 			{
-				DepthStencilAttachmentReference = vk::AttachmentReference(0, vk::ImageLayout::eDepthAttachmentOptimal);
+				DepthStencilAttachmentReference			= vk::AttachmentReference(RenderTargetIndex, vk::ImageLayout::eDepthStencilAttachmentOptimal);
+				VulkanAttachments[RenderTargetIndex]	= vk::AttachmentDescription(
+					vk::AttachmentDescriptionFlagBits(),
+					ConvertFormatToVulkanFormat(InDepthStencilRenderTarget->GetViewFormat()).Format,
+					vk::SampleCountFlagBits::e1,
+					ConvertLoadOperatorToVulkanAttachmentLoadOperator(CreateInformation.DepthStencilOperator.Load),
+					ConvertStoreOperatorToVulkanAttachmentStoreOperator(CreateInformation.DepthStencilOperator.Store),
+					vk::AttachmentLoadOp::eDontCare,
+					vk::AttachmentStoreOp::eDontCare,
+					vk::ImageLayout::eDepthStencilAttachmentOptimal,
+					vk::ImageLayout::eDepthStencilAttachmentOptimal
+				);
+				AttachmentViews[RenderTargetIndex]		= static_cast<VulkanView*>(InDepthStencilRenderTarget)->GetVulkanImageView();
 			}
 
 			vk::SubpassDescription VulkanSubPass(

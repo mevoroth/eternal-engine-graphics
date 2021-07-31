@@ -10,9 +10,9 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		D3D12CommandQueue::D3D12CommandQueue(_In_ Device& InDevice, _In_ const CommandType& Type)
-			: CommandQueue(Type)
-			, _CommandQueueType(D3D12::ConvertCommandTypeToD3D12CommandListType(Type))
+		D3D12CommandQueue::D3D12CommandQueue(_In_ Device& InDevice, _In_ const CommandType& InType)
+			: CommandQueue(InType)
+			, _CommandQueueType(D3D12::ConvertCommandTypeToD3D12CommandListType(InType))
 		{
 			D3D12Device& InD3D12Device = static_cast<D3D12Device&>(InDevice);
 

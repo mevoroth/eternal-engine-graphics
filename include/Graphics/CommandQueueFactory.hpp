@@ -10,6 +10,6 @@ namespace Eternal
 		class Device;
 		class CommandQueue;
 
-		CommandQueue* CreateCommandQueue(_In_ Device& DeviceObj, _In_ const CommandType& Type = CommandType::COMMAND_TYPE_GRAPHIC);
+		CommandQueue* CreateCommandQueue(_In_ Device& InDevice, _In_ const CommandType& InType = CommandType::COMMAND_TYPE_GRAPHIC);
 	}
 }

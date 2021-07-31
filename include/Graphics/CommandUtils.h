@@ -352,6 +352,11 @@ namespace Eternal
 
 		struct VertexBufferParameters
 		{
+			VertexBufferParameters(_In_ uint32_t InOffset)
+				: Offset(InOffset)
+			{
+			}
+
 			uint32_t Offset = 0;
 		};
 

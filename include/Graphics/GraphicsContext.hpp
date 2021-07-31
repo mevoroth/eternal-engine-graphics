@@ -24,6 +24,8 @@ namespace Eternal
 		class ShaderFactory;
 		class Shader;
 		class GraphicsContext;
+		class InputLayout;
+		class Sampler;
 
 		struct GraphicsContextCreateInformation
 		{
@@ -64,6 +66,10 @@ namespace Eternal
 			Window& GetWindow() { return _Window; }
 			SwapChain& GetSwapChain() { return *_SwapChain; }
 			Viewport& GetMainViewport() { return *_MainViewportFullScreen; }
+			Viewport& GetBackBufferViewport() { return *_BackBufferViewportFullScreen; }
+			InputLayout& GetEmptyInputLayout() { return *_EmptyInputLayout; }
+			Sampler* GetPointClampSampler() { return _PointClampSampler; }
+			Sampler* GetBilinearClampSampler() { return _BilinearClampSampler; }
 
 			CommandQueue& GetGraphicsQueue();
 			CommandQueue& GetComputeQueue() { return *_ComputeQueue; }
@@ -107,17 +113,22 @@ namespace Eternal
 			vector<GraphicsCommand*>*												_GraphicsCommands = nullptr;
 
 			Window _Window;
-			Viewport* _MainViewportFullScreen	= nullptr;
-			Device* _Device						= nullptr;
-			SwapChain* _SwapChain				= nullptr;
+			Device* _Device							= nullptr;
+			SwapChain* _SwapChain					= nullptr;
 
-			CommandQueue* _GraphicsQueue		= nullptr;
-			CommandQueue* _ComputeQueue			= nullptr;
-			CommandQueue* _CopyQueue			= nullptr;
+			CommandQueue* _GraphicsQueue			= nullptr;
+			CommandQueue* _ComputeQueue				= nullptr;
+			CommandQueue* _CopyQueue				= nullptr;
 
-			ShaderFactory* _ShaderFactory		= nullptr;
+			ShaderFactory* _ShaderFactory			= nullptr;
+			
+			Viewport* _MainViewportFullScreen		= nullptr;
+			Viewport* _BackBufferViewportFullScreen	= nullptr;
+			InputLayout* _EmptyInputLayout			= nullptr;
+			Sampler* _PointClampSampler				= nullptr;
+			Sampler* _BilinearClampSampler			= nullptr;
 
-			uint32_t _CurrentFrameIndex			= FrameBufferingCount - 1; // During first frame, this will be set correct within range
+			uint32_t _CurrentFrameIndex				= FrameBufferingCount - 1; // During first frame, this will be set correct within range
 		};
 
 		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);

@@ -19,6 +19,8 @@
 #include "Graphics/ViewportFactory.hpp"
 #include "Graphics/View.hpp"
 #include "Graphics/Resource.hpp"
+#include "Graphics/InputLayoutFactory.hpp"
+#include "Graphics/SamplerFactory.hpp"
 
 namespace Eternal
 {
@@ -70,14 +72,11 @@ namespace Eternal
 
 			_Window.Create(CreateInformation.Arguments.WindowEventsHandler);
 
-			_Device					= CreateDevice(*this, CreateInformation.Settings.Driver);
+			_Device							= CreateDevice(*this, CreateInformation.Settings.Driver);
 
-			_MainViewportFullScreen	= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
-
-			_GraphicsQueue			= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHIC);
-			_ComputeQueue			= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
-			_CopyQueue				= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COPY);
-
+			_GraphicsQueue					= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHIC);
+			_ComputeQueue					= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
+			_CopyQueue						= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COPY);
 
 			for (int32_t FrameIndex = 0; FrameIndex < FrameBufferingCount; ++FrameIndex)
 			{
@@ -97,6 +96,26 @@ namespace Eternal
 			_CurrentFrameCommandListIndex.fill(0);
 
 			_ShaderFactory	= new ShaderFactory();
+			
+			_MainViewportFullScreen			= CreateViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+			_BackBufferViewportFullScreen	= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+			_EmptyInputLayout				= CreateInputLayout(*this);
+			_PointClampSampler				= CreateSampler(*this, SamplerCreateInformation(
+				/*InMINLinear =*/ false,
+				/*InMAGLinear =*/ false,
+				/*InMIPLinear =*/ false,
+				AddressMode::ADDRESS_MODE_CLAMP,
+				AddressMode::ADDRESS_MODE_CLAMP,
+				AddressMode::ADDRESS_MODE_CLAMP
+			));
+			_BilinearClampSampler			= CreateSampler(*this, SamplerCreateInformation(
+				/*InMINLinear =*/ true,
+				/*InMAGLinear =*/ true,
+				/*InMIPLinear =*/ false,
+				AddressMode::ADDRESS_MODE_CLAMP,
+				AddressMode::ADDRESS_MODE_CLAMP,
+				AddressMode::ADDRESS_MODE_CLAMP
+			));
 		}
 
 		GraphicsContext::~GraphicsContext()
@@ -134,6 +153,9 @@ namespace Eternal
 
 			delete _GraphicsQueue;
 			_GraphicsQueue = nullptr;
+
+			DestroyViewport(_BackBufferViewportFullScreen);
+			DestroyViewport(_MainViewportFullScreen);
 
 			delete _Device;
 			_Device = nullptr;

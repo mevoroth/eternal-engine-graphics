@@ -10,7 +10,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		CommandQueue* CreateCommandQueue(_In_ Device& InDevice, _In_ const CommandType& Type)
+		CommandQueue* CreateCommandQueue(_In_ Device& InDevice, _In_ const CommandType& InType)
 		{
 			LogWrite(LogInfo, LogGraphics, "[Graphics::CreateDevice]Creating Command Queue");
 
@@ -18,11 +18,11 @@ namespace Eternal
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
-				return new D3D12CommandQueue(InDevice, Type);
+				return new D3D12CommandQueue(InDevice, InType);
 #endif
 
 			case DeviceType::VULKAN:
-				return new VulkanCommandQueue(InDevice, Type);
+				return new VulkanCommandQueue(InDevice, InType);
 
 			default:
 				ETERNAL_BREAK();

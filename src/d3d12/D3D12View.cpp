@@ -248,6 +248,12 @@ namespace Eternal
 			ETERNAL_BREAK();
 		}
 
+		D3D12View::D3D12View(_In_ const DepthStencilViewCreateInformation& InViewCreateInformation)
+			: View(InViewCreateInformation)
+		{
+			ETERNAL_BREAK();
+		}
+
 		D3D12View::~D3D12View()
 		{
 			D3D12GraphicsContext& D3DGraphicsContext = static_cast<D3D12GraphicsContext&>(GetViewCreateInformation().Context);

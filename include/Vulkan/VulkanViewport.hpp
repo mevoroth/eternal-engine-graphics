@@ -17,14 +17,12 @@ namespace Eternal
 
 			inline int32_t GetInvertedY() const
 			{
-				ETERNAL_ASSERT(_InIsHeightInverted);
-				return GetHeight() + GetY();
+				return (_InIsHeightInverted ? GetHeight() : 0) + GetY();
 			}
 
 			inline int32_t GetInvertedHeight() const
 			{
-				ETERNAL_ASSERT(_InIsHeightInverted);
-				return -GetHeight();
+				return _InIsHeightInverted ? -GetHeight() : GetHeight();
 			}
 
 		private:

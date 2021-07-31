@@ -23,8 +23,6 @@ namespace Eternal
 			Shader* GetShader(_In_ GraphicsContext& Context, _In_ const ShaderCreateInformation& CreateInformation);
 
 		private:
-			static ShaderFactory* _Instance;
-
 			Shader* _Find(_In_ const string& Name);
 			Shader* _Create(_In_ GraphicsContext& Context, _In_ const ShaderCreateInformation& CreateInformation);
 

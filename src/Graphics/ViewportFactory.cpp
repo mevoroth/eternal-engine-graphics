@@ -32,5 +32,11 @@ namespace Eternal
 				break;
 			}
 		}
+
+		void DestroyViewport(_Inout_ Viewport*& InOutViewport)
+		{
+			delete InOutViewport;
+			InOutViewport = nullptr;
+		}
 	}
 }

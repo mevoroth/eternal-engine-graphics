@@ -11,12 +11,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		ShaderFactory* ShaderFactory::_Instance = nullptr;
-
 		ShaderFactory::ShaderFactory()
 		{
-			ETERNAL_ASSERT(!_Instance);
-			_Instance = this;
 		}
 
 		ShaderFactory::~ShaderFactory()

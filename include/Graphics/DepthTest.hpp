@@ -40,8 +40,8 @@ namespace Eternal
 			}
 
 		private:
-			bool _Enabled				= false;
-			Mask _Mask					= Mask::MASK_ZERO;
+			bool _Enabled					= false;
+			Mask _Mask						= Mask::MASK_ZERO;
 			ComparisonFunction _Comparison	= ComparisonFunction::COMPARISON_FUNCTION_LESS;
 		};
 
