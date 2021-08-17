@@ -3,6 +3,8 @@
 #include "GraphicsSettings.hpp"
 #include "Graphics/ShaderType.hpp"
 #include "File/FilePath.hpp"
+#include "File/FileFactory.hpp"
+#include "File/File.hpp"
 
 #include <fstream>
 #include <d3dcompiler.h>
@@ -73,6 +75,20 @@ namespace Eternal
 			ID3DBlob* Errors = nullptr;
 
 			string FullPathSource = FilePath::Find(FileName, FileType::FILE_TYPE_SHADERS);
+			File* ShaderFile = CreateFileHandle(FullPathSource);
+			ShaderFile->Open(File::READ);
+			uint64_t ShaderFileSize = ShaderFile->GetFileSize();
+			vector<char> ShaderFileBuffer;
+			ShaderFileBuffer.resize(ShaderFileSize + 1);
+			ShaderFile->Read(reinterpret_cast<uint8_t*>(ShaderFileBuffer.data()), ShaderFileSize);
+			ShaderFile->Close();
+			DestroyFileHandle(ShaderFile);
+
+			string ShaderFileBufferString = ShaderFileBuffer.data();
+			string ShaderFileContent = R"HLSLINCLUDE(
+				#include "ShadersReflection/HLSLReflection.hpp"
+			)HLSLINCLUDE";
+			ShaderFileContent += string(ShaderFileBuffer.data());
 
 			uint32_t MacrosCount = static_cast<uint32_t>(Defines.size()) / 2;
 			vector<D3D_SHADER_MACRO> Macros;
@@ -97,8 +113,10 @@ namespace Eternal
 			EndOfArrayMacro.Definition	= nullptr;
 			Macros.push_back(EndOfArrayMacro);
 
-			HRESULT hr = D3DCompileFromFile(
-				wstring(FullPathSource.cbegin(), FullPathSource.cend()).c_str(),
+			HRESULT hr = D3DCompile(
+				ShaderFileContent.c_str(),
+				ShaderFileContent.size(),
+				FileName.c_str(),
 				Macros.data(),
 				_IncludeHandler,
 				Entry,

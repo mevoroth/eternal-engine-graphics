@@ -9,7 +9,8 @@ namespace Eternal
 		class GraphicsContext;
 		enum class DeviceType;
 
-		Device* CreateDevice(_In_ const DeviceType& InDeviceType, _In_ Window& WindowObj);
-		Device* CreateDevice(_Inout_ GraphicsContext& Context, _In_ const DeviceType& InDeviceType);
+		Device* CreateDevice(_In_ const DeviceType& InDeviceType, _In_ Window& InWindow);
+		Device* CreateDevice(_Inout_ GraphicsContext& InContext, _In_ const DeviceType& InDeviceType);
+		void DestroyDevice(_Inout_ Device*& InOutDevice);
 	}
 }

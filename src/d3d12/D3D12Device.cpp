@@ -22,10 +22,16 @@ namespace Eternal
 		IDXGIInfoQueue*	D3D12Device::_DXGIInfoQueue	= nullptr;
 		IDXGIDebug*		D3D12Device::_DXGIDebug		= nullptr;
 #endif
+		bool D3D12Device::_IsInitialized			= false;
 		IDXGIFactory4* D3D12Device::_DXGIFactory	= nullptr;
 
 		void D3D12Device::Initialize()
 		{
+			if (_IsInitialized)
+				return;
+
+			_IsInitialized = true;
+
 			HRESULT hr = S_OK;
 
 			VerifySuccess(
@@ -82,6 +88,27 @@ namespace Eternal
 			//	//	ETERNAL_ASSERT(hr == S_OK);
 			//	//}
 			//}
+#endif
+		}
+
+		void D3D12Device::Destroy()
+		{
+			if (!_IsInitialized)
+				return;
+
+			_DXGIFactory->Release();
+			_DXGIFactory = nullptr;
+
+#if ETERNAL_DEBUG
+			VerifySuccess(
+				_DXGIDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL)
+			);
+
+			_Debug->Release();
+			_Debug = nullptr;
+
+			_DXGIDebug->Release();
+			_DXGIDebug = nullptr;
 #endif
 		}
 
@@ -356,11 +383,6 @@ namespace Eternal
 		D3D12Device::~D3D12Device()
 		{
 			_Device->Release();
-#if ETERNAL_DEBUG
-			VerifySuccess(
-				_DXGIDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL)
-			);
-#endif
 		}
 
 		uint32_t D3D12Device::GetDeviceMask() const

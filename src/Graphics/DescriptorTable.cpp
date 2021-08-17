@@ -27,6 +27,7 @@ namespace Eternal
 
 		template<> void DescriptorTable::SetDescriptor<Sampler>(_In_ uint32_t InSlot, _In_ const Sampler* InDescriptor)
 		{
+			ETERNAL_ASSERT(InDescriptor);
 			ETERNAL_ASSERT(InSlot < _Resources.size());
 			_Resources[InSlot].ResourceSampler = InDescriptor;
 			_ResourcesDirtyFlags.Set(InSlot);
@@ -34,6 +35,7 @@ namespace Eternal
 
 		template<> void DescriptorTable::SetDescriptor<View>(_In_ uint32_t InSlot, _In_ const View* InDescriptor)
 		{
+			ETERNAL_ASSERT(InDescriptor);
 			ETERNAL_ASSERT(InSlot < _Resources.size());
 			_Resources[InSlot].ResourceView = InDescriptor;
 			_ResourcesDirtyFlags.Set(InSlot);
@@ -41,6 +43,7 @@ namespace Eternal
 
 		template<> void DescriptorTable::SetDescriptor<DescriptorTable>(_In_ uint32_t InSlot, _In_ const DescriptorTable* InDescriptor)
 		{
+			ETERNAL_ASSERT(InDescriptor);
 			ETERNAL_ASSERT(InSlot < _Resources.size());
 			_Resources[InSlot].ResourceDescriptorTable = InDescriptor;
 			_ResourcesDirtyFlags.Set(InSlot);

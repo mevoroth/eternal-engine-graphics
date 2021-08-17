@@ -26,6 +26,7 @@ namespace Eternal
 		{
 		public:
 			static void Initialize();
+			static void Destroy();
 			static IDXGIFactory4* GetDXGIFactory();
 
 			D3D12Device(_In_ uint32_t DeviceIndex);
@@ -43,6 +44,7 @@ namespace Eternal
 			static IDXGIDebug*		_DXGIDebug;
 			ID3D12InfoQueue*		_InfoQueue		= nullptr;
 #endif
+			static bool				_IsInitialized;
 			static IDXGIFactory4*	_DXGIFactory;
 
 			IDXGIAdapter1*			_DXGIAdapter	= nullptr;

@@ -10,19 +10,15 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		Device* CreateDevice(_In_ const DeviceType& InDeviceType, _In_ Window& WindowObj)
+		Device* CreateDevice(_In_ const DeviceType& InDeviceType, _In_ Window& InWindow)
 		{
-			static bool InitDXGIFactory = false;
-
 			switch (InDeviceType)
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
-				if (!InitDXGIFactory)
 				{
 					LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating DXGI Factory");
 					D3D12Device::Initialize();
-					InitDXGIFactory = true;
 				}
 				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Direct3D 12 Device");
 				return new D3D12Device(0);
@@ -30,7 +26,7 @@ namespace Eternal
 
 			case DeviceType::VULKAN:
 				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Vulkan Device");
-				return new VulkanDevice(WindowObj);
+				return new VulkanDevice(InWindow);
 
 			default:
 				ETERNAL_BREAK();
@@ -38,9 +34,20 @@ namespace Eternal
 			}
 		}
 
-		Device* CreateDevice(_Inout_ GraphicsContext& Context, _In_ const DeviceType& InDeviceType)
+		Device* CreateDevice(_Inout_ GraphicsContext& InContext, _In_ const DeviceType& InDeviceType)
 		{
-			return CreateDevice(InDeviceType, Context.GetWindow());
+			return CreateDevice(InDeviceType, InContext.GetWindow());
+		}
+
+		void DestroyDevice(_Inout_ Device*& InOutDevice)
+		{
+#ifdef ETERNAL_ENABLE_D3D12
+			if (InOutDevice->GetDeviceType() == DeviceType::D3D12)
+				D3D12Device::Destroy();
+#endif
+
+			delete InOutDevice;
+			InOutDevice = nullptr;
 		}
 	}
 }

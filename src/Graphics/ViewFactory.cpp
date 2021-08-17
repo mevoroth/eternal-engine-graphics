@@ -70,6 +70,11 @@ namespace Eternal
 			return CreateMultiBufferedBufferView(InConstantBufferViewCreateInformation, InResources);
 		}
 
+		MultiBuffered<View>* CreateMultiBufferedShaderResourceView(_In_ MultiBuffered<Resource>& InResources, _In_ const ShaderResourceViewCreateInformation& InShaderResourceViewCreateInformation)
+		{
+			return CreateMultiBufferedBufferView(InShaderResourceViewCreateInformation, InResources);
+		}
+
 		void DestroyView(_Inout_ View*& InOutView)
 		{
 			delete InOutView;

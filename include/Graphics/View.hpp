@@ -379,6 +379,24 @@ namespace Eternal
 				ResourceViewShaderResourceType = InViewShaderResourceType;
 			}
 		};
+		
+		struct ShaderResourceViewStructuredBufferCreateInformation : public ShaderResourceViewCreateInformation
+		{
+			ShaderResourceViewStructuredBufferCreateInformation(
+				_In_ GraphicsContext& InContext,
+				_In_ Resource* InResource,
+				_In_ const ViewMetaData& InViewMetaData
+			)
+				: ShaderResourceViewCreateInformation(
+					InContext,
+					InResource,
+					InViewMetaData,
+					Format::FORMAT_UNKNOWN,
+					ViewShaderResourceType::VIEW_SHADER_RESOURCE_BUFFER
+				)
+			{
+			}
+		};
 
 		struct UnorderedAccessViewCreateInformation : public ViewCreateInformation
 		{

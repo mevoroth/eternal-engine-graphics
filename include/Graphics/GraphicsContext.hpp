@@ -70,7 +70,7 @@ namespace Eternal
 			SwapChain& GetSwapChain() { return *_SwapChain; }
 			Viewport& GetMainViewport() { return *_MainViewportFullScreen; }
 			Viewport& GetBackBufferViewport() { return *_BackBufferViewportFullScreen; }
-			InputLayout& GetEmptyInputLayout() { return *_EmptyInputLayout; }
+			InputLayout* GetEmptyInputLayout() { return _EmptyInputLayout; }
 			Sampler* GetPointClampSampler() { return _PointClampSampler; }
 			Sampler* GetBilinearClampSampler() { return _BilinearClampSampler; }
 
@@ -86,7 +86,7 @@ namespace Eternal
 			View& GetCurrentFrameBackBufferView();
 			Resource& GetCurrentFrameBackBuffer();
 			RenderPass& GetCurrentFrameBackBufferRenderPass();
-			RenderPass& GetBackBufferRenderPass();
+			RenderPass* GetBackBufferRenderPass();
 
 			uint32_t& GetCurrentFrameIndex() { return _CurrentFrameIndex; }
 

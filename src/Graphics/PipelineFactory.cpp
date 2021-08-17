@@ -10,7 +10,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation)
+		template<typename PipelineCreateInformationType>
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const PipelineCreateInformationType& InPipelineCreateInformation)
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
@@ -26,6 +27,16 @@ namespace Eternal
 				ETERNAL_BREAK();
 				return nullptr;
 			}
+		}
+
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation)
+		{
+			return CreatePipeline<GraphicsPipelineCreateInformation>(InContext, InPipelineCreateInformation);
+		}
+
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const ComputePipelineCreateInformation& InPipelineCreateInformation)
+		{
+			return CreatePipeline<ComputePipelineCreateInformation>(InContext, InPipelineCreateInformation);
 		}
 
 		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline)

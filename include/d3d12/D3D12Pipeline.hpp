@@ -15,8 +15,13 @@ namespace Eternal
 		public:
 			D3D12Pipeline(
 				_In_ Device& InDevice,
-				_In_ const PipelineCreateInformation& InPipelineCreateInformation
+				_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
 			);
+			D3D12Pipeline(
+				_In_ Device& InDevice,
+				_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
+			);
+			~D3D12Pipeline();
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() const { return _PipelineState; }
 			const D3D12RootSignature& GetD3D12RootSignature() const;

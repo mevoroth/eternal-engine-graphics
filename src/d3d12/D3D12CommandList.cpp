@@ -243,6 +243,8 @@ namespace Eternal
 
 		void D3D12CommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
+			ETERNAL_ASSERT(InPipeline.GetShaderTypes() != ShaderTypeFlags::CS);
+
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
 			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
 
@@ -294,115 +296,14 @@ namespace Eternal
 
 		void D3D12CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
-			ETERNAL_PROFILER(INFO)();
-			CommandList::SetGraphicsDescriptorTable(InContext, InDescriptorTable);
-			
-			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
-			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
-			const vector<RootSignatureParameter>& Parameters			= DescriptorTableLayout.Parameters;
-			
-			const vector<DescriptorTableConstants>& InConstants			= static_cast<const DescriptorTable&>(InDescriptorTable).GetConstants();
-			const vector<DescriptorTableResource>& InResources			= static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
-			ResourcesDirtyFlagsType& InConstantsDirtyFlags				= InDescriptorTable.GetConstantsDirtyFlags();
-			ResourcesDirtyFlagsType& InResourcesDirtyFlags				= InDescriptorTable.GetResourcesDirtyFlags();
 
-			uint32_t RootParameterIndex = 0;
-			for (uint32_t ConstantIndex = 0; ConstantIndex < Constants.size(); ++ConstantIndex, ++RootParameterIndex)
-			{
-				if (InConstantsDirtyFlags.IsSet(ConstantIndex))
-				{
-					_GraphicCommandList5->SetGraphicsRoot32BitConstants(
-						RootParameterIndex,
-						static_cast<UINT>(InConstants[ConstantIndex].Constants.size()),
-						InConstants[ConstantIndex].Constants.data(),
-						RootParameterIndex
-					);
-					InConstantsDirtyFlags.Unset(ConstantIndex);
-				}
-			}
-
-			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex, ++RootParameterIndex)
-			{
-				const RootSignatureParameter& CurrentParameter = Parameters[ParameterIndex];
-
-				D3D12_GPU_DESCRIPTOR_HANDLE DescriptorTableHandle = {};
-
-				switch (CurrentParameter.Parameter)
-				{
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER:
-				{
-					DescriptorTableHandle = static_cast<const D3D12Sampler*>(InResources[ParameterIndex].ResourceSampler)->GetD3D12GPUDescriptorHandle();
-				} break;
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_TEXTURE:
-				{
-					DescriptorTableHandle = static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12GPUDescriptorHandle();
-				} break;
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_TEXTURE:
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER:
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_STRUCTURED_BUFFER:
-					ETERNAL_BREAK(); // Not implemented yet
-					break;
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_CONSTANT_BUFFER:
-				{
-					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
-					{
-						_GraphicCommandList5->SetGraphicsRootConstantBufferView(
-							RootParameterIndex,
-							static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12OffsettedConstantBuffer()
-						);
-						InResourcesDirtyFlags.Unset(ParameterIndex);
-					}
-				} break;
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_BUFFER:
-					ETERNAL_BREAK(); // Not implemented yet
-					break;
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE:
-				{
-					D3D12_GPU_DESCRIPTOR_HANDLE SubResourceTableDescriptorHandle = {};
-					switch (CurrentParameter.DescriptorTable.Parameters[0].Parameter)
-					{
-					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER:
-					{
-						SubResourceTableDescriptorHandle = static_cast<const D3D12Sampler*>(InResources[ParameterIndex].ResourceDescriptorTable->GetResources()[0].ResourceSampler)->GetD3D12GPUDescriptorHandle();
-					} break;
-					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_TEXTURE:
-					{
-						SubResourceTableDescriptorHandle = static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceDescriptorTable->GetResources()[0].ResourceView)->GetD3D12GPUDescriptorHandle();
-					} break;
-					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_TEXTURE:
-					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER:
-					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_STRUCTURED_BUFFER:
-					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_CONSTANT_BUFFER:
-					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:
-					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_BUFFER:
-						ETERNAL_BREAK();
-						break;
-					}
-					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
-					{
-						_GraphicCommandList5->SetGraphicsRootDescriptorTable(
-							RootParameterIndex,
-							SubResourceTableDescriptorHandle
-						);
-						InResourcesDirtyFlags.Unset(ParameterIndex);
-					}
-				} break;
-				}
-
-				if (DescriptorTableHandle.ptr)
-				{
-					bool IsDirty = InResourcesDirtyFlags.IsSet(ParameterIndex);
-					if (IsDirty)
-					{
-						_GraphicCommandList5->SetGraphicsRootDescriptorTable(
-							RootParameterIndex,
-							DescriptorTableHandle
-						);
-						InResourcesDirtyFlags.Unset(ParameterIndex);
-					}
-				}
-			}
+			_SetDescriptorTable<
+				&ID3D12GraphicsCommandList5::SetGraphicsRoot32BitConstants,
+				&ID3D12GraphicsCommandList5::SetGraphicsRootShaderResourceView,
+				&ID3D12GraphicsCommandList5::SetGraphicsRootConstantBufferView,
+				&ID3D12GraphicsCommandList5::SetGraphicsRootUnorderedAccessView,
+				&ID3D12GraphicsCommandList5::SetGraphicsRootDescriptorTable
+			>(InContext, InDescriptorTable);
 		}
 
 		void D3D12CommandList::DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
@@ -424,6 +325,39 @@ namespace Eternal
 				InFirstVertex,
 				InFirstInstance
 			);
+		}
+
+		void D3D12CommandList::SetComputePipeline(_In_ const Pipeline& InPipeline)
+		{
+			ETERNAL_ASSERT(InPipeline.GetShaderTypes() == ShaderTypeFlags::CS);
+
+			const D3D12Pipeline& InD3DPipeline = static_cast<const D3D12Pipeline&>(InPipeline);
+			const D3D12RootSignature& InD3DRootSignature = static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
+
+			_GraphicCommandList5->SetComputeRootSignature(
+				InD3DRootSignature.GetD3D12RootSignature()
+			);
+			_GraphicCommandList5->SetPipelineState(
+				InD3DPipeline.GetD3D12PipelineState()
+			);
+			SetCurrentRootSignature(&InD3DRootSignature);
+		}
+
+		void D3D12CommandList::SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
+			_SetDescriptorTable<
+				&ID3D12GraphicsCommandList5::SetComputeRoot32BitConstants,
+				&ID3D12GraphicsCommandList5::SetComputeRootShaderResourceView,
+				&ID3D12GraphicsCommandList5::SetComputeRootConstantBufferView,
+				&ID3D12GraphicsCommandList5::SetComputeRootUnorderedAccessView,
+				&ID3D12GraphicsCommandList5::SetComputeRootDescriptorTable
+			>(InContext, InDescriptorTable);
+		}
+
+		void D3D12CommandList::Dispatch(_In_ uint32_t InX, _In_ uint32_t InY, _In_ uint32_t InZ)
+		{
+			ETERNAL_ASSERT(InX > 0 && InY > 0 && InZ > 0);
+			_GraphicCommandList5->Dispatch(InX, InY, InZ);
 		}
 
 		void D3D12CommandList::CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
@@ -615,6 +549,137 @@ namespace Eternal
 				&SourceTextureCopyLocation,
 				&SourceBox
 			);
+		}
+
+		template<
+			SetRoot32BitConstantsType SetRoot32BitConstants,
+			SetRootShaderResourceViewType SetRootShaderResourceView,
+			SetRootConstantBufferViewType SetRootConstantBufferView,
+			SetRootUnorderedAccessViewType SetRootUnorderedAccessView,
+			SetRootDescriptorTableType SetRootDescriptorTable
+		>
+		void D3D12CommandList::_SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
+			ETERNAL_PROFILER(INFO)();
+			CommandList::SetGraphicsDescriptorTable(InContext, InDescriptorTable);
+			
+			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
+			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
+			const vector<RootSignatureParameter>& Parameters			= DescriptorTableLayout.Parameters;
+			
+			const vector<DescriptorTableConstants>& InConstants			= static_cast<const DescriptorTable&>(InDescriptorTable).GetConstants();
+			const vector<DescriptorTableResource>& InResources			= static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
+			ResourcesDirtyFlagsType& InConstantsDirtyFlags				= InDescriptorTable.GetConstantsDirtyFlags();
+			ResourcesDirtyFlagsType& InResourcesDirtyFlags				= InDescriptorTable.GetResourcesDirtyFlags();
+
+			uint32_t RootParameterIndex = 0;
+			for (uint32_t ConstantIndex = 0; ConstantIndex < Constants.size(); ++ConstantIndex, ++RootParameterIndex)
+			{
+				if (InConstantsDirtyFlags.IsSet(ConstantIndex))
+				{
+					(_GraphicCommandList5->*SetRoot32BitConstants)(
+						RootParameterIndex,
+						static_cast<UINT>(InConstants[ConstantIndex].Constants.size()),
+						InConstants[ConstantIndex].Constants.data(),
+						RootParameterIndex
+					);
+					InConstantsDirtyFlags.Unset(ConstantIndex);
+				}
+			}
+
+			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex, ++RootParameterIndex)
+			{
+				const RootSignatureParameter& CurrentParameter = Parameters[ParameterIndex];
+
+				D3D12_GPU_DESCRIPTOR_HANDLE DescriptorTableHandle = {};
+
+				switch (CurrentParameter.Parameter)
+				{
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER:
+				{
+					DescriptorTableHandle = static_cast<const D3D12Sampler*>(InResources[ParameterIndex].ResourceSampler)->GetD3D12GPUDescriptorHandle();
+				} break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_TEXTURE:
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_TEXTURE:
+				{
+					DescriptorTableHandle = static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12GPUDescriptorHandle();
+				} break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER:
+				{
+					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
+					{
+						(_GraphicCommandList5->*SetRootShaderResourceView)(
+							RootParameterIndex,
+							static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12OffsettedBuffer()
+						);
+
+						InResourcesDirtyFlags.Unset(ParameterIndex);
+					}
+				} break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_STRUCTURED_BUFFER:
+					ETERNAL_BREAK(); // Not implemented yet
+					break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_CONSTANT_BUFFER:
+				{
+					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
+					{
+						(_GraphicCommandList5->*SetRootConstantBufferView)(
+							RootParameterIndex,
+							static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12OffsettedConstantBuffer()
+						);
+						InResourcesDirtyFlags.Unset(ParameterIndex);
+					}
+				} break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_BUFFER:
+					ETERNAL_BREAK(); // Not implemented yet
+					break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE:
+				{
+					D3D12_GPU_DESCRIPTOR_HANDLE SubResourceTableDescriptorHandle = {};
+					switch (CurrentParameter.DescriptorTable.Parameters[0].Parameter)
+					{
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER:
+					{
+						SubResourceTableDescriptorHandle = static_cast<const D3D12Sampler*>(InResources[ParameterIndex].ResourceDescriptorTable->GetResources()[0].ResourceSampler)->GetD3D12GPUDescriptorHandle();
+					} break;
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_TEXTURE:
+					{
+						SubResourceTableDescriptorHandle = static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceDescriptorTable->GetResources()[0].ResourceView)->GetD3D12GPUDescriptorHandle();
+					} break;
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_TEXTURE:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_STRUCTURED_BUFFER:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_CONSTANT_BUFFER:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:
+					case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_BUFFER:
+						ETERNAL_BREAK();
+						break;
+					}
+					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
+					{
+						(_GraphicCommandList5->*SetRootDescriptorTable)(
+							RootParameterIndex,
+							SubResourceTableDescriptorHandle
+						);
+						InResourcesDirtyFlags.Unset(ParameterIndex);
+					}
+				} break;
+				}
+
+				if (DescriptorTableHandle.ptr)
+				{
+					bool IsDirty = InResourcesDirtyFlags.IsSet(ParameterIndex);
+					if (IsDirty)
+					{
+						(_GraphicCommandList5->*SetRootDescriptorTable)(
+							RootParameterIndex,
+							DescriptorTableHandle
+						);
+						InResourcesDirtyFlags.Unset(ParameterIndex);
+					}
+				}
+			}
 		}
 	}
 }

@@ -24,6 +24,9 @@ namespace Eternal
 			// Constant buffer
 			D3D12_GPU_VIRTUAL_ADDRESS GetD3D12OffsettedConstantBuffer() const;
 
+			// Structured buffer
+			D3D12_GPU_VIRTUAL_ADDRESS GetD3D12OffsettedBuffer() const;
+
 		private:
 			D3D12Handle _D3D12Handle;
 		};

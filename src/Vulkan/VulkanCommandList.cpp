@@ -376,6 +376,21 @@ namespace Eternal
 			);
 		}
 
+		void VulkanCommandList::SetComputePipeline(_In_ const Pipeline& InPipeline)
+		{
+			ETERNAL_BREAK();
+		}
+
+		void VulkanCommandList::SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
+			ETERNAL_BREAK();
+		}
+
+		void VulkanCommandList::Dispatch(_In_ uint32_t InX /* = 1 */, _In_ uint32_t InY /* = 1 */, _In_ uint32_t InZ /* = 1 */)
+		{
+			ETERNAL_BREAK();
+		}
+
 		void VulkanCommandList::CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
 		{
 			ETERNAL_PROFILER(INFO)();

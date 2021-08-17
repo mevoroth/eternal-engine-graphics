@@ -62,26 +62,57 @@ namespace Eternal
 
 		struct PipelineCreateInformation
 		{
+			RootSignature&		PipelineRootSignature;
+			InputLayout*		PipelineInputLayout			= nullptr;
+			RenderPass*			PipelineRenderPass			= nullptr;
+			Shader*				VS							= nullptr;
+			Shader*				PS							= nullptr;
+			Shader*				CS							= nullptr;
+			Rasterizer			PipelineRasterizer;
+			DepthStencil		PipelineDepthStencil;
+			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+			ShaderTypeFlags		PipelineShaderTypes;
+
+		protected:
+
 			PipelineCreateInformation(
 				_In_ RootSignature& InRootSignature,
-				_In_ InputLayout& InInputLayout,
-				_In_ RenderPass& InRenderPass,
-				_In_ Shader& InVS,
-				_In_ Shader& InPS,
+				_In_ InputLayout* InInputLayout,
+				_In_ RenderPass* InRenderPass,
+				_In_ Shader* InVS,
+				_In_ Shader* InPS,
 				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
 				_In_ const Rasterizer& InRasterizer = RasterizerDefault,
 				_In_ const PrimitiveTopology& InPrimitiveTopology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			);
 
-			RootSignature&		PipelineRootSignature;
-			InputLayout&		PipelineInputLayout;
-			RenderPass&			PipelineRenderPass;
-			Shader&				VS;
-			Shader&				PS;
-			Rasterizer			PipelineRasterizer;
-			DepthStencil		PipelineDepthStencil;
-			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-			ShaderTypeFlags		PipelineShaderTypes;
+			PipelineCreateInformation(
+				_In_ RootSignature& InRootSignature,
+				_In_ Shader* InCS
+			);
+
+		};
+
+		struct GraphicsPipelineCreateInformation : public PipelineCreateInformation
+		{
+			GraphicsPipelineCreateInformation(
+				_In_ RootSignature& InRootSignature,
+				_In_ InputLayout* InInputLayout,
+				_In_ RenderPass* InRenderPass,
+				_In_ Shader* InVS,
+				_In_ Shader* InPS,
+				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
+				_In_ const Rasterizer& InRasterizer = RasterizerDefault,
+				_In_ const PrimitiveTopology& InPrimitiveTopology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
+			);
+		};
+
+		struct ComputePipelineCreateInformation : public PipelineCreateInformation
+		{
+			ComputePipelineCreateInformation(
+				_In_ RootSignature& InRootSignature,
+				_In_ Shader* InCS
+			);
 		};
 
 		class Pipeline
@@ -89,7 +120,7 @@ namespace Eternal
 		public:
 			virtual ~Pipeline() {}
 
-			const Viewport& GetViewport() const { return static_cast<const RenderPass&>(_PipelineCreateInformation.PipelineRenderPass).GetViewport(); }
+			const Viewport& GetViewport() const { return static_cast<const RenderPass*>(_PipelineCreateInformation.PipelineRenderPass)->GetViewport(); }
 			const ShaderTypeFlags& GetShaderTypes() const { return _PipelineCreateInformation.PipelineShaderTypes; }
 			const RootSignature& GetRootSignature() const { return _PipelineCreateInformation.PipelineRootSignature; }
 

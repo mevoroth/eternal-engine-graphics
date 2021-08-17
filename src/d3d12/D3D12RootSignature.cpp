@@ -154,6 +154,7 @@ namespace Eternal
 				{
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_SAMPLER:
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_TEXTURE:
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_TEXTURE:
 				{
 					DescriptorRanges.push_back(DefaultDescriptorRange);
 					D3D12_DESCRIPTOR_RANGE1& DescriptorRange = DescriptorRanges.back();

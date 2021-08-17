@@ -14,7 +14,12 @@ namespace Eternal
 		public:
 			VulkanPipeline(
 				_In_ Device& InDevice,
-				_In_ const PipelineCreateInformation& InPipelineCreateInformation
+				_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
+			);
+
+			VulkanPipeline(
+				_In_ Device& InDevice,
+				_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
 			);
 
 			const vk::Pipeline& GetVulkanPipeline() const { return _Pipeline; }

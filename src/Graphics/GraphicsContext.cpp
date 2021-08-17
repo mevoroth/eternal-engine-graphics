@@ -203,9 +203,9 @@ namespace Eternal
 			return *_BackBufferRenderPasses[GetCurrentFrameIndex()];
 		}
 
-		RenderPass& GraphicsContext::GetBackBufferRenderPass()
+		RenderPass* GraphicsContext::GetBackBufferRenderPass()
 		{
-			return *_BackBufferRenderPasses[0];
+			return _BackBufferRenderPasses[0];
 		}
 
 		void GraphicsContext::BeginFrame()

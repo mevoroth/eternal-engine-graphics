@@ -17,7 +17,7 @@ namespace Eternal
 	{
 		VulkanPipeline::VulkanPipeline(
 			_In_ Device& InDevice,
-			_In_ const PipelineCreateInformation& InPipelineCreateInformation
+			_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
 		)
 			: Pipeline(InPipelineCreateInformation)
 		{
@@ -37,20 +37,20 @@ namespace Eternal
 				vk::PipelineShaderStageCreateInfo(
 					vk::PipelineShaderStageCreateFlagBits(),
 					vk::ShaderStageFlagBits::eVertex,
-					static_cast<VulkanShader&>(InPipelineCreateInformation.VS).GetVulkanShader(),
+					static_cast<VulkanShader*>(InPipelineCreateInformation.VS)->GetVulkanShader(),
 					"VS"
 				),
 				vk::PipelineShaderStageCreateInfo(
 					vk::PipelineShaderStageCreateFlagBits(),
 					vk::ShaderStageFlagBits::eFragment,
-					static_cast<VulkanShader&>(InPipelineCreateInformation.PS).GetVulkanShader(),
+					static_cast<VulkanShader*>(InPipelineCreateInformation.PS)->GetVulkanShader(),
 					"PS"
 				)
 			};
 
-			VulkanInputLayout& InputLayout = static_cast<VulkanInputLayout&>(InPipelineCreateInformation.PipelineInputLayout);
-			const vector<vk::VertexInputAttributeDescription>& VertexInputAttributeDescriptions	= static_cast<VulkanInputLayout&>(InputLayout).GetVertexInputAttributeDescriptions();
-			const vector<vk::VertexInputBindingDescription>& VertexInputBindingDescriptions		= static_cast<VulkanInputLayout&>(InputLayout).GetVertexInputBindingDescriptions();
+			VulkanInputLayout* InputLayout = static_cast<VulkanInputLayout*>(InPipelineCreateInformation.PipelineInputLayout);
+			const vector<vk::VertexInputAttributeDescription>& VertexInputAttributeDescriptions	= InputLayout->GetVertexInputAttributeDescriptions();
+			const vector<vk::VertexInputBindingDescription>& VertexInputBindingDescriptions		= InputLayout->GetVertexInputBindingDescriptions();
 
 			vk::PipelineVertexInputStateCreateInfo InputLayoutStateInfo(
 				vk::PipelineVertexInputStateCreateFlagBits(),
@@ -84,7 +84,7 @@ namespace Eternal
 				1.0f
 			);
 
-			const VulkanViewport& Viewport = static_cast<const VulkanViewport&>(InPipelineCreateInformation.PipelineRenderPass.GetViewport());
+			const VulkanViewport& Viewport = static_cast<const VulkanViewport&>(InPipelineCreateInformation.PipelineRenderPass->GetViewport());
 
 			vk::Viewport ViewportInfo(
 				static_cast<float>(Viewport.GetX()),
@@ -120,21 +120,21 @@ namespace Eternal
 			);
 
 			std::vector<vk::PipelineColorBlendAttachmentState> ColorBlendAttachmentStates;
-			ColorBlendAttachmentStates.resize(InPipelineCreateInformation.PipelineRenderPass.GetRenderTargets().size());
+			ColorBlendAttachmentStates.resize(InPipelineCreateInformation.PipelineRenderPass->GetRenderTargets().size());
 	
-			for (int TargetIndex = 0; TargetIndex < InPipelineCreateInformation.PipelineRenderPass.GetRenderTargets().size(); ++TargetIndex)
+			for (int TargetIndex = 0; TargetIndex < InPipelineCreateInformation.PipelineRenderPass->GetRenderTargets().size(); ++TargetIndex)
 			{
-				const BlendState& CurrentBlendState = InPipelineCreateInformation.PipelineRenderPass.GetRenderTargets()[TargetIndex].RenderTargetBlendState;
+				const BlendState& CurrentBlendState = InPipelineCreateInformation.PipelineRenderPass->GetRenderTargets()[TargetIndex].RenderTargetBlendState;
 
 				ColorBlendAttachmentStates[TargetIndex] = CreateVulkanPipelineColorBlendStateAttachmentState(
-					InPipelineCreateInformation.PipelineRenderPass.GetRenderTargets()[TargetIndex].RenderTargetBlendState
+					InPipelineCreateInformation.PipelineRenderPass->GetRenderTargets()[TargetIndex].RenderTargetBlendState
 				);
 			}
 
 			vk::PipelineColorBlendStateCreateInfo ColorBlendStateInfo(
 				vk::PipelineColorBlendStateCreateFlagBits(),
-				InPipelineCreateInformation.PipelineRenderPass.GetLogicBlend().IsEnabled(),
-				ConvertLogicOperatorToVulkanLogicOperator(InPipelineCreateInformation.PipelineRenderPass.GetLogicBlend().GetLogicOperator()),
+				InPipelineCreateInformation.PipelineRenderPass->GetLogicBlend().IsEnabled(),
+				ConvertLogicOperatorToVulkanLogicOperator(InPipelineCreateInformation.PipelineRenderPass->GetLogicBlend().GetLogicOperator()),
 				static_cast<uint32_t>(ColorBlendAttachmentStates.size()),
 				ColorBlendAttachmentStates.data()
 			);
@@ -172,7 +172,7 @@ namespace Eternal
 				&ColorBlendStateInfo,
 				&DynamicStateInfos,
 				static_cast<VulkanRootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetVulkanPipelineLayout(),
-				static_cast<VulkanRenderPass&>(InPipelineCreateInformation.PipelineRenderPass).GetVulkanRenderPass(),
+				static_cast<VulkanRenderPass*>(InPipelineCreateInformation.PipelineRenderPass)->GetVulkanRenderPass(),
 				0,
 				nullptr, 0
 			);
@@ -183,6 +183,15 @@ namespace Eternal
 				nullptr,
 				&_Pipeline
 			));
+		}
+
+		VulkanPipeline::VulkanPipeline(
+			_In_ Device& InDevice,
+			_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
+		)
+			: Pipeline(InPipelineCreateInformation)
+		{
+			ETERNAL_BREAK();
 		}
 	}
 }

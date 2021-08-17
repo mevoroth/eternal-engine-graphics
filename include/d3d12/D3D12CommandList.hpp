@@ -14,6 +14,33 @@ namespace Eternal
 		class Resource;
 		class RootSignature;
 
+		using SetRoot32BitConstantsType = void (ID3D12GraphicsCommandList::*)(
+			_In_ UINT													RootParameterIndex,
+			_In_ UINT													Num32BitValuesToSet,
+			_In_reads_(Num32BitValuesToSet * sizeof(UINT))	const void*	pSrcData,
+			_In_ UINT													DestOffsetIn32BitValues
+		);
+
+		using SetRootShaderResourceViewType = void (ID3D12GraphicsCommandList::*)(
+			_In_ UINT							RootParameterIndex,
+			_In_ D3D12_GPU_VIRTUAL_ADDRESS		BufferLocation
+		);
+
+		using SetRootConstantBufferViewType = void (ID3D12GraphicsCommandList::*)(
+			_In_ UINT							RootParameterIndex,
+			_In_ D3D12_GPU_VIRTUAL_ADDRESS		BufferLocation
+		);
+
+		using SetRootUnorderedAccessViewType = void (ID3D12GraphicsCommandList::*)(
+			_In_ UINT							RootParameterIndex,
+			_In_ D3D12_GPU_VIRTUAL_ADDRESS		BufferLocation
+			);
+
+		using SetRootDescriptorTableType = void (ID3D12GraphicsCommandList::*)(
+			_In_ UINT							RootParameterIndex,
+			_In_ D3D12_GPU_DESCRIPTOR_HANDLE	BaseDescriptor
+		);
+
 		class D3D12CommandList final : public CommandList
 		{
 		public:
@@ -39,6 +66,10 @@ namespace Eternal
 			virtual void DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount = 0, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t InFirstInstance = 0) override final;
 			virtual void DrawIndexedInstanced(_In_ uint32_t InIndexCountPerInstance, _In_ uint32_t InInstanceCount = 1, _In_ uint32_t InFirstIndex = 0, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t InFirstInstance = 0) override final;
 
+			virtual void SetComputePipeline(_In_ const Pipeline& InPipeline) override final;
+			virtual void SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable) override final;
+			virtual void Dispatch(_In_ uint32_t InX = 1, _In_ uint32_t InY = 1, _In_ uint32_t InZ = 1) override final;
+
 			virtual void CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion) override final;
 
 			inline ID3D12CommandList* GetD3D12CommandList() { return _GraphicCommandList5; }
@@ -48,6 +79,14 @@ namespace Eternal
 		private:
 			void _CopyResourceToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
 			void _CopyResourceToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
+			template<
+				SetRoot32BitConstantsType SetRoot32BitConstants,
+				SetRootShaderResourceViewType SetRootShaderResourceView,
+				SetRootConstantBufferViewType SetRootConstantBufferView,
+				SetRootUnorderedAccessViewType SetRootUnorderedAccessView,
+				SetRootDescriptorTableType SetRootDescriptorTable
+			>
+			void _SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable);
 
 			ID3D12GraphicsCommandList5*	_GraphicCommandList5	= nullptr;
 		};

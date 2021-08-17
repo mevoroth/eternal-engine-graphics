@@ -49,6 +49,18 @@ namespace Eternal
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_DSV_DIMENSIONS) == static_cast<int32_t>(ViewDepthStencilType::VIEW_DEPTH_STENCIL_COUNT), "Mismatch between abstraction and d3d12 dsv dimensions");
 
+		static constexpr D3D12_UAV_DIMENSION D3D12_UAV_DIMENSIONS[] =
+		{
+			D3D12_UAV_DIMENSION_UNKNOWN,
+			D3D12_UAV_DIMENSION_BUFFER,
+			D3D12_UAV_DIMENSION_TEXTURE1D,
+			D3D12_UAV_DIMENSION_TEXTURE1DARRAY,
+			D3D12_UAV_DIMENSION_TEXTURE2D,
+			D3D12_UAV_DIMENSION_TEXTURE2DARRAY,
+			D3D12_UAV_DIMENSION_TEXTURE3D
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_UAV_DIMENSIONS) == static_cast<int32_t>(ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_COUNT), "Mismatch between abstraction and d3d12 uav dimensions");
+
 		static D3D12_RTV_DIMENSION ConvertViewRenderTargetTypeToD3D12RenderTargetViewDimension(_In_ const ViewRenderTargetType& InViewRenderTargetType)
 		{
 			return D3D12_RTV_DIMENSIONS[static_cast<int32_t>(InViewRenderTargetType)];
@@ -64,12 +76,17 @@ namespace Eternal
 			return D3D12_DSV_DIMENSIONS[static_cast<int32_t>(InViewDepthStencilType)];
 		}
 
+		static D3D12_UAV_DIMENSION ConvertViewUnorderedAccessTypeToD3D12UnorderedAccessViewDimension(_In_ const ViewUnorderedAccessType& InViewUnorderedAccessType)
+		{
+			return D3D12_UAV_DIMENSIONS[static_cast<int32_t>(InViewUnorderedAccessType)];
+		}
+
 		D3D12View::D3D12View(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation)
 			: View(InViewCreateInformation)
 		{
 			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
 
-			D3D12_RENDER_TARGET_VIEW_DESC D3D12RenderTargetViewDesc;
+			D3D12_RENDER_TARGET_VIEW_DESC D3D12RenderTargetViewDesc = {};
 			D3D12RenderTargetViewDesc.Format		= ConvertFormatToD3D12Format(InViewCreateInformation.GraphicsFormat).Format;
 			D3D12RenderTargetViewDesc.ViewDimension	= ConvertViewRenderTargetTypeToD3D12RenderTargetViewDimension(InViewCreateInformation.ResourceViewRenderTargetType);
 			
@@ -159,7 +176,7 @@ namespace Eternal
 
 			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
 
-			D3D12_CONSTANT_BUFFER_VIEW_DESC D3D12ConstantBufferViewDesc;
+			D3D12_CONSTANT_BUFFER_VIEW_DESC D3D12ConstantBufferViewDesc = {};
 			D3D12ConstantBufferViewDesc.BufferLocation	= static_cast<D3D12Resource*>(InViewCreateInformation.GraphicsResource)->GetD3D12Resource()->GetGPUVirtualAddress()
 														+ InViewCreateInformation.MetaData.ConstantBufferView.BufferElementOffset * InViewCreateInformation.GraphicsResource->GetBufferStride();
 			D3D12ConstantBufferViewDesc.SizeInBytes		= Align<UINT>(InViewCreateInformation.MetaData.ConstantBufferView.BufferSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
@@ -177,7 +194,7 @@ namespace Eternal
 		{
 			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
 			
-			D3D12_SHADER_RESOURCE_VIEW_DESC D3D12ShaderResourceViewDesc;
+			D3D12_SHADER_RESOURCE_VIEW_DESC D3D12ShaderResourceViewDesc = {};
 
 			D3D12ShaderResourceViewDesc.Format					= ConvertFormatToD3D12Format(InViewCreateInformation.GraphicsFormat).Format;
 			D3D12ShaderResourceViewDesc.ViewDimension			= ConvertViewShaderResourceTypeToD3D12ShaderResourceViewDimension(InViewCreateInformation.ResourceViewShaderResourceType);
@@ -192,6 +209,7 @@ namespace Eternal
 				D3D12ShaderResourceViewDesc.Buffer.FirstElement						= InMetaData.ShaderResourceViewBuffer.FirstElement;
 				D3D12ShaderResourceViewDesc.Buffer.NumElements						= InMetaData.ShaderResourceViewBuffer.NumElements;
 				D3D12ShaderResourceViewDesc.Buffer.StructureByteStride				= InMetaData.ShaderResourceViewBuffer.StructureByteStride;
+				D3D12ShaderResourceViewDesc.Buffer.Flags							= D3D12_BUFFER_SRV_FLAG_NONE;
 			} break;
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_1D:
 			{
@@ -242,7 +260,7 @@ namespace Eternal
 				D3D12ShaderResourceViewDesc.TextureCubeArray.NumCubes				= InMetaData.ShaderResourceViewTextureCubeArray.NumCubes;
 				D3D12ShaderResourceViewDesc.TextureCubeArray.ResourceMinLODClamp	= InMetaData.ShaderResourceViewTextureCubeArray.ResourceMinLODClamp;
 				break;
-
+			default:
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN:
 			{
 				ETERNAL_BREAK();
@@ -261,7 +279,66 @@ namespace Eternal
 		D3D12View::D3D12View(_In_ const UnorderedAccessViewCreateInformation& InViewCreateInformation)
 			: View(InViewCreateInformation)
 		{
-			ETERNAL_BREAK();
+			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
+
+			D3D12_UNORDERED_ACCESS_VIEW_DESC D3D12UnorderedAccessViewDesc = {};
+
+			D3D12UnorderedAccessViewDesc.Format			= ConvertFormatToD3D12Format(InViewCreateInformation.GraphicsFormat).Format;
+			D3D12UnorderedAccessViewDesc.ViewDimension	= ConvertViewUnorderedAccessTypeToD3D12UnorderedAccessViewDimension(InViewCreateInformation.ResourceViewUnorderedAccessType);
+
+			const ViewMetaData& InMetaData = InViewCreateInformation.MetaData;
+
+			switch (InViewCreateInformation.ResourceViewUnorderedAccessType)
+			{
+			case  ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_BUFFER:
+			{
+				D3D12UnorderedAccessViewDesc.Buffer.FirstElement			= InMetaData.UnorderedAccessViewBuffer.FirstElement;
+				D3D12UnorderedAccessViewDesc.Buffer.NumElements				= InMetaData.UnorderedAccessViewBuffer.NumElements;
+				D3D12UnorderedAccessViewDesc.Buffer.StructureByteStride		= InMetaData.UnorderedAccessViewBuffer.StructureByteStride;
+			} break;
+			case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_1D:
+			{
+				D3D12UnorderedAccessViewDesc.Texture1D.MipSlice				= InMetaData.UnorderedAccessViewTexture1D.MipSlice;
+			} break;
+
+			case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_1D_ARRAY:
+			{
+				D3D12UnorderedAccessViewDesc.Texture1DArray.MipSlice		= InMetaData.UnorderedAccessViewTexture1DArray.MipSlice;
+				D3D12UnorderedAccessViewDesc.Texture1DArray.FirstArraySlice	= InMetaData.UnorderedAccessViewTexture1DArray.FirstArraySlice;
+				D3D12UnorderedAccessViewDesc.Texture1DArray.ArraySize		= InMetaData.UnorderedAccessViewTexture1DArray.ArraySize;
+			} break;
+			case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_2D:
+			{
+				D3D12UnorderedAccessViewDesc.Texture2D.MipSlice				= InMetaData.UnorderedAccessViewTexture2D.MipSlice;
+				D3D12UnorderedAccessViewDesc.Texture2D.PlaneSlice			= InMetaData.UnorderedAccessViewTexture2D.PlaneSlice;
+			} break;
+			case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_2D_ARRAY:
+			{
+				D3D12UnorderedAccessViewDesc.Texture2DArray.MipSlice		= InMetaData.UnorderedAccessViewTexture2DArray.MipSlice;
+				D3D12UnorderedAccessViewDesc.Texture2DArray.FirstArraySlice	= InMetaData.UnorderedAccessViewTexture2DArray.FirstArraySlice;
+				D3D12UnorderedAccessViewDesc.Texture2DArray.ArraySize		= InMetaData.UnorderedAccessViewTexture2DArray.ArraySize;
+				D3D12UnorderedAccessViewDesc.Texture2DArray.PlaneSlice		= InMetaData.UnorderedAccessViewTexture2DArray.PlaneSlice;
+			} break;
+			case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_TEXTURE_3D:
+			{
+				D3D12UnorderedAccessViewDesc.Texture3D.MipSlice				= InMetaData.UnorderedAccessViewTexture3D.MipSlice;
+				D3D12UnorderedAccessViewDesc.Texture3D.FirstWSlice			= InMetaData.UnorderedAccessViewTexture3D.FirstWSlice;
+				D3D12UnorderedAccessViewDesc.Texture3D.WSize				= InMetaData.UnorderedAccessViewTexture3D.WSize;
+			} break;
+			case ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_UNKNOWN:
+			{
+				ETERNAL_BREAK();
+			} break;
+			}
+
+			_D3D12Handle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateUnorderedAccessViewDescriptor();
+
+			InD3DDevice->CreateUnorderedAccessView(
+				static_cast<D3D12Resource&>(GetResource()).GetD3D12Resource(),
+				nullptr,
+				&D3D12UnorderedAccessViewDesc,
+				_D3D12Handle.D3D12CPUDescriptorHandle
+			);
 		}
 
 		D3D12View::D3D12View(_In_ const DepthStencilViewCreateInformation& InViewCreateInformation)
@@ -269,7 +346,7 @@ namespace Eternal
 		{
 			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
 
-			D3D12_DEPTH_STENCIL_VIEW_DESC D3D12DepthStencilViewDesc;
+			D3D12_DEPTH_STENCIL_VIEW_DESC D3D12DepthStencilViewDesc = {};
 
 			D3D12DepthStencilViewDesc.Format		= ConvertFormatToD3D12Format(InViewCreateInformation.GraphicsFormat).Format;
 			D3D12DepthStencilViewDesc.ViewDimension	= ConvertViewDepthStencilTypeToD3D12DepthStencilViewDimension(InViewCreateInformation.ResourceViewDepthStencilType);
@@ -343,6 +420,15 @@ namespace Eternal
 			const ViewCreateInformation& ViewInformation = GetViewCreateInformation();
 			return static_cast<const D3D12Resource&>(GetResource()).GetD3D12Resource()->GetGPUVirtualAddress()
 				+ ViewInformation.MetaData.ConstantBufferView.BufferElementOffset * GetResource().GetBufferStride();
+		}
+
+		D3D12_GPU_VIRTUAL_ADDRESS D3D12View::GetD3D12OffsettedBuffer() const
+		{
+			ETERNAL_ASSERT(GetViewCreateInformation().ResourceViewType == ViewType::VIEW_SHADER_RESOURCE);
+
+			const ViewCreateInformation& ViewInformation = GetViewCreateInformation();
+			return static_cast<const D3D12Resource&>(GetResource()).GetD3D12Resource()->GetGPUVirtualAddress()
+				+ ViewInformation.MetaData.ShaderResourceViewBuffer.FirstElement * GetResource().GetBufferStride();
 		}
 	}
 }
