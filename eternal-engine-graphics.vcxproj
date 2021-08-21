@@ -281,7 +281,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ETERNAL_ENABLE_D3D12=1;ETERNAL_DEBUG=1;ETERNAL_DEBUG_VERBOSE=(ETERNAL_DEBUG &amp;&amp; 1);ETERNAL_ENABLE_VULKAN=1;ETERNAL_USE_STD_PARALLEL=1;ETERNAL_PROFILER_USE_VERBOSE=0;VK_USE_PLATFORM_WIN32_KHR=1;IMGUI_USER_CONFIG="Imgui/ImguiConfig.hpp";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ETERNAL_ENABLE_D3D12=1;ETERNAL_DEBUG=1;ETERNAL_DEBUG_VERBOSE=(ETERNAL_DEBUG &amp;&amp; 1);ETERNAL_ENABLE_VULKAN=1;ETERNAL_USE_STD_PARALLEL=1;ETERNAL_PROFILER_USE_VERBOSE=0;VK_USE_PLATFORM_WIN32_KHR=1;IMGUI_USER_CONFIG="Imgui/ImguiConfig.hpp";NOMINMAX=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
@@ -290,6 +290,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DisableSpecificWarnings>4189;4100</DisableSpecificWarnings>
       <LanguageStandard>Default</LanguageStandard>
+      <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
