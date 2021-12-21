@@ -40,6 +40,12 @@ namespace Eternal
 			return _ResourceCreateInformation.TextureInformation.ClearValue;
 		}
 
+		uint8_t Resource::GetStencilClearValue() const
+		{
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+			return _ResourceCreateInformation.TextureInformation.StencilClearValue;
+		}
+
 		const ResourceDimension& Resource::GetResourceDimension() const
 		{
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);

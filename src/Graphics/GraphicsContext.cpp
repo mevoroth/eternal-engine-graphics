@@ -39,10 +39,11 @@ namespace Eternal
 				Context = new D3D12GraphicsContext(CreateInformation);
 				break;
 #endif
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				Context = new VulkanGraphicsContext(CreateInformation);
 				break;
-
+#endif
 			default:
 				ETERNAL_BREAK();
 			}

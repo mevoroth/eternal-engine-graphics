@@ -118,6 +118,7 @@ namespace Eternal
 			static constexpr uint32_t ComponentCount					= 4;
 			static constexpr float DefaultClearValue[ComponentCount]	= { 0.0f };
 			static constexpr float DefaultClearValueOne[ComponentCount]	= { 1.0f, 1.0f, 1.0f, 1.0f };
+			static constexpr uint8_t DefaultStencilClearValue			= 0x0u;
 
 			TextureCreateInformation(
 				_In_ const ResourceDimension& InResourceDimension,
@@ -127,7 +128,8 @@ namespace Eternal
 				_In_ uint32_t InHeight = 1,
 				_In_ uint32_t InDepthOrArraySize = 1,
 				_In_ uint32_t InMIPLevels = 1,
-				_In_ const float InClearValue[ComponentCount] = DefaultClearValue
+				_In_ const float InClearValue[ComponentCount] = DefaultClearValue,
+				_In_ uint8_t InStencilClearValue = DefaultStencilClearValue
 			)
 				: Dimension(InResourceDimension)
 				, ResourceFormat(InFormat)
@@ -136,6 +138,7 @@ namespace Eternal
 				, Height(InHeight)
 				, DepthOrArraySize(InDepthOrArraySize)
 				, MIPLevels(InMIPLevels)
+				, StencilClearValue(InStencilClearValue)
 			{
 				ETERNAL_ASSERT(InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_UNKNOWN);
 				ETERNAL_ASSERT(InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_BUFFER);
@@ -145,6 +148,7 @@ namespace Eternal
 			}
 
 			float ClearValue[ComponentCount]	= { 0.0f };
+			uint8_t StencilClearValue			= 0x0u;
 			ResourceDimension Dimension			= ResourceDimension::RESOURCE_DIMENSION_UNKNOWN;
 			Format ResourceFormat				= Format::FORMAT_INVALID;
 			TextureResourceUsage Usage			= TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE;
@@ -313,6 +317,7 @@ namespace Eternal
 			ResourceType GetResourceType() const;
 			const ResourceType& GetResourceTypeRaw() const { return _ResourceType; }
 			const float* GetClearValue() const;
+			uint8_t GetStencilClearValue() const;
 			const Format& GetFormat() const;
 
 		protected:

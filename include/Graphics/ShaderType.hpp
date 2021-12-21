@@ -12,6 +12,8 @@ namespace Eternal
 			GS,
 			PS,
 			CS,
+			MS,
+			AS,
 			SHADER_TYPE_COUNT
 		};
 
@@ -22,7 +24,13 @@ namespace Eternal
 			HS = 0x2,
 			DS = 0x4,
 			GS = 0x8,
-			PS = 0x10
+			PS = 0x10,
+			MS = 0x20,
+			AS = 0x40,
+
+			VS_PS		= VS | PS,
+			MS_PS		= MS | PS,
+			MS_AS_PS	= MS | AS | PS
 		};
 
 		ShaderTypeFlags operator|(_In_ const ShaderTypeFlags& InLeftShaderTypeFlags, _In_ const ShaderTypeFlags& InRightShaderTypeFlags);

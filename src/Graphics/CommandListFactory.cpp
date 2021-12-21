@@ -17,10 +17,10 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new D3D12CommandList(InDevice, InCommandAllocator);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				return new VulkanCommandList(InDevice, InCommandAllocator);
-
+#endif
 			default:
 				ETERNAL_BREAK();
 				return nullptr;

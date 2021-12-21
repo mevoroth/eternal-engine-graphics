@@ -23,11 +23,11 @@ namespace Eternal
 				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Direct3D 12 Device");
 				return new D3D12Device(0);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Vulkan Device");
 				return new VulkanDevice(InWindow);
-
+#endif
 			default:
 				ETERNAL_BREAK();
 				return nullptr;

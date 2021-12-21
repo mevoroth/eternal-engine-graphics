@@ -68,6 +68,8 @@ namespace Eternal
 			Shader*				VS							= nullptr;
 			Shader*				PS							= nullptr;
 			Shader*				CS							= nullptr;
+			Shader*				MS							= nullptr;
+			Shader*				AS							= nullptr;
 			Rasterizer			PipelineRasterizer;
 			DepthStencil		PipelineDepthStencil;
 			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -91,6 +93,24 @@ namespace Eternal
 				_In_ Shader* InCS
 			);
 
+			PipelineCreateInformation(
+				_In_ RootSignature& InRootSignature,
+				_In_ RenderPass* InRenderPass,
+				_In_ Shader* InMS,
+				_In_ Shader* InPS,
+				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
+				_In_ const Rasterizer& InRasterizer = RasterizerDefault
+			);
+
+			PipelineCreateInformation(
+				_In_ RootSignature& InRootSignature,
+				_In_ RenderPass* InRenderPass,
+				_In_ Shader* InMS,
+				_In_ Shader* InAS,
+				_In_ Shader* InPS,
+				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
+				_In_ const Rasterizer& InRasterizer = RasterizerDefault
+			);
 		};
 
 		struct GraphicsPipelineCreateInformation : public PipelineCreateInformation
@@ -112,6 +132,28 @@ namespace Eternal
 			ComputePipelineCreateInformation(
 				_In_ RootSignature& InRootSignature,
 				_In_ Shader* InCS
+			);
+		};
+
+		struct MeshPipelineCreateInformation : public PipelineCreateInformation
+		{
+			MeshPipelineCreateInformation(
+				_In_ RootSignature& InRootSignature,
+				_In_ RenderPass* InRenderPass,
+				_In_ Shader* InMS,
+				_In_ Shader* InPS,
+				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
+				_In_ const Rasterizer& InRasterizer = RasterizerDefault
+			);
+
+			MeshPipelineCreateInformation(
+				_In_ RootSignature& InRootSignature,
+				_In_ RenderPass* InRenderPass,
+				_In_ Shader* InMS,
+				_In_ Shader* InAS,
+				_In_ Shader* InPS,
+				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
+				_In_ const Rasterizer& InRasterizer = RasterizerDefault
 			);
 		};
 
