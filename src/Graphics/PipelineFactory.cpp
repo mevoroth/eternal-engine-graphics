@@ -19,10 +19,10 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new D3D12Pipeline(InContext.GetDevice(), InPipelineCreateInformation);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				return new VulkanPipeline(InContext.GetDevice(), InPipelineCreateInformation);
-
+#endif
 			default:
 				ETERNAL_BREAK();
 				return nullptr;

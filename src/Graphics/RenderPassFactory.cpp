@@ -18,10 +18,10 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new D3D12RenderPass(CreateInformation);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				return new VulkanRenderPass(Context, CreateInformation);
-
+#endif
 			default:
 				break;
 			}

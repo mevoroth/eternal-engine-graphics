@@ -51,7 +51,7 @@ namespace Eternal
 				InPrimitiveTopology
 			)
 		{
-			PipelineShaderTypes = ShaderTypeFlags::VS | ShaderTypeFlags::PS;
+			PipelineShaderTypes = ShaderTypeFlags::VS_PS;
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -67,6 +67,87 @@ namespace Eternal
 			: PipelineCreateInformation(InRootSignature, InCS)
 		{
 			PipelineShaderTypes = ShaderTypeFlags::CS;
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		// Mesh
+
+		PipelineCreateInformation::PipelineCreateInformation(
+			_In_ RootSignature& InRootSignature,
+			_In_ RenderPass* InRenderPass,
+			_In_ Shader* InMS,
+			_In_ Shader* InPS,
+			_In_ const DepthStencil& InDepthStencil /* = Graphics::DepthStencilNoneNone */,
+			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */
+		)
+			: PipelineRootSignature(InRootSignature)
+			, PipelineRenderPass(InRenderPass)
+			, MS(InMS)
+			, PS(InPS)
+			, PipelineDepthStencil(InDepthStencil)
+			, PipelineRasterizer(InRasterizer)
+		{
+		}
+
+		PipelineCreateInformation::PipelineCreateInformation(
+			_In_ RootSignature& InRootSignature,
+			_In_ RenderPass* InRenderPass,
+			_In_ Shader* InMS,
+			_In_ Shader* InAS,
+			_In_ Shader* InPS,
+			_In_ const DepthStencil& InDepthStencil /* = Graphics::DepthStencilNoneNone */,
+			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */
+		)
+			: PipelineRootSignature(InRootSignature)
+			, PipelineRenderPass(InRenderPass)
+			, MS(InMS)
+			, AS(InAS)
+			, PS(InPS)
+			, PipelineDepthStencil(InDepthStencil)
+			, PipelineRasterizer(InRasterizer)
+		{
+		}
+
+		MeshPipelineCreateInformation::MeshPipelineCreateInformation(
+			_In_ RootSignature& InRootSignature,
+			_In_ RenderPass* InRenderPass,
+			_In_ Shader* InMS,
+			_In_ Shader* InPS,
+			_In_ const DepthStencil& InDepthStencil /* = Graphics::DepthStencilNoneNone */,
+			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */
+		)
+			: PipelineCreateInformation(
+				InRootSignature,
+				InRenderPass,
+				InMS,
+				InPS,
+				InDepthStencil,
+				InRasterizer
+			)
+		{
+			PipelineShaderTypes = ShaderTypeFlags::MS_PS;
+		}
+
+		MeshPipelineCreateInformation::MeshPipelineCreateInformation(
+			_In_ RootSignature& InRootSignature,
+			_In_ RenderPass* InRenderPass,
+			_In_ Shader* InMS,
+			_In_ Shader* InAS,
+			_In_ Shader* InPS,
+			_In_ const DepthStencil& InDepthStencil /* = Graphics::DepthStencilNoneNone */,
+			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */
+		)
+			: PipelineCreateInformation(
+				InRootSignature,
+				InRenderPass,
+				InMS,
+				InAS,
+				InPS,
+				InDepthStencil,
+				InRasterizer
+			)
+		{
+			PipelineShaderTypes = ShaderTypeFlags::MS_AS_PS;
 		}
 	}
 }

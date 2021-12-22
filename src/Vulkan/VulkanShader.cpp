@@ -20,7 +20,9 @@ static constexpr shaderc_shader_kind SHADER_KINDS[] =
 	shaderc_glsl_tess_evaluation_shader,
 	shaderc_glsl_geometry_shader,
 	shaderc_glsl_fragment_shader,
-	shaderc_glsl_compute_shader
+	shaderc_glsl_compute_shader,
+	shaderc_glsl_mesh_shader,
+	shaderc_glsl_task_shader
 };
 
 static const char* SHADER_ENTRY_POINTS[] =
@@ -30,7 +32,9 @@ static const char* SHADER_ENTRY_POINTS[] =
 	"DS",
 	"GS",
 	"PS",
-	"CS"
+	"CS",
+	"MS",
+	"AS"
 };
 ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_KINDS) == int(ShaderType::SHADER_TYPE_COUNT),		"Shader kinds does not match ShaderType definition.");
 ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == int(ShaderType::SHADER_TYPE_COUNT),	"Shader entry points does not match ShaderType definition.");

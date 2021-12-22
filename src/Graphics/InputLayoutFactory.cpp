@@ -18,10 +18,10 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new D3D12InputLayout(InVertexStreams);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				return new VulkanInputLayout(InVertexStreams);
-
+#endif
 			default:
 				ETERNAL_BREAK();
 				return nullptr;

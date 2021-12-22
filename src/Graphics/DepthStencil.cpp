@@ -16,5 +16,10 @@ namespace Eternal
 			DepthTest(DepthTest::Mask::MASK_ALL, ComparisonFunction::COMPARISON_FUNCTION_GREATER),
 			StencilTest()
 		);
+#if ETERNAL_USE_REVERSED_Z
+		const DepthStencil DepthStencilTestWriteNone = DepthStencilTestWriteGreaterNone;
+#else
+		const DepthStencil DepthStencilTestWriteNone = DepthStencilTestWriteLessNone;
+#endif
 	}
 }

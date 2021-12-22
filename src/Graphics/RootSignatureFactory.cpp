@@ -18,10 +18,10 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new D3D12RootSignature(InContext.GetDevice());
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				return new VulkanRootSignature(InContext);
-
+#endif
 			default:
 				ETERNAL_BREAK();
 				return nullptr;
@@ -36,10 +36,10 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new D3D12RootSignature(InContext.GetDevice(), InRootSignatureCreateInformation);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				return new VulkanRootSignature(InContext, InRootSignatureCreateInformation);
-
+#endif
 			default:
 				ETERNAL_BREAK();
 				return nullptr;

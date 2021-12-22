@@ -39,10 +39,11 @@ namespace Eternal
 				Context = new D3D12GraphicsContext(CreateInformation);
 				break;
 #endif
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				Context = new VulkanGraphicsContext(CreateInformation);
 				break;
-
+#endif
 			default:
 				ETERNAL_BREAK();
 			}
@@ -225,11 +226,9 @@ namespace Eternal
 			{
 				ETERNAL_PROFILER(INFO)("TransitionBackBufferToRenderTarget");
 				const vector<View*>& BackBufferViews = GetSwapChain().GetBackBufferRenderTargetViews();
-				CommandList* TransitionToRenderTargetCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "TransitionBackBufferToRenderTarget");
-				TransitionToRenderTargetCommandList->Begin(*this);
+				CommandListScope TransitionToRenderTargetCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "TransitionBackBufferToRenderTarget");
 				ResourceTransition BackBufferPresentToRenderTarget(BackBufferViews[GetCurrentFrameIndex()], TransitionState::TRANSITION_RENDER_TARGET);
 				TransitionToRenderTargetCommandList->Transition(&BackBufferPresentToRenderTarget, 1);
-				TransitionToRenderTargetCommandList->End();
 			}
 
 			{
@@ -253,11 +252,9 @@ namespace Eternal
 			{
 				ETERNAL_PROFILER(INFO)("TransitionBackBufferToPresent");
 				const vector<View*>& BackBufferViews = GetSwapChain().GetBackBufferRenderTargetViews();
-				CommandList* TransitionToBackBufferCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "TransitionBackBufferToPresent");
+				CommandListScope TransitionToBackBufferCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "TransitionBackBufferToPresent");
 				ResourceTransition BackBufferRenderTargetToPresent(BackBufferViews[GetCurrentFrameIndex()], TransitionState::TRANSITION_PRESENT);
-				TransitionToBackBufferCommandList->Begin(*this);
 				TransitionToBackBufferCommandList->Transition(&BackBufferRenderTargetToPresent, 1);
-				TransitionToBackBufferCommandList->End();
 			}
 
 			uint32_t CopyQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_COPY);
@@ -326,24 +323,26 @@ namespace Eternal
 			return *_GraphicsQueue;
 		}
 
-		CommandList* GraphicsContext::CreateNewCommandList(_In_ const CommandType& Type, _In_ const std::string& InName)
+		CommandListScope GraphicsContext::CreateNewCommandList(_In_ const CommandType& Type, _In_ const std::string& InName)
 		{
 			uint32_t TypeInt			= static_cast<int32_t>(Type);
 			uint32_t CommandListIndex	= _CurrentFrameCommandListIndex[TypeInt]++;
 
 			std::vector<CommandList*>& CurrentCommandListPool = _CommandListPools[_CurrentFrameIndex][TypeInt];
 
+			CommandList* NewCommandList = nullptr;
 			if (CommandListIndex < CurrentCommandListPool.size())
 			{
-				CurrentCommandListPool[CommandListIndex]->SetName(InName);
-				return CurrentCommandListPool[CommandListIndex];
+				NewCommandList = CurrentCommandListPool[CommandListIndex];
+			}
+			else
+			{
+				NewCommandList = CreateCommandList(*_Device, *_CommandAllocators[_CurrentFrameIndex][TypeInt]);
+				CurrentCommandListPool.push_back(NewCommandList);
 			}
 
-			CurrentCommandListPool.push_back(
-				CreateCommandList(*_Device, *_CommandAllocators[_CurrentFrameIndex][TypeInt])
-			);
-			CurrentCommandListPool.back()->SetName(InName);
-			return CurrentCommandListPool.back();
+			NewCommandList->SetName(InName);
+			return CommandListScope(NewCommandList, *this);
 		}
 
 		Shader* GraphicsContext::GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation)
@@ -371,6 +370,20 @@ namespace Eternal
 		void GraphicsContext::RegisterGraphicsCommands(_In_ vector<GraphicsCommand *>* InCommands)
 		{
 			_GraphicsCommands = InCommands;
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+		CommandListScope::CommandListScope(_In_ CommandList* InCommandList, _In_ GraphicsContext& InContext)
+			: _CommandList(InCommandList)
+		{
+			_CommandList->Begin(InContext);
+		}
+
+		CommandListScope::~CommandListScope()
+		{
+			_CommandList->End();
+			_CommandList = nullptr;
 		}
 	}
 }

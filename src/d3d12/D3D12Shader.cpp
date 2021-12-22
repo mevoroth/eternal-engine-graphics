@@ -25,7 +25,9 @@ namespace Eternal
 			"DS",
 			"GS",
 			"PS",
-			"CS"
+			"CS",
+			"MS",
+			"AS"
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_ENTRIES) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader entries");
 
@@ -36,7 +38,9 @@ namespace Eternal
 			"ds_5_1",
 			"gs_5_1",
 			"ps_5_1",
-			"cs_5_1"
+			"cs_5_1",
+			"",
+			""
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_PROFILES) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader profiles");
 

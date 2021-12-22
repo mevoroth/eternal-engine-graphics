@@ -22,10 +22,10 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new Viewport(InX, InY, InWidth, InHeight);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				return new VulkanViewport(InX, InY, InWidth, InHeight, /*InIsHeightInverted=*/ true);
-
+#endif
 			default:
 				ETERNAL_BREAK();
 				return nullptr;

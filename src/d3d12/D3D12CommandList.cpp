@@ -132,15 +132,15 @@ namespace Eternal
 				if (DepthStencilLoadOperator == LoadOperator::CLEAR)
 				{
 					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.Format					= ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format;
-					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Depth		= 0.0f;
-					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
+					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Depth		= DepthStencilView->GetResource().GetClearValue()[0];
+					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= DepthStencilView->GetResource().GetStencilClearValue();
 				}
 				RenderPassDepthStencilDesc.StencilBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
 				if (DepthStencilLoadOperator == LoadOperator::CLEAR)
 				{
 					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.Format				= ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format;
-					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Depth	= 0.0f;
-					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= 0x0;
+					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Depth	= DepthStencilView->GetResource().GetClearValue()[0];
+					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= DepthStencilView->GetResource().GetStencilClearValue();
 				}
 				RenderPassDepthStencilDesc.DepthEndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(InRenderPass.GetDepthStencilOperator().Store);
 				if (DepthStencilStoreOperator == StoreOperator::RESOLVE)

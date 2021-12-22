@@ -84,10 +84,10 @@ namespace Eternal
 			case DeviceType::D3D12:
 				return new DescriptorTable(this);
 #endif
-				
+#ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
 				return new VulkanDescriptorTable(InContext, this);
-
+#endif
 			default:
 				ETERNAL_BREAK();
 				return nullptr;
@@ -111,7 +111,7 @@ namespace Eternal
 						case DeviceType::D3D12:
 							return new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 						case DeviceType::VULKAN:
 							return new VulkanDescriptorTable(
 								InContext,
@@ -119,6 +119,7 @@ namespace Eternal
 								*this,
 								SubDescriptorTableIndex
 							);
+#endif
 						}
 					}
 				}
@@ -153,7 +154,7 @@ namespace Eternal
 					case DeviceType::D3D12:
 						Table = new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
 #endif
-
+#ifdef ETERNAL_ENABLE_VULKAN
 					case DeviceType::VULKAN:
 						Table = new VulkanDescriptorTable(
 							InContext,
@@ -161,6 +162,7 @@ namespace Eternal
 							*this,
 							DescriptorTableCount++
 						);
+#endif
 					}
 					OutDescriptorTables.push_back(Table);
 				}
