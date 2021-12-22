@@ -33,6 +33,11 @@ namespace Eternal
 					ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfacePresentModesKHR);
 					ETERNAL_ASSERT(_vkGetSwapchainImagesKHR);
 				}
+				
+				size_t getVkHeaderVersion() const
+				{
+					return VK_HEADER_VERSION;
+				}
 
 				VkResult vkGetPhysicalDeviceSurfaceSupportKHR(VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex, VkSurfaceKHR surface, VkBool32* pSupported) const VULKAN_HPP_NOEXCEPT
 				{
@@ -68,15 +73,15 @@ namespace Eternal
 			};
 		}
 
-		VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& Context)
+		VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& InContext)
 			: SwapChain()
 		{
 			using namespace Vulkan;
 
-			Window& InWindow = Context.GetWindow();
+			Window& InWindow = InContext.GetWindow();
 
-			VulkanDevice& VulkanDeviceObj = static_cast<VulkanDevice&>(Context.GetDevice());
-			VulkanPrivate::EternalDispatchLoader EternalLoader(VulkanDeviceObj);
+			VulkanDevice& InVulkanDevice = static_cast<VulkanDevice&>(InContext.GetDevice());
+			VulkanPrivate::EternalDispatchLoader EternalLoader(InVulkanDevice);
 
 			vk::Win32SurfaceCreateInfoKHR Win32SurfaceInfo(
 				vk::Win32SurfaceCreateFlagBitsKHR(),
@@ -84,13 +89,13 @@ namespace Eternal
 				InWindow.GetWindowHandler()
 			);
 
-			vk::Instance& VulkanInstance = VulkanDeviceObj.GetInstance();
+			vk::Instance& VulkanInstance = InVulkanDevice.GetInstance();
 			VerifySuccess(VulkanInstance.createWin32SurfaceKHR(&Win32SurfaceInfo, nullptr, &_Surface));
 
-			vk::PhysicalDevice& VulkanPhysicalDevice = VulkanDeviceObj.GetPhysicalDevice();
+			vk::PhysicalDevice& VulkanPhysicalDevice = InVulkanDevice.GetPhysicalDevice();
 			std::vector<vk::Bool32> SupportPresents;
-			SupportPresents.resize(VulkanDeviceObj.GetQueueFamilyPropertiesCount());
-			for (uint32_t QueueFamilyIndex = 0; QueueFamilyIndex < VulkanDeviceObj.GetQueueFamilyPropertiesCount(); ++QueueFamilyIndex)
+			SupportPresents.resize(InVulkanDevice.GetQueueFamilyPropertiesCount());
+			for (uint32_t QueueFamilyIndex = 0; QueueFamilyIndex < InVulkanDevice.GetQueueFamilyPropertiesCount(); ++QueueFamilyIndex)
 			{
 				VerifySuccess(VulkanPhysicalDevice.getSurfaceSupportKHR(QueueFamilyIndex, _Surface, &SupportPresents[QueueFamilyIndex], EternalLoader));
 			}
@@ -141,7 +146,7 @@ namespace Eternal
 				true
 			);
 
-			vk::Device& VulkanDevice = VulkanDeviceObj.GetVulkanDevice();
+			vk::Device& VulkanDevice = InVulkanDevice.GetVulkanDevice();
 			VerifySuccess(VulkanDevice.createSwapchainKHR(&SwapChainInfo, nullptr, &_SwapChain));
 
 			vk::PhysicalDeviceMemoryProperties PhysicalDeviceMemoryProperties = VulkanPhysicalDevice.getMemoryProperties();
@@ -162,7 +167,7 @@ namespace Eternal
 				{
 					std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
 					VulkanResourceBackBufferCreateInformation CreateInformation(
-						Context.GetDevice(),
+						InContext.GetDevice(),
 						BackBufferName,
 						BackBufferImages[BackBufferIndex]
 					);
@@ -173,7 +178,7 @@ namespace Eternal
 				{
 					ViewMetaData MetaData;
 					RenderTargetViewCreateInformation CreateInformation(
-						Context,
+						InContext,
 						_BackBuffers[BackBufferIndex],
 						MetaData,
 						Format::FORMAT_BGRA8888_UNORM,

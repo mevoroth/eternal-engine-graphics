@@ -56,6 +56,11 @@ namespace Eternal
 					ETERNAL_ASSERT(_vkCreateDebugUtilsMessenger);
 				}
 
+				size_t getVkHeaderVersion() const
+				{
+					return VK_HEADER_VERSION;
+				}
+
 				VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback) const VULKAN_HPP_NOEXCEPT
 				{
 					return _vkCreateDebugReport(instance, pCreateInfo, pAllocator, pCallback);
