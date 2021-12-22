@@ -71,6 +71,8 @@ namespace Eternal
 #endif
 		}
 
+		//////////////////////////////////////////////////////////////////////////
+
 		ResourceTransitionScope::ResourceTransitionScope(_In_ CommandList& InCommandList, _In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 			: _CommandList(InCommandList)
 			, _ResourceTransitionsCount(InResourceTransitionsCount)
