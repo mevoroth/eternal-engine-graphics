@@ -16,7 +16,7 @@ namespace Eternal
 
 		enum class CommandType
 		{
-			COMMAND_TYPE_GRAPHIC = 0,
+			COMMAND_TYPE_GRAPHICS = 0,
 			COMMAND_TYPE_COMPUTE,
 			COMMAND_TYPE_COPY,
 			COMMAND_TYPE_COUNT
@@ -149,8 +149,8 @@ namespace Eternal
 				_In_ View* InView,
 				_In_ const TransitionState& InBefore,
 				_In_ const TransitionState& InAfter,
-				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHIC,
-				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHIC
+				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHICS,
+				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHICS
 			)
 				: ViewToTransition(InView)
 				, Before(InBefore)
@@ -163,15 +163,15 @@ namespace Eternal
 			ResourceTransition(
 				_In_ View* InView,
 				_In_ const TransitionState& InAfter,
-				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHIC,
-				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHIC
+				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHICS,
+				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHICS
 			);
 
 			ResourceTransition(
 				_In_ Resource* InResource,
 				_In_ const TransitionState& InAfter,
-				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHIC,
-				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHIC
+				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHICS,
+				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHICS
 			);
 
 			ResourceTransition() {}
@@ -191,8 +191,8 @@ namespace Eternal
 			};
 			TransitionState Before				= TransitionState::TRANSITION_UNDEFINED;
 			TransitionState After				= TransitionState::TRANSITION_UNDEFINED;
-			CommandType		BeforeCommandType	= CommandType::COMMAND_TYPE_GRAPHIC;
-			CommandType		AfterCommandType	= CommandType::COMMAND_TYPE_GRAPHIC;
+			CommandType		BeforeCommandType	= CommandType::COMMAND_TYPE_GRAPHICS;
+			CommandType		AfterCommandType	= CommandType::COMMAND_TYPE_GRAPHICS;
 		};
 
 		//////////////////////////////////////////////////////////////////////////

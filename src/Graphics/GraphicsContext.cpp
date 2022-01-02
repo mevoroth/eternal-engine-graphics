@@ -77,7 +77,7 @@ namespace Eternal
 
 			_Device							= CreateDevice(*this, CreateInformation.Settings.Driver);
 
-			_GraphicsQueue					= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHIC);
+			_GraphicsQueue					= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHICS);
 			_ComputeQueue					= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
 			_CopyQueue						= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COPY);
 
@@ -85,7 +85,7 @@ namespace Eternal
 			{
 				_FrameFences[FrameIndex] = CreateFence(*_Device);
 
-				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_GRAPHIC)]	= CreateCommandAllocator(*_Device, *_GraphicsQueue);
+				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_GRAPHICS)]	= CreateCommandAllocator(*_Device, *_GraphicsQueue);
 				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_COMPUTE)]	= CreateCommandAllocator(*_Device, *_ComputeQueue);
 				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_COPY)]	= CreateCommandAllocator(*_Device, *_CopyQueue);
 
@@ -226,7 +226,7 @@ namespace Eternal
 			{
 				ETERNAL_PROFILER(INFO)("TransitionBackBufferToRenderTarget");
 				const vector<View*>& BackBufferViews = GetSwapChain().GetBackBufferRenderTargetViews();
-				CommandListScope TransitionToRenderTargetCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "TransitionBackBufferToRenderTarget");
+				CommandListScope TransitionToRenderTargetCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHICS, "TransitionBackBufferToRenderTarget");
 				ResourceTransition BackBufferPresentToRenderTarget(BackBufferViews[GetCurrentFrameIndex()], TransitionState::TRANSITION_RENDER_TARGET);
 				TransitionToRenderTargetCommandList->Transition(&BackBufferPresentToRenderTarget, 1);
 			}
@@ -252,14 +252,14 @@ namespace Eternal
 			{
 				ETERNAL_PROFILER(INFO)("TransitionBackBufferToPresent");
 				const vector<View*>& BackBufferViews = GetSwapChain().GetBackBufferRenderTargetViews();
-				CommandListScope TransitionToBackBufferCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHIC, "TransitionBackBufferToPresent");
+				CommandListScope TransitionToBackBufferCommandList = CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHICS, "TransitionBackBufferToPresent");
 				ResourceTransition BackBufferRenderTargetToPresent(BackBufferViews[GetCurrentFrameIndex()], TransitionState::TRANSITION_PRESENT);
 				TransitionToBackBufferCommandList->Transition(&BackBufferRenderTargetToPresent, 1);
 			}
 
 			uint32_t CopyQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_COPY);
 			uint32_t ComputeQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_COMPUTE);
-			uint32_t GraphicsQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_GRAPHIC);
+			uint32_t GraphicsQueueIndex = static_cast<uint32_t>(CommandType::COMMAND_TYPE_GRAPHICS);
 			if (_CurrentFrameCommandListIndex[CopyQueueIndex] > 0)
 			{
 				ETERNAL_PROFILER(INFO)("Submit Copy Queue");
@@ -323,9 +323,9 @@ namespace Eternal
 			return *_GraphicsQueue;
 		}
 
-		CommandListScope GraphicsContext::CreateNewCommandList(_In_ const CommandType& Type, _In_ const std::string& InName)
+		CommandList* GraphicsContext::_CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName)
 		{
-			uint32_t TypeInt			= static_cast<int32_t>(Type);
+			uint32_t TypeInt			= static_cast<int32_t>(InType);
 			uint32_t CommandListIndex	= _CurrentFrameCommandListIndex[TypeInt]++;
 
 			std::vector<CommandList*>& CurrentCommandListPool = _CommandListPools[_CurrentFrameIndex][TypeInt];
@@ -342,7 +342,17 @@ namespace Eternal
 			}
 
 			NewCommandList->SetName(InName);
-			return CommandListScope(NewCommandList, *this);
+			return NewCommandList;
+		}
+
+		CommandListScope GraphicsContext::CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName)
+		{
+			return CommandListScope(_CreateNewCommandList(InType, InName), *this);
+		}
+
+		GraphicsCommandListScope GraphicsContext::CreateNewGraphicsCommandList(_In_ const RenderPass& InRenderPass, _In_ const string& InName)
+		{
+			return GraphicsCommandListScope(_CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHICS, InName), InRenderPass, *this);
 		}
 
 		Shader* GraphicsContext::GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation)
@@ -384,6 +394,18 @@ namespace Eternal
 		{
 			_CommandList->End();
 			_CommandList = nullptr;
+		}
+
+
+		GraphicsCommandListScope::GraphicsCommandListScope(_In_ CommandList* InCommandList, _In_ const RenderPass& InRenderPass, _In_ GraphicsContext& InContext)
+			: CommandListScope(InCommandList, InContext)
+		{
+			_CommandList->BeginRenderPass(InRenderPass);
+		}
+
+		GraphicsCommandListScope::~GraphicsCommandListScope()
+		{
+			_CommandList->EndRenderPass();
 		}
 	}
 }

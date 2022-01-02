@@ -84,7 +84,7 @@ namespace Eternal
 					InitialStates,
 					(InTextureInformation.Usage & TextureResourceUsageRenderTargetDepthStencil) != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE ? &ClearValue : nullptr,
 					__uuidof(ID3D12Resource),
-					(void**)&_Resource
+					reinterpret_cast<void**>(&_Resource)
 				)
 			);
 
@@ -152,7 +152,7 @@ namespace Eternal
 					InitialStates,
 					nullptr,
 					__uuidof(ID3D12Resource),
-					(void**)&_Resource
+					reinterpret_cast<void**>(&_Resource)
 				)
 			);
 

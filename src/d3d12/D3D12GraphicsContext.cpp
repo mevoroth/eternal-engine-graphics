@@ -27,7 +27,7 @@ namespace Eternal
 				InD3DDevice->CreateDescriptorHeap(
 					&CBV_SRV_UAV_DescriptorHeapDesc,
 					__uuidof(ID3D12DescriptorHeap),
-					(void**)&_CBV_SRV_UAV_DescriptorHeap
+					reinterpret_cast<void**>(&_CBV_SRV_UAV_DescriptorHeap)
 				)
 			);
 			VerifySuccess(
@@ -45,7 +45,7 @@ namespace Eternal
 				InD3DDevice->CreateDescriptorHeap(
 					&SamplerDescriptorHeapDesc,
 					__uuidof(ID3D12DescriptorHeap),
-					(void**)&_SamplerDescriptorHeap
+					reinterpret_cast<void**>(&_SamplerDescriptorHeap)
 				)
 			);
 			VerifySuccess(
@@ -63,7 +63,7 @@ namespace Eternal
 				InD3DDevice->CreateDescriptorHeap(
 					&RenderTargetViewDescriptorHeapDesc,
 					__uuidof(ID3D12DescriptorHeap),
-					(void**)&_RenderTargetViewDescriptorHeap
+					reinterpret_cast<void**>(&_RenderTargetViewDescriptorHeap)
 				)
 			);
 			VerifySuccess(
@@ -81,7 +81,7 @@ namespace Eternal
 				InD3DDevice->CreateDescriptorHeap(
 					&DepthStencilViewDescriptorHeapDesc,
 					__uuidof(ID3D12DescriptorHeap),
-					(void**)&_DepthStencilViewDescriptorHeap
+					reinterpret_cast<void**>(&_DepthStencilViewDescriptorHeap)
 				)
 			);
 			VerifySuccess(

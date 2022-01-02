@@ -24,8 +24,8 @@ namespace Eternal
 			inline ID3D12CommandAllocator* GetD3D12CommandAllocator() const { return _CommandAllocator; }
 
 		private:
-			CommandType _CommandType = CommandType::COMMAND_TYPE_GRAPHIC;
-			ID3D12CommandAllocator*	_CommandAllocator = nullptr;
+			CommandType				_CommandType		= CommandType::COMMAND_TYPE_GRAPHICS;
+			ID3D12CommandAllocator*	_CommandAllocator	= nullptr;
 		};
 	}
 }

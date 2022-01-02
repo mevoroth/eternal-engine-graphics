@@ -17,7 +17,7 @@ namespace Eternal
 					_FenceValue,
 					D3D12_FENCE_FLAG_NONE,
 					__uuidof(ID3D12Fence),
-					(void**)&_Fence
+					reinterpret_cast<void**>(&_Fence)
 				)
 			);
 

@@ -4,6 +4,12 @@
 #include <d3d12.h>
 #include "Graphics/Shader.hpp"
 
+struct ID3DInclude;
+struct IDxcUtils;
+struct IDxcIncludeHandler;
+struct IDxcCompiler3;
+struct IDxcBlob;
+
 namespace Eternal
 {
 	namespace Graphics
@@ -15,29 +21,32 @@ namespace Eternal
 
 		class D3D12Shader final : public Shader
 		{
-			class D3D12Include : public ID3DInclude
-			{
-			public:
-				virtual STDMETHODIMP Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes) override;
-				virtual STDMETHODIMP Close(THIS_ LPCVOID pData) override;
-			};
-
 		public:
-			static ID3DInclude* GetIncludeHandler() { return _IncludeHandler; }
-
-			D3D12Shader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation);
+			static void Initialize();
+			static void Destroy();
+			
+			D3D12Shader(_In_ GraphicsContext& InContext, const ShaderCreateInformation& InCreateInformation);
 			virtual ~D3D12Shader();
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode);
 
 		protected:
-			static ID3DInclude* _IncludeHandler;
-			ID3DBlob* _Program;
+			static ID3DInclude*			_FxcIncludeHandler;
+			static IDxcIncludeHandler*	_DxcIncludeHandler;
+			static IDxcIncludeHandler*	_DxcIncludeHandlerDefault;
+			static IDxcUtils*			_DxcUtils;
+			static IDxcCompiler3*		_DxcCompiler;
 
-			void _CompileFile(_In_ const string& Source, _In_ const char* Entry, _In_ const char* Profile, _In_ const vector<string>& Defines);
-			void _LoadFile(const string& ShaderFile);
+			union
+			{
+				ID3DBlob* _FxcProgram;
+				IDxcBlob* _DxcProgram;
+			};
+
+			void _CompileFile(_In_ const string& InSource, _In_ uint32_t InShaderStageInt, _In_ const vector<string>& InDefines);
+			void _LoadFile(const string& InShaderFile);
 
 		private:
-			D3D12Shader(_In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines = vector<string>());
+			D3D12Shader(_In_ const string& InName, _In_ const string& InSource, _In_ const ShaderType& InShaderStage, _In_ const vector<string>& InDefines = vector<string>());
 		};
 	}
 }

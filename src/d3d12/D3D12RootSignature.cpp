@@ -63,7 +63,7 @@ namespace Eternal
 					RootSignatureBlob->GetBufferPointer(),
 					RootSignatureBlob->GetBufferSize(),
 					__uuidof(ID3D12RootSignature),
-					(void**)&_RootSignature
+					reinterpret_cast<void**>(&_RootSignature)
 				)
 			);
 
@@ -276,7 +276,7 @@ namespace Eternal
 					RootSignatureBlob->GetBufferPointer(),
 					RootSignatureBlob->GetBufferSize(),
 					__uuidof(ID3D12RootSignature),
-					(void**)&_RootSignature
+					reinterpret_cast<void**>(&_RootSignature)
 				)
 			);
 

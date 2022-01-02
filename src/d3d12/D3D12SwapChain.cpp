@@ -79,7 +79,7 @@ namespace Eternal
 					_SwapChain->GetBuffer(
 						BackBufferIndex,
 						__uuidof(ID3D12Resource),
-						(void**)&BackBufferResource
+						reinterpret_cast<void**>(&BackBufferResource)
 					)
 				);
 

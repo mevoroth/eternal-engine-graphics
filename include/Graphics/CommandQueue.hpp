@@ -24,7 +24,7 @@ namespace Eternal
 			CommandQueue(_In_ const CommandType& Type);
 
 		private:
-			CommandType _CommandType = CommandType::COMMAND_TYPE_GRAPHIC;
+			CommandType _CommandType = CommandType::COMMAND_TYPE_GRAPHICS;
 		};
 	}
 }

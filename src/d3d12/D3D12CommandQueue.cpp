@@ -26,7 +26,7 @@ namespace Eternal
 				InD3D12Device.GetD3D12Device()->CreateCommandQueue(
 					&CommandQueueDesc,
 					__uuidof(ID3D12CommandQueue),
-					(void**)&_CommandQueue
+					reinterpret_cast<void**>(&_CommandQueue)
 				)
 			);
 		}

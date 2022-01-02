@@ -239,7 +239,7 @@
     <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.2.176.1\Include;$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx;$(SolutionDir)eternal-engine-extern\optick\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.2.176.1\Include;$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx;$(SolutionDir)eternal-engine-extern\optick\src;$(SolutionDir)eternal-engine-extern\dxc\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.2.176.1\Include;$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx;$(SolutionDir)eternal-engine-extern\optick\src;$(IncludePath)</IncludePath>

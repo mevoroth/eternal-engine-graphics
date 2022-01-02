@@ -52,16 +52,26 @@ namespace Eternal
 		{
 			friend class GraphicsContext;
 		public:
-			~CommandListScope();
+			virtual ~CommandListScope();
 
 			inline CommandList* operator->() { return _CommandList; }
 			inline CommandList& operator*() { return *_CommandList; }
 			inline operator CommandList*() { return _CommandList; }
 
-		private:
+		protected:
 			CommandListScope(_In_ CommandList* InCommandList, _In_ GraphicsContext& InContext);
 
 			CommandList* _CommandList = nullptr;
+		};
+
+		class GraphicsCommandListScope : public CommandListScope
+		{
+			friend class GraphicsContext;
+		public:
+			virtual ~GraphicsCommandListScope();
+
+		protected:
+			GraphicsCommandListScope(_In_ CommandList* InCommandList, _In_ const RenderPass& InRenderPass, _In_ GraphicsContext& InContext);
 		};
 
 		class GraphicsContext
@@ -96,7 +106,8 @@ namespace Eternal
 			CommandQueue& GetCopyQueue() { return *_CopyQueue; }
 
 			Shader* GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation);
-			CommandListScope CreateNewCommandList(_In_ const CommandType& Type, _In_ const std::string& InName);
+			CommandListScope CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName);
+			GraphicsCommandListScope CreateNewGraphicsCommandList(_In_ const RenderPass& InRenderPass, _In_ const string& InName);
 
 			Fence& GetCurrentFrameFence() { return *_FrameFences[GetCurrentFrameIndex()]; }
 			Fence& GetNextFrameFence() { return *_FrameFences[(GetCurrentFrameIndex() + 1) % static_cast<uint32_t>(_FrameFences.size())]; }
@@ -118,6 +129,8 @@ namespace Eternal
 			void WaitForAllFences();
 
 		private:
+
+			CommandList* _CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName);
 
 			array<
 				array<CommandAllocator*, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>,

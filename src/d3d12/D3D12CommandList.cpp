@@ -1,7 +1,7 @@
 #include "d3d12/D3D12CommandList.hpp"
 
 #include <d3d12.h>
-#include <d3dx12.h>
+#include "d3dx12.h"
 #include "Graphics/RenderPass.hpp"
 #include "Graphics/DescriptorTable.hpp"
 #include "d3d12/D3D12Device.hpp"
@@ -35,7 +35,7 @@ namespace Eternal
 					InD3DCommandAllocator.GetD3D12CommandAllocator(),
 					nullptr,
 					__uuidof(ID3D12GraphicsCommandList5),
-					(void**)&_GraphicCommandList5
+					reinterpret_cast<void**>(&_GraphicCommandList5)
 				)
 			);
 			End();

@@ -3,6 +3,7 @@
 #include "Log/Log.hpp"
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12Device.hpp"
+#include "d3d12/D3D12Shader.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Graphics/GraphicsContext.hpp"
 
@@ -17,7 +18,9 @@ namespace Eternal
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
 				{
-					LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating DXGI Factory");
+					LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Initializing D3D12Shader");
+					D3D12Shader::Initialize();
+					LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Initializing DXGI Factory");
 					D3D12Device::Initialize();
 				}
 				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Direct3D 12 Device");
@@ -43,7 +46,10 @@ namespace Eternal
 		{
 #ifdef ETERNAL_ENABLE_D3D12
 			if (InOutDevice->GetDeviceType() == DeviceType::D3D12)
+			{
 				D3D12Device::Destroy();
+				D3D12Shader::Destroy();
+			}
 #endif
 
 			delete InOutDevice;

@@ -21,6 +21,10 @@ namespace Eternal
 				_In_ Device& InDevice,
 				_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
 			);
+			D3D12Pipeline(
+				_In_ Device& InDevice,
+				_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
+			);
 			~D3D12Pipeline();
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() const { return _PipelineState; }

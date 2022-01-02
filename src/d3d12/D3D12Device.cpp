@@ -35,12 +35,12 @@ namespace Eternal
 			HRESULT hr = S_OK;
 
 			VerifySuccess(
-				CreateDXGIFactory2(ETERNAL_D3D12_DXGIFLAG, __uuidof(IDXGIFactory4), (void**)&_DXGIFactory)
+				CreateDXGIFactory2(ETERNAL_D3D12_DXGIFLAG, __uuidof(IDXGIFactory4), reinterpret_cast<void**>(&_DXGIFactory))
 			);
 
 #if ETERNAL_DEBUG
 			// Enable the D3D12 debug layer
-			hr = D3D12GetDebugInterface(__uuidof(ID3D12Debug), (void**)&_Debug);
+			hr = D3D12GetDebugInterface(__uuidof(ID3D12Debug), reinterpret_cast<void**>(&_Debug));
 			if (hr == S_OK)
 			{
 				_Debug->EnableDebugLayer();
@@ -59,7 +59,7 @@ namespace Eternal
 				ETERNAL_ASSERT(DXGIGetDebugInterface);
 
 				VerifySuccess(
-					DXGIGetDebugInterface(__uuidof(IDXGIDebug), (void**)&_DXGIDebug)
+					DXGIGetDebugInterface(__uuidof(IDXGIDebug), reinterpret_cast<void**>(&_DXGIDebug))
 				);
 			}
 
@@ -130,7 +130,7 @@ namespace Eternal
 			}
 	
 			VerifySuccess(
-				D3D12CreateDevice(_DXGIAdapter, D3D_FEATURE_LEVEL_12_0, __uuidof(ID3D12Device5), (void**)&_Device5)
+				D3D12CreateDevice(_DXGIAdapter, D3D_FEATURE_LEVEL_12_0, __uuidof(ID3D12Device5), reinterpret_cast<void**>(&_Device5))
 			);
 			_Device = _Device5;
 			ETERNAL_ASSERT(_Device);
@@ -141,7 +141,7 @@ namespace Eternal
 				_DXGIAdapter->GetDesc1(&DXGIAdapterDesc1)
 			); // Break here for debug info on device
 
-			//hr = _Device->QueryInterface(__uuidof(ID3D12InfoQueue), (void**)_InfoQueue);
+			//hr = _Device->QueryInterface(__uuidof(ID3D12InfoQueue), reinterpret_cast<void**>(_InfoQueue));
 			//ETERNAL_ASSERT(hr == S_OK);
 
 			//// Break on category

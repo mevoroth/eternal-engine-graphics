@@ -36,6 +36,7 @@ namespace Eternal
 			virtual DeviceType GetDeviceType() const override final { return DeviceType::D3D12; }
 
 			inline ID3D12Device* GetD3D12Device() { return _Device; }
+			inline ID3D12Device5* GetD3D12Device5() { return _Device5; }
 
 		private:
 #if ETERNAL_DEBUG

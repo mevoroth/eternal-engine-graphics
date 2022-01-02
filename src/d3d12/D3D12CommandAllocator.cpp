@@ -18,7 +18,7 @@ namespace Eternal
 				static_cast<D3D12Device&>(InDevice).GetD3D12Device()->CreateCommandAllocator(
 					ConvertCommandTypeToD3D12CommandListType(_CommandType),
 					__uuidof(ID3D12CommandAllocator),
-					(void**)&_CommandAllocator
+					reinterpret_cast<void**>(&_CommandAllocator)
 				)
 			);
 		}
