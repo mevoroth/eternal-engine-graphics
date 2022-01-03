@@ -201,7 +201,7 @@ namespace Eternal
 
 			D3D12_PIPELINE_STATE_STREAM_DESC PipelineStateStreamDesc;
 			PipelineStateStreamDesc.pPipelineStateSubobjectStream	= &PipelineMeshStateStream;
-			PipelineStateStreamDesc.SizeInBytes						= sizeof(PipelineStateStreamDesc);
+			PipelineStateStreamDesc.SizeInBytes						= sizeof(PipelineMeshStateStream);
 
 			VerifySuccess(
 				InD3DDevice.GetD3D12Device5()->CreatePipelineState(

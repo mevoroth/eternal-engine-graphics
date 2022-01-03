@@ -18,6 +18,8 @@ namespace Eternal
 
 		enum class ShaderType;
 		class GraphicsContext;
+		struct D3D12IncludeFXC;
+		struct D3D12IncludeDXC;
 
 		class D3D12Shader final : public Shader
 		{
@@ -30,8 +32,8 @@ namespace Eternal
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode);
 
 		protected:
-			static ID3DInclude*			_FxcIncludeHandler;
-			static IDxcIncludeHandler*	_DxcIncludeHandler;
+			static D3D12IncludeFXC*		_FxcIncludeHandler;
+			static D3D12IncludeDXC*		_DxcIncludeHandler;
 			static IDxcIncludeHandler*	_DxcIncludeHandlerDefault;
 			static IDxcUtils*			_DxcUtils;
 			static IDxcCompiler3*		_DxcCompiler;

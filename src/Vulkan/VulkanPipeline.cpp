@@ -193,5 +193,14 @@ namespace Eternal
 		{
 			ETERNAL_BREAK();
 		}
+
+		VulkanPipeline::VulkanPipeline(
+			_In_ Device& InDevice,
+			_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
+		)
+			: Pipeline(InPipelineCreateInformation)
+		{
+			ETERNAL_BREAK();
+		}
 	}
 }

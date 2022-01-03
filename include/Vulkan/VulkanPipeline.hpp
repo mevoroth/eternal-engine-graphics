@@ -22,6 +22,11 @@ namespace Eternal
 				_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
 			);
 
+			VulkanPipeline(
+				_In_ Device& InDevice,
+				_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
+			);
+
 			const vk::Pipeline& GetVulkanPipeline() const { return _Pipeline; }
 
 		private:

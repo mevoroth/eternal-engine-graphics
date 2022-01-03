@@ -181,8 +181,8 @@ namespace Eternal
 
 		//////////////////////////////////////////////////////////////////////////
 
-		ID3DInclude*		D3D12Shader::_FxcIncludeHandler			= nullptr;
-		IDxcIncludeHandler*	D3D12Shader::_DxcIncludeHandler			= nullptr;
+		D3D12IncludeFXC*	D3D12Shader::_FxcIncludeHandler			= nullptr;
+		D3D12IncludeDXC*	D3D12Shader::_DxcIncludeHandler			= nullptr;
 		IDxcIncludeHandler*	D3D12Shader::_DxcIncludeHandlerDefault	= nullptr;
 		IDxcUtils*			D3D12Shader::_DxcUtils					= nullptr;
 		IDxcCompiler3*		D3D12Shader::_DxcCompiler				= nullptr;
@@ -237,6 +237,9 @@ namespace Eternal
 			{
 				delete _DxcIncludeHandler;
 				_DxcIncludeHandler = nullptr;
+
+				_DxcIncludeHandlerDefault->Release();
+				_DxcIncludeHandlerDefault = nullptr;
 
 				_DxcUtils->Release();
 				_DxcUtils = nullptr;
@@ -313,7 +316,7 @@ namespace Eternal
 
 			string ShaderFileBufferString = ShaderFileBuffer.data();
 			string ShaderFileContent = R"HLSLINCLUDE(
-				#include "./ShadersReflection/HLSLReflection.hpp"
+				#include "ShadersReflection/HLSLReflection.hpp"
 			)HLSLINCLUDE";
 			ShaderFileContent += string(ShaderFileBuffer.data());
 

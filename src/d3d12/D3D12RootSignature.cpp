@@ -16,13 +16,17 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		void AllowStage(D3D12_ROOT_SIGNATURE_FLAGS& Flags, const RootSignatureAccess& InAccess)
+		static void AllowStage(_Inout_ D3D12_ROOT_SIGNATURE_FLAGS& InOutFlags, _In_ const RootSignatureAccess& InAccess)
 		{
 			if (InAccess == RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS)
 				return;
 
 			ETERNAL_ASSERT(InAccess != RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID);
-			Flags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (static_cast<uint32_t>(InAccess) + 1));
+			uint32_t InAccessInt = static_cast<uint32_t>(InAccess);
+			if (InAccessInt <= static_cast<uint32_t>(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_PS))
+				InOutFlags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (InAccessInt + 1));
+			else
+				InOutFlags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (InAccessInt + 3));
 		}
 
 		D3D12RootSignature::D3D12RootSignature(_In_ Device& InDevice)
@@ -246,6 +250,10 @@ namespace Eternal
 			uint32_t GraphicsParameters = 0;
 			uint32_t ComputeParameters = DebugRegisterCount[static_cast<int32_t>(ShaderType::CS)];
 			for (uint32_t ShaderTypeIndex = static_cast<uint32_t>(ShaderType::VS); ShaderTypeIndex <= static_cast<uint32_t>(ShaderType::PS); ++ShaderTypeIndex)
+			{
+				GraphicsParameters += DebugRegisterCount[ShaderTypeIndex];
+			}
+			for (uint32_t ShaderTypeIndex = static_cast<uint32_t>(ShaderType::MS); ShaderTypeIndex <= static_cast<uint32_t>(ShaderType::AS); ++ShaderTypeIndex)
 			{
 				GraphicsParameters += DebugRegisterCount[ShaderTypeIndex];
 			}

@@ -39,6 +39,11 @@ namespace Eternal
 			return CreatePipeline<ComputePipelineCreateInformation>(InContext, InPipelineCreateInformation);
 		}
 
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const MeshPipelineCreateInformation& InPipelineCreateInformation)
+		{
+			return CreatePipeline<MeshPipelineCreateInformation>(InContext, InPipelineCreateInformation);
+		}
+
 		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline)
 		{
 			delete InOutPipeline;

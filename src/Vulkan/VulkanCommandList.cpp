@@ -391,6 +391,11 @@ namespace Eternal
 			ETERNAL_BREAK();
 		}
 
+		void VulkanCommandList::DispatchMesh(_In_ uint32_t InTaskBatchesCount /* = 1 */)
+		{
+			ETERNAL_BREAK();
+		}
+
 		void VulkanCommandList::CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
 		{
 			ETERNAL_PROFILER(INFO)();

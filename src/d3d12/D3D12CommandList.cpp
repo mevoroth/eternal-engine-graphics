@@ -34,8 +34,8 @@ namespace Eternal
 					ConvertCommandTypeToD3D12CommandListType(InD3DCommandAllocator.GetCommandType()),
 					InD3DCommandAllocator.GetD3D12CommandAllocator(),
 					nullptr,
-					__uuidof(ID3D12GraphicsCommandList5),
-					reinterpret_cast<void**>(&_GraphicCommandList5)
+					__uuidof(ID3D12GraphicsCommandList6),
+					reinterpret_cast<void**>(&_GraphicCommandList6)
 				)
 			);
 			End();
@@ -43,8 +43,8 @@ namespace Eternal
 
 		D3D12CommandList::~D3D12CommandList()
 		{
-			_GraphicCommandList5->Release();
-			_GraphicCommandList5 = nullptr;
+			_GraphicCommandList6->Release();
+			_GraphicCommandList6 = nullptr;
 		}
 
 		void D3D12CommandList::SetName(_In_ const std::string& InName)
@@ -52,13 +52,13 @@ namespace Eternal
 			CommandList::SetName(InName);
 			std::wstring InNameUTF8(InName.begin(), InName.end());
 			VerifySuccess(
-				_GraphicCommandList5->SetName(InNameUTF8.c_str())
+				_GraphicCommandList6->SetName(InNameUTF8.c_str())
 			);
 		}
 
 		void D3D12CommandList::Begin(_In_ GraphicsContext& InContext)
 		{
-			_GraphicCommandList5->Reset(
+			_GraphicCommandList6->Reset(
 				GetD3D12CommandAllocator().GetD3D12CommandAllocator(),
 				nullptr
 			);
@@ -69,7 +69,7 @@ namespace Eternal
 				InD3DContext.GetCBV_SRV_UAV_DescriptorHeap(),
 				InD3DContext.GetSamplerDescriptorHeap()
 			};
-			_GraphicCommandList5->SetDescriptorHeaps(
+			_GraphicCommandList6->SetDescriptorHeaps(
 				ETERNAL_ARRAYSIZE(DescriptorHeaps),
 				DescriptorHeaps
 			);
@@ -77,7 +77,7 @@ namespace Eternal
 
 		void D3D12CommandList::End()
 		{
-			_GraphicCommandList5->Close();
+			_GraphicCommandList6->Close();
 		}
 
 		void D3D12CommandList::BeginRenderPass(_In_ const RenderPass& InRenderPass)
@@ -154,7 +154,7 @@ namespace Eternal
 				}
 			}
 
-			_GraphicCommandList5->BeginRenderPass(
+			_GraphicCommandList6->BeginRenderPass(
 				static_cast<UINT>(InRenderTargets.size()),
 				InRenderTargets.size() > 0 ? RenderPassRenderTargetsDescs.data() : nullptr,
 				DepthStencilView ? &RenderPassDepthStencilDesc : nullptr,
@@ -170,7 +170,7 @@ namespace Eternal
 			ScissorRectangle.right			= InViewport.GetWidth();
 			ScissorRectangle.bottom			= InViewport.GetHeight();
 
-			_GraphicCommandList5->RSSetScissorRects(
+			_GraphicCommandList6->RSSetScissorRects(
 				1, &ScissorRectangle
 			);
 		}
@@ -179,7 +179,7 @@ namespace Eternal
 		{
 			CommandList::EndRenderPass();
 
-			_GraphicCommandList5->EndRenderPass();
+			_GraphicCommandList6->EndRenderPass();
 		}
 
 		void D3D12CommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
@@ -205,7 +205,7 @@ namespace Eternal
 				D3DResource.SetResourceState(CurrentResourceTransition.After);
 			}
 
-			_GraphicCommandList5->ResourceBarrier(
+			_GraphicCommandList6->ResourceBarrier(
 				InResourceTransitionsCount,
 				ResourceBarriers.data()
 			);
@@ -222,7 +222,7 @@ namespace Eternal
 			ViewportInformation.MinDepth	= 0.0f;
 			ViewportInformation.MaxDepth	= 1.0f;
 
-			_GraphicCommandList5->RSSetViewports(
+			_GraphicCommandList6->RSSetViewports(
 				1, &ViewportInformation
 			);
 		}
@@ -236,7 +236,7 @@ namespace Eternal
 				InScissorRectangle.Right,
 				InScissorRectangle.Bottom
 			};
-			_GraphicCommandList5->RSSetScissorRects(
+			_GraphicCommandList6->RSSetScissorRects(
 				1, &D3D12Rect
 			);
 		}
@@ -248,13 +248,13 @@ namespace Eternal
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
 			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
 
-			_GraphicCommandList5->SetGraphicsRootSignature(
+			_GraphicCommandList6->SetGraphicsRootSignature(
 				InD3DRootSignature.GetD3D12RootSignature()
 			);
-			_GraphicCommandList5->SetPipelineState(
+			_GraphicCommandList6->SetPipelineState(
 				InD3DPipeline.GetD3D12PipelineState()
 			);
-			_GraphicCommandList5->IASetPrimitiveTopology(InD3DPipeline.GetD3D12PrimitiveTopology());
+			_GraphicCommandList6->IASetPrimitiveTopology(InD3DPipeline.GetD3D12PrimitiveTopology());
 			SetCurrentRootSignature(&InD3DRootSignature);
 		}
 
@@ -267,7 +267,7 @@ namespace Eternal
 			D3D12IndexBufferView.Format			= ConvertIndexBufferTypeToDXGIFormat(InIndexBufferType);
 			D3D12IndexBufferView.SizeInBytes	= InIndexBuffer.GetBufferSize();
 
-			_GraphicCommandList5->IASetIndexBuffer(&D3D12IndexBufferView);
+			_GraphicCommandList6->IASetIndexBuffer(&D3D12IndexBufferView);
 		}
 
 		void D3D12CommandList::SetVertexBuffers(_In_ const Resource* InVertexBuffers[], _In_ uint32_t InBufferCount /* = 1 */, _In_ uint32_t InFirstVertexBuffer /* = 0 */, _In_ VertexBufferParameters InParameters[] /* = */)
@@ -287,7 +287,7 @@ namespace Eternal
 				CurrentD3D12VertexBufferView.StrideInBytes		= CurrentD3D12Resource->GetBufferStride();
 			}
 
-			_GraphicCommandList5->IASetVertexBuffers(
+			_GraphicCommandList6->IASetVertexBuffers(
 				InFirstVertexBuffer,
 				InBufferCount,
 				D3D12VertexBufferViews.data()
@@ -298,17 +298,17 @@ namespace Eternal
 		{
 
 			_SetDescriptorTable<
-				&ID3D12GraphicsCommandList5::SetGraphicsRoot32BitConstants,
-				&ID3D12GraphicsCommandList5::SetGraphicsRootShaderResourceView,
-				&ID3D12GraphicsCommandList5::SetGraphicsRootConstantBufferView,
-				&ID3D12GraphicsCommandList5::SetGraphicsRootUnorderedAccessView,
-				&ID3D12GraphicsCommandList5::SetGraphicsRootDescriptorTable
+				&ID3D12GraphicsCommandList6::SetGraphicsRoot32BitConstants,
+				&ID3D12GraphicsCommandList6::SetGraphicsRootShaderResourceView,
+				&ID3D12GraphicsCommandList6::SetGraphicsRootConstantBufferView,
+				&ID3D12GraphicsCommandList6::SetGraphicsRootUnorderedAccessView,
+				&ID3D12GraphicsCommandList6::SetGraphicsRootDescriptorTable
 			>(InContext, InDescriptorTable);
 		}
 
 		void D3D12CommandList::DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
 		{
-			_GraphicCommandList5->DrawInstanced(
+			_GraphicCommandList6->DrawInstanced(
 				InVertexCountPerInstance,
 				InInstanceCount,
 				InFirstVertex,
@@ -318,7 +318,7 @@ namespace Eternal
 
 		void D3D12CommandList::DrawIndexedInstanced(_In_ uint32_t InIndexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstIndex /* = 0 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
 		{
-			_GraphicCommandList5->DrawIndexedInstanced(
+			_GraphicCommandList6->DrawIndexedInstanced(
 				InIndexCountPerInstance,
 				InInstanceCount,
 				InFirstIndex,
@@ -334,10 +334,10 @@ namespace Eternal
 			const D3D12Pipeline& InD3DPipeline = static_cast<const D3D12Pipeline&>(InPipeline);
 			const D3D12RootSignature& InD3DRootSignature = static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
 
-			_GraphicCommandList5->SetComputeRootSignature(
+			_GraphicCommandList6->SetComputeRootSignature(
 				InD3DRootSignature.GetD3D12RootSignature()
 			);
-			_GraphicCommandList5->SetPipelineState(
+			_GraphicCommandList6->SetPipelineState(
 				InD3DPipeline.GetD3D12PipelineState()
 			);
 			SetCurrentRootSignature(&InD3DRootSignature);
@@ -346,18 +346,18 @@ namespace Eternal
 		void D3D12CommandList::SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
 			_SetDescriptorTable<
-				&ID3D12GraphicsCommandList5::SetComputeRoot32BitConstants,
-				&ID3D12GraphicsCommandList5::SetComputeRootShaderResourceView,
-				&ID3D12GraphicsCommandList5::SetComputeRootConstantBufferView,
-				&ID3D12GraphicsCommandList5::SetComputeRootUnorderedAccessView,
-				&ID3D12GraphicsCommandList5::SetComputeRootDescriptorTable
+				&ID3D12GraphicsCommandList6::SetComputeRoot32BitConstants,
+				&ID3D12GraphicsCommandList6::SetComputeRootShaderResourceView,
+				&ID3D12GraphicsCommandList6::SetComputeRootConstantBufferView,
+				&ID3D12GraphicsCommandList6::SetComputeRootUnorderedAccessView,
+				&ID3D12GraphicsCommandList6::SetComputeRootDescriptorTable
 			>(InContext, InDescriptorTable);
 		}
 
 		void D3D12CommandList::Dispatch(_In_ uint32_t InX, _In_ uint32_t InY, _In_ uint32_t InZ)
 		{
 			ETERNAL_ASSERT(InX > 0 && InY > 0 && InZ > 0);
-			_GraphicCommandList5->Dispatch(InX, InY, InZ);
+			_GraphicCommandList6->Dispatch(InX, InY, InZ);
 		}
 
 		void D3D12CommandList::CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
@@ -375,13 +375,18 @@ namespace Eternal
 			}
 		}
 
+		void D3D12CommandList::DispatchMesh(_In_ uint32_t InTaskBatchesCount /* = 1 */)
+		{
+			_GraphicCommandList6->DispatchMesh(InTaskBatchesCount, 1, 1);
+		}
+
 		void D3D12CommandList::_CopyResourceToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
 		{
 			switch (InSourceResource.GetResourceType())
 			{
 			case ResourceType::RESOURCE_TYPE_BUFFER:
 			{
-				_GraphicCommandList5->CopyBufferRegion(
+				_GraphicCommandList6->CopyBufferRegion(
 					static_cast<const D3D12Resource&>(InDestinationResource).GetD3D12Resource(),
 					InCopyRegion.Buffer.DestinationOffset,
 					static_cast<const D3D12Resource&>(InSourceResource).GetD3D12Resource(),
@@ -435,7 +440,7 @@ namespace Eternal
 				SourceBox.bottom	= InSourceExtent.Height;
 				SourceBox.back		= InSourceExtent.Depth;
 
-				_GraphicCommandList5->CopyTextureRegion(
+				_GraphicCommandList6->CopyTextureRegion(
 					&DestinationTextureCopyLocation,
 					0, 0, 0,
 					&SourceTextureCopyLocation,
@@ -541,7 +546,7 @@ namespace Eternal
 			} break;
 			}
 
-			_GraphicCommandList5->CopyTextureRegion(
+			_GraphicCommandList6->CopyTextureRegion(
 				&DestinationTextureCopyLocation,
 				DestinationPosition.X,
 				DestinationPosition.Y,
@@ -577,7 +582,7 @@ namespace Eternal
 			{
 				if (InConstantsDirtyFlags.IsSet(ConstantIndex))
 				{
-					(_GraphicCommandList5->*SetRoot32BitConstants)(
+					(_GraphicCommandList6->*SetRoot32BitConstants)(
 						RootParameterIndex,
 						static_cast<UINT>(InConstants[ConstantIndex].Constants.size()),
 						InConstants[ConstantIndex].Constants.data(),
@@ -608,7 +613,7 @@ namespace Eternal
 				{
 					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
 					{
-						(_GraphicCommandList5->*SetRootShaderResourceView)(
+						(_GraphicCommandList6->*SetRootShaderResourceView)(
 							RootParameterIndex,
 							static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12OffsettedBuffer()
 						);
@@ -623,7 +628,7 @@ namespace Eternal
 				{
 					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
 					{
-						(_GraphicCommandList5->*SetRootConstantBufferView)(
+						(_GraphicCommandList6->*SetRootConstantBufferView)(
 							RootParameterIndex,
 							static_cast<const D3D12View*>(InResources[ParameterIndex].ResourceView)->GetD3D12OffsettedConstantBuffer()
 						);
@@ -658,7 +663,7 @@ namespace Eternal
 					}
 					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
 					{
-						(_GraphicCommandList5->*SetRootDescriptorTable)(
+						(_GraphicCommandList6->*SetRootDescriptorTable)(
 							RootParameterIndex,
 							SubResourceTableDescriptorHandle
 						);
@@ -672,7 +677,7 @@ namespace Eternal
 					bool IsDirty = InResourcesDirtyFlags.IsSet(ParameterIndex);
 					if (IsDirty)
 					{
-						(_GraphicCommandList5->*SetRootDescriptorTable)(
+						(_GraphicCommandList6->*SetRootDescriptorTable)(
 							RootParameterIndex,
 							DescriptorTableHandle
 						);

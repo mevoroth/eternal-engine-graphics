@@ -71,7 +71,9 @@ namespace Eternal
 				vk::ShaderStageFlagBits::eTessellationEvaluation,
 				vk::ShaderStageFlagBits::eGeometry,
 				vk::ShaderStageFlagBits::eFragment,
-				vk::ShaderStageFlagBits::eCompute
+				vk::ShaderStageFlagBits::eCompute,
+				vk::ShaderStageFlagBits::eTaskNV,
+				vk::ShaderStageFlagBits::eMeshNV
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_SHADER_STAGE_FLAGS) == static_cast<int32_t>(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_COUNT), "Mismatch between abstraction and vulkan shader stage flags");
 

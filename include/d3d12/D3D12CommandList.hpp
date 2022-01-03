@@ -70,9 +70,11 @@ namespace Eternal
 			virtual void SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable) override final;
 			virtual void Dispatch(_In_ uint32_t InX = 1, _In_ uint32_t InY = 1, _In_ uint32_t InZ = 1) override final;
 
+			virtual void DispatchMesh(_In_ uint32_t InTaskBatchesCount = 1) override final;
+
 			virtual void CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion) override final;
 
-			inline ID3D12CommandList* GetD3D12CommandList() { return _GraphicCommandList5; }
+			inline ID3D12CommandList* GetD3D12CommandList() { return _GraphicCommandList6; }
 			inline D3D12CommandAllocator& GetD3D12CommandAllocator() { return static_cast<D3D12CommandAllocator&>(GetCommandAllocator()); }
 			inline D3D12Device& GetD3D12Device() { return static_cast<D3D12Device&>(GetDevice()); }
 
@@ -88,7 +90,7 @@ namespace Eternal
 			>
 			void _SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable);
 
-			ID3D12GraphicsCommandList5*	_GraphicCommandList5	= nullptr;
+			ID3D12GraphicsCommandList6*	_GraphicCommandList6	= nullptr;
 		};
 	}
 }
