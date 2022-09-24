@@ -26,7 +26,7 @@ namespace Eternal
 			SHADER_COMPILER_TYPE_DXC
 		};
 
-		static constexpr ShaderCompilerType ShaderCompiler = ShaderCompilerType::SHADER_COMPILER_TYPE_DXC;
+		static constexpr ShaderCompilerType ShaderCompiler = ShaderCompilerType::SHADER_COMPILER_TYPE_FXC;
 
 		static constexpr char* D3D12_SHADER_ENTRIES_FXC[] =
 		{
