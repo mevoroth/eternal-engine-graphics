@@ -62,6 +62,23 @@ namespace Eternal
 			return VULKAN_IMAGE_VIEW_TYPES_DEPTH_STENCILS[static_cast<int32_t>(InViewDepthStencilType)];
 		}
 
+		static constexpr vk::ImageViewType VULKAN_IMAGE_VIEW_TYPES_UNORDERED_ACCESS[] =
+		{
+			vk::ImageViewType(~0),
+			vk::ImageViewType(~0),
+			vk::ImageViewType::e1D,
+			vk::ImageViewType::e1DArray,
+			vk::ImageViewType::e2D,
+			vk::ImageViewType::e2DArray,
+			vk::ImageViewType::e3D
+		};
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_VIEW_TYPES_UNORDERED_ACCESS) == static_cast<int32_t>(ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_COUNT), "Mismatch between abstraction and vulkan image view types");
+
+		vk::ImageViewType ConvertViewUnorderedAccessToVulkanImageViewType(_In_ const ViewUnorderedAccessType& InViewUnorderedAccessType)
+		{
+			return VULKAN_IMAGE_VIEW_TYPES_UNORDERED_ACCESS[static_cast<int32_t>(InViewUnorderedAccessType)];
+		}
+
 		VulkanView::VulkanView(_In_ const RenderTargetViewCreateInformation& InViewCreateInformation)
 			: View(InViewCreateInformation)
 		{
@@ -304,7 +321,7 @@ namespace Eternal
 				vk::ImageViewCreateInfo CreateInfo;
 				CreateInfo.flags			= vk::ImageViewCreateFlagBits();
 				CreateInfo.image			= VkResource.GetVulkanImage();
-				CreateInfo.viewType			= ConvertViewShaderResourceTypeToVulkanImageViewType(InViewCreateInformation.ResourceViewShaderResourceType);
+				CreateInfo.viewType			= ConvertViewUnorderedAccessToVulkanImageViewType(InViewCreateInformation.ResourceViewUnorderedAccessType);
 				CreateInfo.format			= ConvertFormatToVulkanFormat(InViewCreateInformation.GraphicsFormat).Format;
 				CreateInfo.components		= vk::ComponentMapping();
 				CreateInfo.subresourceRange	= _SubresourceRange;
