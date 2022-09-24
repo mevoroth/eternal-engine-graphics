@@ -105,6 +105,7 @@ namespace Eternal
 			}
 
 			ResourceStructureType* GetDataPointer() const { return _DataPointer; }
+			ResourceStructureType* operator->() const { return _DataPointer; }
 
 		private:
 			Resource&				_Resource;
