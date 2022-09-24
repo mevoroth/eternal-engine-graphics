@@ -80,8 +80,8 @@ namespace Eternal
 		private:
 			Device&					_Device;
 			CommandAllocator&		_CommandAllocator;
-			const RootSignature*	_CurrentRootSignature = nullptr;
-			CommandListState		_CommandListState;
+			const RootSignature*	_CurrentRootSignature	= nullptr;
+			CommandListState		_CommandListState		= CommandListState::COMMAND_LIST_STATE_CLOSED;
 			std::string				_CommandListName;
 		};
 

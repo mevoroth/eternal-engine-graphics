@@ -3,6 +3,7 @@
 #include "Graphics/DepthStencil.hpp"
 #include "Graphics/Rasterizer.hpp"
 #include "Graphics/RenderPass.hpp"
+#include "Graphics/ShaderType.hpp"
 
 namespace Eternal
 {
@@ -73,7 +74,7 @@ namespace Eternal
 			Rasterizer			PipelineRasterizer;
 			DepthStencil		PipelineDepthStencil;
 			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-			ShaderTypeFlags		PipelineShaderTypes;
+			ShaderTypeFlags		PipelineShaderTypes			= ShaderTypeFlags::SHADER_TYPE_FLAGS_UNDEFINED;
 
 		protected:
 

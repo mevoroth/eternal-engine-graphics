@@ -30,7 +30,9 @@ namespace Eternal
 
 			VS_PS		= VS | PS,
 			MS_PS		= MS | PS,
-			MS_AS_PS	= MS | AS | PS
+			MS_AS_PS	= MS | AS | PS,
+
+			SHADER_TYPE_FLAGS_UNDEFINED
 		};
 
 		ShaderTypeFlags operator|(_In_ const ShaderTypeFlags& InLeftShaderTypeFlags, _In_ const ShaderTypeFlags& InRightShaderTypeFlags);
