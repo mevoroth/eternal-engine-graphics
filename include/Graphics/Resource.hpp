@@ -311,6 +311,8 @@ namespace Eternal
 			inline bool IsMultisample() const { return _Multisample; }
 			inline const TransitionState& GetResourceState() const { return _ResourceCreateInformation.ResourceState; }
 			const ResourceDimension& GetResourceDimension() const;
+			uint32_t GetWidth() const;
+			uint32_t GetHeight() const;
 			uint32_t GetMIPLevels() const;
 			uint32_t GetArraySize() const;
 			uint32_t GetBufferSize() const;
