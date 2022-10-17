@@ -19,7 +19,8 @@ namespace Eternal
 			VulkanFormat(vk::Format::eD32SfloatS8Uint,			16), // FIX THIS
 			VulkanFormat(vk::Format::eD32SfloatS8Uint,			16), // FIX THIS
 			VulkanFormat(vk::Format::eR32G32Sfloat,				8),
-			VulkanFormat(vk::Format::eR16Uint,					2)
+			VulkanFormat(vk::Format::eR16Uint,					2),
+			VulkanFormat(vk::Format::eR8Unorm,					1)
 		};
 
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_FORMATS) == static_cast<int32_t>(Format::FORMAT_COUNT), "Vulkan Formats declaration not complete");
