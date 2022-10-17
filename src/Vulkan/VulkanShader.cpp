@@ -41,28 +41,24 @@ ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == int(ShaderType::
 
 static shaderc_include_result* IncludeResolver(void* UserData, const char* RequestedSource, int Type, const char* RequestingSource, size_t IncludeDepth)
 {
-	std::vector<char>* ShaderSourceCode = new std::vector<char>();
+	FileContent* ShaderSourceCode = new FileContent();
 	string FullPathSrc = FilePath::Find(RequestedSource, FileType::FILE_TYPE_SHADERS);
-	File* ShaderFile = CreateFileHandle(FullPathSrc);
-	ShaderFile->Open(File::READ);
-	uint64_t ShaderFileSize = ShaderFile->GetFileSize();
-	ShaderSourceCode->resize(ShaderFileSize);
-	ShaderFile->Read((uint8_t*)ShaderSourceCode->data(), ShaderSourceCode->size());
-	ShaderFile->Close();
-	DestroyFileHandle(ShaderFile);
+	*ShaderSourceCode = LoadFileToMemory(FullPathSrc);
 
 	shaderc_include_result* ShaderIncludeResult = new shaderc_include_result;
 	ShaderIncludeResult->source_name			= RequestedSource;
 	ShaderIncludeResult->source_name_length		= strlen(RequestedSource);
-	ShaderIncludeResult->content				= ShaderSourceCode->data();
-	ShaderIncludeResult->content_length			= ShaderSourceCode->size();
+	ShaderIncludeResult->content				= reinterpret_cast<const char*>(ShaderSourceCode->Content);
+	ShaderIncludeResult->content_length			= ShaderSourceCode->Size;
 	ShaderIncludeResult->user_data				= ShaderSourceCode;
 	return ShaderIncludeResult;
 }
 
 static void IncludeReleaser(void* UserData, shaderc_include_result* IncludeResult)
 {
-	delete (std::vector<char>*)IncludeResult->user_data;
+	FileContent* ShaderSourceCode = reinterpret_cast<FileContent*>(IncludeResult->user_data);
+	UnloadFileFromMemory(*ShaderSourceCode);
+	delete ShaderSourceCode;
 	delete IncludeResult;
 }
 
@@ -95,15 +91,8 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 
 	const uint32_t VulkanVersion = static_cast<VulkanDevice&>(InDevice).GetVulkanVersion();
 
-	std::vector<char> ShaderSourceCode;
 	string FullPathSrc = FilePath::Find(FileName, FileType::FILE_TYPE_SHADERS);
-	File* ShaderFile = CreateFileHandle(FullPathSrc);
-	ShaderFile->Open(File::READ);
-	uint64_t ShaderFileSize = ShaderFile->GetFileSize();
-	ShaderSourceCode.resize(ShaderFileSize);
-	ShaderFile->Read((uint8_t*)ShaderSourceCode.data(), ShaderSourceCode.size());
-	ShaderFile->Close();
-	DestroyFileHandle(ShaderFile);
+	FileContent ShaderSourceCode = LoadFileToMemory(FullPathSrc);
 
 	shaderc_compiler_t Compiler						= shaderc_compiler_initialize();
 	shaderc_compile_options_t CompilerOptions		= shaderc_compile_options_initialize();
@@ -202,8 +191,8 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 
 	shaderc_compilation_result_t PreprocessedCompilationResult = shaderc_compile_into_preprocessed_text(
 		Compiler,
-		ShaderSourceCode.data(),
-		ShaderSourceCode.size(),
+		reinterpret_cast<const char*>(ShaderSourceCode.Content),
+		ShaderSourceCode.Size,
 		SHADER_KINDS[static_cast<int32_t>(Stage)],
 		FullPathSrc.c_str(),
 		SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)],
@@ -212,8 +201,8 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 
 	shaderc_compilation_result_t CompilationResult	= shaderc_compile_into_spv(
 		Compiler,
-		ShaderSourceCode.data(),
-		ShaderSourceCode.size(),
+		reinterpret_cast<const char*>(ShaderSourceCode.Content),
+		ShaderSourceCode.Size,
 		SHADER_KINDS[static_cast<int32_t>(Stage)],
 		FullPathSrc.c_str(),
 		SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)],
@@ -231,7 +220,7 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 	ETERNAL_ASSERT(CompilationStatus == shaderc_compilation_status_success);
 
 	{
-		shaderc_compilation_result_t DebugCompilationResult = shaderc_compile_into_spv_assembly(Compiler, ShaderSourceCode.data(), ShaderSourceCode.size(), SHADER_KINDS[static_cast<int32_t>(Stage)], FullPathSrc.c_str(), SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)], CompilerOptions);
+		shaderc_compilation_result_t DebugCompilationResult = shaderc_compile_into_spv_assembly(Compiler, reinterpret_cast<const char*>(ShaderSourceCode.Content), ShaderSourceCode.Size, SHADER_KINDS[static_cast<int32_t>(Stage)], FullPathSrc.c_str(), SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)], CompilerOptions);
 		size_t DebugShaderByteCodeLength = shaderc_result_get_length(DebugCompilationResult);
 		const char* DebugShaderByteCode = shaderc_result_get_bytes(DebugCompilationResult);
 
