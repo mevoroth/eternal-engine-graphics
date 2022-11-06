@@ -19,7 +19,6 @@ namespace Eternal
 			void*										pUserData
 		)
 		{
-			//ETERNAL_BREAK();
 			OutputDebugString(pMessage);
 			OutputDebugString("\n");
 			return VK_FALSE;
@@ -34,6 +33,7 @@ namespace Eternal
 		{
 			OutputDebugString(pCallbackData->pMessage);
 			OutputDebugString("\n");
+			ETERNAL_BREAK();
 			return VK_FALSE;
 		}
 
