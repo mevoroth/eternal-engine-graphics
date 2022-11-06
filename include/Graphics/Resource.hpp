@@ -313,6 +313,7 @@ namespace Eternal
 			const ResourceDimension& GetResourceDimension() const;
 			uint32_t GetWidth() const;
 			uint32_t GetHeight() const;
+			uint32_t GetDepth() const;
 			uint32_t GetMIPLevels() const;
 			uint32_t GetArraySize() const;
 			uint32_t GetBufferSize() const;

@@ -64,6 +64,24 @@ namespace Eternal
 			return _ResourceCreateInformation.TextureInformation.Height;
 		}
 
+		uint32_t Resource::GetDepth() const
+		{
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+			switch (GetResourceDimension())
+			{
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY:
+				return 6;
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D_ARRAY:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D_ARRAY:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D:
+				return 1;
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_3D:
+				return _ResourceCreateInformation.TextureInformation.DepthOrArraySize;
+			}
+		}
+
 		uint32_t Resource::GetMIPLevels() const
 		{
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
