@@ -29,5 +29,17 @@ namespace Eternal
 		{
 			return VULKAN_FORMATS[static_cast<int32_t>(InFormat)];
 		}
+
+		bool IsVulkanDepthStencilFormat(const Format& InFormat)
+		{
+			switch (InFormat)
+			{
+			case Format::FORMAT_D32:
+			case Format::FORMAT_DS328:
+			case Format::FORMAT_RG328:
+				return true;
+			}
+			return false;
+		}
 	}
 }

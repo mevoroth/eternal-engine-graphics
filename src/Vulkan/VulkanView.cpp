@@ -186,7 +186,7 @@ namespace Eternal
 			{
 				ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
 				_SubresourceRange = vk::ImageSubresourceRange(
-					vk::ImageAspectFlagBits::eColor
+					 (IsVulkanDepthStencilFormat(InViewCreateInformation.GraphicsFormat) ? vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil : vk::ImageAspectFlagBits::eColor)
 				);
 				_SubresourceRange.layerCount = 1;
 
