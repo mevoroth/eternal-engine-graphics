@@ -94,6 +94,11 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 	string FullPathSrc = FilePath::Find(FileName, FileType::FILE_TYPE_SHADERS);
 	FileContent ShaderSourceCode = LoadFileToMemory(FullPathSrc);
 
+	string ShaderFileContent = R"HLSLINCLUDE(
+		#include "ShadersReflection/HLSLReflection.hpp"
+	)HLSLINCLUDE";
+	ShaderFileContent += reinterpret_cast<const char*>(ShaderSourceCode.Content);
+
 	shaderc_compiler_t Compiler						= shaderc_compiler_initialize();
 	shaderc_compile_options_t CompilerOptions		= shaderc_compile_options_initialize();
 
@@ -191,8 +196,8 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 
 	shaderc_compilation_result_t PreprocessedCompilationResult = shaderc_compile_into_preprocessed_text(
 		Compiler,
-		reinterpret_cast<const char*>(ShaderSourceCode.Content),
-		ShaderSourceCode.Size,
+		reinterpret_cast<const char*>(ShaderFileContent.c_str()),
+		ShaderFileContent.size(),
 		SHADER_KINDS[static_cast<int32_t>(Stage)],
 		FullPathSrc.c_str(),
 		SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)],
@@ -201,8 +206,8 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 
 	shaderc_compilation_result_t CompilationResult	= shaderc_compile_into_spv(
 		Compiler,
-		reinterpret_cast<const char*>(ShaderSourceCode.Content),
-		ShaderSourceCode.Size,
+		reinterpret_cast<const char*>(ShaderFileContent.c_str()),
+		ShaderFileContent.size(),
 		SHADER_KINDS[static_cast<int32_t>(Stage)],
 		FullPathSrc.c_str(),
 		SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)],
@@ -220,7 +225,15 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 	ETERNAL_ASSERT(CompilationStatus == shaderc_compilation_status_success);
 
 	{
-		shaderc_compilation_result_t DebugCompilationResult = shaderc_compile_into_spv_assembly(Compiler, reinterpret_cast<const char*>(ShaderSourceCode.Content), ShaderSourceCode.Size, SHADER_KINDS[static_cast<int32_t>(Stage)], FullPathSrc.c_str(), SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)], CompilerOptions);
+		shaderc_compilation_result_t DebugCompilationResult = shaderc_compile_into_spv_assembly(
+			Compiler,
+			ShaderFileContent.c_str(),
+			ShaderFileContent.size(),
+			SHADER_KINDS[static_cast<int32_t>(Stage)],
+			FullPathSrc.c_str(),
+			SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)],
+			CompilerOptions
+		);
 		size_t DebugShaderByteCodeLength = shaderc_result_get_length(DebugCompilationResult);
 		const char* DebugShaderByteCode = shaderc_result_get_bytes(DebugCompilationResult);
 

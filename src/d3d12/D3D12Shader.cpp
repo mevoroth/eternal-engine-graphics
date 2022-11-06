@@ -305,20 +305,12 @@ namespace Eternal
 			ETERNAL_ASSERT(!(InDefines.size() % 2)); // Force value for defines
 
 			string FullPathSource = FilePath::Find(InFileName, FileType::FILE_TYPE_SHADERS);
-			File* ShaderFile = CreateFileHandle(FullPathSource);
-			ShaderFile->Open(File::READ);
-			uint64_t ShaderFileSize = ShaderFile->GetFileSize();
-			vector<char> ShaderFileBuffer;
-			ShaderFileBuffer.resize(ShaderFileSize + 1);
-			ShaderFile->Read(reinterpret_cast<uint8_t*>(ShaderFileBuffer.data()), ShaderFileSize);
-			ShaderFile->Close();
-			DestroyFileHandle(ShaderFile);
+			FileContent ShaderSourceCode = LoadFileToMemory(FullPathSource);
 
-			string ShaderFileBufferString = ShaderFileBuffer.data();
 			string ShaderFileContent = R"HLSLINCLUDE(
 				#include "ShadersReflection/HLSLReflection.hpp"
 			)HLSLINCLUDE";
-			ShaderFileContent += string(ShaderFileBuffer.data());
+			ShaderFileContent += reinterpret_cast<const char*>(ShaderSourceCode.Content);
 
 			switch (ShaderCompiler)
 			{
