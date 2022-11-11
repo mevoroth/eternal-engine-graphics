@@ -133,6 +133,12 @@ namespace Eternal
 				static_cast<uint32_t>(InResourceUsage) >> BitCount
 			);
 		}
+		inline BufferResourceUsage operator<<(_In_ const BufferResourceUsage& InResourceUsage, _In_ uint32_t BitCount)
+		{
+			return static_cast<BufferResourceUsage>(
+				static_cast<uint32_t>(InResourceUsage) << BitCount
+			);
+		}
 
 		inline bool OnlyHasFlags(_In_ const TransitionState& InTransitionState, _In_ const TransitionState& InFilterState)
 		{
