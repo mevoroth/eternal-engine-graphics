@@ -327,7 +327,7 @@ namespace Eternal
 				static_cast<uint32_t>(DeviceQueueCreateInfos.size()), DeviceQueueCreateInfos.data(),
 				ETERNAL_ARRAYSIZE(VulkanValidationLayers), VulkanValidationLayers,
 				ETERNAL_ARRAYSIZE(VulkanDeviceExtensions), VulkanDeviceExtensions,
-				static_cast<vk::PhysicalDeviceFeatures*>(nullptr)
+				&PhysicalDeviceFeatures
 			);
 
 			VerifySuccess(_PhysicalDevice.createDevice(&DeviceInfo, nullptr, &_Device));
