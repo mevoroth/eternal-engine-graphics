@@ -55,7 +55,7 @@ namespace Eternal
 				vk::DescriptorType::eSampler,
 				vk::DescriptorType::eSampledImage,
 				vk::DescriptorType::eStorageImage,
-				vk::DescriptorType::eUniformTexelBuffer,
+				vk::DescriptorType::eStorageBuffer,
 				vk::DescriptorType::eStorageTexelBuffer,
 				vk::DescriptorType::eUniformBuffer,
 				vk::DescriptorType::eUniformBuffer,
@@ -554,21 +554,25 @@ namespace Eternal
 
 			vk::BufferUsageFlagBits ConvertBufferResourceUsageToVulkanBufferUsageFlags(_In_ const BufferResourceUsage& InBufferResourceUsage)
 			{
-				static constexpr BufferResourceUsage CopyRead_CopyWrite_StructuredBuffer_RWStructuredBuffer_ConstantBuffer_Usage	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_READ
-																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_WRITE
-																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER
-																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER
-																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER;
+				static constexpr BufferResourceUsage CopyRead_CopyWrite_ConstantBuffer_Usage						= BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_READ
+																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_WRITE
+																													//| BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER
+																													//| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER
+																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER;
 
-				static constexpr BufferResourceUsage Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer						= BufferResourceUsage::BUFFER_RESOURCE_USAGE_BUFFER
-																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_BUFFER
-																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDEX_BUFFER
-																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_VERTEX_BUFFER
-																																	| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER;
+				static constexpr BufferResourceUsage StructuredBuffer_RWStructuredBuffer_Usage						= BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER
+																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER;
+
+				static constexpr BufferResourceUsage Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer_Usage	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_BUFFER
+																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_BUFFER
+																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDEX_BUFFER
+																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_VERTEX_BUFFER
+																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER;
 
 				return static_cast<vk::BufferUsageFlagBits>(
-					(InBufferResourceUsage & CopyRead_CopyWrite_StructuredBuffer_RWStructuredBuffer_ConstantBuffer_Usage) |
-					((InBufferResourceUsage & Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer) >> 1)
+					(InBufferResourceUsage & CopyRead_CopyWrite_ConstantBuffer_Usage) |
+					((InBufferResourceUsage & StructuredBuffer_RWStructuredBuffer_Usage) /* << 2*/) |
+					((InBufferResourceUsage & Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer_Usage) >> 1)
 				);
 			}
 			

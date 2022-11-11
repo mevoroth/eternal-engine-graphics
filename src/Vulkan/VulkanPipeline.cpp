@@ -191,7 +191,34 @@ namespace Eternal
 		)
 			: Pipeline(InPipelineCreateInformation)
 		{
+			using namespace Eternal::Graphics::Vulkan;
+
+			vk::Device& Device = static_cast<VulkanDevice&>(InDevice).GetVulkanDevice();
+
 			ETERNAL_BREAK();
+
+			//VULKAN_HPP_CONSTEXPR ComputePipelineCreateInfo(VULKAN_HPP_NAMESPACE::PipelineCreateFlags           flags_ = {},
+			//	VULKAN_HPP_NAMESPACE::PipelineShaderStageCreateInfo stage_ = {},
+			//	VULKAN_HPP_NAMESPACE::PipelineLayout                layout_ = {},
+			//	VULKAN_HPP_NAMESPACE::Pipeline basePipelineHandle_ = {},
+			//	int32_t basePipelineIndex_ = {}) VULKAN_HPP_NOEXCEPT
+
+			vk::PipelineShaderStageCreateInfo ShaderStageInfo(
+				vk::PipelineShaderStageCreateFlagBits(),
+				vk::ShaderStageFlagBits::eCompute,
+				static_cast<VulkanShader*>(InPipelineCreateInformation.CS)->GetVulkanShader(),
+				"CS"
+			);
+
+			vk::ComputePipelineCreateInfo PipelineInfo(
+				vk::PipelineCreateFlagBits(),
+				ShaderStageInfo,
+				static_cast<VulkanRootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetVulkanPipelineLayout(),
+			);
+
+			VerifySuccess(Device.createComputePipeline(
+
+			));
 		}
 
 		VulkanPipeline::VulkanPipeline(

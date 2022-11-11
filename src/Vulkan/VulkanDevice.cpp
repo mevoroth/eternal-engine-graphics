@@ -291,7 +291,11 @@ namespace Eternal
 
 			vk::PhysicalDeviceFeatures PhysicalDeviceFeatures;
 			_PhysicalDevice.getFeatures(&PhysicalDeviceFeatures);
-	
+			
+			vk::FormatProperties FormatProperties[static_cast<int32_t>(vk::Format::eAstc12x12SrgbBlock) + 1];
+			for (int32_t FormatIndex = 0; FormatIndex < static_cast<int32_t>(vk::Format::eAstc12x12SrgbBlock) + 1; ++FormatIndex)
+				_PhysicalDevice.getFormatProperties(vk::Format(FormatIndex), &FormatProperties[FormatIndex]);
+
 			const char* VulkanDeviceExtensions[] =
 			{
 				VK_KHR_SWAPCHAIN_EXTENSION_NAME

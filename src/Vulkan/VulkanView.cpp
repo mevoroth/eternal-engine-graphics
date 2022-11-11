@@ -178,9 +178,9 @@ namespace Eternal
 					InViewCreateInformation.MetaData.ShaderResourceViewBuffer.FirstElement,
 					InViewCreateInformation.MetaData.ShaderResourceViewBuffer.NumElements * InViewCreateInformation.MetaData.ShaderResourceViewBuffer.StructureByteStride
 				);
-				VerifySuccess(
-					VkDevice.createBufferView(&BufferViewCreateInfo, nullptr, &_VulkanViewMetaData.BufferView)
-				);
+				//VerifySuccess(
+				//	VkDevice.createBufferView(&BufferViewCreateInfo, nullptr, &_VulkanViewMetaData.BufferView)
+				//);
 			}
 			else
 			{
