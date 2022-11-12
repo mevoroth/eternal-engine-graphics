@@ -197,12 +197,6 @@ namespace Eternal
 
 			ETERNAL_BREAK();
 
-			//VULKAN_HPP_CONSTEXPR ComputePipelineCreateInfo(VULKAN_HPP_NAMESPACE::PipelineCreateFlags           flags_ = {},
-			//	VULKAN_HPP_NAMESPACE::PipelineShaderStageCreateInfo stage_ = {},
-			//	VULKAN_HPP_NAMESPACE::PipelineLayout                layout_ = {},
-			//	VULKAN_HPP_NAMESPACE::Pipeline basePipelineHandle_ = {},
-			//	int32_t basePipelineIndex_ = {}) VULKAN_HPP_NOEXCEPT
-
 			vk::PipelineShaderStageCreateInfo ShaderStageInfo(
 				vk::PipelineShaderStageCreateFlagBits(),
 				vk::ShaderStageFlagBits::eCompute,
@@ -213,11 +207,14 @@ namespace Eternal
 			vk::ComputePipelineCreateInfo PipelineInfo(
 				vk::PipelineCreateFlagBits(),
 				ShaderStageInfo,
-				static_cast<VulkanRootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetVulkanPipelineLayout(),
+				static_cast<VulkanRootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetVulkanPipelineLayout()
 			);
 
-			VerifySuccess(Device.createComputePipeline(
-
+			VerifySuccess(Device.createComputePipelines(
+				nullptr,
+				1, &PipelineInfo,
+				nullptr,
+				&_Pipeline
 			));
 		}
 
