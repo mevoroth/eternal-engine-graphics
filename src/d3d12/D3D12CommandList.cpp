@@ -47,10 +47,8 @@ namespace Eternal
 			_GraphicCommandList6 = nullptr;
 		}
 
-		void D3D12CommandList::SetName(_In_ const std::string& InName)
 		void D3D12CommandList::SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName)
 		{
-			CommandList::SetName(InName);
 			CommandList::SetName(InContext, InName);
 			
 			std::wstring InNameUTF8(InName.begin(), InName.end());
@@ -192,26 +190,38 @@ namespace Eternal
 			std::array<D3D12_RESOURCE_BARRIER, MaxResourceTransitionsPerSubmit> ResourceBarriers;
 			ResourceBarriers.fill(DefaultBarrier);
 
+			uint32_t EffectiveTransitionsCount = 0;
 			for (uint32_t TransitionIndex = 0; TransitionIndex < InResourceTransitionsCount; ++TransitionIndex)
 			{
 				ResourceTransition& CurrentResourceTransition = InResourceTransitions[TransitionIndex];
 
+				const TransitionState& Before	= CurrentResourceTransition.GetBefore();
+				const TransitionState& After	= CurrentResourceTransition.GetAfter();
+
+				if (Before == After)
+					continue;
+
 				D3D12Resource& D3DResource = static_cast<D3D12Resource&>(CurrentResourceTransition.GetResource());
 
-				ResourceBarriers[TransitionIndex].Type						= D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-				ResourceBarriers[TransitionIndex].Flags						= D3D12_RESOURCE_BARRIER_FLAG_NONE;
-				ResourceBarriers[TransitionIndex].Transition.pResource		= D3DResource.GetD3D12Resource();
-				ResourceBarriers[TransitionIndex].Transition.Subresource	= D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-				ResourceBarriers[TransitionIndex].Transition.StateBefore	= ConvertTransitionStateToD3D12ResourceStates(CurrentResourceTransition.GetBefore());
-				ResourceBarriers[TransitionIndex].Transition.StateAfter		= ConvertTransitionStateToD3D12ResourceStates(CurrentResourceTransition.GetAfter());
+				ResourceBarriers[EffectiveTransitionsCount].Type					= D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+				ResourceBarriers[EffectiveTransitionsCount].Flags					= D3D12_RESOURCE_BARRIER_FLAG_NONE;
+				ResourceBarriers[EffectiveTransitionsCount].Transition.pResource	= D3DResource.GetD3D12Resource();
+				ResourceBarriers[EffectiveTransitionsCount].Transition.Subresource	= D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+				ResourceBarriers[EffectiveTransitionsCount].Transition.StateBefore	= ConvertTransitionStateToD3D12ResourceStates(Before);
+				ResourceBarriers[EffectiveTransitionsCount].Transition.StateAfter	= ConvertTransitionStateToD3D12ResourceStates(After);
 				
 				D3DResource.SetResourceState(CurrentResourceTransition.After);
+
+				++EffectiveTransitionsCount;
 			}
 
-			_GraphicCommandList6->ResourceBarrier(
-				InResourceTransitionsCount,
-				ResourceBarriers.data()
-			);
+			if (EffectiveTransitionsCount > 0)
+			{
+				_GraphicCommandList6->ResourceBarrier(
+					EffectiveTransitionsCount,
+					ResourceBarriers.data()
+				);
+			}
 		}
 
 		void D3D12CommandList::SetViewport(_In_ const Viewport& InViewport)
