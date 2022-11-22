@@ -21,6 +21,17 @@ namespace Eternal
 		VulkanResource::VulkanResource(_In_ const TextureResourceCreateInformation& InResourceCreateInformation)
 			: Resource(InResourceCreateInformation, ResourceType::RESOURCE_TYPE_TEXTURE)
 		{
+			switch (GetResourceCreateInformation().ResourceState)
+			{
+			case TransitionState::TRANSITION_COPY_WRITE:
+			case TransitionState::TRANSITION_RENDER_TARGET:
+				GetResourceCreateInformation().ResourceState = TransitionState::TRANSITION_UNDEFINED;
+				break;
+			}
+
+			if (GetResourceCreateInformation().ResourceState == TransitionState::TRANSITION_COPY_WRITE)
+				GetResourceCreateInformation().ResourceState = TransitionState::TRANSITION_UNDEFINED;
+
 			VulkanDevice& InVkDevice = static_cast<VulkanDevice&>(InResourceCreateInformation.GfxDevice);
 			vk::Device& InVulkanDevice = InVkDevice.GetVulkanDevice();
 
@@ -58,6 +69,14 @@ namespace Eternal
 					&_VulkanResourceMetaData.ImageResource
 				)
 			);
+
+			VkImage ImageResourceHandle = _VulkanResourceMetaData.ImageResource;
+			vk::DebugUtilsObjectNameInfoEXT ObjectNameInfo(
+				vk::ObjectType::eImage,
+				reinterpret_cast<uint64_t>(ImageResourceHandle),
+				InResourceCreateInformation.Name.c_str()
+			);
+			VerifySuccess(InVulkanDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, InVkDevice.GetDispatchLoader()));
 
 			vk::MemoryRequirements ImageMemoryRequirements = InVulkanDevice.getImageMemoryRequirements(
 				_VulkanResourceMetaData.ImageResource
