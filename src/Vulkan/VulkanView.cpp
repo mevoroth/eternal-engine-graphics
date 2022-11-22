@@ -241,6 +241,9 @@ namespace Eternal
 					break;
 				}
 
+				if (_SubresourceRange.levelCount == 0)
+					_SubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+
 				vk::ImageViewCreateInfo CreateInfo;
 				CreateInfo.flags			= vk::ImageViewCreateFlagBits();
 				CreateInfo.image			= VkResource.GetVulkanImage();
