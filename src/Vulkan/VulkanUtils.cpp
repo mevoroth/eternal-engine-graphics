@@ -612,13 +612,16 @@ namespace Eternal
 			{
 				vk::ImageCreateFlagBits ImageCreateFlags = vk::ImageCreateFlagBits::eMutableFormat;
 
-				if (InResourceDimension == ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D_ARRAY
-					|| InResourceDimension == ResourceDimension::RESOURCE_DIMENSION_TEXTURE_3D
-					|| InResourceDimension == ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE
-					|| InResourceDimension == ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY)
+				switch (InResourceDimension)
 				{
+				case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D_ARRAY:
 					ImageCreateFlags |= vk::ImageCreateFlagBits::e2DArrayCompatible;
+					break;
+
+				case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE:
+				case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY:
 					ImageCreateFlags |= vk::ImageCreateFlagBits::eCubeCompatible;
+					break;
 				}
 
 				return ImageCreateFlags;
