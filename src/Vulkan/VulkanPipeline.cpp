@@ -195,8 +195,6 @@ namespace Eternal
 
 			vk::Device& Device = static_cast<VulkanDevice&>(InDevice).GetVulkanDevice();
 
-			ETERNAL_BREAK();
-
 			vk::PipelineShaderStageCreateInfo ShaderStageInfo(
 				vk::PipelineShaderStageCreateFlagBits(),
 				vk::ShaderStageFlagBits::eCompute,
