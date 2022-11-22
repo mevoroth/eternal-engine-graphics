@@ -16,7 +16,7 @@ namespace Eternal
 		struct VulkanResourceBackBufferCreateInformation : public ResourceCreateInformation
 		{
 			VulkanResourceBackBufferCreateInformation(_In_ Device& InDevice, _In_ const std::string& InName, _In_ vk::Image InBackBufferResource)
-				: ResourceCreateInformation(InDevice, InName, ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY, TransitionState::TRANSITION_PRESENT)
+				: ResourceCreateInformation(InDevice, InName, ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY, TransitionState::TRANSITION_UNDEFINED)
 				, BackBufferResource(InBackBufferResource)
 			{
 			}
