@@ -1,4 +1,5 @@
 #include "Graphics/Resource.hpp"
+#include <set>
 
 namespace Eternal
 {
@@ -20,10 +21,19 @@ namespace Eternal
 
 		//////////////////////////////////////////////////////////////////////////
 
+		static std::set<Resource*> ResourceHistory;
+
 		Resource::Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType)
 			: _ResourceCreateInformation(InResourceCreateInformation)
 			, _ResourceType(InResourceType)
 		{
+			ETERNAL_ASSERT(_ResourceCreateInformation.Name.size() > 0);
+			ResourceHistory.insert(this);
+		}
+
+		Resource::~Resource()
+		{
+			ResourceHistory.erase(this);
 		}
 
 		ResourceType Resource::GetResourceType() const

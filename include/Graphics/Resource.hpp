@@ -298,7 +298,7 @@ namespace Eternal
 		class Resource
 		{
 		public:
-			virtual ~Resource() {}
+			virtual ~Resource();
 
 			template<typename ResourceStructureType = void>
 			ResourceStructureType* Map(_In_ const MapRange& InMapRange)
