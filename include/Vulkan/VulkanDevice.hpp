@@ -16,6 +16,20 @@ namespace Eternal
 
 		using QueueFamilyIndicesType = std::array<uint32_t, static_cast<uint32_t>(CommandType::COMMAND_TYPE_COUNT)>;
 
+		class EternalDebugDispatchLoader
+		{
+		public:
+			EternalDebugDispatchLoader(vk::Instance& InInstance);
+
+			size_t getVkHeaderVersion() const;
+
+			VkResult vkSetDebugUtilsObjectNameEXT(VkDevice device, const VkDebugUtilsObjectNameInfoEXT* pNameInfo) const;
+
+		private:
+			vk::Instance& _Instance;
+			PFN_vkSetDebugUtilsObjectNameEXT	_vkSetDebugUtilsObjectName;
+		};
+
 		class VulkanDevice final : public Device
 		{
 		public:
@@ -38,6 +52,7 @@ namespace Eternal
 			);
 
 			VulkanDevice(_In_ Window& InWindow);
+			~VulkanDevice();
 
 			virtual uint32_t GetDeviceMask() const override final { return 0x1; }
 			virtual DeviceType GetDeviceType() const override final { return DeviceType::VULKAN; }
@@ -45,6 +60,7 @@ namespace Eternal
 			vk::Device& GetVulkanDevice();
 			vk::PhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
 			vk::Instance& GetInstance() { return _Instance; }
+			const EternalDebugDispatchLoader& GetDispatchLoader() const { return *_DebugDispatchLoader; };
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }
 			const vk::PhysicalDeviceMemoryProperties& GetPhysicalDeviceMemoryProperties() const { return _PhysicalDeviceMemoryProperties; }
 			uint32_t FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const;
@@ -60,6 +76,8 @@ namespace Eternal
 			uint32_t GetNonCoherentMemoryAtomicSize() const;
 
 		private:
+			EternalDebugDispatchLoader*			_DebugDispatchLoader		= nullptr;
+			
 			vk::PhysicalDeviceMemoryProperties	_PhysicalDeviceMemoryProperties;
 			vk::DebugReportCallbackEXT			_DebugReportCallback;
 			vk::DebugUtilsMessengerEXT			_DebugUtilsMessengerCallback;
@@ -67,8 +85,8 @@ namespace Eternal
 			vk::PhysicalDevice					_PhysicalDevice;
 			vk::Device							_Device;
 			vk::PhysicalDeviceProperties		_PhysicalDeviceProperties;
-			uint32_t							_QueueFamilyPropertiesCount = 0;
-			uint32_t							_VulkanVersion = 0;
+			uint32_t							_QueueFamilyPropertiesCount	= 0;
+			uint32_t							_VulkanVersion				= 0;
 			uint32_t							_QueueFamilyIndexGraphics	= Vulkan::InvalidQueueFamilyIndex;
 			uint32_t							_QueueFamilyIndexCompute	= Vulkan::InvalidQueueFamilyIndex;
 			uint32_t							_QueueFamilyIndexCopy		= Vulkan::InvalidQueueFamilyIndex;

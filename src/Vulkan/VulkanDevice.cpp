@@ -37,6 +37,23 @@ namespace Eternal
 			return VK_FALSE;
 		}
 
+		EternalDebugDispatchLoader::EternalDebugDispatchLoader(vk::Instance& InInstance)
+			: _Instance(InInstance)
+		{
+			_vkSetDebugUtilsObjectName	= (PFN_vkSetDebugUtilsObjectNameEXT)_Instance.getProcAddr("vkSetDebugUtilsObjectNameEXT");
+			ETERNAL_ASSERT(_vkSetDebugUtilsObjectName);
+		}
+
+		size_t EternalDebugDispatchLoader::getVkHeaderVersion() const
+		{
+			return VK_HEADER_VERSION;
+		}
+
+		VkResult EternalDebugDispatchLoader::vkSetDebugUtilsObjectNameEXT(VkDevice device, const VkDebugUtilsObjectNameInfoEXT* pNameInfo) const
+		{
+			return _vkSetDebugUtilsObjectName(device, pNameInfo);
+		}
+
 		namespace VulkanPrivate
 		{
 			class EternalDispatchLoader
@@ -82,11 +99,11 @@ namespace Eternal
 				}
 
 			private:
-				vk::Instance& _Instance;
-				PFN_vkCreateDebugReportCallbackEXT _vkCreateDebugReport = nullptr;
-				PFN_vkDestroyDebugReportCallbackEXT _vkDestroyDebugReport = nullptr;
-				PFN_vkDebugReportMessageEXT _vkDebugReportMessage = nullptr;
-				PFN_vkCreateDebugUtilsMessengerEXT _vkCreateDebugUtilsMessenger = nullptr;
+				vk::Instance&						_Instance;
+				PFN_vkCreateDebugReportCallbackEXT	_vkCreateDebugReport			= nullptr;
+				PFN_vkDestroyDebugReportCallbackEXT	_vkDestroyDebugReport			= nullptr;
+				PFN_vkDebugReportMessageEXT			_vkDebugReportMessage			= nullptr;
+				PFN_vkCreateDebugUtilsMessengerEXT	_vkCreateDebugUtilsMessenger	= nullptr;
 			};
 		}
 
@@ -220,8 +237,6 @@ namespace Eternal
 				ETERNAL_ASSERT(_PhysicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu);
 			}
 
-
-
 			uint32_t ExtensionsCount;
 			VerifySuccess(_PhysicalDevice.enumerateDeviceExtensionProperties(nullptr, &ExtensionsCount, static_cast<vk::ExtensionProperties*>(nullptr)));
 	
@@ -238,6 +253,7 @@ namespace Eternal
 			);
 
 			VulkanPrivate::EternalDispatchLoader EternalLoader(_Instance);
+			_DebugDispatchLoader = new EternalDebugDispatchLoader(_Instance);
 
 			VerifySuccess(_Instance.createDebugReportCallbackEXT(&DebugReportCallbackInfo, nullptr, &_DebugReportCallback, EternalLoader));
 	
@@ -337,6 +353,12 @@ namespace Eternal
 			VerifySuccess(_PhysicalDevice.createDevice(&DeviceInfo, nullptr, &_Device));
 
 			_PhysicalDevice.getMemoryProperties(&_PhysicalDeviceMemoryProperties);
+		}
+
+		VulkanDevice::~VulkanDevice()
+		{
+			delete _DebugDispatchLoader;
+			_DebugDispatchLoader = nullptr;
 		}
 
 		vk::Device& VulkanDevice::GetVulkanDevice()
