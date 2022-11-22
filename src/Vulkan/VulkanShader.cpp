@@ -110,9 +110,14 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 
 	switch (VulkanVersion)
 	{
+	case VK_API_VERSION_1_2:
+		ShaderEnvironmentVersion	= shaderc_env_version_vulkan_1_2;
+		ShaderSpirvVersion			= shaderc_spirv_version_1_3;
+		break;
+
 	case VK_API_VERSION_1_1:
-		ShaderEnvironmentVersion = shaderc_env_version_vulkan_1_1;
-		ShaderSpirvVersion = shaderc_spirv_version_1_3;
+		ShaderEnvironmentVersion	= shaderc_env_version_vulkan_1_1;
+		ShaderSpirvVersion			= shaderc_spirv_version_1_3;
 		break;
 
 	case VK_API_VERSION_1_0:
