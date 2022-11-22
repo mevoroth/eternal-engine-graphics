@@ -146,7 +146,7 @@ namespace Eternal
 			TransitionState InTransitionStateExcludingInFilterState = (InTransitionState & ~InFilterState);
 
 			return InTransitionStateIncludingInFilterState != TransitionState::TRANSITION_UNDEFINED
-				|| InTransitionStateExcludingInFilterState == TransitionState::TRANSITION_UNDEFINED;
+				&& InTransitionStateExcludingInFilterState == TransitionState::TRANSITION_UNDEFINED;
 		}
 
 		struct ResourceTransition
