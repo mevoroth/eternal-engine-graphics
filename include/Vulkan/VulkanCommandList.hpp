@@ -23,7 +23,7 @@ namespace Eternal
 			VulkanCommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator);
 			~VulkanCommandList();
 
-			//virtual void SetName(_In_ const std::string& InName) override final {}
+			virtual void SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName) override final;
 
 			virtual void Begin(_In_ GraphicsContext& InContext) override final;
 			virtual void End() override final;

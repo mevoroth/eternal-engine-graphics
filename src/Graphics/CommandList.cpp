@@ -44,7 +44,7 @@ namespace Eternal
 		{
 		}
 
-		void CommandList::SetName(_In_ const std::string& InName)
+		void CommandList::SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName)
 		{
 			_CommandListName = InName;
 		}

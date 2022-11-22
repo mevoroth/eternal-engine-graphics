@@ -45,6 +45,22 @@ namespace Eternal
 			);
 		}
 
+		void VulkanCommandList::SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName)
+		{
+			CommandList::SetName(InContext, InName);
+
+			vk::Device InVulkanDevice = static_cast<VulkanDevice&>(InContext.GetDevice()).GetVulkanDevice();
+
+			VkCommandBuffer CommandBufferHandle = _CommandBuffer;
+			vk::DebugUtilsObjectNameInfoEXT ObjectNameInfo(
+				vk::ObjectType::eCommandBuffer,
+				reinterpret_cast<uint64_t>(CommandBufferHandle),
+				InName.c_str()
+			);
+
+			VerifySuccess(InVulkanDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InContext.GetDevice()).GetDispatchLoader()));
+		}
+
 		void VulkanCommandList::Begin(_In_ GraphicsContext& InContext)
 		{
 			vk::CommandBufferInheritanceInfo CommandBufferInheritanceInfo;

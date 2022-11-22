@@ -341,7 +341,7 @@ namespace Eternal
 				CurrentCommandListPool.push_back(NewCommandList);
 			}
 
-			NewCommandList->SetName(InName);
+			NewCommandList->SetName(*this, InName);
 			return NewCommandList;
 		}
 

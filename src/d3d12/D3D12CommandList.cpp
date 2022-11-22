@@ -48,8 +48,11 @@ namespace Eternal
 		}
 
 		void D3D12CommandList::SetName(_In_ const std::string& InName)
+		void D3D12CommandList::SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName)
 		{
 			CommandList::SetName(InName);
+			CommandList::SetName(InContext, InName);
+			
 			std::wstring InNameUTF8(InName.begin(), InName.end());
 			VerifySuccess(
 				_GraphicCommandList6->SetName(InNameUTF8.c_str())

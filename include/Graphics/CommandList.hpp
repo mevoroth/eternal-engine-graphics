@@ -42,7 +42,7 @@ namespace Eternal
 
 			virtual ~CommandList();
 
-			virtual void SetName(_In_ const std::string& InName);
+			virtual void SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName);
 
 			virtual void Begin(_In_ GraphicsContext& InContext) = 0;
 			virtual void End() = 0;
