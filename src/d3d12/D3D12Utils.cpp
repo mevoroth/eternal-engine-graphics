@@ -343,8 +343,11 @@ namespace Eternal
 			{
 				if (InRootSignatureAccess == RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS)
 					return D3D12_SHADER_VISIBILITY_ALL;
-				return static_cast<D3D12_SHADER_VISIBILITY>(static_cast<int32_t>(InRootSignatureAccess) + 1);
 
+				if (InRootSignatureAccess < RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS)
+					return static_cast<D3D12_SHADER_VISIBILITY>(static_cast<int32_t>(InRootSignatureAccess) + 1);
+
+				return static_cast<D3D12_SHADER_VISIBILITY>(static_cast<int32_t>(InRootSignatureAccess) + 2);
 			}
 			D3D12_ROOT_PARAMETER_TYPE ConvertRootSignatureParameterTypeToD3D12RootParameterType(_In_ const RootSignatureParameterType& InRootSignatureParameterType)
 			{

@@ -23,10 +23,10 @@ namespace Eternal
 
 			ETERNAL_ASSERT(InAccess != RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID);
 			uint32_t InAccessInt = static_cast<uint32_t>(InAccess);
-			if (InAccessInt <= static_cast<uint32_t>(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_PS))
+			if (InAccessInt < static_cast<uint32_t>(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS))
 				InOutFlags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (InAccessInt + 1));
 			else
-				InOutFlags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (InAccessInt + 3));
+				InOutFlags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (InAccessInt + 2));
 		}
 
 		D3D12RootSignature::D3D12RootSignature(_In_ Device& InDevice)
