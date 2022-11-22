@@ -443,7 +443,7 @@ namespace Eternal
 		class View
 		{
 		public:
-			virtual ~View() {}
+			virtual ~View();
 
 			Resource& GetResource();
 			const Resource& GetResource() const;

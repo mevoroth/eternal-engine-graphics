@@ -2,14 +2,24 @@
 
 #include "Graphics/Resource.hpp"
 
+#include <set>
+
 namespace Eternal
 {
 	namespace Graphics
 	{
+		static std::set<View*> ViewHistory;
+
 		View::View(_In_ const ViewCreateInformation& InViewCreateInformation)
 			: _ViewCreateInformation(InViewCreateInformation)
 		{
 			ETERNAL_ASSERT(InViewCreateInformation.ResourceViewType != ViewType::VIEW_UNKNOWN);
+			ViewHistory.insert(this);
+		}
+
+		View::~View()
+		{
+			ViewHistory.erase(this);
 		}
 
 		Resource& View::GetResource()
