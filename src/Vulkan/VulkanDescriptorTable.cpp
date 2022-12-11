@@ -109,7 +109,6 @@ namespace Eternal
 					VKDescriptorImageInfo->imageView	= static_cast<const VulkanView*>(Resources[ParameterIndex].ResourceView)->GetVulkanImageView();
 					VKDescriptorImageInfo->imageLayout	= ConvertTransitionStateToVulkanImageLayout(Resources[ParameterIndex].ResourceView->GetResourceTransition());
 				} break;
-				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER:
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_STRUCTURED_BUFFER:
 				{
 					VkDescriptorTexelBufferView			= static_cast<const vk::BufferView*>(&static_cast<const VulkanView*>(Resources[ParameterIndex].ResourceView)->GetVulkanBufferView());
@@ -120,13 +119,14 @@ namespace Eternal
 					VKDescriptorImageInfo->sampler		= static_cast<const VulkanSampler*>(Resources[ParameterIndex].ResourceSampler)->GetVulkanSampler();
 				} break;
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_CONSTANT_BUFFER:
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_STRUCTURED_BUFFER:
 				{
 					const ViewMetaData& MetaData		= Resources[ParameterIndex].ResourceView->GetViewMetaData();
 
 					VkDescriptorBufferInfo				= static_cast<vk::DescriptorBufferInfo*>(&DescriptorBufferInfos[BufferCount++]);
 					VkDescriptorBufferInfo->buffer		= static_cast<const VulkanResource&>(Resources[ParameterIndex].ResourceView->GetResource()).GetVulkanBuffer();
 					VkDescriptorBufferInfo->offset		= MetaData.ConstantBufferView.BufferElementOffset * Resources[ParameterIndex].ResourceView->GetResource().GetBufferStride();
-					VkDescriptorBufferInfo->range		= MetaData.ConstantBufferView.BufferSize;
+					VkDescriptorBufferInfo->range		= MetaData.ConstantBufferView.BufferSize > 0 ? MetaData.ConstantBufferView.BufferSize : VK_WHOLE_SIZE;
 				} break;
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_BUFFER:
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_BUFFER:
