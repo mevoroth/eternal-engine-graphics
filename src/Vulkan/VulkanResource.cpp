@@ -70,13 +70,7 @@ namespace Eternal
 				)
 			);
 
-			VkImage ImageResourceHandle = _VulkanResourceMetaData.ImageResource;
-			vk::DebugUtilsObjectNameInfoEXT ObjectNameInfo(
-				vk::ObjectType::eImage,
-				reinterpret_cast<uint64_t>(ImageResourceHandle),
-				InResourceCreateInformation.Name.c_str()
-			);
-			VerifySuccess(InVulkanDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, InVkDevice.GetDispatchLoader()));
+			_SetDebugName();
 
 			vk::MemoryRequirements ImageMemoryRequirements = InVulkanDevice.getImageMemoryRequirements(
 				_VulkanResourceMetaData.ImageResource
@@ -126,6 +120,8 @@ namespace Eternal
 					&_VulkanResourceMetaData.BufferResource
 				)
 			);
+
+			_SetDebugName();
 
 			vk::MemoryRequirements BufferMemoryRequirements = InVulkanDevice.getBufferMemoryRequirements(
 				_VulkanResourceMetaData.BufferResource
@@ -243,6 +239,39 @@ namespace Eternal
 		{
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER);
 			return _VulkanResourceMetaData.BufferResource;
+		}
+
+		void VulkanResource::_SetDebugName()
+		{
+			uint64_t ResourceHandle = 0ull;
+			vk::ObjectType ObjectType = vk::ObjectType::eUnknown;
+
+			switch (GetResourceType())
+			{
+			case ResourceType::RESOURCE_TYPE_BUFFER:
+			{
+				VkBuffer BufferResourceHandle = _VulkanResourceMetaData.BufferResource;
+				ResourceHandle = reinterpret_cast<uint64_t>(BufferResourceHandle);
+				ObjectType = vk::ObjectType::eBuffer;
+			} break;
+			case ResourceType::RESOURCE_TYPE_TEXTURE:
+			{
+				VkImage ImageResourceHandle = _VulkanResourceMetaData.ImageResource;
+				ResourceHandle = reinterpret_cast<uint64_t>(ImageResourceHandle);
+				ObjectType = vk::ObjectType::eImage;
+			} break;
+			default:
+				ETERNAL_BREAK();
+				break;
+			}
+
+			vk::DebugUtilsObjectNameInfoEXT ObjectNameInfo(
+				ObjectType,
+				ResourceHandle,
+				GetResourceCreateInformation().Name.c_str()
+			);
+			VulkanDevice& Device = static_cast<VulkanDevice&>(GetResourceCreateInformation().GfxDevice);
+			VerifySuccess(Device.GetVulkanDevice().setDebugUtilsObjectNameEXT(&ObjectNameInfo, Device.GetDispatchLoader()));
 		}
 	}
 }

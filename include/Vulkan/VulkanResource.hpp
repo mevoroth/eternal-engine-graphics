@@ -51,6 +51,8 @@ namespace Eternal
 			virtual void* Map(_In_ const MapRange& InMapRange) override final;
 
 		private:
+			void _SetDebugName();
+
 			union VulkanResourceMetaData
 			{
 				VulkanResourceMetaData(vk::Image InImageResource)
