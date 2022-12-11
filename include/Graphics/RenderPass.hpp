@@ -83,7 +83,7 @@ namespace Eternal
 			LogicBlend LogicBlend;
 			RenderTargetOperator DepthStencilOperator;
 			const Viewport& Viewport;
-			View* DepthStencilRenderTarget;
+			View* DepthStencilRenderTarget = nullptr;
 		};
 
 		class RenderPass
