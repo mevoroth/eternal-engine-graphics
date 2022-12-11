@@ -71,6 +71,12 @@ namespace Eternal
 			VIEW_DEPTH_STENCIL_COUNT
 		};
 
+		enum class ViewDepthStencilPlane
+		{
+			VIEW_PLANE_DEPTH,
+			VIEW_PLANE_STENCIL
+		};
+
 		union ViewMetaData
 		{
 			//////////////////////////////////////////////////////////////////////////
@@ -426,7 +432,8 @@ namespace Eternal
 				_In_ Resource* InResource,
 				_In_ const ViewMetaData& InViewMetaData,
 				_In_ const Format& InFormat,
-				_In_ const ViewDepthStencilType& InViewDepthStencilType
+				_In_ const ViewDepthStencilType& InViewDepthStencilType,
+				_In_ const ViewDepthStencilPlane& InViewDepthStencilPlane = ViewDepthStencilPlane::VIEW_PLANE_DEPTH
 			)
 				: ViewCreateInformation(
 					InContext,
@@ -435,9 +442,15 @@ namespace Eternal
 					InFormat,
 					ViewType::VIEW_DEPTH_STENCIL
 				)
+				, _ViewDepthStencilPlane(InViewDepthStencilPlane)
 			{
 				ResourceViewDepthStencilType = InViewDepthStencilType;
 			}
+
+			const ViewDepthStencilPlane& GetViewDepthStencilPlane() const { return _ViewDepthStencilPlane; }
+
+		private:
+			ViewDepthStencilPlane _ViewDepthStencilPlane = ViewDepthStencilPlane::VIEW_PLANE_DEPTH;
 		};
 
 		class View

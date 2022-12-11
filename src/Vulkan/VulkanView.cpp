@@ -134,6 +134,8 @@ namespace Eternal
 			VerifySuccess(
 				VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
 			);
+
+			_SetDebugName();
 		}
 
 		VulkanView::VulkanView(_In_ const ConstantBufferViewCreateInformation& InViewCreateInformation)
@@ -255,6 +257,8 @@ namespace Eternal
 				VerifySuccess(
 					VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
 				);
+
+				_SetDebugName();
 			}
 		}
 
@@ -332,7 +336,17 @@ namespace Eternal
 				VerifySuccess(
 					VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
 				);
+
+				VkImageView ImageViewResourceHandle = _VulkanViewMetaData.ImageView;
+				vk::DebugUtilsObjectNameInfoEXT ObjectNameInfo(
+					vk::ObjectType::eImageView,
+					reinterpret_cast<uint64_t>(ImageViewResourceHandle),
+					InViewCreateInformation.GraphicsResource->GetResourceName().c_str()
+				);
+				VerifySuccess(VkDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InViewCreateInformation.Context.GetDevice()).GetDispatchLoader()));
 			}
+
+			_SetDebugName();
 		}
 
 		VulkanView::VulkanView(_In_ const DepthStencilViewCreateInformation& InViewCreateInformation)
@@ -343,7 +357,7 @@ namespace Eternal
 
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
 			_SubresourceRange = vk::ImageSubresourceRange(
-				vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil
+				InViewCreateInformation.GetViewDepthStencilPlane() == ViewDepthStencilPlane::VIEW_PLANE_STENCIL ? vk::ImageAspectFlagBits::eStencil : vk::ImageAspectFlagBits::eDepth
 			);
 			_SubresourceRange.layerCount = 1;
 			_SubresourceRange.levelCount = 1;
@@ -386,6 +400,8 @@ namespace Eternal
 			VerifySuccess(
 				VkDevice.createImageView(&CreateInfo, nullptr, &_VulkanViewMetaData.ImageView)
 			);
+
+			_SetDebugName();
 		}
 
 		VulkanView::~VulkanView()
@@ -407,6 +423,43 @@ namespace Eternal
 			default:
 				ETERNAL_BREAK(); // Invalid resource type
 			}
+		}
+
+		void VulkanView::_SetDebugName()
+		{
+			uint64_t ResourceHandle = 0ull;
+			vk::ObjectType ObjectType = vk::ObjectType::eUnknown;
+
+			switch (GetResourceType())
+			{
+			case ResourceType::RESOURCE_TYPE_BUFFER:
+			{
+				VkBufferView BufferViewResourceHandle = _VulkanViewMetaData.BufferView;
+				ResourceHandle = reinterpret_cast<uint64_t>(BufferViewResourceHandle);
+				ObjectType = vk::ObjectType::eBufferView;
+			} break;
+
+			case ResourceType::RESOURCE_TYPE_TEXTURE:
+			{
+				VkImageView ImageViewResourceHandle = _VulkanViewMetaData.ImageView;
+				ResourceHandle = reinterpret_cast<uint64_t>(ImageViewResourceHandle);
+				ObjectType = vk::ObjectType::eImageView;
+			} break;
+
+			default:
+				ETERNAL_BREAK();
+				break;
+			}
+
+			vk::DebugUtilsObjectNameInfoEXT ObjectNameInfo(
+				ObjectType,
+				ResourceHandle,
+				GetViewCreateInformation().GraphicsResource->GetResourceName().c_str()
+			);
+
+			VulkanDevice& Device = static_cast<VulkanDevice&>(GetViewCreateInformation().Context.GetDevice());
+
+			VerifySuccess(Device.GetVulkanDevice().setDebugUtilsObjectNameEXT(&ObjectNameInfo, Device.GetDispatchLoader()));
 		}
 
 		const vk::ImageView& VulkanView::GetVulkanImageView() const

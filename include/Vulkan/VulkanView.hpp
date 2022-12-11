@@ -25,6 +25,8 @@ namespace Eternal
 			vk::BufferView& GetVulkanBufferView();
 
 		private:
+			void _SetDebugName();
+
 			union VulkanViewMetaData
 			{
 				VulkanViewMetaData()
