@@ -323,6 +323,7 @@ namespace Eternal
 			const float* GetClearValue() const;
 			uint8_t GetStencilClearValue() const;
 			const Format& GetFormat() const;
+			const std::string& GetResourceName() const;
 
 		protected:
 			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType);

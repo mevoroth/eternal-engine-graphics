@@ -136,5 +136,10 @@ namespace Eternal
 		{
 			return GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE ? _ResourceCreateInformation.TextureInformation.ResourceFormat : _ResourceCreateInformation.BufferInformation.ResourceFormat;
 		}
+
+		const std::string& Resource::GetResourceName() const
+		{
+			return _ResourceCreateInformation.Name;
+		}
 	}
 }
