@@ -560,8 +560,9 @@ namespace Eternal
 																													//| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER
 																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER;
 
-				static constexpr BufferResourceUsage StructuredBuffer_RWStructuredBuffer_Usage						= BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER
-																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER;
+				static constexpr BufferResourceUsage StructuredBuffer_Usage											= BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER;
+
+				static constexpr BufferResourceUsage RWStructuredBuffer_Usage										= BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER;
 
 				static constexpr BufferResourceUsage Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer_Usage	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_BUFFER
 																													| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_BUFFER
@@ -571,7 +572,8 @@ namespace Eternal
 
 				return static_cast<vk::BufferUsageFlagBits>(
 					(InBufferResourceUsage & CopyRead_CopyWrite_ConstantBuffer_Usage) |
-					((InBufferResourceUsage & StructuredBuffer_RWStructuredBuffer_Usage) /* << 2*/) |
+					((InBufferResourceUsage & StructuredBuffer_Usage) << 3) |
+					((InBufferResourceUsage & RWStructuredBuffer_Usage) /* << 2*/) |
 					((InBufferResourceUsage & Buffer_RWBuffer_IndexBuffer_VertexBuffer_IndirectBuffer_Usage) >> 1)
 				);
 			}
