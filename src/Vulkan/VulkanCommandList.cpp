@@ -82,9 +82,9 @@ namespace Eternal
 			ETERNAL_PROFILER(INFO)();
 			CommandList::BeginRenderPass(InRenderPass);
 
-			std::array<vk::ClearValue, MAX_RENDER_TARGETS> ClearValues;
+			std::array<vk::ClearValue, MAX_RENDER_TARGETS_AND_DEPTH_STENCIL> ClearValues;
 			ClearValues.fill(vk::ClearValue());
-			std::array<vk::ClearColorValue, MAX_RENDER_TARGETS> ClearColorValues;
+			std::array<vk::ClearColorValue, MAX_RENDER_TARGETS_AND_DEPTH_STENCIL> ClearColorValues;
 
 			const vector<RenderTargetInformation>& InRenderTargets = InRenderPass.GetRenderTargets();
 			for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < InRenderTargets.size(); ++RenderTargetIndex)
@@ -96,11 +96,21 @@ namespace Eternal
 				);
 			}
 
+			if (InRenderPass.GetDepthStencilRenderTarget())
+			{
+				uint32_t DepthStencilSlot = InRenderTargets.size();
+				memcpy(ClearColorValues[DepthStencilSlot].float32.data(), InRenderPass.GetDepthStencilRenderTarget()->GetResource().GetClearValue(), sizeof(float) * ClearColorValues[DepthStencilSlot].float32.size());
+				
+				ClearValues[DepthStencilSlot] = vk::ClearValue(
+					ClearColorValues[DepthStencilSlot]
+				);
+			}
+
 			vk::RenderPassBeginInfo RenderPassInfo(
 				static_cast<const VulkanRenderPass&>(InRenderPass).GetVulkanRenderPass(),
 				static_cast<const VulkanRenderPass&>(InRenderPass).GetFrameBuffer(),
 				ConvertViewportToRect2D(InRenderPass.GetViewport()),
-				static_cast<uint32_t>(InRenderTargets.size()), ClearValues.data()
+				static_cast<uint32_t>(InRenderTargets.size()) + (InRenderPass.GetDepthStencilRenderTarget() ? 1 : 0), ClearValues.data()
 			);
 			_CommandBuffer.beginRenderPass(
 				&RenderPassInfo, vk::SubpassContents::eInline
