@@ -342,12 +342,15 @@ namespace Eternal
 				}
 			}
 
+			vk::PhysicalDeviceSeparateDepthStencilLayoutsFeatures SeparateDepthStencilLayoutFeatures(true);
+
 			vk::DeviceCreateInfo DeviceInfo(
 				vk::DeviceCreateFlagBits(),
 				static_cast<uint32_t>(DeviceQueueCreateInfos.size()), DeviceQueueCreateInfos.data(),
 				ETERNAL_ARRAYSIZE(VulkanValidationLayers), VulkanValidationLayers,
 				ETERNAL_ARRAYSIZE(VulkanDeviceExtensions), VulkanDeviceExtensions,
-				&PhysicalDeviceFeatures
+				&PhysicalDeviceFeatures,
+				&SeparateDepthStencilLayoutFeatures
 			);
 
 			VerifySuccess(_PhysicalDevice.createDevice(&DeviceInfo, nullptr, &_Device));
