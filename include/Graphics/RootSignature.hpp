@@ -118,7 +118,7 @@ namespace Eternal
 
 			bool operator==(_In_ const RootSignatureParameter& InOther) const;
 
-			RootSignatureParameterType			Parameter			= RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT;
+			RootSignatureParameterType			Parameter			= RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_INVALID;
 			RootSignatureAccess					Access				= RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID;
 			RootSignatureDescriptorTable		DescriptorTable;
 		};
