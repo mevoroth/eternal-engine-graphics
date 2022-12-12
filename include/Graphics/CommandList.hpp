@@ -62,8 +62,8 @@ namespace Eternal
 			virtual void DrawIndexedInstanced(_In_ uint32_t InIndexCountPerInstance, _In_ uint32_t InInstanceCount = 1, _In_ uint32_t InFirstIndex = 0, _In_ uint32_t InFirstVertex = 0, _In_ uint32_t InFirstInstance = 0) = 0;
 
 			virtual void SetComputePipeline(_In_ const Pipeline& InPipeline) = 0;
-			virtual void SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable) = 0;
-			virtual void Dispatch(_In_ uint32_t InX = 1, _In_ uint32_t InY = 1, _In_ uint32_t InZ = 1) = 0;
+			virtual void SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable);
+			virtual void Dispatch(_In_ uint32_t InX = 1, _In_ uint32_t InY = 1, _In_ uint32_t InZ = 1);
 
 			virtual void DispatchMesh(_In_ uint32_t InTaskBatchesCount = 1) = 0;
 
@@ -78,6 +78,8 @@ namespace Eternal
 			const RootSignature* GetCurrentSignature() const { return _CurrentRootSignature; }
 
 		private:
+			void _SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable);
+
 			Device&					_Device;
 			CommandAllocator&		_CommandAllocator;
 			const RootSignature*	_CurrentRootSignature	= nullptr;

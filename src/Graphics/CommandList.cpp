@@ -64,11 +64,26 @@ namespace Eternal
 
 		void CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
+			_SetDescriptorTable(InContext, InDescriptorTable);
+		}
+
+		void CommandList::SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
+			_SetDescriptorTable(InContext, InDescriptorTable);
+		}
+
+		void CommandList::_SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
 #if ETERNAL_DEBUG_MATCHING_ROOT_SIGNATURE
 			ETERNAL_ASSERT(GetCurrentSignature() && *GetCurrentSignature() == *InDescriptorTable.GetRootSignature());
 #elif ETERNAL_DEBUG
 			ETERNAL_ASSERT(GetCurrentSignature() && GetCurrentSignature() == InDescriptorTable.GetRootSignature()); // Faster but limiting possibilities
 #endif
+		}
+
+		void CommandList::Dispatch(_In_ uint32_t InX /* = 1 */, _In_ uint32_t InY /* = 1 */, _In_ uint32_t InZ /* = 1 */)
+		{
+			ETERNAL_ASSERT(InX > 0 && InY > 0 && InZ > 0);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
