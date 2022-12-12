@@ -55,6 +55,8 @@ namespace Eternal
 			inline VulkanDevice& GetVulkanDevice() { return static_cast<VulkanDevice&>(GetDevice()); }
 
 		private:
+			template<vk::PipelineBindPoint VulkanPipelineBindPoint>
+			void _SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable);
 			void _CopyBufferToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
 			void _CopyTextureToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
 			void _CopyBufferToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);

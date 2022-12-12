@@ -98,7 +98,7 @@ namespace Eternal
 
 			if (InRenderPass.GetDepthStencilRenderTarget())
 			{
-				uint32_t DepthStencilSlot = InRenderTargets.size();
+				uint32_t DepthStencilSlot = static_cast<uint32_t>(InRenderTargets.size());
 				memcpy(ClearColorValues[DepthStencilSlot].float32.data(), InRenderPass.GetDepthStencilRenderTarget()->GetResource().GetClearValue(), sizeof(float) * ClearColorValues[DepthStencilSlot].float32.size());
 				
 				ClearValues[DepthStencilSlot] = vk::ClearValue(
@@ -295,90 +295,7 @@ namespace Eternal
 		{
 			ETERNAL_PROFILER(INFO)();
 			CommandList::SetGraphicsDescriptorTable(InContext, InDescriptorTable);
-			
-			const VulkanRootSignature& VkRootSignature					= *static_cast<const VulkanRootSignature*>(GetCurrentSignature());
-			const vk::PipelineLayout& CurrentPipelineLayout				= VkRootSignature.GetVulkanPipelineLayout();
-
-			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
-			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
-			const vector<RootSignatureParameter>& Parameters			= DescriptorTableLayout.Parameters;
-			
-			const vector<DescriptorTableConstants>& InConstants			= static_cast<const DescriptorTable&>(InDescriptorTable).GetConstants();
-			const vector<DescriptorTableResource>& InResources			= static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
-			ResourcesDirtyFlagsType& InConstantsDirtyFlags				= InDescriptorTable.GetConstantsDirtyFlags();
-			ResourcesDirtyFlagsType& InResourcesDirtyFlags				= InDescriptorTable.GetResourcesDirtyFlags();
-
-			//////////////////////////////////////////////////////////////////////////
-			// Constants
-
-			const vector<vk::PushConstantRange>& ConstantRanges			= VkRootSignature.GetVulkanPushConstantRanges();
-
-			uint32_t ConstantRangeIndex = 0;
-			for (uint32_t ConstantIndex = 0; ConstantIndex < Constants.size(); ++ConstantIndex)
-			{
-				if (InConstantsDirtyFlags.IsSet(ConstantIndex))
-				{
-					uint32_t ConstantOffset	= 0;
-					uint32_t ConstantCount	= Constants[ConstantIndex].Count;
-					while (ConstantOffset < ConstantCount)
-					{
-						const vk::PushConstantRange& ConstantRange = ConstantRanges[ConstantRangeIndex];
-
-						uint32_t ConstantRangeConstantsCount = static_cast<int32_t>(ConstantRange.size - ConstantRange.offset) / ByteTo32Bits;
-					
-						_CommandBuffer.pushConstants(
-							CurrentPipelineLayout,
-							ConstantRange.stageFlags,
-							ConstantRange.offset,
-							ConstantRange.size,
-							&InConstants[ConstantIndex].Constants[ConstantOffset]
-						);
-
-						ConstantOffset += ConstantRangeConstantsCount;
-					}
-				}
-			}
-
-			//////////////////////////////////////////////////////////////////////////
-			// Descriptor sets
-
-			std::array<vk::DescriptorSet, MaxDescriptorSetsCount> DescriptorSets;
-			DescriptorSets.fill(vk::DescriptorSet());
-
-			VulkanDescriptorTable& VkDescriptorTable = static_cast<VulkanDescriptorTable&>(InDescriptorTable);
-
-			uint32_t DescriptorSetCount = 0;
-			VkDescriptorTable.Commit(InContext, Parameters);
-			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex)
-			{
-				if (Parameters[ParameterIndex].Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE)
-				{
-					const vector<DescriptorTableResource>& Resources = static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
-					const VulkanDescriptorTable* VkTable = static_cast<const VulkanDescriptorTable*>(Resources[ParameterIndex].ResourceDescriptorTable);
-					const_cast<VulkanDescriptorTable*>(VkTable)->Commit(
-						InContext,
-						Parameters[ParameterIndex].DescriptorTable
-					);
-					DescriptorSets[++DescriptorSetCount] = VkTable->GetVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
-				}
-			}
-
-			const vk::DescriptorSet* FirstSetPointer = &DescriptorSets[1];
-			if (Parameters.size() > DescriptorSetCount)
-			{
-				DescriptorSets[0] = VkDescriptorTable.GetVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
-				FirstSetPointer = &DescriptorSets[0];
-				++DescriptorSetCount;
-			}
-			
-			_CommandBuffer.bindDescriptorSets(
-				vk::PipelineBindPoint::eGraphics,
-				CurrentPipelineLayout,
-				0,
-				DescriptorSetCount,
-				FirstSetPointer,
-				0, nullptr
-			);
+			_SetDescriptorTable<vk::PipelineBindPoint::eGraphics>(InContext, InDescriptorTable);
 		}
 
 		void VulkanCommandList::DrawInstanced(_In_ uint32_t InVertexCountPerInstance, _In_ uint32_t InInstanceCount /* = 1 */, _In_ uint32_t InFirstVertex /* = 0 */, _In_ uint32_t InFirstInstance /* = 0 */)
@@ -404,17 +321,25 @@ namespace Eternal
 
 		void VulkanCommandList::SetComputePipeline(_In_ const Pipeline& InPipeline)
 		{
-			ETERNAL_BREAK();
+			_CommandBuffer.bindPipeline(
+				vk::PipelineBindPoint::eCompute,
+				static_cast<const VulkanPipeline&>(InPipeline).GetVulkanPipeline()
+			);
+			SetCurrentRootSignature(&InPipeline.GetRootSignature());
+			_CurrentShaderStages = ConvertShaderTypeFlagsToVulkanShaderStageFlags(InPipeline.GetShaderTypes());
 		}
 
 		void VulkanCommandList::SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
-			ETERNAL_BREAK();
+			ETERNAL_PROFILER(INFO)();
+			CommandList::SetGraphicsDescriptorTable(InContext, InDescriptorTable);
+			_SetDescriptorTable<vk::PipelineBindPoint::eCompute>(InContext, InDescriptorTable);
 		}
 
 		void VulkanCommandList::Dispatch(_In_ uint32_t InX /* = 1 */, _In_ uint32_t InY /* = 1 */, _In_ uint32_t InZ /* = 1 */)
 		{
-			ETERNAL_BREAK();
+			CommandList::Dispatch(InX, InY, InZ);
+			_CommandBuffer.dispatch(InX, InY, InZ);
 		}
 
 		void VulkanCommandList::DispatchMesh(_In_ uint32_t InTaskBatchesCount /* = 1 */)
@@ -454,7 +379,7 @@ namespace Eternal
 
 		void VulkanCommandList::_CopyBufferToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
 		{
-
+			ETERNAL_BREAK();
 		}
 
 		void VulkanCommandList::_CopyTextureToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
@@ -532,7 +457,96 @@ namespace Eternal
 
 		void VulkanCommandList::_CopyTextureToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
 		{
+			ETERNAL_BREAK();
+		}
+		
+		template<vk::PipelineBindPoint VulkanPipelineBindPoint>
+		void VulkanCommandList::_SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
+			
+			const VulkanRootSignature& VkRootSignature					= *static_cast<const VulkanRootSignature*>(GetCurrentSignature());
+			const vk::PipelineLayout& CurrentPipelineLayout				= VkRootSignature.GetVulkanPipelineLayout();
 
+			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
+			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
+			const vector<RootSignatureParameter>& Parameters			= DescriptorTableLayout.Parameters;
+			
+			const vector<DescriptorTableConstants>& InConstants			= static_cast<const DescriptorTable&>(InDescriptorTable).GetConstants();
+			const vector<DescriptorTableResource>& InResources			= static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
+			ResourcesDirtyFlagsType& InConstantsDirtyFlags				= InDescriptorTable.GetConstantsDirtyFlags();
+			ResourcesDirtyFlagsType& InResourcesDirtyFlags				= InDescriptorTable.GetResourcesDirtyFlags();
+
+			//////////////////////////////////////////////////////////////////////////
+			// Constants
+
+			const vector<vk::PushConstantRange>& ConstantRanges			= VkRootSignature.GetVulkanPushConstantRanges();
+
+			uint32_t ConstantRangeIndex = 0;
+			for (uint32_t ConstantIndex = 0; ConstantIndex < Constants.size(); ++ConstantIndex)
+			{
+				if (InConstantsDirtyFlags.IsSet(ConstantIndex))
+				{
+					uint32_t ConstantOffset	= 0;
+					uint32_t ConstantCount	= Constants[ConstantIndex].Count;
+					while (ConstantOffset < ConstantCount)
+					{
+						const vk::PushConstantRange& ConstantRange = ConstantRanges[ConstantRangeIndex];
+
+						uint32_t ConstantRangeConstantsCount = static_cast<int32_t>(ConstantRange.size - ConstantRange.offset) / ByteTo32Bits;
+					
+						_CommandBuffer.pushConstants(
+							CurrentPipelineLayout,
+							ConstantRange.stageFlags,
+							ConstantRange.offset,
+							ConstantRange.size,
+							&InConstants[ConstantIndex].Constants[ConstantOffset]
+						);
+
+						ConstantOffset += ConstantRangeConstantsCount;
+					}
+				}
+			}
+
+			//////////////////////////////////////////////////////////////////////////
+			// Descriptor sets
+
+			std::array<vk::DescriptorSet, MaxDescriptorSetsCount> DescriptorSets;
+			DescriptorSets.fill(vk::DescriptorSet());
+
+			VulkanDescriptorTable& VkDescriptorTable = static_cast<VulkanDescriptorTable&>(InDescriptorTable);
+
+			uint32_t DescriptorSetCount = 0;
+			VkDescriptorTable.Commit(InContext, Parameters);
+			for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex)
+			{
+				if (Parameters[ParameterIndex].Parameter == RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE)
+				{
+					const vector<DescriptorTableResource>& Resources = static_cast<const DescriptorTable&>(InDescriptorTable).GetResources();
+					const VulkanDescriptorTable* VkTable = static_cast<const VulkanDescriptorTable*>(Resources[ParameterIndex].ResourceDescriptorTable);
+					const_cast<VulkanDescriptorTable*>(VkTable)->Commit(
+						InContext,
+						Parameters[ParameterIndex].DescriptorTable
+					);
+					DescriptorSets[++DescriptorSetCount] = VkTable->GetVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
+				}
+			}
+
+			const vk::DescriptorSet* FirstSetPointer = &DescriptorSets[1];
+			if (Parameters.size() > DescriptorSetCount)
+			{
+				DescriptorSets[0] = VkDescriptorTable.GetVulkanDescriptorSet(InContext.GetCurrentFrameIndex());
+				FirstSetPointer = &DescriptorSets[0];
+				++DescriptorSetCount;
+			}
+			
+			_CommandBuffer.bindDescriptorSets(
+				VulkanPipelineBindPoint,
+				CurrentPipelineLayout,
+				0,
+				DescriptorSetCount,
+				FirstSetPointer,
+				0, nullptr
+			);
 		}
 	}
 }
