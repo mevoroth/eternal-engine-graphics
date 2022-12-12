@@ -25,12 +25,10 @@ namespace Eternal
 			{
 			case TransitionState::TRANSITION_COPY_WRITE:
 			case TransitionState::TRANSITION_RENDER_TARGET:
+			case TransitionState::TRANSITION_DEPTH_STENCIL_WRITE:
 				GetResourceCreateInformation().ResourceState = TransitionState::TRANSITION_UNDEFINED;
 				break;
 			}
-
-			if (GetResourceCreateInformation().ResourceState == TransitionState::TRANSITION_COPY_WRITE)
-				GetResourceCreateInformation().ResourceState = TransitionState::TRANSITION_UNDEFINED;
 
 			VulkanDevice& InVkDevice = static_cast<VulkanDevice&>(InResourceCreateInformation.GfxDevice);
 			vk::Device& InVulkanDevice = InVkDevice.GetVulkanDevice();
@@ -127,7 +125,7 @@ namespace Eternal
 				_VulkanResourceMetaData.BufferResource
 			);
 			vk::MemoryAllocateInfo BufferMemoryAllocationInfo(
-				BufferMemoryRequirements.size,
+				Align<vk::DeviceSize>(BufferMemoryRequirements.size, InVkDevice.GetNonCoherentMemoryAtomicSize()),
 				InVkDevice.FindBestMemoryTypeIndex(
 					BufferMemoryRequirements.memoryTypeBits,
 					ConvertResourceMemoryTypeToMemoryPropertyFlagBits(InResourceCreateInformation.MemoryType)
