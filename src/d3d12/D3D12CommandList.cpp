@@ -198,7 +198,7 @@ namespace Eternal
 				const TransitionState& Before	= CurrentResourceTransition.GetBefore();
 				const TransitionState& After	= CurrentResourceTransition.GetAfter();
 
-				if (Before == After)
+				if ((Before & After) == After)
 					continue;
 
 				D3D12Resource& D3DResource = static_cast<D3D12Resource&>(CurrentResourceTransition.GetResource());
@@ -309,7 +309,7 @@ namespace Eternal
 
 		void D3D12CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
-
+			CommandList::SetGraphicsDescriptorTable(InContext, InDescriptorTable);
 			_SetDescriptorTable<
 				&ID3D12GraphicsCommandList6::SetGraphicsRoot32BitConstants,
 				&ID3D12GraphicsCommandList6::SetGraphicsRootShaderResourceView,
@@ -369,7 +369,7 @@ namespace Eternal
 
 		void D3D12CommandList::Dispatch(_In_ uint32_t InX, _In_ uint32_t InY, _In_ uint32_t InZ)
 		{
-			ETERNAL_ASSERT(InX > 0 && InY > 0 && InZ > 0);
+			CommandList::Dispatch(InX, InY, InZ);
 			_GraphicCommandList6->Dispatch(InX, InY, InZ);
 		}
 
@@ -579,8 +579,7 @@ namespace Eternal
 		void D3D12CommandList::_SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
 			ETERNAL_PROFILER(INFO)();
-			CommandList::SetGraphicsDescriptorTable(InContext, InDescriptorTable);
-			
+
 			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
 			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;
 			const vector<RootSignatureParameter>& Parameters			= DescriptorTableLayout.Parameters;
