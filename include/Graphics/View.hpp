@@ -71,10 +71,13 @@ namespace Eternal
 			VIEW_DEPTH_STENCIL_COUNT
 		};
 
-		enum class ViewDepthStencilPlane
+		enum class ViewPlane
 		{
-			VIEW_PLANE_DEPTH,
-			VIEW_PLANE_STENCIL
+			VIEW_PLANE_0		= 0,
+			VIEW_PLANE_1,
+			VIEW_PLANE_DEPTH	= VIEW_PLANE_0,
+			VIEW_PLANE_STENCIL	= VIEW_PLANE_1,
+			VIEW_PLANE_DEFAULT	= VIEW_PLANE_0
 		};
 
 		union ViewMetaData
@@ -372,7 +375,8 @@ namespace Eternal
 				_In_ Resource* InResource,
 				_In_ const ViewMetaData& InViewMetaData,
 				_In_ const Format& InFormat,
-				_In_ const ViewShaderResourceType& InViewShaderResourceType
+				_In_ const ViewShaderResourceType& InViewShaderResourceType,
+				_In_ const ViewPlane& InViewPlane = ViewPlane::VIEW_PLANE_DEFAULT
 			)
 				: ViewCreateInformation(
 					InContext,
@@ -381,9 +385,15 @@ namespace Eternal
 					InFormat,
 					ViewType::VIEW_SHADER_RESOURCE
 				)
+				, _ViewPlane(InViewPlane)
 			{
 				ResourceViewShaderResourceType = InViewShaderResourceType;
 			}
+
+			const ViewPlane& GetViewPlane() const { return _ViewPlane; }
+
+		private:
+			ViewPlane _ViewPlane = ViewPlane::VIEW_PLANE_DEFAULT;
 		};
 		
 		struct ShaderResourceViewStructuredBufferCreateInformation : public ShaderResourceViewCreateInformation
@@ -432,8 +442,7 @@ namespace Eternal
 				_In_ Resource* InResource,
 				_In_ const ViewMetaData& InViewMetaData,
 				_In_ const Format& InFormat,
-				_In_ const ViewDepthStencilType& InViewDepthStencilType,
-				_In_ const ViewDepthStencilPlane& InViewDepthStencilPlane = ViewDepthStencilPlane::VIEW_PLANE_DEPTH
+				_In_ const ViewDepthStencilType& InViewDepthStencilType
 			)
 				: ViewCreateInformation(
 					InContext,
@@ -442,15 +451,9 @@ namespace Eternal
 					InFormat,
 					ViewType::VIEW_DEPTH_STENCIL
 				)
-				, _ViewDepthStencilPlane(InViewDepthStencilPlane)
 			{
 				ResourceViewDepthStencilType = InViewDepthStencilType;
 			}
-
-			const ViewDepthStencilPlane& GetViewDepthStencilPlane() const { return _ViewDepthStencilPlane; }
-
-		private:
-			ViewDepthStencilPlane _ViewDepthStencilPlane = ViewDepthStencilPlane::VIEW_PLANE_DEPTH;
 		};
 
 		class View

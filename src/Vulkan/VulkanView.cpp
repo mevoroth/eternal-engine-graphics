@@ -187,9 +187,22 @@ namespace Eternal
 			else
 			{
 				ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
-				_SubresourceRange = vk::ImageSubresourceRange(
-					 (IsVulkanDepthStencilFormat(InViewCreateInformation.GraphicsFormat) ? vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil : vk::ImageAspectFlagBits::eColor)
-				);
+				if (IsVulkanDepthStencilFormat(InViewCreateInformation.GraphicsFormat))
+				{
+					switch (InViewCreateInformation.GetViewPlane())
+					{
+					case ViewPlane::VIEW_PLANE_DEPTH:
+					{
+						_SubresourceRange = vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth);
+					} break;
+					case ViewPlane::VIEW_PLANE_STENCIL:
+					{
+						_SubresourceRange = vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eStencil);
+					} break;
+					}
+				}
+				else
+					_SubresourceRange = vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor);
 				_SubresourceRange.layerCount = 1;
 
 				switch (InViewCreateInformation.ResourceViewShaderResourceType)
@@ -357,7 +370,7 @@ namespace Eternal
 
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
 			_SubresourceRange = vk::ImageSubresourceRange(
-				InViewCreateInformation.GetViewDepthStencilPlane() == ViewDepthStencilPlane::VIEW_PLANE_STENCIL ? vk::ImageAspectFlagBits::eStencil : vk::ImageAspectFlagBits::eDepth
+				vk::ImageAspectFlagBits::eStencil | vk::ImageAspectFlagBits::eDepth
 			);
 			_SubresourceRange.layerCount = 1;
 			_SubresourceRange.levelCount = 1;
