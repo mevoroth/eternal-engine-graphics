@@ -306,6 +306,7 @@ namespace Eternal
 				return static_cast<ResourceStructureType*>(Map(InMapRange));
 			}
 			virtual void Unmap(_In_ const MapRange& InMapRange) = 0;
+			virtual uint32_t GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const = 0;
 
 			inline void SetResourceState(_In_ const TransitionState& InTransitionState) { _ResourceCreateInformation.ResourceState = InTransitionState; }
 			inline bool IsMultisample() const { return _Multisample; }
@@ -330,6 +331,7 @@ namespace Eternal
 
 			virtual void* Map(_In_ const MapRange& InMapRange) = 0;
 			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }
+			inline const ResourceCreateInformation& GetResourceCreateInformation() const { return _ResourceCreateInformation; }
 			const ResourceType& GetRawResourceType() const { return _ResourceType; }
 
 		private:

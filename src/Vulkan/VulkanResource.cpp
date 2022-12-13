@@ -215,6 +215,12 @@ namespace Eternal
 			);
 		}
 
+		uint32_t VulkanResource::GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const
+		{
+			const TextureCreateInformation& CreateInformation = GetResourceCreateInformation().TextureInformation;
+			return CreateInformation.Width * CreateInformation.Height * CreateInformation.DepthOrArraySize * ConvertFormatToVulkanFormat(CreateInformation.ResourceFormat).Size;
+		}
+
 		vk::Image& VulkanResource::GetVulkanImage()
 		{
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);

@@ -18,7 +18,7 @@ namespace Eternal
 		{
 			ETERNAL_ASSERT(_Resource);
 
-			_SetName();
+			_SetDebugName();
 		}
 
 		D3D12Resource::D3D12Resource(_In_ const TextureResourceCreateInformation& InResourceCreateInformation)
@@ -88,7 +88,7 @@ namespace Eternal
 				)
 			);
 
-			_SetName();
+			_SetDebugName();
 		}
 
 		D3D12Resource::D3D12Resource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
@@ -156,7 +156,7 @@ namespace Eternal
 				)
 			);
 
-			_SetName();
+			_SetDebugName();
 		}
 
 		D3D12Resource::~D3D12Resource()
@@ -165,7 +165,7 @@ namespace Eternal
 			_Resource = nullptr;
 		}
 
-		void D3D12Resource::_SetName()
+		void D3D12Resource::_SetDebugName()
 		{
 			ETERNAL_ASSERT(_Resource);
 			std::wstring UTF8String(GetResourceCreateInformation().Name.begin(), GetResourceCreateInformation().Name.end());
@@ -217,6 +217,26 @@ namespace Eternal
 				0,
 				&D3DWrittenRange
 			);
+		}
+
+		uint32_t D3D12Resource::GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const
+		{
+			D3D12_PLACED_SUBRESOURCE_FOOTPRINT Footprint	= {};
+			UINT NumRows									= 0;
+			UINT64 RowSizeInBytes							= 0;
+			UINT64 TotalBytes								= 0;
+
+			D3D12_RESOURCE_DESC DestinationResourceDesc	= _Resource->GetDesc();
+			static_cast<D3D12Device&>(InDevice).GetD3D12Device()->GetCopyableFootprints(
+				&DestinationResourceDesc,
+				0, 1, 0,
+				&Footprint,
+				&NumRows,
+				&RowSizeInBytes,
+				&TotalBytes
+			);
+
+			return static_cast<uint32_t>(TotalBytes);
 		}
 	}
 }
