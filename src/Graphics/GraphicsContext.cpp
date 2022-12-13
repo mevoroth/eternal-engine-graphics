@@ -100,7 +100,7 @@ namespace Eternal
 
 			_ShaderFactory	= new ShaderFactory();
 			
-			_MainViewportFullScreen			= CreateViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+			_MainViewportFullScreen			= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
 			_BackBufferViewportFullScreen	= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
 			_EmptyInputLayout				= CreateInputLayout(*this);
 		}
