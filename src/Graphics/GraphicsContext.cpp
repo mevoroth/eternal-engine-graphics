@@ -347,12 +347,12 @@ namespace Eternal
 
 		CommandListScope GraphicsContext::CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName)
 		{
-			return CommandListScope(_CreateNewCommandList(InType, InName), *this);
+			return CommandListScope(*this, _CreateNewCommandList(InType, InName), InName);
 		}
 
 		GraphicsCommandListScope GraphicsContext::CreateNewGraphicsCommandList(_In_ const RenderPass& InRenderPass, _In_ const string& InName)
 		{
-			return GraphicsCommandListScope(_CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHICS, InName), InRenderPass, *this);
+			return GraphicsCommandListScope(*this, _CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHICS, InName), InName, InRenderPass);
 		}
 
 		Shader* GraphicsContext::GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation)
@@ -384,21 +384,23 @@ namespace Eternal
 
 		//////////////////////////////////////////////////////////////////////////
 
-		CommandListScope::CommandListScope(_In_ CommandList* InCommandList, _In_ GraphicsContext& InContext)
+		CommandListScope::CommandListScope(_In_ GraphicsContext& InContext, _In_ CommandList* InCommandList, _In_ const string& InName)
 			: _CommandList(InCommandList)
 		{
 			_CommandList->Begin(InContext);
+			_CommandList->BeginEvent(InName.c_str());
 		}
 
 		CommandListScope::~CommandListScope()
 		{
+			_CommandList->EndEvent();
 			_CommandList->End();
 			_CommandList = nullptr;
 		}
 
 
-		GraphicsCommandListScope::GraphicsCommandListScope(_In_ CommandList* InCommandList, _In_ const RenderPass& InRenderPass, _In_ GraphicsContext& InContext)
-			: CommandListScope(InCommandList, InContext)
+		GraphicsCommandListScope::GraphicsCommandListScope(_In_ GraphicsContext& InContext, _In_ CommandList* InCommandList, _In_ const string& InName, _In_ const RenderPass& InRenderPass)
+			: CommandListScope(InContext, InCommandList, InName)
 		{
 			_CommandList->BeginRenderPass(InRenderPass);
 		}

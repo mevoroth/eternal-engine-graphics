@@ -14,6 +14,7 @@
 #include "d3d12/D3D12RootSignature.hpp"
 #include "d3d12/D3D12Sampler.hpp"
 #include "d3d12/D3D12GraphicsContext.hpp"
+#include "WinPixEventRuntime/pix3.h"
 #include <array>
 #include <string>
 
@@ -55,6 +56,16 @@ namespace Eternal
 			VerifySuccess(
 				_GraphicCommandList6->SetName(InNameUTF8.c_str())
 			);
+		}
+
+		void D3D12CommandList::BeginEvent(_In_ const char* InEventName)
+		{
+			PIXBeginEvent(_GraphicCommandList6, 0, InEventName);
+		}
+
+		void D3D12CommandList::EndEvent()
+		{
+			PIXEndEvent(_GraphicCommandList6);
 		}
 
 		void D3D12CommandList::Begin(_In_ GraphicsContext& InContext)

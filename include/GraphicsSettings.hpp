@@ -16,6 +16,8 @@
 #define ETERNAL_DEBUG_MATCHING_ROOT_SIGNATURE	(ETERNAL_DEBUG_VERBOSE && 0)
 #define ETERNAL_DEBUG_COMMAND_LIST_SUBMIT		(ETERNAL_DEBUG_VERBOSE || 1)
 
+#define USE_PIX									(1)
+
 #include <cstdint>
 #include <vector>
 #include "Macros/Macros.hpp"

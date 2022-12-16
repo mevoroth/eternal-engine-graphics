@@ -25,6 +25,9 @@ namespace Eternal
 
 			virtual void SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName) override final;
 
+			virtual void BeginEvent(_In_ const char* InEventName) override final;
+			virtual void EndEvent() override final;
+
 			virtual void Begin(_In_ GraphicsContext& InContext) override final;
 			virtual void End() override final;
 

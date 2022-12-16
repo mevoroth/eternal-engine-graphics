@@ -61,6 +61,16 @@ namespace Eternal
 			VerifySuccess(InVulkanDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InContext.GetDevice()).GetDispatchLoader()));
 		}
 
+		void VulkanCommandList::BeginEvent(_In_ const char* InEventName)
+		{
+			ETERNAL_BREAK(); // Not implemented
+		}
+
+		void VulkanCommandList::EndEvent()
+		{
+			ETERNAL_BREAK(); // Not implemented
+		}
+
 		void VulkanCommandList::Begin(_In_ GraphicsContext& InContext)
 		{
 			vk::CommandBufferInheritanceInfo CommandBufferInheritanceInfo;

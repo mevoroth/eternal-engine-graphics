@@ -44,6 +44,9 @@ namespace Eternal
 
 			virtual void SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName);
 
+			virtual void BeginEvent(_In_ const char* InEventName) = 0;
+			virtual void EndEvent() = 0;
+
 			virtual void Begin(_In_ GraphicsContext& InContext) = 0;
 			virtual void End() = 0;
 

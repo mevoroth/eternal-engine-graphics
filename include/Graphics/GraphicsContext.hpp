@@ -59,7 +59,7 @@ namespace Eternal
 			inline operator CommandList*() { return _CommandList; }
 
 		protected:
-			CommandListScope(_In_ CommandList* InCommandList, _In_ GraphicsContext& InContext);
+			CommandListScope(_In_ GraphicsContext& InContext, _In_ CommandList* InCommandList, _In_ const string& InName);
 
 			CommandList* _CommandList = nullptr;
 		};
@@ -71,7 +71,7 @@ namespace Eternal
 			virtual ~GraphicsCommandListScope();
 
 		protected:
-			GraphicsCommandListScope(_In_ CommandList* InCommandList, _In_ const RenderPass& InRenderPass, _In_ GraphicsContext& InContext);
+			GraphicsCommandListScope(_In_ GraphicsContext& InContext, _In_ CommandList* InCommandList, _In_ const string& InName, _In_ const RenderPass& InRenderPass);
 		};
 
 		class GraphicsContext
