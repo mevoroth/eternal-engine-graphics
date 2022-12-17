@@ -164,7 +164,7 @@ namespace Eternal
 			//}
 #endif
 
-			D3D12_FEATURE_DATA_D3D12_OPTIONS FeatureD3D12Options;
+			D3D12_FEATURE_DATA_D3D12_OPTIONS FeatureD3D12Options = {};
 			VerifySuccess(
 				_Device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &FeatureD3D12Options, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS))
 			);
