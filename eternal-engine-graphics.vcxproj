@@ -242,10 +242,10 @@
     <LibraryPath>$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.3.231.1\Include;$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx;$(SolutionDir)eternal-engine-extern\optick\src;$(SolutionDir)eternal-engine-extern\dxc\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.3.231.1\Include;$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx;$(SolutionDir)eternal-engine-extern\optick\src;$(SolutionDir)eternal-engine-extern\dxc\include;$(SolutionDir)packages\WinPixEventRuntime.1.0.220810001\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.3.231.1\Include;$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx;$(SolutionDir)eternal-engine-extern\optick\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)PlatformSDK\include;$(ProjectDir);$(SolutionDir)eternal-engine-utils\include;$(SolutionDir)eternal-engine-components\include;$(ProjectDir)include;D:\Code\VulkanSDK\1.3.231.1\Include;$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx;$(SolutionDir)eternal-engine-extern\optick\src;$(SolutionDir)packages\WinPixEventRuntime.1.0.220810001\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
