@@ -219,7 +219,7 @@ namespace Eternal
 			);
 		}
 
-		uint32_t D3D12Resource::GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const
+		TextureToBufferMemoryFootprint D3D12Resource::GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const
 		{
 			D3D12_PLACED_SUBRESOURCE_FOOTPRINT Footprint	= {};
 			UINT NumRows									= 0;
@@ -236,7 +236,10 @@ namespace Eternal
 				&TotalBytes
 			);
 
-			return static_cast<uint32_t>(TotalBytes);
+			return {
+				Footprint.Footprint.RowPitch,
+				static_cast<uint32_t>(TotalBytes)
+			};
 		}
 	}
 }

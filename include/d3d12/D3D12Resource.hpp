@@ -36,7 +36,7 @@ namespace Eternal
 			virtual ~D3D12Resource();
 
 			virtual void Unmap(_In_ const MapRange& InMapRange) override final;
-			virtual uint32_t GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const override final;
+			virtual TextureToBufferMemoryFootprint GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const override final;
 
 			inline ID3D12Resource* GetD3D12Resource() const { return _Resource; }
 

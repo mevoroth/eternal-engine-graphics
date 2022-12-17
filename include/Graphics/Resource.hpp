@@ -295,6 +295,12 @@ namespace Eternal
 			}
 		};
 
+		struct TextureToBufferMemoryFootprint
+		{
+			uint32_t RowPitch	= 0u;
+			uint32_t TotalBytes	= 0u;
+		};
+
 		class Resource
 		{
 		public:
@@ -306,7 +312,7 @@ namespace Eternal
 				return static_cast<ResourceStructureType*>(Map(InMapRange));
 			}
 			virtual void Unmap(_In_ const MapRange& InMapRange) = 0;
-			virtual uint32_t GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const = 0;
+			virtual TextureToBufferMemoryFootprint GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const = 0;
 
 			inline void SetResourceState(_In_ const TransitionState& InTransitionState) { _ResourceCreateInformation.ResourceState = InTransitionState; }
 			inline bool IsMultisample() const { return _Multisample; }
