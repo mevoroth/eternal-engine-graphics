@@ -24,10 +24,14 @@ namespace Eternal
 			size_t getVkHeaderVersion() const;
 
 			VkResult vkSetDebugUtilsObjectNameEXT(VkDevice device, const VkDebugUtilsObjectNameInfoEXT* pNameInfo) const;
+			void vkCmdDebugMarkerBeginEXT(VkCommandBuffer commandBuffer, const VkDebugMarkerMarkerInfoEXT* pMarkerInfo) const;
+			void vkCmdDebugMarkerEndEXT(VkCommandBuffer commandBuffer) const;
 
 		private:
 			vk::Instance& _Instance;
 			PFN_vkSetDebugUtilsObjectNameEXT	_vkSetDebugUtilsObjectName;
+			PFN_vkCmdDebugMarkerBeginEXT		_vkCmdDebugMarkerBegin;
+			PFN_vkCmdDebugMarkerEndEXT			_vkCmdDebugMarkerEnd;
 		};
 
 		class VulkanDevice final : public Device
@@ -60,7 +64,7 @@ namespace Eternal
 			vk::Device& GetVulkanDevice();
 			vk::PhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
 			vk::Instance& GetInstance() { return _Instance; }
-			const EternalDebugDispatchLoader& GetDispatchLoader() const { return *_DebugDispatchLoader; };
+			const EternalDebugDispatchLoader& GetDebugDispatchLoader() const { return *_DebugDispatchLoader; };
 			uint32_t GetQueueFamilyPropertiesCount() const { return _QueueFamilyPropertiesCount; }
 			const vk::PhysicalDeviceMemoryProperties& GetPhysicalDeviceMemoryProperties() const { return _PhysicalDeviceMemoryProperties; }
 			uint32_t FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const;

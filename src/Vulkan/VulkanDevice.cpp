@@ -41,7 +41,12 @@ namespace Eternal
 			: _Instance(InInstance)
 		{
 			_vkSetDebugUtilsObjectName	= (PFN_vkSetDebugUtilsObjectNameEXT)_Instance.getProcAddr("vkSetDebugUtilsObjectNameEXT");
+			_vkCmdDebugMarkerBegin		= (PFN_vkCmdDebugMarkerBeginEXT)	_Instance.getProcAddr("vkCmdDebugMarkerBeginEXT");
+			_vkCmdDebugMarkerEnd		= (PFN_vkCmdDebugMarkerEndEXT)		_Instance.getProcAddr("vkCmdDebugMarkerEndEXT");
+			
 			ETERNAL_ASSERT(_vkSetDebugUtilsObjectName);
+			ETERNAL_ASSERT(_vkCmdDebugMarkerBegin);
+			ETERNAL_ASSERT(_vkCmdDebugMarkerEnd);
 		}
 
 		size_t EternalDebugDispatchLoader::getVkHeaderVersion() const
@@ -52,6 +57,16 @@ namespace Eternal
 		VkResult EternalDebugDispatchLoader::vkSetDebugUtilsObjectNameEXT(VkDevice device, const VkDebugUtilsObjectNameInfoEXT* pNameInfo) const
 		{
 			return _vkSetDebugUtilsObjectName(device, pNameInfo);
+		}
+
+		void EternalDebugDispatchLoader::vkCmdDebugMarkerBeginEXT(VkCommandBuffer commandBuffer, const VkDebugMarkerMarkerInfoEXT* pMarkerInfo) const
+		{
+			_vkCmdDebugMarkerBegin(commandBuffer, pMarkerInfo);
+		}
+
+		void EternalDebugDispatchLoader::vkCmdDebugMarkerEndEXT(VkCommandBuffer commandBuffer) const
+		{
+			_vkCmdDebugMarkerEnd(commandBuffer);
 		}
 
 		namespace VulkanPrivate
@@ -314,7 +329,8 @@ namespace Eternal
 
 			const char* VulkanDeviceExtensions[] =
 			{
-				VK_KHR_SWAPCHAIN_EXTENSION_NAME
+				VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+				VK_EXT_DEBUG_MARKER_EXTENSION_NAME
 			};
 
 			vector<vk::DeviceQueueCreateInfo> DeviceQueueCreateInfos;

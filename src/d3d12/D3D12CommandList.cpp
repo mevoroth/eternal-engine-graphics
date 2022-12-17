@@ -58,12 +58,12 @@ namespace Eternal
 			);
 		}
 
-		void D3D12CommandList::BeginEvent(_In_ const char* InEventName)
+		void D3D12CommandList::BeginEvent(_In_ GraphicsContext& InContext, _In_ const char* InEventName)
 		{
 			PIXBeginEvent(_GraphicCommandList6, 0, InEventName);
 		}
 
-		void D3D12CommandList::EndEvent()
+		void D3D12CommandList::EndEvent(_In_ GraphicsContext& InContext)
 		{
 			PIXEndEvent(_GraphicCommandList6);
 		}
