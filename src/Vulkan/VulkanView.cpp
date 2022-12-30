@@ -356,7 +356,7 @@ namespace Eternal
 					reinterpret_cast<uint64_t>(ImageViewResourceHandle),
 					InViewCreateInformation.GraphicsResource->GetResourceName().c_str()
 				);
-				VerifySuccess(VkDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InViewCreateInformation.Context.GetDevice()).GetDispatchLoader()));
+				VerifySuccess(VkDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InViewCreateInformation.Context.GetDevice()).GetDebugDispatchLoader()));
 			}
 
 			_SetDebugName();
@@ -472,7 +472,7 @@ namespace Eternal
 
 			VulkanDevice& Device = static_cast<VulkanDevice&>(GetViewCreateInformation().Context.GetDevice());
 
-			VerifySuccess(Device.GetVulkanDevice().setDebugUtilsObjectNameEXT(&ObjectNameInfo, Device.GetDispatchLoader()));
+			VerifySuccess(Device.GetVulkanDevice().setDebugUtilsObjectNameEXT(&ObjectNameInfo, Device.GetDebugDispatchLoader()));
 		}
 
 		const vk::ImageView& VulkanView::GetVulkanImageView() const

@@ -45,7 +45,7 @@ namespace Eternal
 			};
 
 			void _CompileFile(_In_ const string& InSource, _In_ uint32_t InShaderStageInt, _In_ const vector<string>& InDefines);
-			void _LoadFile(const string& InShaderFile);
+			void _LoadFile(_In_ const string& InShaderFile);
 
 		private:
 			D3D12Shader(_In_ const string& InName, _In_ const string& InSource, _In_ const ShaderType& InShaderStage, _In_ const vector<string>& InDefines = vector<string>());

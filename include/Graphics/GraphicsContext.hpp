@@ -61,7 +61,8 @@ namespace Eternal
 		protected:
 			CommandListScope(_In_ GraphicsContext& InContext, _In_ CommandList* InCommandList, _In_ const string& InName);
 
-			CommandList* _CommandList = nullptr;
+			GraphicsContext&	_Context;
+			CommandList*		_CommandList = nullptr;
 		};
 
 		class GraphicsCommandListScope : public CommandListScope

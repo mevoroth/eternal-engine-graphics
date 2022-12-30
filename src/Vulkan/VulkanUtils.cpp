@@ -236,7 +236,7 @@ namespace Eternal
 
 			static constexpr TransitionState CopyRead_CopyWrite_State	= TransitionState::TRANSITION_COPY_READ
 																		| TransitionState::TRANSITION_COPY_WRITE;
-			void VerifySuccess(const vk::Result& VulkanResult)
+			void VerifySuccess(_In_ const vk::Result& VulkanResult)
 			{
 				ETERNAL_ASSERT(VulkanResult == vk::Result::eSuccess);
 			}
@@ -547,7 +547,7 @@ namespace Eternal
 				return PipelineStageFlags;
 			}
 
-			vk::PrimitiveTopology ConvertPrimitiveTopologyToVulkanPrimitiveTopology(const PrimitiveTopology& InPrimitiveTopology)
+			vk::PrimitiveTopology ConvertPrimitiveTopologyToVulkanPrimitiveTopology(_In_ const PrimitiveTopology& InPrimitiveTopology)
 			{
 				return VULKAN_PRIMITIVE_TOPOLOGIES[static_cast<uint32_t>(InPrimitiveTopology)];
 			}
@@ -643,7 +643,7 @@ namespace Eternal
 				return static_cast<vk::ShaderStageFlagBits>(InShaderTypeFlags);
 			}
 
-			uint32_t ConvertHLSLRegisterTypeToVulkanShaderBindingBase(const HLSLRegisterType& InHLSLRegisterType)
+			uint32_t ConvertHLSLRegisterTypeToVulkanShaderBindingBase(_In_ const HLSLRegisterType& InHLSLRegisterType)
 			{
 				return VULKAN_SHADER_REGISTER_OFFSETS[static_cast<int32_t>(InHLSLRegisterType)];
 			}

@@ -393,15 +393,16 @@ namespace Eternal
 		//////////////////////////////////////////////////////////////////////////
 
 		CommandListScope::CommandListScope(_In_ GraphicsContext& InContext, _In_ CommandList* InCommandList, _In_ const string& InName)
-			: _CommandList(InCommandList)
+			: _Context(InContext)
+			, _CommandList(InCommandList)
 		{
 			_CommandList->Begin(InContext);
-			_CommandList->BeginEvent(InName.c_str());
+			_CommandList->BeginEvent(InContext, InName.c_str());
 		}
 
 		CommandListScope::~CommandListScope()
 		{
-			_CommandList->EndEvent();
+			_CommandList->EndEvent(_Context);
 			_CommandList->End();
 			_CommandList = nullptr;
 		}

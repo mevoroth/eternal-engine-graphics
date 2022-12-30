@@ -218,9 +218,10 @@ namespace Eternal
 		TextureToBufferMemoryFootprint VulkanResource::GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const
 		{
 			const TextureCreateInformation& CreateInformation = GetResourceCreateInformation().TextureInformation;
+			uint32_t Stride = ConvertFormatToVulkanFormat(CreateInformation.ResourceFormat).Size;
 			return {
-				CreateInformation.Width,
-				CreateInformation.Width * CreateInformation.Height * CreateInformation.DepthOrArraySize * ConvertFormatToVulkanFormat(CreateInformation.ResourceFormat).Size
+				CreateInformation.Width * Stride,
+				CreateInformation.Width * CreateInformation.Height * CreateInformation.DepthOrArraySize * Stride
 			};
 		}
 
@@ -278,7 +279,7 @@ namespace Eternal
 				GetResourceCreateInformation().Name.c_str()
 			);
 			VulkanDevice& Device = static_cast<VulkanDevice&>(GetResourceCreateInformation().GfxDevice);
-			VerifySuccess(Device.GetVulkanDevice().setDebugUtilsObjectNameEXT(&ObjectNameInfo, Device.GetDispatchLoader()));
+			VerifySuccess(Device.GetVulkanDevice().setDebugUtilsObjectNameEXT(&ObjectNameInfo, Device.GetDebugDispatchLoader()));
 		}
 	}
 }

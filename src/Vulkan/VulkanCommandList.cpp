@@ -58,17 +58,22 @@ namespace Eternal
 				InName.c_str()
 			);
 
-			VerifySuccess(InVulkanDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InContext.GetDevice()).GetDispatchLoader()));
+			VerifySuccess(InVulkanDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InContext.GetDevice()).GetDebugDispatchLoader()));
 		}
 
-		void VulkanCommandList::BeginEvent(_In_ const char* InEventName)
+		void VulkanCommandList::BeginEvent(_In_ GraphicsContext& InContext, _In_ const char* InEventName)
 		{
-			ETERNAL_BREAK(); // Not implemented
+			VulkanDevice& Device = static_cast<VulkanDevice&>(InContext.GetDevice());
+
+			vk::DebugMarkerMarkerInfoEXT MarkerInfo(InEventName, { 1.0f, 1.0f, 1.0f, 1.0f });
+			_CommandBuffer.debugMarkerBeginEXT(&MarkerInfo, Device.GetDebugDispatchLoader());
 		}
 
-		void VulkanCommandList::EndEvent()
+		void VulkanCommandList::EndEvent(_In_ GraphicsContext& InContext)
 		{
-			ETERNAL_BREAK(); // Not implemented
+			VulkanDevice& Device = static_cast<VulkanDevice&>(InContext.GetDevice());
+
+			_CommandBuffer.debugMarkerEndEXT(Device.GetDebugDispatchLoader());
 		}
 
 		void VulkanCommandList::Begin(_In_ GraphicsContext& InContext)

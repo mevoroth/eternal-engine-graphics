@@ -58,12 +58,12 @@ namespace Eternal
 			);
 		}
 
-		void D3D12CommandList::BeginEvent(_In_ const char* InEventName)
+		void D3D12CommandList::BeginEvent(_In_ GraphicsContext& InContext, _In_ const char* InEventName)
 		{
 			PIXBeginEvent(_GraphicCommandList6, 0, InEventName);
 		}
 
-		void D3D12CommandList::EndEvent()
+		void D3D12CommandList::EndEvent(_In_ GraphicsContext& InContext)
 		{
 			PIXEndEvent(_GraphicCommandList6);
 		}
@@ -119,7 +119,7 @@ namespace Eternal
 					memcpy(
 						RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Color,
 						CurrentRenderTarget.RenderTarget->GetResource().GetClearValue(),
-						sizeof(float) * ETERNAL_ARRAYSIZE(CurrentRenderTarget.RenderTarget->GetResource().GetClearValue())
+						sizeof(float) * TextureCreateInformation::ComponentCount
 					);
 				}
 
@@ -511,7 +511,7 @@ namespace Eternal
 
 			const D3D12Resource& InD3DSourceResource = static_cast<const D3D12Resource&>(InSourceResource);
 
-			D3D12_BOX					SourceBox;
+			D3D12_BOX					SourceBox = {};
 			D3D12_TEXTURE_COPY_LOCATION	SourceTextureCopyLocation;
 			SourceTextureCopyLocation.pResource				= InD3DSourceResource.GetD3D12Resource();
 			switch (InSourceResource.GetResourceType())
