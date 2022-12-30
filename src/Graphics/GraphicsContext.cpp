@@ -172,6 +172,14 @@ namespace Eternal
 				AddressMode::ADDRESS_MODE_CLAMP,
 				AddressMode::ADDRESS_MODE_CLAMP
 			));
+			_BilinearWrapSampler = CreateSampler(*this, SamplerCreateInformation(
+				/*InMINLinear =*/ true,
+				/*InMAGLinear =*/ true,
+				/*InMIPLinear =*/ false,
+				AddressMode::ADDRESS_MODE_WRAP,
+				AddressMode::ADDRESS_MODE_WRAP,
+				AddressMode::ADDRESS_MODE_WRAP
+			));
 
 			_SwapChain = CreateSwapChain(*this);
 

@@ -100,6 +100,7 @@ namespace Eternal
 			InputLayout* GetEmptyInputLayout() { return _EmptyInputLayout; }
 			Sampler* GetPointClampSampler() { return _PointClampSampler; }
 			Sampler* GetBilinearClampSampler() { return _BilinearClampSampler; }
+			Sampler* GetBilinearWrapSampler() { return _BilinearWrapSampler; }
 
 			CommandQueue& GetGraphicsQueue();
 			CommandQueue& GetComputeQueue() { return *_ComputeQueue; }
@@ -165,6 +166,7 @@ namespace Eternal
 			InputLayout* _EmptyInputLayout			= nullptr;
 			Sampler* _PointClampSampler				= nullptr;
 			Sampler* _BilinearClampSampler			= nullptr;
+			Sampler* _BilinearWrapSampler			= nullptr;
 
 			uint32_t _CurrentFrameIndex				= FrameBufferingCount - 1; // During first frame, this will be set correct within range
 		};
