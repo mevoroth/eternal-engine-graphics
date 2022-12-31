@@ -79,6 +79,19 @@ namespace Eternal
 			{
 			}
 
+			RenderPassCreateInformation(
+				_In_ const Viewport& InViewport,
+				_In_ View* InDepthStencilRenderTarget,
+				_In_ const RenderTargetOperator& InDepthStencilOperator = RenderTargetOperator::NoLoad_NoStore,
+				_In_ const LogicBlend& InLogicBlend = LogicBlendNone
+			)
+				: LogicBlend(InLogicBlend)
+				, DepthStencilOperator(InDepthStencilOperator)
+				, Viewport(InViewport)
+				, DepthStencilRenderTarget(InDepthStencilRenderTarget)
+			{
+			}
+
 			vector<RenderTargetInformation> RenderTargets;
 			LogicBlend LogicBlend;
 			RenderTargetOperator DepthStencilOperator;
