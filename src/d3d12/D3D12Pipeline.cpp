@@ -29,7 +29,8 @@ namespace Eternal
 
 			InOutPipelineStateDesc.pRootSignature									= static_cast<const D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
 
-			static_cast<D3D12Shader*>(InPipelineCreateInformation.PS)->GetD3D12Shader(InOutPipelineStateDesc.PS);
+			if (InPipelineCreateInformation.PS)
+				static_cast<D3D12Shader*>(InPipelineCreateInformation.PS)->GetD3D12Shader(InOutPipelineStateDesc.PS);
 
 			const Rasterizer& InRasterizer = InPipelineCreateInformation.PipelineRasterizer;
 
@@ -143,7 +144,7 @@ namespace Eternal
 				)
 			);
 
-			std::string PipelineStateName = "VS_" + InPipelineCreateInformation.VS->GetName() + " PS_" + InPipelineCreateInformation.PS->GetName();
+			std::string PipelineStateName = "VS_" + InPipelineCreateInformation.VS->GetName() + (InPipelineCreateInformation.PS ? " PS_" + InPipelineCreateInformation.PS->GetName() : "_Only");
 			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
 			VerifySuccess(
 				_PipelineState->SetName(UTF8PipelineStateName.c_str())
