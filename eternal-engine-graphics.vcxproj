@@ -38,6 +38,7 @@
     <ClInclude Include="include\Graphics\CommandList.hpp" />
     <ClInclude Include="include\Graphics\CommandQueue.hpp" />
     <ClInclude Include="include\Graphics\ComparisonFunction.hpp" />
+    <ClInclude Include="include\Graphics\ConstantBuffer.hpp" />
     <ClInclude Include="include\Graphics\DescriptorTable.hpp" />
     <ClInclude Include="include\Graphics\MultiBuffered.hpp" />
     <ClInclude Include="include\Graphics\GraphicsContext.hpp" />

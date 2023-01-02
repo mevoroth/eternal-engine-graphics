@@ -5,6 +5,7 @@
 #include "Graphics/CommandQueue.hpp"
 #include "Graphics/CommandUtils.h"
 #include "Graphics/ComparisonFunction.hpp"
+#include "Graphics/ConstantBuffer.hpp"
 #include "Graphics/DepthStencil.hpp"
 #include "Graphics/DepthTest.hpp"
 #include "Graphics/DescriptorTable.hpp"
