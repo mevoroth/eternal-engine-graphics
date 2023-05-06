@@ -247,7 +247,7 @@ namespace Eternal
 			}
 		}
 
-		D3D12Shader::D3D12Shader(_In_ const string& InName, _In_ const string& InFileName, _In_ const ShaderType& InShaderStage, _In_ const vector<string>& InDefines /* = vector<string>() */)
+		D3D12Shader::D3D12Shader(_In_ const string& InName, _In_ const string& InFileName, _In_ ShaderType InShaderStage, _In_ const vector<string>& InDefines /* = vector<string>() */)
 			: Shader(InName)
 			, _FxcProgram(nullptr)
 			, _DxcProgram(nullptr)
@@ -267,7 +267,11 @@ namespace Eternal
 			} break;
 			}
 #if ETERNAL_USE_DEBUG_SHADERS
-			_CompileFile(InFileName, static_cast<uint32_t>(InShaderStage), InDefines);
+			_CompileFile(
+				InFileName,
+				static_cast<uint32_t>(InShaderStage),
+				InDefines
+			);
 #else
 			_LoadFile(InFileName + ".cso");
 #endif

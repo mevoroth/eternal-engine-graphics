@@ -48,7 +48,7 @@ namespace Eternal
 			void _LoadFile(_In_ const string& InShaderFile);
 
 		private:
-			D3D12Shader(_In_ const string& InName, _In_ const string& InSource, _In_ const ShaderType& InShaderStage, _In_ const vector<string>& InDefines = vector<string>());
+			D3D12Shader(_In_ const string& InName, _In_ const string& InSource, _In_ ShaderType InShaderStage, _In_ const vector<string>& InDefines = vector<string>());
 		};
 	}
 }

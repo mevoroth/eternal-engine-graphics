@@ -1,18 +1,19 @@
 #pragma once
 
 #include <string>
-
-using namespace std;
+#include "Graphics/ShaderType.hpp"
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace std;
+
 		enum class ShaderType;
 
 		struct ShaderCreateInformation
 		{
-			ShaderCreateInformation(_In_ const ShaderType& InStage, _In_ const char* InName, _In_ const char* InFileName, _In_ const vector<string>& InDefines = vector<string>())
+			ShaderCreateInformation(_In_ ShaderType InStage, _In_ const char* InName, _In_ const char* InFileName, _In_ const vector<string>& InDefines = vector<string>())
 				: Stage(InStage)
 				, Name(InName)
 				, FileName(InFileName)
@@ -20,9 +21,9 @@ namespace Eternal
 			{
 			}
 
-			const ShaderType& Stage;
-			const char* Name = nullptr;
-			const char* FileName = nullptr;
+			ShaderType Stage		= ShaderType::SHADER_TYPE_COUNT;
+			const char* Name		= nullptr;
+			const char* FileName	= nullptr;
 			const vector<string> Defines;
 		};
 

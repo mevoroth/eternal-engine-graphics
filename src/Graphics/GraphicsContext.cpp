@@ -4,7 +4,7 @@
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12GraphicsContext.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include "Graphics/SwapChainFactory.hpp"
 #include "Graphics/SwapChain.hpp"
 #include "Graphics/CommandQueueFactory.hpp"
@@ -246,6 +246,10 @@ namespace Eternal
 					for (uint32_t CommandIndex = 0, CommandCount = static_cast<uint32_t>(_GraphicsCommands->size()); CommandIndex < CommandCount; ++CommandIndex)
 					{
 						(*_GraphicsCommands)[CommandIndex]->Execute(*this);
+					}
+
+					for (uint32_t CommandIndex = 0, CommandCount = static_cast<uint32_t>(_GraphicsCommands->size()); CommandIndex < CommandCount; ++CommandIndex)
+					{
 						delete (*_GraphicsCommands)[CommandIndex];
 						(*_GraphicsCommands)[CommandIndex] = nullptr;
 					}

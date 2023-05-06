@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include <array>
 #include <string>
 

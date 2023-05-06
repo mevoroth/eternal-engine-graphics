@@ -196,7 +196,7 @@ namespace Eternal
 
 		void D3D12CommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
-			ETERNAL_PROFILER(INFO)();
+			ETERNAL_PROFILER(VERBOSE)();
 			static constexpr D3D12_RESOURCE_BARRIER DefaultBarrier = {};
 			std::array<D3D12_RESOURCE_BARRIER, MaxResourceTransitionsPerSubmit> ResourceBarriers;
 			ResourceBarriers.fill(DefaultBarrier);
@@ -589,7 +589,7 @@ namespace Eternal
 		>
 		void D3D12CommandList::_SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
-			ETERNAL_PROFILER(INFO)();
+			ETERNAL_PROFILER(VERBOSE)();
 
 			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();
 			const vector<RootSignatureConstants>& Constants				= DescriptorTableLayout.Constants;

@@ -4,7 +4,7 @@
 #include "Graphics/Types.hpp"
 #include "Window/Window.hpp"
 #include "Graphics/Viewport.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include <array>
 
 namespace Eternal

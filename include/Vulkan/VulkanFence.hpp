@@ -14,11 +14,11 @@ namespace Eternal
 		class VulkanFence final : public Fence
 		{
 		public:
-			VulkanFence(_In_ Device& DeviceObj);
+			VulkanFence(_In_ Device& InDevice);
 			~VulkanFence();
 
-			virtual void Wait(_In_ Device& DeviceObj) override final;
-			virtual void Reset(_In_ Device& DeviceObj) override final;
+			virtual void Wait(_In_ Device& InDevice) override final;
+			virtual void Reset(_In_ Device& InDevice) override final;
 
 			inline vk::Fence& GetVulkanFence() { return _Fence; }
 

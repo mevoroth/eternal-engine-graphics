@@ -5,7 +5,7 @@
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanFence.hpp"
 #include "Vulkan/VulkanHeader.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include <array>
 
 namespace Eternal

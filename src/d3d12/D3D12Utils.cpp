@@ -1,5 +1,5 @@
 #include "d3d12/D3D12Utils.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include "Graphics/BlendState.hpp"
 #include "Graphics/Rasterizer.hpp"
 #include "Graphics/Sampler.hpp"

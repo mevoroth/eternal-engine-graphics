@@ -1,7 +1,7 @@
 #include "Vulkan/VulkanUtils.hpp"
 
 #include <algorithm>
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include "Graphics/RootSignature.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/BlendState.hpp"

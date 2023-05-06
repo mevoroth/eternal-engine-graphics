@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Graphics/CommandList.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
 #include "Vulkan/VulkanHeader.hpp"

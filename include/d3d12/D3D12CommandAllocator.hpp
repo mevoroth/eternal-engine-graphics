@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Graphics/CommandAllocator.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 
 struct ID3D12CommandAllocator;
 

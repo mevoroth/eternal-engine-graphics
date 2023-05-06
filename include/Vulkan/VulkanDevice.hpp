@@ -3,7 +3,7 @@
 #include "Vulkan/VulkanHeader.hpp"
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include <array>
 

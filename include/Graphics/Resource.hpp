@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include "Graphics/Format.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include <string>
 
 namespace Eternal
@@ -89,7 +89,7 @@ namespace Eternal
 			uint32_t ArraySlice	= 0;
 		};
 
-		template<typename ResourceStructureType = void>
+		template<typename ResourceStructureType = uint8_t>
 		class MapScope
 		{
 		public:
@@ -106,6 +106,11 @@ namespace Eternal
 
 			ResourceStructureType* GetDataPointer() const { return _DataPointer; }
 			ResourceStructureType* operator->() const { return _DataPointer; }
+			ResourceStructureType& operator[](_In_ uint32_t ElementIndex)
+			{
+				ETERNAL_ASSERT(ElementIndex * sizeof(ResourceStructureType) < _Range.MapSize);
+				return _DataPointer[ElementIndex];
+			}
 
 		private:
 			Resource&				_Resource;

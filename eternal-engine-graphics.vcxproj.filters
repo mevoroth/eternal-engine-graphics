@@ -76,7 +76,7 @@
     <ClInclude Include="include\d3d12\D3D12Device.hpp">
       <Filter>d3d12</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\CommandUtils.h">
+    <ClInclude Include="include\Graphics\CommandUtils.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\d3d12\D3D12Utils.hpp">

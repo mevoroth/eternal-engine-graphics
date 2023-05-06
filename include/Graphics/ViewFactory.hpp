@@ -12,9 +12,10 @@ namespace Eternal
 		struct RenderTargetViewCreateInformation;
 		struct UnorderedAccessViewCreateInformation;
 		struct DepthStencilViewCreateInformation;
+		class GraphicsContext;
 		class View;
 
-		View* CreateConstantBufferView(_In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation);
+		View* CreateConstantBufferView(_In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation, _In_ void* InViewPlacementMemory = nullptr);
 		View* CreateShaderResourceView(_In_ const ShaderResourceViewCreateInformation& InShaderResourceViewCreateInformation);
 		View* CreateRenderTargetView(_In_ const RenderTargetViewCreateInformation& InRenderTargetViewCreateInformation);
 		View* CreateUnorderedAccessView(_In_ const UnorderedAccessViewCreateInformation& InUnorderedAccessViewCreateInformation);
@@ -23,5 +24,6 @@ namespace Eternal
 		MultiBuffered<View>* CreateMultiBufferedShaderResourceView(_In_ MultiBuffered<Resource>& InResources, _In_ const ShaderResourceViewCreateInformation& InShaderResourceViewCreateInformation);
 		void DestroyView(_Inout_ View*& InOutView);
 		void DestroyMultiBufferedView(_Inout_ MultiBuffered<View>*& InOutMultiBufferedView);
+		size_t GetViewSize(_In_ GraphicsContext& InContext);
 	}
 }

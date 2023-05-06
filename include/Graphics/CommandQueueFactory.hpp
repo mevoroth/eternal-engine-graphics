@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Graphics/CommandList.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 
 namespace Eternal
 {

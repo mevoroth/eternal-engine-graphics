@@ -1,4 +1,4 @@
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 
 #include "Graphics/View.hpp"
 #include "Graphics/Resource.hpp"

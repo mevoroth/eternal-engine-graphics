@@ -12,17 +12,25 @@ namespace Eternal
 	namespace Graphics
 	{
 		template<typename ViewCreateInformationType>
-		static View* CreateView(_In_ const ViewCreateInformationType& InViewCreateInformation)
+		static View* CreateView(_In_ const ViewCreateInformationType& InViewCreateInformation, _In_ void* InViewPlacementMemory = nullptr)
 		{
 			switch (InViewCreateInformation.Context.GetDevice().GetDeviceType())
 #ifdef ETERNAL_ENABLE_D3D12
 			{
 			case DeviceType::D3D12:
+			{
+				if (InViewPlacementMemory)
+					return new (InViewPlacementMemory) D3D12View(InViewCreateInformation);
 				return new D3D12View(InViewCreateInformation);
+			}
 #endif
 #ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
+			{
+				if (InViewPlacementMemory)
+					return new (InViewPlacementMemory) VulkanView(InViewCreateInformation);
 				return new VulkanView(InViewCreateInformation);
+			}
 #endif
 			default:
 				ETERNAL_BREAK();
@@ -40,9 +48,9 @@ namespace Eternal
 			});
 		}
 
-		View* CreateConstantBufferView(_In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation)
+		View* CreateConstantBufferView(_In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation, _In_ void* InViewPlacementMemory)
 		{
-			return CreateView(InConstantBufferViewCreateInformation);
+			return CreateView(InConstantBufferViewCreateInformation, InViewPlacementMemory);
 		}
 
 		View* CreateShaderResourceView(_In_ const ShaderResourceViewCreateInformation& InShaderResourceViewCreateInformation)
@@ -85,6 +93,24 @@ namespace Eternal
 		{
 			delete InOutMultiBufferedView;
 			InOutMultiBufferedView = nullptr;
+		}
+
+		size_t GetViewSize(_In_ GraphicsContext& InContext)
+		{
+			switch (InContext.GetDevice().GetDeviceType())
+#ifdef ETERNAL_ENABLE_D3D12
+			{
+			case DeviceType::D3D12:
+				return sizeof(D3D12View);
+#endif
+#ifdef ETERNAL_ENABLE_VULKAN
+			case DeviceType::VULKAN:
+				return sizeof(VulkanView);
+#endif
+			default:
+				ETERNAL_BREAK();
+				return 0ull;
+			}
 		}
 	}
 }

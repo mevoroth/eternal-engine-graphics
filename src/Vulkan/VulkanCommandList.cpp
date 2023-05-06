@@ -1,7 +1,7 @@
 #include "Vulkan/VulkanCommandList.hpp"
 
 #include "Graphics/Viewport.hpp"
-#include "Graphics/CommandUtils.h"
+#include "Graphics/CommandUtils.hpp"
 #include "Graphics/RootSignature.hpp"
 #include "Graphics/DescriptorTable.hpp"
 #include "Vulkan/VulkanDevice.hpp"

@@ -34,7 +34,7 @@
     <ClInclude Include="include\Graphics\CommandAllocatorFactory.hpp" />
     <ClInclude Include="include\Graphics\CommandListFactory.hpp" />
     <ClInclude Include="include\Graphics\CommandQueueFactory.hpp" />
-    <ClInclude Include="include\Graphics\CommandUtils.h" />
+    <ClInclude Include="include\Graphics\CommandUtils.hpp" />
     <ClInclude Include="include\Graphics\CommandList.hpp" />
     <ClInclude Include="include\Graphics\CommandQueue.hpp" />
     <ClInclude Include="include\Graphics\ComparisonFunction.hpp" />
@@ -189,13 +189,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
