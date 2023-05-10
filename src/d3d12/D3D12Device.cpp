@@ -4,11 +4,11 @@
 #include <DXGI1_4.h>
 #include "d3d12/D3D12Utils.hpp"
 
-#if ETERNAL_DEBUG
+#if ETERNAL_USE_DEBUG_LAYER
 #include <dxgidebug.h>
-#define ETERNAL_D3D12_DXGIFLAG	(0x1)
+#define ETERNAL_D3D12_DXGIFLAG_DEBUG	(DXGI_CREATE_FACTORY_DEBUG)
 #else
-#define ETERNAL_D3D12_DXGIFLAG	(0x0)
+#define ETERNAL_D3D12_DXGIFLAG_DEBUG	(0x0)
 #endif
 
 namespace Eternal
@@ -17,7 +17,7 @@ namespace Eternal
 	{
 		using namespace Eternal::Graphics::D3D12;
 
-#if ETERNAL_DEBUG
+#if ETERNAL_USE_DEBUG_LAYER
 		ID3D12Debug*	D3D12Device::_Debug			= nullptr;
 		IDXGIInfoQueue*	D3D12Device::_DXGIInfoQueue	= nullptr;
 		IDXGIDebug*		D3D12Device::_DXGIDebug		= nullptr;
@@ -35,10 +35,10 @@ namespace Eternal
 			HRESULT hr = S_OK;
 
 			VerifySuccess(
-				CreateDXGIFactory2(ETERNAL_D3D12_DXGIFLAG, __uuidof(IDXGIFactory4), reinterpret_cast<void**>(&_DXGIFactory))
+				CreateDXGIFactory2(ETERNAL_D3D12_DXGIFLAG_DEBUG, __uuidof(IDXGIFactory4), reinterpret_cast<void**>(&_DXGIFactory))
 			);
 
-#if ETERNAL_DEBUG
+#if ETERNAL_USE_DEBUG_LAYER
 			// Enable the D3D12 debug layer
 			hr = D3D12GetDebugInterface(__uuidof(ID3D12Debug), reinterpret_cast<void**>(&_Debug));
 			if (hr == S_OK)
@@ -99,7 +99,7 @@ namespace Eternal
 			_DXGIFactory->Release();
 			_DXGIFactory = nullptr;
 
-#if ETERNAL_DEBUG
+#if ETERNAL_USE_DEBUG_LAYER
 			VerifySuccess(
 				_DXGIDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL)
 			);
@@ -135,7 +135,7 @@ namespace Eternal
 			_Device = _Device5;
 			ETERNAL_ASSERT(_Device);
 
-#if ETERNAL_DEBUG
+#if ETERNAL_USE_DEBUG_LAYER
 			DXGI_ADAPTER_DESC1 DXGIAdapterDesc1;
 			VerifySuccess(
 				_DXGIAdapter->GetDesc1(&DXGIAdapterDesc1)

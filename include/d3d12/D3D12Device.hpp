@@ -9,7 +9,7 @@ struct IDXGIAdapter1;
 struct ID3D12Device;
 struct ID3D12Device5;
 
-#if ETERNAL_DEBUG
+#if ETERNAL_USE_DEBUG_LAYER
 struct ID3D12Debug;
 struct IDXGIInfoQueue;
 struct ID3D12InfoQueue;
@@ -39,7 +39,7 @@ namespace Eternal
 			inline ID3D12Device5* GetD3D12Device5() { return _Device5; }
 
 		private:
-#if ETERNAL_DEBUG
+#if ETERNAL_USE_DEBUG_LAYER
 			static ID3D12Debug*		_Debug;
 			static IDXGIInfoQueue*	_DXGIInfoQueue;
 			static IDXGIDebug*		_DXGIDebug;
