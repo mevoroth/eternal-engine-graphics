@@ -34,6 +34,10 @@ namespace Eternal
 				: _FrontFace(InFrontFace)
 			{
 			}
+			Rasterizer(_In_ const FillMode& InFillMode)
+				: _Fill(InFillMode)
+			{
+			}
 
 			inline const FillMode& GetFillMode() const { return _Fill; }
 			inline const CullMode& GetCullMode() const { return _Cull; }
@@ -55,5 +59,6 @@ namespace Eternal
 
 		extern const Rasterizer RasterizerDefault;
 		extern const Rasterizer RasterizerClockWise;
+		extern const Rasterizer RasterizerLine;
 	}
 }
