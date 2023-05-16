@@ -10,6 +10,8 @@
 #include <fstream>
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
+#include <locale>
+#include <codecvt>
 
 #include "directxcompiler/dxcapi.h"
 
@@ -91,15 +93,10 @@ namespace Eternal
 			{
 				string IncludeSource = pFileName;
 				string FullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
-				ifstream IncludedFile(FullPathSource.c_str(), ios::in | ios::binary | ios::ate);
 
-				ETERNAL_ASSERT(IncludedFile);
-
-				*pBytes = (UINT)IncludedFile.tellg();
-				*ppData = new char[*pBytes];
-				IncludedFile.seekg(0, ios::beg);
-				IncludedFile.read((char*)*ppData, *pBytes);
-				IncludedFile.close();
+				FileContent Content = LoadFileToMemory(FullPathSource);
+				*pBytes	= Content.Size;
+				*ppData = Content.Content;
 
 				return S_OK;
 			}
@@ -127,9 +124,11 @@ namespace Eternal
 				_COM_Outptr_result_maybenull_ IDxcBlob** ppIncludeSource  // Resultant source object for included file, nullptr if not found.
 			) override
 			{
+				ETERNAL_BREAK();
+
 				IDxcBlobEncoding* Encoding = nullptr;
 				wstring IncludeSourceUTF8(pFilename);
-				string IncludeSource(IncludeSourceUTF8.begin(), IncludeSourceUTF8.end());
+				string IncludeSource = std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(IncludeSourceUTF8);
 				string FullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
 				//wstring FullPathSourceUTF8 = wstring(FullPathSource.begin(), FullPathSource.end());
 
