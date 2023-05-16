@@ -16,12 +16,12 @@ namespace Eternal
 			{
 			}
 
-			template<typename ConstructionFunctor>
-			MultiBuffered(_In_ GraphicsContext& InContext, ConstructionFunctor InConstructResourceFunction)
+			template<typename ConstructionFunction>
+			MultiBuffered(_In_ GraphicsContext& InContext, ConstructionFunction InConstructResourceFunctor)
 				: _Context(&InContext)
 			{
 				for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesCount; ++ResourceIndex)
-					_Resources[ResourceIndex] = InConstructResourceFunction();
+					_Resources[ResourceIndex] = InConstructResourceFunctor();
 			}
 
 			~MultiBuffered()
