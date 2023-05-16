@@ -17,8 +17,7 @@ namespace Eternal
 			"NORMAL",
 			"TANGENT",
 			"BINORMAL",
-			"TEXCOORD",
-			""
+			"TEXCOORD"
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_INPUT_SEMANTICS) == static_cast<int32_t>(VertexDataType::VERTEX_DATA_TYPE_COUNT), "Mismatch between abstraction and d3d12 input semantics");
 
