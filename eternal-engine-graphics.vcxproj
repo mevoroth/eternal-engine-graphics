@@ -57,6 +57,7 @@
     <ClInclude Include="include\Graphics\Rasterizer.hpp" />
     <ClInclude Include="include\Graphics\RenderPass.hpp" />
     <ClInclude Include="include\Graphics\RenderPassFactory.hpp" />
+    <ClInclude Include="include\Graphics\RenderTargetTexture.hpp" />
     <ClInclude Include="include\Graphics\Resource.hpp" />
     <ClInclude Include="include\Graphics\ResourceFactory.hpp" />
     <ClInclude Include="include\Graphics\RootSignature.hpp" />
@@ -67,8 +68,10 @@
     <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
     <ClInclude Include="include\Graphics\ShaderType.hpp" />
     <ClInclude Include="include\Graphics\StencilTest.hpp" />
+    <ClInclude Include="include\Graphics\StructuredBuffer.hpp" />
     <ClInclude Include="include\Graphics\SwapChain.hpp" />
     <ClInclude Include="include\Graphics\SwapChainFactory.hpp" />
+    <ClInclude Include="include\Graphics\Texture.hpp" />
     <ClInclude Include="include\Graphics\Types.hpp" />
     <ClInclude Include="include\Graphics\Types\DeviceType.hpp" />
     <ClInclude Include="include\Graphics\Types\HLSLTypes.hpp" />
@@ -139,6 +142,7 @@
     <ClCompile Include="src\Graphics\Rasterizer.cpp" />
     <ClCompile Include="src\Graphics\RenderPass.cpp" />
     <ClCompile Include="src\Graphics\RenderPassFactory.cpp" />
+    <ClCompile Include="src\Graphics\RenderTargetTexture.cpp" />
     <ClCompile Include="src\Graphics\Resource.cpp" />
     <ClCompile Include="src\Graphics\ResourceFactory.cpp" />
     <ClCompile Include="src\Graphics\RootSignature.cpp" />
@@ -150,6 +154,7 @@
     <ClCompile Include="src\Graphics\StencilTest.cpp" />
     <ClCompile Include="src\Graphics\SwapChain.cpp" />
     <ClCompile Include="src\Graphics\SwapChainFactory.cpp" />
+    <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\Types\HLSLTypes.cpp" />
     <ClCompile Include="src\Graphics\Types\MemoryType.cpp" />
     <ClCompile Include="src\Graphics\View.cpp" />
