@@ -16,7 +16,7 @@ namespace Eternal
 		{
 			return static_cast<ResourceType>(
 				static_cast<uint32_t>(InLeftResourceType) & static_cast<uint32_t>(InRightResourceType)
-				);
+			);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
