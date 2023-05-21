@@ -45,6 +45,11 @@ namespace Eternal
 				DestroyMultiBufferedView(ResourceView);
 			}
 
+			View* GetView()
+			{
+				return *ResourceView;
+			}
+
 			MultiBuffered<Resource>* ResourceBuffer = nullptr;
 			MultiBuffered<View>* ResourceView = nullptr;
 		};
