@@ -10,6 +10,7 @@ namespace Eternal
 		using namespace std;
 
 		enum class ShaderType;
+		class GraphicsContext;
 
 		struct ShaderCreateInformation
 		{
@@ -34,10 +35,11 @@ namespace Eternal
 			const string& GetName() const;
 
 		protected:
-			Shader(_In_ const string& InName);
+			Shader(_Inout_ GraphicsContext& InOutContext, _In_ const string& InName, _In_ const string& InFileName);
 
 		private:
 			string _Name;
+			string _FileName;
 		};
 	}
 }

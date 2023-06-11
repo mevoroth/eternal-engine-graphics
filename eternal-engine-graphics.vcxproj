@@ -81,6 +81,7 @@
     <ClInclude Include="include\Graphics\Viewport.hpp" />
     <ClInclude Include="include\Graphics\ViewportFactory.hpp" />
     <ClInclude Include="include\NextGenGraphics\FrameGraph.hpp" />
+    <ClInclude Include="include\Tools\PipelineDependency.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandAllocator.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandList.hpp" />
     <ClInclude Include="include\Vulkan\VulkanCommandQueue.hpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="src\Graphics\Viewport.cpp" />
     <ClCompile Include="src\Graphics\ViewportFactory.cpp" />
     <ClCompile Include="src\NextGenGraphics\FrameGraph.cpp" />
+    <ClCompile Include="src\Tools\PipelineDependency.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandAllocator.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandList.cpp" />
     <ClCompile Include="src\Vulkan\VulkanCommandQueue.cpp" />

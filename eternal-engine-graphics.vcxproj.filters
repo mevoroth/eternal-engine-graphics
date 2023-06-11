@@ -19,6 +19,9 @@
     <Filter Include="Graphics\Types">
       <UniqueIdentifier>{806a68b5-eb1d-4d49-959e-1666fbd8cde1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{a6af31c7-499b-41d8-9ba5-594e855a9c2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GraphicsSettings.hpp" />
@@ -292,6 +295,9 @@
     <ClInclude Include="include\Graphics\Texture.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Tools\PipelineDependency.hpp">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -524,6 +530,9 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\Texture.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tools\PipelineDependency.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
