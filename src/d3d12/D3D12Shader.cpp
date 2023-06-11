@@ -95,7 +95,7 @@ namespace Eternal
 				string FullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
 
 				FileContent Content = LoadFileToMemory(FullPathSource);
-				*pBytes	= Content.Size;
+				*pBytes	= static_cast<UINT>(Content.Size);
 				*ppData = Content.Content;
 
 				return S_OK;
@@ -246,8 +246,8 @@ namespace Eternal
 			}
 		}
 
-		D3D12Shader::D3D12Shader(_In_ const string& InName, _In_ const string& InFileName, _In_ ShaderType InShaderStage, _In_ const vector<string>& InDefines /* = vector<string>() */)
-			: Shader(InName)
+		D3D12Shader::D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const string& InName, _In_ const string& InFileName, _In_ ShaderType InShaderStage, _In_ const vector<string>& InDefines /* = vector<string>() */)
+			: Shader(InOutContext, InName, InFileName)
 			, _FxcProgram(nullptr)
 			, _DxcProgram(nullptr)
 		{
@@ -276,8 +276,9 @@ namespace Eternal
 #endif
 		}
 
-		D3D12Shader::D3D12Shader(_In_ GraphicsContext& InContext, _In_ const ShaderCreateInformation& InCreateInformation)
-			: D3D12Shader(InCreateInformation.Name,
+		D3D12Shader::D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const ShaderCreateInformation& InCreateInformation)
+			: D3D12Shader(InOutContext,
+						  InCreateInformation.Name,
 						  InCreateInformation.FileName,
 						  InCreateInformation.Stage,
 						  InCreateInformation.Defines)

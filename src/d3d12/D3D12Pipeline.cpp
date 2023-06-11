@@ -1,6 +1,7 @@
 #include "d3d12/D3D12Pipeline.hpp"
 
 #include "d3dx12.h"
+#include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/DepthStencil.hpp"
 #include "Graphics/DepthTest.hpp"
@@ -103,13 +104,13 @@ namespace Eternal
 		}
 		
 		D3D12Pipeline::D3D12Pipeline(
-			_In_ Device& InDevice,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
 		)
-			: Pipeline(InPipelineCreateInformation)
+			: Pipeline(InOutContext, InPipelineCreateInformation)
 			, _PrimitiveTopology(ConvertPrimitiveTopologyToD3D12PrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology))
 		{
-			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
+			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
 
 			D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc	= {};
 
@@ -152,12 +153,12 @@ namespace Eternal
 		}
 
 		D3D12Pipeline::D3D12Pipeline(
-			_In_ Device& InDevice,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
 		)
-			: Pipeline(InPipelineCreateInformation)
+			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
-			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
+			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
 			
 			D3D12_COMPUTE_PIPELINE_STATE_DESC PipelineStateDesc = {};
 			
@@ -182,12 +183,12 @@ namespace Eternal
 		}
 
 		D3D12Pipeline::D3D12Pipeline(
-			_In_ Device& InDevice,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
 		)
-			: Pipeline(InPipelineCreateInformation)
+			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
-			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
+			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
 
 			D3DX12_MESH_SHADER_PIPELINE_STATE_DESC PipelineStateDesc = {};
 

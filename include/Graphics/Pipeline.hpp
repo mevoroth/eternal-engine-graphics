@@ -11,6 +11,7 @@ namespace Eternal
 	{
 		enum class ShaderTypeFlags;
 
+		class GraphicsContext;
 		class RootSignature;
 		class InputLayout;
 		class Shader;
@@ -67,6 +68,9 @@ namespace Eternal
 			InputLayout*		PipelineInputLayout			= nullptr;
 			RenderPass*			PipelineRenderPass			= nullptr;
 			Shader*				VS							= nullptr;
+			//Shader*				HS							= nullptr;
+			//Shader*				DS							= nullptr;
+			//Shader*				GS							= nullptr;
 			Shader*				PS							= nullptr;
 			Shader*				CS							= nullptr;
 			Shader*				MS							= nullptr;
@@ -168,10 +172,7 @@ namespace Eternal
 			const RootSignature& GetRootSignature() const { return _PipelineCreateInformation.PipelineRootSignature; }
 
 		protected:
-			Pipeline(const PipelineCreateInformation& InPipelineCreateInformation)
-				: _PipelineCreateInformation(InPipelineCreateInformation)
-			{
-			}
+			Pipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation);
 
 		private:
 			PipelineCreateInformation _PipelineCreateInformation;

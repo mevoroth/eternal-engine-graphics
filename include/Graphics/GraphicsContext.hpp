@@ -5,6 +5,7 @@
 #include "Window/Window.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/CommandUtils.hpp"
+#include "Tools/PipelineDependency.hpp"
 #include <array>
 
 namespace Eternal
@@ -93,6 +94,7 @@ namespace Eternal
 			void EndFrame();
 			virtual void ResetFrameStates();
 
+			PipelineDependency& GetPipelineDependency() { return _PipelineDependency; }
 			Device& GetDevice() { return *_Device; }
 			Window& GetWindow() { return _Window; }
 			SwapChain& GetSwapChain() { return *_SwapChain; }
@@ -153,6 +155,7 @@ namespace Eternal
 			vector<GraphicsCommand*>*												_GraphicsCommands = nullptr;
 
 			Window _Window;
+			PipelineDependency _PipelineDependency;
 			Device* _Device							= nullptr;
 			SwapChain* _SwapChain					= nullptr;
 

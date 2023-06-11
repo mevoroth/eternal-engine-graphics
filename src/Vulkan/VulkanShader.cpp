@@ -42,8 +42,8 @@ ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == int(ShaderType::
 static shaderc_include_result* IncludeResolver(void* UserData, const char* RequestedSource, int Type, const char* RequestingSource, size_t IncludeDepth)
 {
 	FileContent* ShaderSourceCode = new FileContent();
-	string FullPathSrc = FilePath::Find(RequestedSource, FileType::FILE_TYPE_SHADERS);
-	*ShaderSourceCode = LoadFileToMemory(FullPathSrc);
+	string FullPathSource = FilePath::Find(RequestedSource, FileType::FILE_TYPE_SHADERS);
+	*ShaderSourceCode = LoadFileToMemory(FullPathSource);
 
 	shaderc_include_result* ShaderIncludeResult = new shaderc_include_result;
 	ShaderIncludeResult->source_name			= RequestedSource;
@@ -62,37 +62,37 @@ static void IncludeReleaser(void* UserData, shaderc_include_result* IncludeResul
 	delete IncludeResult;
 }
 
-VulkanShader::VulkanShader(_In_ Device& InDevice, _In_ const string& Name, _In_ const string& FileName, _In_ const ShaderType& Stage, _In_ const vector<string>& Defines /* = vector<string>() */)
-	: Shader(Name)
+VulkanShader::VulkanShader(_Inout_ GraphicsContext& InOutContext, _In_ const string& InName, _In_ const string& InFileName, _In_ const ShaderType& InStage, _In_ const vector<string>& InDefines /* = vector<string>() */)
+	: Shader(InOutContext, InName, InFileName)
 {
 #if ETERNAL_DEBUG || 1
-	_CompileFile(InDevice, FileName, Stage, Defines);
+	_CompileFile(InOutContext.GetDevice(), InFileName, InStage, InDefines);
 #else
-	_LoadFile(InDevice, FileName);
+	_LoadFile(InOutContext.GetDevice(), InFileName);
 #endif
 }
 
-VulkanShader::VulkanShader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation)
+VulkanShader::VulkanShader(_Inout_ GraphicsContext& InOutContext, const ShaderCreateInformation& InCreateInformation)
 	: VulkanShader(
-		Context.GetDevice(),
-		CreateInformation.Name,
-		CreateInformation.FileName,
-		CreateInformation.Stage,
-		CreateInformation.Defines
+		InOutContext,
+		InCreateInformation.Name,
+		InCreateInformation.FileName,
+		InCreateInformation.Stage,
+		InCreateInformation.Defines
 	)
 {
 }
 
-void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileName, _In_ const ShaderType& Stage, _In_ const vector<string>& Defines)
+void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& InFileName, _In_ const ShaderType& InStage, _In_ const vector<string>& InDefines)
 {
 	using namespace Vulkan;
 
-	ETERNAL_ASSERT(!(Defines.size() % 2));
+	ETERNAL_ASSERT(!(InDefines.size() % 2));
 
 	const uint32_t VulkanVersion = static_cast<VulkanDevice&>(InDevice).GetVulkanVersion();
 
-	string FullPathSrc = FilePath::Find(FileName, FileType::FILE_TYPE_SHADERS);
-	FileContent ShaderSourceCode = LoadFileToMemory(FullPathSrc);
+	string FullPathSource = FilePath::Find(InFileName, FileType::FILE_TYPE_SHADERS);
+	FileContent ShaderSourceCode = LoadFileToMemory(FullPathSource);
 
 	string ShaderFileContent = R"HLSLINCLUDE(
 		#include "ShadersReflection/HLSLReflection.hpp"
@@ -132,14 +132,14 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 	shaderc_compile_options_set_generate_debug_info(CompilerOptions);
 	shaderc_compile_options_set_include_callbacks(CompilerOptions, IncludeResolver, IncludeReleaser, nullptr);
 
-	for (int32_t DefineIndex = 0, DefineCount = static_cast<int32_t>(Defines.size() / 2); DefineIndex < DefineCount; ++DefineIndex)
+	for (int32_t DefineIndex = 0, DefineCount = static_cast<int32_t>(InDefines.size() / 2); DefineIndex < DefineCount; ++DefineIndex)
 	{
 		shaderc_compile_options_add_macro_definition(
 			CompilerOptions,
-			Defines[DefineIndex * 2].c_str(),
-			Defines[DefineIndex * 2].size(),
-			Defines[DefineIndex * 2 + 1].c_str(),
-			Defines[DefineIndex * 2 + 1].size()
+			InDefines[DefineIndex * 2].c_str(),
+			InDefines[DefineIndex * 2].size(),
+			InDefines[DefineIndex * 2 + 1].c_str(),
+			InDefines[DefineIndex * 2 + 1].size()
 		);
 	}
 
@@ -203,9 +203,9 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 		Compiler,
 		reinterpret_cast<const char*>(ShaderFileContent.c_str()),
 		ShaderFileContent.size(),
-		SHADER_KINDS[static_cast<int32_t>(Stage)],
-		FullPathSrc.c_str(),
-		SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)],
+		SHADER_KINDS[static_cast<int32_t>(InStage)],
+		FullPathSource.c_str(),
+		SHADER_ENTRY_POINTS[static_cast<int32_t>(InStage)],
 		CompilerOptions
 	);
 
@@ -213,9 +213,9 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 		Compiler,
 		reinterpret_cast<const char*>(ShaderFileContent.c_str()),
 		ShaderFileContent.size(),
-		SHADER_KINDS[static_cast<int32_t>(Stage)],
-		FullPathSrc.c_str(),
-		SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)],
+		SHADER_KINDS[static_cast<int32_t>(InStage)],
+		FullPathSource.c_str(),
+		SHADER_ENTRY_POINTS[static_cast<int32_t>(InStage)],
 		CompilerOptions
 	);
 	size_t ShaderByteCodeLength						= shaderc_result_get_length(CompilationResult);
@@ -234,9 +234,9 @@ void VulkanShader::_CompileFile(_In_ Device& InDevice, _In_ const string& FileNa
 			Compiler,
 			ShaderFileContent.c_str(),
 			ShaderFileContent.size(),
-			SHADER_KINDS[static_cast<int32_t>(Stage)],
-			FullPathSrc.c_str(),
-			SHADER_ENTRY_POINTS[static_cast<int32_t>(Stage)],
+			SHADER_KINDS[static_cast<int32_t>(InStage)],
+			FullPathSource.c_str(),
+			SHADER_ENTRY_POINTS[static_cast<int32_t>(InStage)],
 			CompilerOptions
 		);
 		size_t DebugShaderByteCodeLength = shaderc_result_get_length(DebugCompilationResult);

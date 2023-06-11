@@ -1,5 +1,6 @@
 #include "Vulkan/VulkanPipeline.hpp"
 
+#include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/DepthStencil.hpp"
 #include "Graphics/BlendState.hpp"
@@ -16,14 +17,14 @@ namespace Eternal
 	namespace Graphics
 	{
 		VulkanPipeline::VulkanPipeline(
-			_In_ Device& InDevice,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
 		)
-			: Pipeline(InPipelineCreateInformation)
+			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
 			using namespace Eternal::Graphics::Vulkan;
 
-			vk::Device& Device = static_cast<VulkanDevice&>(InDevice).GetVulkanDevice();
+			vk::Device& Device = static_cast<VulkanDevice&>(InOutContext.GetDevice()).GetVulkanDevice();
 	
 			//vk::PipelineCacheCreateInfo PipelineCacheInfo(
 			//	vk::PipelineCacheCreateFlagBits(),
@@ -186,14 +187,14 @@ namespace Eternal
 		}
 
 		VulkanPipeline::VulkanPipeline(
-			_In_ Device& InDevice,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
 		)
-			: Pipeline(InPipelineCreateInformation)
+			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
 			using namespace Eternal::Graphics::Vulkan;
 
-			vk::Device& Device = static_cast<VulkanDevice&>(InDevice).GetVulkanDevice();
+			vk::Device& Device = static_cast<VulkanDevice&>(InOutContext.GetDevice()).GetVulkanDevice();
 
 			vk::PipelineShaderStageCreateInfo ShaderStageInfo(
 				vk::PipelineShaderStageCreateFlagBits(),
@@ -217,10 +218,10 @@ namespace Eternal
 		}
 
 		VulkanPipeline::VulkanPipeline(
-			_In_ Device& InDevice,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
 		)
-			: Pipeline(InPipelineCreateInformation)
+			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
 			ETERNAL_BREAK();
 		}

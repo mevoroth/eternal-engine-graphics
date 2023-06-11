@@ -11,15 +11,15 @@ namespace Eternal
 		struct MeshPipelineCreateInformation;
 
 		Pipeline* CreatePipeline(
-			_In_ GraphicsContext& InContext,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
 		);
 		Pipeline* CreatePipeline(
-			_In_ GraphicsContext& InContext,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
 		);
 		Pipeline* CreatePipeline(
-			_In_ GraphicsContext& InContext,
+			_Inout_ GraphicsContext& InOutContext,
 			_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
 		);
 		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline);

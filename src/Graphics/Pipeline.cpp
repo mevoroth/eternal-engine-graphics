@@ -1,6 +1,7 @@
 #include "Graphics/Pipeline.hpp"
 
 #include "Graphics/ShaderType.hpp"
+#include "Graphics/GraphicsContext.hpp"
 
 namespace Eternal
 {
@@ -148,6 +149,41 @@ namespace Eternal
 			)
 		{
 			PipelineShaderTypes = ShaderTypeFlags::MS_AS_PS;
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		// Pipeline
+		Pipeline::Pipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation)
+			: _PipelineCreateInformation(InPipelineCreateInformation)
+		{
+			ETERNAL_ASSERT(GetShaderTypes() != ShaderTypeFlags::SHADER_TYPE_FLAGS_UNDEFINED);
+
+			if (GetShaderTypes() == ShaderTypeFlags::CS)
+			{
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.CS);
+				return;
+			}
+
+			if ((GetShaderTypes() & ShaderTypeFlags::VS) == ShaderTypeFlags::VS)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.VS);
+
+			//if ((GetShaderTypes() & ShaderTypeFlags::HS) == ShaderTypeFlags::HS)
+			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.HS);
+
+			//if ((GetShaderTypes() & ShaderTypeFlags::DS) == ShaderTypeFlags::DS)
+			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.DS);
+
+			//if ((GetShaderTypes() & ShaderTypeFlags::GS) == ShaderTypeFlags::GS)
+			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.GS);
+
+			if ((GetShaderTypes() & ShaderTypeFlags::PS) == ShaderTypeFlags::PS)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.PS);
+
+			if ((GetShaderTypes() & ShaderTypeFlags::MS) == ShaderTypeFlags::MS)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.MS);
+
+			if ((GetShaderTypes() & ShaderTypeFlags::AS) == ShaderTypeFlags::AS)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.AS);
 		}
 	}
 }

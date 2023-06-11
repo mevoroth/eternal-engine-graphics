@@ -27,7 +27,7 @@ namespace Eternal
 			static void Initialize();
 			static void Destroy();
 			
-			D3D12Shader(_In_ GraphicsContext& InContext, const ShaderCreateInformation& InCreateInformation);
+			D3D12Shader(_In_ GraphicsContext& InOutContext, const ShaderCreateInformation& InCreateInformation);
 			virtual ~D3D12Shader();
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode);
 
@@ -48,7 +48,7 @@ namespace Eternal
 			void _LoadFile(_In_ const string& InShaderFile);
 
 		private:
-			D3D12Shader(_In_ const string& InName, _In_ const string& InSource, _In_ ShaderType InShaderStage, _In_ const vector<string>& InDefines = vector<string>());
+			D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const string& InName, _In_ const string& InSource, _In_ ShaderType InShaderStage, _In_ const vector<string>& InDefines = vector<string>());
 		};
 	}
 }

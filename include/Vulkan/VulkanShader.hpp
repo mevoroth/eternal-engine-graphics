@@ -17,13 +17,13 @@ namespace Eternal
 		class VulkanShader final : public Shader
 		{
 		public:
-			VulkanShader(_In_ GraphicsContext& Context, const ShaderCreateInformation& CreateInformation);
+			VulkanShader(_Inout_ GraphicsContext& InOutContext, const ShaderCreateInformation& InCreateInformation);
 			vk::ShaderModule& GetVulkanShader();
 
 		private:
-			VulkanShader(_In_ Device& InDevice, _In_ const string& Name, _In_ const string& Source, _In_ const ShaderType& Type, _In_ const vector<string>& Defines = vector<string>());
+			VulkanShader(_Inout_ GraphicsContext& Context, _In_ const string& InName, _In_ const string& InSource, _In_ const ShaderType& InStage, _In_ const vector<string>& InDefines = vector<string>());
 
-			void _CompileFile(_In_ Device& InDevice, _In_ const string& Src, _In_ const ShaderType& Type, _In_ const vector<string>& Defines);
+			void _CompileFile(_In_ Device& InDevice, _In_ const string& InSource, _In_ const ShaderType& InStage, _In_ const vector<string>& InDefines);
 
 			vk::ShaderModule _ShaderModule;
 		};

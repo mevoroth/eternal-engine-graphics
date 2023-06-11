@@ -13,17 +13,17 @@ namespace Eternal
 		{
 		public:
 			VulkanPipeline(
-				_In_ Device& InDevice,
+				_Inout_ GraphicsContext& InOutContext,
 				_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
 			);
 
 			VulkanPipeline(
-				_In_ Device& InDevice,
+				_Inout_ GraphicsContext& InOutContext,
 				_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
 			);
 
 			VulkanPipeline(
-				_In_ Device& InDevice,
+				_Inout_ GraphicsContext& InOutContext,
 				_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
 			);
 

@@ -7,22 +7,22 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class Device;
+		class GraphicsContext;
 		class D3D12RootSignature;
 
 		class D3D12Pipeline final : public Pipeline
 		{
 		public:
 			D3D12Pipeline(
-				_In_ Device& InDevice,
+				_Inout_ GraphicsContext& InOutContext,
 				_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
 			);
 			D3D12Pipeline(
-				_In_ Device& InDevice,
+				_Inout_ GraphicsContext& InOutContext,
 				_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
 			);
 			D3D12Pipeline(
-				_In_ Device& InDevice,
+				_Inout_ GraphicsContext& InOutContext,
 				_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
 			);
 			~D3D12Pipeline();

@@ -11,17 +11,17 @@ namespace Eternal
 	namespace Graphics
 	{
 		template<typename PipelineCreateInformationType>
-		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const PipelineCreateInformationType& InPipelineCreateInformation)
+		Pipeline* CreatePipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformationType& InPipelineCreateInformation)
 		{
-			switch (InContext.GetDevice().GetDeviceType())
+			switch (InOutContext.GetDevice().GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
-				return new D3D12Pipeline(InContext.GetDevice(), InPipelineCreateInformation);
+				return new D3D12Pipeline(InOutContext, InPipelineCreateInformation);
 #endif
 #ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
-				return new VulkanPipeline(InContext.GetDevice(), InPipelineCreateInformation);
+				return new VulkanPipeline(InOutContext, InPipelineCreateInformation);
 #endif
 			default:
 				ETERNAL_BREAK();
@@ -29,19 +29,19 @@ namespace Eternal
 			}
 		}
 
-		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation)
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation)
 		{
-			return CreatePipeline<GraphicsPipelineCreateInformation>(InContext, InPipelineCreateInformation);
+			return CreatePipeline<GraphicsPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
-		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const ComputePipelineCreateInformation& InPipelineCreateInformation)
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const ComputePipelineCreateInformation& InPipelineCreateInformation)
 		{
-			return CreatePipeline<ComputePipelineCreateInformation>(InContext, InPipelineCreateInformation);
+			return CreatePipeline<ComputePipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
-		Pipeline* CreatePipeline(_In_ GraphicsContext& InContext, _In_ const MeshPipelineCreateInformation& InPipelineCreateInformation)
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const MeshPipelineCreateInformation& InPipelineCreateInformation)
 		{
-			return CreatePipeline<MeshPipelineCreateInformation>(InContext, InPipelineCreateInformation);
+			return CreatePipeline<MeshPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
 		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline)
