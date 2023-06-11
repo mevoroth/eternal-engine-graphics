@@ -1,5 +1,4 @@
-#ifndef _D3D12_DEVICE_HPP_
-#define _D3D12_DEVICE_HPP_
+#pragma once
 
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
@@ -56,5 +55,3 @@ namespace Eternal
 		};
 	}
 }
-
-#endif

@@ -1,8 +1,7 @@
-#ifndef _GRAPHICS_SETTINGS_HPP_
-#define _GRAPHICS_SETTINGS_HPP_
+#pragma once
 
 #ifndef ETERNAL_USE_DXMATH_TYPES
-#define ETERNAL_USE_DXMATH_TYPES
+#define ETERNAL_USE_DXMATH_TYPES				(1)
 #endif
 
 #define FRAME_LAG								(2)
@@ -24,5 +23,3 @@
 #include "Macros/Macros.hpp"
 
 // TODO: Rasterizer Ordered Views research
-
-#endif
