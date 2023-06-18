@@ -145,7 +145,7 @@ namespace Eternal
 				)
 			);
 
-			std::string PipelineStateName = "VS_" + InPipelineCreateInformation.VS->GetName() + (InPipelineCreateInformation.PS ? " PS_" + InPipelineCreateInformation.PS->GetName() : "_Only");
+			std::string PipelineStateName = "VS_" + string(InPipelineCreateInformation.VS->GetName()) + (InPipelineCreateInformation.PS ? " PS_" + string(InPipelineCreateInformation.PS->GetName()) : "_Only");
 			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
 			VerifySuccess(
 				_PipelineState->SetName(UTF8PipelineStateName.c_str())
@@ -174,7 +174,7 @@ namespace Eternal
 				)
 			);
 
-			std::string PipelineStateName = "CS_" + InPipelineCreateInformation.CS->GetName();
+			std::string PipelineStateName = "CS_" + string(InPipelineCreateInformation.CS->GetName());
 			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
 			VerifySuccess(
 				_PipelineState->SetName(UTF8PipelineStateName.c_str())
@@ -223,6 +223,17 @@ namespace Eternal
 		const D3D12RootSignature& D3D12Pipeline::GetD3D12RootSignature() const
 		{
 			return static_cast<const D3D12RootSignature&>(GetRootSignature());
+		}
+
+		D3D12Pipeline& D3D12Pipeline::operator=(_In_ const D3D12Pipeline& InPipeline)
+		{
+			if (this != &InPipeline)
+			{
+				Pipeline::operator=(InPipeline);
+				_PipelineState		= InPipeline._PipelineState;
+				_PrimitiveTopology	= InPipeline._PrimitiveTopology;
+			}
+			return *this;
 		}
 	}
 }

@@ -225,5 +225,15 @@ namespace Eternal
 		{
 			ETERNAL_BREAK();
 		}
+
+		VulkanPipeline& VulkanPipeline::operator=(_In_ const VulkanPipeline& InPipeline)
+		{
+			if (this != &InPipeline)
+			{
+				Pipeline::operator=(InPipeline);
+				_Pipeline = InPipeline._Pipeline;
+			}
+			return *this;
+		}
 	}
 }

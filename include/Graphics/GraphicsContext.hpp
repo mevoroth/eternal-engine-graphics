@@ -126,6 +126,7 @@ namespace Eternal
 			void DelayedDelete(_In_ ResourceType* InResource);
 
 			void RegisterGraphicsCommands(_In_ vector<GraphicsCommand*>* InCommands);
+			void RegisterPipelineRecompile(_In_ const ResolvedPipelineDependency& InPipelineDependencies);
 
 		protected:
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
@@ -151,11 +152,13 @@ namespace Eternal
 			array<Fence*, FrameBufferingCount>										_FrameFences;
 			array<vector<View*>, FrameBufferingCount>								_ViewsToClear;
 			array<vector<Resource*>, FrameBufferingCount>							_ResourcesToClear;
+			array<vector<Pipeline*>, FrameBufferingCount>							_PipelinesToClear;
 
 			vector<GraphicsCommand*>*												_GraphicsCommands = nullptr;
 
 			Window _Window;
 			PipelineDependency _PipelineDependency;
+			ResolvedPipelineDependency _PipelineRecompile;
 			Device* _Device							= nullptr;
 			SwapChain* _SwapChain					= nullptr;
 

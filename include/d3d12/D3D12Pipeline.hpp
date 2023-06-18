@@ -28,8 +28,11 @@ namespace Eternal
 			~D3D12Pipeline();
 
 			inline ID3D12PipelineState* GetD3D12PipelineState() const { return _PipelineState; }
+			inline ID3D12PipelineState*& GetD3D12PipelineState() { return _PipelineState; }
 			const D3D12RootSignature& GetD3D12RootSignature() const;
 			inline const D3D12_PRIMITIVE_TOPOLOGY& GetD3D12PrimitiveTopology() const { return _PrimitiveTopology; }
+			inline D3D12_PRIMITIVE_TOPOLOGY& GetD3D12PrimitiveTopology() { return _PrimitiveTopology; }
+			D3D12Pipeline& operator=(_In_ const D3D12Pipeline& InPipeline);
 
 		private:
 			ID3D12PipelineState*	_PipelineState		= nullptr;

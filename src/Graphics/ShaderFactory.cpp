@@ -25,13 +25,13 @@ namespace Eternal
 			_Shaders.clear();
 		}
 
-		Shader* ShaderFactory::GetShader(_In_ GraphicsContext& Context, _In_ const ShaderCreateInformation& CreateInformation)
+		Shader* ShaderFactory::GetShader(_In_ GraphicsContext& InContext, _In_ const ShaderCreateInformation& InCreateInformation)
 		{
-			Shader* ShaderBinary = _Find(CreateInformation.Name);
+			Shader* ShaderBinary = _Find(InCreateInformation.Name);
 			if (ShaderBinary)
 				return ShaderBinary;
 
-			ShaderBinary = _Create(Context, CreateInformation);
+			ShaderBinary = _Create(InContext, InCreateInformation);
 			ETERNAL_ASSERT(ShaderBinary);
 			_Shaders.push_back(ShaderBinary);
 			return ShaderBinary;
@@ -47,17 +47,26 @@ namespace Eternal
 			return nullptr;
 		}
 
-		Shader* ShaderFactory::_Create(_In_ GraphicsContext& Context, _In_ const ShaderCreateInformation& CreateInformation)
+		void ShaderFactory::Create(_In_ GraphicsContext& InContext, _In_ const ShaderCreateInformation& InCreateInformation, _In_ Shader* InShader)
 		{
-			switch (Context.GetDevice().GetDeviceType())
+			_Create(InContext, InCreateInformation, InShader);
+		}
+
+		Shader* ShaderFactory::_Create(_In_ GraphicsContext& InContext, _In_ const ShaderCreateInformation& InCreateInformation, _In_ Shader* InShader)
+		{
+			switch (InContext.GetDevice().GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
-				return new D3D12Shader(Context, CreateInformation);
+				if (InShader)
+					return new (InShader) D3D12Shader(InContext, InCreateInformation);
+				return new D3D12Shader(InContext, InCreateInformation);
 #endif
 #ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:
-				return new VulkanShader(Context, CreateInformation);
+				if (InShader)
+					return new (InShader) VulkanShader(InContext, InCreateInformation);
+				return new VulkanShader(InContext, InCreateInformation);
 #endif
 			default:
 				ETERNAL_BREAK();

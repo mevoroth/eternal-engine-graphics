@@ -24,7 +24,7 @@ namespace Eternal
 		class D3D12Shader final : public Shader
 		{
 		public:
-			static void Initialize();
+			static void Initialize(_Inout_ GraphicsContext& InOutContext);
 			static void Destroy();
 			
 			D3D12Shader(_In_ GraphicsContext& InOutContext, const ShaderCreateInformation& InCreateInformation);
@@ -46,9 +46,6 @@ namespace Eternal
 
 			void _CompileFile(_In_ const string& InSource, _In_ uint32_t InShaderStageInt, _In_ const vector<string>& InDefines);
 			void _LoadFile(_In_ const string& InShaderFile);
-
-		private:
-			D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const string& InName, _In_ const string& InSource, _In_ ShaderType InShaderStage, _In_ const vector<string>& InDefines = vector<string>());
 		};
 	}
 }

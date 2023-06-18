@@ -23,5 +23,7 @@ namespace Eternal
 			_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
 		);
 		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline);
+
+		void SwapPipelines(_In_ GraphicsContext& InContext, _Inout_ Pipeline* A, _Inout_ Pipeline* B);
 	}
 }

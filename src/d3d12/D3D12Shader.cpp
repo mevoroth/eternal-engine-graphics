@@ -2,6 +2,7 @@
 
 #include "GraphicsSettings.hpp"
 #include "Graphics/ShaderType.hpp"
+#include "Graphics/GraphicsContext.hpp"
 #include "File/FilePath.hpp"
 #include "File/FileFactory.hpp"
 #include "File/File.hpp"
@@ -86,15 +87,47 @@ namespace Eternal
 
 		//////////////////////////////////////////////////////////////////////////
 
-		struct D3D12IncludeFXC : public ID3DInclude
+		struct D3D12IncludeCommon
+		{
+			D3D12IncludeCommon(_Inout_ GraphicsContext& InOutContext)
+				: Context(InOutContext)
+			{
+			}
+
+			void SetCurrentShader(_In_ Shader* InShader)
+			{
+				ETERNAL_ASSERT(!CurrentShader);
+				CurrentShader = InShader;
+			}
+
+			void ClearCurrentShader()
+			{
+				CurrentShader = nullptr;
+			}
+
+			GraphicsContext& Context;
+			Shader* CurrentShader = nullptr;
+		};
+
+		struct D3D12IncludeFXC
+			: public ID3DInclude
+			, public D3D12IncludeCommon
 		{
 		public:
+			D3D12IncludeFXC(_Inout_ GraphicsContext& InOutContext)
+				: D3D12IncludeCommon(InOutContext)
+			{
+			}
+
 			virtual STDMETHODIMP Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes) override
 			{
 				string IncludeSource = pFileName;
-				string FullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
+				string IncludeFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
+				FilePath::NormalizePath(IncludeFullPathSource);
 
-				FileContent Content = LoadFileToMemory(FullPathSource);
+				Context.GetPipelineDependency().RegisterShaderDependency(CurrentShader, IncludeFullPathSource);
+
+				FileContent Content = LoadFileToMemory(IncludeFullPathSource);
 				*pBytes	= static_cast<UINT>(Content.Size);
 				*ppData = Content.Content;
 
@@ -110,11 +143,14 @@ namespace Eternal
 
 		//////////////////////////////////////////////////////////////////////////
 
-		struct D3D12IncludeDXC : public IDxcIncludeHandler
+		struct D3D12IncludeDXC
+			: public IDxcIncludeHandler
+			, public D3D12IncludeCommon
 		{
 		public:
-			D3D12IncludeDXC(_In_ IDxcUtils* InDxcUtils, _In_ IDxcIncludeHandler* InDefaultIncludeHandler)
-				: _DxcUtils(InDxcUtils)
+			D3D12IncludeDXC(_Inout_ GraphicsContext& InOutContext, _In_ IDxcUtils* InDxcUtils, _In_ IDxcIncludeHandler* InDefaultIncludeHandler)
+				: D3D12IncludeCommon(InOutContext)
+				, _DxcUtils(InDxcUtils)
 				, _DxcIncludeHandlerDefault(InDefaultIncludeHandler)
 			{
 			}
@@ -129,14 +165,14 @@ namespace Eternal
 				IDxcBlobEncoding* Encoding = nullptr;
 				wstring IncludeSourceUTF8(pFilename);
 				string IncludeSource = std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(IncludeSourceUTF8);
-				string FullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
+				string ShaderFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
 				//wstring FullPathSourceUTF8 = wstring(FullPathSource.begin(), FullPathSource.end());
 
 				//HRESULT hr = _DxcUtils->LoadFile(IncludeSourceUTF8.c_str(), nullptr, &Encoding);
 				//*ppIncludeSource = hr == S_OK ? Encoding : nullptr;
 				//ETERNAL_ASSERT(hr == S_OK);
 				
-				ifstream IncludedFile(FullPathSource.c_str(), ios::in | ios::binary | ios::ate);
+				ifstream IncludedFile(ShaderFullPathSource.c_str(), ios::in | ios::binary | ios::ate);
 
 				if (!IncludedFile)
 				{
@@ -186,7 +222,7 @@ namespace Eternal
 		IDxcUtils*			D3D12Shader::_DxcUtils					= nullptr;
 		IDxcCompiler3*		D3D12Shader::_DxcCompiler				= nullptr;
 
-		void D3D12Shader::Initialize()
+		void D3D12Shader::Initialize(_Inout_ GraphicsContext& InOutContext)
 		{
 			using namespace Eternal::Graphics::D3D12;
 
@@ -195,7 +231,7 @@ namespace Eternal
 			case ShaderCompilerType::SHADER_COMPILER_TYPE_FXC:
 			{
 				ETERNAL_ASSERT(!_FxcIncludeHandler);
-				_FxcIncludeHandler = new D3D12IncludeFXC();
+				_FxcIncludeHandler = new D3D12IncludeFXC(InOutContext);
 			} break;
 			case ShaderCompilerType::SHADER_COMPILER_TYPE_DXC:
 			{
@@ -209,7 +245,7 @@ namespace Eternal
 
 				VerifySuccess(_DxcUtils->CreateDefaultIncludeHandler(&_DxcIncludeHandlerDefault));
 
-				_DxcIncludeHandler = new D3D12IncludeDXC(_DxcUtils, _DxcIncludeHandlerDefault);
+				_DxcIncludeHandler = new D3D12IncludeDXC(InOutContext, _DxcUtils, _DxcIncludeHandlerDefault);
 
 				VerifySuccess(
 					DxcCreateInstance(
@@ -246,8 +282,8 @@ namespace Eternal
 			}
 		}
 
-		D3D12Shader::D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const string& InName, _In_ const string& InFileName, _In_ ShaderType InShaderStage, _In_ const vector<string>& InDefines /* = vector<string>() */)
-			: Shader(InOutContext, InName, InFileName)
+		D3D12Shader::D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const ShaderCreateInformation& InCreateInformation)
+			: Shader(InOutContext, InCreateInformation)
 			, _FxcProgram(nullptr)
 			, _DxcProgram(nullptr)
 		{
@@ -267,22 +303,13 @@ namespace Eternal
 			}
 #if ETERNAL_USE_DEBUG_SHADERS
 			_CompileFile(
-				InFileName,
-				static_cast<uint32_t>(InShaderStage),
-				InDefines
+				InCreateInformation.FileName,
+				static_cast<uint32_t>(InCreateInformation.Stage),
+				InCreateInformation.Defines
 			);
 #else
 			_LoadFile(InFileName + ".cso");
 #endif
-		}
-
-		D3D12Shader::D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const ShaderCreateInformation& InCreateInformation)
-			: D3D12Shader(InOutContext,
-						  InCreateInformation.Name,
-						  InCreateInformation.FileName,
-						  InCreateInformation.Stage,
-						  InCreateInformation.Defines)
-		{
 		}
 
 		D3D12Shader::~D3D12Shader()
@@ -345,6 +372,8 @@ namespace Eternal
 				EndOfArrayMacro.Definition	= nullptr;
 				Macros.push_back(EndOfArrayMacro);
 
+				_FxcIncludeHandler->SetCurrentShader(this);
+
 				HRESULT hr = D3DCompile(
 					ShaderFileContent.c_str(),
 					ShaderFileContent.size(),
@@ -358,6 +387,8 @@ namespace Eternal
 					&_FxcProgram,
 					&Errors
 				);
+
+				_FxcIncludeHandler->ClearCurrentShader();
 
 				if (hr != S_OK)
 				{
@@ -445,6 +476,8 @@ namespace Eternal
 				SourceBuffer.Ptr		= Encoding->GetBufferPointer();
 				SourceBuffer.Size		= Encoding->GetBufferSize();
 				SourceBuffer.Encoding	= 0;
+
+				_DxcIncludeHandler->SetCurrentShader(this);
 
 				IDxcResult* CompilationResult = nullptr;
 				VerifySuccess(

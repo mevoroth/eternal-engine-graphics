@@ -27,7 +27,10 @@ namespace Eternal
 				_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
 			);
 
-			const vk::Pipeline& GetVulkanPipeline() const { return _Pipeline; }
+			inline const vk::Pipeline& GetVulkanPipeline() const { return _Pipeline; }
+			inline vk::Pipeline& GetVulkanPipeline() { return _Pipeline; }
+
+			VulkanPipeline& VulkanPipeline::operator=(_In_ const VulkanPipeline& InPipeline);
 
 		private:
 			vk::Pipeline _Pipeline;

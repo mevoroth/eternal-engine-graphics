@@ -55,19 +55,45 @@ namespace Eternal
 			PipelineShaderTypes = ShaderTypeFlags::VS_PS;
 		}
 
+		GraphicsPipelineCreateInformation::GraphicsPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
+			: GraphicsPipelineCreateInformation(
+				InPipelineCreateInformation.PipelineRootSignature,
+				InPipelineCreateInformation.PipelineInputLayout,
+				InPipelineCreateInformation.PipelineRenderPass,
+				InPipelineCreateInformation.VS,
+				InPipelineCreateInformation.PS,
+				InPipelineCreateInformation.PipelineDepthStencil,
+				InPipelineCreateInformation.PipelineRasterizer,
+				InPipelineCreateInformation.PipelinePrimitiveTopology
+			)
+		{
+			ETERNAL_ASSERT((InPipelineCreateInformation.PipelineShaderTypes & ShaderTypeFlags::VS) == ShaderTypeFlags::VS);
+			PipelineRecreated = true;
+		}
+
 		//////////////////////////////////////////////////////////////////////////
 		// Compute
 
-		PipelineCreateInformation::PipelineCreateInformation( _In_ RootSignature& InRootSignature, _In_ Shader* InCS )
+		PipelineCreateInformation::PipelineCreateInformation(_In_ RootSignature& InRootSignature, _In_ Shader* InCS)
 			: PipelineRootSignature(InRootSignature)
 			, CS(InCS)
 		{
 		}
 
-		ComputePipelineCreateInformation::ComputePipelineCreateInformation( _In_ RootSignature& InRootSignature, _In_ Shader* InCS )
+		ComputePipelineCreateInformation::ComputePipelineCreateInformation(_In_ RootSignature& InRootSignature, _In_ Shader* InCS)
 			: PipelineCreateInformation(InRootSignature, InCS)
 		{
 			PipelineShaderTypes = ShaderTypeFlags::CS;
+		}
+
+		ComputePipelineCreateInformation::ComputePipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
+			: ComputePipelineCreateInformation(
+				InPipelineCreateInformation.PipelineRootSignature,
+				InPipelineCreateInformation.CS
+			)
+		{
+			ETERNAL_ASSERT(InPipelineCreateInformation.PipelineShaderTypes == ShaderTypeFlags::CS);
+			PipelineRecreated = true;
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -151,6 +177,43 @@ namespace Eternal
 			PipelineShaderTypes = ShaderTypeFlags::MS_AS_PS;
 		}
 
+		//MeshPipelineCreateInformation::MeshPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
+		//	: PipelineCreateInformation()
+		//{
+		//	ETERNAL_BREAK(); // Not implemented
+		//	PipelineRecreate = true;
+		//}
+
+		//////////////////////////////////////////////////////////////////////////
+		// PipelineCreateInformation
+		PipelineCreateInformation::PipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
+			: PipelineRootSignature(InPipelineCreateInformation.PipelineRootSignature)
+			, PipelineInputLayout(InPipelineCreateInformation.PipelineInputLayout)
+			, PipelineRenderPass(InPipelineCreateInformation.PipelineRenderPass)
+			, VS(InPipelineCreateInformation.VS)
+			//, HS(InPipelineCreateInformation.HS)
+			//, DS(InPipelineCreateInformation.DS)
+			//, GS(InPipelineCreateInformation.GS)
+			, PS(InPipelineCreateInformation.PS)
+			, CS(InPipelineCreateInformation.CS)
+			, MS(InPipelineCreateInformation.MS)
+			, AS(InPipelineCreateInformation.AS)
+			, PipelineRasterizer(InPipelineCreateInformation.PipelineRasterizer)
+			, PipelineDepthStencil(InPipelineCreateInformation.PipelineDepthStencil)
+			, PipelinePrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology)
+			, PipelineShaderTypes(InPipelineCreateInformation.PipelineShaderTypes)
+		{
+		}
+
+		PipelineCreateInformation& PipelineCreateInformation::operator=(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
+		{
+			if (this != &InPipelineCreateInformation)
+			{
+				new (this) PipelineCreateInformation(InPipelineCreateInformation);
+			}
+			return *this;
+		}
+
 		//////////////////////////////////////////////////////////////////////////
 		// Pipeline
 		Pipeline::Pipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation)
@@ -158,32 +221,45 @@ namespace Eternal
 		{
 			ETERNAL_ASSERT(GetShaderTypes() != ShaderTypeFlags::SHADER_TYPE_FLAGS_UNDEFINED);
 
+			if (InPipelineCreateInformation.IsPipelineRecreated())
+				return;
+
 			if (GetShaderTypes() == ShaderTypeFlags::CS)
 			{
+				ETERNAL_ASSERT(InPipelineCreateInformation.CS);
 				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.CS);
 				return;
 			}
 
-			if ((GetShaderTypes() & ShaderTypeFlags::VS) == ShaderTypeFlags::VS)
+			if ((GetShaderTypes() & ShaderTypeFlags::VS) == ShaderTypeFlags::VS && InPipelineCreateInformation.VS)
 				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.VS);
 
-			//if ((GetShaderTypes() & ShaderTypeFlags::HS) == ShaderTypeFlags::HS)
+			//if ((GetShaderTypes() & ShaderTypeFlags::HS) == ShaderTypeFlags::HS && InPipelineCreateInformation.HS)
 			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.HS);
 
-			//if ((GetShaderTypes() & ShaderTypeFlags::DS) == ShaderTypeFlags::DS)
+			//if ((GetShaderTypes() & ShaderTypeFlags::DS) == ShaderTypeFlags::DS && InPipelineCreateInformation.DS)
 			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.DS);
 
-			//if ((GetShaderTypes() & ShaderTypeFlags::GS) == ShaderTypeFlags::GS)
+			//if ((GetShaderTypes() & ShaderTypeFlags::GS) == ShaderTypeFlags::GS && InPipelineCreateInformation.GS)
 			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.GS);
 
-			if ((GetShaderTypes() & ShaderTypeFlags::PS) == ShaderTypeFlags::PS)
+			if ((GetShaderTypes() & ShaderTypeFlags::PS) == ShaderTypeFlags::PS && InPipelineCreateInformation.PS)
 				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.PS);
 
-			if ((GetShaderTypes() & ShaderTypeFlags::MS) == ShaderTypeFlags::MS)
+			if ((GetShaderTypes() & ShaderTypeFlags::MS) == ShaderTypeFlags::MS && InPipelineCreateInformation.MS)
 				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.MS);
 
-			if ((GetShaderTypes() & ShaderTypeFlags::AS) == ShaderTypeFlags::AS)
+			if ((GetShaderTypes() & ShaderTypeFlags::AS) == ShaderTypeFlags::AS && InPipelineCreateInformation.AS)
 				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.AS);
+		}
+
+		Pipeline& Pipeline::operator=(_In_ const Pipeline& InPipeline)
+		{
+			if (this != &InPipeline)
+			{
+				_PipelineCreateInformation = InPipeline._PipelineCreateInformation;
+			}
+			return *this;
 		}
 	}
 }

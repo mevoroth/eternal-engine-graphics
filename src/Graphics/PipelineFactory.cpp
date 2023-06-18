@@ -49,5 +49,32 @@ namespace Eternal
 			delete InOutPipeline;
 			InOutPipeline = nullptr;
 		}
+
+		void SwapPipelines(_In_ GraphicsContext& InContext, _Inout_ Pipeline* A, _Inout_ Pipeline* B)
+		{
+			std::swap(A->GetPipelineCreateInformation(), B->GetPipelineCreateInformation());
+			switch (InContext.GetDevice().GetDeviceType())
+			{
+#ifdef ETERNAL_ENABLE_D3D12
+			case DeviceType::D3D12:
+			{
+				D3D12Pipeline* PipelineA = static_cast<D3D12Pipeline*>(A);
+				D3D12Pipeline* PipelineB = static_cast<D3D12Pipeline*>(B);
+				std::swap(PipelineA->GetD3D12PipelineState(), PipelineB->GetD3D12PipelineState());
+				std::swap(PipelineA->GetD3D12PrimitiveTopology(), PipelineB->GetD3D12PrimitiveTopology());
+			} break;
+#endif
+#ifdef ETERNAL_ENABLE_VULKAN
+			case DeviceType::VULKAN:
+			{
+				VulkanPipeline* PipelineA = static_cast<VulkanPipeline*>(A);
+				VulkanPipeline* PipelineB = static_cast<VulkanPipeline*>(B);
+				std::swap(PipelineA->GetVulkanPipeline(), PipelineB->GetVulkanPipeline());
+			} break;
+#endif
+			default:
+				ETERNAL_BREAK();
+			}
+		}
 	}
 }

@@ -64,6 +64,12 @@ namespace Eternal
 
 		struct PipelineCreateInformation
 		{
+			PipelineCreateInformation(
+				_In_ const PipelineCreateInformation& InPipelineCreateInformation
+			);
+
+			PipelineCreateInformation& operator=(_In_ const PipelineCreateInformation& InPipelineCreateInformation);
+
 			RootSignature&		PipelineRootSignature;
 			InputLayout*		PipelineInputLayout			= nullptr;
 			RenderPass*			PipelineRenderPass			= nullptr;
@@ -79,6 +85,8 @@ namespace Eternal
 			DepthStencil		PipelineDepthStencil;
 			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 			ShaderTypeFlags		PipelineShaderTypes			= ShaderTypeFlags::SHADER_TYPE_FLAGS_UNDEFINED;
+
+			bool IsPipelineRecreated() const { return PipelineRecreated; }
 
 		protected:
 
@@ -116,6 +124,8 @@ namespace Eternal
 				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
 				_In_ const Rasterizer& InRasterizer = RasterizerDefault
 			);
+
+			bool PipelineRecreated = false;
 		};
 
 		struct GraphicsPipelineCreateInformation : public PipelineCreateInformation
@@ -130,6 +140,8 @@ namespace Eternal
 				_In_ const Rasterizer& InRasterizer = RasterizerDefault,
 				_In_ const PrimitiveTopology& InPrimitiveTopology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			);
+
+			GraphicsPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation);
 		};
 
 		struct ComputePipelineCreateInformation : public PipelineCreateInformation
@@ -138,6 +150,8 @@ namespace Eternal
 				_In_ RootSignature& InRootSignature,
 				_In_ Shader* InCS
 			);
+
+			ComputePipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation);
 		};
 
 		struct MeshPipelineCreateInformation : public PipelineCreateInformation
@@ -160,6 +174,8 @@ namespace Eternal
 				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
 				_In_ const Rasterizer& InRasterizer = RasterizerDefault
 			);
+
+			//MeshPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation);
 		};
 
 		class Pipeline
@@ -170,6 +186,9 @@ namespace Eternal
 			const Viewport& GetViewport() const { return static_cast<const RenderPass*>(_PipelineCreateInformation.PipelineRenderPass)->GetViewport(); }
 			const ShaderTypeFlags& GetShaderTypes() const { return _PipelineCreateInformation.PipelineShaderTypes; }
 			const RootSignature& GetRootSignature() const { return _PipelineCreateInformation.PipelineRootSignature; }
+			const PipelineCreateInformation& GetPipelineCreateInformation() const { return _PipelineCreateInformation; }
+			PipelineCreateInformation& GetPipelineCreateInformation() { return _PipelineCreateInformation; }
+			Pipeline& operator=(_In_ const Pipeline& InPipeline);
 
 		protected:
 			Pipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation);

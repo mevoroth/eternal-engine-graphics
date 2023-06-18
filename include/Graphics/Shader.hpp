@@ -22,9 +22,9 @@ namespace Eternal
 			{
 			}
 
-			ShaderType Stage		= ShaderType::SHADER_TYPE_COUNT;
-			const char* Name		= nullptr;
-			const char* FileName	= nullptr;
+			ShaderType Stage = ShaderType::SHADER_TYPE_COUNT;
+			string Name;
+			string FileName;
 			const vector<string> Defines;
 		};
 
@@ -33,13 +33,14 @@ namespace Eternal
 		public:
 			virtual ~Shader() {}
 			const string& GetName() const;
+			const string& GetFileName() const;
+			ShaderCreateInformation& GetShaderCreateInformation();
 
 		protected:
-			Shader(_Inout_ GraphicsContext& InOutContext, _In_ const string& InName, _In_ const string& InFileName);
+			Shader(_Inout_ GraphicsContext& InOutContext, _In_ const ShaderCreateInformation& InShaderCreateInformation);
 
 		private:
-			string _Name;
-			string _FileName;
+			ShaderCreateInformation _ShaderCreateInformation;
 		};
 	}
 }

@@ -1,28 +1,33 @@
 #include "Graphics/GraphicsContext.hpp"
 
-#include "Graphics/DeviceFactory.hpp"
-#include "Graphics/Device.hpp"
 #include "d3d12/D3D12GraphicsContext.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
+#include "Graphics/CommandAllocator.hpp"
+#include "Graphics/CommandAllocatorFactory.hpp"
+#include "Graphics/CommandList.hpp"
+#include "Graphics/CommandListFactory.hpp"
+#include "Graphics/Device.hpp"
+#include "Graphics/DeviceFactory.hpp"
 #include "Graphics/CommandUtils.hpp"
-#include "Graphics/SwapChainFactory.hpp"
-#include "Graphics/SwapChain.hpp"
 #include "Graphics/CommandQueueFactory.hpp"
 #include "Graphics/CommandQueue.hpp"
-#include "Graphics/FenceFactory.hpp"
 #include "Graphics/Fence.hpp"
-#include "Graphics/CommandAllocatorFactory.hpp"
-#include "Graphics/CommandAllocator.hpp"
-#include "Graphics/CommandListFactory.hpp"
-#include "Graphics/CommandList.hpp"
-#include "Graphics/ShaderFactory.hpp"
-#include "Graphics/ViewportFactory.hpp"
-#include "Graphics/View.hpp"
-#include "Graphics/Resource.hpp"
+#include "Graphics/FenceFactory.hpp"
 #include "Graphics/InputLayoutFactory.hpp"
+#include "Graphics/Pipeline.hpp"
+#include "Graphics/PipelineFactory.hpp"
 #include "Graphics/SamplerFactory.hpp"
 #include "Graphics/RenderPassFactory.hpp"
 #include "Graphics/RenderPass.hpp"
+#include "Graphics/Resource.hpp"
+#include "Graphics/Shader.hpp"
+#include "Graphics/ShaderFactory.hpp"
+#include "Graphics/ShaderType.hpp"
+#include "Graphics/SwapChain.hpp"
+#include "Graphics/SwapChainFactory.hpp"
+#include "Graphics/View.hpp"
+#include "Graphics/ViewportFactory.hpp"
+#include <utility>
 
 namespace Eternal
 {
@@ -240,6 +245,38 @@ namespace Eternal
 			}
 
 			{
+				ETERNAL_PROFILER(INFO)("PipelineRecompile");
+				for (auto ShaderIterator = _PipelineRecompile.Shaders.begin(); ShaderIterator != _PipelineRecompile.Shaders.end(); ++ShaderIterator)
+				{
+					Shader* CurrentShader = *ShaderIterator;
+					ShaderCreateInformation CreateInformation = CurrentShader->GetShaderCreateInformation();
+					CurrentShader->~Shader();
+					_ShaderFactory->Create(*this, CreateInformation, CurrentShader);
+				}
+
+				_PipelinesToClear[_CurrentFrameIndex].reserve(_PipelineRecompile.Pipelines.size());
+				for (uint32_t PipelineIndex = 0; PipelineIndex < _PipelineRecompile.Pipelines.size(); ++PipelineIndex)
+				{
+					Pipeline* NewPipeline = nullptr;
+					if (_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() == ShaderTypeFlags::CS)
+						NewPipeline = CreatePipeline(*this, ComputePipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()));
+					else if ((_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() & ShaderTypeFlags::VS) == ShaderTypeFlags::VS)
+						NewPipeline = CreatePipeline(*this, GraphicsPipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()));
+					//else if ((_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() & ShaderTypeFlags::MS) == ShaderTypeFlags::MS)
+					//	CreatePipeline(*this, MeshPipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()), _PipelineRecompile.Pipelines[PipelineIndex]);
+					else
+					{
+						ETERNAL_BREAK(); // Incorrect pipeline
+					}
+					SwapPipelines(*this, _PipelineRecompile.Pipelines[PipelineIndex], NewPipeline);
+					_PipelinesToClear[_CurrentFrameIndex].push_back(NewPipeline);
+				}
+
+				_PipelineRecompile.Shaders.clear();
+				_PipelineRecompile.Pipelines.clear();
+			}
+
+			{
 				ETERNAL_PROFILER(INFO)("GraphicsCommands");
 				if (_GraphicsCommands)
 				{
@@ -326,6 +363,11 @@ namespace Eternal
 				for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesToClear.size(); ++ResourceIndex)
 					delete ResourcesToClear[ResourceIndex];
 				ResourcesToClear.clear();
+
+				vector<Pipeline*>& PipelinesToClear = _PipelinesToClear[_CurrentFrameIndex];
+				for (uint32_t PipelineIndex = 0; PipelineIndex < PipelinesToClear.size(); ++PipelineIndex)
+					DestroyPipeline(PipelinesToClear[PipelineIndex]);
+				PipelinesToClear.clear();
 			}
 		}
 
@@ -392,6 +434,11 @@ namespace Eternal
 		void GraphicsContext::RegisterGraphicsCommands(_In_ vector<GraphicsCommand *>* InCommands)
 		{
 			_GraphicsCommands = InCommands;
+		}
+
+		void GraphicsContext::RegisterPipelineRecompile(_In_ const ResolvedPipelineDependency& InPipelineDependencies)
+		{
+			_PipelineRecompile = InPipelineDependencies;
 		}
 
 		//////////////////////////////////////////////////////////////////////////
