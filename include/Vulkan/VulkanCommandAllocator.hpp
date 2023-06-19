@@ -15,7 +15,7 @@ namespace Eternal
 		{
 		public:
 			VulkanCommandAllocator(_In_ Device& InDevice, _In_ const CommandQueue& InCommandQueue);
-			virtual ~VulkanCommandAllocator();
+			virtual ~VulkanCommandAllocator() override final;
 
 			virtual void Reset() override final;
 

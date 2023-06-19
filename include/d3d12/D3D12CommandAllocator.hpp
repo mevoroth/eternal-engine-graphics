@@ -16,7 +16,7 @@ namespace Eternal
 		{
 		public:
 			D3D12CommandAllocator(_In_ Device& InDevice, _In_ const CommandQueue& InCommandQueue);
-			virtual ~D3D12CommandAllocator();
+			virtual ~D3D12CommandAllocator() override final;
 
 			virtual void Reset() override final;
 

@@ -28,7 +28,7 @@ namespace Eternal
 			static void Destroy();
 			
 			D3D12Shader(_In_ GraphicsContext& InOutContext, const ShaderCreateInformation& InCreateInformation);
-			virtual ~D3D12Shader();
+			virtual ~D3D12Shader() override final;
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode);
 
 		protected:

@@ -24,7 +24,7 @@ namespace Eternal
 
 			VulkanRootSignature(_In_ GraphicsContext& InContext);
 			VulkanRootSignature(_In_ GraphicsContext& InContext, _In_ const RootSignatureCreateInformation& InRootSignatureCreateInformation);
-			virtual ~VulkanRootSignature();
+			virtual ~VulkanRootSignature() override final;
 
 			inline const vk::PipelineLayout& GetVulkanPipelineLayout() const { return _PipelineLayout; }
 			inline const vector<vk::PushConstantRange>& GetVulkanPushConstantRanges() const { return _PushConstantRanges; }

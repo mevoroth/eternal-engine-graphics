@@ -16,7 +16,7 @@ namespace Eternal
 		{
 		public:
 			D3D12CommandQueue(_In_ Device& InDevice, _In_ const CommandType& InType = CommandType::COMMAND_TYPE_GRAPHICS);
-			virtual ~D3D12CommandQueue();
+			virtual ~D3D12CommandQueue() override final;
 
 			virtual void SubmitCommandLists(_In_ CommandList* InCommandLists[], _In_ uint32_t InCommandListsCount, _In_ GraphicsContext* InContext) override final;
 

@@ -18,7 +18,7 @@ namespace Eternal
 		{
 		public:
 			D3D12SwapChain(_In_ GraphicsContext& Context);
-			virtual ~D3D12SwapChain();
+			virtual ~D3D12SwapChain() override final;
 
 			virtual void Acquire(GraphicsContext& Context) override final;
 			virtual void Present(GraphicsContext& Context) override final;

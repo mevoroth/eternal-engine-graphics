@@ -38,7 +38,7 @@ namespace Eternal
 			 * Buffer
 			 */
 			VulkanResource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation);
-			virtual ~VulkanResource();
+			virtual ~VulkanResource() override final;
 
 			virtual void Unmap(_In_ const MapRange& InMapRange) override final;
 			virtual TextureToBufferMemoryFootprint GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const override final;
