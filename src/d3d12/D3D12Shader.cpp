@@ -6,6 +6,7 @@
 #include "File/FilePath.hpp"
 #include "File/FileFactory.hpp"
 #include "File/File.hpp"
+#include "Log/Log.hpp"
 #include "d3d12/D3D12Utils.hpp"
 
 #include <fstream>
@@ -314,18 +315,21 @@ namespace Eternal
 
 		D3D12Shader::~D3D12Shader()
 		{
-			switch (ShaderCompiler)
+			if (IsShaderCompiled())
 			{
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_FXC:
-			{
-				_FxcProgram->Release();
-				_FxcProgram = nullptr;
-			} break;
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_DXC:
-			{
-				_DxcProgram->Release();
-				_DxcProgram = nullptr;
-			} break;
+				switch (ShaderCompiler)
+				{
+				case ShaderCompilerType::SHADER_COMPILER_TYPE_FXC:
+				{
+					_FxcProgram->Release();
+					_FxcProgram = nullptr;
+				} break;
+				case ShaderCompilerType::SHADER_COMPILER_TYPE_DXC:
+				{
+					_DxcProgram->Release();
+					_DxcProgram = nullptr;
+				} break;
+				}
 			}
 		}
 
@@ -394,8 +398,8 @@ namespace Eternal
 				{
 					_FxcProgram = nullptr;
 					const char* Error = (LPCSTR)Errors->GetBufferPointer();
-					OutputDebugString(Error);
-					ETERNAL_BREAK();
+					LogWrite(LogError, LogShaders, GetFileName());
+					LogWrite(LogError, LogShaders, Error);
 				}
 
 				if (Errors)
@@ -533,6 +537,11 @@ namespace Eternal
 		void D3D12Shader::_LoadFile(_In_ const string& ShaderFile)
 		{
 			ETERNAL_BREAK();
+		}
+
+		bool D3D12Shader::IsShaderCompiled() const
+		{
+			return _FxcProgram && _DxcProgram;
 		}
 
 		template<typename ShaderBlobType>

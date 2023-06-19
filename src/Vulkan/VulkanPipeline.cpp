@@ -235,5 +235,10 @@ namespace Eternal
 			}
 			return *this;
 		}
+
+		bool VulkanPipeline::IsPipelineCompiled() const
+		{
+			return _Pipeline;
+		}
 	}
 }

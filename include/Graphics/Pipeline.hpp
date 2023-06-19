@@ -182,6 +182,7 @@ namespace Eternal
 		{
 		public:
 			virtual ~Pipeline() {}
+			virtual bool IsPipelineCompiled() const = 0;
 
 			const Viewport& GetViewport() const { return static_cast<const RenderPass*>(_PipelineCreateInformation.PipelineRenderPass)->GetViewport(); }
 			const ShaderTypeFlags& GetShaderTypes() const { return _PipelineCreateInformation.PipelineShaderTypes; }

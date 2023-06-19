@@ -34,6 +34,8 @@ namespace Eternal
 			inline D3D12_PRIMITIVE_TOPOLOGY& GetD3D12PrimitiveTopology() { return _PrimitiveTopology; }
 			D3D12Pipeline& operator=(_In_ const D3D12Pipeline& InPipeline);
 
+			virtual bool IsPipelineCompiled() const override final;
+
 		private:
 			ID3D12PipelineState*	_PipelineState		= nullptr;
 			D3D_PRIMITIVE_TOPOLOGY	_PrimitiveTopology	= D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;

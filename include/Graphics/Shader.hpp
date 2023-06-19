@@ -32,6 +32,7 @@ namespace Eternal
 		{
 		public:
 			virtual ~Shader() {}
+			virtual bool IsShaderCompiled() const = 0;
 			const string& GetName() const;
 			const string& GetFileName() const;
 			ShaderCreateInformation& GetShaderCreateInformation();

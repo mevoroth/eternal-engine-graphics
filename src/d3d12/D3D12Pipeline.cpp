@@ -23,15 +23,17 @@ namespace Eternal
 		using namespace Eternal::Graphics::D3D12;
 
 		template<typename PipelineStateDescriptionType>
-		static void InitializePipelineStateDescription(_In_ const D3D12Device& InD3D12Device, _In_ const PipelineCreateInformation& InPipelineCreateInformation, _Inout_ PipelineStateDescriptionType& InOutPipelineStateDesc)
+		static bool InitializePipelineStateDescription(_In_ const D3D12Device& InD3D12Device, _In_ const PipelineCreateInformation& InPipelineCreateInformation, _Inout_ PipelineStateDescriptionType& InOutPipelineStateDesc)
 		{
+			if (!InPipelineCreateInformation.PS || !InPipelineCreateInformation.PS->IsShaderCompiled())
+				return false;
+			
 			const DepthTest& InDepthTest											= InPipelineCreateInformation.PipelineDepthStencil.GetDepthTest();
 			const StencilTest& InStencilTest										= InPipelineCreateInformation.PipelineDepthStencil.GetStencilTest();
 
 			InOutPipelineStateDesc.pRootSignature									= static_cast<const D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
 
-			if (InPipelineCreateInformation.PS)
-				static_cast<D3D12Shader*>(InPipelineCreateInformation.PS)->GetD3D12Shader(InOutPipelineStateDesc.PS);
+			static_cast<D3D12Shader*>(InPipelineCreateInformation.PS)->GetD3D12Shader(InOutPipelineStateDesc.PS);
 
 			const Rasterizer& InRasterizer = InPipelineCreateInformation.PipelineRasterizer;
 
@@ -101,6 +103,7 @@ namespace Eternal
 
 			InOutPipelineStateDesc.Flags											= D3D12_PIPELINE_STATE_FLAG_NONE;
 
+			return true;
 		}
 		
 		D3D12Pipeline::D3D12Pipeline(
@@ -110,11 +113,15 @@ namespace Eternal
 			: Pipeline(InOutContext, InPipelineCreateInformation)
 			, _PrimitiveTopology(ConvertPrimitiveTopologyToD3D12PrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology))
 		{
+			if (!InPipelineCreateInformation.VS || !InPipelineCreateInformation.VS->IsShaderCompiled())
+				return;
+
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
 
 			D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc	= {};
 
-			InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDesc);
+			if (!InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDesc))
+				return;
 
 			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements	= static_cast<D3D12InputLayout*>(InPipelineCreateInformation.PipelineInputLayout)->GetD3D12InputElements();
 			PipelineStateDesc.InputLayout.pInputElementDescs		= InputElements.size() ? InputElements.data() : nullptr;
@@ -158,6 +165,9 @@ namespace Eternal
 		)
 			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
+			if (!InPipelineCreateInformation.CS || !InPipelineCreateInformation.CS->IsShaderCompiled())
+				return;
+
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
 			
 			D3D12_COMPUTE_PIPELINE_STATE_DESC PipelineStateDesc = {};
@@ -188,11 +198,14 @@ namespace Eternal
 		)
 			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
+			ETERNAL_BREAK();
+
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
 
 			D3DX12_MESH_SHADER_PIPELINE_STATE_DESC PipelineStateDesc = {};
 
-			InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDesc);
+			if (!InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDesc))
+				return;
 
 			static_cast<D3D12Shader*>(InPipelineCreateInformation.MS)->GetD3D12Shader(PipelineStateDesc.MS);
 			if (InPipelineCreateInformation.AS)
@@ -216,8 +229,11 @@ namespace Eternal
 
 		D3D12Pipeline::~D3D12Pipeline()
 		{
-			_PipelineState->Release();
-			_PipelineState = nullptr;
+			if (IsPipelineCompiled())
+			{
+				_PipelineState->Release();
+				_PipelineState = nullptr;
+			}
 		}
 
 		const D3D12RootSignature& D3D12Pipeline::GetD3D12RootSignature() const
@@ -234,6 +250,11 @@ namespace Eternal
 				_PrimitiveTopology	= InPipeline._PrimitiveTopology;
 			}
 			return *this;
+		}
+
+		bool D3D12Pipeline::IsPipelineCompiled() const
+		{
+			return _PipelineState;
 		}
 	}
 }

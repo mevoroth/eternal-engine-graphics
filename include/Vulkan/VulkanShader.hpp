@@ -17,6 +17,7 @@ namespace Eternal
 		class VulkanShader final : public Shader
 		{
 		public:
+			virtual bool IsShaderCompiled() const override final;
 			VulkanShader(_Inout_ GraphicsContext& InOutContext, const ShaderCreateInformation& InCreateInformation);
 			vk::ShaderModule& GetVulkanShader();
 

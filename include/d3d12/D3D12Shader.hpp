@@ -29,6 +29,7 @@ namespace Eternal
 			
 			D3D12Shader(_In_ GraphicsContext& InOutContext, const ShaderCreateInformation& InCreateInformation);
 			virtual ~D3D12Shader() override final;
+			virtual bool IsShaderCompiled() const override final;
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode);
 
 		protected:

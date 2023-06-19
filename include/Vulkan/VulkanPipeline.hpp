@@ -32,6 +32,8 @@ namespace Eternal
 
 			VulkanPipeline& VulkanPipeline::operator=(_In_ const VulkanPipeline& InPipeline);
 
+			virtual bool IsPipelineCompiled() const override final;
+
 		private:
 			vk::Pipeline _Pipeline;
 		};

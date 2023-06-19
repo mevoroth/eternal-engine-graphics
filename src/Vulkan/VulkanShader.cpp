@@ -280,5 +280,10 @@ namespace Eternal
 		{
 			return _ShaderModule;
 		}
+
+		bool VulkanShader::IsShaderCompiled() const
+		{
+			return _ShaderModule;
+		}
 	}
 }
