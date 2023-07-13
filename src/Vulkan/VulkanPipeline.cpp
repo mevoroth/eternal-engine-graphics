@@ -38,14 +38,14 @@ namespace Eternal
 				vk::PipelineShaderStageCreateInfo(
 					vk::PipelineShaderStageCreateFlagBits(),
 					vk::ShaderStageFlagBits::eVertex,
-					static_cast<VulkanShader*>(InPipelineCreateInformation.VS)->GetVulkanShader(),
-					"VS"
+					static_cast<VulkanShader*>(InPipelineCreateInformation.ShaderVertex)->GetVulkanShader(),
+					"ShaderVertex"
 				),
 				vk::PipelineShaderStageCreateInfo(
 					vk::PipelineShaderStageCreateFlagBits(),
 					vk::ShaderStageFlagBits::eFragment,
-					static_cast<VulkanShader*>(InPipelineCreateInformation.PS)->GetVulkanShader(),
-					"PS"
+					static_cast<VulkanShader*>(InPipelineCreateInformation.ShaderPixel)->GetVulkanShader(),
+					"ShaderPixel"
 				)
 			};
 
@@ -199,8 +199,8 @@ namespace Eternal
 			vk::PipelineShaderStageCreateInfo ShaderStageInfo(
 				vk::PipelineShaderStageCreateFlagBits(),
 				vk::ShaderStageFlagBits::eCompute,
-				static_cast<VulkanShader*>(InPipelineCreateInformation.CS)->GetVulkanShader(),
-				"CS"
+				static_cast<VulkanShader*>(InPipelineCreateInformation.ShaderCompute)->GetVulkanShader(),
+				"ShaderCompute"
 			);
 
 			vk::ComputePipelineCreateInfo PipelineInfo(

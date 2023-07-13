@@ -23,8 +23,8 @@ namespace Eternal
 			: PipelineRootSignature(InRootSignature)
 			, PipelineInputLayout(InInputLayout)
 			, PipelineRenderPass(InRenderPass)
-			, VS(InVS)
-			, PS(InPS)
+			, ShaderVertex(InVS)
+			, ShaderPixel(InPS)
 			, PipelineDepthStencil(InDepthStencil)
 			, PipelineRasterizer(InRasterizer)
 			, PipelinePrimitiveTopology(InPrimitiveTopology)
@@ -52,7 +52,7 @@ namespace Eternal
 				InPrimitiveTopology
 			)
 		{
-			PipelineShaderTypes = ShaderTypeFlags::VS_PS;
+			PipelineShaderTypes = ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX_PIXEL;
 		}
 
 		GraphicsPipelineCreateInformation::GraphicsPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
@@ -60,39 +60,39 @@ namespace Eternal
 				InPipelineCreateInformation.PipelineRootSignature,
 				InPipelineCreateInformation.PipelineInputLayout,
 				InPipelineCreateInformation.PipelineRenderPass,
-				InPipelineCreateInformation.VS,
-				InPipelineCreateInformation.PS,
+				InPipelineCreateInformation.ShaderVertex,
+				InPipelineCreateInformation.ShaderPixel,
 				InPipelineCreateInformation.PipelineDepthStencil,
 				InPipelineCreateInformation.PipelineRasterizer,
 				InPipelineCreateInformation.PipelinePrimitiveTopology
 			)
 		{
-			ETERNAL_ASSERT((InPipelineCreateInformation.PipelineShaderTypes & ShaderTypeFlags::VS) == ShaderTypeFlags::VS);
+			ETERNAL_ASSERT((InPipelineCreateInformation.PipelineShaderTypes & ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX) == ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX);
 			PipelineRecreated = true;
 		}
 
 		//////////////////////////////////////////////////////////////////////////
 		// Compute
 
-		PipelineCreateInformation::PipelineCreateInformation(_In_ RootSignature& InRootSignature, _In_ Shader* InCS)
+		PipelineCreateInformation::PipelineCreateInformation(_In_ RootSignature& InRootSignature, _In_ Shader* InCompute)
 			: PipelineRootSignature(InRootSignature)
-			, CS(InCS)
+			, ShaderCompute(InCompute)
 		{
 		}
 
-		ComputePipelineCreateInformation::ComputePipelineCreateInformation(_In_ RootSignature& InRootSignature, _In_ Shader* InCS)
-			: PipelineCreateInformation(InRootSignature, InCS)
+		ComputePipelineCreateInformation::ComputePipelineCreateInformation(_In_ RootSignature& InRootSignature, _In_ Shader* InCompute)
+			: PipelineCreateInformation(InRootSignature, InCompute)
 		{
-			PipelineShaderTypes = ShaderTypeFlags::CS;
+			PipelineShaderTypes = ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE;
 		}
 
 		ComputePipelineCreateInformation::ComputePipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
 			: ComputePipelineCreateInformation(
 				InPipelineCreateInformation.PipelineRootSignature,
-				InPipelineCreateInformation.CS
+				InPipelineCreateInformation.ShaderCompute
 			)
 		{
-			ETERNAL_ASSERT(InPipelineCreateInformation.PipelineShaderTypes == ShaderTypeFlags::CS);
+			ETERNAL_ASSERT(InPipelineCreateInformation.PipelineShaderTypes == ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE);
 			PipelineRecreated = true;
 		}
 
@@ -102,15 +102,15 @@ namespace Eternal
 		PipelineCreateInformation::PipelineCreateInformation(
 			_In_ RootSignature& InRootSignature,
 			_In_ RenderPass* InRenderPass,
-			_In_ Shader* InMS,
-			_In_ Shader* InPS,
+			_In_ Shader* InMesh,
+			_In_ Shader* InPixel,
 			_In_ const DepthStencil& InDepthStencil /* = Graphics::DepthStencilNoneNone */,
 			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */
 		)
 			: PipelineRootSignature(InRootSignature)
 			, PipelineRenderPass(InRenderPass)
-			, MS(InMS)
-			, PS(InPS)
+			, ShaderMesh(InMesh)
+			, ShaderPixel(InPixel)
 			, PipelineDepthStencil(InDepthStencil)
 			, PipelineRasterizer(InRasterizer)
 		{
@@ -119,17 +119,17 @@ namespace Eternal
 		PipelineCreateInformation::PipelineCreateInformation(
 			_In_ RootSignature& InRootSignature,
 			_In_ RenderPass* InRenderPass,
-			_In_ Shader* InMS,
-			_In_ Shader* InAS,
-			_In_ Shader* InPS,
+			_In_ Shader* InMesh,
+			_In_ Shader* InAmplification,
+			_In_ Shader* InPixel,
 			_In_ const DepthStencil& InDepthStencil /* = Graphics::DepthStencilNoneNone */,
 			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */
 		)
 			: PipelineRootSignature(InRootSignature)
 			, PipelineRenderPass(InRenderPass)
-			, MS(InMS)
-			, AS(InAS)
-			, PS(InPS)
+			, ShaderMesh(InMesh)
+			, ShaderAmplification(InAmplification)
+			, ShaderPixel(InPixel)
 			, PipelineDepthStencil(InDepthStencil)
 			, PipelineRasterizer(InRasterizer)
 		{
@@ -138,43 +138,43 @@ namespace Eternal
 		MeshPipelineCreateInformation::MeshPipelineCreateInformation(
 			_In_ RootSignature& InRootSignature,
 			_In_ RenderPass* InRenderPass,
-			_In_ Shader* InMS,
-			_In_ Shader* InPS,
+			_In_ Shader* InMesh,
+			_In_ Shader* InPixel,
 			_In_ const DepthStencil& InDepthStencil /* = Graphics::DepthStencilNoneNone */,
 			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */
 		)
 			: PipelineCreateInformation(
 				InRootSignature,
 				InRenderPass,
-				InMS,
-				InPS,
+				InMesh,
+				InPixel,
 				InDepthStencil,
 				InRasterizer
 			)
 		{
-			PipelineShaderTypes = ShaderTypeFlags::MS_PS;
+			PipelineShaderTypes = ShaderTypeFlags::SHADER_TYPE_FLAGS_MESH_PIXEL;
 		}
 
 		MeshPipelineCreateInformation::MeshPipelineCreateInformation(
 			_In_ RootSignature& InRootSignature,
 			_In_ RenderPass* InRenderPass,
-			_In_ Shader* InMS,
-			_In_ Shader* InAS,
-			_In_ Shader* InPS,
+			_In_ Shader* InMesh,
+			_In_ Shader* InAmplification,
+			_In_ Shader* InPixel,
 			_In_ const DepthStencil& InDepthStencil /* = Graphics::DepthStencilNoneNone */,
 			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */
 		)
 			: PipelineCreateInformation(
 				InRootSignature,
 				InRenderPass,
-				InMS,
-				InAS,
-				InPS,
+				InMesh,
+				InAmplification,
+				InPixel,
 				InDepthStencil,
 				InRasterizer
 			)
 		{
-			PipelineShaderTypes = ShaderTypeFlags::MS_AS_PS;
+			PipelineShaderTypes = ShaderTypeFlags::SHADER_TYPE_MESH_AMPLIFICATION_PIXEL;
 		}
 
 		//MeshPipelineCreateInformation::MeshPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
@@ -190,14 +190,14 @@ namespace Eternal
 			: PipelineRootSignature(InPipelineCreateInformation.PipelineRootSignature)
 			, PipelineInputLayout(InPipelineCreateInformation.PipelineInputLayout)
 			, PipelineRenderPass(InPipelineCreateInformation.PipelineRenderPass)
-			, VS(InPipelineCreateInformation.VS)
+			, ShaderVertex(InPipelineCreateInformation.ShaderVertex)
 			//, HS(InPipelineCreateInformation.HS)
 			//, DS(InPipelineCreateInformation.DS)
 			//, GS(InPipelineCreateInformation.GS)
-			, PS(InPipelineCreateInformation.PS)
-			, CS(InPipelineCreateInformation.CS)
-			, MS(InPipelineCreateInformation.MS)
-			, AS(InPipelineCreateInformation.AS)
+			, ShaderPixel(InPipelineCreateInformation.ShaderPixel)
+			, ShaderCompute(InPipelineCreateInformation.ShaderCompute)
+			, ShaderMesh(InPipelineCreateInformation.ShaderMesh)
+			, ShaderAmplification(InPipelineCreateInformation.ShaderAmplification)
 			, PipelineRasterizer(InPipelineCreateInformation.PipelineRasterizer)
 			, PipelineDepthStencil(InPipelineCreateInformation.PipelineDepthStencil)
 			, PipelinePrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology)
@@ -224,15 +224,15 @@ namespace Eternal
 			if (InPipelineCreateInformation.IsPipelineRecreated())
 				return;
 
-			if (GetShaderTypes() == ShaderTypeFlags::CS)
+			if (GetShaderTypes() == ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE)
 			{
-				ETERNAL_ASSERT(InPipelineCreateInformation.CS);
-				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.CS);
+				ETERNAL_ASSERT(InPipelineCreateInformation.ShaderCompute);
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderCompute);
 				return;
 			}
 
-			if ((GetShaderTypes() & ShaderTypeFlags::VS) == ShaderTypeFlags::VS && InPipelineCreateInformation.VS)
-				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.VS);
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX) == ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX && InPipelineCreateInformation.ShaderVertex)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderVertex);
 
 			//if ((GetShaderTypes() & ShaderTypeFlags::HS) == ShaderTypeFlags::HS && InPipelineCreateInformation.HS)
 			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.HS);
@@ -243,14 +243,14 @@ namespace Eternal
 			//if ((GetShaderTypes() & ShaderTypeFlags::GS) == ShaderTypeFlags::GS && InPipelineCreateInformation.GS)
 			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.GS);
 
-			if ((GetShaderTypes() & ShaderTypeFlags::PS) == ShaderTypeFlags::PS && InPipelineCreateInformation.PS)
-				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.PS);
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_PIXEL) == ShaderTypeFlags::SHADER_TYPE_FLAGS_PIXEL && InPipelineCreateInformation.ShaderPixel)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderPixel);
 
-			if ((GetShaderTypes() & ShaderTypeFlags::MS) == ShaderTypeFlags::MS && InPipelineCreateInformation.MS)
-				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.MS);
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_MESH) == ShaderTypeFlags::SHADER_TYPE_FLAGS_MESH && InPipelineCreateInformation.ShaderMesh)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderMesh);
 
-			if ((GetShaderTypes() & ShaderTypeFlags::AS) == ShaderTypeFlags::AS && InPipelineCreateInformation.AS)
-				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.AS);
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_AMPLIFICATION) == ShaderTypeFlags::SHADER_TYPE_FLAGS_AMPLIFICATION && InPipelineCreateInformation.ShaderAmplification)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderAmplification);
 		}
 
 		Pipeline& Pipeline::operator=(_In_ const Pipeline& InPipeline)

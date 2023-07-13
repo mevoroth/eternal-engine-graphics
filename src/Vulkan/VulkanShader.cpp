@@ -30,14 +30,14 @@ namespace Eternal
 
 		static const char* SHADER_ENTRY_POINTS[] =
 		{
-			"VS",
-			"HS",
-			"DS",
-			"GS",
-			"PS",
-			"CS",
-			"MS",
-			"AS"
+			"ShaderVertex",
+			"ShaderHull",
+			"ShaderDomain",
+			"ShaderGeometry",
+			"ShaderPixel",
+			"ShaderCompute",
+			"ShaderMesh",
+			"ShaderAmplification"
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_KINDS) == int(ShaderType::SHADER_TYPE_COUNT),		"Shader kinds does not match ShaderType definition.");
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == int(ShaderType::SHADER_TYPE_COUNT),	"Shader entry points does not match ShaderType definition.");

@@ -248,12 +248,12 @@ namespace Eternal
 #if ETERNAL_DEBUG
 			// Check inconsistent root signature (graphics and compute at the same time)
 			uint32_t GraphicsParameters = 0;
-			uint32_t ComputeParameters = DebugRegisterCount[static_cast<int32_t>(ShaderType::CS)];
-			for (uint32_t ShaderTypeIndex = static_cast<uint32_t>(ShaderType::VS); ShaderTypeIndex <= static_cast<uint32_t>(ShaderType::PS); ++ShaderTypeIndex)
+			uint32_t ComputeParameters = DebugRegisterCount[static_cast<int32_t>(ShaderType::SHADER_TYPE_COMPUTE)];
+			for (uint32_t ShaderTypeIndex = static_cast<uint32_t>(ShaderType::SHADER_TYPE_VERTEX); ShaderTypeIndex <= static_cast<uint32_t>(ShaderType::SHADER_TYPE_PIXEL); ++ShaderTypeIndex)
 			{
 				GraphicsParameters += DebugRegisterCount[ShaderTypeIndex];
 			}
-			for (uint32_t ShaderTypeIndex = static_cast<uint32_t>(ShaderType::MS); ShaderTypeIndex <= static_cast<uint32_t>(ShaderType::AS); ++ShaderTypeIndex)
+			for (uint32_t ShaderTypeIndex = static_cast<uint32_t>(ShaderType::SHADER_TYPE_MESH); ShaderTypeIndex <= static_cast<uint32_t>(ShaderType::SHADER_TYPE_AMPLIFICATION); ++ShaderTypeIndex)
 			{
 				GraphicsParameters += DebugRegisterCount[ShaderTypeIndex];
 			}

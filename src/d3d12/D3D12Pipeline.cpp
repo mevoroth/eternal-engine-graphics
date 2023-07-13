@@ -25,7 +25,7 @@ namespace Eternal
 		template<typename PipelineStateDescriptionType>
 		static bool InitializePipelineStateDescription(_In_ const D3D12Device& InD3D12Device, _In_ const PipelineCreateInformation& InPipelineCreateInformation, _Inout_ PipelineStateDescriptionType& InOutPipelineStateDesc)
 		{
-			if (!InPipelineCreateInformation.PS || !InPipelineCreateInformation.PS->IsShaderCompiled())
+			if (!InPipelineCreateInformation.ShaderPixel || !InPipelineCreateInformation.ShaderPixel->IsShaderCompiled())
 				return false;
 			
 			const DepthTest& InDepthTest											= InPipelineCreateInformation.PipelineDepthStencil.GetDepthTest();
@@ -33,7 +33,7 @@ namespace Eternal
 
 			InOutPipelineStateDesc.pRootSignature									= static_cast<const D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
 
-			static_cast<D3D12Shader*>(InPipelineCreateInformation.PS)->GetD3D12Shader(InOutPipelineStateDesc.PS);
+			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderPixel)->GetD3D12Shader(InOutPipelineStateDesc.PS);
 
 			const Rasterizer& InRasterizer = InPipelineCreateInformation.PipelineRasterizer;
 
@@ -113,7 +113,7 @@ namespace Eternal
 			: Pipeline(InOutContext, InPipelineCreateInformation)
 			, _PrimitiveTopology(ConvertPrimitiveTopologyToD3D12PrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology))
 		{
-			if (!InPipelineCreateInformation.VS || !InPipelineCreateInformation.VS->IsShaderCompiled())
+			if (!InPipelineCreateInformation.ShaderVertex || !InPipelineCreateInformation.ShaderVertex->IsShaderCompiled())
 				return;
 
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
@@ -127,7 +127,7 @@ namespace Eternal
 			PipelineStateDesc.InputLayout.pInputElementDescs		= InputElements.size() ? InputElements.data() : nullptr;
 			PipelineStateDesc.InputLayout.NumElements				= static_cast<UINT>(InputElements.size());
 	
-			static_cast<D3D12Shader*>(InPipelineCreateInformation.VS)->GetD3D12Shader(PipelineStateDesc.VS);
+			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderVertex)->GetD3D12Shader(PipelineStateDesc.VS);
 			PipelineStateDesc.GS.pShaderBytecode					= nullptr;
 			PipelineStateDesc.GS.BytecodeLength						= 0;
 			PipelineStateDesc.DS.pShaderBytecode					= nullptr;
@@ -152,7 +152,7 @@ namespace Eternal
 				)
 			);
 
-			std::string PipelineStateName = "VS_" + string(InPipelineCreateInformation.VS->GetName()) + (InPipelineCreateInformation.PS ? " PS_" + string(InPipelineCreateInformation.PS->GetName()) : "_Only");
+			std::string PipelineStateName = "Vertex_" + string(InPipelineCreateInformation.ShaderVertex->GetName()) + (InPipelineCreateInformation.ShaderPixel ? " Pixel_" + string(InPipelineCreateInformation.ShaderPixel->GetName()) : "_Only");
 			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
 			VerifySuccess(
 				_PipelineState->SetName(UTF8PipelineStateName.c_str())
@@ -165,7 +165,7 @@ namespace Eternal
 		)
 			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
-			if (!InPipelineCreateInformation.CS || !InPipelineCreateInformation.CS->IsShaderCompiled())
+			if (!InPipelineCreateInformation.ShaderCompute || !InPipelineCreateInformation.ShaderCompute->IsShaderCompiled())
 				return;
 
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
@@ -173,7 +173,7 @@ namespace Eternal
 			D3D12_COMPUTE_PIPELINE_STATE_DESC PipelineStateDesc = {};
 			
 			PipelineStateDesc.pRootSignature	= static_cast<const D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
-			static_cast<D3D12Shader*>(InPipelineCreateInformation.CS)->GetD3D12Shader(PipelineStateDesc.CS);
+			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderCompute)->GetD3D12Shader(PipelineStateDesc.CS);
 			PipelineStateDesc.NodeMask			= InD3DDevice.GetDeviceMask();
 
 			VerifySuccess(
@@ -184,7 +184,7 @@ namespace Eternal
 				)
 			);
 
-			std::string PipelineStateName = "CS_" + string(InPipelineCreateInformation.CS->GetName());
+			std::string PipelineStateName = "Compute_" + string(InPipelineCreateInformation.ShaderCompute->GetName());
 			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
 			VerifySuccess(
 				_PipelineState->SetName(UTF8PipelineStateName.c_str())
@@ -207,10 +207,10 @@ namespace Eternal
 			if (!InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDesc))
 				return;
 
-			static_cast<D3D12Shader*>(InPipelineCreateInformation.MS)->GetD3D12Shader(PipelineStateDesc.MS);
-			if (InPipelineCreateInformation.AS)
-				static_cast<D3D12Shader*>(InPipelineCreateInformation.AS)->GetD3D12Shader(PipelineStateDesc.AS);
-			static_cast<D3D12Shader*>(InPipelineCreateInformation.PS)->GetD3D12Shader(PipelineStateDesc.PS);
+			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderMesh)->GetD3D12Shader(PipelineStateDesc.MS);
+			if (InPipelineCreateInformation.ShaderAmplification)
+				static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderAmplification)->GetD3D12Shader(PipelineStateDesc.AS);
+			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderPixel)->GetD3D12Shader(PipelineStateDesc.PS);
 
 			CD3DX12_PIPELINE_MESH_STATE_STREAM PipelineMeshStateStream(PipelineStateDesc);
 

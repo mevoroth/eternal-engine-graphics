@@ -73,14 +73,14 @@ namespace Eternal
 			RootSignature&		PipelineRootSignature;
 			InputLayout*		PipelineInputLayout			= nullptr;
 			RenderPass*			PipelineRenderPass			= nullptr;
-			Shader*				VS							= nullptr;
+			Shader*				ShaderVertex				= nullptr;
 			//Shader*				HS							= nullptr;
 			//Shader*				DS							= nullptr;
 			//Shader*				GS							= nullptr;
-			Shader*				PS							= nullptr;
-			Shader*				CS							= nullptr;
-			Shader*				MS							= nullptr;
-			Shader*				AS							= nullptr;
+			Shader*				ShaderPixel					= nullptr;
+			Shader*				ShaderCompute				= nullptr;
+			Shader*				ShaderMesh					= nullptr;
+			Shader*				ShaderAmplification			= nullptr;
 			Rasterizer			PipelineRasterizer;
 			DepthStencil		PipelineDepthStencil;
 			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -94,8 +94,8 @@ namespace Eternal
 				_In_ RootSignature& InRootSignature,
 				_In_ InputLayout* InInputLayout,
 				_In_ RenderPass* InRenderPass,
-				_In_ Shader* InVS,
-				_In_ Shader* InPS,
+				_In_ Shader* InVertex,
+				_In_ Shader* InPixel,
 				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
 				_In_ const Rasterizer& InRasterizer = RasterizerDefault,
 				_In_ const PrimitiveTopology& InPrimitiveTopology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
@@ -103,14 +103,14 @@ namespace Eternal
 
 			PipelineCreateInformation(
 				_In_ RootSignature& InRootSignature,
-				_In_ Shader* InCS
+				_In_ Shader* InCompute
 			);
 
 			PipelineCreateInformation(
 				_In_ RootSignature& InRootSignature,
 				_In_ RenderPass* InRenderPass,
-				_In_ Shader* InMS,
-				_In_ Shader* InPS,
+				_In_ Shader* InMesh,
+				_In_ Shader* InPixel,
 				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
 				_In_ const Rasterizer& InRasterizer = RasterizerDefault
 			);
@@ -118,9 +118,9 @@ namespace Eternal
 			PipelineCreateInformation(
 				_In_ RootSignature& InRootSignature,
 				_In_ RenderPass* InRenderPass,
-				_In_ Shader* InMS,
-				_In_ Shader* InAS,
-				_In_ Shader* InPS,
+				_In_ Shader* InMesh,
+				_In_ Shader* InAmplification,
+				_In_ Shader* InPixel,
 				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
 				_In_ const Rasterizer& InRasterizer = RasterizerDefault
 			);

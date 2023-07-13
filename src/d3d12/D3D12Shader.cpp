@@ -34,25 +34,25 @@ namespace Eternal
 
 		static constexpr char* D3D12_SHADER_ENTRIES_FXC[] =
 		{
-			"VS",
-			"HS",
-			"DS",
-			"GS",
-			"PS",
-			"CS",
-			"MS",
-			"AS"
+			"ShaderVertex",
+			"ShaderHull",
+			"ShaderDomain",
+			"ShaderGeometry",
+			"ShaderPixel",
+			"ShaderCompute",
+			"ShaderMesh",
+			"ShaderAmplification"
 		};
 		static constexpr wchar_t* D3D12_SHADER_ENTRIES_DXC[] =
 		{
-			L"VS",
-			L"HS",
-			L"DS",
-			L"GS",
-			L"PS",
-			L"CS",
-			L"MS",
-			L"AS"
+			L"ShaderVertex",
+			L"ShaderHull",
+			L"ShaderDomain",
+			L"ShaderGeometry",
+			L"ShaderPixel",
+			L"ShaderCompute",
+			L"ShaderMesh",
+			L"ShaderAmplification"
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_ENTRIES_FXC) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader entries");
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_ENTRIES_DXC) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader entries");

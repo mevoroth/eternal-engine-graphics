@@ -267,7 +267,7 @@ namespace Eternal
 
 		void D3D12CommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
-			ETERNAL_ASSERT(InPipeline.GetShaderTypes() != ShaderTypeFlags::CS);
+			ETERNAL_ASSERT(InPipeline.GetShaderTypes() != ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE);
 
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
 			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
@@ -353,7 +353,7 @@ namespace Eternal
 
 		void D3D12CommandList::SetComputePipeline(_In_ const Pipeline& InPipeline)
 		{
-			ETERNAL_ASSERT(InPipeline.GetShaderTypes() == ShaderTypeFlags::CS);
+			ETERNAL_ASSERT(InPipeline.GetShaderTypes() == ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE);
 
 			const D3D12Pipeline& InD3DPipeline = static_cast<const D3D12Pipeline&>(InPipeline);
 			const D3D12RootSignature& InD3DRootSignature = static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());

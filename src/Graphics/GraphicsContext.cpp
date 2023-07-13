@@ -258,9 +258,9 @@ namespace Eternal
 				for (uint32_t PipelineIndex = 0; PipelineIndex < _PipelineRecompile.Pipelines.size(); ++PipelineIndex)
 				{
 					Pipeline* NewPipeline = nullptr;
-					if (_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() == ShaderTypeFlags::CS)
+					if (_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() == ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE)
 						NewPipeline = CreatePipeline(*this, ComputePipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()));
-					else if ((_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() & ShaderTypeFlags::VS) == ShaderTypeFlags::VS)
+					else if ((_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX) == ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX)
 						NewPipeline = CreatePipeline(*this, GraphicsPipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()));
 					//else if ((_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() & ShaderTypeFlags::MS) == ShaderTypeFlags::MS)
 					//	CreatePipeline(*this, MeshPipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()), _PipelineRecompile.Pipelines[PipelineIndex]);

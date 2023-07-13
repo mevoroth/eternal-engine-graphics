@@ -637,7 +637,7 @@ namespace Eternal
 
 			vk::ShaderStageFlagBits ConvertShaderTypeFlagsToVulkanShaderStageFlags(_In_ const ShaderTypeFlags& InShaderTypeFlags)
 			{
-				if (InShaderTypeFlags == ShaderTypeFlags::CS)
+				if (InShaderTypeFlags == ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE)
 					return vk::ShaderStageFlagBits::eCompute;
 
 				return static_cast<vk::ShaderStageFlagBits>(InShaderTypeFlags);
