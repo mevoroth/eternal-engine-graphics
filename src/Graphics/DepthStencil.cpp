@@ -9,12 +9,10 @@ namespace Eternal
 	{
 		const DepthStencil DepthStencilNoneNone;
 		const DepthStencil DepthStencilTestWriteLessNone(
-			DepthTest(DepthTest::Mask::MASK_ALL, ComparisonFunction::COMPARISON_FUNCTION_LESS),
-			StencilTest()
+			DepthTest(DepthTest::Mask::MASK_ALL, ComparisonFunction::COMPARISON_FUNCTION_LESS)
 		);
 		const DepthStencil DepthStencilTestWriteGreaterNone(
-			DepthTest(DepthTest::Mask::MASK_ALL, ComparisonFunction::COMPARISON_FUNCTION_GREATER),
-			StencilTest()
+			DepthTest(DepthTest::Mask::MASK_ALL, ComparisonFunction::COMPARISON_FUNCTION_GREATER)
 		);
 #if ETERNAL_USE_REVERSED_Z
 		const DepthStencil DepthStencilTestWriteNone = DepthStencilTestWriteGreaterNone;
