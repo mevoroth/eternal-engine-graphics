@@ -14,8 +14,8 @@ namespace Eternal
 			_In_ RootSignature& InRootSignature,
 			_In_ InputLayout* InInputLayout,
 			_In_ RenderPass* InRenderPass,
-			_In_ Shader* InVS,
-			_In_ Shader* InPS,
+			_In_ Shader* InVertex,
+			_In_ Shader* InPixel,
 			_In_ const DepthStencil& InDepthStencil /* = DepthStencilNoneNone */,
 			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */,
 			_In_ const PrimitiveTopology& InPrimitiveTopology /* = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST */
@@ -23,8 +23,8 @@ namespace Eternal
 			: PipelineRootSignature(InRootSignature)
 			, PipelineInputLayout(InInputLayout)
 			, PipelineRenderPass(InRenderPass)
-			, ShaderVertex(InVS)
-			, ShaderPixel(InPS)
+			, ShaderVertex(InVertex)
+			, ShaderPixel(InPixel)
 			, PipelineDepthStencil(InDepthStencil)
 			, PipelineRasterizer(InRasterizer)
 			, PipelinePrimitiveTopology(InPrimitiveTopology)
@@ -35,8 +35,8 @@ namespace Eternal
 			_In_ RootSignature& InRootSignature,
 			_In_ InputLayout* InInputLayout,
 			_In_ RenderPass* InRenderPass,
-			_In_ Shader* InVS,
-			_In_ Shader* InPS,
+			_In_ Shader* InVertex,
+			_In_ Shader* InPixel,
 			_In_ const DepthStencil& InDepthStencil /* = DepthStencilNoneNone */,
 			_In_ const Rasterizer& InRasterizer /* = RasterizerDefault */,
 			_In_ const PrimitiveTopology& InPrimitiveTopology /* = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST */
@@ -45,8 +45,8 @@ namespace Eternal
 				InRootSignature,
 				InInputLayout,
 				InRenderPass,
-				InVS,
-				InPS,
+				InVertex,
+				InPixel,
 				InDepthStencil,
 				InRasterizer,
 				InPrimitiveTopology
@@ -191,9 +191,9 @@ namespace Eternal
 			, PipelineInputLayout(InPipelineCreateInformation.PipelineInputLayout)
 			, PipelineRenderPass(InPipelineCreateInformation.PipelineRenderPass)
 			, ShaderVertex(InPipelineCreateInformation.ShaderVertex)
-			//, HS(InPipelineCreateInformation.HS)
-			//, DS(InPipelineCreateInformation.DS)
-			//, GS(InPipelineCreateInformation.GS)
+			, ShaderHull(InPipelineCreateInformation.ShaderHull)
+			, ShaderDomain(InPipelineCreateInformation.ShaderDomain)
+			, ShaderGeometry(InPipelineCreateInformation.ShaderGeometry)
 			, ShaderPixel(InPipelineCreateInformation.ShaderPixel)
 			, ShaderCompute(InPipelineCreateInformation.ShaderCompute)
 			, ShaderMesh(InPipelineCreateInformation.ShaderMesh)
@@ -234,14 +234,14 @@ namespace Eternal
 			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX) == ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX && InPipelineCreateInformation.ShaderVertex)
 				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderVertex);
 
-			//if ((GetShaderTypes() & ShaderTypeFlags::HS) == ShaderTypeFlags::HS && InPipelineCreateInformation.HS)
-			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.HS);
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_HULL) == ShaderTypeFlags::SHADER_TYPE_FLAGS_HULL && InPipelineCreateInformation.ShaderHull)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderHull);
 
-			//if ((GetShaderTypes() & ShaderTypeFlags::DS) == ShaderTypeFlags::DS && InPipelineCreateInformation.DS)
-			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.DS);
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_DOMAIN) == ShaderTypeFlags::SHADER_TYPE_FLAGS_DOMAIN && InPipelineCreateInformation.ShaderDomain)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderDomain);
 
-			//if ((GetShaderTypes() & ShaderTypeFlags::GS) == ShaderTypeFlags::GS && InPipelineCreateInformation.GS)
-			//	InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.GS);
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_GEOMETRY) == ShaderTypeFlags::SHADER_TYPE_FLAGS_GEOMETRY && InPipelineCreateInformation.ShaderGeometry)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderGeometry);
 
 			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_PIXEL) == ShaderTypeFlags::SHADER_TYPE_FLAGS_PIXEL && InPipelineCreateInformation.ShaderPixel)
 				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderPixel);
