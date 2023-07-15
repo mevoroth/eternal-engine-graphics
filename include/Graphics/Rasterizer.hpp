@@ -36,6 +36,7 @@ namespace Eternal
 			}
 			Rasterizer(_In_ const FillMode& InFillMode)
 				: _Fill(InFillMode)
+				, _ConservativeRasterization(InFillMode == FillMode::FILL_MODE_SOLID)
 			{
 			}
 
@@ -46,15 +47,17 @@ namespace Eternal
 			inline int32_t GetDepthBias() const { return _DepthBias; }
 			inline float GetDepthBiasClamp() const { return _DepthBiasClamp; }
 			inline float GetDepthBiasSlopeScale() const { return _DepthBiasSlopeScale; }
+			inline bool GetConservativeRasterization() const { return _ConservativeRasterization; }
 
 		private:
-			FillMode _Fill				= FillMode::FILL_MODE_SOLID;
-			CullMode _Cull				= CullMode::CULL_MODE_BACK;
-			FrontFace _FrontFace		= FrontFace::FRONT_FACE_COUNTER_CLOCKWISE;
-			bool _DepthClip				= true;
-			int32_t _DepthBias			= 0;
-			float _DepthBiasClamp		= 0.0f;
-			float _DepthBiasSlopeScale	= 0.0f;
+			FillMode _Fill					= FillMode::FILL_MODE_SOLID;
+			CullMode _Cull					= CullMode::CULL_MODE_BACK;
+			FrontFace _FrontFace			= FrontFace::FRONT_FACE_COUNTER_CLOCKWISE;
+			bool _DepthClip					= true;
+			int32_t _DepthBias				= 0;
+			float _DepthBiasClamp			= 0.0f;
+			float _DepthBiasSlopeScale		= 0.0f;
+			bool _ConservativeRasterization	= true;
 		};
 
 		extern const Rasterizer RasterizerDefault;

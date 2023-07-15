@@ -47,7 +47,7 @@ namespace Eternal
 			InOutPipelineStateDesc.RasterizerState.MultisampleEnable				= TRUE;
 			InOutPipelineStateDesc.RasterizerState.AntialiasedLineEnable			= TRUE;
 			InOutPipelineStateDesc.RasterizerState.ForcedSampleCount				= 0;
-			InOutPipelineStateDesc.RasterizerState.ConservativeRaster				= D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON;
+			InOutPipelineStateDesc.RasterizerState.ConservativeRaster				= InRasterizer.GetConservativeRasterization() ? D3D12_CONSERVATIVE_RASTERIZATION_MODE_ON : D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
 
 			InOutPipelineStateDesc.DepthStencilState.DepthEnable					= InDepthTest.IsEnabled() ? TRUE : FALSE;
 			InOutPipelineStateDesc.DepthStencilState.DepthFunc						= ConvertComparisonFunctionToD3D12ComparisonFunction(InDepthTest.GetComparisonFunction());
