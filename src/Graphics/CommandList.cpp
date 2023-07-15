@@ -62,6 +62,11 @@ namespace Eternal
 			SetCurrentRootSignature(nullptr);
 		}
 
+		void CommandList::Transition(_In_ ResourceTransition& InResourceTransition)
+		{
+			Transition(&InResourceTransition, 1);
+		}
+
 		void CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
 			_SetDescriptorTable(InContext, InDescriptorTable);

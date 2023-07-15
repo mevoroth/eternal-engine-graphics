@@ -54,6 +54,7 @@ namespace Eternal
 			virtual void EndRenderPass();
 
 			virtual void Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) = 0;
+			void Transition(_In_ ResourceTransition& InResourceTransition);
 
 			virtual void SetViewport(_In_ const Viewport& InViewport) = 0;
 			virtual void SetScissorRectangle(_In_ const ScissorRectangle& InScissorRectangle) = 0;
