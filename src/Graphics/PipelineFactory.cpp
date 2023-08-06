@@ -44,6 +44,11 @@ namespace Eternal
 			return CreatePipeline<MeshPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
+		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const RayTracingPipelineCreateInformation& InPipelineCreateInformation)
+		{
+			return CreatePipeline<RayTracingPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
+		}
+
 		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline)
 		{
 			delete InOutPipeline;

@@ -60,6 +60,7 @@ namespace Eternal
 				vk::DescriptorType::eUniformBuffer,
 				vk::DescriptorType::eUniformBuffer,
 				vk::DescriptorType::eStorageBuffer,
+				vk::DescriptorType::eAccelerationStructureKHR,
 				vk::DescriptorType(~0) // Descriptor table doesn't exist on vulkan
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_DESCRIPTOR_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and vulkan descriptor types");

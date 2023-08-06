@@ -35,17 +35,18 @@ namespace Eternal
 
 		enum class BufferResourceUsage
 		{
-			BUFFER_RESOURCE_USAGE_NONE					= 0x0,
-			BUFFER_RESOURCE_USAGE_COPY_READ				= 0x1,
-			BUFFER_RESOURCE_USAGE_COPY_WRITE			= 0x2,
-			BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER		= 0x4,
-			BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER	= 0x8,
-			BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER		= 0x10,
-			BUFFER_RESOURCE_USAGE_BUFFER				= 0x20,
-			BUFFER_RESOURCE_USAGE_RW_BUFFER				= 0x40,
-			BUFFER_RESOURCE_USAGE_INDEX_BUFFER			= 0x80,
-			BUFFER_RESOURCE_USAGE_VERTEX_BUFFER			= 0x100,
-			BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER		= 0x200
+			BUFFER_RESOURCE_USAGE_NONE										= 0x0,
+			BUFFER_RESOURCE_USAGE_COPY_READ									= 0x1,
+			BUFFER_RESOURCE_USAGE_COPY_WRITE								= 0x2,
+			BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER							= 0x4,
+			BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER						= 0x8,
+			BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER							= 0x10,
+			BUFFER_RESOURCE_USAGE_BUFFER									= 0x20,
+			BUFFER_RESOURCE_USAGE_RW_BUFFER									= 0x40,
+			BUFFER_RESOURCE_USAGE_INDEX_BUFFER								= 0x80,
+			BUFFER_RESOURCE_USAGE_VERTEX_BUFFER								= 0x100,
+			BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER							= 0x200,
+			BUFFER_RESOURCE_USAGE_RAYTRACING_ACCELERATION_STRUCTURE_BUFFER	= 0x400
 		};
 
 		enum class ResourceDimension
@@ -226,6 +227,20 @@ namespace Eternal
 			}
 		};
 
+		struct AccelerationStructureBufferCreateInformation : public BufferCreateInformation
+		{
+			AccelerationStructureBufferCreateInformation(
+				_In_ uint32_t InSize
+			)
+				: BufferCreateInformation(
+					Format::FORMAT_UNKNOWN,
+					BufferResourceUsage::BUFFER_RESOURCE_USAGE_RAYTRACING_ACCELERATION_STRUCTURE_BUFFER,
+					InSize
+				)
+			{
+			}
+		};
+
 		struct ResourceCreateInformation
 		{
 			ResourceCreateInformation(_In_ Device& InDevice, _In_  const std::string& InName, _In_ const ResourceMemoryType& InMemoryType, _In_ const TransitionState& InInitialTransitionState)
@@ -335,6 +350,7 @@ namespace Eternal
 			uint32_t GetArraySize() const;
 			uint32_t GetBufferSize() const;
 			uint32_t GetBufferStride() const;
+			uint32_t GetElementCount() const;
 			ResourceType GetResourceType() const;
 			const ResourceType& GetResourceTypeRaw() const { return _ResourceType; }
 			const float* GetClearValue() const;

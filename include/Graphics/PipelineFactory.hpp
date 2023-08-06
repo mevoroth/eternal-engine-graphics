@@ -9,6 +9,7 @@ namespace Eternal
 		struct GraphicsPipelineCreateInformation;
 		struct ComputePipelineCreateInformation;
 		struct MeshPipelineCreateInformation;
+		struct RayTracingPipelineCreateInformation;
 
 		Pipeline* CreatePipeline(
 			_Inout_ GraphicsContext& InOutContext,
@@ -21,6 +22,10 @@ namespace Eternal
 		Pipeline* CreatePipeline(
 			_Inout_ GraphicsContext& InOutContext,
 			_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
+		);
+		Pipeline* CreatePipeline(
+			_Inout_ GraphicsContext& InOutContext,
+			_In_ const RayTracingPipelineCreateInformation& InPipelineCreateInformation
 		);
 		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline);
 

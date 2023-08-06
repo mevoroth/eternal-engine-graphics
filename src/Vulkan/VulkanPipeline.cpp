@@ -226,6 +226,15 @@ namespace Eternal
 			ETERNAL_BREAK();
 		}
 
+		VulkanPipeline::VulkanPipeline(
+			_Inout_ GraphicsContext& InOutContext,
+			_In_ const RayTracingPipelineCreateInformation& InPipelineCreateInformation
+		)
+			: Pipeline(InOutContext, InPipelineCreateInformation)
+		{
+			ETERNAL_BREAK();
+		}
+
 		VulkanPipeline& VulkanPipeline::operator=(_In_ const VulkanPipeline& InPipeline)
 		{
 			if (this != &InPipeline)

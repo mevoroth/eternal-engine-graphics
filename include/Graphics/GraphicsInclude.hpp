@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Graphics/AccelerationStructure.hpp"
+#include "Graphics/AccelerationStructureFactory.hpp"
 #include "Graphics/BlendState.hpp"
 #include "Graphics/CommandList.hpp"
 #include "Graphics/CommandQueue.hpp"
@@ -25,6 +27,8 @@
 #include "Graphics/SamplerFactory.hpp"
 #include "Graphics/Shader.hpp"
 #include "Graphics/ShaderFactory.hpp"
+#include "Graphics/ShaderTable.hpp"
+#include "Graphics/ShaderTableFactory.hpp"
 #include "Graphics/ShaderType.hpp"
 #include "Graphics/SwapChain.hpp"
 #include "Graphics/StencilTest.hpp"

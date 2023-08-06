@@ -35,7 +35,8 @@ namespace Eternal
 			D3D12_SRV_DIMENSION_TEXTURE2DARRAY,
 			D3D12_SRV_DIMENSION_TEXTURE3D,
 			D3D12_SRV_DIMENSION_TEXTURECUBE,
-			D3D12_SRV_DIMENSION_TEXTURECUBEARRAY
+			D3D12_SRV_DIMENSION_TEXTURECUBEARRAY,
+			D3D12_SRV_DIMENSION_RAYTRACING_ACCELERATION_STRUCTURE
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SRV_DIMENSIONS) == static_cast<int32_t>(ViewShaderResourceType::VIEW_SHADER_RESOURCE_COUNT), "Mismatch between abstraction and d3d12 srv dimensions");
 		
@@ -194,6 +195,8 @@ namespace Eternal
 		{
 			ID3D12Device* InD3DDevice = static_cast<D3D12Device&>(InViewCreateInformation.Context.GetDevice()).GetD3D12Device();
 			
+			ID3D12Resource* InD3D12Resource = static_cast<D3D12Resource&>(GetResource()).GetD3D12Resource();
+
 			D3D12_SHADER_RESOURCE_VIEW_DESC D3D12ShaderResourceViewDesc = {};
 
 			D3D12ShaderResourceViewDesc.Format					= ConvertFormatToD3D12Format(InViewCreateInformation.GraphicsFormat).Format;
@@ -206,59 +209,62 @@ namespace Eternal
 			{
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_BUFFER:
 			{
-				D3D12ShaderResourceViewDesc.Buffer.FirstElement						= InMetaData.ShaderResourceViewBuffer.FirstElement;
-				D3D12ShaderResourceViewDesc.Buffer.NumElements						= InMetaData.ShaderResourceViewBuffer.NumElements;
-				D3D12ShaderResourceViewDesc.Buffer.StructureByteStride				= InMetaData.ShaderResourceViewBuffer.StructureByteStride;
-				D3D12ShaderResourceViewDesc.Buffer.Flags							= D3D12_BUFFER_SRV_FLAG_NONE;
+				D3D12ShaderResourceViewDesc.Buffer.FirstElement							= InMetaData.ShaderResourceViewBuffer.FirstElement;
+				D3D12ShaderResourceViewDesc.Buffer.NumElements							= InMetaData.ShaderResourceViewBuffer.NumElements;
+				D3D12ShaderResourceViewDesc.Buffer.StructureByteStride					= InMetaData.ShaderResourceViewBuffer.StructureByteStride;
+				D3D12ShaderResourceViewDesc.Buffer.Flags								= D3D12_BUFFER_SRV_FLAG_NONE;
 			} break;
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_1D:
 			{
-				D3D12ShaderResourceViewDesc.Texture1D.MostDetailedMip				= InMetaData.ShaderResourceViewTexture1D.MostDetailedMip;
-				D3D12ShaderResourceViewDesc.Texture1D.MipLevels						= InMetaData.ShaderResourceViewTexture1D.MipLevels;
-				D3D12ShaderResourceViewDesc.Texture1D.ResourceMinLODClamp			= InMetaData.ShaderResourceViewTexture1D.ResourceMinLODClamp;
+				D3D12ShaderResourceViewDesc.Texture1D.MostDetailedMip					= InMetaData.ShaderResourceViewTexture1D.MostDetailedMip;
+				D3D12ShaderResourceViewDesc.Texture1D.MipLevels							= InMetaData.ShaderResourceViewTexture1D.MipLevels;
+				D3D12ShaderResourceViewDesc.Texture1D.ResourceMinLODClamp				= InMetaData.ShaderResourceViewTexture1D.ResourceMinLODClamp;
 			} break;
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_1D_ARRAY:
 			{
-				D3D12ShaderResourceViewDesc.Texture1DArray.MostDetailedMip			= InMetaData.ShaderResourceViewTexture1DArray.MostDetailedMip;
-				D3D12ShaderResourceViewDesc.Texture1DArray.MipLevels				= InMetaData.ShaderResourceViewTexture1DArray.MipLevels;
-				D3D12ShaderResourceViewDesc.Texture1DArray.FirstArraySlice			= InMetaData.ShaderResourceViewTexture1DArray.FirstArraySlice;
-				D3D12ShaderResourceViewDesc.Texture1DArray.ArraySize				= InMetaData.ShaderResourceViewTexture1DArray.ArraySize;
-				D3D12ShaderResourceViewDesc.Texture1DArray.ResourceMinLODClamp		= InMetaData.ShaderResourceViewTexture1DArray.ResourceMinLODClamp;
+				D3D12ShaderResourceViewDesc.Texture1DArray.MostDetailedMip				= InMetaData.ShaderResourceViewTexture1DArray.MostDetailedMip;
+				D3D12ShaderResourceViewDesc.Texture1DArray.MipLevels					= InMetaData.ShaderResourceViewTexture1DArray.MipLevels;
+				D3D12ShaderResourceViewDesc.Texture1DArray.FirstArraySlice				= InMetaData.ShaderResourceViewTexture1DArray.FirstArraySlice;
+				D3D12ShaderResourceViewDesc.Texture1DArray.ArraySize					= InMetaData.ShaderResourceViewTexture1DArray.ArraySize;
+				D3D12ShaderResourceViewDesc.Texture1DArray.ResourceMinLODClamp			= InMetaData.ShaderResourceViewTexture1DArray.ResourceMinLODClamp;
 			} break;
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_2D:
 			{
-				D3D12ShaderResourceViewDesc.Texture2D.MostDetailedMip				= InMetaData.ShaderResourceViewTexture2D.MostDetailedMip;
-				D3D12ShaderResourceViewDesc.Texture2D.MipLevels						= InMetaData.ShaderResourceViewTexture2D.MipLevels;
-				D3D12ShaderResourceViewDesc.Texture2D.PlaneSlice					= InMetaData.ShaderResourceViewTexture2D.PlaneSlice;
-				D3D12ShaderResourceViewDesc.Texture2D.ResourceMinLODClamp			= InMetaData.ShaderResourceViewTexture2D.ResourceMinLODClamp;
+				D3D12ShaderResourceViewDesc.Texture2D.MostDetailedMip					= InMetaData.ShaderResourceViewTexture2D.MostDetailedMip;
+				D3D12ShaderResourceViewDesc.Texture2D.MipLevels							= InMetaData.ShaderResourceViewTexture2D.MipLevels;
+				D3D12ShaderResourceViewDesc.Texture2D.PlaneSlice						= InMetaData.ShaderResourceViewTexture2D.PlaneSlice;
+				D3D12ShaderResourceViewDesc.Texture2D.ResourceMinLODClamp				= InMetaData.ShaderResourceViewTexture2D.ResourceMinLODClamp;
 			} break;
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_2D_ARRAY:
 			{
-				D3D12ShaderResourceViewDesc.Texture2DArray.MostDetailedMip			= InMetaData.ShaderResourceViewTexture2DArray.MostDetailedMip;
-				D3D12ShaderResourceViewDesc.Texture2DArray.MipLevels				= InMetaData.ShaderResourceViewTexture2DArray.MipLevels;
-				D3D12ShaderResourceViewDesc.Texture2DArray.FirstArraySlice			= InMetaData.ShaderResourceViewTexture2DArray.FirstArraySlice;
-				D3D12ShaderResourceViewDesc.Texture2DArray.ArraySize				= InMetaData.ShaderResourceViewTexture2DArray.ArraySize;
-				D3D12ShaderResourceViewDesc.Texture2DArray.PlaneSlice				= InMetaData.ShaderResourceViewTexture2DArray.PlaneSlice;
-				D3D12ShaderResourceViewDesc.Texture2DArray.ResourceMinLODClamp		= InMetaData.ShaderResourceViewTexture2DArray.ResourceMinLODClamp;
+				D3D12ShaderResourceViewDesc.Texture2DArray.MostDetailedMip				= InMetaData.ShaderResourceViewTexture2DArray.MostDetailedMip;
+				D3D12ShaderResourceViewDesc.Texture2DArray.MipLevels					= InMetaData.ShaderResourceViewTexture2DArray.MipLevels;
+				D3D12ShaderResourceViewDesc.Texture2DArray.FirstArraySlice				= InMetaData.ShaderResourceViewTexture2DArray.FirstArraySlice;
+				D3D12ShaderResourceViewDesc.Texture2DArray.ArraySize					= InMetaData.ShaderResourceViewTexture2DArray.ArraySize;
+				D3D12ShaderResourceViewDesc.Texture2DArray.PlaneSlice					= InMetaData.ShaderResourceViewTexture2DArray.PlaneSlice;
+				D3D12ShaderResourceViewDesc.Texture2DArray.ResourceMinLODClamp			= InMetaData.ShaderResourceViewTexture2DArray.ResourceMinLODClamp;
 			} break;
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_3D:
 			{
-				D3D12ShaderResourceViewDesc.Texture3D.MostDetailedMip				= InMetaData.ShaderResourceViewTexture3D.MostDetailedMip;
-				D3D12ShaderResourceViewDesc.Texture3D.MipLevels						= InMetaData.ShaderResourceViewTexture3D.MipLevels;
-				D3D12ShaderResourceViewDesc.Texture3D.ResourceMinLODClamp			= InMetaData.ShaderResourceViewTexture3D.ResourceMinLODClamp;
+				D3D12ShaderResourceViewDesc.Texture3D.MostDetailedMip					= InMetaData.ShaderResourceViewTexture3D.MostDetailedMip;
+				D3D12ShaderResourceViewDesc.Texture3D.MipLevels							= InMetaData.ShaderResourceViewTexture3D.MipLevels;
+				D3D12ShaderResourceViewDesc.Texture3D.ResourceMinLODClamp				= InMetaData.ShaderResourceViewTexture3D.ResourceMinLODClamp;
 			} break;
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_CUBE:
 			{
-				D3D12ShaderResourceViewDesc.TextureCube.MostDetailedMip				= InMetaData.ShaderResourceViewTextureCube.MostDetailedMip;
-				D3D12ShaderResourceViewDesc.TextureCube.MipLevels					= InMetaData.ShaderResourceViewTextureCube.MipLevels;
-				D3D12ShaderResourceViewDesc.TextureCube.ResourceMinLODClamp			= InMetaData.ShaderResourceViewTextureCube.ResourceMinLODClamp;
+				D3D12ShaderResourceViewDesc.TextureCube.MostDetailedMip					= InMetaData.ShaderResourceViewTextureCube.MostDetailedMip;
+				D3D12ShaderResourceViewDesc.TextureCube.MipLevels						= InMetaData.ShaderResourceViewTextureCube.MipLevels;
+				D3D12ShaderResourceViewDesc.TextureCube.ResourceMinLODClamp				= InMetaData.ShaderResourceViewTextureCube.ResourceMinLODClamp;
 			} break;
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_TEXTURE_CUBE_ARRAY:
-				D3D12ShaderResourceViewDesc.TextureCubeArray.MostDetailedMip		= InMetaData.ShaderResourceViewTextureCubeArray.MostDetailedMip;
-				D3D12ShaderResourceViewDesc.TextureCubeArray.MipLevels				= InMetaData.ShaderResourceViewTextureCubeArray.MipLevels;
-				D3D12ShaderResourceViewDesc.TextureCubeArray.First2DArrayFace		= InMetaData.ShaderResourceViewTextureCubeArray.First2DArrayFace;
-				D3D12ShaderResourceViewDesc.TextureCubeArray.NumCubes				= InMetaData.ShaderResourceViewTextureCubeArray.NumCubes;
-				D3D12ShaderResourceViewDesc.TextureCubeArray.ResourceMinLODClamp	= InMetaData.ShaderResourceViewTextureCubeArray.ResourceMinLODClamp;
+				D3D12ShaderResourceViewDesc.TextureCubeArray.MostDetailedMip			= InMetaData.ShaderResourceViewTextureCubeArray.MostDetailedMip;
+				D3D12ShaderResourceViewDesc.TextureCubeArray.MipLevels					= InMetaData.ShaderResourceViewTextureCubeArray.MipLevels;
+				D3D12ShaderResourceViewDesc.TextureCubeArray.First2DArrayFace			= InMetaData.ShaderResourceViewTextureCubeArray.First2DArrayFace;
+				D3D12ShaderResourceViewDesc.TextureCubeArray.NumCubes					= InMetaData.ShaderResourceViewTextureCubeArray.NumCubes;
+				D3D12ShaderResourceViewDesc.TextureCubeArray.ResourceMinLODClamp		= InMetaData.ShaderResourceViewTextureCubeArray.ResourceMinLODClamp;
+				break;
+			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_RAYTRACING_ACCELERATION_STRUCTURE:
+				D3D12ShaderResourceViewDesc.RaytracingAccelerationStructure.Location	= InD3D12Resource->GetGPUVirtualAddress();
 				break;
 			default:
 			case ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN:
@@ -270,7 +276,7 @@ namespace Eternal
 			_D3D12Handle = static_cast<D3D12GraphicsContext&>(InViewCreateInformation.Context).AllocateShaderResourceViewDescriptor();
 
 			InD3DDevice->CreateShaderResourceView(
-				static_cast<D3D12Resource&>(GetResource()).GetD3D12Resource(),
+				InViewCreateInformation.ResourceViewShaderResourceType != ViewShaderResourceType::VIEW_SHADER_RESOURCE_RAYTRACING_ACCELERATION_STRUCTURE ? InD3D12Resource : nullptr,
 				&D3D12ShaderResourceViewDesc,
 				_D3D12Handle.D3D12CPUDescriptorHandle
 			);

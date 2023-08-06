@@ -18,6 +18,8 @@ namespace Eternal
 		class GraphicsContext;
 		class RootSignature;
 		class Viewport;
+		class AccelerationStructure;
+		class ShaderTable;
 
 		enum class CommandListState
 		{
@@ -70,6 +72,10 @@ namespace Eternal
 			virtual void Dispatch(_In_ uint32_t InX = 1, _In_ uint32_t InY = 1, _In_ uint32_t InZ = 1);
 
 			virtual void DispatchMesh(_In_ uint32_t InTaskBatchesCount = 1) = 0;
+
+			virtual void SetRayTracingPipeline(_In_ const Pipeline& InPipeline) = 0;
+			virtual void DispatchRays(_In_ const ShaderTable& InShaderTable, _In_ uint32_t InX = 1, _In_ uint32_t InY = 1) = 0;
+			virtual void BuildRaytracingAccelerationStructure(_In_ GraphicsContext& InContext, _In_ AccelerationStructure& InAccelerationStructure) = 0;
 
 			virtual void CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion) = 0;
 

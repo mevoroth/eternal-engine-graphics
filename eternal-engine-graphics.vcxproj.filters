@@ -298,6 +298,12 @@
     <ClInclude Include="include\Tools\PipelineDependency.hpp">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\AccelerationStructure.hpp" />
+    <ClInclude Include="include\d3d12\D3D12AccelerationStructure.hpp" />
+    <ClInclude Include="include\Graphics\AccelerationStructureFactory.hpp" />
+    <ClInclude Include="include\Graphics\ShaderTable.hpp" />
+    <ClInclude Include="include\d3d12\D3D12ShaderTable.hpp" />
+    <ClInclude Include="include\Graphics\ShaderTableFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -534,6 +540,11 @@
     <ClCompile Include="src\Tools\PipelineDependency.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\AccelerationStructure.cpp" />
+    <ClCompile Include="src\d3d12\D3D12AccelerationStructure.cpp" />
+    <ClCompile Include="src\Graphics\AccelerationStructureFactory.cpp" />
+    <ClCompile Include="src\d3d12\D3D12ShaderTable.cpp" />
+    <ClCompile Include="src\Graphics\ShaderTableFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

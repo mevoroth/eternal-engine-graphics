@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\d3d12\D3D12AccelerationStructure.hpp" />
     <ClInclude Include="include\d3d12\D3D12CommandAllocator.hpp" />
     <ClInclude Include="include\d3d12\D3D12CommandList.hpp" />
     <ClInclude Include="include\d3d12\D3D12CommandQueue.hpp" />
@@ -25,10 +26,13 @@
     <ClInclude Include="include\d3d12\D3D12RootSignature.hpp" />
     <ClInclude Include="include\d3d12\D3D12Sampler.hpp" />
     <ClInclude Include="include\d3d12\D3D12Shader.hpp" />
+    <ClInclude Include="include\d3d12\D3D12ShaderTable.hpp" />
     <ClInclude Include="include\d3d12\D3D12SwapChain.hpp" />
     <ClInclude Include="include\d3d12\D3D12Utils.hpp" />
     <ClInclude Include="include\d3d12\D3D12View.hpp" />
     <ClInclude Include="include\GraphicsSettings.hpp" />
+    <ClInclude Include="include\Graphics\AccelerationStructure.hpp" />
+    <ClInclude Include="include\Graphics\AccelerationStructureFactory.hpp" />
     <ClInclude Include="include\Graphics\BlendState.hpp" />
     <ClInclude Include="include\Graphics\CommandAllocator.hpp" />
     <ClInclude Include="include\Graphics\CommandAllocatorFactory.hpp" />
@@ -66,6 +70,8 @@
     <ClInclude Include="include\Graphics\SamplerFactory.hpp" />
     <ClInclude Include="include\Graphics\Shader.hpp" />
     <ClInclude Include="include\Graphics\ShaderFactory.hpp" />
+    <ClInclude Include="include\Graphics\ShaderTable.hpp" />
+    <ClInclude Include="include\Graphics\ShaderTableFactory.hpp" />
     <ClInclude Include="include\Graphics\ShaderType.hpp" />
     <ClInclude Include="include\Graphics\StencilTest.hpp" />
     <ClInclude Include="include\Graphics\StructuredBuffer.hpp" />
@@ -105,6 +111,7 @@
     <ClInclude Include="include\Window\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\d3d12\D3D12AccelerationStructure.cpp" />
     <ClCompile Include="src\d3d12\D3D12CommandAllocator.cpp" />
     <ClCompile Include="src\d3d12\D3D12CommandList.cpp" />
     <ClCompile Include="src\d3d12\D3D12CommandQueue.cpp" />
@@ -119,9 +126,12 @@
     <ClCompile Include="src\d3d12\D3D12RootSignature.cpp" />
     <ClCompile Include="src\d3d12\D3D12Sampler.cpp" />
     <ClCompile Include="src\d3d12\D3D12Shader.cpp" />
+    <ClCompile Include="src\d3d12\D3D12ShaderTable.cpp" />
     <ClCompile Include="src\d3d12\D3D12SwapChain.cpp" />
     <ClCompile Include="src\d3d12\D3D12Utils.cpp" />
     <ClCompile Include="src\d3d12\D3D12View.cpp" />
+    <ClCompile Include="src\Graphics\AccelerationStructure.cpp" />
+    <ClCompile Include="src\Graphics\AccelerationStructureFactory.cpp" />
     <ClCompile Include="src\Graphics\BlendState.cpp" />
     <ClCompile Include="src\Graphics\CommandAllocatorFactory.cpp" />
     <ClCompile Include="src\Graphics\CommandList.cpp" />
@@ -151,6 +161,7 @@
     <ClCompile Include="src\Graphics\SamplerFactory.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\ShaderFactory.cpp" />
+    <ClCompile Include="src\Graphics\ShaderTableFactory.cpp" />
     <ClCompile Include="src\Graphics\ShaderType.cpp" />
     <ClCompile Include="src\Graphics\StencilTest.cpp" />
     <ClCompile Include="src\Graphics\SwapChain.cpp" />

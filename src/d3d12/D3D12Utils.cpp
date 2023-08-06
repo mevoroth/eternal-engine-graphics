@@ -107,6 +107,7 @@ namespace Eternal
 			D3D12_ROOT_PARAMETER_TYPE_CBV,
 			D3D12_ROOT_PARAMETER_TYPE_SRV,
 			D3D12_ROOT_PARAMETER_TYPE_UAV,
+			D3D12_ROOT_PARAMETER_TYPE_SRV,
 			D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_ROOT_PARAMETER_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d12 root parameter types");
@@ -121,9 +122,10 @@ namespace Eternal
 			D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
 			D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
 			D3D12_DESCRIPTOR_RANGE_TYPE_UAV,
+			D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
 			D3D12_DESCRIPTOR_RANGE_TYPE(~0) // Invalid to have descriptor table within descriptor table
 		};
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_DESCRIPTOR_RANGE_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d121 descriptor ranges types");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_DESCRIPTOR_RANGE_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d12 descriptor ranges types");
 
 		static constexpr D3D12_PRIMITIVE_TOPOLOGY_TYPE D3D12_PRIMITIVE_TOPOLOGY_TYPES[] =
 		{
@@ -341,10 +343,10 @@ namespace Eternal
 
 			D3D12_SHADER_VISIBILITY ConvertRootSignatureAccessToD3D12ShaderVisibility(_In_ const RootSignatureAccess& InRootSignatureAccess)
 			{
-				if (InRootSignatureAccess == RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS)
+				if (InRootSignatureAccess == RootSignatureAccess::ROOT_SIGNATURE_ACCESS_COMPUTE_RAYTRACING)
 					return D3D12_SHADER_VISIBILITY_ALL;
 
-				if (InRootSignatureAccess < RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS)
+				if (InRootSignatureAccess < RootSignatureAccess::ROOT_SIGNATURE_ACCESS_COMPUTE_RAYTRACING)
 					return static_cast<D3D12_SHADER_VISIBILITY>(static_cast<int32_t>(InRootSignatureAccess) + 1);
 
 				return static_cast<D3D12_SHADER_VISIBILITY>(static_cast<int32_t>(InRootSignatureAccess) + 2);
@@ -431,16 +433,17 @@ namespace Eternal
 					States |= D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
 
 				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_INDEX_READ);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_INDIRECT)				<< 9);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_READ)			<< 1);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_WRITE)			>> 1);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & ShaderReadState)									<< 2);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_SHADER_WRITE)			>> 3);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_RENDER_TARGET)		>> 5);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_DEPTH_STENCIL_READ)	>> 3);
-				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_DEPTH_STENCIL_WRITE)	>> 5);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_INDIRECT)								<< 9);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_READ)							<< 1);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_COPY_WRITE)							>> 1);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & ShaderReadState)													<< 2);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_SHADER_WRITE)							>> 3);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_RENDER_TARGET)						>> 5);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_DEPTH_STENCIL_READ)					>> 3);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_DEPTH_STENCIL_WRITE)					>> 5);
 				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_RESOLVE_DESTINATION);
 				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_RESOLVE_SOURCE);
+				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_RAYTRACING_ACCELERATION_STRUCTURE)	<< 4);
 
 				return States;
 			}
@@ -491,17 +494,19 @@ namespace Eternal
 			{
 				D3D12_RESOURCE_FLAGS D3D12ResourceFlags = D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
 
-				static constexpr BufferResourceUsage CopyRead_StructuredBuffer_ConstantBuffer_Buffer	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_READ
-																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER
-																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER
-																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_BUFFER;
+				static constexpr BufferResourceUsage CopyRead_StructuredBuffer_ConstantBuffer_Buffer									= BufferResourceUsage::BUFFER_RESOURCE_USAGE_COPY_READ
+																																		| BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER
+																																		| BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER
+																																		| BufferResourceUsage::BUFFER_RESOURCE_USAGE_BUFFER
+																																		| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RAYTRACING_ACCELERATION_STRUCTURE_BUFFER;
 
-				static constexpr BufferResourceUsage RWStructuredBuffer_RWBuffer_IndirectBuffer			= BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER
-																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_BUFFER
-																										| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER;
+				static constexpr BufferResourceUsage RWStructuredBuffer_RWBuffer_IndirectBuffer_RayTracingAccelerationStructureBuffer	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_STRUCTURED_BUFFER
+																																		| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RW_BUFFER
+																																		| BufferResourceUsage::BUFFER_RESOURCE_USAGE_INDIRECT_BUFFER
+																																		| BufferResourceUsage::BUFFER_RESOURCE_USAGE_RAYTRACING_ACCELERATION_STRUCTURE_BUFFER;
 				
 				D3D12ResourceFlags &= ((InResourceFlags & CopyRead_StructuredBuffer_ConstantBuffer_Buffer) != BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE) ? ~D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE : ~D3D12_RESOURCE_FLAG_NONE;
-				D3D12ResourceFlags |= ((InResourceFlags & RWStructuredBuffer_RWBuffer_IndirectBuffer) != BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE) ? D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS : D3D12_RESOURCE_FLAG_NONE;
+				D3D12ResourceFlags |= ((InResourceFlags & RWStructuredBuffer_RWBuffer_IndirectBuffer_RayTracingAccelerationStructureBuffer) != BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE) ? D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS : D3D12_RESOURCE_FLAG_NONE;
 
 				return D3D12ResourceFlags;
 			}

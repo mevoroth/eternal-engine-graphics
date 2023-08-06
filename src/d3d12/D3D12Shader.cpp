@@ -24,14 +24,6 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		enum class ShaderCompilerType
-		{
-			SHADER_COMPILER_TYPE_FXC = 0,
-			SHADER_COMPILER_TYPE_DXC
-		};
-
-		static constexpr ShaderCompilerType ShaderCompiler = ShaderCompilerType::SHADER_COMPILER_TYPE_FXC;
-
 		static constexpr char* D3D12_SHADER_ENTRIES_FXC[] =
 		{
 			"ShaderVertex",
@@ -41,7 +33,11 @@ namespace Eternal
 			"ShaderPixel",
 			"ShaderCompute",
 			"ShaderMesh",
-			"ShaderAmplification"
+			"ShaderAmplification",
+			"ShaderRayGeneration",
+			"ShaderClosestHit",
+			"ShaderMiss",
+			"ShaderAnyHit"
 		};
 		static constexpr wchar_t* D3D12_SHADER_ENTRIES_DXC[] =
 		{
@@ -52,10 +48,14 @@ namespace Eternal
 			L"ShaderPixel",
 			L"ShaderCompute",
 			L"ShaderMesh",
-			L"ShaderAmplification"
+			L"ShaderAmplification",
+			L"ShaderRayGeneration",
+			L"ShaderClosestHit",
+			L"ShaderMiss",
+			L"ShaderAnyHit"
 		};
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_ENTRIES_FXC) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader entries");
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_ENTRIES_DXC) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader entries");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_ENTRIES_FXC) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader entries");
 
 		static constexpr char* D3D12_SHADER_PROFILES_FXC[] =
 		{
@@ -65,6 +65,10 @@ namespace Eternal
 			"gs_5_1",
 			"ps_5_1",
 			"cs_5_1",
+			"",
+			"",
+			"",
+			"",
 			"",
 			""
 		};
@@ -77,7 +81,11 @@ namespace Eternal
 			L"ps_6_5",
 			L"cs_6_5",
 			L"ms_6_5",
-			L"as_6_5"
+			L"as_6_5",
+			L"lib_6_5",
+			L"lib_6_5",
+			L"lib_6_5",
+			L"lib_6_5"
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_PROFILES_FXC) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader profiles");
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(D3D12_SHADER_PROFILES_DXC) == static_cast<int32_t>(ShaderType::SHADER_TYPE_COUNT), "Mismatch between abstraction and d3d12 shader profiles");
@@ -161,35 +169,21 @@ namespace Eternal
 				_COM_Outptr_result_maybenull_ IDxcBlob** ppIncludeSource  // Resultant source object for included file, nullptr if not found.
 			) override
 			{
-				ETERNAL_BREAK();
-
 				IDxcBlobEncoding* Encoding = nullptr;
 				wstring IncludeSourceUTF8(pFilename);
 				string IncludeSource = std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(IncludeSourceUTF8);
-				string ShaderFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
-				//wstring FullPathSourceUTF8 = wstring(FullPathSource.begin(), FullPathSource.end());
+				string IncludeFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
+				FilePath::NormalizePath(IncludeFullPathSource);
 
-				//HRESULT hr = _DxcUtils->LoadFile(IncludeSourceUTF8.c_str(), nullptr, &Encoding);
-				//*ppIncludeSource = hr == S_OK ? Encoding : nullptr;
-				//ETERNAL_ASSERT(hr == S_OK);
-				
-				ifstream IncludedFile(ShaderFullPathSource.c_str(), ios::in | ios::binary | ios::ate);
-
-				if (!IncludedFile)
+				if (!FileSystem::FileExists(IncludeFullPathSource))
 				{
-					//ETERNAL_BREAK();
 					*ppIncludeSource = nullptr;
 					return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 				}
 
-				UINT Bytes = (UINT)IncludedFile.tellg();
-				char* Data = new char[Bytes];
-				IncludedFile.seekg(0, ios::beg);
-				IncludedFile.read((char*)Data, Bytes);
-				IncludedFile.close();
-				
-				_DxcUtils->CreateBlob(Data, Bytes, 0, &Encoding);
-				delete[] Data;
+				FileContent Content = LoadFileToMemory(IncludeFullPathSource);
+				_DxcUtils->CreateBlob(Content.Content, static_cast<UINT32>(Content.Size), 0, &Encoding);
+				UnloadFileFromMemory(Content);
 
 				*ppIncludeSource = Encoding;
 				return S_OK;
@@ -227,60 +221,48 @@ namespace Eternal
 		{
 			using namespace Eternal::Graphics::D3D12;
 
-			switch (ShaderCompiler)
-			{
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_FXC:
-			{
-				ETERNAL_ASSERT(!_FxcIncludeHandler);
-				_FxcIncludeHandler = new D3D12IncludeFXC(InOutContext);
-			} break;
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_DXC:
-			{
-				VerifySuccess(
-					DxcCreateInstance(
-						CLSID_DxcUtils,
-						__uuidof(IDxcUtils),
-						reinterpret_cast<void**>(&_DxcUtils)
-					)
-				);
+			// FXC
+			ETERNAL_ASSERT(!_FxcIncludeHandler);
+			_FxcIncludeHandler = new D3D12IncludeFXC(InOutContext);
 
-				VerifySuccess(_DxcUtils->CreateDefaultIncludeHandler(&_DxcIncludeHandlerDefault));
+			// DXC
+			VerifySuccess(
+				DxcCreateInstance(
+					CLSID_DxcUtils,
+					__uuidof(IDxcUtils),
+					reinterpret_cast<void**>(&_DxcUtils)
+				)
+			);
 
-				_DxcIncludeHandler = new D3D12IncludeDXC(InOutContext, _DxcUtils, _DxcIncludeHandlerDefault);
+			VerifySuccess(_DxcUtils->CreateDefaultIncludeHandler(&_DxcIncludeHandlerDefault));
 
-				VerifySuccess(
-					DxcCreateInstance(
-						CLSID_DxcCompiler,
-						__uuidof(IDxcCompiler3),
-						reinterpret_cast<void**>(&_DxcCompiler)
-					)
-				);
-			} break;
-			}
+			_DxcIncludeHandler = new D3D12IncludeDXC(InOutContext, _DxcUtils, _DxcIncludeHandlerDefault);
+
+			VerifySuccess(
+				DxcCreateInstance(
+					CLSID_DxcCompiler,
+					__uuidof(IDxcCompiler3),
+					reinterpret_cast<void**>(&_DxcCompiler)
+				)
+			);
 		}
 
 		void D3D12Shader::Destroy()
 		{
-			switch (ShaderCompiler)
-			{
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_FXC:
-			{
-				ETERNAL_ASSERT(_FxcIncludeHandler);
-				delete _FxcIncludeHandler;
-				_FxcIncludeHandler = nullptr;
-			} break;
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_DXC:
-			{
-				delete _DxcIncludeHandler;
-				_DxcIncludeHandler = nullptr;
+			// FXC
+			ETERNAL_ASSERT(_FxcIncludeHandler);
+			delete _FxcIncludeHandler;
+			_FxcIncludeHandler = nullptr;
 
-				_DxcIncludeHandlerDefault->Release();
-				_DxcIncludeHandlerDefault = nullptr;
+			// DXC
+			delete _DxcIncludeHandler;
+			_DxcIncludeHandler = nullptr;
 
-				_DxcUtils->Release();
-				_DxcUtils = nullptr;
-			} break;
-			}
+			_DxcIncludeHandlerDefault->Release();
+			_DxcIncludeHandlerDefault = nullptr;
+
+			_DxcUtils->Release();
+			_DxcUtils = nullptr;
 		}
 
 		D3D12Shader::D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const ShaderCreateInformation& InCreateInformation)
@@ -288,20 +270,12 @@ namespace Eternal
 			, _FxcProgram(nullptr)
 			, _DxcProgram(nullptr)
 		{
-			switch (ShaderCompiler)
-			{
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_FXC:
-			{
-				ETERNAL_ASSERT(_FxcIncludeHandler);
-			} break;
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_DXC:
-			{
-				ETERNAL_ASSERT(_DxcIncludeHandler);
-				ETERNAL_ASSERT(_DxcIncludeHandlerDefault);
-				ETERNAL_ASSERT(_DxcUtils);
-				ETERNAL_ASSERT(_DxcCompiler);
-			} break;
-			}
+			ETERNAL_ASSERT(_FxcIncludeHandler);
+			ETERNAL_ASSERT(_DxcIncludeHandler);
+			ETERNAL_ASSERT(_DxcIncludeHandlerDefault);
+			ETERNAL_ASSERT(_DxcUtils);
+			ETERNAL_ASSERT(_DxcCompiler);
+
 #if ETERNAL_USE_DEBUG_SHADERS
 			_CompileFile(
 				InCreateInformation.FileName,
@@ -317,14 +291,14 @@ namespace Eternal
 		{
 			if (IsShaderCompiled())
 			{
-				switch (ShaderCompiler)
+				switch (GetShaderCreateInformation().D3D12CompilerPreference)
 				{
-				case ShaderCompilerType::SHADER_COMPILER_TYPE_FXC:
+				case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_FXC:
 				{
 					_FxcProgram->Release();
 					_FxcProgram = nullptr;
 				} break;
-				case ShaderCompilerType::SHADER_COMPILER_TYPE_DXC:
+				case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_DXC:
 				{
 					_DxcProgram->Release();
 					_DxcProgram = nullptr;
@@ -347,9 +321,9 @@ namespace Eternal
 			)HLSLINCLUDE";
 			ShaderFileContent += reinterpret_cast<const char*>(ShaderSourceCode.Content);
 
-			switch (ShaderCompiler)
+			switch (GetShaderCreateInformation().D3D12CompilerPreference)
 			{
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_FXC:
+			case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_FXC:
 			{
 				ID3DBlob* Errors = nullptr;
 
@@ -408,7 +382,7 @@ namespace Eternal
 					Errors = nullptr;
 				}
 			} break;
-			case ShaderCompilerType::SHADER_COMPILER_TYPE_DXC:
+			case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_DXC:
 			{
 				ETERNAL_ASSERT(_DxcUtils);
 				ETERNAL_ASSERT(_DxcCompiler);
@@ -495,6 +469,8 @@ namespace Eternal
 					)
 				);
 
+				_DxcIncludeHandler->ClearCurrentShader();
+
 				IDxcBlobUtf8* Errors = nullptr;
 				IDxcBlobUtf8* HLSLBlob = nullptr;
 				IDxcBlobUtf16* OutputName = nullptr;
@@ -520,8 +496,10 @@ namespace Eternal
 				if (Errors && Errors->GetStringLength() > 0)
 				{
 					const char* Error = static_cast<const char*>(Errors->GetBufferPointer());
-					OutputDebugString(Error);
-					ETERNAL_BREAK();
+					LogWrite(LogError, LogShaders, GetFileName());
+					LogWrite(LogError, LogShaders, Error);
+					Errors->Release();
+					Errors = nullptr;
 				}
 
 				CompilationResult->GetOutput(
@@ -530,6 +508,9 @@ namespace Eternal
 					reinterpret_cast<void**>(&_DxcProgram),
 					&OutputName
 				);
+
+				CompilationResult->Release();
+				CompilationResult = nullptr;
 			} break;
 			}
 		}
@@ -555,9 +536,14 @@ namespace Eternal
 
 		void D3D12Shader::GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode)
 		{
-			OutShaderByteCode = ShaderCompiler == ShaderCompilerType::SHADER_COMPILER_TYPE_DXC
+			OutShaderByteCode = GetShaderCreateInformation().D3D12CompilerPreference == D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_DXC
 				? D3D12Shader_GetD3D12Shader(_DxcProgram)
 				: D3D12Shader_GetD3D12Shader(_FxcProgram);
+		}
+
+		const wchar_t* D3D12Shader::GetD3D12StageEntryPoint() const
+		{
+			return D3D12_SHADER_ENTRIES_DXC[static_cast<uint32_t>(GetShaderCreateInformation().Stage)];
 		}
 	}
 }

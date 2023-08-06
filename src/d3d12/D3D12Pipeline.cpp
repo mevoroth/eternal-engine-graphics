@@ -5,6 +5,8 @@
 #include "Graphics/Viewport.hpp"
 #include "Graphics/DepthStencil.hpp"
 #include "Graphics/DepthTest.hpp"
+#include "Graphics/Resource.hpp"
+#include "Graphics/ResourceFactory.hpp"
 #include "Graphics/StencilTest.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12InputLayout.hpp"
@@ -14,6 +16,7 @@
 #include "d3d12/D3D12View.hpp"
 #include "d3d12/D3D12Format.hpp"
 #include "d3d12/D3D12Utils.hpp"
+#include "Math/Math.hpp"
 #include <string>
 
 namespace Eternal
@@ -21,6 +24,66 @@ namespace Eternal
 	namespace Graphics
 	{
 		using namespace Eternal::Graphics::D3D12;
+		
+		namespace GraphicsPrivate
+		{
+			struct D3D12_STATE_SUBOBJECT_STATE_OBJECT_CONFIG : public D3D12_STATE_SUBOBJECT
+			{
+				D3D12_STATE_SUBOBJECT_STATE_OBJECT_CONFIG(_In_ D3D12_STATE_OBJECT_CONFIG& InStateObjectConfig)
+				{
+					Type	= D3D12_STATE_SUBOBJECT_TYPE_STATE_OBJECT_CONFIG;
+					pDesc	= &InStateObjectConfig;
+				}
+			};
+
+			struct D3D12_STATE_SUBOBJECT_RAYTRACING_PIPELINE_CONFIG1 : public D3D12_STATE_SUBOBJECT
+			{
+				D3D12_STATE_SUBOBJECT_RAYTRACING_PIPELINE_CONFIG1(_In_ D3D12_RAYTRACING_PIPELINE_CONFIG1& InRayTracingPipelineConfig1)
+				{
+					Type	= D3D12_STATE_SUBOBJECT_TYPE_RAYTRACING_PIPELINE_CONFIG1;
+					pDesc	= &InRayTracingPipelineConfig1;
+				}
+			};
+
+			struct D3D12_STATE_SUBOBJECT_RAYTRACING_SHADER_CONFIG : public D3D12_STATE_SUBOBJECT
+			{
+				D3D12_STATE_SUBOBJECT_RAYTRACING_SHADER_CONFIG(_In_ D3D12_RAYTRACING_SHADER_CONFIG& InRayTracingShaderConfig)
+				{
+					Type	= D3D12_STATE_SUBOBJECT_TYPE_RAYTRACING_SHADER_CONFIG;
+					pDesc	= &InRayTracingShaderConfig;
+				}
+			};
+
+			struct D3D12_STATE_SUBOBJECT_GLOBAL_ROOT_SIGNATURE : public D3D12_STATE_SUBOBJECT
+			{
+				D3D12_STATE_SUBOBJECT_GLOBAL_ROOT_SIGNATURE(_In_ D3D12_GLOBAL_ROOT_SIGNATURE& InGlobalRootSignature)
+				{
+					Type	= D3D12_STATE_SUBOBJECT_TYPE_GLOBAL_ROOT_SIGNATURE;
+					pDesc	= &InGlobalRootSignature;
+				}
+			};
+
+			struct D3D12_STATE_SUBOBJECT_DXIL_LIBRARY_DESC : public D3D12_STATE_SUBOBJECT
+			{
+				D3D12_STATE_SUBOBJECT_DXIL_LIBRARY_DESC(_In_ D3D12_DXIL_LIBRARY_DESC& InDXILLibraryDescription)
+				{
+					Type	= D3D12_STATE_SUBOBJECT_TYPE_DXIL_LIBRARY;
+					pDesc	= &InDXILLibraryDescription;
+				}
+			};
+			
+			struct D3D12_STATE_SUBOBJECT_HIT_GROUP_DESC : public D3D12_STATE_SUBOBJECT
+			{
+				D3D12_STATE_SUBOBJECT_HIT_GROUP_DESC(_In_ D3D12_HIT_GROUP_DESC& HitGroupDescription)
+				{
+					Type	= D3D12_STATE_SUBOBJECT_TYPE_HIT_GROUP;
+					pDesc	= &HitGroupDescription;
+				}
+			};
+
+			static constexpr uint32_t RayTracingPipelineStateSubObjectsMaxCount	= 16;
+			static constexpr uint32_t RayTracingPipelineDXILLibrariesMaxCount	= 4;
+		}
 
 		template<typename PipelineStateDescriptionType>
 		static bool InitializePipelineStateDescription(_In_ const D3D12Device& InD3D12Device, _In_ const PipelineCreateInformation& InPipelineCreateInformation, _Inout_ PipelineStateDescriptionType& InOutPipelineStateDesc)
@@ -106,6 +169,13 @@ namespace Eternal
 			return true;
 		}
 		
+		static void ConditionalGetD3D12Shader(_In_ Shader* InShader, _Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode)
+		{
+			OutShaderByteCode = {};
+			if (InShader)
+				static_cast<D3D12Shader*>(InShader)->GetD3D12Shader(OutShaderByteCode);
+		}
+
 		D3D12Pipeline::D3D12Pipeline(
 			_Inout_ GraphicsContext& InOutContext,
 			_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
@@ -118,44 +188,41 @@ namespace Eternal
 
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
 
-			D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDesc	= {};
+			D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDescription	= {};
 
-			if (!InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDesc))
+			if (!InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDescription))
 				return;
 
-			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements	= static_cast<D3D12InputLayout*>(InPipelineCreateInformation.PipelineInputLayout)->GetD3D12InputElements();
-			PipelineStateDesc.InputLayout.pInputElementDescs		= InputElements.size() ? InputElements.data() : nullptr;
-			PipelineStateDesc.InputLayout.NumElements				= static_cast<UINT>(InputElements.size());
+			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements		= static_cast<D3D12InputLayout*>(InPipelineCreateInformation.PipelineInputLayout)->GetD3D12InputElements();
+			PipelineStateDescription.InputLayout.pInputElementDescs		= InputElements.size() ? InputElements.data() : nullptr;
+			PipelineStateDescription.InputLayout.NumElements			= static_cast<UINT>(InputElements.size());
 	
-			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderVertex)->GetD3D12Shader(PipelineStateDesc.VS);
-			PipelineStateDesc.GS.pShaderBytecode					= nullptr;
-			PipelineStateDesc.GS.BytecodeLength						= 0;
-			PipelineStateDesc.DS.pShaderBytecode					= nullptr;
-			PipelineStateDesc.DS.BytecodeLength						= 0;
-			PipelineStateDesc.HS.pShaderBytecode					= nullptr;
-			PipelineStateDesc.HS.BytecodeLength						= 0;
+			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderVertex)->GetD3D12Shader(PipelineStateDescription.VS);
+			ConditionalGetD3D12Shader(InPipelineCreateInformation.ShaderGeometry,	PipelineStateDescription.GS);
+			ConditionalGetD3D12Shader(InPipelineCreateInformation.ShaderDomain,		PipelineStateDescription.DS);
+			ConditionalGetD3D12Shader(InPipelineCreateInformation.ShaderHull,		PipelineStateDescription.HS);
 
-			PipelineStateDesc.StreamOutput.pSODeclaration			= nullptr;
-			PipelineStateDesc.StreamOutput.NumEntries				= 0;
-			PipelineStateDesc.StreamOutput.pBufferStrides			= nullptr;
-			PipelineStateDesc.StreamOutput.NumStrides				= 0;
-			PipelineStateDesc.StreamOutput.RasterizedStream			= 0;
+			PipelineStateDescription.StreamOutput.pSODeclaration		= nullptr;
+			PipelineStateDescription.StreamOutput.NumEntries			= 0;
+			PipelineStateDescription.StreamOutput.pBufferStrides		= nullptr;
+			PipelineStateDescription.StreamOutput.NumStrides			= 0;
+			PipelineStateDescription.StreamOutput.RasterizedStream		= 0;
 
-			PipelineStateDesc.IBStripCutValue						= D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
-			PipelineStateDesc.PrimitiveTopologyType					= ConvertPrimitiveTopologyToD3D12PrimitiveTopologyType(InPipelineCreateInformation.PipelinePrimitiveTopology);
+			PipelineStateDescription.IBStripCutValue					= D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
+			PipelineStateDescription.PrimitiveTopologyType				= ConvertPrimitiveTopologyToD3D12PrimitiveTopologyType(InPipelineCreateInformation.PipelinePrimitiveTopology);
 
 			VerifySuccess(
 				InD3DDevice.GetD3D12Device()->CreateGraphicsPipelineState(
-					&PipelineStateDesc,
+					&PipelineStateDescription,
 					__uuidof(ID3D12PipelineState),
-					reinterpret_cast<void**>(&_PipelineState)
+					reinterpret_cast<void**>(&_Pipeline.PipelineState)
 				)
 			);
 
 			std::string PipelineStateName = "Vertex_" + string(InPipelineCreateInformation.ShaderVertex->GetName()) + (InPipelineCreateInformation.ShaderPixel ? " Pixel_" + string(InPipelineCreateInformation.ShaderPixel->GetName()) : "_Only");
 			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
 			VerifySuccess(
-				_PipelineState->SetName(UTF8PipelineStateName.c_str())
+				_Pipeline.PipelineState->SetName(UTF8PipelineStateName.c_str())
 			);
 		}
 
@@ -180,16 +247,16 @@ namespace Eternal
 				InD3DDevice.GetD3D12Device()->CreateComputePipelineState(
 					&PipelineStateDesc,
 					__uuidof(ID3D12PipelineState),
-					reinterpret_cast<void**>(&_PipelineState)
+					reinterpret_cast<void**>(&_Pipeline.PipelineState)
 				)
 			);
 
 			std::string PipelineStateName = "Compute_" + string(InPipelineCreateInformation.ShaderCompute->GetName());
 			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
 			VerifySuccess(
-				_PipelineState->SetName(UTF8PipelineStateName.c_str())
+				_Pipeline.PipelineState->SetName(UTF8PipelineStateName.c_str())
 			);
-			_PipelineState->SetName(UTF8PipelineStateName.c_str());
+			_Pipeline.PipelineState->SetName(UTF8PipelineStateName.c_str());
 		}
 
 		D3D12Pipeline::D3D12Pipeline(
@@ -222,17 +289,128 @@ namespace Eternal
 				InD3DDevice.GetD3D12Device5()->CreatePipelineState(
 					&PipelineStateStreamDesc,
 					__uuidof(ID3D12PipelineState),
-					reinterpret_cast<void**>(&_PipelineState)
+					reinterpret_cast<void**>(&_Pipeline.PipelineState)
 				)
 			);
+		}
+
+		D3D12Pipeline::D3D12Pipeline(
+			_Inout_ GraphicsContext& InOutContext,
+			_In_ const RayTracingPipelineCreateInformation& InPipelineCreateInformation
+		)
+			: Pipeline(InOutContext, InPipelineCreateInformation)
+		{
+			using namespace Eternal::Graphics::GraphicsPrivate;
+
+			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
+
+			ID3D12Device5* InD3D12Device5 = InD3DDevice.GetD3D12Device5();
+
+			D3D12_STATE_OBJECT_CONFIG StateObjectConfig =
+			{
+				D3D12_STATE_OBJECT_FLAG_ALLOW_LOCAL_DEPENDENCIES_ON_EXTERNAL_DEFINITIONS |
+				D3D12_STATE_OBJECT_FLAG_ALLOW_EXTERNAL_DEPENDENCIES_ON_LOCAL_DEFINITIONS |
+				D3D12_STATE_OBJECT_FLAG_ALLOW_STATE_OBJECT_ADDITIONS
+			};
+
+			D3D12_RAYTRACING_PIPELINE_CONFIG1 RayTracingPipelineConfig;
+			RayTracingPipelineConfig.MaxTraceRecursionDepth	= 1;
+			RayTracingPipelineConfig.Flags					= D3D12_RAYTRACING_PIPELINE_FLAG_NONE;
+
+			D3D12_RAYTRACING_SHADER_CONFIG RayTracingShaderConfig;
+			RayTracingShaderConfig.MaxPayloadSizeInBytes	= 16;
+			RayTracingShaderConfig.MaxAttributeSizeInBytes	= 8;
+
+			D3D12_GLOBAL_ROOT_SIGNATURE GlobalRootSignature;
+			GlobalRootSignature.pGlobalRootSignature		= static_cast<D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
+
+			uint32_t DXILLibrariesCount = 0u;
+			D3D12_DXIL_LIBRARY_DESC* DXILLibraryDescriptions	= reinterpret_cast<D3D12_DXIL_LIBRARY_DESC*>(alloca(sizeof(D3D12_DXIL_LIBRARY_DESC) * RayTracingPipelineDXILLibrariesMaxCount));
+			D3D12_EXPORT_DESC* ExportDescriptions				= reinterpret_cast<D3D12_EXPORT_DESC*>(alloca(sizeof(D3D12_EXPORT_DESC) * RayTracingPipelineDXILLibrariesMaxCount));
+
+			auto AddDXILLibrary = [DXILLibraryDescriptions, ExportDescriptions, &DXILLibrariesCount](_In_ Shader* InShader) -> void
+			{
+				if (!InShader)
+					return;
+
+				D3D12_EXPORT_DESC& ExportDescription	= ExportDescriptions[DXILLibrariesCount];
+				ExportDescription						= {};
+				ExportDescription.Name					= static_cast<D3D12Shader*>(InShader)->GetD3D12StageEntryPoint();
+
+				D3D12_DXIL_LIBRARY_DESC& DXILLibraryDescription	= DXILLibraryDescriptions[DXILLibrariesCount++];
+				DXILLibraryDescription							= {};
+				static_cast<D3D12Shader*>(InShader)->GetD3D12Shader(DXILLibraryDescription.DXILLibrary);
+				DXILLibraryDescription.NumExports				= 1;
+				DXILLibraryDescription.pExports					= &ExportDescription;
+			};
+
+			AddDXILLibrary(InPipelineCreateInformation.ShaderRayTracingRayGeneration);
+			AddDXILLibrary(InPipelineCreateInformation.ShaderRayTracingMiss);
+			AddDXILLibrary(InPipelineCreateInformation.ShaderRayTracingClosestHit);
+			AddDXILLibrary(InPipelineCreateInformation.ShaderRayTracingAnyHit);
+
+			D3D12_HIT_GROUP_DESC HitGroupDescription		= {};
+			HitGroupDescription.HitGroupExport				= L"HitGroup";
+			HitGroupDescription.Type						= D3D12_HIT_GROUP_TYPE_TRIANGLES;
+			HitGroupDescription.ClosestHitShaderImport		= InPipelineCreateInformation.ShaderRayTracingClosestHit ? static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderRayTracingClosestHit)->GetD3D12StageEntryPoint() : nullptr;
+			HitGroupDescription.AnyHitShaderImport			= InPipelineCreateInformation.ShaderRayTracingAnyHit ? static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderRayTracingAnyHit)->GetD3D12StageEntryPoint() : nullptr;
+			HitGroupDescription.IntersectionShaderImport	= {};
+
+			uint32_t StateSubObjectsCount = 0u;
+			D3D12_STATE_SUBOBJECT* StateSubObjects = reinterpret_cast<D3D12_STATE_SUBOBJECT*>(alloca(sizeof(D3D12_STATE_SUBOBJECT) * RayTracingPipelineStateSubObjectsMaxCount));
+
+			auto AddStateSubObject = [StateSubObjects, &StateSubObjectsCount](_In_ const D3D12_STATE_SUBOBJECT& InStateSubObject)
+			{
+				StateSubObjects[StateSubObjectsCount++] = InStateSubObject;
+			};
+			AddStateSubObject(D3D12_STATE_SUBOBJECT_STATE_OBJECT_CONFIG(StateObjectConfig));
+			AddStateSubObject(D3D12_STATE_SUBOBJECT_RAYTRACING_PIPELINE_CONFIG1(RayTracingPipelineConfig));
+			AddStateSubObject(D3D12_STATE_SUBOBJECT_RAYTRACING_SHADER_CONFIG(RayTracingShaderConfig));
+			AddStateSubObject(D3D12_STATE_SUBOBJECT_GLOBAL_ROOT_SIGNATURE(GlobalRootSignature));
+			for (uint32_t DXILLibraryIndex = 0; DXILLibraryIndex < DXILLibrariesCount; ++DXILLibraryIndex)
+				AddStateSubObject(D3D12_STATE_SUBOBJECT_DXIL_LIBRARY_DESC(DXILLibraryDescriptions[DXILLibraryIndex]));
+
+			if (InPipelineCreateInformation.ShaderRayTracingClosestHit || InPipelineCreateInformation.ShaderRayTracingAnyHit)
+				AddStateSubObject(D3D12_STATE_SUBOBJECT_HIT_GROUP_DESC(HitGroupDescription));
+
+			D3D12_STATE_OBJECT_DESC StateObjectDescription;
+			StateObjectDescription.Type				= D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE;
+			StateObjectDescription.NumSubobjects	= StateSubObjectsCount;
+			StateObjectDescription.pSubobjects		= StateSubObjects;
+
+			VerifySuccess(
+				InD3D12Device5->CreateStateObject(
+					&StateObjectDescription,
+					__uuidof(ID3D12StateObject),
+					reinterpret_cast<void**>(&_Pipeline.StateObject)
+				)
+			);
+
+			std::string PipelineStateName	= "RayGeneration_" + string(InPipelineCreateInformation.ShaderRayTracingRayGeneration->GetName())
+											+ (InPipelineCreateInformation.ShaderRayTracingClosestHit	? " ClosestHit_" + string(InPipelineCreateInformation.ShaderRayTracingClosestHit->GetName())	: string())
+											+ (InPipelineCreateInformation.ShaderRayTracingMiss			? " Miss_" + string(InPipelineCreateInformation.ShaderRayTracingMiss->GetName())				: string())
+											+ (InPipelineCreateInformation.ShaderRayTracingAnyHit		? " AnyHit_" + string(InPipelineCreateInformation.ShaderRayTracingAnyHit->GetName())			: string());
+			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
+			VerifySuccess(
+				_Pipeline.StateObject->SetName(UTF8PipelineStateName.c_str())
+			);
+			_Pipeline.StateObject->SetName(UTF8PipelineStateName.c_str());
 		}
 
 		D3D12Pipeline::~D3D12Pipeline()
 		{
 			if (IsPipelineCompiled())
 			{
-				_PipelineState->Release();
-				_PipelineState = nullptr;
+				if (IsRayTracingPipeline())
+				{
+					_Pipeline.StateObject->Release();
+					_Pipeline.StateObject = nullptr;
+				}
+				else
+				{
+					_Pipeline.PipelineState->Release();
+					_Pipeline.PipelineState = nullptr;
+				}
 			}
 		}
 
@@ -246,15 +424,24 @@ namespace Eternal
 			if (this != &InPipeline)
 			{
 				Pipeline::operator=(InPipeline);
-				_PipelineState		= InPipeline._PipelineState;
-				_PrimitiveTopology	= InPipeline._PrimitiveTopology;
+				if (IsRayTracingPipeline())
+					_Pipeline.StateObject	= InPipeline._Pipeline.StateObject;
+				else
+					_Pipeline.PipelineState	= InPipeline._Pipeline.PipelineState;
+				_PrimitiveTopology			= InPipeline._PrimitiveTopology;
 			}
 			return *this;
 		}
 
 		bool D3D12Pipeline::IsPipelineCompiled() const
 		{
-			return _PipelineState;
+			return IsRayTracingPipeline() ? !!_Pipeline.StateObject : !!_Pipeline.PipelineState;
+		}
+
+		bool D3D12Pipeline::IsRayTracingPipeline() const
+		{
+			return GetPipelineCreateInformation().PipelineShaderTypes != ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE
+				&& (GetPipelineCreateInformation().PipelineShaderTypes & ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_ALL) != ShaderTypeFlags::SHADER_TYPE_FLAGS_NONE;
 		}
 	}
 }

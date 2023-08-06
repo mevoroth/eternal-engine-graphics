@@ -71,20 +71,24 @@ namespace Eternal
 			PipelineCreateInformation& operator=(_In_ const PipelineCreateInformation& InPipelineCreateInformation);
 
 			RootSignature&		PipelineRootSignature;
-			InputLayout*		PipelineInputLayout			= nullptr;
-			RenderPass*			PipelineRenderPass			= nullptr;
-			Shader*				ShaderVertex				= nullptr;
-			Shader*				ShaderHull					= nullptr;
-			Shader*				ShaderDomain				= nullptr;
-			Shader*				ShaderGeometry				= nullptr;
-			Shader*				ShaderPixel					= nullptr;
-			Shader*				ShaderCompute				= nullptr;
-			Shader*				ShaderMesh					= nullptr;
-			Shader*				ShaderAmplification			= nullptr;
+			InputLayout*		PipelineInputLayout				= nullptr;
+			RenderPass*			PipelineRenderPass				= nullptr;
+			Shader*				ShaderVertex					= nullptr;
+			Shader*				ShaderHull						= nullptr;
+			Shader*				ShaderDomain					= nullptr;
+			Shader*				ShaderGeometry					= nullptr;
+			Shader*				ShaderPixel						= nullptr;
+			Shader*				ShaderCompute					= nullptr;
+			Shader*				ShaderMesh						= nullptr;
+			Shader*				ShaderAmplification				= nullptr;
+			Shader*				ShaderRayTracingRayGeneration	= nullptr;
+			Shader*				ShaderRayTracingClosestHit		= nullptr;
+			Shader*				ShaderRayTracingMiss			= nullptr;
+			Shader*				ShaderRayTracingAnyHit			= nullptr;
 			Rasterizer			PipelineRasterizer;
 			DepthStencil		PipelineDepthStencil;
-			PrimitiveTopology	PipelinePrimitiveTopology	= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-			ShaderTypeFlags		PipelineShaderTypes			= ShaderTypeFlags::SHADER_TYPE_FLAGS_UNDEFINED;
+			PrimitiveTopology	PipelinePrimitiveTopology		= PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+			ShaderTypeFlags		PipelineShaderTypes				= ShaderTypeFlags::SHADER_TYPE_FLAGS_UNDEFINED;
 
 			bool IsPipelineRecreated() const { return PipelineRecreated; }
 
@@ -123,6 +127,14 @@ namespace Eternal
 				_In_ Shader* InPixel,
 				_In_ const DepthStencil& InDepthStencil = Graphics::DepthStencilNoneNone,
 				_In_ const Rasterizer& InRasterizer = RasterizerDefault
+			);
+
+			PipelineCreateInformation(
+				_In_ RootSignature& InGlobalRootSignature,
+				_In_ Shader* InRayTracingRayGeneration,
+				_In_ Shader* InRayTracingClosestHit,
+				_In_ Shader* InRayTracingMiss,
+				_In_ Shader* InRayTracingHit
 			);
 
 			bool PipelineRecreated = false;
@@ -180,7 +192,13 @@ namespace Eternal
 
 		struct RayTracingPipelineCreateInformation : public PipelineCreateInformation
 		{
-
+			RayTracingPipelineCreateInformation(
+				_In_ RootSignature& InGlobalRootSignature,
+				_In_ Shader* InRayTracingRayGeneration,
+				_In_ Shader* InRayTracingClosestHit,
+				_In_ Shader* InRayTracingMiss,
+				_In_ Shader* InRayTracingAnyHit = nullptr
+			);
 		};
 
 		class Pipeline

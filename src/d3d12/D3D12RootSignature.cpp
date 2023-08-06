@@ -18,12 +18,12 @@ namespace Eternal
 	{
 		static void AllowStage(_Inout_ D3D12_ROOT_SIGNATURE_FLAGS& InOutFlags, _In_ const RootSignatureAccess& InAccess)
 		{
-			if (InAccess == RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS)
+			if (InAccess == RootSignatureAccess::ROOT_SIGNATURE_ACCESS_COMPUTE_RAYTRACING)
 				return;
 
 			ETERNAL_ASSERT(InAccess != RootSignatureAccess::ROOT_SIGNATURE_ACCESS_INVALID);
 			uint32_t InAccessInt = static_cast<uint32_t>(InAccess);
-			if (InAccessInt < static_cast<uint32_t>(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_CS))
+			if (InAccessInt < static_cast<uint32_t>(RootSignatureAccess::ROOT_SIGNATURE_ACCESS_COMPUTE_RAYTRACING))
 				InOutFlags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (InAccessInt + 1));
 			else
 				InOutFlags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (InAccessInt + 2));
@@ -71,8 +71,17 @@ namespace Eternal
 				)
 			);
 
-			RootSignatureBlob->Release();
-			ErrorBlob->Release();
+			if (RootSignatureBlob)
+			{
+				RootSignatureBlob->Release();
+				RootSignatureBlob = nullptr;
+			}
+
+			if (ErrorBlob)
+			{
+				ErrorBlob->Release();
+				ErrorBlob = nullptr;
+			}
 		}
 
 		D3D12RootSignature::D3D12RootSignature(_In_ Device& InDevice, _In_ const RootSignatureCreateInformation& InRootSignatureCreateInformation)

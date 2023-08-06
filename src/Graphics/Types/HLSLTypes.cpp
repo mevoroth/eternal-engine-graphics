@@ -16,6 +16,7 @@ namespace Eternal
 			HLSLRegisterType::HLSL_REGISTER_TYPE_CBV,
 			HLSLRegisterType::HLSL_REGISTER_TYPE_SRV,
 			HLSLRegisterType::HLSL_REGISTER_TYPE_UAV,
+			HLSLRegisterType::HLSL_REGISTER_TYPE_SRV,
 			HLSLRegisterType::HLSL_REGISTER_TYPE_INVALID
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(HLSL_REGISTER_TYPES) == static_cast<int32_t>(RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_COUNT), "Mismatch between abstraction and d3d12 register types");

@@ -174,7 +174,7 @@ namespace Eternal
 				InRasterizer
 			)
 		{
-			PipelineShaderTypes = ShaderTypeFlags::SHADER_TYPE_MESH_AMPLIFICATION_PIXEL;
+			PipelineShaderTypes = ShaderTypeFlags::SHADER_TYPE_FLAGS_MESH_AMPLIFICATION_PIXEL;
 		}
 
 		//MeshPipelineCreateInformation::MeshPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
@@ -183,6 +183,53 @@ namespace Eternal
 		//	ETERNAL_BREAK(); // Not implemented
 		//	PipelineRecreate = true;
 		//}
+
+		//////////////////////////////////////////////////////////////////////////
+		// RayTracing
+		PipelineCreateInformation::PipelineCreateInformation(
+			_In_ RootSignature& InGlobalRootSignature,
+			_In_ Shader* InRayTracingRayGeneration,
+			_In_ Shader* InRayTracingClosestHit,
+			_In_ Shader* InRayTracingMiss,
+			_In_ Shader* InRayTracingAnyHit
+		)
+			: PipelineRootSignature(InGlobalRootSignature)
+			, ShaderRayTracingRayGeneration(InRayTracingRayGeneration)
+			, ShaderRayTracingClosestHit(InRayTracingClosestHit)
+			, ShaderRayTracingMiss(InRayTracingMiss)
+			, ShaderRayTracingAnyHit(InRayTracingAnyHit)
+		{
+		}
+
+		RayTracingPipelineCreateInformation::RayTracingPipelineCreateInformation(
+			_In_ RootSignature& InGlobalRootSignature,
+			_In_ Shader* InRayTracingRayGeneration,
+			_In_ Shader* InRayTracingClosestHit,
+			_In_ Shader* InRayTracingMiss,
+			_In_ Shader* InRayTracingAnyHit
+		)
+			: PipelineCreateInformation(
+				InGlobalRootSignature,
+				InRayTracingRayGeneration,
+				InRayTracingClosestHit,
+				InRayTracingMiss,
+				InRayTracingAnyHit
+			)
+		{
+			PipelineShaderTypes = ShaderTypeFlags::SHADER_TYPE_FLAGS_NONE;
+
+			if (InRayTracingRayGeneration)
+				PipelineShaderTypes |= ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_RAY_GENERATION;
+
+			if (InRayTracingClosestHit)
+				PipelineShaderTypes |= ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_CLOSEST_HIT;
+
+			if (InRayTracingMiss)
+				PipelineShaderTypes |= ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_MISS;
+
+			if (InRayTracingAnyHit)
+				PipelineShaderTypes |= ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_ANY_HIT;
+		}
 
 		//////////////////////////////////////////////////////////////////////////
 		// PipelineCreateInformation
@@ -198,6 +245,10 @@ namespace Eternal
 			, ShaderCompute(InPipelineCreateInformation.ShaderCompute)
 			, ShaderMesh(InPipelineCreateInformation.ShaderMesh)
 			, ShaderAmplification(InPipelineCreateInformation.ShaderAmplification)
+			, ShaderRayTracingRayGeneration(InPipelineCreateInformation.ShaderRayTracingRayGeneration)
+			, ShaderRayTracingClosestHit(InPipelineCreateInformation.ShaderRayTracingClosestHit)
+			, ShaderRayTracingMiss(InPipelineCreateInformation.ShaderRayTracingMiss)
+			, ShaderRayTracingAnyHit(InPipelineCreateInformation.ShaderRayTracingAnyHit)
 			, PipelineRasterizer(InPipelineCreateInformation.PipelineRasterizer)
 			, PipelineDepthStencil(InPipelineCreateInformation.PipelineDepthStencil)
 			, PipelinePrimitiveTopology(InPipelineCreateInformation.PipelinePrimitiveTopology)
@@ -251,6 +302,18 @@ namespace Eternal
 
 			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_AMPLIFICATION) == ShaderTypeFlags::SHADER_TYPE_FLAGS_AMPLIFICATION && InPipelineCreateInformation.ShaderAmplification)
 				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderAmplification);
+
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_RAY_GENERATION) == ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_RAY_GENERATION && InPipelineCreateInformation.ShaderRayTracingRayGeneration)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderRayTracingRayGeneration);
+
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_CLOSEST_HIT) == ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_CLOSEST_HIT && InPipelineCreateInformation.ShaderRayTracingClosestHit)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderRayTracingClosestHit);
+
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_MISS) == ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_MISS && InPipelineCreateInformation.ShaderRayTracingMiss)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderRayTracingMiss);
+
+			if ((GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_ANY_HIT) == ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_ANY_HIT && InPipelineCreateInformation.ShaderRayTracingAnyHit)
+				InOutContext.GetPipelineDependency().RegisterPipelineDependency(this, InPipelineCreateInformation.ShaderRayTracingAnyHit);
 		}
 
 		Pipeline& Pipeline::operator=(_In_ const Pipeline& InPipeline)

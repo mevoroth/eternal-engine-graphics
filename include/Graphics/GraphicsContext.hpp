@@ -85,10 +85,12 @@ namespace Eternal
 				256,
 				256
 			};
+			static constexpr uint32_t GraphicsCommandBudgetPerFrame = 4;
+			static constexpr uint32_t ScratchAccelerationStructureBufferSize = 256 * 1024 * 1024;
 
 			virtual ~GraphicsContext();
 
-			void Initialize();
+			void InitializeGraphicsContext();
 
 			void BeginFrame();
 			void EndFrame();
@@ -104,6 +106,7 @@ namespace Eternal
 			Sampler* GetPointClampSampler() { return _PointClampSampler; }
 			Sampler* GetBilinearClampSampler() { return _BilinearClampSampler; }
 			Sampler* GetBilinearWrapSampler() { return _BilinearWrapSampler; }
+			Resource* GetScratchAccelerationStructureBuffer() { return _ScratchAccelerationStructureBuffer; }
 
 			CommandQueue& GetGraphicsQueue();
 			CommandQueue& GetComputeQueue() { return *_ComputeQueue; }
@@ -154,28 +157,31 @@ namespace Eternal
 			array<vector<Resource*>, FrameBufferingCount>							_ResourcesToClear;
 			array<vector<Pipeline*>, FrameBufferingCount>							_PipelinesToClear;
 
-			vector<GraphicsCommand*>*												_GraphicsCommands = nullptr;
+			vector<GraphicsCommand*>*												_NewGraphicsCommands = nullptr;
+			vector<GraphicsCommand*>												_GraphicsCommands;
 
 			Window _Window;
 			PipelineDependency _PipelineDependency;
 			ResolvedPipelineDependency _PipelineRecompile;
-			Device* _Device							= nullptr;
-			SwapChain* _SwapChain					= nullptr;
+			Device* _Device									= nullptr;
+			SwapChain* _SwapChain							= nullptr;
 
-			CommandQueue* _GraphicsQueue			= nullptr;
-			CommandQueue* _ComputeQueue				= nullptr;
-			CommandQueue* _CopyQueue				= nullptr;
+			CommandQueue* _GraphicsQueue					= nullptr;
+			CommandQueue* _ComputeQueue						= nullptr;
+			CommandQueue* _CopyQueue						= nullptr;
 
-			ShaderFactory* _ShaderFactory			= nullptr;
+			ShaderFactory* _ShaderFactory					= nullptr;
 			
-			Viewport* _MainViewportFullScreen		= nullptr;
-			Viewport* _BackBufferViewportFullScreen	= nullptr;
-			InputLayout* _EmptyInputLayout			= nullptr;
-			Sampler* _PointClampSampler				= nullptr;
-			Sampler* _BilinearClampSampler			= nullptr;
-			Sampler* _BilinearWrapSampler			= nullptr;
+			Viewport* _MainViewportFullScreen				= nullptr;
+			Viewport* _BackBufferViewportFullScreen			= nullptr;
+			InputLayout* _EmptyInputLayout					= nullptr;
+			Sampler* _PointClampSampler						= nullptr;
+			Sampler* _BilinearClampSampler					= nullptr;
+			Sampler* _BilinearWrapSampler					= nullptr;
+			Resource* _ScratchAccelerationStructureBuffer	= nullptr;
 
 			uint32_t _CurrentFrameIndex				= FrameBufferingCount - 1; // During first frame, this will be set correct within range
+			uint32_t _CurrentGraphicsCommandIndex	= 0;
 		};
 
 		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);

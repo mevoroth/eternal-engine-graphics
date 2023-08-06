@@ -38,7 +38,8 @@ namespace Eternal
 			vk::ImageViewType::e2DArray,
 			vk::ImageViewType::e3D,
 			vk::ImageViewType::eCube,
-			vk::ImageViewType::eCubeArray
+			vk::ImageViewType::eCubeArray,
+			vk::ImageViewType(~0)
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_IMAGE_VIEW_TYPES_SHADER_RESOURCES) == static_cast<int32_t>(ViewShaderResourceType::VIEW_SHADER_RESOURCE_COUNT), "Mismatch between abstraction and vulkan image view types");
 

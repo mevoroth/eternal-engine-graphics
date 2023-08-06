@@ -4,16 +4,18 @@
 #include "d3dx12.h"
 #include "Graphics/RenderPass.hpp"
 #include "Graphics/DescriptorTable.hpp"
-#include "d3d12/D3D12Device.hpp"
+#include "d3d12/D3D12AccelerationStructure.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
-#include "d3d12/D3D12View.hpp"
-#include "d3d12/D3D12Utils.hpp"
+#include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12Format.hpp"
-#include "d3d12/D3D12Resource.hpp"
+#include "d3d12/D3D12GraphicsContext.hpp"
 #include "d3d12/D3D12Pipeline.hpp"
+#include "d3d12/D3D12Resource.hpp"
 #include "d3d12/D3D12RootSignature.hpp"
 #include "d3d12/D3D12Sampler.hpp"
-#include "d3d12/D3D12GraphicsContext.hpp"
+#include "d3d12/D3D12ShaderTable.hpp"
+#include "d3d12/D3D12Utils.hpp"
+#include "d3d12/D3D12View.hpp"
 #include "WinPixEventRuntime/pix3.h"
 #include <array>
 #include <string>
@@ -355,8 +357,8 @@ namespace Eternal
 		{
 			ETERNAL_ASSERT(InPipeline.GetShaderTypes() == ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE);
 
-			const D3D12Pipeline& InD3DPipeline = static_cast<const D3D12Pipeline&>(InPipeline);
-			const D3D12RootSignature& InD3DRootSignature = static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
+			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
+			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
 
 			_GraphicCommandList6->SetComputeRootSignature(
 				InD3DRootSignature.GetD3D12RootSignature()
@@ -402,6 +404,50 @@ namespace Eternal
 		void D3D12CommandList::DispatchMesh(_In_ uint32_t InTaskBatchesCount /* = 1 */)
 		{
 			_GraphicCommandList6->DispatchMesh(InTaskBatchesCount, 1, 1);
+		}
+
+		void D3D12CommandList::SetRayTracingPipeline(_In_ const Pipeline& InPipeline)
+		{
+			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
+			ETERNAL_ASSERT(InD3DPipeline.IsRayTracingPipeline());
+			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
+
+			_GraphicCommandList6->SetComputeRootSignature(
+				InD3DRootSignature.GetD3D12RootSignature()
+			);
+			_GraphicCommandList6->SetPipelineState1(
+				InD3DPipeline.GetD3D12StateObject()
+			);
+			SetCurrentRootSignature(&InD3DRootSignature);
+		}
+
+		void D3D12CommandList::DispatchRays(_In_ const ShaderTable& InShaderTable, _In_ uint32_t InX /* = 1 */, _In_ uint32_t InY /* = 1 */)
+		{
+			const D3D12ShaderTable& InD3D12ShaderTable = static_cast<const D3D12ShaderTable&>(InShaderTable);
+
+			D3D12_DISPATCH_RAYS_DESC DispatchRaysDescription	= {};
+			DispatchRaysDescription.RayGenerationShaderRecord	= InD3D12ShaderTable.GetD3D12RayGenerationShaderRecord();
+			DispatchRaysDescription.MissShaderTable				= InD3D12ShaderTable.GetD3D12MissShaderTable();
+			DispatchRaysDescription.HitGroupTable				= InD3D12ShaderTable.GetD3D12HitGroupTable();
+			//DispatchRaysDescription.CallableShaderTable			= {};
+			DispatchRaysDescription.Width						= InX;
+			DispatchRaysDescription.Height						= InY;
+			DispatchRaysDescription.Depth						= 1;
+			_GraphicCommandList6->DispatchRays(&DispatchRaysDescription);
+		}
+
+		void D3D12CommandList::BuildRaytracingAccelerationStructure(_In_ GraphicsContext& InContext, _In_ AccelerationStructure& InAccelerationStructure)
+		{
+			D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_DESC BuildRaytracingAccelerationStructureDescription = {};
+			static_cast<D3D12AccelerationStructure&>(InAccelerationStructure).GetD3D12BuildRaytracingAccelerationStructureInputs(BuildRaytracingAccelerationStructureDescription.Inputs);
+
+			D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO PrebuildInfo;
+			static_cast<D3D12Device&>(InContext.GetDevice()).GetD3D12Device5()->GetRaytracingAccelerationStructurePrebuildInfo(&BuildRaytracingAccelerationStructureDescription.Inputs, &PrebuildInfo);
+			ETERNAL_ASSERT(PrebuildInfo.UpdateScratchDataSizeInBytes < GraphicsContext::ScratchAccelerationStructureBufferSize);
+
+			BuildRaytracingAccelerationStructureDescription.DestAccelerationStructureData		= static_cast<D3D12Resource*>(InAccelerationStructure.GetAccelerationStructure())->GetD3D12Resource()->GetGPUVirtualAddress();
+			BuildRaytracingAccelerationStructureDescription.ScratchAccelerationStructureData	= static_cast<D3D12Resource*>(InContext.GetScratchAccelerationStructureBuffer())->GetD3D12Resource()->GetGPUVirtualAddress();
+			_GraphicCommandList6->BuildRaytracingAccelerationStructure(&BuildRaytracingAccelerationStructureDescription, 0, nullptr);
 		}
 
 		void D3D12CommandList::_CopyResourceToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)

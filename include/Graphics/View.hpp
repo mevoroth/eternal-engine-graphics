@@ -34,6 +34,7 @@ namespace Eternal
 			VIEW_SHADER_RESOURCE_TEXTURE_3D,
 			VIEW_SHADER_RESOURCE_TEXTURE_CUBE,
 			VIEW_SHADER_RESOURCE_TEXTURE_CUBE_ARRAY,
+			VIEW_SHADER_RESOURCE_RAYTRACING_ACCELERATION_STRUCTURE,
 			VIEW_SHADER_RESOURCE_COUNT
 		};
 
@@ -409,6 +410,23 @@ namespace Eternal
 					InViewMetaData,
 					Format::FORMAT_UNKNOWN,
 					ViewShaderResourceType::VIEW_SHADER_RESOURCE_BUFFER
+				)
+			{
+			}
+		};
+
+		struct ShaderResourceViewAccelerationStructureCreateInformation : public ShaderResourceViewCreateInformation
+		{
+			ShaderResourceViewAccelerationStructureCreateInformation(
+				_In_ GraphicsContext& InContext,
+				_In_ Resource* InResource
+			)
+				: ShaderResourceViewCreateInformation(
+					InContext,
+					InResource,
+					ViewMetaData(),
+					Format::FORMAT_UNKNOWN,
+					ViewShaderResourceType::VIEW_SHADER_RESOURCE_RAYTRACING_ACCELERATION_STRUCTURE
 				)
 			{
 			}

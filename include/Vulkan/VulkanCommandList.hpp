@@ -51,6 +51,10 @@ namespace Eternal
 
 			virtual void DispatchMesh(_In_ uint32_t InTaskBatchesCount /* = 1 */) override final;
 
+			virtual void SetRayTracingPipeline(_In_ const Pipeline& InPipeline) override final;
+			virtual void DispatchRays(_In_ const ShaderTable& InShaderTable, _In_ uint32_t InX /* = 1 */, _In_ uint32_t InY /* = 1 */) override final;
+			virtual void BuildRaytracingAccelerationStructure(_In_ GraphicsContext& InContext, _In_ AccelerationStructure& InAccelerationStructure) override final;
+
 			virtual void CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion) override final;
 
 			inline vk::CommandBuffer& GetVulkanCommandBuffer() { return _CommandBuffer; }

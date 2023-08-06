@@ -27,6 +27,11 @@ namespace Eternal
 				_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
 			);
 
+			VulkanPipeline(
+				_Inout_ GraphicsContext& InOutContext,
+				_In_ const RayTracingPipelineCreateInformation& InPipelineCreateInformation
+			);
+
 			inline const vk::Pipeline& GetVulkanPipeline() const { return _Pipeline; }
 			inline vk::Pipeline& GetVulkanPipeline() { return _Pipeline; }
 

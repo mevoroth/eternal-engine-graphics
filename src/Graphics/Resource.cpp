@@ -132,6 +132,12 @@ namespace Eternal
 			return _ResourceCreateInformation.BufferInformation.Stride;
 		}
 
+		uint32_t Resource::GetElementCount() const
+		{
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_BUFFER);
+			return _ResourceCreateInformation.BufferInformation.ElementCount;
+		}
+
 		const Format& Resource::GetFormat() const
 		{
 			return GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE ? _ResourceCreateInformation.TextureInformation.ResourceFormat : _ResourceCreateInformation.BufferInformation.ResourceFormat;

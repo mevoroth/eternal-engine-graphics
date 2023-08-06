@@ -17,9 +17,10 @@
 #include "Graphics/Pipeline.hpp"
 #include "Graphics/PipelineFactory.hpp"
 #include "Graphics/SamplerFactory.hpp"
-#include "Graphics/RenderPassFactory.hpp"
 #include "Graphics/RenderPass.hpp"
+#include "Graphics/RenderPassFactory.hpp"
 #include "Graphics/Resource.hpp"
+#include "Graphics/ResourceFactory.hpp"
 #include "Graphics/Shader.hpp"
 #include "Graphics/ShaderFactory.hpp"
 #include "Graphics/ShaderType.hpp"
@@ -33,6 +34,20 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		namespace GraphicsPrivate
+		{
+			struct GraphicsCommandInitialization final : public GraphicsCommand
+			{
+				virtual void Execute(_In_ GraphicsContext& InContext) override final
+				{
+					//CommandListScope InitializationCommandList = InContext.CreateNewCommandList(CommandType::COMMAND_TYPE_GRAPHICS, "GraphicsCommandInitialization");
+
+					//ResourceTransition TransitionScratchAccelerationStructure(InContext.GetScratchAccelerationStructureBuffer(), TransitionState::TRANSITION_SHADER_WRITE);
+					//InitializationCommandList->Transition(TransitionScratchAccelerationStructure);
+				}
+			};
+		}
+
 		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
 		{
 			GraphicsContext* Context = nullptr;
@@ -53,7 +68,7 @@ namespace Eternal
 				ETERNAL_BREAK();
 			}
 
-			Context->Initialize();
+			Context->InitializeGraphicsContext();
 
 			return Context;
 		}
@@ -91,8 +106,8 @@ namespace Eternal
 				_FrameFences[FrameIndex] = CreateFence(*_Device);
 
 				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_GRAPHICS)]	= CreateCommandAllocator(*_Device, *_GraphicsQueue);
-				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_COMPUTE)]	= CreateCommandAllocator(*_Device, *_ComputeQueue);
-				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_COPY)]	= CreateCommandAllocator(*_Device, *_CopyQueue);
+				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_COMPUTE)]		= CreateCommandAllocator(*_Device, *_ComputeQueue);
+				_CommandAllocators[FrameIndex][static_cast<int32_t>(CommandType::COMMAND_TYPE_COPY)]		= CreateCommandAllocator(*_Device, *_CopyQueue);
 
 				for (int32_t CommandTypeIndex = 0; CommandTypeIndex < static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT); ++CommandTypeIndex)
 					_CommandListPools[FrameIndex][CommandTypeIndex].reserve(CommandListUsage[CommandTypeIndex]);
@@ -103,11 +118,23 @@ namespace Eternal
 
 			_CurrentFrameCommandListIndex.fill(0);
 
-			_ShaderFactory	= new ShaderFactory();
+			_ShaderFactory						= new ShaderFactory();
 			
-			_MainViewportFullScreen			= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
-			_BackBufferViewportFullScreen	= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
-			_EmptyInputLayout				= CreateInputLayout(*this);
+			_MainViewportFullScreen				= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+			_BackBufferViewportFullScreen		= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+			_EmptyInputLayout					= CreateInputLayout(*this);
+
+			_ScratchAccelerationStructureBuffer	= CreateBuffer(
+				BufferResourceCreateInformation(
+					*_Device,
+					"ScratchAccelerationStructureBuffer",
+					AccelerationStructureBufferCreateInformation(ScratchAccelerationStructureBufferSize),
+					ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY,
+					TransitionState::TRANSITION_SHADER_WRITE
+				)
+			);
+
+			_GraphicsCommands.push_back(new GraphicsPrivate::GraphicsCommandInitialization());
 		}
 
 		GraphicsContext::~GraphicsContext()
@@ -118,8 +145,10 @@ namespace Eternal
 			delete _SwapChain;
 			_SwapChain = nullptr;
 
+			DestroySampler(_BilinearWrapSampler);
 			DestroySampler(_BilinearClampSampler);
 			DestroySampler(_PointClampSampler);
+			DestroyResource(_ScratchAccelerationStructureBuffer);
 			DestroyInputLayout(_EmptyInputLayout);
 			DestroyViewport(_BackBufferViewportFullScreen);
 			DestroyViewport(_MainViewportFullScreen);
@@ -159,7 +188,7 @@ namespace Eternal
 			_Device = nullptr;
 		}
 
-		void GraphicsContext::Initialize()
+		void GraphicsContext::InitializeGraphicsContext()
 		{
 			_PointClampSampler = CreateSampler(*this, SamplerCreateInformation(
 				/*InMINLinear =*/ false,
@@ -278,20 +307,31 @@ namespace Eternal
 
 			{
 				ETERNAL_PROFILER(INFO)("GraphicsCommands");
-				if (_GraphicsCommands)
+				if (_NewGraphicsCommands)
 				{
-					for (uint32_t CommandIndex = 0, CommandCount = static_cast<uint32_t>(_GraphicsCommands->size()); CommandIndex < CommandCount; ++CommandIndex)
+					ETERNAL_ASSERT(_NewGraphicsCommands->size() > 0);
+					_GraphicsCommands.insert(_GraphicsCommands.end(), _NewGraphicsCommands->begin(), _NewGraphicsCommands->end());
+					_NewGraphicsCommands->clear();
+					_NewGraphicsCommands = nullptr;
+				}
+
+				for (uint32_t CommandCount = min(static_cast<uint32_t>(_GraphicsCommands.size()), _CurrentGraphicsCommandIndex + GraphicsCommandBudgetPerFrame);
+					_CurrentGraphicsCommandIndex < CommandCount;
+					++_CurrentGraphicsCommandIndex)
+				{
+					_GraphicsCommands[_CurrentGraphicsCommandIndex]->Execute(*this);
+				}
+
+				if (_CurrentGraphicsCommandIndex >= _GraphicsCommands.size())
+				{
+					for (uint32_t CommandIndex = 0; CommandIndex < _GraphicsCommands.size(); ++CommandIndex)
 					{
-						(*_GraphicsCommands)[CommandIndex]->Execute(*this);
+						delete _GraphicsCommands[CommandIndex];
+						_GraphicsCommands[CommandIndex] = nullptr;
 					}
 
-					for (uint32_t CommandIndex = 0, CommandCount = static_cast<uint32_t>(_GraphicsCommands->size()); CommandIndex < CommandCount; ++CommandIndex)
-					{
-						delete (*_GraphicsCommands)[CommandIndex];
-						(*_GraphicsCommands)[CommandIndex] = nullptr;
-					}
-					_GraphicsCommands->clear();
-					_GraphicsCommands = nullptr;
+					_GraphicsCommands.clear();
+					_CurrentGraphicsCommandIndex = 0;
 				}
 			}
 		}
@@ -433,7 +473,7 @@ namespace Eternal
 
 		void GraphicsContext::RegisterGraphicsCommands(_In_ vector<GraphicsCommand *>* InCommands)
 		{
-			_GraphicsCommands = InCommands;
+			_NewGraphicsCommands = InCommands;
 		}
 
 		void GraphicsContext::RegisterPipelineRecompile(_In_ const ResolvedPipelineDependency& InPipelineDependencies)

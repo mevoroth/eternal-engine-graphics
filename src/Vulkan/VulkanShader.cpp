@@ -18,14 +18,18 @@ namespace Eternal
 
 		static constexpr shaderc_shader_kind SHADER_KINDS[] =
 		{
-			shaderc_glsl_vertex_shader,
-			shaderc_glsl_tess_control_shader,
-			shaderc_glsl_tess_evaluation_shader,
-			shaderc_glsl_geometry_shader,
-			shaderc_glsl_fragment_shader,
-			shaderc_glsl_compute_shader,
-			shaderc_glsl_mesh_shader,
-			shaderc_glsl_task_shader
+			shaderc_vertex_shader,
+			shaderc_tess_control_shader,
+			shaderc_tess_evaluation_shader,
+			shaderc_geometry_shader,
+			shaderc_fragment_shader,
+			shaderc_compute_shader,
+			shaderc_mesh_shader,
+			shaderc_task_shader,
+			shaderc_raygen_shader,
+			shaderc_closesthit_shader,
+			shaderc_miss_shader,
+			shaderc_anyhit_shader
 		};
 
 		static const char* SHADER_ENTRY_POINTS[] =
@@ -37,7 +41,11 @@ namespace Eternal
 			"ShaderPixel",
 			"ShaderCompute",
 			"ShaderMesh",
-			"ShaderAmplification"
+			"ShaderAmplification",
+			"ShaderRayGeneration",
+			"ShaderClosestHit",
+			"ShaderMiss",
+			"ShaderAnyHit"
 		};
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_KINDS) == int(ShaderType::SHADER_TYPE_COUNT),		"Shader kinds does not match ShaderType definition.");
 		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == int(ShaderType::SHADER_TYPE_COUNT),	"Shader entry points does not match ShaderType definition.");
