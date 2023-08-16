@@ -29,36 +29,29 @@ namespace Eternal
 				InOutFlags &= ~static_cast<D3D12_ROOT_SIGNATURE_FLAGS>(1 << (InAccessInt + 2));
 		}
 
-		D3D12RootSignature::D3D12RootSignature(_In_ Device& InDevice)
+		D3D12RootSignature::D3D12RootSignature(_In_ Device& InDevice, _In_ bool IsLocalRootSignature)
 		{
 			using namespace Eternal::Graphics::D3D12;
 
-			D3D12_ROOT_SIGNATURE_DESC RootSignatureDesc;
-
-			RootSignatureDesc.NumParameters		= 0;
-			RootSignatureDesc.pParameters		= nullptr;
-			RootSignatureDesc.NumStaticSamplers	= 0;
-			RootSignatureDesc.pStaticSamplers	= nullptr;
-			RootSignatureDesc.Flags				= D3D12_ROOT_SIGNATURE_FLAG_NONE;
+			D3D12_VERSIONED_ROOT_SIGNATURE_DESC RootVersionedSignatureDescription;
+			RootVersionedSignatureDescription.Version						= D3D_ROOT_SIGNATURE_VERSION_1_1;
+			RootVersionedSignatureDescription.Desc_1_1.NumParameters		= 0;
+			RootVersionedSignatureDescription.Desc_1_1.pParameters			= nullptr;
+			RootVersionedSignatureDescription.Desc_1_1.NumStaticSamplers	= 0;
+			RootVersionedSignatureDescription.Desc_1_1.pStaticSamplers		= nullptr;
+			RootVersionedSignatureDescription.Desc_1_1.Flags				= IsLocalRootSignature ? D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE : D3D12_ROOT_SIGNATURE_FLAG_NONE;
 
 			ID3DBlob* RootSignatureBlob	= nullptr;
 			ID3DBlob* ErrorBlob			= nullptr;
 
-			HRESULT hr;
-			VerifySuccess(
-				hr = D3D12SerializeRootSignature(&RootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &RootSignatureBlob, &ErrorBlob)
-			);
+			HRESULT HResult = D3D12SerializeVersionedRootSignature(&RootVersionedSignatureDescription, &RootSignatureBlob, &ErrorBlob);
+			VerifySuccess(HResult);
 
-			if (hr != S_OK)
+			if (HResult != S_OK)
 			{
 				std::string ErrorMessage(static_cast<char*>(ErrorBlob->GetBufferPointer()), ErrorBlob->GetBufferSize());
 				LogWrite(LogError, LogGraphics, ErrorMessage);
 				ETERNAL_BREAK();
-			}
-
-			{
-				std::string RootSignatureContent(static_cast<char*>(RootSignatureBlob->GetBufferPointer()), RootSignatureBlob->GetBufferSize());
-				LogWrite(LogInfo, LogGraphics, RootSignatureContent);
 			}
 
 			VerifySuccess(
@@ -70,6 +63,8 @@ namespace Eternal
 					reinterpret_cast<void**>(&_RootSignature)
 				)
 			);
+
+			VerifySuccess(_RootSignature->SetName(IsLocalRootSignature ? L"EmptyLocalRootSignature" : L"EmptyRootSignature"));
 
 			if (RootSignatureBlob)
 			{
@@ -246,13 +241,13 @@ namespace Eternal
 #endif
 			}
 			
-			D3D12_VERSIONED_ROOT_SIGNATURE_DESC RootVersionedSignatureDesc;
-			RootVersionedSignatureDesc.Version						= D3D_ROOT_SIGNATURE_VERSION_1_1;
-			RootVersionedSignatureDesc.Desc_1_1.NumParameters		= static_cast<UINT>(Parameters.size());
-			RootVersionedSignatureDesc.Desc_1_1.pParameters			= Parameters.data();
-			RootVersionedSignatureDesc.Desc_1_1.NumStaticSamplers	= static_cast<UINT>(StaticSamplers.size());
-			RootVersionedSignatureDesc.Desc_1_1.pStaticSamplers		= StaticSamplers.data();
-			RootVersionedSignatureDesc.Desc_1_1.Flags				= Flags;
+			D3D12_VERSIONED_ROOT_SIGNATURE_DESC RootVersionedSignatureDescription;
+			RootVersionedSignatureDescription.Version						= D3D_ROOT_SIGNATURE_VERSION_1_1;
+			RootVersionedSignatureDescription.Desc_1_1.NumParameters		= static_cast<UINT>(Parameters.size());
+			RootVersionedSignatureDescription.Desc_1_1.pParameters			= Parameters.data();
+			RootVersionedSignatureDescription.Desc_1_1.NumStaticSamplers	= static_cast<UINT>(StaticSamplers.size());
+			RootVersionedSignatureDescription.Desc_1_1.pStaticSamplers		= StaticSamplers.data();
+			RootVersionedSignatureDescription.Desc_1_1.Flags				= Flags;
 
 #if ETERNAL_DEBUG
 			// Check inconsistent root signature (graphics and compute at the same time)
@@ -275,12 +270,10 @@ namespace Eternal
 			ID3DBlob* RootSignatureBlob = nullptr;
 			ID3DBlob* ErrorBlob = nullptr;
 
-			HRESULT hr;
-			VerifySuccess(
-				hr = D3D12SerializeVersionedRootSignature(&RootVersionedSignatureDesc, &RootSignatureBlob, &ErrorBlob)
-			);
+			HRESULT HResult = D3D12SerializeVersionedRootSignature(&RootVersionedSignatureDescription, &RootSignatureBlob, &ErrorBlob);
+			VerifySuccess(HResult);
 
-			if (hr != S_OK)
+			if (HResult != S_OK)
 			{
 				std::string ErrorMessage(static_cast<char*>(ErrorBlob->GetBufferPointer()), ErrorBlob->GetBufferSize());
 				LogWrite(LogError, LogGraphics, ErrorMessage);
