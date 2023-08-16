@@ -10,13 +10,13 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		RootSignature* CreateRootSignature(_In_ GraphicsContext& InContext)
+		RootSignature* CreateRootSignature(_In_ GraphicsContext& InContext, _In_ bool InIsLocalRootSignature)
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
 #ifdef ETERNAL_ENABLE_D3D12
 			case DeviceType::D3D12:
-				return new D3D12RootSignature(InContext.GetDevice());
+				return new D3D12RootSignature(InContext.GetDevice(), InIsLocalRootSignature);
 #endif
 #ifdef ETERNAL_ENABLE_VULKAN
 			case DeviceType::VULKAN:

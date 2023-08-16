@@ -21,6 +21,7 @@
 #include "Graphics/RenderPassFactory.hpp"
 #include "Graphics/Resource.hpp"
 #include "Graphics/ResourceFactory.hpp"
+#include "Graphics/RootSignatureFactory.hpp"
 #include "Graphics/Shader.hpp"
 #include "Graphics/ShaderFactory.hpp"
 #include "Graphics/ShaderType.hpp"
@@ -122,6 +123,8 @@ namespace Eternal
 			
 			_MainViewportFullScreen				= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
 			_BackBufferViewportFullScreen		= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+			_EmptyRootSignature					= CreateRootSignature(*this);
+			_EmptyLocalRootSignature			= CreateRootSignature(*this, /* InIsLocalRootSignature = */ true);
 			_EmptyInputLayout					= CreateInputLayout(*this);
 
 			_ScratchAccelerationStructureBuffer	= CreateBuffer(
@@ -150,6 +153,8 @@ namespace Eternal
 			DestroySampler(_PointClampSampler);
 			DestroyResource(_ScratchAccelerationStructureBuffer);
 			DestroyInputLayout(_EmptyInputLayout);
+			DestroyRootSignature(_EmptyLocalRootSignature);
+			DestroyRootSignature(_EmptyRootSignature);
 			DestroyViewport(_BackBufferViewportFullScreen);
 			DestroyViewport(_MainViewportFullScreen);
 
@@ -442,6 +447,11 @@ namespace Eternal
 		CommandListScope GraphicsContext::CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName)
 		{
 			return CommandListScope(*this, _CreateNewCommandList(InType, InName), InName);
+		}
+
+		CommandList* GraphicsContext::CreateNewCommandListUnsafe(_In_ const CommandType& InType, _In_ const string& InName)
+		{
+			return _CreateNewCommandList(InType, InName);
 		}
 
 		GraphicsCommandListScope GraphicsContext::CreateNewGraphicsCommandList(_In_ const RenderPass& InRenderPass, _In_ const string& InName)

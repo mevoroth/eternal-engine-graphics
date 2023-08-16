@@ -9,7 +9,7 @@ namespace Eternal
 		class RootSignature;
 
 		RootSignature* CreateRootSignature(_In_ GraphicsContext& InContext, _In_ const RootSignatureCreateInformation& InRootSignatureCreateInformation);
-		RootSignature* CreateRootSignature(_In_ GraphicsContext& InContext);
+		RootSignature* CreateRootSignature(_In_ GraphicsContext& InContext, _In_ bool InIsLocalRootSignature = false);
 		void DestroyRootSignature(_Inout_ RootSignature*& InOutRootSignature);
 	}
 }

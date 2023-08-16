@@ -25,6 +25,7 @@ namespace Eternal
 		class ShaderFactory;
 		class Shader;
 		class GraphicsContext;
+		class RootSignature;
 		class InputLayout;
 		class Sampler;
 		class View;
@@ -102,6 +103,8 @@ namespace Eternal
 			SwapChain& GetSwapChain() { return *_SwapChain; }
 			Viewport& GetMainViewport() { return *_MainViewportFullScreen; }
 			Viewport& GetBackBufferViewport() { return *_BackBufferViewportFullScreen; }
+			RootSignature& GetEmptyRootSignature() { return *_EmptyRootSignature; }
+			RootSignature& GetEmptyLocalRootSignature() { return *_EmptyLocalRootSignature; }
 			InputLayout* GetEmptyInputLayout() { return _EmptyInputLayout; }
 			Sampler* GetPointClampSampler() { return _PointClampSampler; }
 			Sampler* GetBilinearClampSampler() { return _BilinearClampSampler; }
@@ -114,6 +117,7 @@ namespace Eternal
 
 			Shader* GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation);
 			CommandListScope CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName);
+			CommandList* CreateNewCommandListUnsafe(_In_ const CommandType& InType, _In_ const string& InName);
 			GraphicsCommandListScope CreateNewGraphicsCommandList(_In_ const RenderPass& InRenderPass, _In_ const string& InName);
 
 			Fence& GetCurrentFrameFence() { return *_FrameFences[GetCurrentFrameIndex()]; }
@@ -174,6 +178,8 @@ namespace Eternal
 			
 			Viewport* _MainViewportFullScreen				= nullptr;
 			Viewport* _BackBufferViewportFullScreen			= nullptr;
+			RootSignature* _EmptyRootSignature				= nullptr;
+			RootSignature* _EmptyLocalRootSignature			= nullptr;
 			InputLayout* _EmptyInputLayout					= nullptr;
 			Sampler* _PointClampSampler						= nullptr;
 			Sampler* _BilinearClampSampler					= nullptr;

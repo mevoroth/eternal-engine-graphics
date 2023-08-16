@@ -39,7 +39,7 @@ namespace Eternal
 		public:
 			static constexpr uint32_t DescriptorRangesMaxCount		= 1024;
 
-			D3D12RootSignature(_In_ Device& InDevice);
+			D3D12RootSignature(_In_ Device& InDevice, _In_ bool IsLocalRootSignature);
 			D3D12RootSignature(_In_ Device& InDevice, _In_ const RootSignatureCreateInformation& InRootSignatureCreateInformation);
 			
 			~D3D12RootSignature();
