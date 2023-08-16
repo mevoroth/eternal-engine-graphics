@@ -9,6 +9,7 @@
 #endif
 
 #if ETERNAL_USE_DEBUG_LAYER
+#include "WinPixEventRuntime/pix3.h"
 #include <dxgidebug.h>
 #define ETERNAL_D3D12_DXGIFLAG_DEBUG	(DXGI_CREATE_FACTORY_DEBUG)
 #else
@@ -25,6 +26,8 @@ namespace Eternal
 		ID3D12Debug3*								D3D12Device::_Debug3									= nullptr;
 		IDXGIInfoQueue*								D3D12Device::_DXGIInfoQueue								= nullptr;
 		IDXGIDebug*									D3D12Device::_DXGIDebug									= nullptr;
+		ID3D12DeviceRemovedExtendedDataSettings*	D3D12Device::_D3D12DeviceRemovedExtendedDataSettings	= nullptr;
+		ID3D12DeviceRemovedExtendedDataSettings1*	D3D12Device::_D3D12DeviceRemovedExtendedDataSettings1	= nullptr;
 #endif
 		bool										D3D12Device::_IsInitialized								= false;
 		IDXGIFactory4*								D3D12Device::_DXGIFactory								= nullptr;
@@ -36,7 +39,12 @@ namespace Eternal
 
 			_IsInitialized = true;
 
-			HRESULT hr = S_OK;
+			HRESULT HResult = S_OK;
+
+#if ETERNAL_USE_DEBUG_LAYER
+			if (LoadPixDLLOnStartup)
+				PIXLoadLatestWinPixGpuCapturerLibrary();
+#endif
 
 			VerifySuccess(
 				CreateDXGIFactory2(ETERNAL_D3D12_DXGIFLAG_DEBUG, __uuidof(IDXGIFactory4), reinterpret_cast<void**>(&_DXGIFactory))
@@ -44,14 +52,17 @@ namespace Eternal
 
 #if ETERNAL_USE_DEBUG_LAYER
 			// Enable the D3D12 debug layer
-			hr = D3D12GetDebugInterface(__uuidof(ID3D12Debug), reinterpret_cast<void**>(&_Debug));
-			if (hr == S_OK)
+			HResult = D3D12GetDebugInterface(__uuidof(ID3D12Debug3), reinterpret_cast<void**>(&_Debug3));
+			if (HResult == S_OK)
 			{
-				_Debug->EnableDebugLayer();
+				_Debug3->EnableDebugLayer();
+				_Debug3->SetEnableGPUBasedValidation(TRUE);
+				_Debug3->SetEnableSynchronizedCommandQueueValidation(TRUE);
+				_Debug3->SetGPUBasedValidationFlags(D3D12_GPU_BASED_VALIDATION_FLAGS_NONE);
 			}
 
 			HMODULE DXGIDebugLib = LoadLibraryEx("dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
-			hr = S_FALSE;
+			
 			if (DXGIDebugLib)
 			{
 				typedef HRESULT(WINAPI * LPDXGIGETDEBUGINTERFACE)(REFIID, void **);
@@ -65,33 +76,48 @@ namespace Eternal
 				VerifySuccess(
 					DXGIGetDebugInterface(__uuidof(IDXGIDebug), reinterpret_cast<void**>(&_DXGIDebug))
 				);
+
+				VerifySuccess(
+					HResult = _DXGIDebug->QueryInterface(__uuidof(IDXGIInfoQueue), reinterpret_cast<void**>(&_DXGIInfoQueue))
+				);
+
+				if (HResult == S_OK)
+				{
+					// Break on category
+					DXGI_DEBUG_ID DebugID = DXGI_DEBUG_ALL;
+					//_DXGIInfoQueue->SetMuteDebugOutput(DebugID, TRUE);
+
+					for (uint32_t CategoryIndex = DXGI_INFO_QUEUE_MESSAGE_CATEGORY_UNKNOWN; CategoryIndex < DXGI_INFO_QUEUE_MESSAGE_CATEGORY_SHADER; ++CategoryIndex)
+					{
+						HResult = _DXGIInfoQueue->SetBreakOnCategory(DebugID, (DXGI_INFO_QUEUE_MESSAGE_CATEGORY)CategoryIndex, TRUE);
+						ETERNAL_ASSERT(HResult == S_OK);
+					}
+
+					for (uint32_t SeverityIndex = DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION; SeverityIndex <= DXGI_INFO_QUEUE_MESSAGE_SEVERITY_WARNING; ++SeverityIndex)
+					{
+						HResult = _DXGIInfoQueue->SetBreakOnSeverity(DebugID, (DXGI_INFO_QUEUE_MESSAGE_SEVERITY)SeverityIndex, TRUE);
+						ETERNAL_ASSERT(HResult == S_OK);
+					}
+
+					//for (uint32_t MessageId = D3D12_MESSAGE_ID_UNKNOWN; MessageId <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageId)
+					//{
+					//	hr = _DXGIInfoQueue->SetBreakOnID(DebugID, (DXGI_INFO_QUEUE_MESSAGE_ID)MessageId, TRUE);
+					//	ETERNAL_ASSERT(hr == S_OK);
+					//}
+				}
 			}
 
-			//if (hr == S_OK)
-			//{
-			//	// Break on category
-			//	DXGI_DEBUG_ID DebugID = DXGI_DEBUG_ALL;
-			//	//_DXGIInfoQueue->SetMuteDebugOutput(DebugID, TRUE);
-			//	
-			//	for (uint32_t CategoryIndex = DXGI_INFO_QUEUE_MESSAGE_CATEGORY_UNKNOWN; CategoryIndex < DXGI_INFO_QUEUE_MESSAGE_CATEGORY_SHADER; ++CategoryIndex)
-			//	{
-			//		hr = _DXGIInfoQueue->SetBreakOnCategory(DebugID, (DXGI_INFO_QUEUE_MESSAGE_CATEGORY)CategoryIndex, TRUE);
-			//		ETERNAL_ASSERT(hr == S_OK);
-			//	}
+			HResult = D3D12GetDebugInterface(__uuidof(ID3D12DeviceRemovedExtendedDataSettings), reinterpret_cast<void**>(&_D3D12DeviceRemovedExtendedDataSettings));
+			if (HResult == S_OK)
+				HResult = _D3D12DeviceRemovedExtendedDataSettings->QueryInterface(__uuidof(ID3D12DeviceRemovedExtendedDataSettings1), reinterpret_cast<void**>(&_D3D12DeviceRemovedExtendedDataSettings1));
 
-			//	for (uint32_t SeverityIndex = DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION; SeverityIndex <= DXGI_INFO_QUEUE_MESSAGE_SEVERITY_WARNING; ++SeverityIndex)
-			//	{
-			//		hr = _DXGIInfoQueue->SetBreakOnSeverity(DebugID, (DXGI_INFO_QUEUE_MESSAGE_SEVERITY)SeverityIndex, TRUE);
-			//		ETERNAL_ASSERT(hr == S_OK);
-			//	}
-
-			//	//for (uint32_t MessageId = DXGI_INFO_QUEUE_MESSAGE_ID)
-			//	//for (uint32_t MessageId = D3D12_MESSAGE_ID_UNKNOWN; MessageId <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageId)
-			//	//{
-			//	//	hr = _DXGIInfoQueue->SetBreakOnID(DebugID, (DXGI_INFO_QUEUE_MESSAGE_ID)MessageId, TRUE);
-			//	//	ETERNAL_ASSERT(hr == S_OK);
-			//	//}
-			//}
+			if (_D3D12DeviceRemovedExtendedDataSettings1)
+			{
+				_D3D12DeviceRemovedExtendedDataSettings1->SetAutoBreadcrumbsEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+				_D3D12DeviceRemovedExtendedDataSettings1->SetBreadcrumbContextEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+				_D3D12DeviceRemovedExtendedDataSettings1->SetPageFaultEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+				_D3D12DeviceRemovedExtendedDataSettings1->SetWatsonDumpEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+			}
 #endif
 		}
 
@@ -100,20 +126,29 @@ namespace Eternal
 			if (!_IsInitialized)
 				return;
 
-			_DXGIFactory->Release();
-			_DXGIFactory = nullptr;
-
 #if ETERNAL_USE_DEBUG_LAYER
 			VerifySuccess(
 				_DXGIDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL)
 			);
 
-			_Debug->Release();
-			_Debug = nullptr;
+			_D3D12DeviceRemovedExtendedDataSettings1->Release();
+			_D3D12DeviceRemovedExtendedDataSettings1 = nullptr;
+
+			_D3D12DeviceRemovedExtendedDataSettings->Release();
+			_D3D12DeviceRemovedExtendedDataSettings = nullptr;
+
+			_DXGIInfoQueue->Release();
+			_DXGIInfoQueue = nullptr;
 
 			_DXGIDebug->Release();
 			_DXGIDebug = nullptr;
+
+			_Debug3->Release();
+			_Debug3 = nullptr;
 #endif
+
+			_DXGIFactory->Release();
+			_DXGIFactory = nullptr;
 		}
 
 		IDXGIFactory4* D3D12Device::GetDXGIFactory()
@@ -128,19 +163,22 @@ namespace Eternal
 #endif
 
 			ETERNAL_ASSERT(_DXGIFactory);
-			HRESULT hr = _DXGIFactory->EnumAdapters1(DeviceIndex, &_DXGIAdapter);
+			HRESULT HResult = _DXGIFactory->EnumAdapters1(DeviceIndex, &_DXGIAdapter);
 	
-			if (hr == DXGI_ERROR_NOT_FOUND)
+			if (HResult == DXGI_ERROR_NOT_FOUND)
 			{
 				// No GPU at this index
 				ETERNAL_BREAK();
 				return;
 			}
-	
+
 			VerifySuccess(
-				D3D12CreateDevice(_DXGIAdapter, D3D_FEATURE_LEVEL_12_0, __uuidof(ID3D12Device5), reinterpret_cast<void**>(&_Device5))
+				D3D12CreateDevice(_DXGIAdapter, D3D_FEATURE_LEVEL_12_0, __uuidof(ID3D12Device), reinterpret_cast<void**>(&_Device))
 			);
-			_Device = _Device5;
+			VerifySuccess(
+				_Device->QueryInterface(__uuidof(ID3D12Device5), reinterpret_cast<void**>(&_Device5))
+			);
+			//_Device = _Device5;
 			ETERNAL_ASSERT(_Device);
 
 #if ETERNAL_USE_NVIDIA_AFTERMATH
@@ -153,27 +191,46 @@ namespace Eternal
 				_DXGIAdapter->GetDesc1(&DXGIAdapterDesc1)
 			); // Break here for debug info on device
 
-			//hr = _Device->QueryInterface(__uuidof(ID3D12InfoQueue), reinterpret_cast<void**>(_InfoQueue));
-			//ETERNAL_ASSERT(hr == S_OK);
+			/*VerifySuccess*/(
+				HResult = _Device5->QueryInterface(__uuidof(ID3D12InfoQueue), reinterpret_cast<void**>(&_D3D12InfoQueue))
+			);
+			if (HResult == S_OK)
+			{
+				/*VerifySuccess*/(
+					HResult = _D3D12InfoQueue->QueryInterface(__uuidof(ID3D12InfoQueue1), reinterpret_cast<void**>(&_D3D12InfoQueue1))
+				);
 
-			//// Break on category
-			//for (uint32_t CategoryIndex = D3D12_MESSAGE_CATEGORY_APPLICATION_DEFINED; CategoryIndex <= D3D12_MESSAGE_CATEGORY_SHADER; ++CategoryIndex)
-			//{
-			//	hr = _InfoQueue->SetBreakOnCategory((D3D12_MESSAGE_CATEGORY)CategoryIndex, TRUE);
-			//	ETERNAL_ASSERT(hr == S_OK);
-			//}
+				if (HResult == S_OK)
+				{
+					//DWORD CallBackCookies = 0x0;
+					//VerifySuccess(
+					//	_D3D12InfoQueue1->RegisterMessageCallback(
+					//		D3D12MessageFunctor,
+					//		D3D12_MESSAGE_CALLBACK_FLAG_NONE,
+					//		this,
+					//		&CallBackCookies
+					//	)
+					//);
+				}
+			}
 
-			//for (uint32_t SeverityIndex = D3D12_MESSAGE_SEVERITY_CORRUPTION; SeverityIndex <= D3D12_MESSAGE_SEVERITY_WARNING; ++SeverityIndex)
-			//{
-			//	hr = _InfoQueue->SetBreakOnSeverity((D3D12_MESSAGE_SEVERITY)SeverityIndex, TRUE);
-			//	ETERNAL_ASSERT(hr == S_OK);
-			//}
+			//VerifySuccess(
+			//	_Device->QueryInterface(
+			//		__uuidof(ID3D12DeviceRemovedExtendedData),
+			//		reinterpret_cast<void**>(&_D3D12DeviceRemovedExtendedData)
+			//	)
+			//);
 
-			//for (uint32_t MessageId = D3D12_MESSAGE_ID_UNKNOWN; MessageId <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageId)
-			//{
-			//	hr = _InfoQueue->SetBreakOnID((D3D12_MESSAGE_ID)MessageId, TRUE);
-			//	ETERNAL_ASSERT(hr == S_OK);
-			//}
+			//ID3D12DeviceRemovedExtendedData1* _D3D12DeviceRemovedExtendedData1 = nullptr;
+			//VerifySuccess(
+			//	_D3D12DeviceRemovedExtendedData->QueryInterface(__uuidof(ID3D12DeviceRemovedExtendedData1), reinterpret_cast<void**>(&_D3D12DeviceRemovedExtendedData1))
+			//);
+
+			//D3D12_DRED_AUTO_BREADCRUMBS_OUTPUT1 BreadCrumb1 = {};
+			//VerifySuccess(_D3D12DeviceRemovedExtendedData1->GetAutoBreadcrumbsOutput1(&BreadCrumb1));
+
+			//D3D12_DRED_AUTO_BREADCRUMBS_OUTPUT BreadCrumb = {};
+			//VerifySuccess(_D3D12DeviceRemovedExtendedData1->GetAutoBreadcrumbsOutput(&BreadCrumb));
 #endif
 
 			D3D12_FEATURE_DATA_D3D12_OPTIONS FeatureD3D12Options = {};
@@ -336,8 +393,8 @@ namespace Eternal
 			for (uint32_t FormatType = 0; FormatType < FormatsCount; ++FormatType)
 			{
 				FeatureFormatSupports[FormatType].Format = (DXGI_FORMAT)Formats[FormatType];
-				hr = _Device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &FeatureFormatSupports[FormatType], sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT));
-				ETERNAL_ASSERT(hr == S_OK || hr == E_FAIL);
+				HResult = _Device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &FeatureFormatSupports[FormatType], sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT));
+				ETERNAL_ASSERT(HResult == S_OK || HResult == E_FAIL);
 			}
 
 			const uint32_t SampleCountMaxLog2			= 7;
@@ -356,9 +413,9 @@ namespace Eternal
 						FeatureMultisampleQualityLevels[Key].Format			= (DXGI_FORMAT)Formats[FormatType];
 						FeatureMultisampleQualityLevels[Key].Flags			= (D3D12_MULTISAMPLE_QUALITY_LEVEL_FLAGS)MultisampleQualityFlag;
 						FeatureMultisampleQualityLevels[Key].SampleCount	= 1 << SampleCountLog2;
-						hr = _Device->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &FeatureMultisampleQualityLevels[Key], sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
-						FeatureEnabledMultisampleQualityLevels[Key] = (hr == S_OK);
-						ETERNAL_ASSERT(hr == S_OK || hr == E_FAIL);
+						HResult = _Device->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &FeatureMultisampleQualityLevels[Key], sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
+						FeatureEnabledMultisampleQualityLevels[Key] = (HResult == S_OK);
+						ETERNAL_ASSERT(HResult == S_OK || HResult == E_FAIL);
 					}
 				}
 			}
@@ -394,7 +451,28 @@ namespace Eternal
 
 		D3D12Device::~D3D12Device()
 		{
+#if ETERNAL_USE_DEBUG_LAYER
+			if (_D3D12InfoQueue1)
+			{
+				_D3D12InfoQueue1->Release();
+				_D3D12InfoQueue1 = nullptr;
+			}
+
+			if (_D3D12InfoQueue)
+			{
+				_D3D12InfoQueue->Release();
+				_D3D12InfoQueue = nullptr;
+			}
+#endif
+
+			_Device5->Release();
+			_Device5 = nullptr;
+
 			_Device->Release();
+			_Device = nullptr;
+
+			_DXGIAdapter->Release();
+			_DXGIAdapter = nullptr;
 		}
 
 		uint32_t D3D12Device::GetDeviceMask() const

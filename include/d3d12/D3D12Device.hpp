@@ -13,10 +13,18 @@ struct ID3D12Device;
 struct ID3D12Device5;
 
 #if ETERNAL_USE_DEBUG_LAYER
-struct ID3D12Debug;
+struct ID3D12Debug3;
 struct IDXGIInfoQueue;
 struct ID3D12InfoQueue;
+struct ID3D12InfoQueue1;
 struct IDXGIDebug;
+struct ID3D12DeviceRemovedExtendedDataSettings;
+struct ID3D12DeviceRemovedExtendedDataSettings1;
+struct ID3D12DeviceRemovedExtendedData;
+enum D3D12_MESSAGE_CATEGORY;
+enum D3D12_MESSAGE_SEVERITY;
+enum D3D12_MESSAGE_ID;
+using LPCSTR = const char*;
 #endif
 
 namespace Eternal
@@ -28,6 +36,8 @@ namespace Eternal
 		class D3D12Device final : public Device
 		{
 		public:
+			static constexpr bool LoadPixDLLOnStartup = true;
+
 			static void Initialize();
 			static void Destroy();
 			static IDXGIFactory4* GetDXGIFactory();
@@ -43,13 +53,20 @@ namespace Eternal
 #if ETERNAL_USE_NVIDIA_AFTERMATH
 			inline NVIDIA::NVIDIANsightAftermath& GetNVIDIANsightAftermath() { return _NVIDIANsightAftermath; }
 #endif
+#if ETERNAL_USE_DEBUG_LAYER
+			//inline ID3D12DeviceRemovedExtendedData* GetD3D12DeviceRemovedExtendedData() { return _D3D12DeviceRemovedExtendedData; }
+#endif
 
 		private:
 #if ETERNAL_USE_DEBUG_LAYER
-			static ID3D12Debug*		_Debug;
-			static IDXGIInfoQueue*	_DXGIInfoQueue;
-			static IDXGIDebug*		_DXGIDebug;
-			ID3D12InfoQueue*		_InfoQueue		= nullptr;
+			static ID3D12Debug3*								_Debug3;
+			static IDXGIInfoQueue*								_DXGIInfoQueue;
+			static IDXGIDebug*									_DXGIDebug;
+			static ID3D12DeviceRemovedExtendedDataSettings*		_D3D12DeviceRemovedExtendedDataSettings;
+			static ID3D12DeviceRemovedExtendedDataSettings1*	_D3D12DeviceRemovedExtendedDataSettings1;
+			ID3D12InfoQueue*									_D3D12InfoQueue					= nullptr;
+			ID3D12InfoQueue1*									_D3D12InfoQueue1				= nullptr;
+			//ID3D12DeviceRemovedExtendedData*					_D3D12DeviceRemovedExtendedData	= nullptr;
 #endif
 			static bool											_IsInitialized;
 			static IDXGIFactory4*								_DXGIFactory;

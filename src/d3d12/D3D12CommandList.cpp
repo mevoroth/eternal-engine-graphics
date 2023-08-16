@@ -32,6 +32,7 @@ namespace Eternal
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InDevice);
 			D3D12CommandAllocator& InD3DCommandAllocator = static_cast<D3D12CommandAllocator&>(InCommandAllocator);
 			VerifySuccess(
+				InD3DDevice,
 				InD3DDevice.GetD3D12Device()->CreateCommandList(
 					InD3DDevice.GetDeviceMask(),
 					ConvertCommandTypeToD3D12CommandListType(InD3DCommandAllocator.GetCommandType()),
@@ -84,9 +85,12 @@ namespace Eternal
 
 		void D3D12CommandList::Begin(_In_ GraphicsContext& InContext)
 		{
-			_GraphicCommandList6->Reset(
-				GetD3D12CommandAllocator().GetD3D12CommandAllocator(),
-				nullptr
+			VerifySuccess(
+				InContext.GetDevice(),
+				_GraphicCommandList6->Reset(
+					GetD3D12CommandAllocator().GetD3D12CommandAllocator(),
+					nullptr
+				)
 			);
 
 			D3D12GraphicsContext& InD3DContext = static_cast<D3D12GraphicsContext&>(InContext);
@@ -103,7 +107,10 @@ namespace Eternal
 
 		void D3D12CommandList::End()
 		{
-			_GraphicCommandList6->Close();
+			VerifySuccess(
+				GetDevice(),
+				_GraphicCommandList6->Close()
+			);
 		}
 
 		void D3D12CommandList::BeginRenderPass(_In_ const RenderPass& InRenderPass)

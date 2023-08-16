@@ -77,6 +77,7 @@ namespace Eternal
 			memcpy(ClearValue.Color, GetClearValue(), sizeof(float) * ETERNAL_ARRAYSIZE(ClearValue.Color));
 
 			VerifySuccess(
+				InD3DDevice,
 				InD3DDevice.GetD3D12Device()->CreateCommittedResource(
 					&D3D12HeapProperties,
 					D3D12_HEAP_FLAG_NONE,
@@ -145,6 +146,7 @@ namespace Eternal
 			D3D12_RESOURCE_STATES InitialStates = ConvertTransitionStateToD3D12ResourceStates(GetResourceCreateInformation().ResourceState);
 
 			VerifySuccess(
+				InD3DDevice,
 				InD3DDevice.GetD3D12Device()->CreateCommittedResource(
 					&D3D12HeapProperties,
 					D3D12_HEAP_FLAG_NONE,
@@ -183,6 +185,7 @@ namespace Eternal
 			void* OutData = nullptr;
 
 			VerifySuccess(
+				GetResourceCreateInformation().GfxDevice,
 				_Resource->Map(
 					//D3D12CalcSubresource(
 					//	InMapRange.MIPIndex,
