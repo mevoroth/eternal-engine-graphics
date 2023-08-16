@@ -104,6 +104,7 @@ namespace Eternal
 
 			static inline void PrintStateObjectDescription(_In_ const D3D12_STATE_OBJECT_DESC& InDescription)
 			{
+#if ETERNAL_USE_DEBUG_VERBOSE
 				char TemporaryBuffer[512];
 
 				std::stringstream StateObjectString;
@@ -239,6 +240,7 @@ namespace Eternal
 				}
 				StateObjectString << "\n";
 				LogWrite(LogInfo, LogGraphics, StateObjectString.str());
+#endif
 			}
 
 			static constexpr uint32_t RayTracingPipelineStateSubObjectsMaxCount					= 64;
