@@ -20,8 +20,8 @@ namespace Eternal
 			D3D12SwapChain(_In_ GraphicsContext& Context);
 			virtual ~D3D12SwapChain() override final;
 
-			virtual void Acquire(GraphicsContext& Context) override final;
-			virtual void Present(GraphicsContext& Context) override final;
+			virtual void Acquire(_In_ GraphicsContext& Context) override final;
+			virtual void Present(_In_ GraphicsContext& Context) override final;
 
 			IDXGISwapChain* GetDXGISwapChain() { return _SwapChain; }
 
