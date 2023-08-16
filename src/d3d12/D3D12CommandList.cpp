@@ -727,6 +727,17 @@ namespace Eternal
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RW_BUFFER:
 					ETERNAL_BREAK(); // Not implemented yet
 					break;
+				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_RAYTRACING_ACCELERATION_STRUCTURE:
+				{
+					if (InResourcesDirtyFlags.IsSet(ParameterIndex))
+					{
+						(_GraphicCommandList6->*SetRootShaderResourceView)(
+							RootParameterIndex,
+							const_cast<D3D12Resource&>(static_cast<const D3D12Resource&>(InResources[ParameterIndex].ResourceView->GetResource())).GetD3D12Resource()->GetGPUVirtualAddress()
+						);
+						InResourcesDirtyFlags.Unset(ParameterIndex);
+					}
+				} break;
 				case RootSignatureParameterType::ROOT_SIGNATURE_PARAMETER_DESCRIPTOR_TABLE:
 				{
 					D3D12_GPU_DESCRIPTOR_HANDLE SubResourceTableDescriptorHandle = {};

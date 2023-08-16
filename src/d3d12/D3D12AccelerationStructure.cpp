@@ -111,12 +111,12 @@ namespace Eternal
 			}
 
 			if (_InstancesBuffer)
-				DestroyResource(_InstancesBuffer);
+				InContext.DelayedDelete(_InstancesBuffer);
 
 			if (_AccelerationStructureView)
 				DestroyView(_AccelerationStructureView);
 			if (_AccelerationStructureResource)
-				DestroyResource(_AccelerationStructureResource);
+				InContext.DelayedDelete(_AccelerationStructureResource);
 			CreateAccelerationStructureBuffer(InContext);
 			_AccelerationStructureView = CreateShaderResourceView(
 				ShaderResourceViewAccelerationStructureCreateInformation(InContext, _AccelerationStructureResource)
@@ -125,7 +125,7 @@ namespace Eternal
 			_InstancesBuffer = CreateBuffer(
 				BufferResourceCreateInformation(
 					InContext.GetDevice(),
-					GetAccelerationStructureName(),
+					GetAccelerationStructureName() + "_InstancesBuffer",
 					BufferCreateInformation(
 						Format::FORMAT_UNKNOWN,
 						BufferResourceUsage::BUFFER_RESOURCE_USAGE_STRUCTURED_BUFFER,
