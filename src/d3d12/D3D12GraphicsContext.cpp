@@ -111,6 +111,15 @@ namespace Eternal
 			_CBV_SRV_UAV_DescriptorHeap = nullptr;
 		}
 
+		void D3D12GraphicsContext::ResetFrameStates()
+		{
+			GraphicsContext::ResetFrameStates();
+
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			static_cast<D3D12Device&>(GetDevice()).GetNVIDIANsightAftermath().ResetMarkers();
+#endif
+		}
+
 		template<typename BitFieldHandles>
 		static D3D12Handle AllocateDescriptor(_In_ BitFieldHandles& Handles, _In_ ID3D12DescriptorHeap* DescriptorHeap, _In_ uint32_t IncrementSize, _In_ uint32_t Offset = 0)
 		{

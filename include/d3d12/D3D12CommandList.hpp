@@ -5,6 +5,11 @@
 #include "d3d12/D3D12Device.hpp"
 #include <d3d12.h>
 
+namespace NVIDIANsightAftermath
+{
+	class NVIDIANsightAftermathContext;
+}
+
 namespace Eternal
 {
 	namespace Graphics
@@ -95,6 +100,9 @@ namespace Eternal
 			void _SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable);
 
 			ID3D12GraphicsCommandList6*	_GraphicCommandList6	= nullptr;
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			NVIDIA::NVIDIANsightAftermathContext	_AftermathContext;
+#endif
 		};
 	}
 }

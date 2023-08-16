@@ -4,6 +4,10 @@
 #include <DXGI1_4.h>
 #include "d3d12/D3D12Utils.hpp"
 
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+#include "NVIDIANsightAftermath/GFSDK_Aftermath.h"
+#endif
+
 #if ETERNAL_USE_DEBUG_LAYER
 #include <dxgidebug.h>
 #define ETERNAL_D3D12_DXGIFLAG_DEBUG	(DXGI_CREATE_FACTORY_DEBUG)
@@ -18,12 +22,12 @@ namespace Eternal
 		using namespace Eternal::Graphics::D3D12;
 
 #if ETERNAL_USE_DEBUG_LAYER
-		ID3D12Debug*	D3D12Device::_Debug			= nullptr;
-		IDXGIInfoQueue*	D3D12Device::_DXGIInfoQueue	= nullptr;
-		IDXGIDebug*		D3D12Device::_DXGIDebug		= nullptr;
+		ID3D12Debug3*								D3D12Device::_Debug3									= nullptr;
+		IDXGIInfoQueue*								D3D12Device::_DXGIInfoQueue								= nullptr;
+		IDXGIDebug*									D3D12Device::_DXGIDebug									= nullptr;
 #endif
-		bool D3D12Device::_IsInitialized			= false;
-		IDXGIFactory4* D3D12Device::_DXGIFactory	= nullptr;
+		bool										D3D12Device::_IsInitialized								= false;
+		IDXGIFactory4*								D3D12Device::_DXGIFactory								= nullptr;
 
 		void D3D12Device::Initialize()
 		{
@@ -119,6 +123,10 @@ namespace Eternal
 
 		D3D12Device::D3D12Device(_In_ uint32_t DeviceIndex)
 		{
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			_NVIDIANsightAftermath.InitializeGpuCrashTracker();
+#endif
+
 			ETERNAL_ASSERT(_DXGIFactory);
 			HRESULT hr = _DXGIFactory->EnumAdapters1(DeviceIndex, &_DXGIAdapter);
 	
@@ -134,6 +142,10 @@ namespace Eternal
 			);
 			_Device = _Device5;
 			ETERNAL_ASSERT(_Device);
+
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			_NVIDIANsightAftermath.InitializeAftermath(_Device);
+#endif
 
 #if ETERNAL_USE_DEBUG_LAYER
 			DXGI_ADAPTER_DESC1 DXGIAdapterDesc1;

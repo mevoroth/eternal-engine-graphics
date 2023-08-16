@@ -26,6 +26,8 @@ namespace Eternal
 			D3D12GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
 			~D3D12GraphicsContext();
 
+			virtual void ResetFrameStates() override final;
+
 			D3D12Handle AllocateConstantBufferViewDescriptor();
 			D3D12Handle AllocateShaderResourceViewDescriptor();
 			D3D12Handle AllocateUnorderedAccessViewDescriptor();

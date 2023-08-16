@@ -42,10 +42,18 @@ namespace Eternal
 				)
 			);
 			End();
+
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			_AftermathContext.InitializeAftermathContext(_GraphicCommandList6);
+#endif
 		}
 
 		D3D12CommandList::~D3D12CommandList()
 		{
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			_AftermathContext.ReleaseAftermathContext();
+#endif
+
 			_GraphicCommandList6->Release();
 			_GraphicCommandList6 = nullptr;
 		}
@@ -63,6 +71,10 @@ namespace Eternal
 		void D3D12CommandList::BeginEvent(_In_ GraphicsContext& InContext, _In_ const char* InEventName)
 		{
 			PIXBeginEvent(_GraphicCommandList6, 0, InEventName);
+
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			static_cast<D3D12Device&>(InContext.GetDevice()).GetNVIDIANsightAftermath().SetEventMarker(_AftermathContext, InEventName);
+#endif
 		}
 
 		void D3D12CommandList::EndEvent(_In_ GraphicsContext& InContext)

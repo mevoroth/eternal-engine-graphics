@@ -3,6 +3,10 @@
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
 
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+#include "NVIDIANsightAftermath.hpp"
+#endif
+
 struct IDXGIFactory4;
 struct IDXGIAdapter1;
 struct ID3D12Device;
@@ -36,6 +40,9 @@ namespace Eternal
 
 			inline ID3D12Device* GetD3D12Device() { return _Device; }
 			inline ID3D12Device5* GetD3D12Device5() { return _Device5; }
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			inline NVIDIA::NVIDIANsightAftermath& GetNVIDIANsightAftermath() { return _NVIDIANsightAftermath; }
+#endif
 
 		private:
 #if ETERNAL_USE_DEBUG_LAYER
@@ -44,14 +51,18 @@ namespace Eternal
 			static IDXGIDebug*		_DXGIDebug;
 			ID3D12InfoQueue*		_InfoQueue		= nullptr;
 #endif
-			static bool				_IsInitialized;
-			static IDXGIFactory4*	_DXGIFactory;
+			static bool											_IsInitialized;
+			static IDXGIFactory4*								_DXGIFactory;
 
-			IDXGIAdapter1*			_DXGIAdapter	= nullptr;
-			ID3D12Device*			_Device			= nullptr;
-			ID3D12Device5*			_Device5		= nullptr;
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			NVIDIA::NVIDIANsightAftermath						_NVIDIANsightAftermath;
+#endif
+			IDXGIAdapter1*										_DXGIAdapter					= nullptr;
+			ID3D12Device*										_Device							= nullptr;
+			ID3D12Device5*										_Device5						= nullptr;
 
-			uint32_t				_DeviceMask		= 0xFFFFFFFF;
+			uint32_t											_DeviceMask						= 0xFFFFFFFF;
+
 		};
 	}
 }
