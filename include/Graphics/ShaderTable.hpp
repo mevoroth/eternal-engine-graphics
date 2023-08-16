@@ -17,9 +17,6 @@ namespace Eternal
 			
 			Pipeline&	_Pipeline;
 			Resource*	_ShaderTable	= nullptr;
-
-			Resource* _ShaderTable1 = nullptr;
-			Resource* _ShaderTable2 = nullptr;
 		};
 	}
 }
