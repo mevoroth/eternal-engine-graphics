@@ -16,8 +16,11 @@
 #include "d3d12/D3D12View.hpp"
 #include "d3d12/D3D12Format.hpp"
 #include "d3d12/D3D12Utils.hpp"
+#include "Log/Log.hpp"
 #include "Math/Math.hpp"
 #include <string>
+#include <sstream>
+#include <iomanip>
 
 namespace Eternal
 {
@@ -25,7 +28,7 @@ namespace Eternal
 	{
 		using namespace Eternal::Graphics::D3D12;
 		
-		namespace GraphicsPrivate
+		namespace D3D12
 		{
 			struct D3D12_STATE_SUBOBJECT_STATE_OBJECT_CONFIG : public D3D12_STATE_SUBOBJECT
 			{
@@ -63,6 +66,15 @@ namespace Eternal
 				}
 			};
 
+			struct D3D12_STATE_SUBOBJECT_LOCAL_ROOT_SIGNATURE : public D3D12_STATE_SUBOBJECT
+			{
+				D3D12_STATE_SUBOBJECT_LOCAL_ROOT_SIGNATURE(_In_ D3D12_LOCAL_ROOT_SIGNATURE& InLocalRootSignature)
+				{
+					Type	= D3D12_STATE_SUBOBJECT_TYPE_LOCAL_ROOT_SIGNATURE;
+					pDesc	= &InLocalRootSignature;
+				}
+			};
+
 			struct D3D12_STATE_SUBOBJECT_DXIL_LIBRARY_DESC : public D3D12_STATE_SUBOBJECT
 			{
 				D3D12_STATE_SUBOBJECT_DXIL_LIBRARY_DESC(_In_ D3D12_DXIL_LIBRARY_DESC& InDXILLibraryDescription)
@@ -81,8 +93,157 @@ namespace Eternal
 				}
 			};
 
-			static constexpr uint32_t RayTracingPipelineStateSubObjectsMaxCount	= 16;
-			static constexpr uint32_t RayTracingPipelineDXILLibrariesMaxCount	= 4;
+			struct D3D12_STATE_SUBOBJECT_SUBOBJECT_TO_EXPORTS_ASSOCIATION : public D3D12_STATE_SUBOBJECT
+			{
+				D3D12_STATE_SUBOBJECT_SUBOBJECT_TO_EXPORTS_ASSOCIATION(_In_ D3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION& InSubObjectToExportsAssociation)
+				{
+					Type	= D3D12_STATE_SUBOBJECT_TYPE_SUBOBJECT_TO_EXPORTS_ASSOCIATION;
+					pDesc	= &InSubObjectToExportsAssociation;
+				}
+			};
+
+			static inline void PrintStateObjectDescription(_In_ const D3D12_STATE_OBJECT_DESC& InDescription)
+			{
+				char TemporaryBuffer[512];
+
+				std::stringstream StateObjectString;
+				StateObjectString << "\n";
+				StateObjectString << "--------------------------------------------------------------------\n";
+				StateObjectString << "| D3D12 State Object 0x" << static_cast<const void*>(&InDescription) << ": ";
+				if (InDescription.Type == D3D12_STATE_OBJECT_TYPE_COLLECTION) StateObjectString << "Collection\n";
+				if (InDescription.Type == D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE) StateObjectString << "Raytracing Pipeline\n";
+
+				auto ExportTree = [TemporaryBuffer](_In_ UINT InDepth, _In_ UINT InNumExports, _In_ const D3D12_EXPORT_DESC* InExports) mutable
+				{
+					std::ostringstream TreeString;
+					for (UINT i = 0; i < InNumExports; i++)
+					{
+						TreeString << "|";
+						if (InDepth > 0)
+						{
+							for (UINT j = 0; j < 2 * InDepth - 1; j++) TreeString << " ";
+						}
+						TreeString << " [" << i << "]: ";
+						if (InExports[i].ExportToRename)
+						{
+							wcstombs_s(nullptr, TemporaryBuffer, InExports[i].ExportToRename, 512);
+							TreeString << TemporaryBuffer << " --> ";
+						}
+						wcstombs_s(nullptr, TemporaryBuffer, InExports[i].Name, 512);
+						TreeString << TemporaryBuffer << "\n";
+					}
+					return TreeString.str();
+				};
+
+				for (UINT i = 0; i < InDescription.NumSubobjects; i++)
+				{
+					StateObjectString << "| [" << i << "]: ";
+					switch (InDescription.pSubobjects[i].Type)
+					{
+					case D3D12_STATE_SUBOBJECT_TYPE_GLOBAL_ROOT_SIGNATURE:
+						StateObjectString << "Global Root Signature 0x" << InDescription.pSubobjects[i].pDesc << "\n";
+						break;
+					case D3D12_STATE_SUBOBJECT_TYPE_LOCAL_ROOT_SIGNATURE:
+						StateObjectString << "Local Root Signature 0x" << InDescription.pSubobjects[i].pDesc << "\n";
+						break;
+					case D3D12_STATE_SUBOBJECT_TYPE_NODE_MASK:
+						StateObjectString << "Node Mask: 0x" << std::hex << std::setfill('0') << std::setw(8) << *static_cast<const UINT*>(InDescription.pSubobjects[i].pDesc) << std::setw(0) << std::dec << "\n";
+						break;
+					case D3D12_STATE_SUBOBJECT_TYPE_DXIL_LIBRARY:
+					{
+						StateObjectString << "DXIL Library 0x";
+						auto lib = static_cast<const D3D12_DXIL_LIBRARY_DESC*>(InDescription.pSubobjects[i].pDesc);
+						StateObjectString << lib->DXILLibrary.pShaderBytecode << ", " << lib->DXILLibrary.BytecodeLength << " bytes\n";
+						StateObjectString << ExportTree(1, lib->NumExports, lib->pExports);
+						break;
+					}
+					case D3D12_STATE_SUBOBJECT_TYPE_EXISTING_COLLECTION:
+					{
+						StateObjectString << "Existing Library 0x";
+						auto collection = static_cast<const D3D12_EXISTING_COLLECTION_DESC*>(InDescription.pSubobjects[i].pDesc);
+						StateObjectString << collection->pExistingCollection << "\n";
+						StateObjectString << ExportTree(1, collection->NumExports, collection->pExports);
+						break;
+					}
+					case D3D12_STATE_SUBOBJECT_TYPE_SUBOBJECT_TO_EXPORTS_ASSOCIATION:
+					{
+						StateObjectString << "Subobject to Exports Association (Subobject [";
+						auto association = static_cast<const D3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION*>(InDescription.pSubobjects[i].pDesc);
+						UINT index = static_cast<UINT>(association->pSubobjectToAssociate - InDescription.pSubobjects);
+						StateObjectString << index << "])\n";
+						for (UINT j = 0; j < association->NumExports; j++)
+						{
+							wcstombs_s(nullptr, TemporaryBuffer, association->pExports[j], 512);
+							StateObjectString << "|  [" << j << "]: " << TemporaryBuffer << "\n";
+						}
+						break;
+					}
+					case D3D12_STATE_SUBOBJECT_TYPE_DXIL_SUBOBJECT_TO_EXPORTS_ASSOCIATION:
+					{
+						StateObjectString << "DXIL Subobjects to Exports Association (";
+						auto association = static_cast<const D3D12_DXIL_SUBOBJECT_TO_EXPORTS_ASSOCIATION*>(InDescription.pSubobjects[i].pDesc);
+						StateObjectString << association->SubobjectToAssociate << ")\n";
+						for (UINT j = 0; j < association->NumExports; j++)
+						{
+							StateObjectString << "|  [" << j << "]: " << association->pExports[j] << "\n";
+						}
+						break;
+					}
+					case D3D12_STATE_SUBOBJECT_TYPE_RAYTRACING_SHADER_CONFIG:
+					{
+						StateObjectString << "Raytracing Shader Config\n";
+						auto config = static_cast<const D3D12_RAYTRACING_SHADER_CONFIG*>(InDescription.pSubobjects[i].pDesc);
+						StateObjectString << "|  [0]: Max Payload Size: " << config->MaxPayloadSizeInBytes << " bytes\n";
+						StateObjectString << "|  [1]: Max Attribute Size: " << config->MaxAttributeSizeInBytes << " bytes\n";
+						break;
+					}
+					case D3D12_STATE_SUBOBJECT_TYPE_RAYTRACING_PIPELINE_CONFIG1:
+					case D3D12_STATE_SUBOBJECT_TYPE_RAYTRACING_PIPELINE_CONFIG:
+					{
+						StateObjectString << "Raytracing Pipeline Config" << (InDescription.pSubobjects[i].Type == D3D12_STATE_SUBOBJECT_TYPE_RAYTRACING_PIPELINE_CONFIG1 ? "1" : "") << "\n";
+						auto config = static_cast<const D3D12_RAYTRACING_PIPELINE_CONFIG*>(InDescription.pSubobjects[i].pDesc);
+						StateObjectString << "|  [0]: Max Recursion Depth: " << config->MaxTraceRecursionDepth << "\n";
+						break;
+					}
+					case D3D12_STATE_SUBOBJECT_TYPE_HIT_GROUP:
+					{
+						StateObjectString << "Hit Group (";
+						auto hitGroup = static_cast<const D3D12_HIT_GROUP_DESC*>(InDescription.pSubobjects[i].pDesc);
+
+						if (hitGroup->HitGroupExport)
+							wcstombs_s(nullptr, TemporaryBuffer, hitGroup->HitGroupExport, 512);
+						StateObjectString << (hitGroup->HitGroupExport ? TemporaryBuffer : "[none]") << ")\n";
+
+						if (hitGroup->AnyHitShaderImport)
+							wcstombs_s(nullptr, TemporaryBuffer, hitGroup->AnyHitShaderImport, 512);
+						StateObjectString << "|  [0]: Any Hit Import: " << (hitGroup->AnyHitShaderImport ? TemporaryBuffer : "[none]") << "\n";
+
+						if (hitGroup->ClosestHitShaderImport)
+							wcstombs_s(nullptr, TemporaryBuffer, hitGroup->ClosestHitShaderImport, 512);
+						StateObjectString << "|  [1]: Closest Hit Import: " << (hitGroup->ClosestHitShaderImport ? TemporaryBuffer : "[none]") << "\n";
+
+						if (hitGroup->IntersectionShaderImport)
+							wcstombs_s(nullptr, TemporaryBuffer, hitGroup->IntersectionShaderImport, 512);
+						StateObjectString << "|  [2]: Intersection Import: " << (hitGroup->IntersectionShaderImport ? TemporaryBuffer : "[none]") << "\n";
+						break;
+					}
+					case D3D12_STATE_SUBOBJECT_TYPE_STATE_OBJECT_CONFIG:
+					{
+						StateObjectString << "State Object Config\n";
+						auto config = static_cast<const D3D12_STATE_OBJECT_CONFIG*>(InDescription.pSubobjects[i].pDesc);
+						StateObjectString << "|  [0]: Flags: " << config->Flags << "\n";
+						break;
+					}
+					}
+					StateObjectString << "|--------------------------------------------------------------------\n";
+				}
+				StateObjectString << "\n";
+				LogWrite(LogInfo, LogGraphics, StateObjectString.str());
+			}
+
+			static constexpr uint32_t RayTracingPipelineStateSubObjectsMaxCount					= 64;
+			static constexpr uint32_t RayTracingPipelineDXILLibrariesMaxCount					= 4;
+			static constexpr uint32_t RayTracingPipelineSubObjectToExportsAssociationsMaxCount	= RayTracingPipelineDXILLibrariesMaxCount * 8;
 		}
 
 		template<typename PipelineStateDescriptionType>
@@ -300,18 +461,17 @@ namespace Eternal
 		)
 			: Pipeline(InOutContext, InPipelineCreateInformation)
 		{
-			using namespace Eternal::Graphics::GraphicsPrivate;
-
 			D3D12Device& InD3DDevice = static_cast<D3D12Device&>(InOutContext.GetDevice());
 
 			ID3D12Device5* InD3D12Device5 = InD3DDevice.GetD3D12Device5();
 
 			D3D12_STATE_OBJECT_CONFIG StateObjectConfig =
 			{
-				D3D12_STATE_OBJECT_FLAG_ALLOW_LOCAL_DEPENDENCIES_ON_EXTERNAL_DEFINITIONS |
-				D3D12_STATE_OBJECT_FLAG_ALLOW_EXTERNAL_DEPENDENCIES_ON_LOCAL_DEFINITIONS |
-				D3D12_STATE_OBJECT_FLAG_ALLOW_STATE_OBJECT_ADDITIONS
+				//D3D12_STATE_OBJECT_FLAG_ALLOW_LOCAL_DEPENDENCIES_ON_EXTERNAL_DEFINITIONS |
+				//D3D12_STATE_OBJECT_FLAG_ALLOW_EXTERNAL_DEPENDENCIES_ON_LOCAL_DEFINITIONS |
+				//D3D12_STATE_OBJECT_FLAG_ALLOW_STATE_OBJECT_ADDITIONS
 			};
+			D3D12_STATE_SUBOBJECT_STATE_OBJECT_CONFIG StateSubObjectStateObjectConfig(StateObjectConfig);
 
 			D3D12_RAYTRACING_PIPELINE_CONFIG1 RayTracingPipelineConfig;
 			RayTracingPipelineConfig.MaxTraceRecursionDepth	= 1;
@@ -321,12 +481,30 @@ namespace Eternal
 			RayTracingShaderConfig.MaxPayloadSizeInBytes	= 16;
 			RayTracingShaderConfig.MaxAttributeSizeInBytes	= 8;
 
-			D3D12_GLOBAL_ROOT_SIGNATURE GlobalRootSignature;
+			D3D12_GLOBAL_ROOT_SIGNATURE GlobalRootSignature	= {};
 			GlobalRootSignature.pGlobalRootSignature		= static_cast<D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
 
+			D3D12_LOCAL_ROOT_SIGNATURE DefaultLocalRootSignature	= {};
+			DefaultLocalRootSignature.pLocalRootSignature			= static_cast<D3D12RootSignature&>(InOutContext.GetEmptyLocalRootSignature()).GetD3D12RootSignature();
+			D3D12_STATE_SUBOBJECT_LOCAL_ROOT_SIGNATURE DefaultLocalRootSignatureStateSubObject(DefaultLocalRootSignature);
+
 			uint32_t DXILLibrariesCount = 0u;
-			D3D12_DXIL_LIBRARY_DESC* DXILLibraryDescriptions	= reinterpret_cast<D3D12_DXIL_LIBRARY_DESC*>(alloca(sizeof(D3D12_DXIL_LIBRARY_DESC) * RayTracingPipelineDXILLibrariesMaxCount));
-			D3D12_EXPORT_DESC* ExportDescriptions				= reinterpret_cast<D3D12_EXPORT_DESC*>(alloca(sizeof(D3D12_EXPORT_DESC) * RayTracingPipelineDXILLibrariesMaxCount));
+			uint32_t SubObjectToExportsAssociationsCount = 0u;
+			D3D12_DXIL_LIBRARY_DESC* DXILLibraryDescriptions						= reinterpret_cast<D3D12_DXIL_LIBRARY_DESC*>(alloca(sizeof(D3D12_DXIL_LIBRARY_DESC) * RayTracingPipelineDXILLibrariesMaxCount));
+			D3D12_EXPORT_DESC* ExportDescriptions									= reinterpret_cast<D3D12_EXPORT_DESC*>(alloca(sizeof(D3D12_EXPORT_DESC) * RayTracingPipelineDXILLibrariesMaxCount));
+			D3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION* SubObjectToExportsAssociations	= reinterpret_cast<D3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION*>(alloca(sizeof(D3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION) * RayTracingPipelineSubObjectToExportsAssociationsMaxCount));
+			
+			auto AddSubObjectToExportsAssociation = [SubObjectToExportsAssociations, &SubObjectToExportsAssociationsCount](_In_ Shader* InShader, _In_ D3D12_STATE_SUBOBJECT& InStateSubObject) -> void
+			{
+				if (!InShader)
+					return;
+
+				D3D12_SUBOBJECT_TO_EXPORTS_ASSOCIATION& DefaultLocalRootSignatureSubObjectToExportsAssociation	= SubObjectToExportsAssociations[SubObjectToExportsAssociationsCount++];
+				DefaultLocalRootSignatureSubObjectToExportsAssociation											= {};
+				DefaultLocalRootSignatureSubObjectToExportsAssociation.pSubobjectToAssociate					= &InStateSubObject;
+				DefaultLocalRootSignatureSubObjectToExportsAssociation.NumExports								= 1;
+				DefaultLocalRootSignatureSubObjectToExportsAssociation.pExports									= static_cast<D3D12Shader*>(InShader)->GetD3D12StageEntryPointPointer();
+			};
 
 			auto AddDXILLibrary = [DXILLibraryDescriptions, ExportDescriptions, &DXILLibrariesCount](_In_ Shader* InShader) -> void
 			{
@@ -337,17 +515,28 @@ namespace Eternal
 				ExportDescription						= {};
 				ExportDescription.Name					= static_cast<D3D12Shader*>(InShader)->GetD3D12StageEntryPoint();
 
-				D3D12_DXIL_LIBRARY_DESC& DXILLibraryDescription	= DXILLibraryDescriptions[DXILLibrariesCount++];
+				D3D12_DXIL_LIBRARY_DESC& DXILLibraryDescription	= DXILLibraryDescriptions[DXILLibrariesCount];
 				DXILLibraryDescription							= {};
 				static_cast<D3D12Shader*>(InShader)->GetD3D12Shader(DXILLibraryDescription.DXILLibrary);
 				DXILLibraryDescription.NumExports				= 1;
 				DXILLibraryDescription.pExports					= &ExportDescription;
+
+				++DXILLibrariesCount;
 			};
 
 			AddDXILLibrary(InPipelineCreateInformation.ShaderRayTracingRayGeneration);
 			AddDXILLibrary(InPipelineCreateInformation.ShaderRayTracingMiss);
 			AddDXILLibrary(InPipelineCreateInformation.ShaderRayTracingClosestHit);
 			AddDXILLibrary(InPipelineCreateInformation.ShaderRayTracingAnyHit);
+
+			//AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingRayGeneration,	DefaultLocalRootSignatureStateSubObject);
+			//AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingRayGeneration,	StateSubObjectStateObjectConfig);
+			//AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingMiss,			DefaultLocalRootSignatureStateSubObject);
+			//AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingMiss,			StateSubObjectStateObjectConfig);
+			//AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingClosestHit,	DefaultLocalRootSignatureStateSubObject);
+			//AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingClosestHit,	StateSubObjectStateObjectConfig);
+			//AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingAnyHit,		DefaultLocalRootSignatureStateSubObject);
+			//AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingAnyHit,		StateSubObjectStateObjectConfig);
 
 			D3D12_HIT_GROUP_DESC HitGroupDescription		= {};
 			HitGroupDescription.HitGroupExport				= L"HitGroup";
@@ -367,8 +556,20 @@ namespace Eternal
 			AddStateSubObject(D3D12_STATE_SUBOBJECT_RAYTRACING_PIPELINE_CONFIG1(RayTracingPipelineConfig));
 			AddStateSubObject(D3D12_STATE_SUBOBJECT_RAYTRACING_SHADER_CONFIG(RayTracingShaderConfig));
 			AddStateSubObject(D3D12_STATE_SUBOBJECT_GLOBAL_ROOT_SIGNATURE(GlobalRootSignature));
+			{
+				AddStateSubObject(DefaultLocalRootSignatureStateSubObject);
+				AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingRayGeneration,	StateSubObjects[StateSubObjectsCount - 1]);
+				AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingMiss,			StateSubObjects[StateSubObjectsCount - 1]);
+				AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingClosestHit,	StateSubObjects[StateSubObjectsCount - 1]);
+				AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingAnyHit,		StateSubObjects[StateSubObjectsCount - 1]);
+			}
+			//AddStateSubObject(D3D12_STATE_SUBOBJECT_SUBOBJECT_TO_EXPORTS_ASSOCIATION(DefaultLocalRootSignatureSubObjectToExportsAssociation));
+
 			for (uint32_t DXILLibraryIndex = 0; DXILLibraryIndex < DXILLibrariesCount; ++DXILLibraryIndex)
 				AddStateSubObject(D3D12_STATE_SUBOBJECT_DXIL_LIBRARY_DESC(DXILLibraryDescriptions[DXILLibraryIndex]));
+
+			for (uint32_t SubObjectToExportsAssociationIndex = 0; SubObjectToExportsAssociationIndex < SubObjectToExportsAssociationsCount; ++SubObjectToExportsAssociationIndex)
+				AddStateSubObject(D3D12_STATE_SUBOBJECT_SUBOBJECT_TO_EXPORTS_ASSOCIATION(SubObjectToExportsAssociations[SubObjectToExportsAssociationIndex]));
 
 			if (InPipelineCreateInformation.ShaderRayTracingClosestHit || InPipelineCreateInformation.ShaderRayTracingAnyHit)
 				AddStateSubObject(D3D12_STATE_SUBOBJECT_HIT_GROUP_DESC(HitGroupDescription));
@@ -377,6 +578,8 @@ namespace Eternal
 			StateObjectDescription.Type				= D3D12_STATE_OBJECT_TYPE_RAYTRACING_PIPELINE;
 			StateObjectDescription.NumSubobjects	= StateSubObjectsCount;
 			StateObjectDescription.pSubobjects		= StateSubObjects;
+
+			PrintStateObjectDescription(StateObjectDescription);
 
 			VerifySuccess(
 				InD3D12Device5->CreateStateObject(
