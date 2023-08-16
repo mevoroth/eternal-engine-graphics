@@ -19,13 +19,13 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& Context)
+		D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& InContext)
 			: SwapChain()
 			, _BackBuffersCount(GraphicsContext::FrameBufferingCount)
 		{
 			using namespace Eternal::Graphics::D3D12;
 
-			Window& InWindow = Context.GetWindow();
+			Window& InWindow = InContext.GetWindow();
 
 			DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 
@@ -49,7 +49,7 @@ namespace Eternal
 																| (InWindow.GetVSync() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : DXGI_SWAP_CHAIN_FLAG(0));
 
 			VerifySuccess(
-				D3D12Device::GetDXGIFactory()->CreateSwapChain(static_cast<D3D12CommandQueue&>(Context.GetGraphicsQueue()).GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain)
+				D3D12Device::GetDXGIFactory()->CreateSwapChain(static_cast<D3D12CommandQueue&>(InContext.GetGraphicsQueue()).GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain)
 			);
 
 			VerifySuccess(
@@ -89,7 +89,7 @@ namespace Eternal
 				{
 					std::string BackBufferName = "BackBuffer" + std::to_string(BackBufferIndex);
 					D3D12ResourceBackBufferCreateInformation CreateInformation(
-						Context.GetDevice(),
+						InContext.GetDevice(),
 						BackBufferName,
 						BackBufferResource
 					);
@@ -101,7 +101,7 @@ namespace Eternal
 				{
 					ViewMetaData MetaData;
 					RenderTargetViewCreateInformation CreateInformation(
-						Context,
+						InContext,
 						_BackBuffers[BackBufferIndex],
 						MetaData,
 						Format::FORMAT_RGBA8888_UNORM,
@@ -118,17 +118,25 @@ namespace Eternal
 			_SwapChain = nullptr;
 		}
 
-		void D3D12SwapChain::Acquire(GraphicsContext& Context)
+		void D3D12SwapChain::Acquire(_In_ GraphicsContext& InContext)
 		{
-			Context.GetCurrentFrameIndex() = _SwapChain3->GetCurrentBackBufferIndex();
+			InContext.GetCurrentFrameIndex() = _SwapChain3->GetCurrentBackBufferIndex();
 		}
 
-		void D3D12SwapChain::Present(GraphicsContext& Context)
+		void D3D12SwapChain::Present(_In_ GraphicsContext& InContext)
 		{
-			_SwapChain->Present(0, 0);
+			using namespace Eternal::Graphics::D3D12;
 
-			static_cast<D3D12Fence&>(Context.GetCurrentFrameFence()).Signal(
-				static_cast<D3D12CommandQueue&>(Context.GetGraphicsQueue())
+			HRESULT HResult = _SwapChain->Present(0, 0);
+
+#if ETERNAL_USE_NVIDIA_AFTERMATH
+			static_cast<D3D12Device&>(InContext.GetDevice()).GetNVIDIANsightAftermath().OnPresent(HResult);
+#endif
+
+			VerifySuccess(InContext.GetDevice(), HResult);
+
+			static_cast<D3D12Fence&>(InContext.GetCurrentFrameFence()).Signal(
+				static_cast<D3D12CommandQueue&>(InContext.GetGraphicsQueue())
 			);
 		}
 	}
