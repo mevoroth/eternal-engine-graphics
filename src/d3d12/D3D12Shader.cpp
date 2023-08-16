@@ -39,7 +39,7 @@ namespace Eternal
 			"ShaderMiss",
 			"ShaderAnyHit"
 		};
-		static constexpr wchar_t* D3D12_SHADER_ENTRIES_DXC[] =
+		static const wchar_t* D3D12_SHADER_ENTRIES_DXC[] =
 		{
 			L"ShaderVertex",
 			L"ShaderHull",
@@ -544,6 +544,11 @@ namespace Eternal
 		const wchar_t* D3D12Shader::GetD3D12StageEntryPoint() const
 		{
 			return D3D12_SHADER_ENTRIES_DXC[static_cast<uint32_t>(GetShaderCreateInformation().Stage)];
+		}
+
+		const wchar_t** D3D12Shader::GetD3D12StageEntryPointPointer() const
+		{
+			return &D3D12_SHADER_ENTRIES_DXC[static_cast<uint32_t>(GetShaderCreateInformation().Stage)];
 		}
 	}
 }

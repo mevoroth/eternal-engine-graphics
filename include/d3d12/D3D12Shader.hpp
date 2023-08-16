@@ -32,6 +32,7 @@ namespace Eternal
 			virtual bool IsShaderCompiled() const override final;
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode);
 			const wchar_t* GetD3D12StageEntryPoint() const;
+			const wchar_t** GetD3D12StageEntryPointPointer() const;
 
 		protected:
 			static D3D12IncludeFXC*		_FxcIncludeHandler;
