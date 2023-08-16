@@ -5,10 +5,33 @@
 #include "d3d12/D3D12Utils.hpp"
 #include "Graphics/Fence.hpp"
 
+#if ETERNAL_USE_DEBUG_VERBOSE
+#include "Log/Log.hpp"
+#include <sstream>
+#include <iomanip>
+#endif
+
 namespace Eternal
 {
 	namespace Graphics
 	{
+		void LogDescriptorHeap(_In_ const string& InDescriptorHeapName, _In_ ID3D12DescriptorHeap* InDescriptorHeap, _In_ uint32_t InDescriptorCount, _In_ uint32_t InDescriptorSize)
+		{
+#if ETERNAL_USE_DEBUG_VERBOSE
+			using namespace std;
+			using namespace Eternal::LogSystem;
+
+			SIZE_T CPUDescriptorStart	= InDescriptorHeap->GetCPUDescriptorHandleForHeapStart().ptr;
+			SIZE_T GPUDescriptorStart	= InDescriptorHeap->GetGPUDescriptorHandleForHeapStart().ptr;
+
+			stringstream LogDescriptorHeapStream;
+			LogDescriptorHeapStream << "DescriptorHeap: { Name = " << InDescriptorHeapName << ", "
+									<< "CPUPtr = { 0x" << hex << setfill('0') << setw(16) << CPUDescriptorStart << "-0x" << setfill('0') << setw(16) << CPUDescriptorStart + InDescriptorSize * InDescriptorCount << " }, "
+									<< "GPUVA = { 0x" << setfill('0') << setw(16) << GPUDescriptorStart << "-0x" << setw(16) << GPUDescriptorStart + InDescriptorSize * InDescriptorCount << " } }";
+			LogWrite(LogInfo, LogGraphics, LogDescriptorHeapStream.str());
+#endif
+		}
+
 		D3D12GraphicsContext::D3D12GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
 			: GraphicsContext(CreateInformation)
 		{
@@ -92,6 +115,11 @@ namespace Eternal
 			_SamplerDescriptorHandleIncrementSize			= InD3DDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 			_RenderTargetViewDescriptorHandleIncrementSize	= InD3DDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 			_DepthStencilViewDescriptorHandleIncrementSize	= InD3DDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+
+			LogDescriptorHeap("CBV_SRV_UAV_DescriptorHeap",			_CBV_SRV_UAV_DescriptorHeap,		MaxShaderResourceViewCount + MaxUnorderedAccessViewCount + MaxConstantBufferViewCount,	_CBV_SRV_UAV_DescriptorHandleIncrementSize);
+			LogDescriptorHeap("Sampler_DescriptorHeap",				_SamplerDescriptorHeap,				MaxSamplerCount,																		_SamplerDescriptorHandleIncrementSize);
+			LogDescriptorHeap("RenderTargetView_DescriptorHeap",	_RenderTargetViewDescriptorHeap,	MaxRenderTargetViewCount,																_RenderTargetViewDescriptorHandleIncrementSize);
+			LogDescriptorHeap("DepthStencilView_DescriptorHeap",	_DepthStencilViewDescriptorHeap,	MaxDepthStencilViewCount,																_DepthStencilViewDescriptorHandleIncrementSize);
 		}
 
 		D3D12GraphicsContext::~D3D12GraphicsContext()
