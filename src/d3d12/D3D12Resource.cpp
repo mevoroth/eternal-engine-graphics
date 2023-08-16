@@ -6,11 +6,29 @@
 #include <d3d12.h>
 #include <string>
 
+#if ETERNAL_USE_DEBUG_VERBOSE
+#include "Log/Log.hpp"
+#include <sstream>
+#include <iomanip>
+#endif
+
 namespace Eternal
 {
 	namespace Graphics
 	{
 		using namespace Eternal::Graphics::D3D12;
+
+		static void LogResourceAddress(_In_ D3D12Resource& InResource)
+		{
+#if ETERNAL_USE_DEBUG_VERBOSE
+			using namespace std;
+			using namespace Eternal::LogSystem;
+
+			stringstream LogResourceAddressStream;
+			LogResourceAddressStream << "Resource: { Name = " << InResource.GetResourceName() << ", CPUPtr = 0x" << hex << setfill('0') << setw(16) << InResource.GetD3D12Resource() << ", GPUVA = 0x" << setfill('0') << setw(16) << InResource.GetD3D12Resource()->GetGPUVirtualAddress() << " }";
+			LogWrite(LogInfo, LogGraphics, LogResourceAddressStream.str());
+#endif
+		}
 
 		D3D12Resource::D3D12Resource(_In_ const D3D12ResourceBackBufferCreateInformation& InResourceCreateInformation)
 			: Resource(InResourceCreateInformation, ResourceType::RESOURCE_TYPE_BACK_BUFFER)
@@ -90,6 +108,7 @@ namespace Eternal
 			);
 
 			_SetDebugName();
+			LogResourceAddress(*this);
 		}
 
 		D3D12Resource::D3D12Resource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
@@ -159,6 +178,7 @@ namespace Eternal
 			);
 
 			_SetDebugName();
+			LogResourceAddress(*this);
 		}
 
 		D3D12Resource::~D3D12Resource()

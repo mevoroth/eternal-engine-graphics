@@ -20,6 +20,12 @@
 #include <array>
 #include <string>
 
+#if ETERNAL_USE_DEBUG_VERBOSE
+#include "Log/Log.hpp"
+#include <sstream>
+#include <iomanip>
+#endif
+
 namespace Eternal
 {
 	namespace Graphics
@@ -452,6 +458,14 @@ namespace Eternal
 			DispatchRaysDescription.Width						= InX;
 			DispatchRaysDescription.Height						= InY;
 			DispatchRaysDescription.Depth						= 1;
+
+			stringstream DebugInfoStream;
+			DebugInfoStream << "DispatchRays:\n";
+			DebugInfoStream << "\tRayGenerationShaderRecord: { 0x" << std::hex << std::setfill('0') << std::setw(16) << InD3D12ShaderTable.GetD3D12RayGenerationShaderRecord().StartAddress << ", " << std::dec << InD3D12ShaderTable.GetD3D12RayGenerationShaderRecord().SizeInBytes << " }\n";
+			DebugInfoStream << "\tMissShaderTable: { " << std::hex << std::setfill('0') << std::setw(16) << InD3D12ShaderTable.GetD3D12MissShaderTable().StartAddress << ", " << std::dec << InD3D12ShaderTable.GetD3D12MissShaderTable().SizeInBytes << ", " << InD3D12ShaderTable.GetD3D12MissShaderTable().StrideInBytes << " }\n";
+			DebugInfoStream << "\tHitGroupTable: { " << std::hex << std::setfill('0') << std::setw(16) << InD3D12ShaderTable.GetD3D12HitGroupTable().StartAddress << ", " << std::dec << InD3D12ShaderTable.GetD3D12HitGroupTable().SizeInBytes << ", " << InD3D12ShaderTable.GetD3D12HitGroupTable().StrideInBytes << " }\n";
+			LogWrite(LogError, LogGraphics, DebugInfoStream.str());
+
 			_GraphicCommandList6->DispatchRays(&DispatchRaysDescription);
 		}
 
