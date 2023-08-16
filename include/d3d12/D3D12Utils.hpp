@@ -12,6 +12,7 @@ namespace Eternal
 
 		class BlendState;
 		class LogicBlend;
+		class Device;
 
 		enum class TransitionState;
 		enum class CommandType;
@@ -60,7 +61,8 @@ namespace Eternal
 
 		namespace D3D12
 		{
-			void VerifySuccess(_In_ const HRESULT& HResult);
+			void VerifySuccess(_In_ const HRESULT& InHResult);
+			void VerifySuccess(_In_ Device& InDevice, _In_ const HRESULT& InHResult);
 			D3D12_RENDER_TARGET_BLEND_DESC CreateD3D12RenderTargetBlendDesc(_In_ const BlendState& InBlendState, _In_ const LogicBlend& InLogicBlend);
 			D3D12_COMMAND_LIST_TYPE ConvertCommandTypeToD3D12CommandListType(_In_ const CommandType& InCommandType);
 			D3D12_LOGIC_OP ConvertLogicOperatorToD3D12LogicOperator(_In_ const LogicOperator& InLogicOperator);

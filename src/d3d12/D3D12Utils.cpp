@@ -1,4 +1,5 @@
 #include "d3d12/D3D12Utils.hpp"
+
 #include "Graphics/CommandUtils.hpp"
 #include "Graphics/BlendState.hpp"
 #include "Graphics/Rasterizer.hpp"
@@ -7,6 +8,7 @@
 #include "Graphics/RootSignature.hpp"
 #include "Graphics/Pipeline.hpp"
 #include "Graphics/Resource.hpp"
+#include "d3d12/D3D12Device.hpp"
 #include "Math/Math.hpp"
 
 namespace Eternal
@@ -273,9 +275,39 @@ namespace Eternal
 
 		namespace D3D12
 		{
-			void VerifySuccess(_In_ const HRESULT& HResult)
+			void VerifySuccess(_In_ const HRESULT& InHResult)
 			{
-				ETERNAL_ASSERT(HResult == S_OK);
+				ETERNAL_ASSERT(InHResult == S_OK);
+			}
+
+			void VerifySuccess(_In_ Device& InDevice, _In_ const HRESULT& InHResult)
+			{
+				if (InHResult == S_OK)
+					return;
+
+				D3D12_DRED_AUTO_BREADCRUMBS_OUTPUT1	DredAutoBreadcrumbsOutput1	= {};
+				D3D12_DRED_PAGE_FAULT_OUTPUT1		DredPageFaultOutput1		= {};
+
+				HRESULT DeviceRemovedReason = static_cast<D3D12Device&>(InDevice).GetD3D12Device5()->GetDeviceRemovedReason();
+				if (DeviceRemovedReason == DXGI_ERROR_DEVICE_HUNG)
+				{
+					ID3D12DeviceRemovedExtendedData1* Dred1 = nullptr;
+					VerifySuccess(
+						static_cast<D3D12Device&>(InDevice).GetD3D12Device5()->QueryInterface(__uuidof(ID3D12DeviceRemovedExtendedData1), reinterpret_cast<void**>(&Dred1))
+					);
+
+					VerifySuccess(
+						Dred1->GetPageFaultAllocationOutput1(&DredPageFaultOutput1)
+					);
+
+					VerifySuccess(
+						Dred1->GetAutoBreadcrumbsOutput1(&DredAutoBreadcrumbsOutput1)
+					);
+
+					Dred1->Release();
+				}
+
+				ETERNAL_BREAK();
 			}
 
 			D3D12_RENDER_TARGET_BLEND_DESC CreateD3D12RenderTargetBlendDesc(_In_ const BlendState& InBlendState, _In_ const LogicBlend& InLogicBlend)
