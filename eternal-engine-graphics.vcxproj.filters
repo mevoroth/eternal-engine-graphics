@@ -298,12 +298,24 @@
     <ClInclude Include="include\Tools\PipelineDependency.hpp">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\AccelerationStructure.hpp" />
-    <ClInclude Include="include\d3d12\D3D12AccelerationStructure.hpp" />
-    <ClInclude Include="include\Graphics\AccelerationStructureFactory.hpp" />
-    <ClInclude Include="include\Graphics\ShaderTable.hpp" />
-    <ClInclude Include="include\d3d12\D3D12ShaderTable.hpp" />
-    <ClInclude Include="include\Graphics\ShaderTableFactory.hpp" />
+    <ClInclude Include="include\Graphics\AccelerationStructure.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\AccelerationStructureFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12AccelerationStructure.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3d12\D3D12ShaderTable.hpp">
+      <Filter>d3d12</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ShaderTable.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\ShaderTableFactory.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">
@@ -540,11 +552,21 @@
     <ClCompile Include="src\Tools\PipelineDependency.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\AccelerationStructure.cpp" />
-    <ClCompile Include="src\d3d12\D3D12AccelerationStructure.cpp" />
-    <ClCompile Include="src\Graphics\AccelerationStructureFactory.cpp" />
-    <ClCompile Include="src\d3d12\D3D12ShaderTable.cpp" />
-    <ClCompile Include="src\Graphics\ShaderTableFactory.cpp" />
+    <ClCompile Include="src\Graphics\AccelerationStructure.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\AccelerationStructureFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12AccelerationStructure.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\d3d12\D3D12ShaderTable.cpp">
+      <Filter>d3d12</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ShaderTableFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
