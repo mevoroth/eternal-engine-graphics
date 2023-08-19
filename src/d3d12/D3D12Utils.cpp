@@ -288,23 +288,26 @@ namespace Eternal
 				D3D12_DRED_AUTO_BREADCRUMBS_OUTPUT1	DredAutoBreadcrumbsOutput1	= {};
 				D3D12_DRED_PAGE_FAULT_OUTPUT1		DredPageFaultOutput1		= {};
 
-				HRESULT DeviceRemovedReason = static_cast<D3D12Device&>(InDevice).GetD3D12Device5()->GetDeviceRemovedReason();
-				if (DeviceRemovedReason == DXGI_ERROR_DEVICE_HUNG)
+				if (D3D12Device::UseDRED)
 				{
-					ID3D12DeviceRemovedExtendedData1* Dred1 = nullptr;
-					VerifySuccess(
-						static_cast<D3D12Device&>(InDevice).GetD3D12Device5()->QueryInterface(__uuidof(ID3D12DeviceRemovedExtendedData1), reinterpret_cast<void**>(&Dred1))
-					);
+					HRESULT DeviceRemovedReason = static_cast<D3D12Device&>(InDevice).GetD3D12Device5()->GetDeviceRemovedReason();
+					if (DeviceRemovedReason == DXGI_ERROR_DEVICE_HUNG)
+					{
+						ID3D12DeviceRemovedExtendedData1* Dred1 = nullptr;
+						VerifySuccess(
+							static_cast<D3D12Device&>(InDevice).GetD3D12Device5()->QueryInterface(__uuidof(ID3D12DeviceRemovedExtendedData1), reinterpret_cast<void**>(&Dred1))
+						);
 
-					VerifySuccess(
-						Dred1->GetPageFaultAllocationOutput1(&DredPageFaultOutput1)
-					);
+						VerifySuccess(
+							Dred1->GetPageFaultAllocationOutput1(&DredPageFaultOutput1)
+						);
 
-					VerifySuccess(
-						Dred1->GetAutoBreadcrumbsOutput1(&DredAutoBreadcrumbsOutput1)
-					);
+						VerifySuccess(
+							Dred1->GetAutoBreadcrumbsOutput1(&DredAutoBreadcrumbsOutput1)
+						);
 
-					Dred1->Release();
+						Dred1->Release();
+					}
 				}
 
 				ETERNAL_BREAK();

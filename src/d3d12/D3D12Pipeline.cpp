@@ -558,13 +558,13 @@ namespace Eternal
 			AddStateSubObject(D3D12_STATE_SUBOBJECT_RAYTRACING_PIPELINE_CONFIG1(RayTracingPipelineConfig));
 			AddStateSubObject(D3D12_STATE_SUBOBJECT_RAYTRACING_SHADER_CONFIG(RayTracingShaderConfig));
 			AddStateSubObject(D3D12_STATE_SUBOBJECT_GLOBAL_ROOT_SIGNATURE(GlobalRootSignature));
-			{
-				AddStateSubObject(DefaultLocalRootSignatureStateSubObject);
-				AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingRayGeneration,	StateSubObjects[StateSubObjectsCount - 1]);
-				AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingMiss,			StateSubObjects[StateSubObjectsCount - 1]);
-				AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingClosestHit,	StateSubObjects[StateSubObjectsCount - 1]);
-				AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingAnyHit,		StateSubObjects[StateSubObjectsCount - 1]);
-			}
+			//{
+			//	AddStateSubObject(DefaultLocalRootSignatureStateSubObject);
+			//	AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingRayGeneration,	StateSubObjects[StateSubObjectsCount - 1]);
+			//	AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingMiss,			StateSubObjects[StateSubObjectsCount - 1]);
+			//	AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingClosestHit,	StateSubObjects[StateSubObjectsCount - 1]);
+			//	AddSubObjectToExportsAssociation(InPipelineCreateInformation.ShaderRayTracingAnyHit,		StateSubObjects[StateSubObjectsCount - 1]);
+			//}
 			//AddStateSubObject(D3D12_STATE_SUBOBJECT_SUBOBJECT_TO_EXPORTS_ASSOCIATION(DefaultLocalRootSignatureSubObjectToExportsAssociation));
 
 			for (uint32_t DXILLibraryIndex = 0; DXILLibraryIndex < DXILLibrariesCount; ++DXILLibraryIndex)

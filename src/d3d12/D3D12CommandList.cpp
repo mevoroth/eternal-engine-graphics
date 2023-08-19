@@ -459,12 +459,14 @@ namespace Eternal
 			DispatchRaysDescription.Height						= InY;
 			DispatchRaysDescription.Depth						= 1;
 
+#if ETERNAL_USE_DEBUG_VERBOSE
 			stringstream DebugInfoStream;
 			DebugInfoStream << "DispatchRays:\n";
 			DebugInfoStream << "\tRayGenerationShaderRecord: { 0x" << std::hex << std::setfill('0') << std::setw(16) << InD3D12ShaderTable.GetD3D12RayGenerationShaderRecord().StartAddress << ", " << std::dec << InD3D12ShaderTable.GetD3D12RayGenerationShaderRecord().SizeInBytes << " }\n";
 			DebugInfoStream << "\tMissShaderTable: { " << std::hex << std::setfill('0') << std::setw(16) << InD3D12ShaderTable.GetD3D12MissShaderTable().StartAddress << ", " << std::dec << InD3D12ShaderTable.GetD3D12MissShaderTable().SizeInBytes << ", " << InD3D12ShaderTable.GetD3D12MissShaderTable().StrideInBytes << " }\n";
 			DebugInfoStream << "\tHitGroupTable: { " << std::hex << std::setfill('0') << std::setw(16) << InD3D12ShaderTable.GetD3D12HitGroupTable().StartAddress << ", " << std::dec << InD3D12ShaderTable.GetD3D12HitGroupTable().SizeInBytes << ", " << InD3D12ShaderTable.GetD3D12HitGroupTable().StrideInBytes << " }\n";
 			LogWrite(LogError, LogGraphics, DebugInfoStream.str());
+#endif
 
 			_GraphicCommandList6->DispatchRays(&DispatchRaysDescription);
 		}
@@ -476,7 +478,7 @@ namespace Eternal
 
 			D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO PrebuildInfo;
 			static_cast<D3D12Device&>(InContext.GetDevice()).GetD3D12Device5()->GetRaytracingAccelerationStructurePrebuildInfo(&BuildRaytracingAccelerationStructureDescription.Inputs, &PrebuildInfo);
-			ETERNAL_ASSERT(PrebuildInfo.UpdateScratchDataSizeInBytes < GraphicsContext::ScratchAccelerationStructureBufferSize);
+			ETERNAL_ASSERT(PrebuildInfo.ScratchDataSizeInBytes < GraphicsContext::ScratchAccelerationStructureBufferSize);
 
 			BuildRaytracingAccelerationStructureDescription.DestAccelerationStructureData		= static_cast<D3D12Resource*>(InAccelerationStructure.GetAccelerationStructure())->GetD3D12Resource()->GetGPUVirtualAddress();
 			BuildRaytracingAccelerationStructureDescription.ScratchAccelerationStructureData	= static_cast<D3D12Resource*>(InContext.GetScratchAccelerationStructureBuffer())->GetD3D12Resource()->GetGPUVirtualAddress();

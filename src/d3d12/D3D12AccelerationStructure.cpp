@@ -136,6 +136,11 @@ namespace Eternal
 					TransitionState::TRANSITION_NON_PIXEL_SHADER_READ
 				)
 			);
+
+			{
+				MapScope<D3D12_RAYTRACING_INSTANCE_DESC> InstancesBufferMapScope(*_InstancesBuffer);
+				memcpy(InstancesBufferMapScope.GetDataPointer(), _D3D12Instances.data(), _D3D12Instances.size() * sizeof(D3D12_RAYTRACING_INSTANCE_DESC));
+			}
 		}
 
 		void D3D12TopLevelAccelerationStructure::GetD3D12BuildRaytracingAccelerationStructureInputs(_Out_ D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS& OutInputs)

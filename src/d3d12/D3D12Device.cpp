@@ -52,13 +52,16 @@ namespace Eternal
 
 #if ETERNAL_USE_DEBUG_LAYER
 			// Enable the D3D12 debug layer
-			HResult = D3D12GetDebugInterface(__uuidof(ID3D12Debug3), reinterpret_cast<void**>(&_Debug3));
-			if (HResult == S_OK)
+			if (UseValidationLayer)
 			{
-				_Debug3->EnableDebugLayer();
-				_Debug3->SetEnableGPUBasedValidation(TRUE);
-				_Debug3->SetEnableSynchronizedCommandQueueValidation(TRUE);
-				_Debug3->SetGPUBasedValidationFlags(D3D12_GPU_BASED_VALIDATION_FLAGS_NONE);
+				HResult = D3D12GetDebugInterface(__uuidof(ID3D12Debug3), reinterpret_cast<void**>(&_Debug3));
+				if (HResult == S_OK)
+				{
+					_Debug3->EnableDebugLayer();
+					_Debug3->SetEnableGPUBasedValidation(TRUE);
+					_Debug3->SetEnableSynchronizedCommandQueueValidation(TRUE);
+					_Debug3->SetGPUBasedValidationFlags(D3D12_GPU_BASED_VALIDATION_FLAGS_NONE);
+				}
 			}
 
 			HMODULE DXGIDebugLib = LoadLibraryEx("dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
@@ -107,16 +110,19 @@ namespace Eternal
 				}
 			}
 
-			HResult = D3D12GetDebugInterface(__uuidof(ID3D12DeviceRemovedExtendedDataSettings), reinterpret_cast<void**>(&_D3D12DeviceRemovedExtendedDataSettings));
-			if (HResult == S_OK)
-				HResult = _D3D12DeviceRemovedExtendedDataSettings->QueryInterface(__uuidof(ID3D12DeviceRemovedExtendedDataSettings1), reinterpret_cast<void**>(&_D3D12DeviceRemovedExtendedDataSettings1));
-
-			if (_D3D12DeviceRemovedExtendedDataSettings1)
+			if (UseDRED)
 			{
-				_D3D12DeviceRemovedExtendedDataSettings1->SetAutoBreadcrumbsEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
-				_D3D12DeviceRemovedExtendedDataSettings1->SetBreadcrumbContextEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
-				_D3D12DeviceRemovedExtendedDataSettings1->SetPageFaultEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
-				_D3D12DeviceRemovedExtendedDataSettings1->SetWatsonDumpEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+				HResult = D3D12GetDebugInterface(__uuidof(ID3D12DeviceRemovedExtendedDataSettings), reinterpret_cast<void**>(&_D3D12DeviceRemovedExtendedDataSettings));
+				if (HResult == S_OK)
+					HResult = _D3D12DeviceRemovedExtendedDataSettings->QueryInterface(__uuidof(ID3D12DeviceRemovedExtendedDataSettings1), reinterpret_cast<void**>(&_D3D12DeviceRemovedExtendedDataSettings1));
+
+				if (_D3D12DeviceRemovedExtendedDataSettings1)
+				{
+					_D3D12DeviceRemovedExtendedDataSettings1->SetAutoBreadcrumbsEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+					_D3D12DeviceRemovedExtendedDataSettings1->SetBreadcrumbContextEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+					_D3D12DeviceRemovedExtendedDataSettings1->SetPageFaultEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+					_D3D12DeviceRemovedExtendedDataSettings1->SetWatsonDumpEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
+				}
 			}
 #endif
 		}
@@ -131,11 +137,17 @@ namespace Eternal
 				_DXGIDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL)
 			);
 
-			_D3D12DeviceRemovedExtendedDataSettings1->Release();
-			_D3D12DeviceRemovedExtendedDataSettings1 = nullptr;
+			if (_D3D12DeviceRemovedExtendedDataSettings1)
+			{
+				_D3D12DeviceRemovedExtendedDataSettings1->Release();
+				_D3D12DeviceRemovedExtendedDataSettings1 = nullptr;
+			}
 
-			_D3D12DeviceRemovedExtendedDataSettings->Release();
-			_D3D12DeviceRemovedExtendedDataSettings = nullptr;
+			if (_D3D12DeviceRemovedExtendedDataSettings)
+			{
+				_D3D12DeviceRemovedExtendedDataSettings->Release();
+				_D3D12DeviceRemovedExtendedDataSettings = nullptr;
+			}
 
 			_DXGIInfoQueue->Release();
 			_DXGIInfoQueue = nullptr;
@@ -143,8 +155,11 @@ namespace Eternal
 			_DXGIDebug->Release();
 			_DXGIDebug = nullptr;
 
-			_Debug3->Release();
-			_Debug3 = nullptr;
+			if (_Debug3)
+			{
+				_Debug3->Release();
+				_Debug3 = nullptr;
+			}
 #endif
 
 			_DXGIFactory->Release();

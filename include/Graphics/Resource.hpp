@@ -100,6 +100,13 @@ namespace Eternal
 				, _DataPointer(InResource.Map<ResourceStructureType>(InRange))
 			{
 			}
+			MapScope(_In_ Resource& InResource)
+				: _Resource(InResource)
+				, _Range(sizeof(ResourceStructureType))
+				, _DataPointer(InResource.Map<ResourceStructureType>(_Range))
+			{
+
+			}
 			~MapScope()
 			{
 				_Resource.Unmap(_Range);
@@ -115,7 +122,7 @@ namespace Eternal
 
 		private:
 			Resource&				_Resource;
-			const MapRange&			_Range;
+			MapRange				_Range;
 			ResourceStructureType*	_DataPointer = nullptr;
 		};
 
