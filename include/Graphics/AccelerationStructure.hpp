@@ -18,8 +18,13 @@ namespace Eternal
 
 		struct AccelerationStructureGeometry
 		{
-			Resource* VertexBuffer	= nullptr;
-			Resource* IndexBuffer	= nullptr;
+			Resource* VertexBuffer		= nullptr;
+			Resource* IndexBuffer		= nullptr;
+			Resource* TransformBuffer	= nullptr;
+			uint32_t IndicesCount		= 0u;
+			uint32_t IndicesOffset		= 0u;
+			uint32_t VerticesOffset		= 0u;
+			uint32_t TransformsOffet	= 0u;
 		};
 
 		struct AccelerationStructureInstance

@@ -632,7 +632,7 @@ namespace Eternal
 
 			vk::ImageType ConvertResourceDimensionToVulkanImageType(_In_ const ResourceDimension& InResourceDimension)
 			{
-				ETERNAL_ASSERT(InResourceDimension >= ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D);
+				ETERNAL_ASSERT(InResourceDimension < ResourceDimension::RESOURCE_DIMENSION_COUNT && InResourceDimension >= ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D);
 				return VULKAN_IMAGE_TYPES[static_cast<int32_t>(InResourceDimension)];
 			}
 

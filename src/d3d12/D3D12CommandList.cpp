@@ -32,6 +32,11 @@ namespace Eternal
 	{
 		using namespace Eternal::Graphics::D3D12;
 
+		namespace D3D12
+		{
+			static constexpr D3D12_RESOURCE_BARRIER DefaultBarrier = {};
+		}
+
 		D3D12CommandList::D3D12CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
 			: CommandList(InDevice, InCommandAllocator)
 		{
@@ -224,7 +229,6 @@ namespace Eternal
 		void D3D12CommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
 			ETERNAL_PROFILER(VERBOSE)();
-			static constexpr D3D12_RESOURCE_BARRIER DefaultBarrier = {};
 			std::array<D3D12_RESOURCE_BARRIER, MaxResourceTransitionsPerSubmit> ResourceBarriers;
 			ResourceBarriers.fill(DefaultBarrier);
 
@@ -249,6 +253,31 @@ namespace Eternal
 				ResourceBarriers[EffectiveTransitionsCount].Transition.StateAfter	= ConvertTransitionStateToD3D12ResourceStates(After);
 				
 				D3DResource.SetResourceState(CurrentResourceTransition.After);
+
+				++EffectiveTransitionsCount;
+			}
+
+			if (EffectiveTransitionsCount > 0)
+			{
+				_GraphicCommandList6->ResourceBarrier(
+					EffectiveTransitionsCount,
+					ResourceBarriers.data()
+				);
+			}
+		}
+
+		void D3D12CommandList::TransitionUAV(_In_ Resource* InResources[], _In_ uint32_t InResourcesCount)
+		{
+			ETERNAL_PROFILER(VERBOSE)();
+			std::array<D3D12_RESOURCE_BARRIER, MaxResourceTransitionsPerSubmit> ResourceBarriers;
+			ResourceBarriers.fill(DefaultBarrier);
+
+			uint32_t EffectiveTransitionsCount = 0;
+			for (uint32_t TransitionIndex = 0; TransitionIndex < InResourcesCount; ++TransitionIndex)
+			{
+				ResourceBarriers[EffectiveTransitionsCount].Type			= D3D12_RESOURCE_BARRIER_TYPE_UAV;
+				ResourceBarriers[EffectiveTransitionsCount].Flags			= D3D12_RESOURCE_BARRIER_FLAG_NONE;
+				ResourceBarriers[EffectiveTransitionsCount].UAV.pResource	= static_cast<D3D12Resource*>(InResources[TransitionIndex])->GetD3D12Resource();
 
 				++EffectiveTransitionsCount;
 			}

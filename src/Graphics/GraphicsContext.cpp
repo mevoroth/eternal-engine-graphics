@@ -2,6 +2,7 @@
 
 #include "d3d12/D3D12GraphicsContext.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
+#include "Graphics/AccelerationStructureFactory.hpp"
 #include "Graphics/CommandAllocator.hpp"
 #include "Graphics/CommandAllocatorFactory.hpp"
 #include "Graphics/CommandList.hpp"
@@ -115,6 +116,7 @@ namespace Eternal
 
 				_ViewsToClear[FrameIndex].reserve(ResourcesToClearInitialCount);
 				_ResourcesToClear[FrameIndex].reserve(ResourcesToClearInitialCount);
+				_AccelerationStructuresToClear[FrameIndex].reserve(ResourcesToClearInitialCount);
 			}
 
 			_CurrentFrameCommandListIndex.fill(0);
@@ -413,6 +415,10 @@ namespace Eternal
 				for (uint32_t PipelineIndex = 0; PipelineIndex < PipelinesToClear.size(); ++PipelineIndex)
 					DestroyPipeline(PipelinesToClear[PipelineIndex]);
 				PipelinesToClear.clear();
+
+				vector<AccelerationStructure*>& AccelerationStructuresToClear = _AccelerationStructuresToClear[_CurrentFrameIndex];
+				for (uint32_t AccelerationStructureIndex = 0; AccelerationStructureIndex < AccelerationStructuresToClear.size(); ++AccelerationStructureIndex)
+					DestroyAccelerationStructure(AccelerationStructuresToClear[AccelerationStructureIndex]);
 			}
 		}
 
@@ -473,6 +479,11 @@ namespace Eternal
 		template<> void GraphicsContext::DelayedDelete<Resource>(_In_ Resource* InResource)
 		{
 			_ResourcesToClear[_CurrentFrameIndex].push_back(InResource);
+		}
+
+		template<> void GraphicsContext::DelayedDelete<AccelerationStructure>(_In_ AccelerationStructure* InAccelerationStructure)
+		{
+			_AccelerationStructuresToClear[_CurrentFrameIndex].push_back(InAccelerationStructure);
 		}
 
 		void GraphicsContext::WaitForAllFences()

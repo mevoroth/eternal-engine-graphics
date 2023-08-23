@@ -61,13 +61,13 @@ namespace Eternal
 				D3D12_RAYTRACING_GEOMETRY_DESC& CurrentGeometryDescription		= _D3D12Geometries.back();
 				CurrentGeometryDescription.Type									= D3D12_RAYTRACING_GEOMETRY_TYPE_TRIANGLES;
 				CurrentGeometryDescription.Flags								= D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE;
-				CurrentGeometryDescription.Triangles.Transform3x4				= static_cast<D3D12_GPU_VIRTUAL_ADDRESS>(0);
+				CurrentGeometryDescription.Triangles.Transform3x4				= CurrentGeometry.TransformBuffer ? static_cast<const D3D12Resource*>(CurrentGeometry.TransformBuffer)->GetD3D12Resource()->GetGPUVirtualAddress() + CurrentGeometry.TransformBuffer->GetBufferStride() * CurrentGeometry.TransformsOffet : static_cast<D3D12_GPU_VIRTUAL_ADDRESS>(0);
 				CurrentGeometryDescription.Triangles.IndexFormat				= ConvertFormatToD3D12Format(CurrentGeometry.IndexBuffer->GetFormat()).Format;
 				CurrentGeometryDescription.Triangles.VertexFormat				= DXGI_FORMAT_R32G32B32_FLOAT;//ConvertFormatToD3D12Format(CurrentGeometry.VertexBuffer->GetFormat()).Format;
-				CurrentGeometryDescription.Triangles.IndexCount					= CurrentGeometry.IndexBuffer->GetElementCount();
-				CurrentGeometryDescription.Triangles.VertexCount				= CurrentGeometry.VertexBuffer->GetElementCount();
-				CurrentGeometryDescription.Triangles.IndexBuffer				= static_cast<const D3D12Resource*>(CurrentGeometry.IndexBuffer)->GetD3D12Resource()->GetGPUVirtualAddress();
-				CurrentGeometryDescription.Triangles.VertexBuffer.StartAddress	= static_cast<const D3D12Resource*>(CurrentGeometry.VertexBuffer)->GetD3D12Resource()->GetGPUVirtualAddress();
+				CurrentGeometryDescription.Triangles.IndexCount					= CurrentGeometry.IndicesCount; //CurrentGeometry.IndexBuffer->GetElementCount();
+				CurrentGeometryDescription.Triangles.VertexCount				= CurrentGeometry.IndicesCount; //CurrentGeometry.VertexBuffer->GetElementCount();
+				CurrentGeometryDescription.Triangles.IndexBuffer				= static_cast<const D3D12Resource*>(CurrentGeometry.IndexBuffer)->GetD3D12Resource()->GetGPUVirtualAddress() + CurrentGeometry.IndexBuffer->GetBufferStride() * CurrentGeometry.IndicesOffset;
+				CurrentGeometryDescription.Triangles.VertexBuffer.StartAddress	= static_cast<const D3D12Resource*>(CurrentGeometry.VertexBuffer)->GetD3D12Resource()->GetGPUVirtualAddress() + CurrentGeometry.VertexBuffer->GetBufferStride() * CurrentGeometry.VerticesOffset;
 				CurrentGeometryDescription.Triangles.VertexBuffer.StrideInBytes	= CurrentGeometry.VertexBuffer->GetBufferStride();
 			}
 
@@ -100,6 +100,8 @@ namespace Eternal
 
 		void D3D12TopLevelAccelerationStructure::RebuildAccelerationStructure(_In_ GraphicsContext& InContext, _In_ const RebuildAccelerationStructureInput& InRebuildInput)
 		{
+			ID3D12Device5* Device5 = static_cast<D3D12Device&>(InContext.GetDevice()).GetD3D12Device5();
+
 			_D3D12Instances.resize(InRebuildInput.Instances.size());
 			
 			for (uint32_t InstanceIndex = 0; InstanceIndex < InRebuildInput.Instances.size(); ++InstanceIndex)
@@ -117,6 +119,25 @@ namespace Eternal
 				DestroyView(_AccelerationStructureView);
 			if (_AccelerationStructureResource)
 				InContext.DelayedDelete(_AccelerationStructureResource);
+
+			D3D12_BUILD_RAYTRACING_ACCELERATION_STRUCTURE_INPUTS BuildRayTracingAccelerationStructureInputs = {};
+			GetD3D12BuildRaytracingAccelerationStructureInputs(BuildRayTracingAccelerationStructureInputs);
+
+			{
+				D3D12_RAYTRACING_ACCELERATION_STRUCTURE_PREBUILD_INFO RayTracingAccelerationStructurePrebuildInfo = {};
+				Device5->GetRaytracingAccelerationStructurePrebuildInfo(&BuildRayTracingAccelerationStructureInputs, &RayTracingAccelerationStructurePrebuildInfo);
+				ETERNAL_ASSERT(RayTracingAccelerationStructurePrebuildInfo.ResultDataMaxSizeInBytes > 0);
+				_AccelerationStructureResource = CreateBuffer(
+					BufferResourceCreateInformation(
+						InContext.GetDevice(),
+						GetAccelerationStructureName(),
+						AccelerationStructureBufferCreateInformation(static_cast<uint32_t>(RayTracingAccelerationStructurePrebuildInfo.ResultDataMaxSizeInBytes)),
+						ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY,
+						TransitionState::TRANSITION_RAYTRACING_ACCELERATION_STRUCTURE
+					)
+				);
+			}
+
 			CreateAccelerationStructureBuffer(InContext);
 			_AccelerationStructureView = CreateShaderResourceView(
 				ShaderResourceViewAccelerationStructureCreateInformation(InContext, _AccelerationStructureResource)

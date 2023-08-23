@@ -61,6 +61,7 @@ namespace Eternal
 			virtual void EndRenderPass() override final;
 
 			virtual void Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override final;
+			virtual void TransitionUAV(_In_ Resource* InResources[], _In_ uint32_t InResourcesCount) override final;
 
 			virtual void SetViewport(_In_ const Viewport& InViewport) override final;
 			virtual void SetScissorRectangle(_In_ const ScissorRectangle& InScissorRectangle) override final;

@@ -215,7 +215,8 @@ namespace Eternal
 		D3D12IncludeDXC*	D3D12Shader::_DxcIncludeHandler			= nullptr;
 		IDxcIncludeHandler*	D3D12Shader::_DxcIncludeHandlerDefault	= nullptr;
 		IDxcUtils*			D3D12Shader::_DxcUtils					= nullptr;
-		IDxcCompiler3*		D3D12Shader::_DxcCompiler				= nullptr;
+		IDxcCompiler3*		D3D12Shader::_DxcCompiler3				= nullptr;
+		IDxcPdbUtils*		D3D12Shader::_DxcPdbUtils				= nullptr;
 
 		void D3D12Shader::Initialize(_Inout_ GraphicsContext& InOutContext)
 		{
@@ -242,9 +243,19 @@ namespace Eternal
 				DxcCreateInstance(
 					CLSID_DxcCompiler,
 					__uuidof(IDxcCompiler3),
-					reinterpret_cast<void**>(&_DxcCompiler)
+					reinterpret_cast<void**>(&_DxcCompiler3)
 				)
 			);
+
+			VerifySuccess(
+				DxcCreateInstance(
+					CLSID_DxcPdbUtils,
+					__uuidof(IDxcPdbUtils),
+					reinterpret_cast<void**>(&_DxcPdbUtils)
+				)
+			);
+
+			_DxcPdbUtils->SetCompiler(_DxcCompiler3);
 		}
 
 		void D3D12Shader::Destroy()
@@ -274,7 +285,8 @@ namespace Eternal
 			ETERNAL_ASSERT(_DxcIncludeHandler);
 			ETERNAL_ASSERT(_DxcIncludeHandlerDefault);
 			ETERNAL_ASSERT(_DxcUtils);
-			ETERNAL_ASSERT(_DxcCompiler);
+			ETERNAL_ASSERT(_DxcCompiler3);
+			ETERNAL_ASSERT(_DxcPdbUtils);
 
 #if ETERNAL_USE_DEBUG_SHADERS
 			_CompileFile(
@@ -385,7 +397,7 @@ namespace Eternal
 			case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_DXC:
 			{
 				ETERNAL_ASSERT(_DxcUtils);
-				ETERNAL_ASSERT(_DxcCompiler);
+				ETERNAL_ASSERT(_DxcCompiler3);
 
 				vector<LPCWSTR> Arguments;
 				vector<DxcDefine> Macros;
@@ -393,10 +405,11 @@ namespace Eternal
 
 				{
 					Arguments.reserve(256);
-					Arguments.push_back(DXC_ARG_DEBUG);
-					Arguments.push_back(DXC_ARG_WARNINGS_ARE_ERRORS);
-					Arguments.push_back(DXC_ARG_SKIP_OPTIMIZATIONS);
 					Arguments.push_back(DXC_ARG_ENABLE_STRICTNESS);
+					Arguments.push_back(DXC_ARG_WARNINGS_ARE_ERRORS);
+					Arguments.push_back(DXC_ARG_DEBUG);
+					Arguments.push_back(DXC_ARG_OPTIMIZATION_LEVEL0);
+					Arguments.push_back(DXC_ARG_SKIP_OPTIMIZATIONS);
 
 					//const vector<wstring>& ShadersIncludePaths = FilePath::GetFolderPathsUTF8(FileType::FILE_TYPE_SHADERS);
 					//for (uint32_t PathIndex = 0; PathIndex < ShadersIncludePaths.size(); ++PathIndex)
@@ -459,7 +472,7 @@ namespace Eternal
 
 				IDxcResult* CompilationResult = nullptr;
 				VerifySuccess(
-					_DxcCompiler->Compile(
+					_DxcCompiler3->Compile(
 						&SourceBuffer,
 						CompilationArguments->GetArguments(),
 						CompilationArguments->GetCount(),
@@ -473,6 +486,7 @@ namespace Eternal
 
 				IDxcBlobUtf8* Errors = nullptr;
 				IDxcBlobUtf8* HLSLBlob = nullptr;
+				IDxcBlob* PDBBlob = nullptr;
 				IDxcBlobUtf16* OutputName = nullptr;
 
 				VerifySuccess(
@@ -508,6 +522,29 @@ namespace Eternal
 					reinterpret_cast<void**>(&_DxcProgram),
 					&OutputName
 				);
+
+				VerifySuccess(
+					CompilationResult->GetOutput(
+						DXC_OUT_PDB,
+						__uuidof(IDxcBlob),
+						reinterpret_cast<void**>(&PDBBlob),
+						&OutputName
+					)
+				);
+
+				if (PDBBlob && PDBBlob->GetBufferSize() > 0)
+				{
+					char PDBName[256] = {};
+					size_t StringLength = OutputName->GetStringLength();
+					LPCWSTR StringPointer = OutputName->GetStringPointer();
+					wcstombs_s(nullptr, PDBName, StringPointer, 256);
+					string PDBPath = FilePath::FindOrCreate(PDBName, FileType::FILE_TYPE_SHADERS_PDB);
+					File* PDBFile = CreateFileHandle(PDBPath);
+					PDBFile->Open(File::OpenMode::WRITE);
+					PDBFile->Write(reinterpret_cast<uint8_t*>(PDBBlob->GetBufferPointer()), PDBBlob->GetBufferSize());
+					PDBFile->Close();
+					DestroyFileHandle(PDBFile);
+				}
 
 				CompilationResult->Release();
 				CompilationResult = nullptr;

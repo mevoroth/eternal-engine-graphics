@@ -31,6 +31,7 @@ namespace Eternal
 		class View;
 		class Resource;
 		class RenderPass;
+		class AccelerationStructure;
 
 		struct GraphicsContextCreateInformation
 		{
@@ -87,7 +88,7 @@ namespace Eternal
 				256
 			};
 			static constexpr uint32_t GraphicsCommandBudgetPerFrame = 4;
-			static constexpr uint32_t ScratchAccelerationStructureBufferSize = 256 * 1024 * 1024;
+			static constexpr uint32_t ScratchAccelerationStructureBufferSize = 1024 * 1024 * 1024;
 
 			virtual ~GraphicsContext();
 
@@ -160,6 +161,7 @@ namespace Eternal
 			array<vector<View*>, FrameBufferingCount>								_ViewsToClear;
 			array<vector<Resource*>, FrameBufferingCount>							_ResourcesToClear;
 			array<vector<Pipeline*>, FrameBufferingCount>							_PipelinesToClear;
+			array<vector<AccelerationStructure*>, FrameBufferingCount>				_AccelerationStructuresToClear;
 
 			vector<GraphicsCommand*>*												_NewGraphicsCommands = nullptr;
 			vector<GraphicsCommand*>												_GraphicsCommands;

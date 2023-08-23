@@ -13,7 +13,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		VulkanRootSignature::VulkanRootSignature(GraphicsContext& InContext)
+		VulkanRootSignature::VulkanRootSignature(_In_ GraphicsContext& InContext)
 			: RootSignature()
 			, _Context(InContext)
 		{

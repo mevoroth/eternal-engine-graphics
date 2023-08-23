@@ -67,6 +67,11 @@ namespace Eternal
 			Transition(&InResourceTransition, 1);
 		}
 
+		void CommandList::TransitionUAV(_In_ Resource* InResource)
+		{
+			TransitionUAV(&InResource, 1);
+		}
+
 		void CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
 			_SetDescriptorTable(InContext, InDescriptorTable);

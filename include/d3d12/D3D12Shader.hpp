@@ -8,6 +8,7 @@ struct ID3DInclude;
 struct IDxcUtils;
 struct IDxcIncludeHandler;
 struct IDxcCompiler3;
+struct IDxcPdbUtils;
 struct IDxcBlob;
 
 namespace Eternal
@@ -39,7 +40,8 @@ namespace Eternal
 			static D3D12IncludeDXC*		_DxcIncludeHandler;
 			static IDxcIncludeHandler*	_DxcIncludeHandlerDefault;
 			static IDxcUtils*			_DxcUtils;
-			static IDxcCompiler3*		_DxcCompiler;
+			static IDxcCompiler3*		_DxcCompiler3;
+			static IDxcPdbUtils*		_DxcPdbUtils;
 
 			union
 			{

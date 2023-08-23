@@ -220,6 +220,11 @@ namespace Eternal
 			);
 		}
 
+		void VulkanCommandList::TransitionUAV(_In_ Resource* InResources[], _In_ uint32_t InResourcesCount)
+		{
+			ETERNAL_BREAK();
+		}
+
 		void VulkanCommandList::SetViewport(_In_ const Viewport& InViewport)
 		{
 			const VulkanViewport& InVkViewport = static_cast<const VulkanViewport&>(InViewport);
