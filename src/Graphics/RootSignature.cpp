@@ -120,6 +120,8 @@ namespace Eternal
 								SubDescriptorTableIndex
 							);
 #endif
+						default:
+							break;
 						}
 					}
 				}
@@ -163,6 +165,8 @@ namespace Eternal
 							DescriptorTableCount++
 						);
 #endif
+					default:
+						break;
 					}
 					OutDescriptorTables.push_back(Table);
 				}
