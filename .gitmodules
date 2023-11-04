@@ -1,0 +1,3 @@
+[submodule "GraphicsPrivate"]
+	path = GraphicsPrivate
+	url = git@github.com:mevoroth/eternal-engine-graphics-private.git
