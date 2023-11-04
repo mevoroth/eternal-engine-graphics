@@ -105,7 +105,6 @@ namespace Eternal
 				, _Range(sizeof(ResourceStructureType))
 				, _DataPointer(InResource.Map<ResourceStructureType>(_Range))
 			{
-
 			}
 			~MapScope()
 			{
@@ -139,6 +138,7 @@ namespace Eternal
 #endif
 			static constexpr uint8_t DefaultStencilClearValue				= 0x0u;
 
+			TextureCreateInformation() {}
 			TextureCreateInformation(
 				_In_ const ResourceDimension& InResourceDimension,
 				_In_ const Format& InFormat,
@@ -179,6 +179,7 @@ namespace Eternal
 		
 		struct BufferCreateInformation
 		{
+			BufferCreateInformation() {}
 			BufferCreateInformation(
 				_In_ const Format& InFormat,
 				_In_ const BufferResourceUsage& InResourceUsage,
@@ -256,6 +257,8 @@ namespace Eternal
 				, ResourceState(InInitialTransitionState)
 				, MemoryType(InMemoryType)
 			{
+				TextureInformation	= TextureCreateInformation();
+				BufferInformation	= BufferCreateInformation();
 			}
 
 			ResourceCreateInformation(
