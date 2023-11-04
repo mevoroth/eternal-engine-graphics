@@ -63,9 +63,9 @@ namespace Eternal
 				CurrentGeometryDescription.Flags								= D3D12_RAYTRACING_GEOMETRY_FLAG_OPAQUE;
 				CurrentGeometryDescription.Triangles.Transform3x4				= CurrentGeometry.TransformBuffer ? static_cast<const D3D12Resource*>(CurrentGeometry.TransformBuffer)->GetD3D12Resource()->GetGPUVirtualAddress() + CurrentGeometry.TransformBuffer->GetBufferStride() * CurrentGeometry.TransformsOffet : static_cast<D3D12_GPU_VIRTUAL_ADDRESS>(0);
 				CurrentGeometryDescription.Triangles.IndexFormat				= ConvertFormatToD3D12Format(CurrentGeometry.IndexBuffer->GetFormat()).Format;
-				CurrentGeometryDescription.Triangles.VertexFormat				= DXGI_FORMAT_R32G32B32_FLOAT;//ConvertFormatToD3D12Format(CurrentGeometry.VertexBuffer->GetFormat()).Format;
-				CurrentGeometryDescription.Triangles.IndexCount					= CurrentGeometry.IndicesCount; //CurrentGeometry.IndexBuffer->GetElementCount();
-				CurrentGeometryDescription.Triangles.VertexCount				= CurrentGeometry.IndicesCount; //CurrentGeometry.VertexBuffer->GetElementCount();
+				CurrentGeometryDescription.Triangles.VertexFormat				= DXGI_FORMAT_R32G32B32_FLOAT;
+				CurrentGeometryDescription.Triangles.IndexCount					= CurrentGeometry.IndicesCount;
+				CurrentGeometryDescription.Triangles.VertexCount				= CurrentGeometry.IndicesCount;
 				CurrentGeometryDescription.Triangles.IndexBuffer				= static_cast<const D3D12Resource*>(CurrentGeometry.IndexBuffer)->GetD3D12Resource()->GetGPUVirtualAddress() + CurrentGeometry.IndexBuffer->GetBufferStride() * CurrentGeometry.IndicesOffset;
 				CurrentGeometryDescription.Triangles.VertexBuffer.StartAddress	= static_cast<const D3D12Resource*>(CurrentGeometry.VertexBuffer)->GetD3D12Resource()->GetGPUVirtualAddress() + CurrentGeometry.VertexBuffer->GetBufferStride() * CurrentGeometry.VerticesOffset;
 				CurrentGeometryDescription.Triangles.VertexBuffer.StrideInBytes	= CurrentGeometry.VertexBuffer->GetBufferStride();
@@ -109,6 +109,7 @@ namespace Eternal
 				_D3D12Instances[InstanceIndex]							= {};
 				memcpy(_D3D12Instances[InstanceIndex].Transform, InRebuildInput.Instances[InstanceIndex].InstanceToWorld.m, sizeof(float) * 3 * 4);
 				_D3D12Instances[InstanceIndex].InstanceMask				= 0x1;
+				_D3D12Instances[InstanceIndex].Flags					= D3D12_RAYTRACING_INSTANCE_FLAG_TRIANGLE_FRONT_COUNTERCLOCKWISE;
 				_D3D12Instances[InstanceIndex].AccelerationStructure	= static_cast<D3D12Resource*>(InRebuildInput.Instances[InstanceIndex].BottomLevelAccelerationStructureBuffer->GetAccelerationStructure())->GetD3D12Resource()->GetGPUVirtualAddress();
 			}
 
