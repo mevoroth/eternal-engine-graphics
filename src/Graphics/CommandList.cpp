@@ -82,6 +82,11 @@ namespace Eternal
 			_SetDescriptorTable(InContext, InDescriptorTable);
 		}
 
+		void CommandList::SetRayTracingDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
+		{
+			SetComputeDescriptorTable(InContext, InDescriptorTable);
+		}
+
 		void CommandList::_SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
 #if ETERNAL_DEBUG_MATCHING_ROOT_SIGNATURE

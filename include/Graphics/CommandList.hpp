@@ -76,6 +76,7 @@ namespace Eternal
 			virtual void DispatchMesh(_In_ uint32_t InTaskBatchesCount = 1) = 0;
 
 			virtual void SetRayTracingPipeline(_In_ const Pipeline& InPipeline) = 0;
+			void SetRayTracingDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable);
 			virtual void DispatchRays(_In_ const ShaderTable& InShaderTable, _In_ uint32_t InX = 1, _In_ uint32_t InY = 1) = 0;
 			virtual void BuildRaytracingAccelerationStructure(_In_ GraphicsContext& InContext, _In_ AccelerationStructure& InAccelerationStructure) = 0;
 
