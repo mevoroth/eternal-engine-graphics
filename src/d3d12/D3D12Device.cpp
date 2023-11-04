@@ -22,6 +22,12 @@ namespace Eternal
 	{
 		using namespace Eternal::Graphics::D3D12;
 
+		namespace D3D12
+		{
+			static constexpr bool LoadPixDLLOnStartup	= true;
+			static constexpr bool UseValidationLayer	= true;
+		}
+
 #if ETERNAL_USE_DEBUG_LAYER
 		ID3D12Debug3*								D3D12Device::_Debug3									= nullptr;
 		IDXGIInfoQueue*								D3D12Device::_DXGIInfoQueue								= nullptr;
@@ -42,7 +48,7 @@ namespace Eternal
 			HRESULT HResult = S_OK;
 
 #if ETERNAL_USE_DEBUG_LAYER
-			if (LoadPixDLLOnStartup)
+			if (D3D12::LoadPixDLLOnStartup)
 				PIXLoadLatestWinPixGpuCapturerLibrary();
 #endif
 
@@ -52,7 +58,7 @@ namespace Eternal
 
 #if ETERNAL_USE_DEBUG_LAYER
 			// Enable the D3D12 debug layer
-			if (UseValidationLayer)
+			if (D3D12::UseValidationLayer)
 			{
 				HResult = D3D12GetDebugInterface(__uuidof(ID3D12Debug3), reinterpret_cast<void**>(&_Debug3));
 				if (HResult == S_OK)

@@ -36,9 +36,7 @@ namespace Eternal
 		class D3D12Device final : public Device
 		{
 		public:
-			static constexpr bool LoadPixDLLOnStartup	= true;
-			static constexpr bool UseValidationLayer	= false;
-			static constexpr bool UseDRED				= true;
+			static constexpr bool UseDRED = true;
 
 			static void Initialize();
 			static void Destroy();
