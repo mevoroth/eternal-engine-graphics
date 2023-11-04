@@ -8,6 +8,9 @@ namespace Eternal
 		{
 			D3D12,
 			VULKAN
+			#if ETERNAL_USE_GRAPHICS_PRIVATE
+			#include "GraphicsPrivate/Types/DeviceType.hpp"
+			#endif
 		};
 	}
 }
