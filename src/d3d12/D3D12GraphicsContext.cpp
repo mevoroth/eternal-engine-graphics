@@ -148,16 +148,19 @@ namespace Eternal
 #endif
 		}
 
-		template<typename BitFieldHandles>
+		template<bool IsShaderVisible = true, typename BitFieldHandles>
 		static D3D12Handle AllocateDescriptor(_In_ BitFieldHandles& Handles, _In_ ID3D12DescriptorHeap* DescriptorHeap, _In_ uint32_t IncrementSize, _In_ uint32_t Offset = 0)
 		{
 			D3D12Handle Handle;
 
-			Handle.DescriptorHandle				= Handles.Pop();
-			Handle.D3D12CPUDescriptorHandle		= DescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-			Handle.D3D12GPUDescriptorHandle		= DescriptorHeap->GetGPUDescriptorHandleForHeapStart();
-			Handle.D3D12CPUDescriptorHandle.ptr	+= IncrementSize * (Offset + Handle.DescriptorHandle);
-			Handle.D3D12GPUDescriptorHandle.ptr	+= IncrementSize * (Offset + Handle.DescriptorHandle);
+			Handle.DescriptorHandle					= Handles.Pop();
+			Handle.D3D12CPUDescriptorHandle			= DescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+			Handle.D3D12CPUDescriptorHandle.ptr		+= IncrementSize * (Offset + Handle.DescriptorHandle);
+			if (IsShaderVisible)
+			{
+				Handle.D3D12GPUDescriptorHandle		= DescriptorHeap->GetGPUDescriptorHandleForHeapStart();
+				Handle.D3D12GPUDescriptorHandle.ptr	+= IncrementSize * (Offset + Handle.DescriptorHandle);
+			}
 
 			return Handle;
 		}
@@ -202,7 +205,7 @@ namespace Eternal
 
 		D3D12Handle D3D12GraphicsContext::AllocateRenderTargetViewDescriptor()
 		{
-			return AllocateDescriptor(
+			return AllocateDescriptor</* IsShaderVisible = */ false>(
 				_RenderTargetViewHandles,
 				_RenderTargetViewDescriptorHeap,
 				_RenderTargetViewDescriptorHandleIncrementSize
@@ -211,7 +214,7 @@ namespace Eternal
 
 		D3D12Handle D3D12GraphicsContext::AllocateDepthStencilViewDescriptor()
 		{
-			return AllocateDescriptor(
+			return AllocateDescriptor</* IsShaderVisible = */ false>(
 				_DepthStencilViewHandles,
 				_DepthStencilViewDescriptorHeap,
 				_DepthStencilViewDescriptorHandleIncrementSize
