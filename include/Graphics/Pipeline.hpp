@@ -199,6 +199,8 @@ namespace Eternal
 				_In_ Shader* InRayTracingMiss,
 				_In_ Shader* InRayTracingAnyHit = nullptr
 			);
+
+			RayTracingPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation);
 		};
 
 		class Pipeline

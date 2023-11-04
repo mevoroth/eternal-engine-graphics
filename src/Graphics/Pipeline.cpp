@@ -231,6 +231,19 @@ namespace Eternal
 				PipelineShaderTypes |= ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_ANY_HIT;
 		}
 
+		RayTracingPipelineCreateInformation::RayTracingPipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)
+			: RayTracingPipelineCreateInformation(
+				InPipelineCreateInformation.PipelineRootSignature,
+				InPipelineCreateInformation.ShaderRayTracingRayGeneration,
+				InPipelineCreateInformation.ShaderRayTracingClosestHit,
+				InPipelineCreateInformation.ShaderRayTracingMiss,
+				InPipelineCreateInformation.ShaderRayTracingAnyHit
+			)
+		{
+			ETERNAL_ASSERT((InPipelineCreateInformation.PipelineShaderTypes & ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_RAY_GENERATION) == ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_RAY_GENERATION);
+			PipelineRecreated = true;
+		}
+
 		//////////////////////////////////////////////////////////////////////////
 		// PipelineCreateInformation
 		PipelineCreateInformation::PipelineCreateInformation(_In_ const PipelineCreateInformation& InPipelineCreateInformation)

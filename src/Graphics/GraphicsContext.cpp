@@ -300,6 +300,8 @@ namespace Eternal
 						NewPipeline = CreatePipeline(*this, GraphicsPipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()));
 					//else if ((_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() & ShaderTypeFlags::MS) == ShaderTypeFlags::MS)
 					//	CreatePipeline(*this, MeshPipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()), _PipelineRecompile.Pipelines[PipelineIndex]);
+					else if ((_PipelineRecompile.Pipelines[PipelineIndex]->GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_RAY_GENERATION) == ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_RAY_GENERATION)
+						NewPipeline = CreatePipeline(*this, RayTracingPipelineCreateInformation(_PipelineRecompile.Pipelines[PipelineIndex]->GetPipelineCreateInformation()));
 					else
 					{
 						ETERNAL_BREAK(); // Incorrect pipeline
