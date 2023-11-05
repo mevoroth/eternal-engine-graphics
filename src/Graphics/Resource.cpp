@@ -24,8 +24,8 @@ namespace Eternal
 		static std::set<Resource*> ResourceHistory;
 
 		Resource::Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType)
-			: _ResourceCreateInformation(InResourceCreateInformation)
-			, _ResourceType(InResourceType)
+			: _ResourceType(InResourceType)
+			, _ResourceCreateInformation(InResourceCreateInformation)
 		{
 			ETERNAL_ASSERT(_ResourceCreateInformation.Name.size() > 0);
 			ResourceHistory.insert(this);

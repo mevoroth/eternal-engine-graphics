@@ -1,6 +1,6 @@
 #include "Graphics/SwapChain.hpp"
 
-#include "Window/Window.hpp"
+#include "OutputDevice/OutputDevice.hpp"
 #include "Graphics/ViewFactory.hpp"
 #include "Graphics/ResourceFactory.hpp"
 

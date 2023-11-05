@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Graphics/InputLayout.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 
@@ -28,3 +30,5 @@ namespace Eternal
 		extern const VulkanInputLayout VulkanEmptyInputLayout;
 	}
 }
+
+#endif

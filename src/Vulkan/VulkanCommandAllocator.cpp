@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanCommandAllocator.hpp"
 
 #include "Vulkan/VulkanDevice.hpp"
@@ -35,3 +37,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

@@ -15,8 +15,8 @@ namespace Eternal
 		{
 			switch (InDeviceType)
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 			{
 				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Initializing D3D12Shader");
 				D3D12Shader::Initialize(InOutContext);
@@ -26,10 +26,10 @@ namespace Eternal
 			LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Direct3D 12 Device");
 			return new D3D12Device(0);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Vulkan Device");
-				return new VulkanDevice(InOutContext.GetWindow());
+				return new VulkanDevice(InOutContext.GetOutputDevice());
 #endif
 			default:
 				ETERNAL_BREAK();
@@ -39,8 +39,8 @@ namespace Eternal
 
 		void DestroyDevice(_Inout_ Device*& InOutDevice)
 		{
-#ifdef ETERNAL_ENABLE_D3D12
-			if (InOutDevice->GetDeviceType() == DeviceType::D3D12)
+#if ETERNAL_ENABLE_D3D12
+			if (InOutDevice->GetDeviceType() == DeviceType::DEVICE_TYPE_D3D12)
 			{
 				D3D12Device::Destroy();
 				D3D12Shader::Destroy();

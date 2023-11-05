@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12Shader.hpp"
 
 #include "GraphicsSettings.hpp"
@@ -589,3 +591,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

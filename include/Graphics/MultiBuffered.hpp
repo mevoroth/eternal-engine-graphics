@@ -35,13 +35,13 @@ namespace Eternal
 
 			operator GraphicsResourceType&()
 			{
-				ETERNAL_ASSERT(&_Context != nullptr);
+				ETERNAL_ASSERT(_Context != nullptr);
 				return *_Resources[_Context->GetCurrentFrameIndex()];
 			}
 
 			operator GraphicsResourceType*()
 			{
-				ETERNAL_ASSERT(&_Context != nullptr);
+				ETERNAL_ASSERT(_Context != nullptr);
 				return _Resources[_Context->GetCurrentFrameIndex()];
 			}
 
@@ -52,24 +52,24 @@ namespace Eternal
 
 			GraphicsResourceType* operator->()
 			{
-				ETERNAL_ASSERT(&_Context != nullptr);
+				ETERNAL_ASSERT(_Context != nullptr);
 				return _Resources[_Context->GetCurrentFrameIndex()];
 			}
 
-			GraphicsResourceType* operator[](size_t Index)
+			GraphicsResourceType* operator[](_In_ size_t InIndex)
 			{
-				ETERNAL_ASSERT(_Resources[Index]);
-				return _Resources[Index];
+				ETERNAL_ASSERT(_Resources[InIndex]);
+				return _Resources[InIndex];
 			}
 
-			MultiBuffered& operator=(const MultiBuffered& Other)
+			MultiBuffered& operator=(_In_ const MultiBuffered& InOther)
 			{
-				if (this == &Other)
+				if (this == &InOther)
 					return *this;
 
-				_Context = Other._Context;
+				_Context = InOther._Context;
 				for (uint32_t ResourceIndex = 0; ResourceIndex < ResourcesCount; ++ResourceIndex)
-					_Resources[ResourceIndex] = Other._Resources[ResourceIndex];
+					_Resources[ResourceIndex] = InOther._Resources[ResourceIndex];
 
 				return *this;
 			}

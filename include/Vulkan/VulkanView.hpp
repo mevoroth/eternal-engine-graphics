@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Graphics/View.hpp"
+
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanHeader.hpp"
 
 namespace Eternal
@@ -54,3 +57,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

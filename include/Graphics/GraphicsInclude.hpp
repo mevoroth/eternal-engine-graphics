@@ -14,6 +14,7 @@
 #include "Graphics/Device.hpp"
 #include "Graphics/Format.hpp"
 #include "Graphics/GraphicsContext.hpp"
+#include "Graphics/GraphicsContextFactory.hpp"
 #include "Graphics/InputLayoutFactory.hpp"
 #include "Graphics/Pipeline.hpp"
 #include "Graphics/PipelineFactory.hpp"

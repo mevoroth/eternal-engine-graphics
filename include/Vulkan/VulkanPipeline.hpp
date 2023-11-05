@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Graphics/Pipeline.hpp"
+
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanHeader.hpp"
 
 namespace Eternal
@@ -44,3 +47,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

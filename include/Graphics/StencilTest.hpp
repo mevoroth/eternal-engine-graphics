@@ -39,9 +39,9 @@ namespace Eternal
 
 			StencilTest() {}
 			StencilTest(_In_ const FaceOperator& Front, _In_ const FaceOperator& Back, _In_ uint8_t ReadMask, _In_ uint8_t WriteMask, _In_ uint8_t Reference)
-				: _Enabled(true)
-				, _Front(Front)
+				: _Front(Front)
 				, _Back(Back)
+				, _Enabled(true)
 				, _ReadMask(ReadMask)
 				, _WriteMask(WriteMask)
 				, _Reference(Reference)

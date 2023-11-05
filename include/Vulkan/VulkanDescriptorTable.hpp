@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Graphics/DescriptorTable.hpp"
 #include "Graphics/RootSignature.hpp"
 #include "Graphics/GraphicsContext.hpp"
@@ -43,3 +45,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

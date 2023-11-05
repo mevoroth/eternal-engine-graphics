@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12AccelerationStructure.hpp"
 
 #include "d3d12/D3D12Device.hpp"
@@ -176,3 +178,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

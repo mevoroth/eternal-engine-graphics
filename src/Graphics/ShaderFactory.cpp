@@ -56,14 +56,14 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 				if (InShader)
 					return new (InShader) D3D12Shader(InContext, InCreateInformation);
 				return new D3D12Shader(InContext, InCreateInformation);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				if (InShader)
 					return new (InShader) VulkanShader(InContext, InCreateInformation);
 				return new VulkanShader(InContext, InCreateInformation);

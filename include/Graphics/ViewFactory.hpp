@@ -2,6 +2,7 @@
 
 #include "Graphics/MultiBuffered.hpp"
 #include "Graphics/Resource.hpp"
+#include "Graphics/View.hpp"
 
 namespace Eternal
 {
@@ -13,7 +14,6 @@ namespace Eternal
 		struct UnorderedAccessViewCreateInformation;
 		struct DepthStencilViewCreateInformation;
 		class GraphicsContext;
-		class View;
 
 		View* CreateConstantBufferView(_In_ const ConstantBufferViewCreateInformation& InConstantBufferViewCreateInformation, _In_ void* InViewPlacementMemory = nullptr);
 		View* CreateShaderResourceView(_In_ const ShaderResourceViewCreateInformation& InShaderResourceViewCreateInformation);

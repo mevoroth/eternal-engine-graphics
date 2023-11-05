@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanInputLayout.hpp"
 
 #include "Graphics/InputLayout.hpp"
@@ -55,3 +57,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_D3D12
+
 #include "Graphics/StencilTest.hpp"
 #include "Bit/BitField.hpp"
 #include <d3d12.h>
@@ -94,3 +96,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

@@ -1,6 +1,8 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanSwapChain.hpp"
 
-#include "Window/Window.hpp"
+#include "Windows/WindowsOutputDevice.hpp"
 #include "Graphics/RenderPassFactory.hpp"
 #include "Graphics/GraphicsContext.hpp"
 #include "Vulkan/VulkanUtils.hpp"
@@ -78,15 +80,15 @@ namespace Eternal
 		{
 			using namespace Vulkan;
 
-			Window& InWindow = InContext.GetWindow();
+			WindowsOutputDevice& InOutputDevice = static_cast<WindowsOutputDevice&>(InContext.GetOutputDevice());
 
 			VulkanDevice& InVulkanDevice = static_cast<VulkanDevice&>(InContext.GetDevice());
 			VulkanPrivate::EternalDispatchLoader EternalLoader(InVulkanDevice);
 
 			vk::Win32SurfaceCreateInfoKHR Win32SurfaceInfo(
 				vk::Win32SurfaceCreateFlagBitsKHR(),
-				InWindow.GetHInstance(),
-				InWindow.GetWindowHandler()
+				InOutputDevice.GetHInstance(),
+				InOutputDevice.GetWindowHandler()
 			);
 
 			vk::Instance& VulkanInstance = InVulkanDevice.GetInstance();
@@ -121,7 +123,7 @@ namespace Eternal
 			bool HasValidMode = false;
 			for (uint32_t PresentIndex = 0; PresentIndex < PresentModesCount; ++PresentIndex)
 			{
-				if (InWindow.GetVSync())
+				if (InOutputDevice.GetVSync())
 					HasValidMode |= PresentModes[PresentIndex] == vk::PresentModeKHR::eMailbox;
 				else
 					HasValidMode |= PresentModes[PresentIndex] == vk::PresentModeKHR::eFifo;
@@ -142,7 +144,7 @@ namespace Eternal
 				0, nullptr,
 				vk::SurfaceTransformFlagBitsKHR::eIdentity,
 				vk::CompositeAlphaFlagBitsKHR::eOpaque,
-				InWindow.GetVSync() ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eMailbox,
+				InOutputDevice.GetVSync() ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eMailbox,
 				true
 			);
 
@@ -233,3 +235,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

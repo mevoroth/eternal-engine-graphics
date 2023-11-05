@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_D3D12
+
 #include "Graphics/CommandQueue.hpp"
 #include <d3d12.h>
 
@@ -28,3 +30,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

@@ -6,7 +6,7 @@ namespace Eternal
 	{
 		class Device;
 		class SwapChain;
-		class Window;
+		class OutputDevice;
 		class CommandQueue;
 		class GraphicsContext;
 

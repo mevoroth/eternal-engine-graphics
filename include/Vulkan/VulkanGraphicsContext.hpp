@@ -1,6 +1,10 @@
 #pragma once
 
-#include "Graphics/GraphicsContext.hpp"
+#if ETERNAL_ENABLE_VULKAN
+
+#if ETERNAL_PLATFORM_WINDOWS
+#include "Windows/WindowsGraphicsContext.hpp"
+#endif
 #include "Vulkan/VulkanHeader.hpp"
 #include "Bit/BitField.hpp"
 #include <array>
@@ -15,7 +19,7 @@ namespace Eternal
 
 		class VulkanDescriptorTable;
 
-		class VulkanGraphicsContext final : public GraphicsContext
+		class VulkanGraphicsContext final : public WindowsGraphicsContext
 		{
 		public:
 
@@ -39,7 +43,7 @@ namespace Eternal
 			static constexpr uint32_t ShaderRegisterUnorderedAccessesOffset	= ShaderRegisterConstantBuffersOffset + MaxConstantBuffersCountPerShader;
 			static constexpr uint32_t ShaderRegisterSamplersOffset			= ShaderRegisterUnorderedAccessesOffset + MaxUnorderedAccessesCountPerShader;
 
-			VulkanGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
+			VulkanGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& CreateInformation);
 			~VulkanGraphicsContext();
 
 			virtual void ResetFrameStates() override final;
@@ -62,3 +66,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_D3D12
+
 #include "Graphics/Format.hpp"
 
 enum DXGI_FORMAT;
@@ -25,3 +27,5 @@ namespace Eternal
 		const D3D12Format& ConvertFormatToD3D12Format(const Format& InFormat);
 	}
 }
+
+#endif

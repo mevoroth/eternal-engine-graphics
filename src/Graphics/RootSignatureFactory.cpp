@@ -14,12 +14,12 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12RootSignature(InContext.GetDevice(), InIsLocalRootSignature);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				return new VulkanRootSignature(InContext);
 #endif
 			default:
@@ -32,12 +32,12 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12RootSignature(InContext.GetDevice(), InRootSignatureCreateInformation);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				return new VulkanRootSignature(InContext, InRootSignatureCreateInformation);
 #endif
 			default:

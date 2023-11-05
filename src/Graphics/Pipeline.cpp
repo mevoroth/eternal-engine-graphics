@@ -25,8 +25,8 @@ namespace Eternal
 			, PipelineRenderPass(InRenderPass)
 			, ShaderVertex(InVertex)
 			, ShaderPixel(InPixel)
-			, PipelineDepthStencil(InDepthStencil)
 			, PipelineRasterizer(InRasterizer)
+			, PipelineDepthStencil(InDepthStencil)
 			, PipelinePrimitiveTopology(InPrimitiveTopology)
 		{
 		}
@@ -109,10 +109,10 @@ namespace Eternal
 		)
 			: PipelineRootSignature(InRootSignature)
 			, PipelineRenderPass(InRenderPass)
-			, ShaderMesh(InMesh)
 			, ShaderPixel(InPixel)
-			, PipelineDepthStencil(InDepthStencil)
+			, ShaderMesh(InMesh)
 			, PipelineRasterizer(InRasterizer)
+			, PipelineDepthStencil(InDepthStencil)
 		{
 		}
 
@@ -127,11 +127,11 @@ namespace Eternal
 		)
 			: PipelineRootSignature(InRootSignature)
 			, PipelineRenderPass(InRenderPass)
+			, ShaderPixel(InPixel)
 			, ShaderMesh(InMesh)
 			, ShaderAmplification(InAmplification)
-			, ShaderPixel(InPixel)
-			, PipelineDepthStencil(InDepthStencil)
 			, PipelineRasterizer(InRasterizer)
+			, PipelineDepthStencil(InDepthStencil)
 		{
 		}
 

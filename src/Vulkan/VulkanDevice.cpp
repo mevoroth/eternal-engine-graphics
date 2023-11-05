@@ -1,7 +1,9 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanDevice.hpp"
 
 #include <algorithm>
-#include "Window/Window.hpp"
+#include "Windows/WindowsOutputDevice.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 
 namespace Eternal
@@ -122,7 +124,7 @@ namespace Eternal
 			};
 		}
 
-		VulkanDevice::VulkanDevice(_In_ Window& InWindow)
+		VulkanDevice::VulkanDevice(_In_ OutputDevice& InOutputDevice)
 		{
 			using namespace Vulkan;
 			using namespace Eternal::Graphics::Vulkan;
@@ -182,7 +184,7 @@ namespace Eternal
 
 			_VulkanVersion = VK_API_VERSION_1_2; // Vulkan version
 			vk::ApplicationInfo ApplicationInfo(
-				InWindow.GetClassName().c_str(),
+				static_cast<WindowsOutputDevice&>(InOutputDevice).GetWindowClassName().c_str(),
 				0,
 				"EternalEngine",
 				0,
@@ -427,3 +429,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

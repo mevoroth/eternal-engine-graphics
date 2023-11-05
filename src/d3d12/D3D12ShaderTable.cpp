@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12ShaderTable.hpp"
 
 #include "Graphics/Format.hpp"
@@ -141,3 +143,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

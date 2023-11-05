@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12GraphicsContext.hpp"
 
 #include <d3d12.h>
@@ -32,8 +34,8 @@ namespace Eternal
 #endif
 		}
 
-		D3D12GraphicsContext::D3D12GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
-			: GraphicsContext(CreateInformation)
+		D3D12GraphicsContext::D3D12GraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation)
+			: WindowsGraphicsContext(InWindowsGraphicsContextCreateInformation)
 		{
 			using namespace Eternal::Graphics::D3D12;
 
@@ -252,3 +254,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

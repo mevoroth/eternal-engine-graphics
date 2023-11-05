@@ -293,7 +293,7 @@ namespace Eternal
 			}
 
 		private:
-			struct
+			struct ViewMetaDataDummy
 			{
 				static constexpr uint32_t Size = 3;
 				uint64_t Dummy[Size] = {};

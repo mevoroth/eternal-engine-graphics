@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12Format.hpp"
 
 #include <d3d12.h>
@@ -31,3 +33,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

@@ -1,8 +1,11 @@
 #pragma once
 
+#include "Graphics/Shader.hpp"
+
+#if ETERNAL_ENABLE_D3D12
+
 #include <string>
 #include <d3d12.h>
-#include "Graphics/Shader.hpp"
 
 struct ID3DInclude;
 struct IDxcUtils;
@@ -54,3 +57,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

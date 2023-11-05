@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Graphics/Pipeline.hpp"
+
+#if ETERNAL_ENABLE_D3D12
+
 #include <d3d12.h>
 
 namespace Eternal
@@ -64,3 +67,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

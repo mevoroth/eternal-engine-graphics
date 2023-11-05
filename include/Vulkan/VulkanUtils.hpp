@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Graphics/StencilTest.hpp"
 #include "Graphics/Types/MemoryType.hpp"
 #include "Graphics/StencilTest.hpp"
@@ -86,3 +88,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

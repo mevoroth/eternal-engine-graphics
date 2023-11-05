@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanDescriptorTable.hpp"
 
 #include "Vulkan/VulkanGraphicsContext.hpp"
@@ -317,3 +319,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

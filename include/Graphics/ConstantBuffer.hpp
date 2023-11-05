@@ -1,6 +1,11 @@
 #pragma once
 
 #include "Graphics/MultiBuffered.hpp"
+#include "Graphics/Format.hpp"
+#include "Graphics/Resource.hpp"
+#include "Graphics/ResourceFactory.hpp"
+#include "Graphics/View.hpp"
+#include "Graphics/ViewFactory.hpp"
 
 namespace Eternal
 {

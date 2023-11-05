@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanRootSignature.hpp"
 
 #include "Graphics/GraphicsContext.hpp"
@@ -312,3 +314,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

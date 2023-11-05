@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_D3D12
+
 #include "Graphics/CommandList.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
 #include "d3d12/D3D12Device.hpp"
@@ -107,3 +109,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

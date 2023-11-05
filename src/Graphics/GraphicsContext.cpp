@@ -50,54 +50,12 @@ namespace Eternal
 			};
 		}
 
-		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
-		{
-			GraphicsContext* Context = nullptr;
-
-			switch (CreateInformation.Settings.Driver)
-			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
-				Context = new D3D12GraphicsContext(CreateInformation);
-				break;
-#endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
-				Context = new VulkanGraphicsContext(CreateInformation);
-				break;
-#endif
-			default:
-				ETERNAL_BREAK();
-			}
-
-			Context->InitializeGraphicsContext();
-
-			return Context;
-		}
-
-		void DestroyGraphicsContext(_Inout_ GraphicsContext*& Context)
-		{
-			delete Context;
-			Context = nullptr;
-		}
-
-		GraphicsContext::GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
-			: _Window(WindowCreateInformation(
-				CreateInformation.Arguments.hInstance,
-				CreateInformation.Arguments.nCmdShow,
-				CreateInformation.Arguments.Name,
-				CreateInformation.Arguments.ClassName,
-				CreateInformation.Settings.Width,
-				CreateInformation.Settings.Height,
-				CreateInformation.Settings.IsVSync,
-				CreateInformation.Settings.IsWindowed
-			))
+		GraphicsContext::GraphicsContext(_In_ const GraphicsContextCreateInformation& InGraphicsContextCreateInformation, _In_ OutputDevice& InOutputDevice)
+			: _OutputDevice(InOutputDevice)
 		{
 			static constexpr uint32_t ResourcesToClearInitialCount = 256;
 
-			_Window.Create(CreateInformation.Arguments.WindowEventsHandler);
-
-			_Device							= CreateDevice(*this, CreateInformation.Settings.Driver);
+			_Device							= CreateDevice(*this, InGraphicsContextCreateInformation.Settings.Driver);
 
 			_GraphicsQueue					= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_GRAPHICS);
 			_ComputeQueue					= CreateCommandQueue(*_Device, CommandType::COMMAND_TYPE_COMPUTE);
@@ -123,8 +81,8 @@ namespace Eternal
 
 			_ShaderFactory						= new ShaderFactory();
 			
-			_MainViewportFullScreen				= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
-			_BackBufferViewportFullScreen		= CreateInvertedViewport(*this, CreateInformation.Settings.Width, CreateInformation.Settings.Height);
+			_MainViewportFullScreen				= CreateInvertedViewport(*this, InGraphicsContextCreateInformation.Settings.Width, InGraphicsContextCreateInformation.Settings.Height);
+			_BackBufferViewportFullScreen		= CreateInvertedViewport(*this, InGraphicsContextCreateInformation.Settings.Width, InGraphicsContextCreateInformation.Settings.Height);
 			_EmptyRootSignature					= CreateRootSignature(*this);
 			_EmptyLocalRootSignature			= CreateRootSignature(*this, /* InIsLocalRootSignature = */ true);
 			_EmptyInputLayout					= CreateInputLayout(*this);

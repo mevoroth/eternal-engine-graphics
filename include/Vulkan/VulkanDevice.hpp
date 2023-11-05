@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanHeader.hpp"
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
@@ -12,7 +14,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		using namespace std;
-		class Window;
+		class OutputDevice;
 
 		using QueueFamilyIndicesType = std::array<uint32_t, static_cast<uint32_t>(CommandType::COMMAND_TYPE_COUNT)>;
 
@@ -55,11 +57,11 @@ namespace Eternal
 				void*                                            pUserData
 			);
 
-			VulkanDevice(_In_ Window& InWindow);
+			VulkanDevice(_In_ OutputDevice& InOutputDevice);
 			~VulkanDevice();
 
 			virtual uint32_t GetDeviceMask() const override final { return 0x1; }
-			virtual DeviceType GetDeviceType() const override final { return DeviceType::VULKAN; }
+			virtual DeviceType GetDeviceType() const override final { return DeviceType::DEVICE_TYPE_VULKAN; }
 
 			vk::Device& GetVulkanDevice();
 			vk::PhysicalDevice& GetPhysicalDevice() { return _PhysicalDevice; }
@@ -100,3 +102,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

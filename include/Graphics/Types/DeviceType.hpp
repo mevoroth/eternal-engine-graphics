@@ -6,11 +6,13 @@ namespace Eternal
 	{
 		enum class DeviceType
 		{
-			D3D12,
-			VULKAN
-			#if ETERNAL_USE_GRAPHICS_PRIVATE
+			DEVICE_TYPE_D3D12,
+			DEVICE_TYPE_VULKAN
+		#if ETERNAL_USE_GRAPHICS_PRIVATE
 			#include "GraphicsPrivate/Types/DeviceType.hpp"
-			#endif
+		#else
+			, DEVICE_TYPE_DEFAULT = DEVICE_TYPE_D3D12
+		#endif
 		};
 	}
 }

@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanUtils.hpp"
 
 #include <algorithm>
@@ -671,3 +673,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

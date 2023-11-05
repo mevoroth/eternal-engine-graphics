@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_D3D12
+
 #include <d3d12.h>
 #include <vector>
 #include "Graphics/InputLayout.hpp"
@@ -26,3 +28,5 @@ namespace Eternal
 		const D3D12Format& ConvertVertexDataTypeToD3D12Format(const VertexDataType& InVertexDataType);
 	}
 }
+
+#endif

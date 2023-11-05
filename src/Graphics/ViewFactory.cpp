@@ -3,7 +3,7 @@
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
 #include "Graphics/GraphicsContext.hpp"
-#include "Graphics/View.hpp"
+#include "Graphics/MultiBuffered.hpp"
 #include "d3d12/D3D12View.hpp"
 #include "Vulkan/VulkanView.hpp"
 
@@ -15,17 +15,17 @@ namespace Eternal
 		static View* CreateView(_In_ const ViewCreateInformationType& InViewCreateInformation, _In_ void* InViewPlacementMemory = nullptr)
 		{
 			switch (InViewCreateInformation.Context.GetDevice().GetDeviceType())
-#ifdef ETERNAL_ENABLE_D3D12
 			{
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 			{
 				if (InViewPlacementMemory)
 					return new (InViewPlacementMemory) D3D12View(InViewCreateInformation);
 				return new D3D12View(InViewCreateInformation);
 			}
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 			{
 				if (InViewPlacementMemory)
 					return new (InViewPlacementMemory) VulkanView(InViewCreateInformation);
@@ -98,13 +98,13 @@ namespace Eternal
 		size_t GetViewSize(_In_ GraphicsContext& InContext)
 		{
 			switch (InContext.GetDevice().GetDeviceType())
-#ifdef ETERNAL_ENABLE_D3D12
 			{
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 				return sizeof(D3D12View);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				return sizeof(VulkanView);
 #endif
 			default:

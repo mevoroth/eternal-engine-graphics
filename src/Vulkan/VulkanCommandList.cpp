@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanCommandList.hpp"
 
 #include "Graphics/Viewport.hpp"
@@ -585,3 +587,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

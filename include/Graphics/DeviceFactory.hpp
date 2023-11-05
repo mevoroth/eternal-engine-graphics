@@ -5,7 +5,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		class Device;
-		class Window;
+		class OutputDevice;
 		class GraphicsContext;
 		enum class DeviceType;
 

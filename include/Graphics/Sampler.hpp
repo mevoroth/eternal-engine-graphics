@@ -31,12 +31,12 @@ namespace Eternal
 				_In_ const AddressMode& InV = AddressMode::ADDRESS_MODE_WRAP,
 				_In_ const AddressMode& InW = AddressMode::ADDRESS_MODE_WRAP
 			)
-				: MINLinear(InMINLinear)
-				, MAGLinear(InMAGLinear)
-				, MIPLinear(InMIPLinear)
-				, U(InU)
+				: U(InU)
 				, V(InV)
 				, W(InW)
+				, MINLinear(InMINLinear)
+				, MAGLinear(InMAGLinear)
+				, MIPLinear(InMIPLinear)
 			{
 			}
 

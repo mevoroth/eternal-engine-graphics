@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanSampler.hpp"
 
 #include "Graphics/GraphicsContext.hpp"
@@ -48,3 +50,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

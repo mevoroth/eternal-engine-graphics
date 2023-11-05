@@ -14,16 +14,16 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 			{
 				if (InViewportPlacementMemory)
 					return new (InViewportPlacementMemory) Viewport(InX, InY, InWidth, InHeight);
 				return new Viewport(InX, InY, InWidth, InHeight);
 			}
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				if (InViewportPlacementMemory)
 					return new (InViewportPlacementMemory) VulkanViewport(InX, InY, InWidth, InHeight, IsHeightInverted);
 				return new VulkanViewport(InX, InY, InWidth, InHeight, IsHeightInverted);
@@ -48,12 +48,12 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 				return sizeof(Viewport);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				return sizeof(VulkanViewport);
 #endif
 			default:

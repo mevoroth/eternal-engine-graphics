@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanRenderPass.hpp"
 
 #include "Graphics/Format.hpp"
@@ -116,3 +118,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

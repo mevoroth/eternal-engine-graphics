@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Graphics/CommandList.hpp"
 #include "Graphics/CommandUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
@@ -74,3 +76,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

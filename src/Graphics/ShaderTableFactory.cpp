@@ -12,12 +12,12 @@ namespace Eternal
 		{
 			switch (InDevice.GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12ShaderTable(InDevice, InPipeline);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 #endif
 			default:
 				ETERNAL_BREAK();

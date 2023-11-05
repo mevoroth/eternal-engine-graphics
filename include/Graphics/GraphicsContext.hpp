@@ -2,7 +2,7 @@
 
 #include "GraphicsSettings.hpp"
 #include "Graphics/Types.hpp"
-#include "Window/Window.hpp"
+#include "OutputDevice/OutputDevice.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/CommandUtils.hpp"
 #include "Tools/PipelineDependency.hpp"
@@ -35,13 +35,13 @@ namespace Eternal
 
 		struct GraphicsContextCreateInformation
 		{
-			GraphicsContextCreateInformation(const RenderSettings& Settings, const WindowsArguments& Arguments)
-				: Settings(Settings)
-				, Arguments(Arguments)
-			{}
-
 			RenderSettings Settings;
-			WindowsArguments Arguments;
+
+		protected:
+			GraphicsContextCreateInformation(_In_ const RenderSettings& InSettings)
+				: Settings(InSettings)
+			{
+			}
 		};
 
 		struct GraphicsCommand
@@ -100,7 +100,7 @@ namespace Eternal
 
 			PipelineDependency& GetPipelineDependency() { return _PipelineDependency; }
 			Device& GetDevice() { return *_Device; }
-			Window& GetWindow() { return _Window; }
+			OutputDevice& GetOutputDevice() { return _OutputDevice; }
 			SwapChain& GetSwapChain() { return *_SwapChain; }
 			Viewport& GetMainViewport() { return *_MainViewportFullScreen; }
 			Viewport& GetBackBufferViewport() { return *_BackBufferViewportFullScreen; }
@@ -137,7 +137,7 @@ namespace Eternal
 			void RegisterPipelineRecompile(_In_ const ResolvedPipelineDependency& InPipelineDependencies);
 
 		protected:
-			GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
+			GraphicsContext(_In_ const GraphicsContextCreateInformation& InCreateInformation, _In_ OutputDevice& InOutputDevice);
 
 			void WaitForAllFences();
 
@@ -166,7 +166,7 @@ namespace Eternal
 			vector<GraphicsCommand*>*												_NewGraphicsCommands = nullptr;
 			vector<GraphicsCommand*>												_GraphicsCommands;
 
-			Window _Window;
+			OutputDevice& _OutputDevice;
 			PipelineDependency _PipelineDependency;
 			ResolvedPipelineDependency _PipelineRecompile;
 			Device* _Device									= nullptr;
@@ -191,8 +191,5 @@ namespace Eternal
 			uint32_t _CurrentFrameIndex				= FrameBufferingCount - 1; // During first frame, this will be set correct within range
 			uint32_t _CurrentGraphicsCommandIndex	= 0;
 		};
-
-		GraphicsContext* CreateGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
-		void DestroyGraphicsContext(_Inout_ GraphicsContext*& Context);
 	}
 }

@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12InputLayout.hpp"
 
 #include "d3d12/D3D12Utils.hpp"
@@ -71,3 +73,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

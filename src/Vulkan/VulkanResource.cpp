@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanResource.hpp"
 
 #include "Vulkan/VulkanDevice.hpp"
@@ -283,3 +285,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

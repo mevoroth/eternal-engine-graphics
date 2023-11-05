@@ -1,9 +1,10 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12SwapChain.hpp"
 
 #include <cwchar>
 #include <d3d12.h>
 #include <dxgi1_4.h>
-#include "Window/Window.hpp"
 #include "Graphics/Format.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
@@ -14,6 +15,7 @@
 #include "Graphics/View.hpp"
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Viewport.hpp"
+#include "Windows/WindowsOutputDevice.hpp"
 
 namespace Eternal
 {
@@ -25,13 +27,13 @@ namespace Eternal
 		{
 			using namespace Eternal::Graphics::D3D12;
 
-			Window& InWindow = InContext.GetWindow();
+			WindowsOutputDevice& InOutputDevice = static_cast<WindowsOutputDevice&>(InContext.GetOutputDevice());
 
 			DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 
-			SwapChainDesc.BufferDesc.Width						= InWindow.GetWidth();
-			SwapChainDesc.BufferDesc.Height						= InWindow.GetHeight();
-			SwapChainDesc.BufferDesc.RefreshRate.Numerator		= InWindow.GetVSync() ? 0 : 60;
+			SwapChainDesc.BufferDesc.Width						= InOutputDevice.GetWidth();
+			SwapChainDesc.BufferDesc.Height						= InOutputDevice.GetHeight();
+			SwapChainDesc.BufferDesc.RefreshRate.Numerator		= InOutputDevice.GetVSync() ? 0 : 60;
 			SwapChainDesc.BufferDesc.RefreshRate.Denominator	= 1;
 			SwapChainDesc.BufferDesc.Scaling					= DXGI_MODE_SCALING_STRETCHED;
 			SwapChainDesc.BufferDesc.RefreshRate.Denominator	= 1;
@@ -42,11 +44,11 @@ namespace Eternal
 			SwapChainDesc.SampleDesc.Quality					= 0;
 			SwapChainDesc.BufferUsage							= DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			SwapChainDesc.BufferCount							= _BackBuffersCount;
-			SwapChainDesc.OutputWindow							= InWindow.GetWindowHandler();
-			SwapChainDesc.Windowed								= InWindow.GetWindowed() ? TRUE : FALSE;
+			SwapChainDesc.OutputWindow							= InOutputDevice.GetWindowHandler();
+			SwapChainDesc.Windowed								= InOutputDevice.GetWindowed() ? TRUE : FALSE;
 			SwapChainDesc.SwapEffect							= DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 			SwapChainDesc.Flags									= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT
-																| (InWindow.GetVSync() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : DXGI_SWAP_CHAIN_FLAG(0));
+																| (InOutputDevice.GetVSync() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : DXGI_SWAP_CHAIN_FLAG(0));
 
 			VerifySuccess(
 				D3D12Device::GetDXGIFactory()->CreateSwapChain(static_cast<D3D12CommandQueue&>(InContext.GetGraphicsQueue()).GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain)
@@ -141,3 +143,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

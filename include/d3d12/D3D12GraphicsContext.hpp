@@ -1,6 +1,10 @@
 #pragma once
 
-#include "Graphics/GraphicsContext.hpp"
+#if ETERNAL_ENABLE_D3D12
+
+#if ETERNAL_PLATFORM_WINDOWS
+#include "Windows/WindowsGraphicsContext.hpp"
+#endif
 #include "Bit/BitField.hpp"
 #include "d3d12/D3D12Utils.hpp"
 
@@ -13,7 +17,7 @@ namespace Eternal
 	{
 		using namespace Eternal::Bit;
 
-		class D3D12GraphicsContext final : public GraphicsContext
+		class D3D12GraphicsContext final : public WindowsGraphicsContext
 		{
 		public:
 			static constexpr uint32_t MaxConstantBufferViewCount	= 2048;
@@ -23,7 +27,7 @@ namespace Eternal
 			static constexpr uint32_t MaxRenderTargetViewCount		= 2048;
 			static constexpr uint32_t MaxDepthStencilViewCount		= 256;
 
-			D3D12GraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation);
+			D3D12GraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& CreateInformation);
 			~D3D12GraphicsContext();
 
 			virtual void ResetFrameStates() override final;
@@ -67,3 +71,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

@@ -10,7 +10,7 @@ namespace Eternal
 	namespace Graphics
 	{
 		class Device;
-		class Window;
+		class OutputDevice;
 		class CommandQueue;
 		class GraphicsContext;
 

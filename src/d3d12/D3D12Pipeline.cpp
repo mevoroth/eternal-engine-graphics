@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12Pipeline.hpp"
 
 #include "d3dx12.h"
@@ -650,3 +652,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

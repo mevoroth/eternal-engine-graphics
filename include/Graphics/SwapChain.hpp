@@ -10,7 +10,7 @@ namespace Eternal
 		using namespace std;
 
 		class Device;
-		class Window;
+		class OutputDevice;
 		class GraphicsContext;
 		class Resource;
 		class View;

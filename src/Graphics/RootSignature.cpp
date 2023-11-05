@@ -15,7 +15,7 @@ namespace Eternal
 			if (IsEqual)
 			{
 				for (uint32_t ParameterIndex = 0; ParameterIndex < Parameters.size(); ++ParameterIndex)
-					Parameters[ParameterIndex] == InOtherRootSignatureRootDescriptorTable.Parameters[ParameterIndex];
+					IsEqual &= Parameters[ParameterIndex] == InOtherRootSignatureRootDescriptorTable.Parameters[ParameterIndex];
 			}
 			return IsEqual;
 		}
@@ -80,12 +80,12 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 				return new DescriptorTable(this);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				return new VulkanDescriptorTable(InContext, this);
 #endif
 			default:
@@ -107,12 +107,12 @@ namespace Eternal
 					{
 						switch (InContext.GetDevice().GetDeviceType())
 						{
-#ifdef ETERNAL_ENABLE_D3D12
-						case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+						case DeviceType::DEVICE_TYPE_D3D12:
 							return new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-						case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+						case DeviceType::DEVICE_TYPE_VULKAN:
 							return new VulkanDescriptorTable(
 								InContext,
 								Parameters[ParameterIndex].DescriptorTable,
@@ -152,12 +152,12 @@ namespace Eternal
 					DescriptorTable* Table = nullptr;
 					switch (InContext.GetDevice().GetDeviceType())
 					{
-#ifdef ETERNAL_ENABLE_D3D12
-					case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+					case DeviceType::DEVICE_TYPE_D3D12:
 						Table = new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-					case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+					case DeviceType::DEVICE_TYPE_VULKAN:
 						Table = new VulkanDescriptorTable(
 							InContext,
 							Parameters[ParameterIndex].DescriptorTable,

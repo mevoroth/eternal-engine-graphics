@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanDevice.hpp"
@@ -9,8 +11,8 @@ namespace Eternal
 	{
 		using namespace Eternal::Graphics::Vulkan;
 
-		VulkanGraphicsContext::VulkanGraphicsContext(_In_ const GraphicsContextCreateInformation& CreateInformation)
-			: GraphicsContext(CreateInformation)
+		VulkanGraphicsContext::VulkanGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsCreateInformation)
+			: WindowsGraphicsContext(InWindowsGraphicsCreateInformation)
 			, _ConstantHandles(static_cast<VulkanDevice&>(GetDevice()).GetPushConstantMaxSize())
 		{
 			vk::SemaphoreCreateInfo SemaphoreInfo;
@@ -82,3 +84,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

@@ -15,12 +15,12 @@ namespace Eternal
 		{
 			switch (InOutContext.GetDevice().GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12Pipeline(InOutContext, InPipelineCreateInformation);
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 				return new VulkanPipeline(InOutContext, InPipelineCreateInformation);
 #endif
 			default:
@@ -60,8 +60,8 @@ namespace Eternal
 			std::swap(A->GetPipelineCreateInformation(), B->GetPipelineCreateInformation());
 			switch (InContext.GetDevice().GetDeviceType())
 			{
-#ifdef ETERNAL_ENABLE_D3D12
-			case DeviceType::D3D12:
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
 			{
 				D3D12Pipeline* PipelineA = static_cast<D3D12Pipeline*>(A);
 				D3D12Pipeline* PipelineB = static_cast<D3D12Pipeline*>(B);
@@ -69,8 +69,8 @@ namespace Eternal
 				std::swap(PipelineA->GetD3D12PrimitiveTopology(), PipelineB->GetD3D12PrimitiveTopology());
 			} break;
 #endif
-#ifdef ETERNAL_ENABLE_VULKAN
-			case DeviceType::VULKAN:
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
 			{
 				VulkanPipeline* PipelineA = static_cast<VulkanPipeline*>(A);
 				VulkanPipeline* PipelineB = static_cast<VulkanPipeline*>(B);

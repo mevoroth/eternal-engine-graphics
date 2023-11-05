@@ -90,41 +90,6 @@ namespace Eternal
 			uint32_t ArraySlice	= 0;
 		};
 
-		template<typename ResourceStructureType = uint8_t>
-		class MapScope
-		{
-		public:
-			MapScope(_In_ Resource& InResource, _In_ const MapRange& InRange)
-				: _Resource(InResource)
-				, _Range(InRange)
-				, _DataPointer(InResource.Map<ResourceStructureType>(InRange))
-			{
-			}
-			MapScope(_In_ Resource& InResource)
-				: _Resource(InResource)
-				, _Range(sizeof(ResourceStructureType))
-				, _DataPointer(InResource.Map<ResourceStructureType>(_Range))
-			{
-			}
-			~MapScope()
-			{
-				_Resource.Unmap(_Range);
-			}
-
-			ResourceStructureType* GetDataPointer() const { return _DataPointer; }
-			ResourceStructureType* operator->() const { return _DataPointer; }
-			ResourceStructureType& operator[](_In_ uint32_t ElementIndex)
-			{
-				ETERNAL_ASSERT(ElementIndex * sizeof(ResourceStructureType) < _Range.MapSize);
-				return _DataPointer[ElementIndex];
-			}
-
-		private:
-			Resource&				_Resource;
-			MapRange				_Range;
-			ResourceStructureType*	_DataPointer = nullptr;
-		};
-
 		// TODO: Add multisample resource
 		struct TextureCreateInformation
 		{
@@ -132,9 +97,9 @@ namespace Eternal
 			static constexpr float DefaultClearValueZero[ComponentCount]	= { 0.0f };
 			static constexpr float DefaultClearValueOne[ComponentCount]		= { 1.0f, 1.0f, 1.0f, 1.0f };
 #if ETERNAL_USE_REVERSED_Z
-			static constexpr float DefaultClearValueDepth[ComponentCount]	= DefaultClearValueZero;
+			static constexpr float DefaultClearValueDepth[ComponentCount]	= { DefaultClearValueZero[0], DefaultClearValueZero[1], DefaultClearValueZero[2], DefaultClearValueZero[3] };
 #else
-			static constexpr float DefaultClearValueDepth[ComponentCount]	= DefaultClearValueOne;
+			static constexpr float DefaultClearValueDepth[ComponentCount]	= { DefaultClearValueOne[0], DefaultClearValueOne[1], DefaultClearValueOne[2], DefaultClearValueOne[3] };
 #endif
 			static constexpr uint8_t DefaultStencilClearValue				= 0x0u;
 
@@ -150,14 +115,14 @@ namespace Eternal
 				_In_ const float InClearValue[ComponentCount] = DefaultClearValueZero,
 				_In_ uint8_t InStencilClearValue = DefaultStencilClearValue
 			)
-				: Dimension(InResourceDimension)
+				: StencilClearValue(InStencilClearValue)
+				, Dimension(InResourceDimension)
 				, ResourceFormat(InFormat)
 				, Usage(InResourceUsage)
 				, Width(InWidth)
 				, Height(InHeight)
 				, DepthOrArraySize(InDepthOrArraySize)
 				, MIPLevels(InMIPLevels)
-				, StencilClearValue(InStencilClearValue)
 			{
 				ETERNAL_ASSERT(InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_UNKNOWN);
 				ETERNAL_ASSERT(InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_BUFFER);
@@ -380,6 +345,41 @@ namespace Eternal
 			ResourceType				_ResourceType = ResourceType::RESOURCE_TYPE_UNKNOWN; // Used to track down type of resource
 			ResourceCreateInformation	_ResourceCreateInformation;
 			bool						_Multisample = false;
+		};
+
+		template<typename ResourceStructureType = uint8_t>
+		class MapScope
+		{
+		public:
+			MapScope(_In_ Resource& InResource, _In_ const MapRange& InRange)
+				: _Resource(InResource)
+				, _Range(InRange)
+				, _DataPointer(InResource.Map<ResourceStructureType>(InRange))
+			{
+			}
+			MapScope(_In_ Resource& InResource)
+				: _Resource(InResource)
+				, _Range(sizeof(ResourceStructureType))
+				, _DataPointer(InResource.Map<ResourceStructureType>(_Range))
+			{
+			}
+			~MapScope()
+			{
+				_Resource.Unmap(_Range);
+			}
+
+			ResourceStructureType* GetDataPointer() const { return _DataPointer; }
+			ResourceStructureType* operator->() const { return _DataPointer; }
+			ResourceStructureType& operator[](_In_ uint32_t ElementIndex)
+			{
+				ETERNAL_ASSERT(ElementIndex * sizeof(ResourceStructureType) < _Range.MapSize);
+				return _DataPointer[ElementIndex];
+			}
+
+		private:
+			Resource&				_Resource;
+			MapRange				_Range;
+			ResourceStructureType*	_DataPointer = nullptr;
 		};
 	}
 }

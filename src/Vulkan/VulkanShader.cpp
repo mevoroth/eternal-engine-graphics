@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanShader.hpp"
 
 #include <fstream>
@@ -295,3 +297,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

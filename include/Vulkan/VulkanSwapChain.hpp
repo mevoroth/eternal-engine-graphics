@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_VULKAN
+
 #ifndef VK_USE_PLATFORM_WIN32_KHR
 #define VK_USE_PLATFORM_WIN32_KHR (1)
 #endif
@@ -12,7 +14,7 @@ namespace Eternal
 	{
 		using namespace std;
 
-		class Window;
+		class OutputDevice;
 		class Device;
 		class CommandQueue;
 		class GraphicsContext;
@@ -37,3 +39,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

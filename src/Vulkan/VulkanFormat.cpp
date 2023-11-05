@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanFormat.hpp"
 
 namespace Eternal
@@ -43,3 +45,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

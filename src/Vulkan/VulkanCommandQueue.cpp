@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_VULKAN
+
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VUlkanCommandList.hpp"
@@ -125,3 +127,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

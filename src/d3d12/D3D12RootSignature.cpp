@@ -1,3 +1,5 @@
+#if ETERNAL_ENABLE_D3D12
+
 #include "d3d12/D3D12RootSignature.hpp"
 
 #include <string>
@@ -310,3 +312,5 @@ namespace Eternal
 		}
 	}
 }
+
+#endif

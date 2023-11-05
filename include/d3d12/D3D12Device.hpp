@@ -1,5 +1,7 @@
 #pragma once
 
+#if ETERNAL_ENABLE_D3D12
+
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
 
@@ -31,7 +33,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		class Window;
+		class OutputDevice;
 
 		class D3D12Device final : public Device
 		{
@@ -46,7 +48,7 @@ namespace Eternal
 			~D3D12Device();
 
 			virtual uint32_t GetDeviceMask() const override final;
-			virtual DeviceType GetDeviceType() const override final { return DeviceType::D3D12; }
+			virtual DeviceType GetDeviceType() const override final { return DeviceType::DEVICE_TYPE_D3D12; }
 
 			inline ID3D12Device* GetD3D12Device() { return _Device; }
 			inline ID3D12Device5* GetD3D12Device5() { return _Device5; }
@@ -83,3 +85,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif
