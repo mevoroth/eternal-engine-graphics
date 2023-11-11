@@ -5,6 +5,13 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		constexpr uint32_t TextureCreateInformation::ComponentCount;
+		constexpr float TextureCreateInformation::DefaultClearValueZero[ComponentCount];
+		constexpr float TextureCreateInformation::DefaultClearValueOne[ComponentCount];
+		constexpr float TextureCreateInformation::DefaultClearValueDepth[ComponentCount];
+
+		//////////////////////////////////////////////////////////////////////////
+
 		constexpr ResourceType operator|(const ResourceType& InLeftResourceType, const ResourceType& InRightResourceType)
 		{
 			return static_cast<ResourceType>(
