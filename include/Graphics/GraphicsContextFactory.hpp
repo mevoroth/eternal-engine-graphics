@@ -10,7 +10,7 @@ namespace Eternal
 		GraphicsContext* CreateGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation);
 		void DestroyGraphicsContext(_Inout_ GraphicsContext*& Context);
 		#if ETERNAL_USE_GRAPHICS_PRIVATE
-		#include "GraphicsPrivate/GraphicsContextFactory.hpp"
+		#include "GraphicsPrivate/GraphicsContextFactoryPrivate.hpp"
 		#endif
 	}
 }
