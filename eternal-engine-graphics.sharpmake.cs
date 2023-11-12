@@ -37,7 +37,7 @@ namespace EternalEngine
 
 			// Defines
 			InConfiguration.Defines.Add(new string[] {
-				"ETERNAL_USE_GRAPHICS_PRIVATE=0",
+				"ETERNAL_USE_PRIVATE=0",
 				"ETERNAL_ENABLE_D3D12=1",
 				"ETERNAL_DEBUG_VERBOSE=(ETERNAL_DEBUG &amp;&amp; 1)",
 			});

@@ -8,7 +8,7 @@ namespace Eternal
 		{
 			DEVICE_TYPE_D3D12,
 			DEVICE_TYPE_VULKAN
-		#if ETERNAL_USE_GRAPHICS_PRIVATE
+		#if ETERNAL_USE_PRIVATE
 			#include "GraphicsPrivate/Types/DeviceTypePrivate.hpp"
 		#else
 			, DEVICE_TYPE_DEFAULT = DEVICE_TYPE_D3D12
