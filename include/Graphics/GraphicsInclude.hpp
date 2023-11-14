@@ -25,6 +25,7 @@
 #include "Graphics/ResourceFactory.hpp"
 #include "Graphics/RootSignature.hpp"
 #include "Graphics/RootSignatureFactory.hpp"
+#include "Graphics/Sampler.hpp"
 #include "Graphics/SamplerFactory.hpp"
 #include "Graphics/Shader.hpp"
 #include "Graphics/ShaderFactory.hpp"
