@@ -4,6 +4,9 @@
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12CommandAllocator.hpp"
 #include "Vulkan/VulkanCommandAllocator.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/CommandAllocatorFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -22,9 +25,12 @@ namespace Eternal
 				return new VulkanCommandAllocator(InDevice, InCommandQueue);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateCommandAllocatorPrivate(InDevice, InCommandQueue);
+#endif
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 	}
 }

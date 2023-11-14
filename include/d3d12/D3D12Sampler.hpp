@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Graphics/Sampler.hpp"
+
 #if ETERNAL_ENABLE_D3D12
 
-#include "Graphics/Sampler.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include <d3d12.h>
 

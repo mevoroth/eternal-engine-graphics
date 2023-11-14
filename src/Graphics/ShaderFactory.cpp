@@ -6,6 +6,9 @@
 #include "Graphics/GraphicsContext.hpp"
 #include "d3d12/D3D12Shader.hpp"
 #include "Vulkan/VulkanShader.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/ShaderFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -69,9 +72,12 @@ namespace Eternal
 				return new VulkanShader(InContext, InCreateInformation);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateShaderPrivate(InContext, InCreateInformation, InShader);
+#endif
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 	}
 }

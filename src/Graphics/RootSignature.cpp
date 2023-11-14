@@ -89,10 +89,13 @@ namespace Eternal
 				return new VulkanDescriptorTable(InContext, this);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
-				break;
+#if ETERNAL_USE_PRIVATE
+				return _CreateRootDescriptorTablePrivate(InContext);
+#endif
 			}
+
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		DescriptorTable* RootSignature::CreateSubDescriptorTable(_In_ GraphicsContext& InContext, _In_ uint32_t SubDescriptorTableIndex) const
@@ -121,7 +124,9 @@ namespace Eternal
 							);
 #endif
 						default:
-							break;
+#if ETERNAL_USE_PRIVATE
+							return _CreateSubDescriptorTable(InContext, SubDescriptorTableIndex, Parameters[ParameterIndex].DescriptorTable);
+#endif
 						}
 					}
 				}
@@ -162,15 +167,31 @@ namespace Eternal
 							InContext,
 							Parameters[ParameterIndex].DescriptorTable,
 							*this,
-							DescriptorTableCount++
+							DescriptorTableCount
 						);
 #endif
 					default:
+#if ETERNAL_USE_PRIVATE
+						Table = _CreateSubDescriptorTable(InContext, DescriptorTableCount, Parameters[ParameterIndex].DescriptorTable);
+#else
+						ETERNAL_BREAK();
 						break;
+#endif
 					}
+					++DescriptorTableCount;
 					OutDescriptorTables.push_back(Table);
 				}
 			}
+		}
+
+		DescriptorTable* RootSignature::_CreateRootDescriptorTablePrivate(_In_ GraphicsContext& InContext) const
+		{
+			return new DescriptorTable(this);
+		}
+
+		DescriptorTable* RootSignature::_CreateSubDescriptorTable(_In_ GraphicsContext& InContext, _In_ uint32_t SubDescriptorTableIndex, _In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable) const
+		{
+			return new DescriptorTable(InRootSignatureDescriptorTable);
 		}
 
 		void DestroyDescriptorTable(_Inout_ DescriptorTable*& InOutDescriptorTable)

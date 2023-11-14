@@ -4,6 +4,9 @@
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12Fence.hpp"
 #include "Vulkan/VulkanFence.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/FenceFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -22,9 +25,13 @@ namespace Eternal
 				return new VulkanFence(InDevice);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateFencePrivate(InDevice);
+#endif
 			}
+
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 	}
 }

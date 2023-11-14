@@ -5,6 +5,9 @@
 #include "Graphics/GraphicsContext.hpp"
 #include "d3d12/D3D12Sampler.hpp"
 #include "Vulkan/VulkanSampler.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/SamplerFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -23,9 +26,12 @@ namespace Eternal
 				return new VulkanSampler(InContext, InSamplerCreateInformation);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateSamplerPrivate(InContext, InSamplerCreateInformation);
+#endif
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		void DestroySampler(_Inout_ Sampler*& InOutSampler)

@@ -5,6 +5,9 @@
 #include "Graphics/Device.hpp"
 #include "Vulkan/VulkanRootSignature.hpp"
 #include "d3d12/D3D12RootSignature.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/RootSignatureFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -23,9 +26,12 @@ namespace Eternal
 				return new VulkanRootSignature(InContext);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateRootSignaturePrivate(InContext, InIsLocalRootSignature);
+#endif
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		RootSignature* CreateRootSignature(_In_ GraphicsContext& InContext, _In_ const RootSignatureCreateInformation& InRootSignatureCreateInformation)
@@ -41,9 +47,12 @@ namespace Eternal
 				return new VulkanRootSignature(InContext, InRootSignatureCreateInformation);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateRootSignaturePrivate(InContext, InRootSignatureCreateInformation);
+#endif
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		void DestroyRootSignature(_Inout_ RootSignature*& InOutRootSignature)

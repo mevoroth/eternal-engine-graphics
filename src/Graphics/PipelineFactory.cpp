@@ -5,6 +5,9 @@
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12Pipeline.hpp"
 #include "Vulkan/VulkanPipeline.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/PipelineFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -31,21 +34,33 @@ namespace Eternal
 
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation)
 		{
+#if ETERNAL_USE_PRIVATE
+			return CreatePipelinePrivate(InOutContext, InPipelineCreateInformation);
+#endif
 			return CreatePipeline<GraphicsPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const ComputePipelineCreateInformation& InPipelineCreateInformation)
 		{
+#if ETERNAL_USE_PRIVATE
+			return CreatePipelinePrivate(InOutContext, InPipelineCreateInformation);
+#endif
 			return CreatePipeline<ComputePipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const MeshPipelineCreateInformation& InPipelineCreateInformation)
 		{
+#if ETERNAL_USE_PRIVATE
+			return CreatePipelinePrivate(InOutContext, InPipelineCreateInformation);
+#endif
 			return CreatePipeline<MeshPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const RayTracingPipelineCreateInformation& InPipelineCreateInformation)
 		{
+#if ETERNAL_USE_PRIVATE
+			return CreatePipelinePrivate(InOutContext, InPipelineCreateInformation);
+#endif
 			return CreatePipeline<RayTracingPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 

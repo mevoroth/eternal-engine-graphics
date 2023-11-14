@@ -23,6 +23,7 @@
 #include "Graphics/Resource.hpp"
 #include "Graphics/ResourceFactory.hpp"
 #include "Graphics/RootSignatureFactory.hpp"
+#include "Graphics/Sampler.hpp"
 #include "Graphics/Shader.hpp"
 #include "Graphics/ShaderFactory.hpp"
 #include "Graphics/ShaderType.hpp"

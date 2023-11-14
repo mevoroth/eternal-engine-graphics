@@ -5,6 +5,9 @@
 #include "Graphics/Types/DeviceType.hpp"
 #include "d3d12/D3D12Resource.hpp"
 #include "Vulkan/VulkanResource.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/ResourceFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -26,7 +29,6 @@ namespace Eternal
 			default:
 				ETERNAL_BREAK();
 				return nullptr;
-				break;
 			}
 		}
 
@@ -40,11 +42,17 @@ namespace Eternal
 
 		Resource* CreateTexture(_In_ const TextureResourceCreateInformation& InResourceCreateInformation)
 		{
+#if ETERNAL_USE_PRIVATE
+			return CreateTexturePrivate(InResourceCreateInformation);
+#endif
 			return CreateResource(InResourceCreateInformation);
 		}
 
 		Resource* CreateBuffer(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
 		{
+#if ETERNAL_USE_PRIVATE
+			return CreateBufferPrivate(InResourceCreateInformation);
+#endif
 			return CreateResource(InResourceCreateInformation);
 		}
 

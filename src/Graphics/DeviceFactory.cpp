@@ -6,6 +6,7 @@
 #include "d3d12/D3D12Shader.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Graphics/GraphicsContext.hpp"
+#include "Graphics/DeviceFactoryPrivate.hpp"
 
 namespace Eternal
 {
@@ -32,9 +33,13 @@ namespace Eternal
 				return new VulkanDevice(InOutContext.GetOutputDevice());
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateDevicePrivate(InOutContext, InDeviceType);
+#endif
 			}
+
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		void DestroyDevice(_Inout_ Device*& InOutDevice)

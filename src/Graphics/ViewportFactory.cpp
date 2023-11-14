@@ -4,6 +4,9 @@
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Device.hpp"
 #include "Vulkan/VulkanViewport.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/ViewportFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -29,9 +32,12 @@ namespace Eternal
 				return new VulkanViewport(InX, InY, InWidth, InHeight, IsHeightInverted);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateViewportPrivate(InContext, InWidth, InHeight, InX, InY, InViewportPlacementMemory);
+#endif
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		Viewport* CreateViewport(_In_ GraphicsContext& InContext, _In_ int32_t InWidth, _In_ int32_t InHeight, _In_ int32_t InX, _In_ int32_t InY, _In_ void* InViewportPlacementMemory)

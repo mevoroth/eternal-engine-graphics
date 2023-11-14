@@ -5,6 +5,9 @@
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12InputLayout.hpp"
 #include "Vulkan/VulkanInputLayout.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/InputLayoutFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -23,9 +26,12 @@ namespace Eternal
 				return new VulkanInputLayout(InVertexStreams);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateInputLayoutPrivate(InContext, InVertexStreams);
+#endif
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		void DestroyInputLayout(_Inout_ InputLayout*& InOutInputLayout)

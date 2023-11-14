@@ -5,6 +5,9 @@
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/CommandQueueFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -25,10 +28,13 @@ namespace Eternal
 				return new VulkanCommandQueue(InDevice, InType);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateCommandQueuePrivate(InDevice, InType);
+#endif
 			}
-			
+
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 	}
 }
