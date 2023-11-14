@@ -35,6 +35,7 @@ namespace Eternal
 
 		protected:
 			OutputDevice(_In_ const OutputDeviceCreateInformation& InOutputDeviceCreateInformation);
+			virtual ~OutputDevice() {}
 
 			OutputDeviceCreateInformation _OutputDeviceCreateInformation;
 		};
