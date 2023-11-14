@@ -43,7 +43,7 @@ namespace Eternal
 			static constexpr uint32_t ShaderRegisterUnorderedAccessesOffset	= ShaderRegisterConstantBuffersOffset + MaxConstantBuffersCountPerShader;
 			static constexpr uint32_t ShaderRegisterSamplersOffset			= ShaderRegisterUnorderedAccessesOffset + MaxUnorderedAccessesCountPerShader;
 
-			VulkanGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& CreateInformation);
+			VulkanGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation);
 			~VulkanGraphicsContext();
 
 			virtual void ResetFrameStates() override final;

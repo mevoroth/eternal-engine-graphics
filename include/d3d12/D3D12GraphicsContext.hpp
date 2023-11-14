@@ -27,7 +27,7 @@ namespace Eternal
 			static constexpr uint32_t MaxRenderTargetViewCount		= 2048;
 			static constexpr uint32_t MaxDepthStencilViewCount		= 256;
 
-			D3D12GraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& CreateInformation);
+			D3D12GraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation);
 			~D3D12GraphicsContext();
 
 			virtual void ResetFrameStates() override final;

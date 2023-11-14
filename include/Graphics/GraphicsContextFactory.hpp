@@ -13,5 +13,5 @@ namespace Eternal
 }
 
 #if ETERNAL_USE_PRIVATE
-#include "GraphicsPrivate/GraphicsContextFactoryPrivate.hpp"
+#include "Graphics/GraphicsContextFactoryPrivate.hpp"
 #endif
