@@ -2,11 +2,15 @@
 
 #include "Log/Log.hpp"
 #include "Graphics/Device.hpp"
+#include "Null/NullDevice.hpp"
+#include "Proxy/ProxyDevice.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12Shader.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Graphics/GraphicsContext.hpp"
+#if ETERNAL_USE_PRIVATE
 #include "Graphics/DeviceFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -16,6 +20,12 @@ namespace Eternal
 		{
 			switch (InDeviceType)
 			{
+			case DeviceType::DEVICE_TYPE_NULL:
+				return new NullDevice();
+
+			case DeviceType::DEVICE_TYPE_PROXY:
+				return new ProxyDevice();
+
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
 			{
@@ -36,6 +46,7 @@ namespace Eternal
 #if ETERNAL_USE_PRIVATE
 				return CreateDevicePrivate(InOutContext, InDeviceType);
 #endif
+				break;
 			}
 
 			ETERNAL_BREAK();

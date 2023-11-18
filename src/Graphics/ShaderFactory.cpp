@@ -4,6 +4,8 @@
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
 #include "Graphics/GraphicsContext.hpp"
+#include "Null/NullShader.hpp"
+#include "Proxy/ProxyShader.hpp"
 #include "d3d12/D3D12Shader.hpp"
 #include "Vulkan/VulkanShader.hpp"
 #if ETERNAL_USE_PRIVATE
@@ -59,6 +61,12 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
+			case DeviceType::DEVICE_TYPE_NULL:
+				return new NullShader(InContext, InCreateInformation);
+
+			case DeviceType::DEVICE_TYPE_PROXY:
+				return new ProxyShader(InContext, InCreateInformation);
+
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
 				if (InShader)
@@ -75,6 +83,7 @@ namespace Eternal
 #if ETERNAL_USE_PRIVATE
 				return CreateShaderPrivate(InContext, InCreateInformation, InShader);
 #endif
+				break;
 			}
 			ETERNAL_BREAK();
 			return nullptr;

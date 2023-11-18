@@ -3,6 +3,7 @@
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
+#include "Null/NullRootSignature.hpp"
 #include "Vulkan/VulkanRootSignature.hpp"
 #include "d3d12/D3D12RootSignature.hpp"
 #if ETERNAL_USE_PRIVATE
@@ -17,6 +18,10 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
+			case DeviceType::DEVICE_TYPE_NULL:
+			case DeviceType::DEVICE_TYPE_PROXY:
+				return new NullRootSignature();
+
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12RootSignature(InContext.GetDevice(), InIsLocalRootSignature);
@@ -29,6 +34,7 @@ namespace Eternal
 #if ETERNAL_USE_PRIVATE
 				return CreateRootSignaturePrivate(InContext, InIsLocalRootSignature);
 #endif
+				break;
 			}
 			ETERNAL_BREAK();
 			return nullptr;
@@ -38,6 +44,10 @@ namespace Eternal
 		{
 			switch (InContext.GetDevice().GetDeviceType())
 			{
+			case DeviceType::DEVICE_TYPE_NULL:
+			case DeviceType::DEVICE_TYPE_PROXY:
+				return new NullRootSignature(InRootSignatureCreateInformation);
+
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12RootSignature(InContext.GetDevice(), InRootSignatureCreateInformation);
@@ -50,6 +60,7 @@ namespace Eternal
 #if ETERNAL_USE_PRIVATE
 				return CreateRootSignaturePrivate(InContext, InRootSignatureCreateInformation);
 #endif
+				break;
 			}
 			ETERNAL_BREAK();
 			return nullptr;

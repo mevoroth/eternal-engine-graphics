@@ -22,9 +22,10 @@ namespace Eternal
 				return new VulkanCommandList(InDevice, InCommandAllocator);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+				break;
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 	}
 }

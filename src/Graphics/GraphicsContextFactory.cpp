@@ -1,5 +1,7 @@
 #include "Graphics/GraphicsContextFactory.hpp"
 
+#include "Null/NullGraphicsContext.hpp"
+#include "Proxy/ProxyGraphicsContext.hpp"
 #if ETERNAL_PLATFORM_WINDOWS
 #include "d3d12/D3D12GraphicsContext.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
@@ -36,6 +38,29 @@ namespace Eternal
 			return Context;
 		}
 #endif
+
+		GraphicsContext* CreateGraphicsContext(_In_ const DeviceType& InDeviceType)
+		{
+			GraphicsContext* Context = nullptr;
+
+			switch (InDeviceType)
+			{
+			case DeviceType::DEVICE_TYPE_NULL:
+				Context = new NullGraphicsContext();
+				break;
+
+			case DeviceType::DEVICE_TYPE_PROXY:
+				Context = new ProxyGraphicsContext();
+				break;
+
+			default:
+				ETERNAL_BREAK();
+				break;
+			}
+
+			Context->InitializeGraphicsContext();
+			return Context;
+		}
 
 		void DestroyGraphicsContext(_Inout_ GraphicsContext*& InOutContext)
 		{

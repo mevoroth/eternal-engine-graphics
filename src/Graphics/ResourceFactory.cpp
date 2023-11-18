@@ -3,6 +3,7 @@
 #include "Graphics/Resource.hpp"
 #include "Graphics/Device.hpp"
 #include "Graphics/Types/DeviceType.hpp"
+#include "Null/NullResource.hpp"
 #include "d3d12/D3D12Resource.hpp"
 #include "Vulkan/VulkanResource.hpp"
 #if ETERNAL_USE_PRIVATE
@@ -18,6 +19,10 @@ namespace Eternal
 		{
 			switch (InResourceCreateInformation.GfxDevice.GetDeviceType())
 			{
+			case DeviceType::DEVICE_TYPE_NULL:
+			case DeviceType::DEVICE_TYPE_PROXY:
+				return new NullResource(InResourceCreateInformation);
+
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12Resource(InResourceCreateInformation);

@@ -19,12 +19,14 @@ namespace Eternal
 			{
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
+#endif
+			case DeviceType::DEVICE_TYPE_NULL:
+			case DeviceType::DEVICE_TYPE_PROXY:
 			{
 				if (InViewportPlacementMemory)
 					return new (InViewportPlacementMemory) Viewport(InX, InY, InWidth, InHeight);
 				return new Viewport(InX, InY, InWidth, InHeight);
 			}
-#endif
 #if ETERNAL_ENABLE_VULKAN
 			case DeviceType::DEVICE_TYPE_VULKAN:
 				if (InViewportPlacementMemory)
@@ -35,6 +37,7 @@ namespace Eternal
 #if ETERNAL_USE_PRIVATE
 				return CreateViewportPrivate(InContext, InWidth, InHeight, InX, InY, InViewportPlacementMemory);
 #endif
+				break;
 			}
 			ETERNAL_BREAK();
 			return nullptr;
@@ -56,8 +59,9 @@ namespace Eternal
 			{
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
-				return sizeof(Viewport);
 #endif
+			case DeviceType::DEVICE_TYPE_NULL:
+				return sizeof(Viewport);
 #if ETERNAL_ENABLE_VULKAN
 			case DeviceType::DEVICE_TYPE_VULKAN:
 				return sizeof(VulkanViewport);

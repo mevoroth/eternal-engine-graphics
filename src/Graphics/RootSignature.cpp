@@ -82,8 +82,10 @@ namespace Eternal
 			{
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
-				return new DescriptorTable(this);
 #endif
+			case DeviceType::DEVICE_TYPE_NULL:
+			case DeviceType::DEVICE_TYPE_PROXY:
+				return new DescriptorTable(this);
 #if ETERNAL_ENABLE_VULKAN
 			case DeviceType::DEVICE_TYPE_VULKAN:
 				return new VulkanDescriptorTable(InContext, this);
@@ -92,6 +94,7 @@ namespace Eternal
 #if ETERNAL_USE_PRIVATE
 				return _CreateRootDescriptorTablePrivate(InContext);
 #endif
+				break;
 			}
 
 			ETERNAL_BREAK();
@@ -112,8 +115,10 @@ namespace Eternal
 						{
 #if ETERNAL_ENABLE_D3D12
 						case DeviceType::DEVICE_TYPE_D3D12:
-							return new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
 #endif
+						case DeviceType::DEVICE_TYPE_NULL:
+						case DeviceType::DEVICE_TYPE_PROXY:
+							return new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
 #if ETERNAL_ENABLE_VULKAN
 						case DeviceType::DEVICE_TYPE_VULKAN:
 							return new VulkanDescriptorTable(
@@ -127,6 +132,7 @@ namespace Eternal
 #if ETERNAL_USE_PRIVATE
 							return _CreateSubDescriptorTable(InContext, SubDescriptorTableIndex, Parameters[ParameterIndex].DescriptorTable);
 #endif
+							break;
 						}
 					}
 				}
@@ -159,8 +165,10 @@ namespace Eternal
 					{
 #if ETERNAL_ENABLE_D3D12
 					case DeviceType::DEVICE_TYPE_D3D12:
-						Table = new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
 #endif
+					case DeviceType::DEVICE_TYPE_NULL:
+					case DeviceType::DEVICE_TYPE_PROXY:
+						Table = new DescriptorTable(Parameters[ParameterIndex].DescriptorTable);
 #if ETERNAL_ENABLE_VULKAN
 					case DeviceType::DEVICE_TYPE_VULKAN:
 						Table = new VulkanDescriptorTable(

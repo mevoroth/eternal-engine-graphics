@@ -4,6 +4,7 @@
 #include "Graphics/Device.hpp"
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/MultiBuffered.hpp"
+#include "Null/NullView.hpp"
 #include "d3d12/D3D12View.hpp"
 #include "Vulkan/VulkanView.hpp"
 
@@ -16,6 +17,13 @@ namespace Eternal
 		{
 			switch (InViewCreateInformation.Context.GetDevice().GetDeviceType())
 			{
+			case DeviceType::DEVICE_TYPE_NULL:
+			case DeviceType::DEVICE_TYPE_PROXY:
+			{
+				if (InViewPlacementMemory)
+					return new (InViewPlacementMemory) NullView(InViewCreateInformation);
+				return new NullView(InViewCreateInformation);
+			}
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
 			{
@@ -33,9 +41,10 @@ namespace Eternal
 			}
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+				break;
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		template<typename ViewCreateInformationType>
@@ -108,9 +117,10 @@ namespace Eternal
 				return sizeof(VulkanView);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return 0ull;
+				break;
 			}
+			ETERNAL_BREAK();
+			return 0ull;
 		}
 	}
 }

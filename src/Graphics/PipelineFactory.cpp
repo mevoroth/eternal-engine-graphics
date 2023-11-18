@@ -3,6 +3,8 @@
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Types/DeviceType.hpp"
 #include "Graphics/Device.hpp"
+#include "Null/NullPipeline.hpp"
+#include "Proxy/ProxyPipeline.hpp"
 #include "d3d12/D3D12Pipeline.hpp"
 #include "Vulkan/VulkanPipeline.hpp"
 #if ETERNAL_USE_PRIVATE
@@ -18,6 +20,12 @@ namespace Eternal
 		{
 			switch (InOutContext.GetDevice().GetDeviceType())
 			{
+			case DeviceType::DEVICE_TYPE_NULL:
+				return new NullPipeline(InOutContext, InPipelineCreateInformation);
+
+			case DeviceType::DEVICE_TYPE_PROXY:
+				return new ProxyPipeline(InOutContext, InPipelineCreateInformation);
+
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12Pipeline(InOutContext, InPipelineCreateInformation);
@@ -27,9 +35,10 @@ namespace Eternal
 				return new VulkanPipeline(InOutContext, InPipelineCreateInformation);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+				break;
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation)
