@@ -23,11 +23,11 @@ namespace Eternal
 		class VulkanSwapChain final : public SwapChain
 		{
 		public:
-			VulkanSwapChain(_In_ GraphicsContext& Context);
+			VulkanSwapChain(_In_ GraphicsContext& InContext);
 			~VulkanSwapChain();
 
-			virtual void Acquire(GraphicsContext& Context) override final;
-			virtual void Present(GraphicsContext& Context) override final;
+			virtual void Acquire(GraphicsContext& InContext) override final;
+			virtual void Present(GraphicsContext& InContext) override final;
 
 			const vk::SwapchainKHR& GetSwapChain() const { return _SwapChain; }
 			const vk::SurfaceKHR& GetSurface() const { return _Surface; }

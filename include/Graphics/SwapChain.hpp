@@ -20,8 +20,8 @@ namespace Eternal
 		public:
 			virtual ~SwapChain();
 
-			virtual void Acquire(GraphicsContext& Context) = 0;
-			virtual void Present(GraphicsContext& Context) = 0;
+			virtual void Acquire(GraphicsContext& InContext) = 0;
+			virtual void Present(GraphicsContext& InContext) = 0;
 
 			vector<Resource*>& GetBackBuffers() { return _BackBuffers; }
 			vector<View*>& GetBackBufferRenderTargetViews() { return _BackBufferRenderTargetViews; }

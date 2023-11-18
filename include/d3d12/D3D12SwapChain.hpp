@@ -17,11 +17,11 @@ namespace Eternal
 		class D3D12SwapChain final : public SwapChain
 		{
 		public:
-			D3D12SwapChain(_In_ GraphicsContext& Context);
+			D3D12SwapChain(_In_ GraphicsContext& InContext);
 			virtual ~D3D12SwapChain() override final;
 
-			virtual void Acquire(_In_ GraphicsContext& Context) override final;
-			virtual void Present(_In_ GraphicsContext& Context) override final;
+			virtual void Acquire(_In_ GraphicsContext& InContext) override final;
+			virtual void Present(_In_ GraphicsContext& InContext) override final;
 
 			IDXGISwapChain* GetDXGISwapChain() { return _SwapChain; }
 

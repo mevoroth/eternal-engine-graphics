@@ -197,12 +197,12 @@ namespace Eternal
 
 		}
 
-		void VulkanSwapChain::Acquire(GraphicsContext& Context)
+		void VulkanSwapChain::Acquire(GraphicsContext& InContext)
 		{
-			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);
+			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(InContext);
 
 			Vulkan::VerifySuccess(
-				static_cast<VulkanDevice&>(Context.GetDevice()).GetVulkanDevice().acquireNextImageKHR(
+				static_cast<VulkanDevice&>(InContext.GetDevice()).GetVulkanDevice().acquireNextImageKHR(
 					GetSwapChain(),
 					UINT64_MAX,
 					GfxContext.GetNextFrameSemaphore(),
@@ -212,11 +212,11 @@ namespace Eternal
 			);
 		}
 
-		void VulkanSwapChain::Present(GraphicsContext& Context)
+		void VulkanSwapChain::Present(GraphicsContext& InContext)
 		{
-			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(Context);
+			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(InContext);
 
-			VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue());
+			VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(InContext.GetGraphicsQueue());
 
 			vk::Semaphore* SubmitCompletionSemaphores	= nullptr;
 			uint32_t SubmitCompletionSemaphoresCount	= 0;
@@ -228,7 +228,7 @@ namespace Eternal
 				&GfxContext.GetCurrentFrameIndex()
 			);
 			Vulkan::VerifySuccess(
-				static_cast<VulkanCommandQueue&>(Context.GetGraphicsQueue()).GetVulkanCommandQueue().presentKHR(
+				static_cast<VulkanCommandQueue&>(InContext.GetGraphicsQueue()).GetVulkanCommandQueue().presentKHR(
 					&PresentInfo
 				)
 			);
