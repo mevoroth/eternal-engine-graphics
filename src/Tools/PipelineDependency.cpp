@@ -16,7 +16,10 @@ namespace Eternal
 
 		void PipelineDependency::RegisterPipelineDependency(_In_ Pipeline* InPipeline, _In_ Shader* InShader)
 		{
+			ETERNAL_ASSERT(InPipeline);
 			ETERNAL_ASSERT(InShader);
+			_Pipelines.emplace(InPipeline);
+
 			auto PipelinesIterator = _ShaderToPipelines.find(InShader);
 			if (PipelinesIterator == _ShaderToPipelines.end())
 				PipelinesIterator = _ShaderToPipelines.emplace(InShader, vector<Pipeline*>()).first;

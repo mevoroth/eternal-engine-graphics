@@ -41,9 +41,11 @@ namespace Eternal
 			void RegisterShaderDependency(_In_ Shader* InShader, _In_ const string& InSource);
 			void RegisterPipelineDependency(_In_ Pipeline* InPipeline, _In_ Shader* InShader);
 			ResolvedPipelineDependency ResolveSource(_In_ const string& InSource);
+			const unordered_set<Pipeline*>& GetPipelines() const { return _Pipelines; }
 
 		private:
 
+			unordered_set<Pipeline*>						_Pipelines;
 			unordered_map<Shader*, vector<Pipeline*>>		_ShaderToPipelines;
 			unordered_map<string, unordered_set<Shader*>>	_SourceToShaders;
 		};
