@@ -6,6 +6,9 @@
 #include "Null/NullSwapChain.hpp"
 #include "d3d12/D3D12SwapChain.hpp"
 #include "Vulkan/VulkanSwapChain.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/SwapChainFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -29,9 +32,13 @@ namespace Eternal
 				return new VulkanSwapChain(InContext);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateSwapChainPrivate(InContext);
+#endif
+				break;
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 	}
 }
