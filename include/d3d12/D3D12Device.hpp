@@ -38,7 +38,7 @@ namespace Eternal
 		class D3D12Device final : public Device
 		{
 		public:
-			static constexpr bool UseDRED = true;
+			static constexpr bool UseDRED = false;
 
 			static void Initialize();
 			static void Destroy();

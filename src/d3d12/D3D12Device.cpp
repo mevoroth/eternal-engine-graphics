@@ -26,8 +26,8 @@ namespace Eternal
 
 		namespace D3D12
 		{
-			static constexpr bool LoadPixDLLOnStartup	= true;
-			static constexpr bool UseValidationLayer	= true;
+			static constexpr bool LoadPixDLLOnStartup	= false;
+			static constexpr bool UseValidationLayer	= false;
 		}
 
 #if ETERNAL_USE_DEBUG_LAYER
