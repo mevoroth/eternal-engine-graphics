@@ -48,7 +48,8 @@ namespace Eternal
 		Resource* CreateTexture(_In_ const TextureResourceCreateInformation& InResourceCreateInformation)
 		{
 #if ETERNAL_USE_PRIVATE
-			return CreateTexturePrivate(InResourceCreateInformation);
+			if (static_cast<uint32_t>(InResourceCreateInformation.GfxDevice.GetDeviceType()) >= static_cast<uint32_t>(DeviceType::DEVICE_TYPE_BASE_COUNT))
+				return CreateTexturePrivate(InResourceCreateInformation);
 #endif
 			return CreateResource(InResourceCreateInformation);
 		}
@@ -56,7 +57,8 @@ namespace Eternal
 		Resource* CreateBuffer(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
 		{
 #if ETERNAL_USE_PRIVATE
-			return CreateBufferPrivate(InResourceCreateInformation);
+			if (static_cast<uint32_t>(InResourceCreateInformation.GfxDevice.GetDeviceType()) >= static_cast<uint32_t>(DeviceType::DEVICE_TYPE_BASE_COUNT))
+				return CreateBufferPrivate(InResourceCreateInformation);
 #endif
 			return CreateResource(InResourceCreateInformation);
 		}
