@@ -4,11 +4,18 @@
 #include "Graphics/Rasterizer.hpp"
 #include "Graphics/RenderPass.hpp"
 #include "Graphics/ShaderType.hpp"
+#include <string>
 
 namespace Eternal
 {
+	namespace FileSystem
+	{
+		class File;
+	}
 	namespace Graphics
 	{
+		using namespace Eternal::FileSystem;
+
 		enum class ShaderTypeFlags;
 
 		class GraphicsContext;
@@ -70,7 +77,8 @@ namespace Eternal
 
 			PipelineCreateInformation& operator=(_In_ const PipelineCreateInformation& InPipelineCreateInformation);
 
-			RootSignature&		PipelineRootSignature;
+			string				PipelineName;
+			RootSignature*		PipelineRootSignature			= nullptr;
 			InputLayout*		PipelineInputLayout				= nullptr;
 			RenderPass*			PipelineRenderPass				= nullptr;
 			Shader*				ShaderVertex					= nullptr;
@@ -94,8 +102,10 @@ namespace Eternal
 
 		protected:
 
+			PipelineCreateInformation() = default;
+
 			PipelineCreateInformation(
-				_In_ RootSignature& InRootSignature,
+				_In_ RootSignature* InRootSignature,
 				_In_ InputLayout* InInputLayout,
 				_In_ RenderPass* InRenderPass,
 				_In_ Shader* InVertex,
@@ -106,12 +116,12 @@ namespace Eternal
 			);
 
 			PipelineCreateInformation(
-				_In_ RootSignature& InRootSignature,
+				_In_ RootSignature* InRootSignature,
 				_In_ Shader* InCompute
 			);
 
 			PipelineCreateInformation(
-				_In_ RootSignature& InRootSignature,
+				_In_ RootSignature* InRootSignature,
 				_In_ RenderPass* InRenderPass,
 				_In_ Shader* InMesh,
 				_In_ Shader* InPixel,
@@ -120,7 +130,7 @@ namespace Eternal
 			);
 
 			PipelineCreateInformation(
-				_In_ RootSignature& InRootSignature,
+				_In_ RootSignature* InRootSignature,
 				_In_ RenderPass* InRenderPass,
 				_In_ Shader* InMesh,
 				_In_ Shader* InAmplification,
@@ -130,7 +140,7 @@ namespace Eternal
 			);
 
 			PipelineCreateInformation(
-				_In_ RootSignature& InGlobalRootSignature,
+				_In_ RootSignature* InGlobalRootSignature,
 				_In_ Shader* InRayTracingRayGeneration,
 				_In_ Shader* InRayTracingClosestHit,
 				_In_ Shader* InRayTracingMiss,
@@ -138,12 +148,14 @@ namespace Eternal
 			);
 
 			bool PipelineRecreated = false;
+
+			friend class Pipeline;
 		};
 
 		struct GraphicsPipelineCreateInformation : public PipelineCreateInformation
 		{
 			GraphicsPipelineCreateInformation(
-				_In_ RootSignature& InRootSignature,
+				_In_ RootSignature* InRootSignature,
 				_In_ InputLayout* InInputLayout,
 				_In_ RenderPass* InRenderPass,
 				_In_ Shader* InVertex,
@@ -159,7 +171,7 @@ namespace Eternal
 		struct ComputePipelineCreateInformation : public PipelineCreateInformation
 		{
 			ComputePipelineCreateInformation(
-				_In_ RootSignature& InRootSignature,
+				_In_ RootSignature* InRootSignature,
 				_In_ Shader* InCompute
 			);
 
@@ -169,7 +181,7 @@ namespace Eternal
 		struct MeshPipelineCreateInformation : public PipelineCreateInformation
 		{
 			MeshPipelineCreateInformation(
-				_In_ RootSignature& InRootSignature,
+				_In_ RootSignature* InRootSignature,
 				_In_ RenderPass* InRenderPass,
 				_In_ Shader* InMesh,
 				_In_ Shader* InPixel,
@@ -178,7 +190,7 @@ namespace Eternal
 			);
 
 			MeshPipelineCreateInformation(
-				_In_ RootSignature& InRootSignature,
+				_In_ RootSignature* InRootSignature,
 				_In_ RenderPass* InRenderPass,
 				_In_ Shader* InMesh,
 				_In_ Shader* InAmplification,
@@ -193,7 +205,7 @@ namespace Eternal
 		struct RayTracingPipelineCreateInformation : public PipelineCreateInformation
 		{
 			RayTracingPipelineCreateInformation(
-				_In_ RootSignature& InGlobalRootSignature,
+				_In_ RootSignature* InGlobalRootSignature,
 				_In_ Shader* InRayTracingRayGeneration,
 				_In_ Shader* InRayTracingClosestHit,
 				_In_ Shader* InRayTracingMiss,
@@ -206,21 +218,31 @@ namespace Eternal
 		class Pipeline
 		{
 		public:
+
 			virtual ~Pipeline() {}
 			virtual bool IsPipelineCompiled() const = 0;
+			virtual void SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile);
 
 			const Viewport& GetViewport() const { return static_cast<const RenderPass*>(_PipelineCreateInformation.PipelineRenderPass)->GetViewport(); }
 			const ShaderTypeFlags& GetShaderTypes() const { return _PipelineCreateInformation.PipelineShaderTypes; }
-			const RootSignature& GetRootSignature() const { return _PipelineCreateInformation.PipelineRootSignature; }
+			const RootSignature* GetRootSignature() const { return _PipelineCreateInformation.PipelineRootSignature; }
 			const PipelineCreateInformation& GetPipelineCreateInformation() const { return _PipelineCreateInformation; }
 			PipelineCreateInformation& GetPipelineCreateInformation() { return _PipelineCreateInformation; }
 			Pipeline& operator=(_In_ const Pipeline& InPipeline);
 
 		protected:
-			Pipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation);
+			Pipeline(_Inout_ GraphicsContext& InOutContext);
+			Pipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation, _In_ bool IsSkippingRegistration = false);
+
+			void _RegisterPipeline(_Inout_ GraphicsContext& InOutContext);
 
 		private:
+
+			void FinalizeConstruction(_In_ const PipelineCreateInformation& InPipelineCreateInformation);
+
 			PipelineCreateInformation _PipelineCreateInformation;
+
+			friend class PipelineLibrary;
 		};
 	}
 }

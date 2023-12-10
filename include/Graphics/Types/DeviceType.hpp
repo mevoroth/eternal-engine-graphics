@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace Eternal
 {
 	namespace Graphics
@@ -10,11 +12,17 @@ namespace Eternal
 			DEVICE_TYPE_PROXY,
 			DEVICE_TYPE_D3D12,
 			DEVICE_TYPE_VULKAN
-#if ETERNAL_USE_PRIVATE
-			#include "Graphics/Types/DeviceTypePrivate.hpp"
+#if (ETERNAL_USE_PRIVATE || ETERNAL_USE_PROXY)
+			#include "Graphics/Types/DeviceTypeEnumPrivate.hpp"
 #else
+			, DEVICE_TYPE_COUNT
 			, DEVICE_TYPE_DEFAULT = DEVICE_TYPE_D3D12
 #endif
+			, DEVICE_TYPE_BASE_COUNT = DEVICE_TYPE_VULKAN + 1
+			, DEVICE_TYPE_EXTENDED_COUNT = DEVICE_TYPE_COUNT - DEVICE_TYPE_BASE_COUNT
 		};
+
+		const char* ConvertDeviceTypeToString(_In_ const DeviceType& InDeviceType);
+		DeviceType ConvertStringToDeviceType(_In_ const std::string& InDeviceTypeString);
 	}
 }

@@ -7,7 +7,7 @@
 #include "Proxy/ProxyPipeline.hpp"
 #include "d3d12/D3D12Pipeline.hpp"
 #include "Vulkan/VulkanPipeline.hpp"
-#if ETERNAL_USE_PRIVATE
+#if (ETERNAL_USE_PRIVATE || ETERNAL_USE_PROXY)
 #include "Graphics/PipelineFactoryPrivate.hpp"
 #endif
 
@@ -16,9 +16,9 @@ namespace Eternal
 	namespace Graphics
 	{
 		template<typename PipelineCreateInformationType>
-		Pipeline* CreatePipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformationType& InPipelineCreateInformation)
+		Pipeline* CreatePipeline(_In_ const DeviceType& InDeviceType, _Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformationType& InPipelineCreateInformation)
 		{
-			switch (InOutContext.GetDevice().GetDeviceType())
+			switch (InDeviceType)
 			{
 			case DeviceType::DEVICE_TYPE_NULL:
 				return new NullPipeline(InOutContext, InPipelineCreateInformation);
@@ -35,42 +35,67 @@ namespace Eternal
 				return new VulkanPipeline(InOutContext, InPipelineCreateInformation);
 #endif
 			default:
+#if (ETERNAL_USE_PRIVATE || ETERNAL_USE_PROXY)
+				return CreatePipelinePrivate(InDeviceType, InOutContext, InPipelineCreateInformation);
+#endif
 				break;
 			}
 			ETERNAL_BREAK();
 			return nullptr;
 		}
 
+		template<typename PipelineCreateInformationType>
+		Pipeline* CreatePipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformationType& InPipelineCreateInformation)
+		{
+			return CreatePipeline(InOutContext.GetDevice().GetDeviceType(), InOutContext, InPipelineCreateInformation);
+		}
+
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation)
 		{
-#if ETERNAL_USE_PRIVATE
-			return CreatePipelinePrivate(InOutContext, InPipelineCreateInformation);
-#endif
 			return CreatePipeline<GraphicsPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const ComputePipelineCreateInformation& InPipelineCreateInformation)
 		{
-#if ETERNAL_USE_PRIVATE
-			return CreatePipelinePrivate(InOutContext, InPipelineCreateInformation);
-#endif
 			return CreatePipeline<ComputePipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const MeshPipelineCreateInformation& InPipelineCreateInformation)
 		{
-#if ETERNAL_USE_PRIVATE
-			return CreatePipelinePrivate(InOutContext, InPipelineCreateInformation);
-#endif
 			return CreatePipeline<MeshPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
 		}
 
 		Pipeline* CreatePipeline(_In_ GraphicsContext& InOutContext, _In_ const RayTracingPipelineCreateInformation& InPipelineCreateInformation)
 		{
-#if ETERNAL_USE_PRIVATE
-			return CreatePipelinePrivate(InOutContext, InPipelineCreateInformation);
-#endif
 			return CreatePipeline<RayTracingPipelineCreateInformation>(InOutContext, InPipelineCreateInformation);
+		}
+
+		Pipeline* CreatePipeline(_Inout_ GraphicsContext& InOutContext)
+		{
+			switch (InOutContext.GetDevice().GetDeviceType())
+			{
+			case DeviceType::DEVICE_TYPE_NULL:
+				return new NullPipeline(InOutContext);
+
+			case DeviceType::DEVICE_TYPE_PROXY:
+				return new ProxyPipeline(InOutContext);
+
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
+				return new D3D12Pipeline(InOutContext);
+#endif
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
+				return new VulkanPipeline(InOutContext);
+#endif
+			default:
+#if (ETERNAL_USE_PRIVATE || ETERNAL_USE_PROXY)
+				return CreatePipelinePrivate(InOutContext);
+#endif
+				break;
+			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		void DestroyPipeline(_Inout_ Pipeline*& InOutPipeline)
@@ -102,8 +127,9 @@ namespace Eternal
 			} break;
 #endif
 			default:
-				ETERNAL_BREAK();
+				break;
 			}
+			ETERNAL_BREAK();
 		}
 	}
 }

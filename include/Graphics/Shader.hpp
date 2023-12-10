@@ -5,9 +5,14 @@
 
 namespace Eternal
 {
+	namespace FileSystem
+	{
+		class File;
+	}
 	namespace Graphics
 	{
 		using namespace std;
+		using namespace Eternal::FileSystem;
 
 		enum class ShaderType;
 		class GraphicsContext;
@@ -26,7 +31,13 @@ namespace Eternal
 			D3D12ShaderCompilerType D3D12CompilerPreference	= D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_FXC;
 			string Name;
 			string FileName;
-			const vector<string> Defines;
+			vector<string> Defines;
+
+		private:
+
+			ShaderCreateInformation() {}
+
+			friend class Shader;
 		};
 
 		class Shader
@@ -34,6 +45,8 @@ namespace Eternal
 		public:
 			virtual ~Shader() {}
 			virtual bool IsShaderCompiled() const = 0;
+			virtual void SerializeShader(_Inout_ File* InOutFile);
+
 			const string& GetName() const;
 			const string& GetFileName() const;
 			ShaderCreateInformation& GetShaderCreateInformation();
@@ -41,6 +54,7 @@ namespace Eternal
 
 		protected:
 			Shader(_Inout_ GraphicsContext& InOutContext, _In_ const ShaderCreateInformation& InShaderCreateInformation);
+			Shader();
 
 		private:
 			ShaderCreateInformation _ShaderCreateInformation;

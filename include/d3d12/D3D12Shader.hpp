@@ -32,8 +32,10 @@ namespace Eternal
 			static void Destroy();
 			
 			D3D12Shader(_In_ GraphicsContext& InOutContext, const ShaderCreateInformation& InCreateInformation);
+			D3D12Shader();
 			virtual ~D3D12Shader() override final;
 			virtual bool IsShaderCompiled() const override final;
+			virtual void SerializeShader(_Inout_ File* InOutFile) override final;
 			void GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode);
 			const wchar_t* GetD3D12StageEntryPoint() const;
 			const wchar_t** GetD3D12StageEntryPointPointer() const;

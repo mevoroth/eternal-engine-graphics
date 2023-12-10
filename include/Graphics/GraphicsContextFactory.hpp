@@ -7,11 +7,11 @@ namespace Eternal
 		enum class DeviceType;
 		class GraphicsContext;
 		struct WindowsGraphicsContextCreateInformation;
-		struct BakeGraphicsContextCreateInformation;
+		struct ProxyGraphicsContextCreateInformation;
 
-		GraphicsContext* CreateGraphicsContext(_In_ const DeviceType& InDeviceType);
+		GraphicsContext* CreateGraphicsContext();
 		GraphicsContext* CreateGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation);
-		GraphicsContext* CreateGraphicsContext(_In_ const BakeGraphicsContextCreateInformation& InBakeGraphicsContextCreateInformation);
+		GraphicsContext* CreateGraphicsContext(_In_ const ProxyGraphicsContextCreateInformation& InProxyGraphicsContextCreateInformation);
 		void DestroyGraphicsContext(_Inout_ GraphicsContext*& Context);
 	}
 }

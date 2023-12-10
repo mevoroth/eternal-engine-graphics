@@ -17,6 +17,12 @@ namespace Eternal
 		class D3D12Pipeline final : public Pipeline
 		{
 		public:
+
+			D3D12Pipeline(_Inout_ GraphicsContext& InOutContext)
+				: Pipeline(InOutContext)
+			{
+			}
+
 			D3D12Pipeline(
 				_Inout_ GraphicsContext& InOutContext,
 				_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
@@ -49,9 +55,14 @@ namespace Eternal
 			D3D12Pipeline& operator=(_In_ const D3D12Pipeline& InPipeline);
 
 			virtual bool IsPipelineCompiled() const override final;
+			virtual void SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile) override final;
+
 			bool IsRayTracingPipeline() const;
 
 		private:
+
+			void _SetName();
+
 			union D3D12PipelineInternal
 			{
 				D3D12PipelineInternal()

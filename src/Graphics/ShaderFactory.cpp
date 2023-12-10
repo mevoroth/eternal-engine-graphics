@@ -8,7 +8,7 @@
 #include "Proxy/ProxyShader.hpp"
 #include "d3d12/D3D12Shader.hpp"
 #include "Vulkan/VulkanShader.hpp"
-#if ETERNAL_USE_PRIVATE
+#if (ETERNAL_USE_PRIVATE || ETERNAL_USE_PROXY)
 #include "Graphics/ShaderFactoryPrivate.hpp"
 #endif
 
@@ -16,6 +16,8 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		extern Shader* CreateShaderPrivate(_In_ GraphicsContext& InContext);
+
 		ShaderFactory::ShaderFactory()
 		{
 		}
@@ -30,13 +32,50 @@ namespace Eternal
 			_Shaders.clear();
 		}
 
+		Shader* ShaderFactory::GetShader(_In_ GraphicsContext& InContext)
+		{
+			Shader* ShaderBinary = nullptr;
+			switch (InContext.GetDevice().GetDeviceType())
+			{
+			case DeviceType::DEVICE_TYPE_NULL:
+				ShaderBinary = new NullShader();
+
+			case DeviceType::DEVICE_TYPE_PROXY:
+				ShaderBinary = new ProxyShader();
+
+#if ETERNAL_ENABLE_D3D12
+			case DeviceType::DEVICE_TYPE_D3D12:
+				ShaderBinary = new D3D12Shader();
+#endif
+#if ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
+				ShaderBinary = new VulkanShader();
+#endif
+			default:
+#if (ETERNAL_USE_PRIVATE || ETERNAL_USE_PROXY)
+			{
+				ShaderBinary = CreateShaderPrivate(InContext);
+			}
+#endif
+				break;
+			}
+			ETERNAL_ASSERT(ShaderBinary);
+			_Shaders.push_back(ShaderBinary);
+			return ShaderBinary;
+		}
+
 		Shader* ShaderFactory::GetShader(_In_ GraphicsContext& InContext, _In_ const ShaderCreateInformation& InCreateInformation)
+		{
+			return GetShader(InContext.GetDevice().GetDeviceType(), InContext, InCreateInformation);
+		}
+
+		Shader* ShaderFactory::GetShader(_In_ const DeviceType& InDeviceType, _In_ GraphicsContext& InContext, _In_ const ShaderCreateInformation& InCreateInformation)
 		{
 			Shader* ShaderBinary = _Find(InCreateInformation.Name);
 			if (ShaderBinary)
 				return ShaderBinary;
 
-			ShaderBinary = _Create(InContext, InCreateInformation);
+			ShaderBinary = _Create(InDeviceType, InContext, InCreateInformation);
 			ETERNAL_ASSERT(ShaderBinary);
 			_Shaders.push_back(ShaderBinary);
 			return ShaderBinary;
@@ -59,12 +98,21 @@ namespace Eternal
 
 		Shader* ShaderFactory::_Create(_In_ GraphicsContext& InContext, _In_ const ShaderCreateInformation& InCreateInformation, _In_ Shader* InShader)
 		{
-			switch (InContext.GetDevice().GetDeviceType())
+			return _Create(InContext.GetDevice().GetDeviceType(), InContext, InCreateInformation, InShader);
+		}
+
+		Shader* ShaderFactory::_Create(_In_ const DeviceType& InDeviceType, _In_ GraphicsContext& InContext, _In_ const ShaderCreateInformation& InCreateInformation, _In_ Shader* InShader)
+		{
+			switch (InDeviceType)
 			{
 			case DeviceType::DEVICE_TYPE_NULL:
+				if (InShader)
+					return new (InShader) NullShader(InContext, InCreateInformation);
 				return new NullShader(InContext, InCreateInformation);
 
 			case DeviceType::DEVICE_TYPE_PROXY:
+				if (InShader)
+					return new (InShader) ProxyShader(InContext, InCreateInformation);
 				return new ProxyShader(InContext, InCreateInformation);
 
 #if ETERNAL_ENABLE_D3D12
@@ -80,8 +128,8 @@ namespace Eternal
 				return new VulkanShader(InContext, InCreateInformation);
 #endif
 			default:
-#if ETERNAL_USE_PRIVATE
-				return CreateShaderPrivate(InContext, InCreateInformation, InShader);
+#if (ETERNAL_USE_PRIVATE || ETERNAL_USE_PROXY)
+				return CreateShaderPrivate(InDeviceType, InContext, InCreateInformation, InShader);
 #endif
 				break;
 			}

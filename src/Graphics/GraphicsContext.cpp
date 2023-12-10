@@ -31,6 +31,10 @@
 #include "Graphics/SwapChainFactory.hpp"
 #include "Graphics/View.hpp"
 #include "Graphics/ViewportFactory.hpp"
+#include "Proxy/ProxyGraphicsContext.hpp"
+#include "File/FileFactory.hpp"
+#include "File/File.hpp"
+#include "File/FilePath.hpp"
 #include <utility>
 
 namespace Eternal
@@ -52,7 +56,8 @@ namespace Eternal
 		}
 
 		GraphicsContext::GraphicsContext(_In_ const GraphicsContextCreateInformation& InGraphicsContextCreateInformation, _In_ OutputDevice& InOutputDevice)
-			: _OutputDevice(InOutputDevice)
+			: _GraphicsContextCreateInformation(InGraphicsContextCreateInformation)
+			, _OutputDevice(InOutputDevice)
 		{
 			static constexpr uint32_t ResourcesToClearInitialCount = 256;
 
@@ -195,6 +200,8 @@ namespace Eternal
 					)
 				);
 			}
+
+			SerializePipelineLibrary(PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_READ);
 		}
 
 		View& GraphicsContext::GetCurrentFrameBackBufferView()
@@ -432,6 +439,12 @@ namespace Eternal
 			return _ShaderFactory->GetShader(*this, InShaderCreateInformation);
 		}
 
+		Shader* GraphicsContext::GetShader()
+		{
+			ETERNAL_ASSERT(_ShaderFactory);
+			return _ShaderFactory->GetShader(*this);
+		}
+
 		template<> void GraphicsContext::DelayedDelete<View>(_In_ View* InView)
 		{
 			_ViewsToClear[_CurrentFrameIndex].push_back(InView);
@@ -453,6 +466,11 @@ namespace Eternal
 				_FrameFences[FrameIndex]->Wait(GetDevice());
 		}
 
+		ShaderFactory* GraphicsContext::GetShaderFactory()
+		{
+			return _ShaderFactory;
+		}
+
 		void GraphicsContext::RegisterGraphicsCommands(_In_ vector<GraphicsCommand *>* InCommands)
 		{
 			_NewGraphicsCommands = InCommands;
@@ -461,6 +479,44 @@ namespace Eternal
 		void GraphicsContext::RegisterPipelineRecompile(_In_ const ResolvedPipelineDependency& InPipelineDependencies)
 		{
 			_PipelineRecompile = InPipelineDependencies;
+		}
+
+		void GraphicsContext::SerializePipelineLibrary(_In_ PipelineSerializationMode InPipelineSerializationMode)
+		{
+			DeviceType CurrentDeviceType = _Device->GetDeviceType();
+			if (CurrentDeviceType == DeviceType::DEVICE_TYPE_PROXY)
+			{
+				if (InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_READ)
+					return;
+
+				CurrentDeviceType = static_cast<ProxyGraphicsContext*>(this)->GetProxyDeviceType();
+			}
+
+			string DeviceTypeString = ConvertDeviceTypeToString(CurrentDeviceType);
+			char PipelineFileName[256];
+			sprintf_s(PipelineFileName, "pipelines.%s.library", DeviceTypeString.c_str());
+
+			string PipelinesLibraryFileName = [&InPipelineSerializationMode, &PipelineFileName]() -> string
+			{
+				if (InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_WRITE)
+					return FilePath::FindOrCreate(PipelineFileName, FileType::FILE_TYPE_CACHED_PIPELINES);
+				else
+					return FilePath::Find(PipelineFileName, FileType::FILE_TYPE_CACHED_PIPELINES);
+			}();
+
+			if (InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_READ)
+			{
+				if (PipelinesLibraryFileName.length() == 0)
+					return;
+			}
+
+			File* PipelinesLibraryFile = CreateFileHandle(PipelinesLibraryFileName);
+			PipelinesLibraryFile->Open(InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_WRITE ? File::OpenMode::WRITE : File::OpenMode::READ);
+
+			_PipelineLibrary.SerializePipelineLibrary(*this, PipelinesLibraryFile);
+
+			PipelinesLibraryFile->Close();
+			DestroyFileHandle(PipelinesLibraryFile);
 		}
 
 		//////////////////////////////////////////////////////////////////////////

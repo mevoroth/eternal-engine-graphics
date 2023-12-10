@@ -15,6 +15,11 @@ namespace Eternal
 		class VulkanPipeline final : public Pipeline
 		{
 		public:
+			VulkanPipeline(_Inout_ GraphicsContext& InOutContext)
+				: Pipeline(InOutContext)
+			{
+			}
+
 			VulkanPipeline(
 				_Inout_ GraphicsContext& InOutContext,
 				_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
@@ -41,6 +46,7 @@ namespace Eternal
 			VulkanPipeline& VulkanPipeline::operator=(_In_ const VulkanPipeline& InPipeline);
 
 			virtual bool IsPipelineCompiled() const override final;
+			virtual void SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile) override final;
 
 		private:
 			vk::Pipeline _Pipeline;

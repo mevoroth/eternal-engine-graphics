@@ -11,6 +11,13 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		GraphicsContext* CreateGraphicsContext()
+		{
+			GraphicsContext* Context = new NullGraphicsContext();
+			Context->InitializeGraphicsContext();
+			return Context;
+		}
+
 #if ETERNAL_PLATFORM_WINDOWS
 		GraphicsContext* CreateGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation)
 		{
@@ -39,25 +46,9 @@ namespace Eternal
 		}
 #endif
 
-		GraphicsContext* CreateGraphicsContext(_In_ const DeviceType& InDeviceType)
+		GraphicsContext* CreateGraphicsContext(_In_ const ProxyGraphicsContextCreateInformation& InProxyGraphicsContextCreateInformation)
 		{
-			GraphicsContext* Context = nullptr;
-
-			switch (InDeviceType)
-			{
-			case DeviceType::DEVICE_TYPE_NULL:
-				Context = new NullGraphicsContext();
-				break;
-
-			case DeviceType::DEVICE_TYPE_PROXY:
-				Context = new ProxyGraphicsContext();
-				break;
-
-			default:
-				ETERNAL_BREAK();
-				break;
-			}
-
+			GraphicsContext* Context = new ProxyGraphicsContext(InProxyGraphicsContextCreateInformation);
 			Context->InitializeGraphicsContext();
 			return Context;
 		}

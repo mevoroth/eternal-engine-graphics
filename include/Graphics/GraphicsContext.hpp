@@ -5,7 +5,7 @@
 #include "OutputDevice/OutputDevice.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/CommandUtils.hpp"
-#include "Tools/PipelineDependency.hpp"
+#include "Tools/PipelineLibrary.hpp"
 #include <array>
 
 namespace Eternal
@@ -98,7 +98,8 @@ namespace Eternal
 			void EndFrame();
 			virtual void ResetFrameStates();
 
-			PipelineDependency& GetPipelineDependency() { return _PipelineDependency; }
+			const GraphicsContextCreateInformation& GetGraphicsContextCreateInformation() { return _GraphicsContextCreateInformation; }
+			PipelineLibrary& GetPipelineLibrary() { return _PipelineLibrary; }
 			Device& GetDevice() { return *_Device; }
 			OutputDevice& GetOutputDevice() { return _OutputDevice; }
 			SwapChain& GetSwapChain() { return *_SwapChain; }
@@ -117,6 +118,7 @@ namespace Eternal
 			CommandQueue& GetCopyQueue() { return *_CopyQueue; }
 
 			Shader* GetShader(_In_ const ShaderCreateInformation& InShaderCreateInformation);
+			Shader* GetShader();
 			CommandListScope CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName);
 			CommandList* CreateNewCommandListUnsafe(_In_ const CommandType& InType, _In_ const string& InName);
 			GraphicsCommandListScope CreateNewGraphicsCommandList(_In_ const RenderPass& InRenderPass, _In_ const string& InName);
@@ -135,11 +137,13 @@ namespace Eternal
 
 			void RegisterGraphicsCommands(_In_ vector<GraphicsCommand*>* InCommands);
 			void RegisterPipelineRecompile(_In_ const ResolvedPipelineDependency& InPipelineDependencies);
+			void SerializePipelineLibrary(_In_ PipelineSerializationMode InPipelineSerializationMode);
 
 		protected:
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& InCreateInformation, _In_ OutputDevice& InOutputDevice);
 
 			void WaitForAllFences();
+			ShaderFactory* GetShaderFactory();
 
 		private:
 
@@ -166,8 +170,9 @@ namespace Eternal
 			vector<GraphicsCommand*>*												_NewGraphicsCommands = nullptr;
 			vector<GraphicsCommand*>												_GraphicsCommands;
 
+			const GraphicsContextCreateInformation& _GraphicsContextCreateInformation;
 			OutputDevice& _OutputDevice;
-			PipelineDependency _PipelineDependency;
+			PipelineLibrary _PipelineLibrary;
 			ResolvedPipelineDependency _PipelineRecompile;
 			Device* _Device									= nullptr;
 			SwapChain* _SwapChain							= nullptr;

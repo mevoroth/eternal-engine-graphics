@@ -10,39 +10,23 @@ namespace Eternal
 		{
 		public:
 
-			ProxyPipeline(
-				_Inout_ GraphicsContext& InOutContext,
-				_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
-			)
-				: Pipeline(InOutContext, InPipelineCreateInformation)
+			ProxyPipeline(_Inout_ GraphicsContext& InOutContext)
+				: Pipeline(InOutContext)
 			{
 			}
 
+			template<typename PipelineCreateInformationType>
 			ProxyPipeline(
 				_Inout_ GraphicsContext& InOutContext,
-				_In_ const ComputePipelineCreateInformation& InPipelineCreateInformation
-			)
-				: Pipeline(InOutContext, InPipelineCreateInformation)
-			{
-			}
+				_In_ const PipelineCreateInformationType& InPipelineCreateInformation
+			);
 
-			ProxyPipeline(
-				_Inout_ GraphicsContext& InOutContext,
-				_In_ const MeshPipelineCreateInformation& InPipelineCreateInformation
-			)
-				: Pipeline(InOutContext, InPipelineCreateInformation)
-			{
-			}
+			virtual bool IsPipelineCompiled() const override final;
+			virtual void SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile) override final;
 
-			ProxyPipeline(
-				_Inout_ GraphicsContext& InOutContext,
-				_In_ const RayTracingPipelineCreateInformation& InPipelineCreateInformation
-			)
-				: Pipeline(InOutContext, InPipelineCreateInformation)
-			{
-			}
+		private:
 
-			virtual bool IsPipelineCompiled() const override final { return true; }
+			Pipeline* _Pipeline = nullptr;
 
 		};
 	}

@@ -174,7 +174,7 @@ namespace Eternal
 				&DepthStencilStateInfo,
 				&ColorBlendStateInfo,
 				&DynamicStateInfos,
-				static_cast<VulkanRootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetVulkanPipelineLayout(),
+				static_cast<VulkanRootSignature*>(InPipelineCreateInformation.PipelineRootSignature)->GetVulkanPipelineLayout(),
 				static_cast<VulkanRenderPass*>(InPipelineCreateInformation.PipelineRenderPass)->GetVulkanRenderPass(),
 				0,
 				nullptr, 0
@@ -208,7 +208,7 @@ namespace Eternal
 			vk::ComputePipelineCreateInfo PipelineInfo(
 				vk::PipelineCreateFlagBits(),
 				ShaderStageInfo,
-				static_cast<VulkanRootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetVulkanPipelineLayout()
+				static_cast<VulkanRootSignature*>(InPipelineCreateInformation.PipelineRootSignature)->GetVulkanPipelineLayout()
 			);
 
 			VerifySuccess(Device.createComputePipelines(
@@ -250,6 +250,11 @@ namespace Eternal
 		bool VulkanPipeline::IsPipelineCompiled() const
 		{
 			return _Pipeline;
+		}
+
+		void VulkanPipeline::SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile)
+		{
+			ETERNAL_BREAK();
 		}
 	}
 }

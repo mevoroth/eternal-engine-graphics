@@ -49,8 +49,8 @@ namespace Eternal
 			"ShaderMiss",
 			"ShaderAnyHit"
 		};
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_KINDS) == int(ShaderType::SHADER_TYPE_COUNT),		"Shader kinds does not match ShaderType definition.");
-		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == int(ShaderType::SHADER_TYPE_COUNT),	"Shader entry points does not match ShaderType definition.");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_KINDS) == static_cast<uint32_t>(ShaderType::SHADER_TYPE_COUNT),			"Shader kinds does not match ShaderType definition.");
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(SHADER_ENTRY_POINTS) == static_cast<uint32_t>(ShaderType::SHADER_TYPE_COUNT),	"Shader entry points does not match ShaderType definition.");
 
 		namespace VulkanPrivate
 		{
@@ -103,6 +103,11 @@ namespace Eternal
 #endif
 		}
 
+		VulkanShader::VulkanShader()
+			: Shader()
+		{
+		}
+
 		void VulkanShader::_CompileFile(_Inout_ GraphicsContext& InOutContext, _In_ const string& InFileName, _In_ const ShaderType& InStage, _In_ const vector<string>& InDefines)
 		{
 			using namespace Vulkan;
@@ -116,6 +121,7 @@ namespace Eternal
 			FileContent ShaderSourceCode	= LoadFileToMemory(FullPathSource);
 
 			string ShaderFileContent		= R"HLSLINCLUDE(
+				#include "platform.common.hlsl"
 				#include "ShadersReflection/HLSLReflection.hpp"
 			)HLSLINCLUDE";
 			ShaderFileContent				+= reinterpret_cast<const char*>(ShaderSourceCode.Content);
@@ -166,7 +172,7 @@ namespace Eternal
 				);
 			}
 
-			static const std::string MacroPlatformName = "PLATFORM_VULKAN";
+			static const std::string MacroPlatformName = "ETERNAL_PLATFORM_VULKAN";
 			static const std::string MacroPlatformValue = "1";
 			shaderc_compile_options_add_macro_definition(
 				CompilerOptions,
@@ -284,6 +290,11 @@ namespace Eternal
 			VerifySuccess(static_cast<VulkanDevice&>(InDevice).GetVulkanDevice().createShaderModule(&ShaderModuleInfo, nullptr, &_ShaderModule));
 
 			shaderc_result_release(CompilationResult);
+		}
+
+		void VulkanShader::SerializeShader(_Inout_ File* InOutFile)
+		{
+			ETERNAL_BREAK();
 		}
 
 		vk::ShaderModule& VulkanShader::GetVulkanShader()

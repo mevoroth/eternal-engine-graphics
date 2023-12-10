@@ -4,6 +4,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class DeviceType;
 		class Pipeline;
 		class GraphicsContext;
 		struct GraphicsPipelineCreateInformation;
@@ -11,6 +12,12 @@ namespace Eternal
 		struct MeshPipelineCreateInformation;
 		struct RayTracingPipelineCreateInformation;
 
+		template<typename PipelineCreateInformationType>
+		Pipeline* CreatePipeline(
+			_In_ const DeviceType& InDeviceType,
+			_Inout_ GraphicsContext& InOutContext,
+			_In_ const PipelineCreateInformationType& InPipelineCreateInformation
+		);
 		Pipeline* CreatePipeline(
 			_Inout_ GraphicsContext& InOutContext,
 			_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation

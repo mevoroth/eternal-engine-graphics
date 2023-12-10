@@ -259,7 +259,7 @@ namespace Eternal
 			const DepthTest& InDepthTest											= InPipelineCreateInformation.PipelineDepthStencil.GetDepthTest();
 			const StencilTest& InStencilTest										= InPipelineCreateInformation.PipelineDepthStencil.GetStencilTest();
 
-			InOutPipelineStateDesc.pRootSignature									= static_cast<const D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
+			InOutPipelineStateDesc.pRootSignature									= static_cast<const D3D12RootSignature*>(InPipelineCreateInformation.PipelineRootSignature)->GetD3D12RootSignature();
 
 			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderPixel)->GetD3D12Shader(InOutPipelineStateDesc.PS);
 
@@ -281,8 +281,8 @@ namespace Eternal
 			InOutPipelineStateDesc.DepthStencilState.DepthFunc						= ConvertComparisonFunctionToD3D12ComparisonFunction(InDepthTest.GetComparisonFunction());
 			InOutPipelineStateDesc.DepthStencilState.DepthWriteMask					= D3D12_DEPTH_WRITE_MASK(InDepthTest.GetMask());
 			InOutPipelineStateDesc.DepthStencilState.StencilEnable					= InStencilTest.IsEnabled() ? TRUE : FALSE;
-			InOutPipelineStateDesc.DepthStencilState.StencilReadMask				= D3D12_DEFAULT_STENCIL_READ_MASK;
-			InOutPipelineStateDesc.DepthStencilState.StencilWriteMask				= D3D12_DEFAULT_STENCIL_WRITE_MASK;
+			InOutPipelineStateDesc.DepthStencilState.StencilReadMask				= InStencilTest.GetReadMask();
+			InOutPipelineStateDesc.DepthStencilState.StencilWriteMask				= InStencilTest.GetWriteMask();
 			InOutPipelineStateDesc.DepthStencilState.FrontFace.StencilFailOp		= ConvertStencilOperatorToD3D12StencilOperator(InStencilTest.GetFront().Fail);
 			InOutPipelineStateDesc.DepthStencilState.FrontFace.StencilDepthFailOp	= ConvertStencilOperatorToD3D12StencilOperator(InStencilTest.GetFront().FailDepth);
 			InOutPipelineStateDesc.DepthStencilState.FrontFace.StencilPassOp		= ConvertStencilOperatorToD3D12StencilOperator(InStencilTest.GetFront().Pass);
@@ -383,12 +383,7 @@ namespace Eternal
 					reinterpret_cast<void**>(&_Pipeline.PipelineState)
 				)
 			);
-
-			std::string PipelineStateName = "Vertex_" + string(InPipelineCreateInformation.ShaderVertex->GetName()) + (InPipelineCreateInformation.ShaderPixel ? " Pixel_" + string(InPipelineCreateInformation.ShaderPixel->GetName()) : "_Only");
-			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
-			VerifySuccess(
-				_Pipeline.PipelineState->SetName(UTF8PipelineStateName.c_str())
-			);
+			_SetName();
 		}
 
 		D3D12Pipeline::D3D12Pipeline(
@@ -404,7 +399,7 @@ namespace Eternal
 			
 			D3D12_COMPUTE_PIPELINE_STATE_DESC PipelineStateDesc = {};
 			
-			PipelineStateDesc.pRootSignature	= static_cast<const D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
+			PipelineStateDesc.pRootSignature	= static_cast<const D3D12RootSignature*>(InPipelineCreateInformation.PipelineRootSignature)->GetD3D12RootSignature();
 			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderCompute)->GetD3D12Shader(PipelineStateDesc.CS);
 			PipelineStateDesc.NodeMask			= InD3DDevice.GetDeviceMask();
 
@@ -415,13 +410,7 @@ namespace Eternal
 					reinterpret_cast<void**>(&_Pipeline.PipelineState)
 				)
 			);
-
-			std::string PipelineStateName = "Compute_" + string(InPipelineCreateInformation.ShaderCompute->GetName());
-			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
-			VerifySuccess(
-				_Pipeline.PipelineState->SetName(UTF8PipelineStateName.c_str())
-			);
-			_Pipeline.PipelineState->SetName(UTF8PipelineStateName.c_str());
+			_SetName();
 		}
 
 		D3D12Pipeline::D3D12Pipeline(
@@ -457,6 +446,7 @@ namespace Eternal
 					reinterpret_cast<void**>(&_Pipeline.PipelineState)
 				)
 			);
+			_SetName();
 		}
 
 		D3D12Pipeline::D3D12Pipeline(
@@ -486,7 +476,7 @@ namespace Eternal
 			RayTracingShaderConfig.MaxAttributeSizeInBytes	= 8;
 
 			D3D12_GLOBAL_ROOT_SIGNATURE GlobalRootSignature	= {};
-			GlobalRootSignature.pGlobalRootSignature		= static_cast<D3D12RootSignature&>(InPipelineCreateInformation.PipelineRootSignature).GetD3D12RootSignature();
+			GlobalRootSignature.pGlobalRootSignature		= static_cast<D3D12RootSignature*>(InPipelineCreateInformation.PipelineRootSignature)->GetD3D12RootSignature();
 
 			D3D12_LOCAL_ROOT_SIGNATURE DefaultLocalRootSignature	= {};
 			DefaultLocalRootSignature.pLocalRootSignature			= static_cast<D3D12RootSignature&>(InOutContext.GetEmptyLocalRootSignature()).GetD3D12RootSignature();
@@ -592,16 +582,7 @@ namespace Eternal
 					reinterpret_cast<void**>(&_Pipeline.StateObject)
 				)
 			);
-
-			std::string PipelineStateName	= "RayGeneration_" + string(InPipelineCreateInformation.ShaderRayTracingRayGeneration->GetName())
-											+ (InPipelineCreateInformation.ShaderRayTracingClosestHit	? " ClosestHit_" + string(InPipelineCreateInformation.ShaderRayTracingClosestHit->GetName())	: string())
-											+ (InPipelineCreateInformation.ShaderRayTracingMiss			? " Miss_" + string(InPipelineCreateInformation.ShaderRayTracingMiss->GetName())				: string())
-											+ (InPipelineCreateInformation.ShaderRayTracingAnyHit		? " AnyHit_" + string(InPipelineCreateInformation.ShaderRayTracingAnyHit->GetName())			: string());
-			std::wstring UTF8PipelineStateName(PipelineStateName.begin(), PipelineStateName.end());
-			VerifySuccess(
-				_Pipeline.StateObject->SetName(UTF8PipelineStateName.c_str())
-			);
-			_Pipeline.StateObject->SetName(UTF8PipelineStateName.c_str());
+			_SetName();
 		}
 
 		D3D12Pipeline::~D3D12Pipeline()
@@ -623,7 +604,7 @@ namespace Eternal
 
 		const D3D12RootSignature& D3D12Pipeline::GetD3D12RootSignature() const
 		{
-			return static_cast<const D3D12RootSignature&>(GetRootSignature());
+			return static_cast<const D3D12RootSignature&>(*GetRootSignature());
 		}
 
 		D3D12Pipeline& D3D12Pipeline::operator=(_In_ const D3D12Pipeline& InPipeline)
@@ -645,10 +626,23 @@ namespace Eternal
 			return IsRayTracingPipeline() ? !!_Pipeline.StateObject : !!_Pipeline.PipelineState;
 		}
 
+		void D3D12Pipeline::SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile)
+		{
+			ETERNAL_BREAK();
+		}
+
 		bool D3D12Pipeline::IsRayTracingPipeline() const
 		{
 			return GetPipelineCreateInformation().PipelineShaderTypes != ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE
 				&& (GetPipelineCreateInformation().PipelineShaderTypes & ShaderTypeFlags::SHADER_TYPE_FLAGS_RAYTRACING_ALL) != ShaderTypeFlags::SHADER_TYPE_FLAGS_NONE;
+		}
+
+		void D3D12Pipeline::_SetName()
+		{
+			std::wstring UTF8PipelineStateName(GetPipelineCreateInformation().PipelineName.begin(), GetPipelineCreateInformation().PipelineName.end());
+			VerifySuccess(
+				_Pipeline.StateObject->SetName(UTF8PipelineStateName.c_str())
+			);
 		}
 	}
 }

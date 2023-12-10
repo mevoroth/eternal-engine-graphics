@@ -133,10 +133,19 @@ namespace Eternal
 			virtual STDMETHODIMP Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes) override
 			{
 				string IncludeSource = pFileName;
+				if (IncludeSource == "platform.private.common.hlsl")
+				{
+					uint8_t* Content = new uint8_t[1];
+					*Content = 0u;
+					*pBytes = 0u;
+					*ppData = Content;
+					return S_OK;
+				}
+
 				string IncludeFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
 				FilePath::NormalizePath(IncludeFullPathSource);
 
-				Context.GetPipelineDependency().RegisterShaderDependency(CurrentShader, IncludeFullPathSource);
+				Context.GetPipelineLibrary().RegisterShaderDependency(CurrentShader, IncludeFullPathSource);
 
 				FileContent Content = LoadFileToMemory(IncludeFullPathSource);
 				*pBytes	= static_cast<UINT>(Content.Size);
@@ -301,6 +310,11 @@ namespace Eternal
 #endif
 		}
 
+		D3D12Shader::D3D12Shader()
+			: Shader()
+		{
+		}
+
 		D3D12Shader::~D3D12Shader()
 		{
 			if (IsShaderCompiled())
@@ -331,6 +345,7 @@ namespace Eternal
 			FileContent ShaderSourceCode = LoadFileToMemory(FullPathSource);
 
 			string ShaderFileContent = R"HLSLINCLUDE(
+				#include "platform.common.hlsl"
 				#include "ShadersReflection/HLSLReflection.hpp"
 			)HLSLINCLUDE";
 			ShaderFileContent += reinterpret_cast<const char*>(ShaderSourceCode.Content);
@@ -354,7 +369,7 @@ namespace Eternal
 				}
 
 				D3D_SHADER_MACRO PlatformMacro;
-				PlatformMacro.Name			= "PLATFORM_DX12";
+				PlatformMacro.Name			= "ETERNAL_PLATFORM_DX12";
 				PlatformMacro.Definition	= "1";
 				Macros.push_back(PlatformMacro);
 
@@ -440,7 +455,7 @@ namespace Eternal
 					}
 
 					DxcDefine PlatformMacro;
-					PlatformMacro.Name	= L"PLATFORM_DX12";
+					PlatformMacro.Name	= L"ETERNAL_PLATFORM_DX12";
 					PlatformMacro.Value	= L"1";
 					Macros.push_back(PlatformMacro);
 				}
@@ -562,6 +577,11 @@ namespace Eternal
 		bool D3D12Shader::IsShaderCompiled() const
 		{
 			return _FxcProgram && _DxcProgram;
+		}
+
+		void D3D12Shader::SerializeShader(_Inout_ File* InOutFile)
+		{
+			ETERNAL_BREAK();
 		}
 
 		template<typename ShaderBlobType>

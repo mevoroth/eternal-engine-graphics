@@ -10,6 +10,11 @@ namespace Eternal
 		{
 		public:
 
+			NullPipeline(_Inout_ GraphicsContext& InOutContext)
+				: Pipeline(InOutContext)
+			{
+			}
+
 			NullPipeline(
 				_Inout_ GraphicsContext& InOutContext,
 				_In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation
@@ -43,6 +48,7 @@ namespace Eternal
 			}
 
 			virtual bool IsPipelineCompiled() const override final { return true; }
+			virtual void SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile) override final {}
 
 		};
 	}
