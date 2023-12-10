@@ -4,6 +4,9 @@
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12CommandList.hpp"
 #include "Vulkan/VulkanCommandList.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/CommandListFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -22,6 +25,9 @@ namespace Eternal
 				return new VulkanCommandList(InDevice, InCommandAllocator);
 #endif
 			default:
+#if ETERNAL_USE_PRIVATE
+				return CreateCommandListPrivate(InDevice, InCommandAllocator);
+#endif
 				break;
 			}
 			ETERNAL_BREAK();
