@@ -7,6 +7,9 @@
 #include "Null/NullView.hpp"
 #include "d3d12/D3D12View.hpp"
 #include "Vulkan/VulkanView.hpp"
+#if ETERNAL_USE_PRIVATE
+#include "Graphics/ViewFactoryPrivate.hpp"
+#endif
 
 namespace Eternal
 {
@@ -41,6 +44,9 @@ namespace Eternal
 			}
 #endif
 			default:
+#if ETERNAL_USE_PRIVATE
+				return CreateViewPrivate(InViewCreateInformation, InViewPlacementMemory);
+#endif
 				break;
 			}
 			ETERNAL_BREAK();
