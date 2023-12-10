@@ -175,12 +175,12 @@ namespace Eternal
 			};
 
 			uint32_t InstanceExtensionPropertiesCount;
-			vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, static_cast<vk::ExtensionProperties *>(nullptr));
+			VerifySuccess(vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, static_cast<vk::ExtensionProperties*>(nullptr)));
 
 			std::vector<vk::ExtensionProperties> InstanceExtensionProperties;
 			InstanceExtensionProperties.resize(InstanceExtensionPropertiesCount);
 
-			vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, InstanceExtensionProperties.data());
+			VerifySuccess(vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, InstanceExtensionProperties.data()));
 
 			_VulkanVersion = VK_API_VERSION_1_2; // Vulkan version
 			vk::ApplicationInfo ApplicationInfo(
