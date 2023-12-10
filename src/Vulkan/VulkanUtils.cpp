@@ -195,12 +195,13 @@ namespace Eternal
 				vk::BlendFactor::eConstantColor,
 				vk::BlendFactor::eOneMinusConstantColor,
 				vk::BlendFactor::eConstantAlpha,
-				vk::BlendFactor::eOneMinusConstantAlpha,
-
-				vk::BlendFactor::eSrc1Color,
-				vk::BlendFactor::eOneMinusSrc1Color,
-				vk::BlendFactor::eSrc1Alpha,
-				vk::BlendFactor::eOneMinusSrc1Alpha
+				vk::BlendFactor::eOneMinusConstantAlpha
+				
+				//,
+				//vk::BlendFactor::eSrc1Color,
+				//vk::BlendFactor::eOneMinusSrc1Color,
+				//vk::BlendFactor::eSrc1Alpha,
+				//vk::BlendFactor::eOneMinusSrc1Alpha
 			};
 			ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(VULKAN_BLEND_STATES) == static_cast<int32_t>(Blend::BLEND_COUNT), "Mismatch between abstraction and blend states");
 
