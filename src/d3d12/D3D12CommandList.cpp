@@ -325,19 +325,19 @@ namespace Eternal
 
 		void D3D12CommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
-			ETERNAL_ASSERT(InPipeline.GetShaderTypes() != ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE);
+			ETERNAL_ASSERT((InPipeline.GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX) == ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX);
 
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
-			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
+			const D3D12RootSignature* InD3DRootSignature	= static_cast<const D3D12RootSignature*>(InD3DPipeline.GetRootSignature());
 
 			_GraphicCommandList6->SetGraphicsRootSignature(
-				InD3DRootSignature.GetD3D12RootSignature()
+				InD3DRootSignature->GetD3D12RootSignature()
 			);
 			_GraphicCommandList6->SetPipelineState(
 				InD3DPipeline.GetD3D12PipelineState()
 			);
 			_GraphicCommandList6->IASetPrimitiveTopology(InD3DPipeline.GetD3D12PrimitiveTopology());
-			SetCurrentRootSignature(&InD3DRootSignature);
+			SetCurrentRootSignature(InD3DRootSignature);
 		}
 
 		void D3D12CommandList::SetIndexBuffer(_In_ const Resource& InIndexBuffer, _In_ uint32_t InOffset /* = 0 */, _In_ const IndexBufferType& InIndexBufferType /* = IndexBufferType::INDEX_BUFFER_TYPE_16BITS */)
@@ -414,15 +414,15 @@ namespace Eternal
 			ETERNAL_ASSERT(InPipeline.GetShaderTypes() == ShaderTypeFlags::SHADER_TYPE_FLAGS_COMPUTE);
 
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
-			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
+			const D3D12RootSignature* InD3DRootSignature	= static_cast<const D3D12RootSignature*>(InD3DPipeline.GetRootSignature());
 
 			_GraphicCommandList6->SetComputeRootSignature(
-				InD3DRootSignature.GetD3D12RootSignature()
+				InD3DRootSignature->GetD3D12RootSignature()
 			);
 			_GraphicCommandList6->SetPipelineState(
 				InD3DPipeline.GetD3D12PipelineState()
 			);
-			SetCurrentRootSignature(&InD3DRootSignature);
+			SetCurrentRootSignature(InD3DRootSignature);
 		}
 
 		void D3D12CommandList::SetComputeDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
@@ -466,15 +466,15 @@ namespace Eternal
 		{
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
 			ETERNAL_ASSERT(InD3DPipeline.IsRayTracingPipeline());
-			const D3D12RootSignature& InD3DRootSignature	= static_cast<const D3D12RootSignature&>(InD3DPipeline.GetRootSignature());
+			const D3D12RootSignature* InD3DRootSignature	= static_cast<const D3D12RootSignature*>(InD3DPipeline.GetRootSignature());
 
 			_GraphicCommandList6->SetComputeRootSignature(
-				InD3DRootSignature.GetD3D12RootSignature()
+				InD3DRootSignature->GetD3D12RootSignature()
 			);
 			_GraphicCommandList6->SetPipelineState1(
 				InD3DPipeline.GetD3D12StateObject()
 			);
-			SetCurrentRootSignature(&InD3DRootSignature);
+			SetCurrentRootSignature(InD3DRootSignature);
 		}
 
 		void D3D12CommandList::DispatchRays(_In_ const ShaderTable& InShaderTable, _In_ uint32_t InX /* = 1 */, _In_ uint32_t InY /* = 1 */)

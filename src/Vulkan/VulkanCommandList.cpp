@@ -276,7 +276,7 @@ namespace Eternal
 			};
 			SetScissorRectangle(Scissor);
 
-			SetCurrentRootSignature(&InPipeline.GetRootSignature());
+			SetCurrentRootSignature(InPipeline.GetRootSignature());
 			_CurrentShaderStages = ConvertShaderTypeFlagsToVulkanShaderStageFlags(InPipeline.GetShaderTypes());
 		}
 
@@ -347,7 +347,7 @@ namespace Eternal
 				vk::PipelineBindPoint::eCompute,
 				static_cast<const VulkanPipeline&>(InPipeline).GetVulkanPipeline()
 			);
-			SetCurrentRootSignature(&InPipeline.GetRootSignature());
+			SetCurrentRootSignature(InPipeline.GetRootSignature());
 			_CurrentShaderStages = ConvertShaderTypeFlagsToVulkanShaderStageFlags(InPipeline.GetShaderTypes());
 		}
 
