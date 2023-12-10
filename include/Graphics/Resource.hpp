@@ -332,13 +332,13 @@ namespace Eternal
 			uint8_t GetStencilClearValue() const;
 			const Format& GetFormat() const;
 			const std::string& GetResourceName() const;
+			inline const ResourceCreateInformation& GetResourceCreateInformation() const { return _ResourceCreateInformation; }
 
 		protected:
 			Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType);
 
 			virtual void* Map(_In_ const MapRange& InMapRange) = 0;
 			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }
-			inline const ResourceCreateInformation& GetResourceCreateInformation() const { return _ResourceCreateInformation; }
 			const ResourceType& GetRawResourceType() const { return _ResourceType; }
 
 		private:
