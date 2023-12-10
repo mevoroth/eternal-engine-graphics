@@ -29,7 +29,8 @@ namespace Eternal
 
 		private:
 
-			WindowsOutputDevice _WindowsOutputDevice;
+			WindowsOutputDeviceCreateInformation	_WindowsOutputDeviceCreateInformation;
+			WindowsOutputDevice						_WindowsOutputDevice;
 		};
 	}
 }
