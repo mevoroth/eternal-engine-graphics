@@ -21,7 +21,7 @@ namespace Eternal
 			{
 				D3D12_SAMPLER_DESC SamplerDesc;
 
-				SamplerDesc.Filter			= GetD3D12Filering();
+				SamplerDesc.Filter			= GetD3D12Filtering();
 				SamplerDesc.AddressU		= GetD3D12U();
 				SamplerDesc.AddressV		= GetD3D12V();
 				SamplerDesc.AddressW		= GetD3D12W();
@@ -44,7 +44,7 @@ namespace Eternal
 		{
 			ETERNAL_ASSERT(IsStatic());
 
-			StaticSamplerDesc.Filter			= GetD3D12Filering();
+			StaticSamplerDesc.Filter			= GetD3D12Filtering();
 			StaticSamplerDesc.AddressU			= GetD3D12U();
 			StaticSamplerDesc.AddressV			= GetD3D12V();
 			StaticSamplerDesc.AddressW			= GetD3D12W();
@@ -56,7 +56,7 @@ namespace Eternal
 			StaticSamplerDesc.MaxLOD			= GetMaxLOD();
 		}
 
-		D3D12_FILTER D3D12Sampler::GetD3D12Filering() const
+		D3D12_FILTER D3D12Sampler::GetD3D12Filtering() const
 		{
 			// We're not supporting min max filtering yet due to Vulkan
 

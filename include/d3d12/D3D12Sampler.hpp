@@ -23,7 +23,7 @@ namespace Eternal
 			void GetD3D12StaticSampler(_Out_ D3D12_STATIC_SAMPLER_DESC& StaticSamplerDesc) const;
 
 		private:
-			D3D12_FILTER GetD3D12Filering() const;
+			D3D12_FILTER GetD3D12Filtering() const;
 			D3D12_TEXTURE_ADDRESS_MODE GetD3D12U() const;
 			D3D12_TEXTURE_ADDRESS_MODE GetD3D12V() const;
 			D3D12_TEXTURE_ADDRESS_MODE GetD3D12W() const;
