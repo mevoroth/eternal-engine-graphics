@@ -123,6 +123,9 @@ namespace Eternal
 				return sizeof(VulkanView);
 #endif
 			default:
+#if ETERNAL_USE_PRIVATE
+				return GetViewSizePrivate(InContext);
+#endif
 				break;
 			}
 			ETERNAL_BREAK();
