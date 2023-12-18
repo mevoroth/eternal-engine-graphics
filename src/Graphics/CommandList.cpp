@@ -101,6 +101,11 @@ namespace Eternal
 			ETERNAL_ASSERT(InX > 0 && InY > 0 && InZ > 0);
 		}
 
+		void CommandList::TransferResource(_In_ Resource& InDestinationResource, _In_ Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)
+		{
+			CopyResource(InDestinationResource, InSourceResource, InCopyRegion);
+		}
+
 		//////////////////////////////////////////////////////////////////////////
 
 		ResourceTransitionScope::ResourceTransitionScope(_In_ CommandList& InCommandList, _In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)

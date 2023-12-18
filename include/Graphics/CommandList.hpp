@@ -81,6 +81,7 @@ namespace Eternal
 			virtual void BuildRaytracingAccelerationStructure(_In_ GraphicsContext& InContext, _In_ AccelerationStructure& InAccelerationStructure) = 0;
 
 			virtual void CopyResource(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion) = 0;
+			virtual void TransferResource(_In_ Resource& InDestinationResource, _In_ Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
 
 			inline CommandAllocator& GetCommandAllocator() { return _CommandAllocator; }
 			inline Device& GetDevice() { return _Device; }
