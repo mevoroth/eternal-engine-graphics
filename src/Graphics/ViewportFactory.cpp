@@ -67,9 +67,13 @@ namespace Eternal
 				return sizeof(VulkanViewport);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return 0ull;
+#if ETERNAL_USE_PRIVATE
+				return GetViewportSizePrivate(InContext);
+#endif
+				break;
 			}
+			ETERNAL_BREAK();
+			return 0ull;
 		}
 
 		void DestroyViewport(_Inout_ Viewport*& InOutViewport)
