@@ -10,7 +10,8 @@ namespace Eternal
 		{
 			ADDRESS_MODE_WRAP	= 0,
 			ADDRESS_MODE_MIRROR,
-			ADDRESS_MODE_CLAMP
+			ADDRESS_MODE_CLAMP,
+			ADDRESS_MODE_COUNT
 		};
 
 		enum class BorderColor
