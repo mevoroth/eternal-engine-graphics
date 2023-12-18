@@ -32,9 +32,13 @@ namespace Eternal
 				return new VulkanResource(InResourceCreateInformation);
 #endif
 			default:
-				ETERNAL_BREAK();
-				return nullptr;
+#if ETERNAL_USE_PRIVATE
+				return CreateResourcePrivate(InResourceCreateInformation);
+#endif
+				break;
 			}
+			ETERNAL_BREAK();
+			return nullptr;
 		}
 
 		template<typename ResourceCreateInformationType>
@@ -47,19 +51,11 @@ namespace Eternal
 
 		Resource* CreateTexture(_In_ const TextureResourceCreateInformation& InResourceCreateInformation)
 		{
-#if ETERNAL_USE_PRIVATE
-			if (static_cast<uint32_t>(InResourceCreateInformation.GfxDevice.GetDeviceType()) >= static_cast<uint32_t>(DeviceType::DEVICE_TYPE_BASE_COUNT))
-				return CreateTexturePrivate(InResourceCreateInformation);
-#endif
 			return CreateResource(InResourceCreateInformation);
 		}
 
 		Resource* CreateBuffer(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
 		{
-#if ETERNAL_USE_PRIVATE
-			if (static_cast<uint32_t>(InResourceCreateInformation.GfxDevice.GetDeviceType()) >= static_cast<uint32_t>(DeviceType::DEVICE_TYPE_BASE_COUNT))
-				return CreateBufferPrivate(InResourceCreateInformation);
-#endif
 			return CreateResource(InResourceCreateInformation);
 		}
 
