@@ -332,6 +332,7 @@ namespace Eternal
 			uint8_t GetStencilClearValue() const;
 			const Format& GetFormat() const;
 			const std::string& GetResourceName() const;
+			bool IsBackBuffer() const;
 			inline const ResourceCreateInformation& GetResourceCreateInformation() const { return _ResourceCreateInformation; }
 			inline ResourceCreateInformation& GetResourceCreateInformation() { return _ResourceCreateInformation; }
 

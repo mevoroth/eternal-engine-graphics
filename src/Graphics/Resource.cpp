@@ -154,5 +154,10 @@ namespace Eternal
 		{
 			return _ResourceCreateInformation.Name;
 		}
+
+		bool Resource::IsBackBuffer() const
+		{
+			return GetRawResourceType() == ResourceType::RESOURCE_TYPE_BACK_BUFFER;
+		}
 	}
 }
