@@ -159,9 +159,9 @@ namespace Eternal
 
 			RootSignatureCreateInformation(
 				_In_ const vector<RootSignatureParameter>& InParameters,
+				_In_ bool InHasInputAssembler = false,
 				_In_ const vector<RootSignatureStaticSampler>& InStaticSamplers = vector<RootSignatureStaticSampler>(),
-				_In_ const vector<RootSignatureConstants>& InConstants = vector<RootSignatureConstants>(),
-				bool InHasInputAssembler = false
+				_In_ const vector<RootSignatureConstants>& InConstants = vector<RootSignatureConstants>()
 			)
 				: Parameters(InParameters)
 				, StaticSamplers(InStaticSamplers)
