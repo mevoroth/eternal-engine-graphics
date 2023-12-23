@@ -3,6 +3,7 @@
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Device.hpp"
 #include "d3d12/D3D12AccelerationStructure.hpp"
+#include "Log/Log.hpp"
 
 namespace Eternal
 {
@@ -39,7 +40,8 @@ namespace Eternal
 
 #endif
 			default:
-				ETERNAL_BREAK();
+				//ETERNAL_BREAK();
+				LogWrite(LogError, LogGraphics, "[CreateTopLevelAccelerationStructure] nullptr");
 				return nullptr;
 			}
 		}
