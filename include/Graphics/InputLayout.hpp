@@ -70,12 +70,14 @@ namespace Eternal
 		{
 		public:
 			InputLayout(_In_ const vector<VertexStreamBase>& InVertexStreams)
-				: VertexStreams(InVertexStreams)
+				: _VertexStreams(InVertexStreams)
 			{
 			}
 
+			const vector<VertexStreamBase>& GetVertexStreams() const { return _VertexStreams; }
+
 		private:
-			vector<VertexStreamBase> VertexStreams;
+			vector<VertexStreamBase> _VertexStreams;
 		};
 
 		const Format& ConvertVertexDataTypeToFormat(_In_ const VertexDataType& InVertexDataType);
