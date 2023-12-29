@@ -1,5 +1,4 @@
 #include "Graphics/Resource.hpp"
-#include <set>
 
 namespace Eternal
 {
@@ -12,14 +11,14 @@ namespace Eternal
 
 		//////////////////////////////////////////////////////////////////////////
 
-		constexpr ResourceType operator|(const ResourceType& InLeftResourceType, const ResourceType& InRightResourceType)
+		constexpr ResourceType operator|(_In_ const ResourceType& InLeftResourceType, _In_ const ResourceType& InRightResourceType)
 		{
 			return static_cast<ResourceType>(
 				static_cast<uint32_t>(InLeftResourceType) | static_cast<uint32_t>(InRightResourceType)
 			);
 		}
 
-		ResourceType operator&(const ResourceType& InLeftResourceType, const ResourceType& InRightResourceType)
+		ResourceType operator&(_In_ const ResourceType& InLeftResourceType, _In_ const ResourceType& InRightResourceType)
 		{
 			return static_cast<ResourceType>(
 				static_cast<uint32_t>(InLeftResourceType) & static_cast<uint32_t>(InRightResourceType)
@@ -28,7 +27,7 @@ namespace Eternal
 
 		//////////////////////////////////////////////////////////////////////////
 
-		static std::set<Resource*> ResourceHistory;
+		std::unordered_set<Resource*> Resource::ResourceHistory;
 
 		Resource::Resource(_In_ const ResourceCreateInformation& InResourceCreateInformation, _In_ const ResourceType& InResourceType)
 			: _ResourceType(InResourceType)

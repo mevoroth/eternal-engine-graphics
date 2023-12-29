@@ -4,6 +4,7 @@
 #include "Graphics/Format.hpp"
 #include "Graphics/CommandUtils.hpp"
 #include <string>
+#include <unordered_set>
 
 namespace Eternal
 {
@@ -304,6 +305,8 @@ namespace Eternal
 		class Resource
 		{
 		public:
+			static std::unordered_set<Resource*> ResourceHistory;
+
 			virtual ~Resource();
 
 			template<typename ResourceStructureType = void>

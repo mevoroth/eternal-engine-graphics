@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics/Format.hpp"
+#include <unordered_set>
 
 namespace Eternal
 {
@@ -477,6 +478,9 @@ namespace Eternal
 		class View
 		{
 		public:
+
+			static std::unordered_set<View*> ViewHistory;
+
 			virtual ~View();
 
 			Resource& GetResource();

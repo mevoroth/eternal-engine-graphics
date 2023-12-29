@@ -2,13 +2,11 @@
 
 #include "Graphics/Resource.hpp"
 
-#include <set>
-
 namespace Eternal
 {
 	namespace Graphics
 	{
-		static std::set<View*> ViewHistory;
+		std::unordered_set<View*> View::ViewHistory;
 
 		View::View(_In_ const ViewCreateInformation& InViewCreateInformation)
 			: _ViewCreateInformation(InViewCreateInformation)
