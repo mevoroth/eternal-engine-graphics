@@ -197,8 +197,10 @@ namespace Eternal
 			return new DescriptorTable(this);
 		}
 
-		DescriptorTable* RootSignature::_CreateSubDescriptorTable(_In_ GraphicsContext& InContext, _In_ uint32_t SubDescriptorTableIndex, _In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable) const
+		DescriptorTable* RootSignature::_CreateSubDescriptorTable(_In_ GraphicsContext& InContext, _In_ uint32_t InSubDescriptorTableIndex, _In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable) const
 		{
+			(void)InContext;
+			(void)InSubDescriptorTableIndex;
 			return new DescriptorTable(InRootSignatureDescriptorTable);
 		}
 

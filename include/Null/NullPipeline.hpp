@@ -48,7 +48,11 @@ namespace Eternal
 			}
 
 			virtual bool IsPipelineCompiled() const override final { return true; }
-			virtual void SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile) override final {}
+			virtual void SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile) override final
+			{
+				(void)InOutContext;
+				(void)InOutFile;
+			}
 
 		};
 	}

@@ -19,9 +19,13 @@ namespace Eternal
 			{
 			}
 
-			virtual void Unmap(_In_ const MapRange& InMapRange) override final {}
+			virtual void Unmap(_In_ const MapRange& InMapRange) override final
+			{
+				(void)InMapRange;
+			}
 			virtual TextureToBufferMemoryFootprint GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const override final
 			{
+				(void)InDevice;
 				return TextureToBufferMemoryFootprint();
 			}
 
@@ -29,6 +33,7 @@ namespace Eternal
 
 			virtual void* Map(_In_ const MapRange& InMapRange) override final
 			{
+				(void)InMapRange;
 				return nullptr;
 			}
 

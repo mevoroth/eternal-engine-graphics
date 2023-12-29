@@ -84,6 +84,8 @@ namespace Eternal
 
 		void D3D12CommandList::BeginEvent(_In_ GraphicsContext& InContext, _In_ const char* InEventName)
 		{
+			(void)InContext;
+			(void)InEventName;
 			PIXBeginEvent(_GraphicCommandList6, 0, InEventName);
 
 #if ETERNAL_USE_NVIDIA_AFTERMATH
@@ -93,6 +95,7 @@ namespace Eternal
 
 		void D3D12CommandList::EndEvent(_In_ GraphicsContext& InContext)
 		{
+			(void)InContext;
 			PIXEndEvent(_GraphicCommandList6);
 		}
 
@@ -701,6 +704,7 @@ namespace Eternal
 		>
 		void D3D12CommandList::_SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
+			(void)InContext;
 			ETERNAL_PROFILER(VERBOSE)();
 
 			const RootSignatureCreateInformation& DescriptorTableLayout	= GetCurrentSignature()->GetCreateInformation();

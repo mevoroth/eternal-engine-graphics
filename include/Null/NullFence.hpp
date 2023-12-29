@@ -10,8 +10,8 @@ namespace Eternal
 		{
 		public:
 
-			virtual void Wait(_In_ Device& InDevice) override final {}
-			virtual void Reset(_In_ Device& InDevice) override final {}
+			virtual void Wait(_In_ Device& InDevice) override final { (void)InDevice; }
+			virtual void Reset(_In_ Device& InDevice) override final { (void)InDevice; }
 		};
 	}
 }

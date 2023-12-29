@@ -297,6 +297,7 @@ namespace Eternal
 		// Pipeline
 		Pipeline::Pipeline(_Inout_ GraphicsContext& InOutContext)
 		{
+			(void)InOutContext;
 		}
 
 		Pipeline::Pipeline(_Inout_ GraphicsContext& InOutContext, _In_ const PipelineCreateInformation& InPipelineCreateInformation, _In_ bool IsSkippingRegistration)
@@ -312,6 +313,7 @@ namespace Eternal
 
 		void Pipeline::SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile)
 		{
+			(void)InOutContext;
 			InOutFile->Serialize(_PipelineCreateInformation.PipelineName);
 			InOutFile->Serialize(_PipelineCreateInformation.PipelineShaderTypes);
 		}
