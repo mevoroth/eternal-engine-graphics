@@ -13,6 +13,9 @@ namespace Eternal
 		{
 			ETERNAL_ASSERT(InCommandListsCount < MaxCommandListsPerSubmission);
 			ETERNAL_ASSERT(InCommandListsCount > 0);
+			(void)InCommandLists;
+			(void)InCommandListsCount;
+			(void)InContext;
 		}
 	}
 }

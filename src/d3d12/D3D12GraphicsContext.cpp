@@ -19,6 +19,10 @@ namespace Eternal
 	{
 		void LogDescriptorHeap(_In_ const string& InDescriptorHeapName, _In_ ID3D12DescriptorHeap* InDescriptorHeap, _In_ uint32_t InDescriptorCount, _In_ uint32_t InDescriptorSize)
 		{
+			(void)InDescriptorHeapName;
+			(void)InDescriptorHeap;
+			(void)InDescriptorCount;
+			(void)InDescriptorSize;
 #if ETERNAL_USE_DEBUG_VERBOSE
 			using namespace std;
 			using namespace Eternal::LogSystem;

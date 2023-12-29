@@ -46,11 +46,13 @@ namespace Eternal
 
 		void CommandList::SetName(_In_ GraphicsContext& InContext, _In_ const std::string& InName)
 		{
+			(void)InContext;
 			_CommandListName = InName;
 		}
 
 		void CommandList::BeginRenderPass(const RenderPass& InRenderPass)
 		{
+			(void)InRenderPass;
 			ETERNAL_ASSERT((_CommandListState & CommandListState::COMMAND_LIST_STATE_OPENED) == CommandListState::COMMAND_LIST_STATE_CLOSED);
 			_CommandListState |= CommandListState::COMMAND_LIST_STATE_OPENED;
 		}

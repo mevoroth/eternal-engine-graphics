@@ -196,7 +196,7 @@ namespace Eternal
 			}
 			RootSignature() {}
 			virtual DescriptorTable* _CreateRootDescriptorTablePrivate(_In_ GraphicsContext& InContext) const;
-			virtual DescriptorTable* _CreateSubDescriptorTable(_In_ GraphicsContext& InContext, _In_ uint32_t SubDescriptorTableIndex, _In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable) const;
+			virtual DescriptorTable* _CreateSubDescriptorTable(_In_ GraphicsContext& InContext, _In_ uint32_t InSubDescriptorTableIndex, _In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable) const;
 
 		private:
 			RootSignatureCreateInformation _CreateInformation;

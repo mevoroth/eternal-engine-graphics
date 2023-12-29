@@ -14,7 +14,12 @@ namespace Eternal
 				: CommandQueue(InType)
 			{
 			}
-			virtual void SubmitCommandLists(_In_ CommandList* InCommandLists[], _In_ uint32_t InCommandListsCount, _In_ GraphicsContext* InContext = nullptr) override final {}
+			virtual void SubmitCommandLists(_In_ CommandList* InCommandLists[], _In_ uint32_t InCommandListsCount, _In_ GraphicsContext* InContext = nullptr) override final
+			{
+				(void)InCommandLists;
+				(void)InCommandListsCount;
+				(void)InContext;
+			}
 
 		};
 	}

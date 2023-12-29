@@ -111,6 +111,7 @@ namespace Eternal
 
 		uint32_t Position3D::GetPlaneSlice(_In_ const ResourceDimension& InResourceDimension) const
 		{
+			(void)InResourceDimension;
 			return 0;
 		}
 	}
