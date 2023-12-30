@@ -39,6 +39,10 @@ namespace Eternal
 				, _ConservativeRasterization(InFillMode == FillMode::FILL_MODE_SOLID)
 			{
 			}
+			Rasterizer(_In_ const CullMode& InCullMode)
+				: _Cull(InCullMode)
+			{
+			}
 
 			inline const FillMode& GetFillMode() const { return _Fill; }
 			inline const CullMode& GetCullMode() const { return _Cull; }
