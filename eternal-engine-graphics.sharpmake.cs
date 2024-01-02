@@ -28,17 +28,22 @@ namespace EternalEngine
 
 			// Include paths
 			InConfiguration.IncludePaths.Add(new string[] {
-				@"[conf.ProjectPath]\GraphicsPrivate\include",
 				@"$(SolutionDir)eternal-engine-components\include",
 				@"$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx",
 				@"$(SolutionDir)eternal-engine-extern\dxc\include",
 				EternalEngineSettings.VulkanPath + @"\Include",
 			});
 
+			if (InConfiguration.Platform != Platform.win64 && InConfiguration.Platform != Platform.win32)
+			{
+				InConfiguration.IncludePaths.AddRange(new string[] {
+					@"$(SolutionDir)eternal-engine-graphics\GraphicsPrivate\include",
+				});
+			}
+
 			// Defines
 			InConfiguration.Defines.Add(new string[] {
-				"ETERNAL_USE_PRIVATE=0",
-				"ETERNAL_ENABLE_D3D12=1",
+				"ETERNAL_ENABLE_D3D12=(ETERNAL_PLATFORM_WINDOWS)",
 				"ETERNAL_DEBUG_VERBOSE=(ETERNAL_DEBUG &amp;&amp; 1)",
 			});
 
