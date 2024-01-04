@@ -34,7 +34,7 @@ namespace EternalEngine
 				EternalEngineSettings.VulkanPath + @"\Include",
 			});
 
-			if (InConfiguration.Platform != Platform.win64 && InConfiguration.Platform != Platform.win32)
+			if (!ExtensionMethods.IsPC(InTarget.Platform))
 			{
 				InConfiguration.IncludePaths.AddRange(new string[] {
 					@"$(SolutionDir)eternal-engine-graphics\GraphicsPrivate\include",
@@ -47,7 +47,7 @@ namespace EternalEngine
 				"ETERNAL_DEBUG_VERBOSE=(ETERNAL_DEBUG &amp;&amp; 1)",
 			});
 
-			if (InTarget.Platform == Platform.win32 || InTarget.Platform == Platform.win64)
+			if (ExtensionMethods.IsPC(InTarget.Platform))
 			{
 				InConfiguration.IncludePaths.Add(new string[] {
 					@"$(SolutionDir)packages\WinPixEventRuntime." + EternalEngineSettings.WinPixEventRuntimeVersion + @"\Include",
