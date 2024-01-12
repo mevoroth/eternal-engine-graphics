@@ -19,5 +19,15 @@ namespace Eternal
 #else
 		const DepthStencil DepthStencilTestWriteNone = DepthStencilTestWriteLessNone;
 #endif
+		const DepthStencil DepthStencilTestNone(
+			DepthTest(
+				DepthTest::Mask::MASK_ZERO,
+#if ETERNAL_USE_REVERSED_Z
+				ComparisonFunction::COMPARISON_FUNCTION_GREATER
+#else
+				ComparisonFunction::COMPARISON_FUNCTION_LESS
+#endif
+			)
+		);
 	}
 }
