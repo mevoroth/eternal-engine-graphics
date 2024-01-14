@@ -1,10 +1,103 @@
 #include "NextGenGraphics/FrameGraph.hpp"
+#include "Graphics/View.hpp"
 
-#include <set>
-#include <algorithm>
+namespace Eternal
+{
+	namespace Graphics
+	{
+		bool FrameGraphPassInputs::DependsOn(_In_ const FrameGraphPassOutputs& InOutputs) const
+		{
+			for (uint32_t InputIndex = 0; InputIndex < InputViews.size(); ++InputIndex)
+			{
+				if (InOutputs.OutputViews.find(&InputViews[InputIndex]->GetResource()) != InOutputs.OutputViews.end())
+					return true;
+			}
 
-using namespace std;
-using namespace Eternal::Graphics;
+			return false;
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+		bool FrameGraphPassOutputs::DependsOn(_In_ const FrameGraphPassOutputs& InOutputs) const
+		{
+			for (auto OutputViewIterator = OutputViews.begin(); OutputViewIterator != OutputViews.end(); ++OutputViewIterator)
+			{
+				if ((OutputViewIterator->second.State & TransitionState::TRANSITION_SHADER_WRITE) == TransitionState::TRANSITION_SHADER_WRITE &&
+					InOutputs.OutputViews.find(OutputViewIterator->first) != InOutputs.OutputViews.end())
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+		void FrameGraphPassGroup::RegisterGraphPass(_In_ FrameGraphPass* InPass)
+		{
+			_GraphPasses.push_back(InPass);
+		}
+
+		void FrameGraphPassGroup::GetOutputs(_Out_ FrameGraphPassOutputs& OutOutputs) const
+		{
+			for (uint32_t PassIndex = 0; PassIndex < _GraphPasses.size(); ++PassIndex)
+			{
+				FrameGraphPassOutputs CurrentPassOuputs;
+				_GraphPasses[PassIndex]->GetOutputs(CurrentPassOuputs);
+				for (auto OutputIterator = CurrentPassOuputs.OutputViews.begin(); OutputIterator != CurrentPassOuputs.OutputViews.end(); ++OutputIterator)
+				{
+					OutOutputs.OutputViews.emplace(*OutputIterator);
+				}
+			}
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+		FrameGraph::FrameGraph()
+		{
+		}
+
+		FrameGraph::~FrameGraph()
+		{
+		}
+
+		void FrameGraph::RegisterGraphPass(_In_ FrameGraphPass* InPass)
+		{
+			FrameGraphPassGroup* PassGroup = nullptr;
+			
+			FrameGraphPassInputs Inputs;
+			FrameGraphPassOutputs Outputs;
+			InPass->GetInputs(Inputs);
+			InPass->GetOutputs(Outputs);
+			
+			for (int PassGroupIndex = static_cast<int>(_GraphPassGroups.size()) - 1; PassGroupIndex >= 0; --PassGroupIndex)
+			{
+				FrameGraphPassOutputs PassOutputs;
+				_GraphPassGroups[PassGroupIndex].GetOutputs(PassOutputs);
+
+				if (!Inputs.DependsOn(PassOutputs) &&
+					!Outputs.DependsOn(PassOutputs))
+				{
+					PassGroup = &_GraphPassGroups[PassGroupIndex];
+					break;
+				}
+			}
+			if (!PassGroup)
+			{
+				_GraphPassGroups.push_back({});
+				PassGroup = &_GraphPassGroups.back();
+			}
+			
+			ETERNAL_ASSERT(PassGroup);
+			PassGroup->RegisterGraphPass(InPass);
+		}
+
+		void FrameGraph::CompileGraph()
+		{
+
+		}
+	}
+}
 
 //static uint32_t FindMaxDepth(_In_ const vector<Resource*>& Resources)
 //{
