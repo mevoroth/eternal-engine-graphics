@@ -67,5 +67,6 @@ namespace Eternal
 		extern const Rasterizer RasterizerDefault;
 		extern const Rasterizer RasterizerClockWise;
 		extern const Rasterizer RasterizerLine;
+		extern const Rasterizer RasterizerCullFront;
 	}
 }

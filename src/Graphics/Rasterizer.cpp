@@ -7,5 +7,6 @@ namespace Eternal
 		const Rasterizer RasterizerDefault;
 		const Rasterizer RasterizerClockWise(FrontFace::FRONT_FACE_CLOCKWISE);
 		const Rasterizer RasterizerLine(FillMode::FILL_MODE_WIREFRAME);
+		const Rasterizer RasterizerCullFront(CullMode::CULL_MODE_FRONT);
 	}
 }
