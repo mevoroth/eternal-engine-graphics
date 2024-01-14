@@ -28,18 +28,12 @@ namespace EternalEngine
 
 			// Include paths
 			InConfiguration.IncludePaths.Add(new string[] {
+				@"$(SolutionDir)eternal-engine-graphics\GraphicsPrivate\include",
 				@"$(SolutionDir)eternal-engine-components\include",
 				@"$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx",
 				@"$(SolutionDir)eternal-engine-extern\dxc\include",
 				EternalEngineSettings.VulkanPath + @"\Include",
 			});
-
-			if (!ExtensionMethods.IsPC(InTarget.Platform))
-			{
-				InConfiguration.IncludePaths.AddRange(new string[] {
-					@"$(SolutionDir)eternal-engine-graphics\GraphicsPrivate\include",
-				});
-			}
 
 			// Defines
 			InConfiguration.Defines.Add(new string[] {
