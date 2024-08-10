@@ -144,6 +144,8 @@ namespace Eternal
 
 		void VulkanCommandList::Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount)
 		{
+			ETERNAL_BREAK(); // Subresource
+
 			ETERNAL_PROFILER(INFO)();
 			static constexpr vk::ImageSubresourceRange DefaultImageSubresourceRange(
 				vk::ImageAspectFlagBits::eColor,
@@ -259,6 +261,7 @@ namespace Eternal
 
 		void VulkanCommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
+			CommandList::SetGraphicsPipeline(InPipeline);
 			_CommandBuffer.bindPipeline(
 				vk::PipelineBindPoint::eGraphics,
 				static_cast<const VulkanPipeline&>(InPipeline).GetVulkanPipeline()

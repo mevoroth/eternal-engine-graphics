@@ -7,6 +7,7 @@
 #include "Graphics/CommandUtils.hpp"
 #include "Tools/PipelineLibrary.hpp"
 #include <array>
+#include <functional>
 
 namespace Eternal
 {
@@ -32,6 +33,8 @@ namespace Eternal
 		class Resource;
 		class RenderPass;
 		class AccelerationStructure;
+
+		using OnStencilWriteFunction = std::function<void(_In_ uint32_t InStencilBit, _In_ const string& InOwner)>;
 
 		struct GraphicsContextCreateInformation
 		{
@@ -89,6 +92,9 @@ namespace Eternal
 			};
 			static constexpr uint32_t GraphicsCommandBudgetPerFrame = 4;
 			static constexpr uint32_t ScratchAccelerationStructureBufferSize = 1024 * 1024 * 1024;
+
+			static OnStencilWriteFunction GetOnStencilWriteFunctor();
+			static void SetOnStencilWriteFunctor(_In_ const OnStencilWriteFunction InOnStencilWriteFunctor);
 
 			virtual ~GraphicsContext();
 
@@ -148,6 +154,8 @@ namespace Eternal
 		private:
 
 			CommandList* _CreateNewCommandList(_In_ const CommandType& InType, _In_ const string& InName);
+
+			static OnStencilWriteFunction OnStencilWriteFunctor;
 
 			array<
 				array<CommandAllocator*, static_cast<int32_t>(CommandType::COMMAND_TYPE_COUNT)>,

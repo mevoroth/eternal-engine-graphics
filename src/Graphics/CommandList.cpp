@@ -1,5 +1,7 @@
 #include "Graphics/CommandList.hpp"
 #include "Graphics/DescriptorTable.hpp"
+#include "Graphics/GraphicsContext.hpp"
+#include "Graphics/Pipeline.hpp"
 
 namespace Eternal
 {
@@ -33,6 +35,22 @@ namespace Eternal
 			InOutCommandListState = InOutCommandListState & InOtherCommandListState;
 			return InOutCommandListState;
 		}
+
+		//////////////////////////////////////////////////////////////////////////
+
+		CommandListEventScope::CommandListEventScope(_In_ CommandList* InCommandList, _In_ GraphicsContext& InContext, _In_ const char* InEventName)
+			: _GraphicsContext(InContext)
+			, _CommandList(InCommandList)
+		{
+			_CommandList->BeginEvent(_GraphicsContext, InEventName);
+		}
+
+		CommandListEventScope::~CommandListEventScope()
+		{
+			_CommandList->EndEvent(_GraphicsContext);
+		}
+
+		//////////////////////////////////////////////////////////////////////////
 
 		CommandList::CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator)
 			: _Device(InDevice)
@@ -72,6 +90,20 @@ namespace Eternal
 		void CommandList::TransitionUAV(_In_ Resource* InResource)
 		{
 			TransitionUAV(&InResource, 1);
+		}
+
+		void CommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
+		{
+			const StencilTest& InPipelineStencil = InPipeline.GetPipelineCreateInformation().PipelineDepthStencil.GetStencilTest();
+			uint8_t StencilWriteMask = InPipelineStencil.IsEnabled() ? InPipelineStencil.GetWriteMask() : 0;
+			if (StencilWriteMask != 0)
+			{
+				for (uint32_t StencilBit = 0; StencilBit < 8; ++StencilBit)
+				{
+					if (StencilWriteMask & (1 << StencilBit))
+						GraphicsContext::GetOnStencilWriteFunctor()(StencilBit, _CommandListName);
+				}
+			}
 		}
 
 		void CommandList::SetGraphicsDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
