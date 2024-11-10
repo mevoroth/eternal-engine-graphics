@@ -41,7 +41,9 @@ namespace Eternal
 			const wchar_t** GetD3D12StageEntryPointPointer() const;
 
 		protected:
+#if ETERNAL_PLATFORM_WINDOWS
 			static D3D12IncludeFXC*		_FxcIncludeHandler;
+#endif
 			static D3D12IncludeDXC*		_DxcIncludeHandler;
 			static IDxcIncludeHandler*	_DxcIncludeHandlerDefault;
 			static IDxcUtils*			_DxcUtils;
@@ -50,7 +52,9 @@ namespace Eternal
 
 			union
 			{
+#if ETERNAL_PLATFORM_WINDOWS
 				ID3DBlob* _FxcProgram;
+#endif
 				IDxcBlob* _DxcProgram;
 			};
 

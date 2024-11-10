@@ -11,13 +11,14 @@
 #include "Log/Log.hpp"
 #include "d3d12/D3D12Utils.hpp"
 
-#include <fstream>
+#if ETERNAL_PLATFORM_WINDOWS
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
+
 #include <locale>
 #include <codecvt>
-
 #include "directxcompiler/dxcapi.h"
+#endif
 
 using namespace Eternal::FileSystem;
 using namespace std;
@@ -120,6 +121,7 @@ namespace Eternal
 			Shader* CurrentShader = nullptr;
 		};
 
+#if ETERNAL_PLATFORM_WINDOWS
 		struct D3D12IncludeFXC
 			: public ID3DInclude
 			, public D3D12IncludeCommon
@@ -160,6 +162,7 @@ namespace Eternal
 				return S_OK;
 			}
 		};
+#endif
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -222,7 +225,9 @@ namespace Eternal
 
 		//////////////////////////////////////////////////////////////////////////
 
+#if ETERNAL_PLATFORM_WINDOWS
 		D3D12IncludeFXC*	D3D12Shader::_FxcIncludeHandler			= nullptr;
+#endif
 		D3D12IncludeDXC*	D3D12Shader::_DxcIncludeHandler			= nullptr;
 		IDxcIncludeHandler*	D3D12Shader::_DxcIncludeHandlerDefault	= nullptr;
 		IDxcUtils*			D3D12Shader::_DxcUtils					= nullptr;
@@ -233,9 +238,11 @@ namespace Eternal
 		{
 			using namespace Eternal::Graphics::D3D12;
 
+#if ETERNAL_PLATFORM_WINDOWS
 			// FXC
 			ETERNAL_ASSERT(!_FxcIncludeHandler);
 			_FxcIncludeHandler = new D3D12IncludeFXC(InOutContext);
+#endif
 
 			// DXC
 			VerifySuccess(
@@ -271,10 +278,12 @@ namespace Eternal
 
 		void D3D12Shader::Destroy()
 		{
+#if ETERNAL_PLATFORM_WINDOWS
 			// FXC
 			ETERNAL_ASSERT(_FxcIncludeHandler);
 			delete _FxcIncludeHandler;
 			_FxcIncludeHandler = nullptr;
+#endif
 
 			// DXC
 			delete _DxcIncludeHandler;
@@ -289,10 +298,14 @@ namespace Eternal
 
 		D3D12Shader::D3D12Shader(_In_ GraphicsContext& InOutContext, _In_ const ShaderCreateInformation& InCreateInformation)
 			: Shader(InOutContext, InCreateInformation)
+#if ETERNAL_PLATFORM_WINDOWS
 			, _FxcProgram(nullptr)
+#endif
 			, _DxcProgram(nullptr)
 		{
+#if ETERNAL_PLATFORM_WINDOWS
 			ETERNAL_ASSERT(_FxcIncludeHandler);
+#endif
 			ETERNAL_ASSERT(_DxcIncludeHandler);
 			ETERNAL_ASSERT(_DxcIncludeHandlerDefault);
 			ETERNAL_ASSERT(_DxcUtils);
@@ -321,11 +334,13 @@ namespace Eternal
 			{
 				switch (GetShaderCreateInformation().D3D12CompilerPreference)
 				{
+#if ETERNAL_PLATFORM_WINDOWS
 				case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_FXC:
 				{
 					_FxcProgram->Release();
 					_FxcProgram = nullptr;
 				} break;
+#endif
 				case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_DXC:
 				{
 					_DxcProgram->Release();
@@ -352,6 +367,7 @@ namespace Eternal
 
 			switch (GetShaderCreateInformation().D3D12CompilerPreference)
 			{
+#if ETERNAL_PLATFORM_WINDOWS
 			case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_FXC:
 			{
 				ID3DBlob* Errors = nullptr;
@@ -411,6 +427,7 @@ namespace Eternal
 					Errors = nullptr;
 				}
 			} break;
+#endif
 			case D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_DXC:
 			{
 				ETERNAL_ASSERT(_DxcUtils);
@@ -549,6 +566,7 @@ namespace Eternal
 					)
 				);
 
+#if ETERNAL_PLATFORM_WINDOWS
 				if (PDBBlob && PDBBlob->GetBufferSize() > 0)
 				{
 					char PDBName[256] = {};
@@ -562,6 +580,7 @@ namespace Eternal
 					PDBFile->Close();
 					DestroyFileHandle(PDBFile);
 				}
+#endif
 
 				CompilationResult->Release();
 				CompilationResult = nullptr;
@@ -576,7 +595,11 @@ namespace Eternal
 
 		bool D3D12Shader::IsShaderCompiled() const
 		{
-			return _FxcProgram && _DxcProgram;
+			return _DxcProgram
+#if ETERNAL_PLATFORM_WINDOWS
+				&& _FxcProgram
+#endif
+			;
 		}
 
 		void D3D12Shader::SerializeShader(_Inout_ File* InOutFile)
@@ -595,9 +618,13 @@ namespace Eternal
 
 		void D3D12Shader::GetD3D12Shader(_Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode)
 		{
-			OutShaderByteCode = GetShaderCreateInformation().D3D12CompilerPreference == D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_DXC
-				? D3D12Shader_GetD3D12Shader(_DxcProgram)
-				: D3D12Shader_GetD3D12Shader(_FxcProgram);
+			const bool IsFXC = GetShaderCreateInformation().D3D12CompilerPreference == D3D12ShaderCompilerType::D3D12_SHADER_COMPILER_TYPE_FXC;
+
+			OutShaderByteCode = 
+#if ETERNAL_PLATFORM_WINDOWS
+				IsFXC ? D3D12Shader_GetD3D12Shader(_FxcProgram) : 
+#endif
+				D3D12Shader_GetD3D12Shader(_DxcProgram);
 		}
 
 		const wchar_t* D3D12Shader::GetD3D12StageEntryPoint() const

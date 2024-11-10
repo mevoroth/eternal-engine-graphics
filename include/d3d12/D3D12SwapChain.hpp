@@ -2,6 +2,8 @@
 
 #include "Graphics/SwapChain.hpp"
 
+#if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
+
 struct IDXGISwapChain;
 struct IDXGISwapChain3;
 
@@ -32,3 +34,5 @@ namespace Eternal
 		};
 	}
 }
+
+#endif

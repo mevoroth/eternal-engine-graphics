@@ -23,7 +23,7 @@ namespace Eternal
 			case DeviceType::DEVICE_TYPE_PROXY:
 				return new NullSwapChain(InContext);
 
-#if ETERNAL_ENABLE_D3D12
+#if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
 			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12SwapChain(InContext);
 #endif

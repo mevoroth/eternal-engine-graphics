@@ -16,7 +16,7 @@ namespace Eternal
 		{
 			switch (InDevice.GetDeviceType())
 			{
-#if ETERNAL_ENABLE_D3D12
+#if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
 			case DeviceType::DEVICE_TYPE_D3D12:
 				return new D3D12CommandList(InDevice, InCommandAllocator);
 #endif
