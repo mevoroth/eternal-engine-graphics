@@ -53,6 +53,23 @@ namespace Eternal
 					//InitializationCommandList->Transition(TransitionScratchAccelerationStructure);
 				}
 			};
+
+			static void OnStencilWriteFunctorNull(_In_ uint32_t InStencilBit, _In_ const string& InOwner)
+			{
+				ETERNAL_BREAK();
+			}
+		}
+
+		OnStencilWriteFunction GraphicsContext::OnStencilWriteFunctor = GraphicsPrivate::OnStencilWriteFunctorNull;
+
+		OnStencilWriteFunction GraphicsContext::GetOnStencilWriteFunctor()
+		{
+			return OnStencilWriteFunctor;
+		}
+
+		void GraphicsContext::SetOnStencilWriteFunctor(_In_ const OnStencilWriteFunction InOnStencilWriteFunctor)
+		{
+			OnStencilWriteFunctor = InOnStencilWriteFunctor;
 		}
 
 		GraphicsContext::GraphicsContext(_In_ const GraphicsContextCreateInformation& InGraphicsContextCreateInformation, _In_ OutputDevice& InOutputDevice)

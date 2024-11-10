@@ -242,22 +242,41 @@ namespace Eternal
 			{
 				ResourceTransition& CurrentResourceTransition = InResourceTransitions[TransitionIndex];
 
-				const TransitionState& Before	= CurrentResourceTransition.GetBefore();
+				D3D12Resource& D3DResource = static_cast<D3D12Resource&>(CurrentResourceTransition.GetResource());
+
+				bool IsWhole = CurrentResourceTransition.SubResource.IsWhole();
+
+				UINT SubResource = [&D3DResource, &CurrentResourceTransition]() -> UINT
+				{
+					if (D3DResource.GetResourceType() != ResourceType::RESOURCE_TYPE_TEXTURE)
+						return ~0u;
+
+					return D3D12CalcSubresource(
+						CurrentResourceTransition.SubResource.MipSlice,
+						CurrentResourceTransition.SubResource.ArraySlice,
+						static_cast<UINT>(CurrentResourceTransition.SubResource.Plane),
+						CurrentResourceTransition.SubResource.MipLevelsNeedsResolve() ? D3DResource.GetMIPLevels() : CurrentResourceTransition.SubResource.MipLevels,
+						CurrentResourceTransition.SubResource.ArraySizeNeedsResolve() ? D3DResource.GetDepthOrArraySize() : CurrentResourceTransition.SubResource.ArraySize
+					);
+				}();
+
+				const TransitionState& Before	= IsWhole ? CurrentResourceTransition.GetBefore() : CurrentResourceTransition.GetBefore(SubResource);
 				const TransitionState& After	= CurrentResourceTransition.GetAfter();
 
 				if ((Before & After) == After)
 					continue;
 
-				D3D12Resource& D3DResource = static_cast<D3D12Resource&>(CurrentResourceTransition.GetResource());
-
 				ResourceBarriers[EffectiveTransitionsCount].Type					= D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 				ResourceBarriers[EffectiveTransitionsCount].Flags					= D3D12_RESOURCE_BARRIER_FLAG_NONE;
 				ResourceBarriers[EffectiveTransitionsCount].Transition.pResource	= D3DResource.GetD3D12Resource();
-				ResourceBarriers[EffectiveTransitionsCount].Transition.Subresource	= D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+				ResourceBarriers[EffectiveTransitionsCount].Transition.Subresource	= IsWhole ? D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES : SubResource;
 				ResourceBarriers[EffectiveTransitionsCount].Transition.StateBefore	= ConvertTransitionStateToD3D12ResourceStates(Before);
 				ResourceBarriers[EffectiveTransitionsCount].Transition.StateAfter	= ConvertTransitionStateToD3D12ResourceStates(After);
-				
-				D3DResource.SetResourceState(CurrentResourceTransition.After);
+
+				if (IsWhole)
+					D3DResource.SetResourceState(After);
+				else
+					D3DResource.SetSubResourceState(SubResource, After);
 
 				++EffectiveTransitionsCount;
 			}
@@ -328,6 +347,7 @@ namespace Eternal
 
 		void D3D12CommandList::SetGraphicsPipeline(_In_ const Pipeline& InPipeline)
 		{
+			CommandList::SetGraphicsPipeline(InPipeline);
 			ETERNAL_ASSERT((InPipeline.GetShaderTypes() & ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX) == ShaderTypeFlags::SHADER_TYPE_FLAGS_VERTEX);
 
 			const D3D12Pipeline& InD3DPipeline				= static_cast<const D3D12Pipeline&>(InPipeline);
@@ -340,6 +360,7 @@ namespace Eternal
 				InD3DPipeline.GetD3D12PipelineState()
 			);
 			_GraphicCommandList6->IASetPrimitiveTopology(InD3DPipeline.GetD3D12PrimitiveTopology());
+			_GraphicCommandList6->OMSetStencilRef(InPipeline.GetPipelineCreateInformation().PipelineDepthStencil.GetStencilTest().GetReference());
 			SetCurrentRootSignature(InD3DRootSignature);
 		}
 

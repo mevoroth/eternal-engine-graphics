@@ -5,6 +5,7 @@
 #include "Graphics/CommandUtils.hpp"
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 namespace Eternal
 {
@@ -317,15 +318,18 @@ namespace Eternal
 			virtual void Unmap(_In_ const MapRange& InMapRange) = 0;
 			virtual TextureToBufferMemoryFootprint GetTextureToBufferMemoryFootprint(_In_ Device& InDevice) const = 0;
 
-			inline void SetResourceState(_In_ const TransitionState& InTransitionState) { _ResourceCreateInformation.ResourceState = InTransitionState; }
+			void SetResourceState(_In_ const TransitionState& InTransitionState);
+			void SetSubResourceState(_In_ uint32_t InSubResourceIndex, _In_ const TransitionState& InTransitionState);
 			inline bool IsMultisample() const { return _Multisample; }
 			inline const TransitionState& GetResourceState() const { return _ResourceCreateInformation.ResourceState; }
+			const TransitionState& GetResourceState(_In_ uint32_t InSubResourceIndex) const;
 			const ResourceDimension& GetResourceDimension() const;
 			uint32_t GetWidth() const;
 			uint32_t GetHeight() const;
 			uint32_t GetDepth() const;
 			uint32_t GetMIPLevels() const;
 			uint32_t GetArraySize() const;
+			uint32_t GetDepthOrArraySize() const;
 			uint32_t GetBufferSize() const;
 			uint32_t GetBufferStride() const;
 			uint32_t GetElementCount() const;
@@ -344,11 +348,13 @@ namespace Eternal
 
 			virtual void* Map(_In_ const MapRange& InMapRange) = 0;
 			const ResourceType& GetRawResourceType() const { return _ResourceType; }
+			std::vector<TransitionState>& GetSubResourceStates() { return _SubResourceStates; }
 
 		private:
-			ResourceType				_ResourceType = ResourceType::RESOURCE_TYPE_UNKNOWN; // Used to track down type of resource
-			ResourceCreateInformation	_ResourceCreateInformation;
-			bool						_Multisample = false;
+			ResourceType					_ResourceType = ResourceType::RESOURCE_TYPE_UNKNOWN; // Used to track down type of resource
+			ResourceCreateInformation		_ResourceCreateInformation;
+			std::vector<TransitionState>	_SubResourceStates;
+			bool							_Multisample = false;
 		};
 
 		template<typename ResourceStructureType = uint8_t>

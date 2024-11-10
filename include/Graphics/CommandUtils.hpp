@@ -64,6 +64,13 @@ namespace Eternal
 			TRANSITION_FLAGS_RESOURCE		= 0x2
 		};
 
+		enum class ResourcePlane : uint8_t
+		{
+			RESOURCE_PLANE_COLOR = 0x0,
+			RESOURCE_PLANE_DEPTH = 0x0,
+			RESOURCE_PLANE_STENCIL = 0x1
+		};
+
 		inline constexpr TransitionState operator|(_In_ const TransitionState& InLeftTransitionState, _In_ const TransitionState& InRightTransitionState)
 		{
 			return static_cast<TransitionState>(
@@ -149,6 +156,31 @@ namespace Eternal
 			return InTransitionStateIncludingInFilterState != TransitionState::TRANSITION_UNDEFINED
 				&& InTransitionStateExcludingInFilterState == TransitionState::TRANSITION_UNDEFINED;
 		}
+		
+		struct ResourceSubResource
+		{
+			static constexpr uint8_t InvalidMipLevel = static_cast<uint8_t>(~0);
+			static constexpr uint64_t InvalidArraySlice = static_cast<uint16_t>(~0);
+
+			ResourceSubResource(_In_ uint16_t InArraySlice, _In_ uint8_t InMipSlice);
+			ResourceSubResource() {}
+
+			bool IsWhole() const;
+			bool ArraySizeNeedsResolve() const;
+			bool MipLevelsNeedsResolve() const;
+
+			uint16_t ArraySlice	= InvalidArraySlice;
+			uint16_t ArraySize	= InvalidArraySlice;
+			uint8_t MipSlice	= InvalidMipLevel;
+			uint8_t MipLevels	= InvalidMipLevel;
+			ResourcePlane Plane	= ResourcePlane::RESOURCE_PLANE_COLOR;
+		};
+
+		struct ResourceViewSubResource
+		{
+			ResourceSubResource	SubResource;
+			View*				ResourceView = nullptr;
+		};
 
 		struct ResourceTransition
 		{
@@ -181,14 +213,23 @@ namespace Eternal
 				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHICS
 			);
 
+			ResourceTransition(
+				_In_ const ResourceViewSubResource& InViewSubResource,
+				_In_ const TransitionState& InAfter,
+				_In_ const CommandType& InBeforeCommandType = CommandType::COMMAND_TYPE_GRAPHICS,
+				_In_ const CommandType& InAfterCommandType = CommandType::COMMAND_TYPE_GRAPHICS
+			);
+
 			ResourceTransition() {}
 
 			const Resource& GetResource() const;
 			Resource& GetResource();
 			const TransitionState& GetBefore() const;
+			const TransitionState& GetBefore(_In_ uint32_t InSubResourceIndex) const;
 			const TransitionState& GetAfter() const;
 			bool IsResource() const;
 
+			ResourceSubResource SubResource;
 			TransitionFlags Flags				= TransitionFlags::TRANSITION_FLAGS_NONE;
 			union
 			{

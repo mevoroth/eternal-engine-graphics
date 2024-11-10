@@ -44,6 +44,13 @@ namespace Eternal
 		D3D12Resource::D3D12Resource(_In_ const TextureResourceCreateInformation& InResourceCreateInformation)
 			: Resource(InResourceCreateInformation, ResourceType::RESOURCE_TYPE_TEXTURE)
 		{
+			const TextureCreateInformation& InTextureInformation = InResourceCreateInformation.TextureInformation;
+
+			uint32_t SubResourcesCount = GetMIPLevels() * InTextureInformation.DepthOrArraySize;
+			GetSubResourceStates().resize(SubResourcesCount);
+			for (uint32_t SubResourceIndex = 0; SubResourceIndex < SubResourcesCount; ++SubResourceIndex)
+				GetSubResourceStates()[SubResourceIndex] = GetResourceState();
+
 			if (InResourceCreateInformation.MemoryType == ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY)
 			{
 				ETERNAL_ASSERT(InResourceCreateInformation.ResourceState != TransitionState::TRANSITION_UNDEFINED)
@@ -57,8 +64,6 @@ namespace Eternal
 			D3D12HeapProperties.MemoryPoolPreference	= D3D12_MEMORY_POOL_UNKNOWN;
 			D3D12HeapProperties.CreationNodeMask		= InD3DDevice.GetDeviceMask();
 			D3D12HeapProperties.VisibleNodeMask			= InD3DDevice.GetDeviceMask();
-
-			const TextureCreateInformation& InTextureInformation = InResourceCreateInformation.TextureInformation;
 
 			D3D12_RESOURCE_DESC D3D12ResourceDesc;
 			D3D12ResourceDesc.Dimension				= ConvertResourceDimensionToD3D12ResourceDimension(InTextureInformation.Dimension);

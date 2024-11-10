@@ -37,6 +37,33 @@ namespace Eternal
 		}
 		
 		//////////////////////////////////////////////////////////////////////////
+		// ResourceSubResource
+
+		ResourceSubResource::ResourceSubResource(_In_ uint16_t InArraySlice, _In_ uint8_t InMipSlice)
+			: ArraySlice(InArraySlice)
+			, MipSlice(InMipSlice)
+		{
+		}
+
+		bool ResourceSubResource::IsWhole() const
+		{
+			return ArraySlice == InvalidArraySlice
+				&& ArraySize == InvalidArraySlice
+				&& MipSlice == InvalidMipLevel
+				&& MipLevels == InvalidMipLevel;
+		}
+
+		bool ResourceSubResource::ArraySizeNeedsResolve() const
+		{
+			return ArraySize == InvalidArraySlice;
+		}
+
+		bool ResourceSubResource::MipLevelsNeedsResolve() const
+		{
+			return MipLevels == InvalidMipLevel;
+		}
+
+		//////////////////////////////////////////////////////////////////////////
 		// ResourceTransition
 
 		ResourceTransition::ResourceTransition( _In_ View* InView, _In_ const TransitionState& InAfter, _In_ const CommandType& InBeforeCommandType /* = CommandType::COMMAND_TYPE_GRAPHIC */, _In_ const CommandType& InAfterCommandType /* = CommandType::COMMAND_TYPE_GRAPHIC */ )
@@ -51,6 +78,16 @@ namespace Eternal
 		ResourceTransition::ResourceTransition( _In_ Resource* InResource, _In_ const TransitionState& InAfter, _In_ const CommandType& InBeforeCommandType /* = CommandType::COMMAND_TYPE_GRAPHIC */, _In_ const CommandType& InAfterCommandType /* = CommandType::COMMAND_TYPE_GRAPHIC */ )
 			: Flags(TransitionFlags::TRANSITION_FLAGS_NEEDS_RESOLVE | TransitionFlags::TRANSITION_FLAGS_RESOURCE)
 			, ResourceToTransition(InResource)
+			, After(InAfter)
+			, BeforeCommandType(InBeforeCommandType)
+			, AfterCommandType(InAfterCommandType)
+		{
+		}
+
+		ResourceTransition::ResourceTransition( _In_ const ResourceViewSubResource& InViewSubResource, _In_ const TransitionState& InAfter, _In_ const CommandType& InBeforeCommandType /* = CommandType::COMMAND_TYPE_GRAPHICS */, _In_ const CommandType& InAfterCommandType /* = CommandType::COMMAND_TYPE_GRAPHICS */ )
+			: SubResource(InViewSubResource.SubResource)
+			, Flags(TransitionFlags::TRANSITION_FLAGS_NEEDS_RESOLVE)
+			, ViewToTransition(InViewSubResource.ResourceView)
 			, After(InAfter)
 			, BeforeCommandType(InBeforeCommandType)
 			, AfterCommandType(InAfterCommandType)
@@ -75,6 +112,11 @@ namespace Eternal
 		const TransitionState& ResourceTransition::GetBefore() const
 		{
 			return ((Flags & TransitionFlags::TRANSITION_FLAGS_NEEDS_RESOLVE) != TransitionFlags::TRANSITION_FLAGS_NONE) ? GetResource().GetResourceState() : Before;
+		}
+
+		const TransitionState& ResourceTransition::GetBefore(_In_ uint32_t InSubResourceIndex) const
+		{
+			return ((Flags & TransitionFlags::TRANSITION_FLAGS_NEEDS_RESOLVE) != TransitionFlags::TRANSITION_FLAGS_NONE) ? GetResource().GetResourceState(InSubResourceIndex) : Before;
 		}
 
 		const TransitionState& ResourceTransition::GetAfter() const

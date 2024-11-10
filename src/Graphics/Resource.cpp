@@ -62,6 +62,25 @@ namespace Eternal
 			return _ResourceCreateInformation.TextureInformation.StencilClearValue;
 		}
 
+		void Resource::SetResourceState(_In_ const TransitionState& InTransitionState)
+		{
+			_ResourceCreateInformation.ResourceState = InTransitionState;
+			for (uint32_t SubResource = 0; SubResource < _SubResourceStates.size(); ++SubResource)
+				_SubResourceStates[SubResource] = InTransitionState;
+		}
+
+		void Resource::SetSubResourceState(_In_ uint32_t InSubResourceIndex, _In_ const TransitionState& InTransitionState)
+		{
+			ETERNAL_ASSERT(InSubResourceIndex < _SubResourceStates.size());
+			_SubResourceStates[InSubResourceIndex] = InTransitionState;
+		}
+
+		const TransitionState& Resource::GetResourceState(_In_ uint32_t InSubResourceIndex) const
+		{
+			ETERNAL_ASSERT(InSubResourceIndex < _SubResourceStates.size());
+			return _SubResourceStates[InSubResourceIndex];
+		}
+
 		const ResourceDimension& Resource::GetResourceDimension() const
 		{
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
@@ -120,6 +139,26 @@ namespace Eternal
 			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D:
 			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_3D:
 			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE:
+			default:
+				return 1;
+				break;
+			}
+		}
+
+		uint32_t Resource::GetDepthOrArraySize() const
+		{
+			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
+			switch (GetResourceDimension())
+			{
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D_ARRAY:
+				return _ResourceCreateInformation.TextureInformation.Height;
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D_ARRAY:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_3D:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_CUBE:
+				return _ResourceCreateInformation.TextureInformation.DepthOrArraySize;
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_1D:
+			case ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D:
 			default:
 				return 1;
 				break;
