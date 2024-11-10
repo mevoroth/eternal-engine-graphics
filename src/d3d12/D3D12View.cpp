@@ -2,7 +2,7 @@
 
 #include "d3d12/D3D12View.hpp"
 
-#include <d3d12.h>
+#include "d3d12/D3D12Library.h"
 #include "d3d12/D3D12GraphicsContext.hpp"
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12Resource.hpp"

@@ -2,7 +2,7 @@
 
 #include "d3d12/D3D12Format.hpp"
 
-#include <d3d12.h>
+#include "d3d12/D3D12Library.h"
 
 namespace Eternal
 {

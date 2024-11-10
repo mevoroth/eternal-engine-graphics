@@ -3,10 +3,8 @@
 #include "d3d12/D3D12SwapChain.hpp"
 
 #include <cwchar>
-#include <d3d12.h>
-#include <dxgi1_4.h>
 #include "Graphics/Format.hpp"
-#include "d3d12/D3D12Device.hpp"
+#include "d3d12/D3D12Library.h"
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Resource.hpp"

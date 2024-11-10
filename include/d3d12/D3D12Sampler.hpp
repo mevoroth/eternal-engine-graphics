@@ -5,7 +5,7 @@
 #if ETERNAL_ENABLE_D3D12
 
 #include "d3d12/D3D12Utils.hpp"
-#include <d3d12.h>
+#include "d3d12/D3D12Library.h"
 
 namespace Eternal
 {

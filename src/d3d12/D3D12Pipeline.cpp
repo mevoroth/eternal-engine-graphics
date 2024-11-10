@@ -2,7 +2,7 @@
 
 #include "d3d12/D3D12Pipeline.hpp"
 
-#include "d3dx12.h"
+#include "d3d12/D3D12Library.h"
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Viewport.hpp"
 #include "Graphics/DepthStencil.hpp"

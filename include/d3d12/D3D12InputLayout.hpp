@@ -2,7 +2,7 @@
 
 #if ETERNAL_ENABLE_D3D12
 
-#include <d3d12.h>
+#include "d3d12/D3D12Library.h"
 #include <vector>
 #include "Graphics/InputLayout.hpp"
 

@@ -4,8 +4,7 @@
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Format.hpp"
-#include "d3dx12.h"
-#include <d3d12.h>
+#include "d3d12/D3D12Library.h"
 #include <string>
 
 #if ETERNAL_USE_DEBUG_VERBOSE
