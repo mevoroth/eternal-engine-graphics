@@ -446,8 +446,7 @@ namespace Eternal
 
 				static constexpr TransitionState CommonTransitionState			= TransitionState::TRANSITION_CPU_READ
 																				| TransitionState::TRANSITION_CPU_WRITE
-																				| TransitionState::TRANSITION_PREINITIALIZED
-																				| TransitionState::TRANSITION_PRESENT;
+																				| TransitionState::TRANSITION_PREINITIALIZED;
 
 				static constexpr TransitionState CPUTransitionState				= TransitionState::TRANSITION_CPU_READ
 																				| TransitionState::TRANSITION_CPU_WRITE;
@@ -490,6 +489,7 @@ namespace Eternal
 				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_RESOLVE_DESTINATION);
 				States |= static_cast<D3D12_RESOURCE_STATES>( InTransitionState & TransitionState::TRANSITION_RESOLVE_SOURCE);
 				States |= static_cast<D3D12_RESOURCE_STATES>((InTransitionState & TransitionState::TRANSITION_RAYTRACING_ACCELERATION_STRUCTURE)	<< 4);
+				States |= (InTransitionState & TransitionState::TRANSITION_PRESENT) == TransitionState::TRANSITION_PRESENT ? D3D12_RESOURCE_STATE_PRESENT : D3D12_RESOURCE_STATE_COMMON;
 
 				return States;
 			}
