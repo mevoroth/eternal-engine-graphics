@@ -101,6 +101,9 @@ namespace Eternal
 					{
 						MetaData.DepthStencilViewTexture2DArray.ArraySize	= InTextureResourceCreateInformation.TextureInformation.DepthOrArraySize;
 					} break;
+					default:
+						ETERNAL_BREAK();
+						break;
 					}
 					DepthStencilViewCreateInformation TextureDepthStencilViewCreateInformation(
 						InContext,
@@ -134,6 +137,9 @@ namespace Eternal
 					{
 						MetaData.RenderTargetViewTexture3D.WSize			= InTextureResourceCreateInformation.TextureInformation.DepthOrArraySize;
 					} break;
+					default:
+						ETERNAL_BREAK();
+						break;
 					}
 					RenderTargetViewCreateInformation TextureRenderTargetViewCreateInformation(
 						InContext,
@@ -169,6 +175,9 @@ namespace Eternal
 				{
 					MetaData.UnorderedAccessViewTexture3D.WSize				= InTextureResourceCreateInformation.TextureInformation.MIPLevels;
 				} break;
+				default:
+					ETERNAL_BREAK();
+					break;
 				}
 				UnorderedAccessViewCreateInformation TextureUnorderedAccessViewCreateInformation(
 					InContext,

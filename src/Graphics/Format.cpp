@@ -11,6 +11,9 @@ namespace Eternal
 			case Format::FORMAT_D32:
 			case Format::FORMAT_DS328:
 				return true;
+
+			default:
+				break;
 			}
 			return false;
 		}
@@ -23,6 +26,9 @@ namespace Eternal
 				return Format::FORMAT_R32_FLOAT;
 			case Format::FORMAT_DS328:
 				return Format::FORMAT_RG328;
+
+			default:
+				break;
 			}
 			return InFormat;
 		}

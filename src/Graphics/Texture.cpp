@@ -65,6 +65,9 @@ namespace Eternal
 				MetaData.ShaderResourceViewTextureCubeArray.MipLevels	= InTextureResourceCreateInformation.TextureInformation.MIPLevels;
 				MetaData.ShaderResourceViewTextureCubeArray.NumCubes	= InTextureResourceCreateInformation.TextureInformation.DepthOrArraySize / 6;
 			} break;
+			default:
+				ETERNAL_BREAK();
+				break;
 			}
 			ShaderResourceViewCreateInformation TextureShaderResourceViewCreateInformation(
 				InContext,
