@@ -13,6 +13,7 @@ namespace Eternal
 			VulkanFormat(vk::Format::eR8G8B8A8Unorm,			4),
 			VulkanFormat(vk::Format::eR8G8B8A8Snorm,			4),
 			VulkanFormat(vk::Format::eR8G8B8A8Srgb,				4),
+			VulkanFormat(vk::Format::eA2R10G10B10UnormPack32,	4),
 			VulkanFormat(vk::Format::eB10G11R11UfloatPack32,	4),
 			VulkanFormat(vk::Format::eR32G32B32A32Sfloat,		16),
 			VulkanFormat(vk::Format::eR32G32B32Sfloat,			12),
