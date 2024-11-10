@@ -7,7 +7,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		static constexpr char* DEVICE_TYPE_TO_STRINGS[] =
+		static constexpr const char* DEVICE_TYPE_TO_STRINGS[] =
 		{
 			"Null",
 			"Proxy",
