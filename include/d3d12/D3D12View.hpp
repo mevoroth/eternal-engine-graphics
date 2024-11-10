@@ -21,8 +21,8 @@ namespace Eternal
 			D3D12View(_In_ const DepthStencilViewCreateInformation& InViewCreateInformation);
 			virtual ~D3D12View() override final;
 
-			D3D12_GPU_DESCRIPTOR_HANDLE GetD3D12GPUDescriptorHandle() const { return _D3D12Handle.D3D12GPUDescriptorHandle; }
-			D3D12_CPU_DESCRIPTOR_HANDLE GetD3D12CPUDescriptorHandle() const { return _D3D12Handle.D3D12CPUDescriptorHandle; }
+			const D3D12_GPU_DESCRIPTOR_HANDLE& GetD3D12GPUDescriptorHandle() const { return _D3D12Handle.D3D12GPUDescriptorHandle; }
+			const D3D12_CPU_DESCRIPTOR_HANDLE& GetD3D12CPUDescriptorHandle() const { return _D3D12Handle.D3D12CPUDescriptorHandle; }
 
 			// Constant buffer
 			D3D12_GPU_VIRTUAL_ADDRESS GetD3D12OffsettedConstantBuffer() const;
