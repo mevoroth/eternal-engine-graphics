@@ -91,11 +91,6 @@ namespace Eternal
 			ETERNAL_ASSERT(PassGroup);
 			PassGroup->RegisterGraphPass(InPass);
 		}
-
-		void FrameGraph::CompileGraph()
-		{
-
-		}
 	}
 }
 

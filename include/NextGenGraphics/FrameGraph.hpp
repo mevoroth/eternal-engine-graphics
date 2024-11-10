@@ -78,7 +78,6 @@ namespace Eternal
 			~FrameGraph();
 
 			void RegisterGraphPass(_In_ FrameGraphPass* InPass);
-			void CompileGraph();
 			template<typename RunFunctionType>
 			void RunGraph(_In_ const RunFunctionType& InRunFunctor)
 			{
