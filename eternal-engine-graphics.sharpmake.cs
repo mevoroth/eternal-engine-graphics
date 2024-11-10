@@ -36,8 +36,7 @@ namespace EternalEngine
 			});
 
 			// Defines
-			InConfiguration.Defines.Add(new string[] {
-				"ETERNAL_ENABLE_D3D12=(ETERNAL_PLATFORM_WINDOWS)",
+			InConfiguration.Defines.AddRange(new string[] {
 				"ETERNAL_DEBUG_VERBOSE=(ETERNAL_DEBUG &amp;&amp; 1)",
 			});
 
