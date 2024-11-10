@@ -319,6 +319,11 @@ namespace Eternal
 				ETERNAL_BREAK();
 			}
 
+			void VerifyNotFailed(_In_ const HRESULT& InHResult)
+			{
+				ETERNAL_ASSERT(InHResult >= S_OK);
+			}
+
 			D3D12_RENDER_TARGET_BLEND_DESC CreateD3D12RenderTargetBlendDesc(_In_ const BlendState& InBlendState, _In_ const LogicBlend& InLogicBlend)
 			{
 				D3D12_RENDER_TARGET_BLEND_DESC RenderTargetBlendDesc;
