@@ -7,6 +7,7 @@
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12Resource.hpp"
 #include "d3d12/D3D12Format.hpp"
+#include "Graphics/GraphicsContext.hpp"
 #include "Math/Math.hpp"
 
 namespace Eternal
