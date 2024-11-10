@@ -20,7 +20,7 @@ namespace Eternal
 			}
 
 			virtual bool IsShaderCompiled() const override final { return true; }
-			virtual void SerializeShader(_Inout_ File* InOutFile) override final {}
+			virtual void SerializeShader(_Inout_ File* InOutFile) override final { (void)InOutFile; }
 		};
 	}
 }
