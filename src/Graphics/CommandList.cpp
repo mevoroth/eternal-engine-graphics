@@ -123,6 +123,9 @@ namespace Eternal
 
 		void CommandList::_SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable)
 		{
+			(void)InContext;
+			(void)InDescriptorTable;
+
 #if ETERNAL_DEBUG_MATCHING_ROOT_SIGNATURE
 			ETERNAL_ASSERT(GetCurrentSignature() && *GetCurrentSignature() == *InDescriptorTable.GetRootSignature());
 #elif ETERNAL_DEBUG

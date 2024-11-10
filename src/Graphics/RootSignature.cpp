@@ -194,6 +194,8 @@ namespace Eternal
 
 		DescriptorTable* RootSignature::_CreateRootDescriptorTablePrivate(_In_ GraphicsContext& InContext) const
 		{
+			(void)InContext;
+
 			return new DescriptorTable(this);
 		}
 

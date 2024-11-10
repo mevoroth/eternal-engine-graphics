@@ -78,6 +78,9 @@ namespace Eternal
 
 		void D3D12BottomLevelAccelerationStructure::RebuildAccelerationStructure(_In_ GraphicsContext& InContext, _In_ const RebuildAccelerationStructureInput& InRebuildInput)
 		{
+			(void)InContext;
+			(void)InRebuildInput;
+
 			ETERNAL_BREAK();
 		}
 

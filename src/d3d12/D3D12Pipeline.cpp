@@ -106,6 +106,8 @@ namespace Eternal
 
 			static inline void PrintStateObjectDescription(_In_ const D3D12_STATE_OBJECT_DESC& InDescription)
 			{
+				(void)InDescription;
+
 #if ETERNAL_USE_DEBUG_VERBOSE
 				char TemporaryBuffer[512];
 

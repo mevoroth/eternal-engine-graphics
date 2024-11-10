@@ -254,6 +254,9 @@ namespace Eternal
 
 		void VulkanPipeline::SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile)
 		{
+			(void)InOutContext;
+			(void)InOutContext;
+
 			ETERNAL_BREAK();
 		}
 	}

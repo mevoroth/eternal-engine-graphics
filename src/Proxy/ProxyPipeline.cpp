@@ -20,6 +20,8 @@ namespace Eternal
 
 		void ProxyPipeline::SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile)
 		{
+			(void)InOutContext;
+			(void)InOutFile;
 		}
 
 		template ProxyPipeline::ProxyPipeline(_Inout_ GraphicsContext& InOutContext, _In_ const GraphicsPipelineCreateInformation& InPipelineCreateInformation);

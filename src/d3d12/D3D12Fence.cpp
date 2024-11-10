@@ -43,6 +43,8 @@ namespace Eternal
 
 		void D3D12Fence::Wait(_In_ Device& InDevice)
 		{
+			(void)InDevice;
+
 			if (_FenceValue != InvalidFenceValue && _Fence->GetCompletedValue() != _FenceValue)
 			{
 				D3D12::VerifySuccess(
@@ -54,6 +56,7 @@ namespace Eternal
 
 		void D3D12Fence::Reset(_In_ Device& InDevice)
 		{
+			(void)InDevice;
 		}
 
 		void D3D12Fence::Signal(_Inout_ D3D12CommandQueue& InCommandQueue)
