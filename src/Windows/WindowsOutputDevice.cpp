@@ -37,7 +37,7 @@ namespace Eternal
 
 			RECT WindowRect = { 0, 0, GetWidth(), GetHeight() };
 			BOOL Adjust = AdjustWindowRect(&WindowRect, WS_OVERLAPPEDWINDOW, FALSE);
-			ETERNAL_ASSERT(Adjust);
+			ETERNAL_ASSERT(Adjust == TRUE);
 
 			_WindowHandle = CreateWindowEx(
 				WS_EX_APPWINDOW,
@@ -56,7 +56,7 @@ namespace Eternal
 
 			if (!_WindowHandle)
 			{
-				DWORD err = GetLastError();
+				DWORD LastError = GetLastError();
 				ETERNAL_BREAK();
 				// LOG
 			}
