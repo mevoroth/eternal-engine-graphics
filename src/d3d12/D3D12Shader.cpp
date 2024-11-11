@@ -135,14 +135,6 @@ namespace Eternal
 			virtual STDMETHODIMP Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes) override
 			{
 				string IncludeSource = pFileName;
-				if (IncludeSource == "platform.private.common.hlsl")
-				{
-					uint8_t* Content = new uint8_t[1];
-					*Content = 0u;
-					*pBytes = 0u;
-					*ppData = Content;
-					return S_OK;
-				}
 
 				string IncludeFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
 				FilePath::NormalizePath(IncludeFullPathSource);
