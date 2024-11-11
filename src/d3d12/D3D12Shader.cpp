@@ -588,8 +588,9 @@ namespace Eternal
 			}
 		}
 
-		void D3D12Shader::_LoadFile(_In_ const string& ShaderFile)
+		void D3D12Shader::_LoadFile(_In_ const string& InShaderFile)
 		{
+			(void)InShaderFile;
 			ETERNAL_BREAK();
 		}
 
