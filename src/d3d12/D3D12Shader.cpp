@@ -14,19 +14,21 @@
 #if ETERNAL_PLATFORM_WINDOWS
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
+#include "directxcompiler/dxcapi.h"
+#else
+#include "d3d12/D3D12ShaderPrivate.hpp"
+#endif
 
 #include <locale>
 #include <codecvt>
-#include "directxcompiler/dxcapi.h"
-#endif
-
-using namespace Eternal::FileSystem;
-using namespace std;
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		using namespace Eternal::FileSystem;
+		using namespace std;
+
 		static constexpr char* D3D12_SHADER_ENTRIES_FXC[] =
 		{
 			"ShaderVertex",
