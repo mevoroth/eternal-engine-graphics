@@ -180,3 +180,11 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+# VS Code
+.vs/
+
+# VS
+*.sln
+*.vcxproj
+*.vcxproj.filters
