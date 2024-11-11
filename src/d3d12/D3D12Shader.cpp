@@ -375,25 +375,24 @@ namespace Eternal
 				uint32_t MacrosCount = static_cast<uint32_t>(InDefines.size()) / 2;
 				vector<D3D_SHADER_MACRO> Macros;
 				Macros.reserve(MacrosCount + 256);
-				for (uint32_t DefineIndex = 0; DefineIndex < MacrosCount; ++DefineIndex)
+
+				auto AddMacro = [&Macros](_In_ const char* InName, _In_ const char* InDefinition)
 				{
 					Macros.push_back({});
 					D3D_SHADER_MACRO& CurrentMacro = Macros.back();
+					CurrentMacro.Name		= InName;
+					CurrentMacro.Definition	= InDefinition;
+				};
 
-					CurrentMacro.Name		= InDefines[DefineIndex * 2].c_str();
-					CurrentMacro.Definition	= InDefines[DefineIndex * 2 + 1].c_str();
-				}
+				AddMacro("ETERNAL_PLATFORM_FXC", "1");
+				AddMacro("ETERNAL_PLATFORM_DX12", "1");
+				AddMacro("ETERNAL_USE_PRIVATE", ETERNAL_STRINGIFY(ETERNAL_USE_PRIVATE));
 
-				D3D_SHADER_MACRO PlatformMacro;
-				PlatformMacro.Name			= "ETERNAL_PLATFORM_DX12";
-				PlatformMacro.Definition	= "1";
-				Macros.push_back(PlatformMacro);
+				for (uint32_t DefineIndex = 0; DefineIndex < MacrosCount; ++DefineIndex)
+					AddMacro(InDefines[DefineIndex * 2].c_str(), InDefines[DefineIndex * 2 + 1].c_str());
 
 				// Empty macro (eq. end of array)
-				D3D_SHADER_MACRO EndOfArrayMacro;
-				EndOfArrayMacro.Name		= nullptr;
-				EndOfArrayMacro.Definition	= nullptr;
-				Macros.push_back(EndOfArrayMacro);
+				AddMacro(nullptr, nullptr);
 
 				_FxcIncludeHandler->SetCurrentShader(this);
 
@@ -457,24 +456,27 @@ namespace Eternal
 				{
 					uint32_t MacrosCount = static_cast<uint32_t>(InDefines.size()) / 2;
 					Macros.reserve(MacrosCount + 256);
-					InDefinesUTF8.resize(InDefines.size());
+					InDefinesUTF8.reserve((MacrosCount + 256) * 2);
 
-					for (uint32_t DefineIndex = 0; DefineIndex < MacrosCount; ++DefineIndex)
+					auto AddMacro = [&Macros, &InDefinesUTF8](const string& InName, const string& InValue)
 					{
 						Macros.push_back({});
 						DxcDefine& CurrentMacro = Macros.back();
+						
+						InDefinesUTF8.emplace_back(InName.begin(), InName.end());
+						CurrentMacro.Name	= InDefinesUTF8.back().c_str();
 
-						InDefinesUTF8[DefineIndex * 2]		= wstring(InDefines[DefineIndex * 2].begin(), InDefines[DefineIndex * 2].end());
-						InDefinesUTF8[DefineIndex * 2 + 1]	= wstring(InDefines[DefineIndex * 2 + 1].begin(), InDefines[DefineIndex * 2 + 1].end());
+						InDefinesUTF8.emplace_back(InValue.begin(), InValue.end());
+						CurrentMacro.Value	= InDefinesUTF8.back().c_str();
+					};
 
-						CurrentMacro.Name	= InDefinesUTF8[DefineIndex * 2].c_str();
-						CurrentMacro.Value	= InDefinesUTF8[DefineIndex * 2 + 1].c_str();
-					}
+					AddMacro("__XBOX_DISABLE_PRECOMPILE", "1");
+					AddMacro("ETERNAL_PLATFORM_DXC", "1");
+					AddMacro("ETERNAL_PLATFORM_DX12", "1");
+					AddMacro("ETERNAL_USE_PRIVATE", ETERNAL_STRINGIFY(ETERNAL_USE_PRIVATE));
 
-					DxcDefine PlatformMacro;
-					PlatformMacro.Name	= L"ETERNAL_PLATFORM_DX12";
-					PlatformMacro.Value	= L"1";
-					Macros.push_back(PlatformMacro);
+					for (uint32_t DefineIndex = 0; DefineIndex < MacrosCount; ++DefineIndex)
+						AddMacro(InDefines[DefineIndex * 2], InDefines[DefineIndex * 2 + 1]);
 				}
 				wstring FileNameUTF8(InFileName.begin(), InFileName.end());
 				IDxcCompilerArgs* CompilationArguments = nullptr;
