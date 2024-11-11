@@ -16,11 +16,11 @@ namespace Eternal
 		class CommandQueue;
 		class GraphicsContext;
 
-		class D3D12SwapChain final : public SwapChain
+		class D3D12WindowsSwapChain final : public SwapChain
 		{
 		public:
-			D3D12SwapChain(_In_ GraphicsContext& InContext);
-			virtual ~D3D12SwapChain() override final;
+			D3D12WindowsSwapChain(_In_ GraphicsContext& InContext);
+			virtual ~D3D12WindowsSwapChain() override final;
 
 			virtual void Acquire(_In_ GraphicsContext& InContext) override final;
 			virtual void Present(_In_ GraphicsContext& InContext) override final;

@@ -6,7 +6,7 @@
 #include "d3d12/D3D12Device.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "Graphics/Fence.hpp"
-
+#include <string>
 #if ETERNAL_USE_DEBUG_VERBOSE
 #include "Log/Log.hpp"
 #include <sstream>
@@ -17,7 +17,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		void LogDescriptorHeap(_In_ const string& InDescriptorHeapName, _In_ ID3D12DescriptorHeap* InDescriptorHeap, _In_ uint32_t InDescriptorCount, _In_ uint32_t InDescriptorSize)
+		void LogDescriptorHeap(_In_ const std::string& InDescriptorHeapName, _In_ ID3D12DescriptorHeap* InDescriptorHeap, _In_ uint32_t InDescriptorCount, _In_ uint32_t InDescriptorSize)
 		{
 			(void)InDescriptorHeapName;
 			(void)InDescriptorHeap;
@@ -38,8 +38,8 @@ namespace Eternal
 #endif
 		}
 
-		D3D12GraphicsContext::D3D12GraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation)
-			: WindowsGraphicsContext(InWindowsGraphicsContextCreateInformation)
+		D3D12GraphicsContext::D3D12GraphicsContext(_In_ const GraphicsContextCreateInformation& InCreateInformation, _In_ OutputDevice& InOutputDevice)
+			: GraphicsContext(InCreateInformation, InOutputDevice)
 		{
 			using namespace Eternal::Graphics::D3D12;
 

@@ -19,7 +19,9 @@ namespace Eternal
 
 		class VulkanDescriptorTable;
 
-		class VulkanGraphicsContext final : public WindowsGraphicsContext
+		class VulkanGraphicsContext final
+			: public WindowsGraphicsContext
+			, public GraphicsContext
 		{
 		public:
 

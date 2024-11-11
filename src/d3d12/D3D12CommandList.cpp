@@ -17,7 +17,6 @@
 #include "d3d12/D3D12ShaderTable.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12View.hpp"
-#include "WinPixEventRuntime/pix3.h"
 #include <array>
 #include <string>
 
@@ -85,7 +84,9 @@ namespace Eternal
 		{
 			(void)InContext;
 			(void)InEventName;
+#if ETERNAL_USE_PIX
 			PIXBeginEvent(_GraphicCommandList6, 0, InEventName);
+#endif
 
 #if ETERNAL_USE_NVIDIA_AFTERMATH
 			static_cast<D3D12Device&>(InContext.GetDevice()).GetNVIDIANsightAftermath().SetEventMarker(_AftermathContext, InEventName);
@@ -95,7 +96,9 @@ namespace Eternal
 		void D3D12CommandList::EndEvent(_In_ GraphicsContext& InContext)
 		{
 			(void)InContext;
+#if ETERNAL_USE_PIX
 			PIXEndEvent(_GraphicCommandList6);
+#endif
 		}
 
 		void D3D12CommandList::Begin(_In_ GraphicsContext& InContext)
@@ -209,18 +212,7 @@ namespace Eternal
 				D3D12_RENDER_PASS_FLAG_NONE
 			);
 
-			const Viewport& InViewport = InRenderPass.GetViewport();
-			SetViewport(InViewport);
-
-			D3D12_RECT ScissorRectangle;
-			ScissorRectangle.left			= InViewport.GetX();
-			ScissorRectangle.top			= InViewport.GetY();
-			ScissorRectangle.right			= InViewport.GetWidth();
-			ScissorRectangle.bottom			= InViewport.GetHeight();
-
-			_GraphicCommandList6->RSSetScissorRects(
-				1, &ScissorRectangle
-			);
+			_SetViewport(InRenderPass);
 		}
 
 		void D3D12CommandList::EndRenderPass()
@@ -537,6 +529,22 @@ namespace Eternal
 			BuildRaytracingAccelerationStructureDescription.DestAccelerationStructureData		= static_cast<D3D12Resource*>(InAccelerationStructure.GetAccelerationStructure())->GetD3D12Resource()->GetGPUVirtualAddress();
 			BuildRaytracingAccelerationStructureDescription.ScratchAccelerationStructureData	= static_cast<D3D12Resource*>(InContext.GetScratchAccelerationStructureBuffer())->GetD3D12Resource()->GetGPUVirtualAddress();
 			_GraphicCommandList6->BuildRaytracingAccelerationStructure(&BuildRaytracingAccelerationStructureDescription, 0, nullptr);
+		}
+
+		void D3D12CommandList::_SetViewport(_In_ const RenderPass& InRenderPass)
+		{
+			const Viewport& InViewport = InRenderPass.GetViewport();
+			SetViewport(InViewport);
+
+			D3D12_RECT ScissorRectangle;
+			ScissorRectangle.left			= InViewport.GetX();
+			ScissorRectangle.top			= InViewport.GetY();
+			ScissorRectangle.right			= InViewport.GetWidth();
+			ScissorRectangle.bottom			= InViewport.GetHeight();
+
+			_GraphicCommandList6->RSSetScissorRects(
+				1, &ScissorRectangle
+			);
 		}
 
 		void D3D12CommandList::_CopyResourceToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion)

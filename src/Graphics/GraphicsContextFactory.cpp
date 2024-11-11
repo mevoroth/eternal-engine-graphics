@@ -3,7 +3,7 @@
 #include "Null/NullGraphicsContext.hpp"
 #include "Proxy/ProxyGraphicsContext.hpp"
 #if ETERNAL_PLATFORM_WINDOWS
-#include "d3d12/D3D12GraphicsContext.hpp"
+#include "d3d12/D3D12WindowsGraphicsContext.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #endif
 
@@ -27,7 +27,7 @@ namespace Eternal
 			{
 #if ETERNAL_ENABLE_D3D12
 			case DeviceType::DEVICE_TYPE_D3D12:
-				Context = new D3D12GraphicsContext(InWindowsGraphicsContextCreateInformation);
+				Context = new D3D12WindowsGraphicsContext(InWindowsGraphicsContextCreateInformation);
 				break;
 #endif
 #if ETERNAL_ENABLE_VULKAN

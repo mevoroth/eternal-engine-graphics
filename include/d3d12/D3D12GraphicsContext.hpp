@@ -1,10 +1,9 @@
 #pragma once
 
+#include "Graphics/GraphicsContext.hpp"
+
 #if ETERNAL_ENABLE_D3D12
 
-#if ETERNAL_PLATFORM_WINDOWS
-#include "Windows/WindowsGraphicsContext.hpp"
-#endif
 #include "Bit/BitField.hpp"
 #include "d3d12/D3D12Utils.hpp"
 
@@ -17,9 +16,10 @@ namespace Eternal
 	{
 		using namespace Eternal::Bit;
 
-		class D3D12GraphicsContext final : public WindowsGraphicsContext
+		class D3D12GraphicsContext : public GraphicsContext
 		{
 		public:
+
 			static constexpr uint32_t MaxConstantBufferViewCount	= 2048;
 			static constexpr uint32_t MaxShaderResourceViewCount	= 16384;
 			static constexpr uint32_t MaxUnorderedAccessViewCount	= 2048;
@@ -27,7 +27,6 @@ namespace Eternal
 			static constexpr uint32_t MaxRenderTargetViewCount		= 2048;
 			static constexpr uint32_t MaxDepthStencilViewCount		= 256;
 
-			D3D12GraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation);
 			~D3D12GraphicsContext();
 
 			virtual void ResetFrameStates() override final;
@@ -51,7 +50,12 @@ namespace Eternal
 			inline ID3D12DescriptorHeap* GetRenderTargetViewDescriptorHeap() { return _RenderTargetViewDescriptorHeap; }
 			inline ID3D12DescriptorHeap* GetDepthStencilViewDescriptorHeap() { return _DepthStencilViewDescriptorHeap; }
 
+		protected:
+
+			D3D12GraphicsContext(_In_ const GraphicsContextCreateInformation& InCreateInformation, _In_ OutputDevice& InOutputDevice);
+
 		private:
+
 			uint32_t _CBV_SRV_UAV_DescriptorHandleIncrementSize		= 0;
 			uint32_t _SamplerDescriptorHandleIncrementSize			= 0;
 			uint32_t _RenderTargetViewDescriptorHandleIncrementSize	= 0;

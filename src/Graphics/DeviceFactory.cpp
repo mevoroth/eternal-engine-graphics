@@ -81,7 +81,7 @@ namespace Eternal
 #if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
 			if (InDeviceType == DeviceType::DEVICE_TYPE_D3D12)
 			{
-				D3D12Device::Destroy();
+				D3D12WindowsDevice::Destroy();
 				D3D12Shader::Destroy();
 			}
 #endif

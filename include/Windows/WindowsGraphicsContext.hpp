@@ -21,13 +21,13 @@ namespace Eternal
 			WindowsArguments Arguments;
 		};
 
-		class WindowsGraphicsContext : public GraphicsContext
+		class WindowsGraphicsContext
 		{
 		public:
 
 			WindowsGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InGraphicsContextCreateInformation);
 
-		private:
+		protected:
 
 			WindowsOutputDeviceCreateInformation	_WindowsOutputDeviceCreateInformation;
 			WindowsOutputDevice						_WindowsOutputDevice;

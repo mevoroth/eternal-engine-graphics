@@ -16,10 +16,8 @@ namespace Eternal
 				InGraphicsContextCreateInformation.Settings.Height
 			)
 			, _WindowsOutputDevice(_WindowsOutputDeviceCreateInformation)
-			, GraphicsContext(InGraphicsContextCreateInformation, _WindowsOutputDevice)
 		{
 			_WindowsOutputDevice.Create(InGraphicsContextCreateInformation.Arguments.WindowEventsHandler);
-
 		}
 	}
 }

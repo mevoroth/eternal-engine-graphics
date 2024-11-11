@@ -13,6 +13,7 @@ namespace Eternal
 
 		VulkanGraphicsContext::VulkanGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsCreateInformation)
 			: WindowsGraphicsContext(InWindowsGraphicsCreateInformation)
+			, GraphicsContext(InWindowsGraphicsCreateInformation, _WindowsOutputDevice)
 			, _ConstantHandles(static_cast<VulkanDevice&>(GetDevice()).GetPushConstantMaxSize())
 		{
 			vk::SemaphoreCreateInfo SemaphoreInfo;

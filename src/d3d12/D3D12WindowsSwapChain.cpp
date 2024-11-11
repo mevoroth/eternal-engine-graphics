@@ -1,10 +1,11 @@
-#if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
+#include "d3d12/D3D12WindowsSwapChain.hpp"
 
-#include "d3d12/D3D12SwapChain.hpp"
+#if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
 
 #include <cwchar>
 #include "Graphics/Format.hpp"
 #include "d3d12/D3D12Library.h"
+#include "d3d12/D3D12WindowsDevice.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Resource.hpp"
@@ -19,7 +20,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		D3D12SwapChain::D3D12SwapChain(_In_ GraphicsContext& InContext)
+		D3D12WindowsSwapChain::D3D12WindowsSwapChain(_In_ GraphicsContext& InContext)
 			: SwapChain()
 			, _BackBuffersCount(GraphicsContext::FrameBufferingCount)
 		{
@@ -49,7 +50,7 @@ namespace Eternal
 																| (InOutputDevice.GetVSync() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : DXGI_SWAP_CHAIN_FLAG(0));
 
 			VerifySuccess(
-				D3D12Device::GetDXGIFactory()->CreateSwapChain(static_cast<D3D12CommandQueue&>(InContext.GetGraphicsQueue()).GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain)
+				D3D12WindowsDevice::GetDXGIFactory()->CreateSwapChain(static_cast<D3D12CommandQueue&>(InContext.GetGraphicsQueue()).GetD3D12CommandQueue(), &SwapChainDesc, &_SwapChain)
 			);
 
 			VerifySuccess(
@@ -112,18 +113,27 @@ namespace Eternal
 			}
 		}
 
-		D3D12SwapChain::~D3D12SwapChain()
+		D3D12WindowsSwapChain::~D3D12WindowsSwapChain()
 		{
+			for (uint32_t BackBufferIndex = 0; BackBufferIndex < _BackBuffersCount; ++BackBufferIndex)
+			{
+				delete _BackBufferRenderTargetViews[BackBufferIndex];
+				_BackBufferRenderTargetViews[BackBufferIndex] = nullptr;
+
+				delete _BackBuffers[BackBufferIndex];
+				_BackBuffers[BackBufferIndex] = nullptr;
+			}
+
 			_SwapChain->Release();
 			_SwapChain = nullptr;
 		}
 
-		void D3D12SwapChain::Acquire(_In_ GraphicsContext& InContext)
+		void D3D12WindowsSwapChain::Acquire(_In_ GraphicsContext& InContext)
 		{
 			InContext.GetCurrentFrameIndex() = _SwapChain3->GetCurrentBackBufferIndex();
 		}
 
-		void D3D12SwapChain::Present(_In_ GraphicsContext& InContext)
+		void D3D12WindowsSwapChain::Present(_In_ GraphicsContext& InContext)
 		{
 			using namespace Eternal::Graphics::D3D12;
 

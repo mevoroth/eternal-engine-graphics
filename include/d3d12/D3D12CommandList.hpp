@@ -45,7 +45,7 @@ namespace Eternal
 			_In_ D3D12_GPU_DESCRIPTOR_HANDLE	BaseDescriptor
 		);
 
-		class D3D12CommandList final : public CommandList
+		class D3D12CommandList : public CommandList
 		{
 		public:
 			D3D12CommandList(_In_ Device& InDevice, _In_ CommandAllocator& InCommandAllocator);
@@ -59,8 +59,8 @@ namespace Eternal
 			virtual void Begin(_In_ GraphicsContext& InContext) override final;
 			virtual void End() override final;
 			
-			virtual void BeginRenderPass(_In_ const RenderPass& InRenderPass) override final;
-			virtual void EndRenderPass() override final;
+			virtual void BeginRenderPass(_In_ const RenderPass& InRenderPass) override;
+			virtual void EndRenderPass() override;
 
 			virtual void Transition(_In_ ResourceTransition InResourceTransitions[], _In_ uint32_t InResourceTransitionsCount) override final;
 			virtual void TransitionUAV(_In_ Resource* InResources[], _In_ uint32_t InResourcesCount) override final;
@@ -90,6 +90,12 @@ namespace Eternal
 			inline D3D12CommandAllocator& GetD3D12CommandAllocator() { return static_cast<D3D12CommandAllocator&>(GetCommandAllocator()); }
 			inline D3D12Device& GetD3D12Device() { return static_cast<D3D12Device&>(GetDevice()); }
 
+		protected:
+
+			void _SetViewport(_In_ const RenderPass& InRenderPass);
+
+			ID3D12GraphicsCommandList6*	_GraphicCommandList6	= nullptr;
+
 		private:
 			void _CopyResourceToTexture(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
 			void _CopyResourceToBuffer(_In_ const Resource& InDestinationResource, _In_ const Resource& InSourceResource, _In_ const CopyRegion& InCopyRegion);
@@ -102,7 +108,6 @@ namespace Eternal
 			>
 			void _SetDescriptorTable(_In_ GraphicsContext& InContext, _In_ DescriptorTable& InDescriptorTable);
 
-			ID3D12GraphicsCommandList6*	_GraphicCommandList6	= nullptr;
 #if ETERNAL_USE_NVIDIA_AFTERMATH
 			NVIDIA::NVIDIANsightAftermathContext	_AftermathContext;
 #endif
