@@ -253,17 +253,15 @@ namespace Eternal
 		}
 
 		template<typename PipelineStateDescriptionType>
-		static bool InitializePipelineStateDescription(_In_ const D3D12Device& InD3D12Device, _In_ const PipelineCreateInformation& InPipelineCreateInformation, _Inout_ PipelineStateDescriptionType& InOutPipelineStateDesc)
+		static void InitializePipelineStateDescription(_In_ const D3D12Device& InD3D12Device, _In_ const PipelineCreateInformation& InPipelineCreateInformation, _Inout_ PipelineStateDescriptionType& InOutPipelineStateDesc)
 		{
-			if (!InPipelineCreateInformation.ShaderPixel || !InPipelineCreateInformation.ShaderPixel->IsShaderCompiled())
-				return false;
-			
 			const DepthTest& InDepthTest											= InPipelineCreateInformation.PipelineDepthStencil.GetDepthTest();
 			const StencilTest& InStencilTest										= InPipelineCreateInformation.PipelineDepthStencil.GetStencilTest();
 
 			InOutPipelineStateDesc.pRootSignature									= static_cast<const D3D12RootSignature*>(InPipelineCreateInformation.PipelineRootSignature)->GetD3D12RootSignature();
 
-			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderPixel)->GetD3D12Shader(InOutPipelineStateDesc.PS);
+			if (InPipelineCreateInformation.ShaderPixel)
+				static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderPixel)->GetD3D12Shader(InOutPipelineStateDesc.PS);
 
 			const Rasterizer& InRasterizer = InPipelineCreateInformation.PipelineRasterizer;
 
@@ -300,6 +298,11 @@ namespace Eternal
 			const LogicBlend& InLogicBlend = InPipelineCreateInformation.PipelineRenderPass->GetLogicBlend();
 			const vector<RenderTargetInformation>& InRenderTargets = InPipelineCreateInformation.PipelineRenderPass->GetRenderTargets();
 
+			if (InPipelineCreateInformation.ShaderPixel)
+			{
+				ETERNAL_ASSERT(InRenderTargets.size() > 0);
+			}
+
 			uint32_t RenderTargetIndex = 0;
 			for (; RenderTargetIndex < InRenderTargets.size(); ++RenderTargetIndex)
 			{
@@ -320,6 +323,11 @@ namespace Eternal
 			InOutPipelineStateDesc.NumRenderTargets									= static_cast<UINT>(InRenderTargets.size());
 			
 			const View* DepthStencilView											= InPipelineCreateInformation.PipelineRenderPass->GetDepthStencilRenderTarget();
+			if (!InPipelineCreateInformation.ShaderPixel)
+			{
+				ETERNAL_ASSERT(DepthStencilView);
+			}
+			
 			InOutPipelineStateDesc.DSVFormat										= DepthStencilView ? ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format : DXGI_FORMAT_UNKNOWN;
 	
 			InOutPipelineStateDesc.SampleDesc.Count									= 1;
@@ -332,8 +340,6 @@ namespace Eternal
 			InOutPipelineStateDesc.CachedPSO.CachedBlobSizeInBytes					= 0;
 
 			InOutPipelineStateDesc.Flags											= D3D12_PIPELINE_STATE_FLAG_NONE;
-
-			return true;
 		}
 		
 		static void ConditionalGetD3D12Shader(_In_ Shader* InShader, _Out_ D3D12_SHADER_BYTECODE& OutShaderByteCode)
@@ -357,8 +363,7 @@ namespace Eternal
 
 			D3D12_GRAPHICS_PIPELINE_STATE_DESC PipelineStateDescription	= {};
 
-			if (!InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDescription))
-				return;
+			InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDescription);
 
 			const vector<D3D12_INPUT_ELEMENT_DESC>& InputElements		= static_cast<D3D12InputLayout*>(InPipelineCreateInformation.PipelineInputLayout)->GetD3D12InputElements();
 			PipelineStateDescription.InputLayout.pInputElementDescs		= InputElements.size() ? InputElements.data() : nullptr;
@@ -427,8 +432,7 @@ namespace Eternal
 
 			D3DX12_MESH_SHADER_PIPELINE_STATE_DESC PipelineStateDesc = {};
 
-			if (!InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDesc))
-				return;
+			InitializePipelineStateDescription(InD3DDevice, InPipelineCreateInformation, PipelineStateDesc);
 
 			static_cast<D3D12Shader*>(InPipelineCreateInformation.ShaderMesh)->GetD3D12Shader(PipelineStateDesc.MS);
 			if (InPipelineCreateInformation.ShaderAmplification)
