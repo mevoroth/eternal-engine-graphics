@@ -452,7 +452,6 @@ namespace Eternal
 				}
 			}
 
-
 			D3D12_FEATURE_DATA_FORMAT_INFO FeatureFormatInfos[FormatsCount];
 			for (uint32_t FormatType = 0; FormatType < FormatsCount; ++FormatType)
 			{
@@ -477,6 +476,12 @@ namespace Eternal
 			D3D12_HEAP_PROPERTIES DefaultHeapProperties		= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_DEFAULT);
 			D3D12_HEAP_PROPERTIES UploadHeapProperties		= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_UPLOAD);
 			D3D12_HEAP_PROPERTIES ReadbackHeapProperties	= _Device->GetCustomHeapProperties(_DeviceMask, D3D12_HEAP_TYPE_READBACK);
+
+			D3D12_FEATURE_DATA_D3D12_OPTIONS5 D3D12FeatureDataD3D12Options5 = {};
+			VerifySuccess(
+				_Device5->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS5, &D3D12FeatureDataD3D12Options5, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS5))
+			);
+			IsRayTracingSupported = D3D12FeatureDataD3D12Options5.RaytracingTier > D3D12_RAYTRACING_TIER_NOT_SUPPORTED;
 		}
 
 		D3D12WindowsDevice::~D3D12WindowsDevice()
