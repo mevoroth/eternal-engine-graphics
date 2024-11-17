@@ -29,6 +29,7 @@ namespace Eternal
 		{
 			static constexpr bool LoadPixDLLOnStartup	= true;
 			static constexpr bool UseValidationLayer	= true;
+			static constexpr bool UseRayTracing			= false;
 		}
 
 #if ETERNAL_USE_DEBUG_LAYER
@@ -482,6 +483,7 @@ namespace Eternal
 				_Device5->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS5, &D3D12FeatureDataD3D12Options5, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS5))
 			);
 			IsRayTracingSupported = D3D12FeatureDataD3D12Options5.RaytracingTier > D3D12_RAYTRACING_TIER_NOT_SUPPORTED;
+			IsRayTracingSupported = D3D12FeatureDataD3D12Options5.RaytracingTier > D3D12_RAYTRACING_TIER_NOT_SUPPORTED && UseRayTracing;
 		}
 
 		D3D12WindowsDevice::~D3D12WindowsDevice()
