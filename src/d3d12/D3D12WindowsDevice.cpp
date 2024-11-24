@@ -112,11 +112,11 @@ namespace Eternal
 						ETERNAL_ASSERT(HResult == S_OK);
 					}
 
-					//for (uint32_t MessageId = D3D12_MESSAGE_ID_UNKNOWN; MessageId <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageId)
-					//{
-					//	hr = _DXGIInfoQueue->SetBreakOnID(DebugID, (DXGI_INFO_QUEUE_MESSAGE_ID)MessageId, TRUE);
-					//	ETERNAL_ASSERT(hr == S_OK);
-					//}
+					for (uint32_t MessageId = D3D12_MESSAGE_ID_UNKNOWN; MessageId <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageId)
+					{
+						HResult = _DXGIInfoQueue->SetBreakOnID(DXGI_DEBUG_DXGI, (DXGI_INFO_QUEUE_MESSAGE_ID)MessageId, TRUE);
+						ETERNAL_ASSERT(HResult == S_OK);
+					}
 				}
 			}
 
