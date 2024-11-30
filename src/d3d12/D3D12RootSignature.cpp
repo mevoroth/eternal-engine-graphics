@@ -41,7 +41,7 @@ namespace Eternal
 			RootVersionedSignatureDescription.Desc_1_1.pParameters			= nullptr;
 			RootVersionedSignatureDescription.Desc_1_1.NumStaticSamplers	= 0;
 			RootVersionedSignatureDescription.Desc_1_1.pStaticSamplers		= nullptr;
-			RootVersionedSignatureDescription.Desc_1_1.Flags				= IsLocalRootSignature ? D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE : D3D12_ROOT_SIGNATURE_FLAG_NONE;
+			RootVersionedSignatureDescription.Desc_1_1.Flags				= IsLocalRootSignature && InDevice.SupportsRayTracing() ? D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE : D3D12_ROOT_SIGNATURE_FLAG_NONE;
 
 			ID3DBlob* RootSignatureBlob	= nullptr;
 			ID3DBlob* ErrorBlob			= nullptr;
@@ -66,7 +66,10 @@ namespace Eternal
 				)
 			);
 
-			VerifySuccess(_RootSignature->SetName(IsLocalRootSignature ? L"EmptyLocalRootSignature" : L"EmptyRootSignature"));
+			if (!IsLocalRootSignature)
+				VerifySuccess(_RootSignature->SetName(L"EmptyRootSignature"));
+			else
+				VerifySuccess(_RootSignature->SetName(InDevice.SupportsRayTracing() ? L"EmptyLocalRootSignature" : L"EmptyRootSignature[No RayTracing fallback]"));
 
 			if (RootSignatureBlob)
 			{
