@@ -18,8 +18,4 @@
 
 #define USE_PIX									(1)
 
-#include <cstdint>
-#include <vector>
-#include "Macros/Macros.hpp"
-
 // TODO: Rasterizer Ordered Views research
