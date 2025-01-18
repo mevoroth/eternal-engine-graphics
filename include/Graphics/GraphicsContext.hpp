@@ -204,5 +204,7 @@ namespace Eternal
 			uint32_t _CurrentFrameIndex				= FrameBufferingCount - 1; // During first frame, this will be set correct within range
 			uint32_t _CurrentGraphicsCommandIndex	= 0;
 		};
+
+		void DestroyGraphicsContextCreateInformation(_Inout_ GraphicsContextCreateInformation*& InOutGraphicsContextCreateInformation);
 	}
 }

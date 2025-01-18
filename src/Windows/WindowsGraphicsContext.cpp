@@ -19,6 +19,12 @@ namespace Eternal
 		{
 			_WindowsOutputDevice.Create(InGraphicsContextCreateInformation.Arguments.WindowEventsHandler);
 		}
+
+		void DestroyGraphicsContextCreateInformation(_Inout_ GraphicsContextCreateInformation*& InOutGraphicsContextCreateInformation)
+		{
+			delete InOutGraphicsContextCreateInformation;
+			InOutGraphicsContextCreateInformation = nullptr;
+		}
 	}
 }
 
