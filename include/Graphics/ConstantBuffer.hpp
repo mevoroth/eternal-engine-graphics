@@ -53,6 +53,11 @@ namespace Eternal
 				return *ResourceView;
 			}
 
+			Resource* GetResource()
+			{
+				return *ResourceBuffer;
+			}
+
 			MultiBuffered<Resource>*	ResourceBuffer	= nullptr;
 			MultiBuffered<View>*		ResourceView	= nullptr;
 		};
