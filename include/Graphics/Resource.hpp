@@ -364,13 +364,13 @@ namespace Eternal
 			MapScope(_In_ Resource& InResource, _In_ const MapRange& InRange)
 				: _Resource(InResource)
 				, _Range(InRange)
-				, _DataPointer(InResource.Map<ResourceStructureType>(InRange))
+				, _DataPointer(InResource.Map<uint8_t>(InRange))
 			{
 			}
 			MapScope(_In_ Resource& InResource)
 				: _Resource(InResource)
-				, _Range(sizeof(ResourceStructureType))
-				, _DataPointer(InResource.Map<ResourceStructureType>(_Range))
+				, _Range(InResource.GetBufferStride())
+				, _DataPointer(InResource.Map<uint8_t>(_Range))
 			{
 			}
 			~MapScope()
@@ -378,18 +378,18 @@ namespace Eternal
 				_Resource.Unmap(_Range);
 			}
 
-			ResourceStructureType* GetDataPointer() const { return _DataPointer; }
-			ResourceStructureType* operator->() const { return _DataPointer; }
+			ResourceStructureType* GetDataPointer() const { return reinterpret_cast<ResourceStructureType*>(_DataPointer); }
+			ResourceStructureType* operator->() const { return reinterpret_cast<ResourceStructureType*>(_DataPointer); }
 			ResourceStructureType& operator[](_In_ uint32_t ElementIndex)
 			{
-				ETERNAL_ASSERT(ElementIndex * sizeof(ResourceStructureType) < _Range.MapSize);
-				return _DataPointer[ElementIndex];
+				ETERNAL_ASSERT(ElementIndex * _Resource.GetBufferStride() < _Range.MapSize);
+				return *reinterpret_cast<ResourceStructureType*>(&_DataPointer[ElementIndex * _Resource.GetBufferStride()]);
 			}
 
 		private:
-			Resource&				_Resource;
-			MapRange				_Range;
-			ResourceStructureType*	_DataPointer = nullptr;
+			Resource&	_Resource;
+			MapRange	_Range;
+			uint8_t*	_DataPointer = nullptr;
 		};
 	}
 }
