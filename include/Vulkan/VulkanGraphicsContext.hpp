@@ -53,7 +53,11 @@ namespace Eternal
 			void AllocateConstantHandles(_In_ uint32_t ConstantCount, _Out_ vector<Handle>& OutHandles);
 			void ReleaseConstantHandles(_Inout_ vector<Handle>& InOutHandles);
 			inline void RegisterVulkanDescriptorTable(_In_ VulkanDescriptorTable* InDescriptorTable) { _DescriptorTables.push_back(InDescriptorTable); }
-			inline void UnregisterVulkanDescriptorTable(_In_ VulkanDescriptorTable* InDescriptorTable) { std::vector<VulkanDescriptorTable*>::iterator Dummy = std::remove(_DescriptorTables.begin(), _DescriptorTables.end(), InDescriptorTable); }
+			inline void UnregisterVulkanDescriptorTable(_In_ VulkanDescriptorTable* InDescriptorTable)
+			{
+				std::vector<VulkanDescriptorTable*>::iterator DescriptorTableIterator = std::find(_DescriptorTables.begin(), _DescriptorTables.end(), InDescriptorTable);
+				_DescriptorTables.erase(DescriptorTableIterator);
+			}
 
 			const vk::DescriptorPool& GetVulkanDescriptorPool() const { return _DescriptorPool; }
 			vk::Semaphore& GetCurrentFrameSemaphore() { return _AcquireFrameSemaphores[GetCurrentFrameIndex()]; }
