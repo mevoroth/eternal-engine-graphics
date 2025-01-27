@@ -294,9 +294,11 @@ namespace Eternal
 				D3D12_DRED_AUTO_BREADCRUMBS_OUTPUT1	DredAutoBreadcrumbsOutput1	= {};
 				D3D12_DRED_PAGE_FAULT_OUTPUT1		DredPageFaultOutput1		= {};
 
+				HRESULT DeviceRemovedReason = S_OK;
+
 				if (D3D12Device::UseDRED)
 				{
-					HRESULT DeviceRemovedReason = static_cast<D3D12Device&>(InDevice).GetD3D12Device5()->GetDeviceRemovedReason();
+					DeviceRemovedReason = static_cast<D3D12Device&>(InDevice).GetD3D12Device5()->GetDeviceRemovedReason();
 					if (DeviceRemovedReason == DXGI_ERROR_DEVICE_HUNG)
 					{
 						ID3D12DeviceRemovedExtendedData1* Dred1 = nullptr;
