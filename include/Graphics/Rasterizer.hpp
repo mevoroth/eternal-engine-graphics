@@ -53,6 +53,8 @@ namespace Eternal
 			inline float GetDepthBiasSlopeScale() const { return _DepthBiasSlopeScale; }
 			inline bool GetConservativeRasterization() const { return _ConservativeRasterization; }
 
+			inline void SetCullMode(_In_ const CullMode& InCull) { _Cull = InCull; }
+
 		private:
 			FillMode _Fill					= FillMode::FILL_MODE_SOLID;
 			CullMode _Cull					= CullMode::CULL_MODE_BACK;
