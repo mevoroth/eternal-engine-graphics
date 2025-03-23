@@ -571,7 +571,7 @@ namespace Eternal
 					wcstombs_s(nullptr, PDBName, StringPointer, 256);
 					string PDBPath = FilePath::FindOrCreate(PDBName, FileType::FILE_TYPE_SHADERS_PDB);
 					File* PDBFile = CreateFileHandle(PDBPath);
-					PDBFile->Open(File::OpenMode::WRITE);
+					PDBFile->Open(FileOpenMode::FILE_OPEN_MODE_WRITE);
 					PDBFile->Write(reinterpret_cast<uint8_t*>(PDBBlob->GetBufferPointer()), PDBBlob->GetBufferSize());
 					PDBFile->Close();
 					DestroyFileHandle(PDBFile);

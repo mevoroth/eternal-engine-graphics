@@ -528,7 +528,7 @@ namespace Eternal
 			}
 
 			File* PipelinesLibraryFile = CreateFileHandle(PipelinesLibraryFileName);
-			PipelinesLibraryFile->Open(InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_WRITE ? File::OpenMode::WRITE : File::OpenMode::READ);
+			PipelinesLibraryFile->Open(InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_WRITE ? FileOpenMode::FILE_OPEN_MODE_WRITE : FileOpenMode::FILE_OPEN_MODE_READ);
 
 			_PipelineLibrary.SerializePipelineLibrary(*this, PipelinesLibraryFile);
 
