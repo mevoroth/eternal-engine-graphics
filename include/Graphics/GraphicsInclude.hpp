@@ -36,6 +36,7 @@
 #include "Graphics/StencilTest.hpp"
 #include "Graphics/StructuredBuffer.hpp"
 #include "Graphics/Texture.hpp"
+#include "Graphics/VertexBuffer.hpp"
 #include "Graphics/View.hpp"
 #include "Graphics/ViewFactory.hpp"
 #include "Graphics/ViewportFactory.hpp"
