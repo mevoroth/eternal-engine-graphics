@@ -4,28 +4,15 @@
 
 namespace EternalEngine
 {
-	[Sharpmake.Generate]
-	public class EternalEngineGraphicsProject : EternalEngineBaseProject
+	public class EternalEngineGraphicsProjectUtils
 	{
-		static readonly string[] SpecialFilterPrefixes = new string[] {
+		public static readonly string[] SpecialFilterPrefixes = new string[] {
 			@"GraphicsPrivate\include",
 			@"GraphicsPrivate\src",
 		};
 
-		public EternalEngineGraphicsProject()
-			: base(
-				"graphics",
-				new EternalEngineProjectSettings(
-					EternalEngineProjectSettingsFlags.EEPSF_IncludeSettingsHeader
-				)
-			)
+		public static void ConfigureAll(Project.Configuration InConfiguration, ITarget InTarget)
 		{
-		}
-
-		public override void ConfigureAll(Configuration InConfiguration, Target InTarget)
-		{
-			base.ConfigureAll(InConfiguration, InTarget);
-
 			// Include paths
 			InConfiguration.IncludePaths.Add(new string[] {
 				@"$(SolutionDir)eternal-engine-graphics\GraphicsPrivate\include",
@@ -40,7 +27,7 @@ namespace EternalEngine
 				"ETERNAL_DEBUG_VERBOSE=(ETERNAL_DEBUG &amp;&amp; 1)",
 			});
 
-			if (ExtensionMethods.IsPC(InTarget.Platform))
+			if (ExtensionMethods.IsPC(InTarget.GetFragment<Platform>()))
 			{
 				InConfiguration.IncludePaths.Add(new string[] {
 					@"$(SolutionDir)packages\WinPixEventRuntime." + EternalEngineSettings.WinPixEventRuntimeVersion + @"\Include",
@@ -54,10 +41,60 @@ namespace EternalEngine
 				InConfiguration.ReferencesByNuGetPackage.Add("WinPixEventRuntime", EternalEngineSettings.WinPixEventRuntimeVersion);
 			}
 		}
+	}
+
+	[Sharpmake.Generate]
+	public class EternalEngineGraphicsProject : EternalEngineBaseProject
+	{
+		public EternalEngineGraphicsProject()
+			: base(
+				typeof(Target),
+				"graphics",
+				new EternalEngineProjectSettings(
+					EternalEngineProjectSettingsFlags.EEPSF_IncludeSettingsHeader
+				)
+			)
+		{
+		}
+
+		public override void ConfigureAll(Configuration InConfiguration, ITarget InTarget)
+		{
+			base.ConfigureAll(InConfiguration, InTarget);
+			EternalEngineGraphicsProjectUtils.ConfigureAll(InConfiguration, InTarget);
+		}
 
 		public override bool ResolveFilterPath(string InRelativePath, out string OutFilterPath)
 		{
-			if (InternalResolveFilterPath(InRelativePath, SpecialFilterPrefixes, out OutFilterPath))
+			if (EternalEngineBaseProjectUtils.InternalResolveFilterPath(InRelativePath, EternalEngineGraphicsProjectUtils.SpecialFilterPrefixes, out OutFilterPath))
+				return true;
+
+			return base.ResolveFilterPath(InRelativePath, out OutFilterPath);
+		}
+	}
+
+	[Sharpmake.Generate]
+	public class EternalEngineGraphicsAndroidProject : EternalEngineBaseAndroidProject
+	{
+		public EternalEngineGraphicsAndroidProject()
+			: base(
+				typeof(AndroidTarget),
+				"graphics",
+				new EternalEngineProjectSettings(
+					EternalEngineProjectSettingsFlags.EEPSF_IncludeSettingsHeader
+				)
+			)
+		{
+		}
+
+		public override void ConfigureAll(Configuration InConfiguration, ITarget InTarget)
+		{
+			base.ConfigureAll(InConfiguration, InTarget);
+			EternalEngineGraphicsProjectUtils.ConfigureAll(InConfiguration, InTarget);
+		}
+
+		public override bool ResolveFilterPath(string InRelativePath, out string OutFilterPath)
+		{
+			if (EternalEngineBaseProjectUtils.InternalResolveFilterPath(InRelativePath, EternalEngineGraphicsProjectUtils.SpecialFilterPrefixes, out OutFilterPath))
 				return true;
 
 			return base.ResolveFilterPath(InRelativePath, out OutFilterPath);
