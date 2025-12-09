@@ -27,6 +27,10 @@ namespace EternalEngine
 				"ETERNAL_DEBUG_VERBOSE=(ETERNAL_DEBUG &amp;&amp; 1)",
 			});
 
+			InConfiguration.Defines.Add(new string[] {
+				"ETERNAL_ENABLE_VULKAN=" + (ExtensionMethods.IsPC(InTarget.GetFragment<Platform>()) || EternalEngineBaseProjectUtils.IsAndroid(InTarget) ? "1" : "0"),
+			});
+
 			if (ExtensionMethods.IsPC(InTarget.GetFragment<Platform>()))
 			{
 				InConfiguration.IncludePaths.Add(new string[] {
@@ -34,11 +38,18 @@ namespace EternalEngine
 				});
 
 				InConfiguration.Defines.Add(new string[] {
-					"ETERNAL_ENABLE_VULKAN=1",
 					"VK_USE_PLATFORM_WIN32_KHR=(ETERNAL_ENABLE_VULKAN &amp;&amp; 1)",
 				});
 
 				InConfiguration.ReferencesByNuGetPackage.Add("WinPixEventRuntime", EternalEngineSettings.WinPixEventRuntimeVersion);
+			}
+
+			if (EternalEngineBaseProjectUtils.IsAndroid(InTarget))
+			{
+				InConfiguration.Defines.Add(new string[] {
+				"VK_USE_PLATFORM_ANDROID_KHR=(ETERNAL_ENABLE_VULKAN &amp;&amp; 1)",
+				});
+
 			}
 		}
 	}
