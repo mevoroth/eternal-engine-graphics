@@ -1,9 +1,11 @@
-#if ETERNAL_ENABLE_VULKAN
+#include "Graphics/GraphicsContext.hpp"
+
+#if ETERNAL_PLATFORM_VULKAN
 
 #include "Vulkan/VulkanGraphicsContext.hpp"
-#include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanDescriptorTable.hpp"
+#include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan/VulkanUtils.hpp"
 
 namespace Eternal
 {
@@ -11,14 +13,13 @@ namespace Eternal
 	{
 		using namespace Eternal::Graphics::Vulkan;
 
-		VulkanGraphicsContext::VulkanGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsCreateInformation)
-			: WindowsGraphicsContext(InWindowsGraphicsCreateInformation)
-			, GraphicsContext(InWindowsGraphicsCreateInformation, _WindowsOutputDevice)
-			, _ConstantHandles(static_cast<VulkanDevice&>(GetDevice()).GetPushConstantMaxSize())
+		VulkanGraphicsContext::VulkanGraphicsContext(_In_ GraphicsContext& InContext)
+			: _GraphicsContext(InContext)
+			, _ConstantHandles(static_cast<VulkanDevice&>(_GraphicsContext.GetDevice()).GetPushConstantMaxSize())
 		{
 			vk::SemaphoreCreateInfo SemaphoreInfo;
 
-			vk::Device& VkDevice = static_cast<VulkanDevice&>(GetDevice()).GetVulkanDevice();
+			vk::Device& VkDevice = static_cast<VulkanDevice&>(_GraphicsContext.GetDevice()).GetVulkanDevice();
 			for (int32_t AcquireSemaphoreIndex = 0; AcquireSemaphoreIndex < _AcquireFrameSemaphores.size(); ++AcquireSemaphoreIndex)
 			{
 				VerifySuccess(
@@ -54,21 +55,24 @@ namespace Eternal
 
 		VulkanGraphicsContext::~VulkanGraphicsContext()
 		{
-			WaitForAllFences();
+			_GraphicsContext.WaitForAllFences();
 
-			vk::Device& VkDevice = static_cast<VulkanDevice&>(GetDevice()).GetVulkanDevice();
+			vk::Device& VkDevice = static_cast<VulkanDevice&>(_GraphicsContext.GetDevice()).GetVulkanDevice();
 			for (int32_t AcquireSemaphoreIndex = 0; AcquireSemaphoreIndex < _AcquireFrameSemaphores.size(); ++AcquireSemaphoreIndex)
 			{
 				VkDevice.destroySemaphore(_AcquireFrameSemaphores[AcquireSemaphoreIndex]);
 			}
 		}
 
+		Device& VulkanGraphicsContext::GetDevice()
+		{
+			return _GraphicsContext.GetDevice();
+		}
+
 		void VulkanGraphicsContext::ResetFrameStates()
 		{
-			GraphicsContext::ResetFrameStates();
-
 			for (uint32_t DescriptorTableIndex = 0; DescriptorTableIndex < _DescriptorTables.size(); ++DescriptorTableIndex)
-				_DescriptorTables[DescriptorTableIndex]->Reset(GetCurrentFrameIndex());
+				_DescriptorTables[DescriptorTableIndex]->Reset(_GraphicsContext.GetCurrentFrameIndex());
 		}
 
 		void VulkanGraphicsContext::AllocateConstantHandles(_In_ uint32_t ConstantCount, _Out_ vector<Handle>& OutHandles)

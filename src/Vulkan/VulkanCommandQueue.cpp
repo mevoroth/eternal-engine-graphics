@@ -75,7 +75,7 @@ namespace Eternal
 
 			CommandQueue::SubmitCommandLists(InCommandLists, InCommandListsCount, InContext);
 
-			vk::Semaphore* CurrentFrameSemaphore = InContext ? &static_cast<VulkanGraphicsContext*>(InContext)->GetCurrentFrameSemaphore() : nullptr;
+			vk::Semaphore* CurrentFrameSemaphore = InContext ? &VulkanGraphicsContextCast(InContext)->GetCurrentFrameSemaphore() : nullptr;
 
 			vk::PipelineStageFlags FrameSemaphoreWaitDestStageMask = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 

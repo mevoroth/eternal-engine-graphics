@@ -4,7 +4,7 @@
 #include "Proxy/ProxyGraphicsContext.hpp"
 #if ETERNAL_PLATFORM_WINDOWS
 #include "d3d12/D3D12WindowsGraphicsContext.hpp"
-#include "Vulkan/VulkanGraphicsContext.hpp"
+#include "Vulkan/VulkanWindowsGraphicsContext.hpp"
 #endif
 
 namespace Eternal
@@ -32,7 +32,7 @@ namespace Eternal
 #endif
 #if ETERNAL_ENABLE_VULKAN
 			case DeviceType::DEVICE_TYPE_VULKAN:
-				Context = new VulkanGraphicsContext(InWindowsGraphicsContextCreateInformation);
+				Context = new VulkanWindowsGraphicsContext(InWindowsGraphicsContextCreateInformation);
 				break;
 #endif
 			default:
@@ -41,6 +41,19 @@ namespace Eternal
 			}
 
 			Context->InitializeGraphicsContext();
+
+			return Context;
+		}
+#endif
+
+#if ETERNAL_PLATFORM_ANDROID
+		GraphicsContext* CreateGraphicsContext(_In_ const AndroidGraphicsContextCreateInformation& InAndroidGraphicsContextCreateInformation)
+		{
+			GraphicsContext* Context = nullptr;
+
+			//switch (InAndroidGraphicsContextCreateInformation.Settings.Driver)
+
+			ETERNAL_BREAK();
 
 			return Context;
 		}

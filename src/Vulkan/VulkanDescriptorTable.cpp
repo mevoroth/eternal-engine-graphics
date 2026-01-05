@@ -18,7 +18,7 @@ namespace Eternal
 
 		VulkanDescriptorTable::VulkanDescriptorTable(_In_ GraphicsContext& InContext, _In_ const RootSignature* InRootSignature)
 			: DescriptorTable(InRootSignature)
-			, _Context(static_cast<VulkanGraphicsContext&>(InContext))
+			, _Context(VulkanGraphicsContextCast(InContext))
 			, _DescriptorSetLayout(static_cast<const VulkanRootSignature&>(*InRootSignature).GetVulkanDescriptorSetLayouts()[0])
 		{
 			for (uint32_t FrameIndex = 0; FrameIndex < GraphicsContext::FrameBufferingCount; ++FrameIndex)
@@ -31,7 +31,7 @@ namespace Eternal
 
 		VulkanDescriptorTable::VulkanDescriptorTable(_In_ GraphicsContext& InContext, _In_ const RootSignatureDescriptorTable& InRootSignatureDescriptorTable, _In_ const RootSignature& InRootSignature, _In_ uint32_t InSubDescriptorTableIndex)
 			: DescriptorTable(InRootSignatureDescriptorTable)
-			, _Context(static_cast<VulkanGraphicsContext&>(InContext))
+			, _Context(VulkanGraphicsContextCast(InContext))
 			, _DescriptorSetLayout(static_cast<const VulkanRootSignature&>(InRootSignature).GetVulkanDescriptorSetLayouts()[InSubDescriptorTableIndex])
 		{
 			for (uint32_t FrameIndex = 0; FrameIndex < GraphicsContext::FrameBufferingCount; ++FrameIndex)
@@ -145,11 +145,12 @@ namespace Eternal
 				uint32_t Offset = ConvertHLSLRegisterTypeToVulkanShaderBindingBase(
 					ConvertRootSignatureParameterTypeToHLSLRegisterType(InRootSignatureParameters[ParameterIndex].Parameter)
 				);
+				uint32_t StageOffset = static_cast<uint32_t>(InRootSignatureParameters[ParameterIndex].Access) * (VulkanGraphicsContext::ShaderRegisterSamplersOffset + VulkanGraphicsContext::MaxSamplersCountPerShader);
 				uint32_t RegisterType = ConvertRootSignatureParameterTypeToHLSLRegisterTypeUInt(InRootSignatureParameters[ParameterIndex].Parameter);
 				
 				CurrentWriteDescriptorSet = vk::WriteDescriptorSet(
 					vk::DescriptorSet(),
-					Offset + RegisterIndicesPerType[static_cast<int32_t>(InRootSignatureParameters[ParameterIndex].Access)][RegisterType]++,
+					Offset + StageOffset + RegisterIndicesPerType[static_cast<int32_t>(InRootSignatureParameters[ParameterIndex].Access)][RegisterType]++,
 					0, 1,
 					ConvertRootSignatureParameterTypeToVulkanDescriptorType(InRootSignatureParameters[ParameterIndex].Parameter),
 					VKDescriptorImageInfo,

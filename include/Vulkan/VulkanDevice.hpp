@@ -7,12 +7,18 @@
 #include "Graphics/Device.hpp"
 #include "Graphics/CommandUtils.hpp"
 #include "Vulkan/VulkanUtils.hpp"
+#include <vulkan/vulkan.hpp>
 #include <array>
 
 namespace Eternal
 {
 	namespace Graphics
 	{
+		namespace VulkanPrivate
+		{
+			class EternalDeviceDispatchLoader;
+		}
+
 		using namespace std;
 		class OutputDevice;
 
@@ -99,6 +105,24 @@ namespace Eternal
 			uint32_t							_QueueIndexGraphics			= Vulkan::InvalidQueueIndex;
 			uint32_t							_QueueIndexCompute			= Vulkan::InvalidQueueIndex;
 			uint32_t							_QueueIndexCopy				= Vulkan::InvalidQueueIndex;
+		};
+	}
+}
+
+namespace VULKAN_HPP_NAMESPACE
+{
+	namespace detail
+	{
+		template <>
+		struct isDispatchLoader<Eternal::Graphics::EternalDebugDispatchLoader>
+		{
+			static VULKAN_HPP_CONST_OR_CONSTEXPR bool value = true;
+		};
+
+		template <>
+		struct isDispatchLoader<Eternal::Graphics::VulkanPrivate::EternalDeviceDispatchLoader>
+		{
+			static VULKAN_HPP_CONST_OR_CONSTEXPR bool value = true;
 		};
 	}
 }

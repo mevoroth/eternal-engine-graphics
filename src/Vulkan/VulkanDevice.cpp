@@ -73,10 +73,10 @@ namespace Eternal
 
 		namespace VulkanPrivate
 		{
-			class EternalDispatchLoader
+			class EternalDeviceDispatchLoader
 			{
 			public:
-				EternalDispatchLoader(vk::Instance& InInstance)
+				EternalDeviceDispatchLoader(vk::Instance& InInstance)
 					: _Instance(InInstance)
 				{
 					_vkCreateDebugReport			= (PFN_vkCreateDebugReportCallbackEXT)	_Instance.getProcAddr("vkCreateDebugReportCallbackEXT");
@@ -269,7 +269,7 @@ namespace Eternal
 				nullptr
 			);
 
-			VulkanPrivate::EternalDispatchLoader EternalLoader(_Instance);
+			VulkanPrivate::EternalDeviceDispatchLoader EternalLoader(_Instance);
 			_DebugDispatchLoader = new EternalDebugDispatchLoader(_Instance);
 
 			VerifySuccess(_Instance.createDebugReportCallbackEXT(&DebugReportCallbackInfo, nullptr, &_DebugReportCallback, EternalLoader));

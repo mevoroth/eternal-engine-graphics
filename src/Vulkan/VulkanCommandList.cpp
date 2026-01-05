@@ -51,7 +51,7 @@ namespace Eternal
 		{
 			CommandList::SetName(InContext, InName);
 
-			vk::Device InVulkanDevice = static_cast<VulkanDevice&>(InContext.GetDevice()).GetVulkanDevice();
+			vk::Device InVkDevice = static_cast<VulkanDevice&>(InContext.GetDevice()).GetVulkanDevice();
 
 			VkCommandBuffer CommandBufferHandle = _CommandBuffer;
 			vk::DebugUtilsObjectNameInfoEXT ObjectNameInfo(
@@ -60,7 +60,7 @@ namespace Eternal
 				InName.c_str()
 			);
 
-			VerifySuccess(InVulkanDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InContext.GetDevice()).GetDebugDispatchLoader()));
+			VerifySuccess(InVkDevice.setDebugUtilsObjectNameEXT(&ObjectNameInfo, static_cast<VulkanDevice&>(InContext.GetDevice()).GetDebugDispatchLoader()));
 		}
 
 		void VulkanCommandList::BeginEvent(_In_ GraphicsContext& InContext, _In_ const char* InEventName)

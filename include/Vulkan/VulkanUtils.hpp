@@ -4,7 +4,6 @@
 
 #include "Graphics/StencilTest.hpp"
 #include "Graphics/Types/MemoryType.hpp"
-#include "Graphics/StencilTest.hpp"
 #include "Vulkan/VulkanHeader.hpp"
 
 namespace Eternal
@@ -37,7 +36,9 @@ namespace Eternal
 		enum class FrontFace;
 
 		class BlendState;
+		class GraphicsContext;
 		class Viewport;
+		class VulkanGraphicsContext;
 
 		namespace Vulkan
 		{
@@ -77,6 +78,9 @@ namespace Eternal
 			vk::PolygonMode ConvertFillModeToVulkanPolygonMode(_In_ const FillMode& InFillMode);
 			vk::CullModeFlagBits ConvertCullModeToVulkanCullModeFlags(_In_ const CullMode& InCullMode);
 			vk::FrontFace ConvertFrontFaceToVulkanFrontFace(_In_ const FrontFace& InFrontFace);
+
+			VulkanGraphicsContext& VulkanGraphicsContextCast(_In_ GraphicsContext& InContext);
+			VulkanGraphicsContext* VulkanGraphicsContextCast(_In_ GraphicsContext* InContext);
 
 			inline vk::PipelineStageFlagBits& operator|=(_Inout_ vk::PipelineStageFlagBits& InOutPipelineStageFlags, _In_ const vk::PipelineStageFlagBits& InPipelineStageFlags)
 			{

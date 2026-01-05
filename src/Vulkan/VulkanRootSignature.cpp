@@ -85,9 +85,11 @@ namespace Eternal
 						ConvertRootSignatureParameterTypeToHLSLRegisterType(CurrentParameterType)
 					);
 
+					uint32_t StageOffset = static_cast<uint32_t>(CurrentAccess) * (VulkanGraphicsContext::ShaderRegisterSamplersOffset + VulkanGraphicsContext::MaxSamplersCountPerShader);
+
 					RootBindings.push_back(
 						vk::DescriptorSetLayoutBinding(
-							Offset + RegisterIndicesPerType[static_cast<int32_t>(CurrentAccess)][ConvertRootSignatureParameterTypeToHLSLRegisterTypeUInt(CurrentParameterType)]++,
+							Offset + StageOffset + RegisterIndicesPerType[static_cast<int32_t>(CurrentAccess)][ConvertRootSignatureParameterTypeToHLSLRegisterTypeUInt(CurrentParameterType)]++,
 							ConvertRootSignatureParameterTypeToVulkanDescriptorType(InParameters[ParameterIndex].Parameter),
 							1,
 							ConvertRootSignatureAccessToShaderStageFlags(CurrentAccess),
@@ -190,7 +192,7 @@ namespace Eternal
 #endif
 				};
 
-				static_cast<VulkanGraphicsContext&>(InContext).AllocateConstantHandles(ConstantCount, _ConstantHandles);
+				VulkanGraphicsContextCast(InContext).AllocateConstantHandles(ConstantCount, _ConstantHandles);
 				uint32_t HandleIndexOffset = 0;
 				for (uint32_t ConstantIndex = 0; ConstantIndex < InConstants.size(); ++ConstantIndex)
 				{
@@ -252,7 +254,7 @@ namespace Eternal
 
 		VulkanRootSignature::~VulkanRootSignature()
 		{
-			VulkanGraphicsContext& VkGraphicsContext = static_cast<VulkanGraphicsContext&>(_Context);
+			VulkanGraphicsContext& VkGraphicsContext = Vulkan::VulkanGraphicsContextCast(_Context);
 			vk::Device& VkDevice = static_cast<VulkanDevice&>(_Context.GetDevice()).GetVulkanDevice();
 			VkGraphicsContext.ReleaseConstantHandles(_ConstantHandles);
 			for (uint32_t DescriptorSetLayoutIndex = 0; DescriptorSetLayoutIndex < _DescriptorSetLayouts.size(); ++DescriptorSetLayoutIndex)

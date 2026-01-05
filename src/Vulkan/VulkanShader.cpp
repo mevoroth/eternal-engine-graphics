@@ -182,9 +182,10 @@ namespace Eternal
 				MacroPlatformValue.size()
 			);
 
+			uint32_t StageOffset = static_cast<uint32_t>(InStage) * (VulkanGraphicsContext::ShaderRegisterSamplersOffset + VulkanGraphicsContext::MaxSamplersCountPerShader);
 	
 			static const std::string MacroRegisterOffsetShaderResourcesName		= "REGISTER_OFFSET_SHADER_RESOURCES";
-			static const std::string MacroRegisterOffsetShaderResourcesValue	= std::to_string(VulkanGraphicsContext::ShaderRegisterShaderResourcesOffset);
+			const std::string MacroRegisterOffsetShaderResourcesValue			= std::to_string(StageOffset + VulkanGraphicsContext::ShaderRegisterShaderResourcesOffset);
 			shaderc_compile_options_add_macro_definition(
 				CompilerOptions,
 				MacroRegisterOffsetShaderResourcesName.c_str(),
@@ -194,7 +195,7 @@ namespace Eternal
 			);
 
 			static const std::string MacroRegisterOffsetConstantBuffersName		= "REGISTER_OFFSET_CONSTANT_BUFFERS";
-			static const std::string MacroRegisterOffsetConstantBuffersValue	= std::to_string(VulkanGraphicsContext::ShaderRegisterConstantBuffersOffset);
+			const std::string MacroRegisterOffsetConstantBuffersValue			= std::to_string(StageOffset + VulkanGraphicsContext::ShaderRegisterConstantBuffersOffset);
 			shaderc_compile_options_add_macro_definition(
 				CompilerOptions,
 				MacroRegisterOffsetConstantBuffersName.c_str(),
@@ -204,7 +205,7 @@ namespace Eternal
 			);
 
 			static const std::string MacroRegisterOffsetUnorderedAccessesName	= "REGISTER_OFFSET_UNORDERED_ACCESSES";
-			static const std::string MacroRegisterOffsetUnorderedAccessesValue	= std::to_string(VulkanGraphicsContext::ShaderRegisterUnorderedAccessesOffset);
+			const std::string MacroRegisterOffsetUnorderedAccessesValue			= std::to_string(StageOffset + VulkanGraphicsContext::ShaderRegisterUnorderedAccessesOffset);
 			shaderc_compile_options_add_macro_definition(
 				CompilerOptions,
 				MacroRegisterOffsetUnorderedAccessesName.c_str(),
@@ -214,7 +215,7 @@ namespace Eternal
 			);
 
 			static const std::string MacroRegisterOffsetSamplersName			= "REGISTER_OFFSET_SAMPLERS";
-			static const std::string MacroRegisterOffsetSamplersValue			= std::to_string(VulkanGraphicsContext::ShaderRegisterSamplersOffset);
+			const std::string MacroRegisterOffsetSamplersValue					= std::to_string(StageOffset + VulkanGraphicsContext::ShaderRegisterSamplersOffset);
 			shaderc_compile_options_add_macro_definition(
 				CompilerOptions,
 				MacroRegisterOffsetSamplersName.c_str(),
@@ -223,10 +224,10 @@ namespace Eternal
 				MacroRegisterOffsetSamplersValue.size()
 			);
 
-			shaderc_compile_options_set_binding_base(CompilerOptions, shaderc_uniform_kind_texture,					VulkanGraphicsContext::ShaderRegisterShaderResourcesOffset);
-			shaderc_compile_options_set_binding_base(CompilerOptions, shaderc_uniform_kind_buffer,					VulkanGraphicsContext::ShaderRegisterConstantBuffersOffset);
-			shaderc_compile_options_set_binding_base(CompilerOptions, shaderc_uniform_kind_unordered_access_view,	VulkanGraphicsContext::ShaderRegisterUnorderedAccessesOffset);
-			shaderc_compile_options_set_binding_base(CompilerOptions, shaderc_uniform_kind_sampler,					VulkanGraphicsContext::ShaderRegisterSamplersOffset);
+			shaderc_compile_options_set_binding_base(CompilerOptions, shaderc_uniform_kind_texture,					0);
+			shaderc_compile_options_set_binding_base(CompilerOptions, shaderc_uniform_kind_buffer,					0);
+			shaderc_compile_options_set_binding_base(CompilerOptions, shaderc_uniform_kind_unordered_access_view,	0);
+			shaderc_compile_options_set_binding_base(CompilerOptions, shaderc_uniform_kind_sampler,					0);
 
 			shaderc_compilation_result_t PreprocessedCompilationResult = shaderc_compile_into_preprocessed_text(
 				Compiler,

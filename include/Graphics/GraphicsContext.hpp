@@ -102,6 +102,7 @@ namespace Eternal
 
 			void BeginFrame();
 			void EndFrame();
+			void WaitForAllFences();
 			virtual void ResetFrameStates();
 
 			const GraphicsContextCreateInformation& GetGraphicsContextCreateInformation() { return _GraphicsContextCreateInformation; }
@@ -148,7 +149,6 @@ namespace Eternal
 		protected:
 			GraphicsContext(_In_ const GraphicsContextCreateInformation& InCreateInformation, _In_ OutputDevice& InOutputDevice);
 
-			void WaitForAllFences();
 			ShaderFactory* GetShaderFactory();
 
 		private:

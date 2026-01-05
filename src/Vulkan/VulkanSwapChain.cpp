@@ -19,60 +19,49 @@ namespace Eternal
 	{
 		namespace VulkanPrivate
 		{
-			class EternalDispatchLoader
+			EternalSwapChainDispatchLoader::EternalSwapChainDispatchLoader(_In_ VulkanDevice& InVulkanDevice)
 			{
-			public:
-				EternalDispatchLoader(VulkanDevice& InVulkanDevice)
-				{
-					_vkGetPhysicalDeviceSurfaceSupportKHR		= (PFN_vkGetPhysicalDeviceSurfaceSupportKHR)		InVulkanDevice.GetInstance().getProcAddr("vkGetPhysicalDeviceSurfaceSupportKHR");
-					_vkGetPhysicalDeviceSurfaceCapabilitiesKHR	= (PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR)	InVulkanDevice.GetInstance().getProcAddr("vkGetPhysicalDeviceSurfaceCapabilitiesKHR");
-					_vkGetPhysicalDeviceSurfaceFormatsKHR		= (PFN_vkGetPhysicalDeviceSurfaceFormatsKHR)		InVulkanDevice.GetInstance().getProcAddr("vkGetPhysicalDeviceSurfaceFormatsKHR");
-					_vkGetPhysicalDeviceSurfacePresentModesKHR	= (PFN_vkGetPhysicalDeviceSurfacePresentModesKHR)	InVulkanDevice.GetInstance().getProcAddr("vkGetPhysicalDeviceSurfacePresentModesKHR");
-					_vkGetSwapchainImagesKHR					= (PFN_vkGetSwapchainImagesKHR)						InVulkanDevice.GetInstance().getProcAddr("vkGetSwapchainImagesKHR");
-					ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfaceSupportKHR);
-					ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfaceCapabilitiesKHR);
-					ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfaceFormatsKHR);
-					ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfacePresentModesKHR);
-					ETERNAL_ASSERT(_vkGetSwapchainImagesKHR);
-				}
+				_vkGetPhysicalDeviceSurfaceSupportKHR		= (PFN_vkGetPhysicalDeviceSurfaceSupportKHR)		InVulkanDevice.GetInstance().getProcAddr("vkGetPhysicalDeviceSurfaceSupportKHR");
+				_vkGetPhysicalDeviceSurfaceCapabilitiesKHR	= (PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR)	InVulkanDevice.GetInstance().getProcAddr("vkGetPhysicalDeviceSurfaceCapabilitiesKHR");
+				_vkGetPhysicalDeviceSurfaceFormatsKHR		= (PFN_vkGetPhysicalDeviceSurfaceFormatsKHR)		InVulkanDevice.GetInstance().getProcAddr("vkGetPhysicalDeviceSurfaceFormatsKHR");
+				_vkGetPhysicalDeviceSurfacePresentModesKHR	= (PFN_vkGetPhysicalDeviceSurfacePresentModesKHR)	InVulkanDevice.GetInstance().getProcAddr("vkGetPhysicalDeviceSurfacePresentModesKHR");
+				_vkGetSwapchainImagesKHR					= (PFN_vkGetSwapchainImagesKHR)						InVulkanDevice.GetInstance().getProcAddr("vkGetSwapchainImagesKHR");
+				ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfaceSupportKHR);
+				ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfaceCapabilitiesKHR);
+				ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfaceFormatsKHR);
+				ETERNAL_ASSERT(_vkGetPhysicalDeviceSurfacePresentModesKHR);
+				ETERNAL_ASSERT(_vkGetSwapchainImagesKHR);
+			}
 				
-				size_t getVkHeaderVersion() const
-				{
-					return VK_HEADER_VERSION;
-				}
+			size_t EternalSwapChainDispatchLoader::getVkHeaderVersion() const
+			{
+				return VK_HEADER_VERSION;
+			}
 
-				VkResult vkGetPhysicalDeviceSurfaceSupportKHR(VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex, VkSurfaceKHR surface, VkBool32* pSupported) const VULKAN_HPP_NOEXCEPT
-				{
-					return _vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, queueFamilyIndex, surface, pSupported);
-				}
+			VkResult EternalSwapChainDispatchLoader::vkGetPhysicalDeviceSurfaceSupportKHR(_In_ VkPhysicalDevice InPhysicalDevice, _In_ uint32_t InQueueFamilyIndex, _In_ VkSurfaceKHR InSurface, _Out_ VkBool32* OutSupported) const VULKAN_HPP_NOEXCEPT
+			{
+				return _vkGetPhysicalDeviceSurfaceSupportKHR(InPhysicalDevice, InQueueFamilyIndex, InSurface, OutSupported);
+			}
 
-				VkResult vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR* pSurfaceCapabilities) const VULKAN_HPP_NOEXCEPT
-				{
-					return _vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, pSurfaceCapabilities);
-				}
+			VkResult EternalSwapChainDispatchLoader::vkGetPhysicalDeviceSurfaceCapabilitiesKHR(_In_ VkPhysicalDevice InPhysicalDevice, _In_ VkSurfaceKHR InSurface, _Out_ VkSurfaceCapabilitiesKHR* OutSurfaceCapabilities) const VULKAN_HPP_NOEXCEPT
+			{
+				return _vkGetPhysicalDeviceSurfaceCapabilitiesKHR(InPhysicalDevice, InSurface, OutSurfaceCapabilities);
+			}
 
-				VkResult vkGetPhysicalDeviceSurfaceFormatsKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t* pSurfaceFormatCount, VkSurfaceFormatKHR* pSurfaceFormats) const VULKAN_HPP_NOEXCEPT
-				{
-					return _vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, pSurfaceFormatCount, pSurfaceFormats);
-				}
+			VkResult EternalSwapChainDispatchLoader::vkGetPhysicalDeviceSurfaceFormatsKHR(_In_ VkPhysicalDevice InPhysicalDevice, _In_ VkSurfaceKHR InSurface, _Out_ uint32_t* OutSurfaceFormatCount, _Out_ VkSurfaceFormatKHR* OutSurfaceFormats) const VULKAN_HPP_NOEXCEPT
+			{
+				return _vkGetPhysicalDeviceSurfaceFormatsKHR(InPhysicalDevice, InSurface, OutSurfaceFormatCount, OutSurfaceFormats);
+			}
 
-				VkResult vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t* pPresentModeCount, VkPresentModeKHR* pPresentModes) const VULKAN_HPP_NOEXCEPT
-				{
-					return _vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, pPresentModeCount, pPresentModes);
-				}
+			VkResult EternalSwapChainDispatchLoader::vkGetPhysicalDeviceSurfacePresentModesKHR(_In_ VkPhysicalDevice InPhysicalDevice, _In_ VkSurfaceKHR InSurface, uint32_t* OutPresentModeCount, VkPresentModeKHR* OutPresentModes) const VULKAN_HPP_NOEXCEPT
+			{
+				return _vkGetPhysicalDeviceSurfacePresentModesKHR(InPhysicalDevice, InSurface, OutPresentModeCount, OutPresentModes);
+			}
 
-				VkResult vkGetSwapchainImagesKHR(VkDevice device, VkSwapchainKHR swapchain, uint32_t* pSwapchainImageCount, VkImage* pSwapchainImages) const VULKAN_HPP_NOEXCEPT
-				{
-					return _vkGetSwapchainImagesKHR(device, swapchain, pSwapchainImageCount, pSwapchainImages);
-				}
-
-			private:
-				PFN_vkGetPhysicalDeviceSurfaceSupportKHR		_vkGetPhysicalDeviceSurfaceSupportKHR;
-				PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR	_vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
-				PFN_vkGetPhysicalDeviceSurfaceFormatsKHR		_vkGetPhysicalDeviceSurfaceFormatsKHR;
-				PFN_vkGetPhysicalDeviceSurfacePresentModesKHR	_vkGetPhysicalDeviceSurfacePresentModesKHR;
-				PFN_vkGetSwapchainImagesKHR						_vkGetSwapchainImagesKHR;
-			};
+			VkResult EternalSwapChainDispatchLoader::vkGetSwapchainImagesKHR(_In_ VkDevice InDevice, _In_ VkSwapchainKHR InSwapchain, _Out_ uint32_t* OutSwapchainImageCount, _Out_ VkImage* OutSwapchainImages) const VULKAN_HPP_NOEXCEPT
+			{
+				return _vkGetSwapchainImagesKHR(InDevice, InSwapchain, OutSwapchainImageCount, OutSwapchainImages);
+			}
 		}
 
 		VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& InContext)
@@ -83,7 +72,7 @@ namespace Eternal
 			WindowsOutputDevice& InOutputDevice = static_cast<WindowsOutputDevice&>(InContext.GetOutputDevice());
 
 			VulkanDevice& InVulkanDevice = static_cast<VulkanDevice&>(InContext.GetDevice());
-			VulkanPrivate::EternalDispatchLoader EternalLoader(InVulkanDevice);
+			VulkanPrivate::EternalSwapChainDispatchLoader EternalLoader(InVulkanDevice);
 
 			vk::Win32SurfaceCreateInfoKHR Win32SurfaceInfo(
 				vk::Win32SurfaceCreateFlagBitsKHR(),
@@ -99,7 +88,7 @@ namespace Eternal
 			SupportPresents.resize(InVulkanDevice.GetQueueFamilyPropertiesCount());
 			for (uint32_t QueueFamilyIndex = 0; QueueFamilyIndex < InVulkanDevice.GetQueueFamilyPropertiesCount(); ++QueueFamilyIndex)
 			{
-				VerifySuccess(VulkanPhysicalDevice.getSurfaceSupportKHR(QueueFamilyIndex, _Surface, &SupportPresents[QueueFamilyIndex], EternalLoader));
+				VerifySuccess(VulkanPhysicalDevice.getSurfaceSupportKHR<VulkanPrivate::EternalSwapChainDispatchLoader>(QueueFamilyIndex, _Surface, &SupportPresents[QueueFamilyIndex], EternalLoader));
 			}
 
 			uint32_t FormatsCount = 0u;
@@ -199,7 +188,7 @@ namespace Eternal
 
 		void VulkanSwapChain::Acquire(GraphicsContext& InContext)
 		{
-			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(InContext);
+			VulkanGraphicsContext& GfxContext = Vulkan::VulkanGraphicsContextCast(InContext);
 
 			Vulkan::VerifySuccess(
 				static_cast<VulkanDevice&>(InContext.GetDevice()).GetVulkanDevice().acquireNextImageKHR(
@@ -207,14 +196,14 @@ namespace Eternal
 					UINT64_MAX,
 					GfxContext.GetNextFrameSemaphore(),
 					nullptr,
-					&GfxContext.GetCurrentFrameIndex()
+					&InContext.GetCurrentFrameIndex()
 				)
 			);
 		}
 
 		void VulkanSwapChain::Present(GraphicsContext& InContext)
 		{
-			VulkanGraphicsContext& GfxContext = static_cast<VulkanGraphicsContext&>(InContext);
+			VulkanGraphicsContext& GfxContext = Vulkan::VulkanGraphicsContextCast(InContext);
 
 			VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(InContext.GetGraphicsQueue());
 
@@ -225,7 +214,7 @@ namespace Eternal
 			vk::PresentInfoKHR PresentInfo(
 				SubmitCompletionSemaphoresCount, SubmitCompletionSemaphores,
 				1, &GetSwapChain(),
-				&GfxContext.GetCurrentFrameIndex()
+				&InContext.GetCurrentFrameIndex()
 			);
 			Vulkan::VerifySuccess(
 				static_cast<VulkanCommandQueue&>(InContext.GetGraphicsQueue()).GetVulkanCommandQueue().presentKHR(
