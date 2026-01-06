@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Graphics/GraphicsContext.hpp"
 #include "Bit/BitField.hpp"
 #include <vulkan/vulkan.hpp>
 #include <array>

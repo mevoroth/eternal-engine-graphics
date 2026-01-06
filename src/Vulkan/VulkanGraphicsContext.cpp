@@ -1,6 +1,6 @@
 #include "Graphics/GraphicsContext.hpp"
 
-#if ETERNAL_PLATFORM_VULKAN
+#if ETERNAL_ENABLE_VULKAN
 
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Vulkan/VulkanDescriptorTable.hpp"
