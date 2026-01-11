@@ -42,8 +42,8 @@ namespace Eternal
 
 		namespace Vulkan
 		{
-			static constexpr uint32_t InvalidQueueFamilyIndex = ~0u;
-			static constexpr uint32_t InvalidQueueIndex = ~0u;
+			static constexpr uint32_t InvalidQueueFamilyIndex	= ~0u;
+			static constexpr uint32_t InvalidQueueIndex			= ~0u;
 
 			void VerifySuccess(_In_ const vk::Result& VulkanResult);
 			vk::StencilOpState CreateVulkanStencilOperatorState(_In_ const StencilTest& InStencilTest, _In_ const StencilTest::FaceOperator& InFaceOperator);

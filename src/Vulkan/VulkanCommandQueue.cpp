@@ -84,10 +84,43 @@ namespace Eternal
 			for (uint32_t CommandListIndex = 0; CommandListIndex < InCommandListsCount; ++CommandListIndex)
 				VulkanCommandLists[CommandListIndex] = static_cast<VulkanCommandList*>(InCommandLists[CommandListIndex])->GetVulkanCommandBuffer();
 
-			vk::Semaphore* SubmitSemaphore = nullptr;
-			if (_SubmitCount < _SubmitCompletionSemaphores.size())
+			_SubmitCompletionSemaphores.insert(
+				_SubmitCompletionSemaphores.end(),
+				_InactiveSubmitCompletionSemaphores.begin(),
+				_InactiveSubmitCompletionSemaphores.end()
+			);
+
+			_InactiveSubmitCompletionSemaphores.clear();
+
+			if (_InactiveSubmitCompletionSemaphores.size() > 0)
 			{
-				SubmitSemaphore = &_SubmitCompletionSemaphores[_SubmitCount++];
+				vk::Device& VkDevice = static_cast<VulkanDevice&>(InContext->GetDevice()).GetVulkanDevice();
+
+				vector<uint64_t> SemaphoreValues;
+				SemaphoreValues.resize(_InactiveSubmitCompletionSemaphores.size());
+				for (uint32_t SemaphoreIndex = 0; SemaphoreIndex < _InactiveSubmitCompletionSemaphores.size(); ++SemaphoreIndex)
+					SemaphoreValues[SemaphoreIndex] = 1ull;
+
+				vk::SemaphoreWaitInfo WaitInfo(
+					vk::SemaphoreWaitFlagBits::eAny,
+					_InactiveSubmitCompletionSemaphores.size(),
+					_InactiveSubmitCompletionSemaphores.data(),
+					SemaphoreValues.data()
+				);
+				VerifySuccess(
+					VkDevice.waitSemaphores(
+						&WaitInfo,
+						UINT64_MAX
+					)
+				);
+			}
+
+			vk::Semaphore* SubmitSemaphore = nullptr;
+			if (_SubmitCompletionSemaphores.size() > 0)
+			{
+				_ActiveSubmitCompletionSemaphores.push_back(_SubmitCompletionSemaphores.back());
+				_SubmitCompletionSemaphores.pop_back();
+				SubmitSemaphore = &_ActiveSubmitCompletionSemaphores.back();
 			}
 			else
 			{
@@ -119,11 +152,18 @@ namespace Eternal
 			);
 		}
 
-		void VulkanCommandQueue::GetSubmitCompletionSemaphoresAndReset(_Out_ vk::Semaphore*& OutSemaphores, uint32_t& OutSemaphoresCount)
+		void VulkanCommandQueue::AcquireSubmitCompletionSemaphores(_Out_ vector<vk::Semaphore>& OutSemaphores)
 		{
-			OutSemaphoresCount	= _SubmitCount;
-			OutSemaphores		= _SubmitCount > 0 ? _SubmitCompletionSemaphores.data() : nullptr;
-			_SubmitCount		= 0;
+			OutSemaphores = std::move(_ActiveSubmitCompletionSemaphores);
+		}
+
+		void VulkanCommandQueue::ReleaseSubmitCompletionSemaphores(_In_ vector<vk::Semaphore>&& InSemaphores)
+		{
+			_InactiveSubmitCompletionSemaphores.insert(
+				_InactiveSubmitCompletionSemaphores.end(),
+				InSemaphores.begin(),
+				InSemaphores.end()
+			);
 		}
 	}
 }

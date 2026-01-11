@@ -99,15 +99,26 @@ namespace Eternal
 		VulkanResource::VulkanResource(_In_ const BufferResourceCreateInformation& InResourceCreateInformation)
 			: Resource(InResourceCreateInformation, ResourceType::RESOURCE_TYPE_BUFFER)
 		{
-			VulkanDevice& InVkDevice = static_cast<VulkanDevice&>(InResourceCreateInformation.GfxDevice);
+			using namespace Eternal::Math;
+
+			BufferCreateInformation& BufferInformation = GetResourceCreateInformation().BufferInformation;
+
+			if (BufferInformation.Usage == BufferResourceUsage::BUFFER_RESOURCE_USAGE_CONSTANT_BUFFER)
+			{
+				VulkanDevice& VkDevice = static_cast<VulkanDevice&>(GetResourceCreateInformation().GfxDevice);
+
+				BufferInformation.Stride = Align(BufferInformation.Stride, VkDevice.GetMinUniformBufferOffsetAlignment());
+			}
+
+			VulkanDevice& InVkDevice = static_cast<VulkanDevice&>(GetResourceCreateInformation().GfxDevice);
 			vk::Device& InVulkanDevice = InVkDevice.GetVulkanDevice();
 			QueueFamilyIndicesType QueueFamilies;
 			InVkDevice.GetQueueFamilyIndices(QueueFamilies);
 
 			vk::BufferCreateInfo BufferCreateInformation(
 				vk::BufferCreateFlagBits(),
-				InResourceCreateInformation.BufferInformation.ElementCount * InResourceCreateInformation.BufferInformation.Stride,
-				ConvertBufferResourceUsageToVulkanBufferUsageFlags(InResourceCreateInformation.BufferInformation.Usage),
+				BufferInformation.ElementCount * BufferInformation.Stride,
+				ConvertBufferResourceUsageToVulkanBufferUsageFlags(BufferInformation.Usage),
 				vk::SharingMode::eExclusive,
 				static_cast<uint32_t>(QueueFamilies.size()),
 				QueueFamilies.data()
@@ -130,7 +141,7 @@ namespace Eternal
 				Align<vk::DeviceSize>(BufferMemoryRequirements.size, InVkDevice.GetNonCoherentMemoryAtomicSize()),
 				InVkDevice.FindBestMemoryTypeIndex(
 					BufferMemoryRequirements.memoryTypeBits,
-					ConvertResourceMemoryTypeToMemoryPropertyFlagBits(InResourceCreateInformation.MemoryType)
+					ConvertResourceMemoryTypeToMemoryPropertyFlagBits(GetResourceCreateInformation().MemoryType)
 				)
 			);
 			VerifySuccess(

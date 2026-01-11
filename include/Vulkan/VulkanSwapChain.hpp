@@ -55,6 +55,7 @@ namespace Eternal
 			const vk::SurfaceKHR& GetSurface() const { return _Surface; }
 
 		private:
+			vector<vk::Semaphore>		_SubmitCompletionSemaphores;
 			vk::SurfaceKHR				_Surface;
 			vk::SwapchainKHR			_SwapChain;
 			uint32_t					_FrameIndex	= 0u;

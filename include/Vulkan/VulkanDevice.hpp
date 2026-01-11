@@ -86,6 +86,7 @@ namespace Eternal
 			void GetQueueFamilyIndices(QueueFamilyIndicesType& OutQueueFamilyIndices) const;
 			uint32_t GetPushConstantMaxSize() const;
 			uint32_t GetNonCoherentMemoryAtomicSize() const;
+			uint32_t GetMinUniformBufferOffsetAlignment() const;
 
 		private:
 			EternalDebugDispatchLoader*			_DebugDispatchLoader		= nullptr;

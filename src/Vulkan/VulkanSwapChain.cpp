@@ -207,12 +207,11 @@ namespace Eternal
 
 			VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(InContext.GetGraphicsQueue());
 
-			vk::Semaphore* SubmitCompletionSemaphores	= nullptr;
-			uint32_t SubmitCompletionSemaphoresCount	= 0;
-			VkCommandQueue.GetSubmitCompletionSemaphoresAndReset(SubmitCompletionSemaphores, SubmitCompletionSemaphoresCount);
+			vector<vk::Semaphore> SubmitCompletionSemaphores;
+			VkCommandQueue.AcquireSubmitCompletionSemaphores(SubmitCompletionSemaphores);
 
 			vk::PresentInfoKHR PresentInfo(
-				SubmitCompletionSemaphoresCount, SubmitCompletionSemaphores,
+				SubmitCompletionSemaphores.size(), SubmitCompletionSemaphores.data(),
 				1, &GetSwapChain(),
 				&InContext.GetCurrentFrameIndex()
 			);
@@ -221,6 +220,9 @@ namespace Eternal
 					&PresentInfo
 				)
 			);
+
+			VkCommandQueue.ReleaseSubmitCompletionSemaphores(std::move(_SubmitCompletionSemaphores));
+			_SubmitCompletionSemaphores = std::move(SubmitCompletionSemaphores);
 		}
 	}
 }

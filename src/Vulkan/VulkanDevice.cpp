@@ -398,6 +398,11 @@ namespace Eternal
 			return static_cast<uint32_t>(_PhysicalDeviceProperties.limits.nonCoherentAtomSize);
 		}
 
+		uint32_t VulkanDevice::GetMinUniformBufferOffsetAlignment() const
+		{
+			return static_cast<uint32_t>(_PhysicalDeviceProperties.limits.minUniformBufferOffsetAlignment);
+		}
+
 		uint32_t VulkanDevice::FindBestMemoryTypeIndex(_In_ uint32_t MemoryTypeBitsRequirement, _In_ const vk::MemoryPropertyFlagBits& Flags) const
 		{
 			uint32_t MemoryTypeIndex = 0;
