@@ -19,7 +19,6 @@ namespace EternalEngine
 				@"$(SolutionDir)eternal-engine-components\include",
 				@"$(SolutionDir)eternal-engine-extern\DirectX-Headers\include\directx",
 				@"$(SolutionDir)eternal-engine-extern\dxc\include",
-				EternalEngineSettings.VulkanPath + @"\Include",
 			});
 
 			// Defines
