@@ -45,7 +45,7 @@ namespace Eternal
 			SwapChainDesc.BufferCount							= _BackBuffersCount;
 			SwapChainDesc.OutputWindow							= InOutputDevice.GetWindowHandler();
 			SwapChainDesc.Windowed								= InOutputDevice.GetWindowed() ? TRUE : FALSE;
-			SwapChainDesc.SwapEffect							= DXGI_SWAP_EFFECT_FLIP_DISCARD;
+			SwapChainDesc.SwapEffect							= DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 			SwapChainDesc.Flags									= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT
 																| (InOutputDevice.GetVSync() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : DXGI_SWAP_CHAIN_FLAG(0));
 
