@@ -32,6 +32,7 @@ namespace Eternal
 			inline bool GetVSync() const { return _OutputDeviceCreateInformation.VSync; }
 			inline int GetWidth() const { return _OutputDeviceCreateInformation.Width; }
 			inline int GetHeight() const { return _OutputDeviceCreateInformation.Height; }
+			virtual const char* GetApplicationName() const { return ""; }
 
 		protected:
 			OutputDevice(_In_ const OutputDeviceCreateInformation& InOutputDeviceCreateInformation);

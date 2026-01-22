@@ -67,21 +67,21 @@ namespace Eternal
 		VulkanSwapChain::VulkanSwapChain(_In_ GraphicsContext& InContext)
 			: SwapChain()
 		{
-			using namespace Vulkan;
+		}
 
-			WindowsOutputDevice& InOutputDevice = static_cast<WindowsOutputDevice&>(InContext.GetOutputDevice());
+		VulkanSwapChain::~VulkanSwapChain()
+		{
+
+		}
+
+		void VulkanSwapChain::InitializeVulkanSwapChain(_In_ GraphicsContext& InContext)
+		{
+			using namespace Vulkan;
 
 			VulkanDevice& InVulkanDevice = static_cast<VulkanDevice&>(InContext.GetDevice());
 			VulkanPrivate::EternalSwapChainDispatchLoader EternalLoader(InVulkanDevice);
 
-			vk::Win32SurfaceCreateInfoKHR Win32SurfaceInfo(
-				vk::Win32SurfaceCreateFlagBitsKHR(),
-				InOutputDevice.GetHInstance(),
-				InOutputDevice.GetWindowHandler()
-			);
-
-			vk::Instance& VulkanInstance = InVulkanDevice.GetInstance();
-			VerifySuccess(VulkanInstance.createWin32SurfaceKHR(&Win32SurfaceInfo, nullptr, &_Surface));
+			CreateSurface(InContext);
 
 			vk::PhysicalDevice& VulkanPhysicalDevice = InVulkanDevice.GetPhysicalDevice();
 			std::vector<vk::Bool32> SupportPresents;
@@ -112,7 +112,7 @@ namespace Eternal
 			bool HasValidMode = false;
 			for (uint32_t PresentIndex = 0; PresentIndex < PresentModesCount; ++PresentIndex)
 			{
-				if (InOutputDevice.GetVSync())
+				if (InContext.GetOutputDevice().GetVSync())
 					HasValidMode |= PresentModes[PresentIndex] == vk::PresentModeKHR::eMailbox;
 				else
 					HasValidMode |= PresentModes[PresentIndex] == vk::PresentModeKHR::eFifo;
@@ -133,7 +133,7 @@ namespace Eternal
 				0, nullptr,
 				vk::SurfaceTransformFlagBitsKHR::eIdentity,
 				vk::CompositeAlphaFlagBitsKHR::eOpaque,
-				InOutputDevice.GetVSync() ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eMailbox,
+				InContext.GetOutputDevice().GetVSync() ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eMailbox,
 				true
 			);
 
@@ -181,11 +181,6 @@ namespace Eternal
 			}
 		}
 
-		VulkanSwapChain::~VulkanSwapChain()
-		{
-
-		}
-
 		void VulkanSwapChain::Acquire(GraphicsContext& InContext)
 		{
 			VulkanGraphicsContext& GfxContext = Vulkan::VulkanGraphicsContextCast(InContext);
@@ -211,7 +206,7 @@ namespace Eternal
 			VkCommandQueue.AcquireSubmitCompletionSemaphores(SubmitCompletionSemaphores);
 
 			vk::PresentInfoKHR PresentInfo(
-				SubmitCompletionSemaphores.size(), SubmitCompletionSemaphores.data(),
+				static_cast<uint32_t>(SubmitCompletionSemaphores.size()), SubmitCompletionSemaphores.data(),
 				1, &GetSwapChain(),
 				&InContext.GetCurrentFrameIndex()
 			);

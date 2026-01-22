@@ -63,6 +63,11 @@ namespace Eternal
 
 			ShowWindow(_WindowHandle, GetNCmdShow());
 		}
+
+		const char* WindowsOutputDevice::GetApplicationName() const
+		{
+			return GetWindowClassName().c_str();
+		}
 	}
 }
 

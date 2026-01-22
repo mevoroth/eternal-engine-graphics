@@ -2,39 +2,80 @@
 
 #include "Vulkan/VulkanDevice.hpp"
 
-#include <algorithm>
-#include "Windows/WindowsOutputDevice.hpp"
 #include "Vulkan/VulkanUtils.hpp"
+#include "OutputDevice/OutputDevice.hpp"
+#include "Log/Log.hpp"
+#include <algorithm>
 
 namespace Eternal
 {
 	namespace Graphics
 	{
 		VkBool32 VulkanDevice::DebugReport(
-			VkDebugReportFlagsEXT						flags,
-			VkDebugReportObjectTypeEXT					objectType,
-			uint64_t									object,
-			size_t										location,
-			int32_t										messageCode,
-			const char*									pLayerPrefix,
-			const char*									pMessage,
-			void*										pUserData
+			_In_ VkDebugReportFlagsEXT							InFlags,
+			_In_ VkDebugReportObjectTypeEXT						InObjectType,
+			_In_ uint64_t										InObject,
+			_In_ size_t											InLocation,
+			_In_ int32_t										InMessageCode,
+			_In_ const char*									InLayerPrefix,
+			_In_ const char*									InMessage,
+			_In_ void*											InUserData
 		)
 		{
-			OutputDebugString(pMessage);
-			OutputDebugString("\n");
+			const LogSystem::Log::LogLevel& Level = [InFlags]() -> const LogSystem::Log::LogLevel&
+			{
+				switch (InFlags)
+				{
+				case VK_DEBUG_REPORT_INFORMATION_BIT_EXT:
+					return LogInfo;
+				
+				case VK_DEBUG_REPORT_WARNING_BIT_EXT:
+				case VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT:
+					return LogWarning;
+
+				case VK_DEBUG_REPORT_ERROR_BIT_EXT:
+				case VK_DEBUG_REPORT_DEBUG_BIT_EXT:
+					return LogError;
+				default:
+					break;
+				}
+				return LogCritical;
+			}();
+
+			LogWrite(Level, LogGraphics, InMessage);
+			//ETERNAL_BREAK();
+
 			return VK_FALSE;
 		}
 
 		VkBool32 VulkanDevice::DebugUtilsMessenger(
-			VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
-			VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
-			const VkDebugUtilsMessengerCallbackDataEXT*      pCallbackData,
-			void*                                            pUserData
+			_In_ VkDebugUtilsMessageSeverityFlagBitsEXT			InMessageSeverity,
+			_In_ VkDebugUtilsMessageTypeFlagsEXT				InMessageTypes,
+			_In_ const VkDebugUtilsMessengerCallbackDataEXT*	InCallbackData,
+			_In_ void*											InUserData
 		)
 		{
-			OutputDebugString(pCallbackData->pMessage);
-			OutputDebugString("\n");
+			const LogSystem::Log::LogLevel& Level = [InMessageSeverity]() -> const LogSystem::Log::LogLevel&
+			{
+				switch (InMessageSeverity)
+				{
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+					return LogInfo;
+				
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+					return LogWarning;
+
+				case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+					return LogError;
+				default:
+					break;
+				}
+				return LogCritical;
+			}();
+
+			LogWrite(Level, LogGraphics, InCallbackData->pMessage);
+
 			ETERNAL_BREAK();
 			return VK_FALSE;
 		}
@@ -87,7 +128,7 @@ namespace Eternal
 					ETERNAL_ASSERT(_vkCreateDebugReport);
 					ETERNAL_ASSERT(_vkDestroyDebugReport);
 					ETERNAL_ASSERT(_vkDebugReportMessage);
-					ETERNAL_ASSERT(_vkCreateDebugUtilsMessenger);
+					//ETERNAL_ASSERT(_vkCreateDebugUtilsMessenger);
 				}
 
 				size_t getVkHeaderVersion() const
@@ -112,7 +153,9 @@ namespace Eternal
 
 				VkResult vkCreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pMessenger) const VULKAN_HPP_NOEXCEPT
 				{
-					return _vkCreateDebugUtilsMessenger(instance, pCreateInfo, pAllocator, pMessenger);
+					if (_vkCreateDebugUtilsMessenger)
+						return _vkCreateDebugUtilsMessenger(instance, pCreateInfo, pAllocator, pMessenger);
+					return VK_SUCCESS;
 				}
 
 			private:
@@ -137,15 +180,15 @@ namespace Eternal
 			uint32_t PropertyCount;
 			VerifySuccess(vk::enumerateInstanceLayerProperties(&PropertyCount, static_cast<vk::LayerProperties*>(nullptr)));
 
-			if (!PropertyCount) // No validation layer
-				return;
-
 			std::vector<vk::LayerProperties> Layers;
-			Layers.resize(PropertyCount);
 
-			VerifySuccess(vk::enumerateInstanceLayerProperties(&PropertyCount, Layers.data()));
+			if (PropertyCount > 0)
+			{
+				Layers.resize(PropertyCount);
+				VerifySuccess(vk::enumerateInstanceLayerProperties(&PropertyCount, Layers.data()));
+			}
 
-			const char* VulkanValidationLayers[] =
+			vector<const char*> VulkanLayers =
 			{
 				//"VK_LAYER_KHRONOS_validation"
 				//"VK_LAYER_LUNARG_standard_validation",
@@ -166,13 +209,32 @@ namespace Eternal
 				//"VK_LAYER_LUNARG_vktrace"
 			};
 
-			const char* VulkanInstanceExtensions[] =
+			for (uint32_t VulkanLayerIndex = 0; VulkanLayerIndex < VulkanLayers.size(); ++VulkanLayerIndex)
+			{
+				const char* CurrentVulkanLayer = VulkanLayers[VulkanLayerIndex];
+
+				auto FoundLayer = std::find_if(
+					Layers.begin(),
+					Layers.end(),
+					[CurrentVulkanLayer](_In_ const vk::LayerProperties& InLayerProperties)
+					{
+						return strcmp(InLayerProperties.layerName, CurrentVulkanLayer) == 0;
+					}
+				);
+
+				if (FoundLayer == Layers.end())
+				{
+					VulkanLayers.erase(VulkanLayers.begin() + VulkanLayerIndex);
+					--VulkanLayerIndex;
+				}
+			}
+			vector<const char*> VulkanInstanceExtensions =
 			{
 				VK_KHR_SURFACE_EXTENSION_NAME,
-				VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
 				VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
 				VK_EXT_DEBUG_UTILS_EXTENSION_NAME
 			};
+			VulkanPrivate::GatherVulkanInstanceExtensions(VulkanInstanceExtensions);
 
 			uint32_t InstanceExtensionPropertiesCount;
 			VerifySuccess(vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, static_cast<vk::ExtensionProperties*>(nullptr)));
@@ -182,9 +244,29 @@ namespace Eternal
 
 			VerifySuccess(vk::enumerateInstanceExtensionProperties(nullptr, &InstanceExtensionPropertiesCount, InstanceExtensionProperties.data()));
 
+			for (uint32_t VulkanInstanceExtensionIndex = 0; VulkanInstanceExtensionIndex < VulkanInstanceExtensions.size(); ++VulkanInstanceExtensionIndex)
+			{
+				const char* CurrentVulkanInstanceExtension = VulkanInstanceExtensions[VulkanInstanceExtensionIndex];
+
+				auto FoundExtension = std::find_if(
+					InstanceExtensionProperties.begin(),
+					InstanceExtensionProperties.end(),
+					[CurrentVulkanInstanceExtension](_In_ const vk::ExtensionProperties& InExtensionProperties)
+					{
+						return strcmp(InExtensionProperties.extensionName, CurrentVulkanInstanceExtension) == 0;
+					}
+				);
+
+				if (FoundExtension == InstanceExtensionProperties.end())
+				{
+					VulkanInstanceExtensions.erase(VulkanInstanceExtensions.begin() + VulkanInstanceExtensionIndex);
+					--VulkanInstanceExtensionIndex;
+				}
+			}
+
 			_VulkanVersion = VK_API_VERSION_1_2; // Vulkan version
 			vk::ApplicationInfo ApplicationInfo(
-				static_cast<WindowsOutputDevice&>(InOutputDevice).GetWindowClassName().c_str(),
+				InOutputDevice.GetApplicationName(),
 				0,
 				"EternalEngine",
 				0,
@@ -194,10 +276,10 @@ namespace Eternal
 			vk::InstanceCreateInfo InstanceInfo(
 				vk::InstanceCreateFlags(),
 				&ApplicationInfo,
-				ETERNAL_ARRAYSIZE(VulkanValidationLayers),
-				VulkanValidationLayers,
-				ETERNAL_ARRAYSIZE(VulkanInstanceExtensions),
-				VulkanInstanceExtensions
+				VulkanLayers.size(),
+				VulkanLayers.data(),
+				VulkanInstanceExtensions.size(),
+				VulkanInstanceExtensions.data()
 			);
 
 			VerifySuccess(vk::createInstance(&InstanceInfo, nullptr, &_Instance));
@@ -221,38 +303,49 @@ namespace Eternal
 				PhysicalDevices[PhysicalDeviceIndex].getProperties(&PhysicalDeviceProperties[PhysicalDeviceIndex]);
 			}
 
-			bool FoundIntegratedGPU = false;
-			vk::PhysicalDevice IntegratedPhysicalDevice;
-			vk::PhysicalDeviceProperties IntegratedPhysicalDeviceProperties;
-
-			for (uint32_t PhysicalDeviceIndex = 0; PhysicalDeviceIndex < PhysicalDevicesCount; ++PhysicalDeviceIndex)
+			auto FindBestDevice = [&PhysicalDevices, &PhysicalDeviceProperties, PhysicalDevicesCount](
+				_In_ const vk::PhysicalDeviceType& InPhysicalDeviceType,
+				_Out_ vk::PhysicalDevice& OutPhysicalDevice,
+				_Out_ vk::PhysicalDeviceProperties& OutPhysicalDeviceProperties
+			) -> bool
 			{
-				if (PhysicalDeviceProperties[PhysicalDeviceIndex].deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
+				for (uint32_t PhysicalDeviceIndex = 0; PhysicalDeviceIndex < PhysicalDevicesCount; ++PhysicalDeviceIndex)
 				{
-					_PhysicalDevice = PhysicalDevices[PhysicalDeviceIndex];
-					_PhysicalDeviceProperties = PhysicalDeviceProperties[PhysicalDeviceIndex];
-					break;
-				}
-				else if (PhysicalDeviceProperties[PhysicalDeviceIndex].deviceType == vk::PhysicalDeviceType::eIntegratedGpu)
-				{
-					if (!FoundIntegratedGPU)
+					if (PhysicalDeviceProperties[PhysicalDeviceIndex].deviceType == InPhysicalDeviceType)
 					{
-						FoundIntegratedGPU = true;
-						IntegratedPhysicalDevice = PhysicalDevices[PhysicalDeviceIndex];
-						IntegratedPhysicalDeviceProperties = PhysicalDeviceProperties[PhysicalDeviceIndex];
+						OutPhysicalDevice			= PhysicalDevices[PhysicalDeviceIndex];
+						OutPhysicalDeviceProperties	= PhysicalDeviceProperties[PhysicalDeviceIndex];
+						return true;
 					}
 				}
+				return false;
+			};
+
+			vk::PhysicalDeviceType DeviceTypePriority[] =
+			{
+				vk::PhysicalDeviceType::eDiscreteGpu,
+				vk::PhysicalDeviceType::eIntegratedGpu,
+				vk::PhysicalDeviceType::eVirtualGpu,
+				vk::PhysicalDeviceType::eCpu,
+				vk::PhysicalDeviceType::eOther
+			};
+
+			bool PhysicalDeviceIsFound = false;
+			for (uint32_t DeviceTypeIndex = 0; !PhysicalDeviceIsFound && DeviceTypeIndex < ETERNAL_ARRAYSIZE(DeviceTypePriority); ++DeviceTypeIndex)
+			{
+				const vk::PhysicalDeviceType& CurrentDeviceType = DeviceTypePriority[DeviceTypeIndex];
+
+				vk::PhysicalDevice FoundPhysicalDevice;
+				vk::PhysicalDeviceProperties FoundPhysicalDeviceProperties;
+				if (FindBestDevice(CurrentDeviceType, FoundPhysicalDevice, FoundPhysicalDeviceProperties))
+				{
+					_PhysicalDevice				= FoundPhysicalDevice;
+					_PhysicalDeviceProperties	= FoundPhysicalDeviceProperties;
+					PhysicalDeviceIsFound		= true;
+				}
 			}
 
-			if (_PhysicalDeviceProperties.deviceType != vk::PhysicalDeviceType::eDiscreteGpu && FoundIntegratedGPU)
-			{
-				_PhysicalDevice = IntegratedPhysicalDevice;
-				_PhysicalDeviceProperties = IntegratedPhysicalDeviceProperties;
-			}
-			else
-			{
-				ETERNAL_ASSERT(_PhysicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu);
-			}
+			ETERNAL_ASSERT(PhysicalDeviceIsFound); // Device not found
 
 			uint32_t ExtensionsCount;
 			VerifySuccess(_PhysicalDevice.enumerateDeviceExtensionProperties(nullptr, &ExtensionsCount, static_cast<vk::ExtensionProperties*>(nullptr)));
@@ -297,24 +390,30 @@ namespace Eternal
 			for (uint32_t QueueFamilyPropertyIndex = 0; QueueFamilyPropertyIndex < QueueFamilyProperties.size(); ++QueueFamilyPropertyIndex)
 			{
 				if (_QueueFamilyIndexGraphics == InvalidQueueFamilyIndex
-					&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eGraphics))
+					&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eGraphics)
+					&& QueueFamilyProperties[QueueFamilyPropertyIndex].queueCount > 0)
 				{
 					_QueueFamilyIndexGraphics = QueueFamilyPropertyIndex;
 					_QueueIndexGraphics = QueueIndices[QueueFamilyPropertyIndex]++;
+					QueueFamilyProperties[QueueFamilyPropertyIndex].queueCount--;
 				}
 
 				if (_QueueFamilyIndexCompute == InvalidQueueFamilyIndex
-					&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eCompute))
+					&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eCompute)
+					&& QueueFamilyProperties[QueueFamilyPropertyIndex].queueCount > 0)
 				{
 					_QueueFamilyIndexCompute = QueueFamilyPropertyIndex;
 					_QueueIndexCompute = QueueIndices[QueueFamilyPropertyIndex]++;
+					QueueFamilyProperties[QueueFamilyPropertyIndex].queueCount--;
 				}
 
 				if (_QueueFamilyIndexCopy == InvalidQueueFamilyIndex
-					&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eTransfer))
+					&& (QueueFamilyProperties[QueueFamilyPropertyIndex].queueFlags & vk::QueueFlagBits::eTransfer)
+					&& QueueFamilyProperties[QueueFamilyPropertyIndex].queueCount > 0)
 				{
 					_QueueFamilyIndexCopy = QueueFamilyPropertyIndex;
 					_QueueIndexCopy = QueueIndices[QueueFamilyPropertyIndex]++;
+					QueueFamilyProperties[QueueFamilyPropertyIndex].queueCount--;
 				}
 			}
 
@@ -354,7 +453,8 @@ namespace Eternal
 						vk::DeviceQueueCreateInfo(
 							vk::DeviceQueueCreateFlagBits(),
 							QueueFamilyIndex,
-							static_cast<uint32_t>(Priorities.front().size()), Priorities.front().data()
+							static_cast<uint32_t>(Priorities.front().size()),
+							Priorities.front().data()
 						)
 					);
 				}
@@ -365,7 +465,7 @@ namespace Eternal
 			vk::DeviceCreateInfo DeviceInfo(
 				vk::DeviceCreateFlagBits(),
 				static_cast<uint32_t>(DeviceQueueCreateInfos.size()), DeviceQueueCreateInfos.data(),
-				ETERNAL_ARRAYSIZE(VulkanValidationLayers), VulkanValidationLayers,
+				VulkanLayers.size(), VulkanLayers.data(),
 				ETERNAL_ARRAYSIZE(VulkanDeviceExtensions), VulkanDeviceExtensions,
 				&PhysicalDeviceFeatures,
 				&SeparateDepthStencilLayoutFeatures

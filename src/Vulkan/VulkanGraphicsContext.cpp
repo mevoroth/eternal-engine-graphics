@@ -69,7 +69,7 @@ namespace Eternal
 			return _GraphicsContext.GetDevice();
 		}
 
-		void VulkanGraphicsContext::ResetFrameStates()
+		void VulkanGraphicsContext::InternalResetFrameStates()
 		{
 			for (uint32_t DescriptorTableIndex = 0; DescriptorTableIndex < _DescriptorTables.size(); ++DescriptorTableIndex)
 				_DescriptorTables[DescriptorTableIndex]->Reset(_GraphicsContext.GetCurrentFrameIndex());

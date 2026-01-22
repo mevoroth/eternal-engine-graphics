@@ -15,15 +15,15 @@ namespace Eternal
 
 		class VulkanDescriptorTable;
 
-		class VulkanWindowsGraphicsContext final
+		class WindowsVulkanGraphicsContext final
 			: public WindowsGraphicsContext
 			, public GraphicsContext
 			, public VulkanGraphicsContext
 		{
 		public:
 
-			VulkanWindowsGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation);
-			~VulkanWindowsGraphicsContext();
+			WindowsVulkanGraphicsContext(_In_ const WindowsGraphicsContextCreateInformation& InWindowsGraphicsContextCreateInformation);
+			~WindowsVulkanGraphicsContext();
 
 			virtual void ResetFrameStates() override final;
 

@@ -2,7 +2,7 @@
 
 #if ETERNAL_PLATFORM_WINDOWS && ETERNAL_ENABLE_VULKAN
 
-#include "Vulkan/VulkanWindowsGraphicsContext.hpp"
+#include "Windows/Vulkan/WindowsVulkanGraphicsContext.hpp"
 
 namespace Eternal
 {
@@ -12,12 +12,12 @@ namespace Eternal
 		{
 			VulkanGraphicsContext& VulkanGraphicsContextCast(_In_ GraphicsContext& InContext)
 			{
-				return static_cast<VulkanWindowsGraphicsContext&>(InContext);
+				return static_cast<WindowsVulkanGraphicsContext&>(InContext);
 			}
 
 			VulkanGraphicsContext* VulkanGraphicsContextCast(_In_ GraphicsContext* InContext)
 			{
-				return static_cast<VulkanWindowsGraphicsContext*>(InContext);
+				return static_cast<WindowsVulkanGraphicsContext*>(InContext);
 			}
 		}
 	}

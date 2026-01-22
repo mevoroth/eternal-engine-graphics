@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Graphics/GraphicsContext.hpp"
+#include "Vulkan/VulkanHeader.hpp"
 #include "Bit/BitField.hpp"
-#include <vulkan/vulkan.hpp>
 #include <array>
 #include <vector>
 
@@ -44,7 +44,6 @@ namespace Eternal
 			virtual ~VulkanGraphicsContext();
 
 			Device& GetDevice();
-			void ResetFrameStates();
 
 			void AllocateConstantHandles(_In_ uint32_t ConstantCount, _Out_ vector<Handle>& OutHandles);
 			void ReleaseConstantHandles(_Inout_ vector<Handle>& InOutHandles);
@@ -58,6 +57,10 @@ namespace Eternal
 			const vk::DescriptorPool& GetVulkanDescriptorPool() const { return _DescriptorPool; }
 			vk::Semaphore& GetCurrentFrameSemaphore() { return _AcquireFrameSemaphores[_GraphicsContext.GetCurrentFrameIndex()]; }
 			vk::Semaphore& GetNextFrameSemaphore() { return _AcquireFrameSemaphores[(_GraphicsContext.GetCurrentFrameIndex() + 1) % _AcquireFrameSemaphores.size()]; }
+
+		protected:
+
+			void InternalResetFrameStates();
 
 		private:
 

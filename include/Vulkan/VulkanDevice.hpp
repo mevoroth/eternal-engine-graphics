@@ -17,6 +17,8 @@ namespace Eternal
 		namespace VulkanPrivate
 		{
 			class EternalDeviceDispatchLoader;
+
+			void GatherVulkanInstanceExtensions(_Inout_ std::vector<const char*>& InOutVulkanInstanceExtensions);
 		}
 
 		using namespace std;

@@ -42,11 +42,13 @@ namespace Eternal
 			};
 		}
 
-		class VulkanSwapChain final : public SwapChain
+		class VulkanSwapChain : public SwapChain
 		{
 		public:
 			VulkanSwapChain(_In_ GraphicsContext& InContext);
 			~VulkanSwapChain();
+
+			void InitializeVulkanSwapChain(_In_ GraphicsContext& InContext);
 
 			virtual void Acquire(GraphicsContext& InContext) override final;
 			virtual void Present(GraphicsContext& InContext) override final;
@@ -54,9 +56,13 @@ namespace Eternal
 			const vk::SwapchainKHR& GetSwapChain() const { return _SwapChain; }
 			const vk::SurfaceKHR& GetSurface() const { return _Surface; }
 
+		protected:
+			virtual void CreateSurface(_In_ GraphicsContext& InContext) = 0;
+
+			vk::SurfaceKHR				_Surface;
+
 		private:
 			vector<vk::Semaphore>		_SubmitCompletionSemaphores;
-			vk::SurfaceKHR				_Surface;
 			vk::SwapchainKHR			_SwapChain;
 			uint32_t					_FrameIndex	= 0u;
 		};

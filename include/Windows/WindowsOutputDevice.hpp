@@ -56,6 +56,8 @@ namespace Eternal
 			inline const string& GetWindowClassName() const { return _ClassName; }
 			inline const string& GetWindowName() const { return _WindowName; }
 
+			virtual const char* GetApplicationName() const;
+
 		private:
 
 			string _ClassName;
