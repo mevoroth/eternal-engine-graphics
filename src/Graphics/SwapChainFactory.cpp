@@ -6,6 +6,7 @@
 #include "Null/NullSwapChain.hpp"
 #include "Windows/d3d12/WindowsD3D12SwapChain.hpp"
 #include "Windows/Vulkan/WindowsVulkanSwapChain.hpp"
+#include "Android/Vulkan/AndroidVulkanSwapChain.hpp"
 #if ETERNAL_USE_PRIVATE
 #include "Graphics/SwapChainFactoryPrivate.hpp"
 #endif
@@ -37,6 +38,16 @@ namespace Eternal
 			}
 #endif
 #endif
+
+#if ETERNAL_PLATFORM_ANDROID && ETERNAL_ENABLE_VULKAN
+			case DeviceType::DEVICE_TYPE_VULKAN:
+			{
+				AndroidVulkanSwapChain* NewSwapChain = new AndroidVulkanSwapChain(InContext);
+				NewSwapChain->InitializeVulkanSwapChain(InContext);
+				return NewSwapChain;
+			}
+#endif
+
 			default:
 #if ETERNAL_USE_PRIVATE
 				return CreateSwapChainPrivate(InContext);

@@ -1,6 +1,8 @@
+#if ETERNAL_PLATFORM_ANDROID
+
 #include "Graphics/GraphicsContext.hpp"
 
-#if ETERNAL_PLATFORM_ANDROID
+#include "Android/AndroidOutputDevice.hpp"
 
 namespace Eternal
 {
@@ -14,13 +16,18 @@ namespace Eternal
 			}
 		};
 
-		//class AndroidGraphicsContext : public GraphicsContext
-		//{
-		//public:
+		class AndroidGraphicsContext
+		{
+		public:
 
+			AndroidGraphicsContext(_In_ const AndroidGraphicsContextCreateInformation& InGraphicsContextCreateInformation);
 
+		protected:
 
-		//};
+			AndroidOutputDeviceCreateInformation	_AndroidOutputDeviceCreateInformation;
+			AndroidOutputDevice						_AndroidOutputDevice;
+
+		};
 	}
 }
 

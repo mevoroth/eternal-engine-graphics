@@ -6,6 +6,8 @@
 #include "Windows/d3d12/WindowsD3D12GraphicsContext.hpp"
 #include "Windows/Vulkan/WindowsVulkanGraphicsContext.hpp"
 #endif
+#if ETERNAL_PLATFORM_ANDROID
+#include "Android/Vulkan/AndroidVulkanGraphicsContext.hpp"
 #endif
 
 namespace Eternal
@@ -50,12 +52,8 @@ namespace Eternal
 #if ETERNAL_PLATFORM_ANDROID
 		GraphicsContext* CreateGraphicsContext(_In_ const AndroidGraphicsContextCreateInformation& InAndroidGraphicsContextCreateInformation)
 		{
-			GraphicsContext* Context = nullptr;
-
-			//switch (InAndroidGraphicsContextCreateInformation.Settings.Driver)
-
-			ETERNAL_BREAK();
-
+			GraphicsContext* Context = new AndroidVulkanGraphicsContext(InAndroidGraphicsContextCreateInformation);
+			Context->InitializeGraphicsContext();
 			return Context;
 		}
 #endif
