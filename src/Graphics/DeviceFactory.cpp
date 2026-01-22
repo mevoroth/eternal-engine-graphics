@@ -4,7 +4,7 @@
 #include "Graphics/Device.hpp"
 #include "Null/NullDevice.hpp"
 #include "Proxy/ProxyDevice.hpp"
-#include "d3d12/D3D12WindowsDevice.hpp"
+#include "Windows/d3d12/WindowsD3D12Device.hpp"
 #include "d3d12/D3D12Shader.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Graphics/GraphicsContext.hpp"

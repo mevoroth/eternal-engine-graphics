@@ -43,7 +43,7 @@ namespace Eternal
 			inline const vk::Pipeline& GetVulkanPipeline() const { return _Pipeline; }
 			inline vk::Pipeline& GetVulkanPipeline() { return _Pipeline; }
 
-			VulkanPipeline& VulkanPipeline::operator=(_In_ const VulkanPipeline& InPipeline);
+			VulkanPipeline& operator=(_In_ const VulkanPipeline& InPipeline);
 
 			virtual bool IsPipelineCompiled() const override final;
 			virtual void SerializePipeline(_Inout_ GraphicsContext& InOutContext, _Inout_ File* InOutFile) override final;

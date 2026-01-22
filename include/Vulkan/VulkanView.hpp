@@ -33,9 +33,9 @@ namespace Eternal
 			union VulkanViewMetaData
 			{
 				VulkanViewMetaData()
-					: ImageView(nullptr)
-					, BufferView(nullptr)
 				{
+					ImageView = nullptr;
+					BufferView = nullptr;
 				}
 
 				VulkanViewMetaData(vk::ImageView InImageView)

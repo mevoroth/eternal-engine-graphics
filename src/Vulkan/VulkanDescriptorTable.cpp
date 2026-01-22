@@ -49,15 +49,19 @@ namespace Eternal
 			_Context.UnregisterVulkanDescriptorTable(this);
 			for (uint32_t FrameIndex = 0; FrameIndex < GraphicsContext::FrameBufferingCount; ++FrameIndex)
 			{
-				VkDevice.freeDescriptorSets(
-					_Context.GetVulkanDescriptorPool(),
-					static_cast<uint32_t>(_DescriptorSets[FrameIndex].size()),
-					_DescriptorSets[FrameIndex].data()
+				VerifySuccess(
+					VkDevice.freeDescriptorSets(
+						_Context.GetVulkanDescriptorPool(),
+						static_cast<uint32_t>(_DescriptorSets[FrameIndex].size()),
+						_DescriptorSets[FrameIndex].data()
+					)
 				);
-				VkDevice.freeDescriptorSets(
-					_Context.GetVulkanDescriptorPool(),
-					static_cast<uint32_t>(_UsedDescriptorSets[FrameIndex].size()),
-					_UsedDescriptorSets[FrameIndex].data()
+				VerifySuccess(
+					VkDevice.freeDescriptorSets(
+						_Context.GetVulkanDescriptorPool(),
+						static_cast<uint32_t>(_UsedDescriptorSets[FrameIndex].size()),
+						_UsedDescriptorSets[FrameIndex].data()
+					)
 				);
 			}
 		}
