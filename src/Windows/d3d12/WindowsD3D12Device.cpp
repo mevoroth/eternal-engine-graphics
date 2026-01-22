@@ -1,4 +1,4 @@
-#include "d3d12/D3D12WindowsDevice.hpp"
+#include "Windows/d3d12/WindowsD3D12Device.hpp"
 
 #if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
 
@@ -27,7 +27,7 @@ namespace Eternal
 
 		namespace D3D12
 		{
-			static constexpr bool LoadPixDLLOnStartup	= true;
+			static constexpr bool LoadPixDLLOnStartup	= false;
 			static constexpr bool UseValidationLayer	= true;
 			static constexpr bool UseRayTracing			= false;
 		}

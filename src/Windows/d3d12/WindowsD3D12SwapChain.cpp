@@ -1,11 +1,10 @@
-#include "d3d12/D3D12WindowsSwapChain.hpp"
+#include "Windows/d3d12/WindowsD3D12SwapChain.hpp"
 
 #if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
 
 #include <cwchar>
 #include "Graphics/Format.hpp"
 #include "d3d12/D3D12Library.h"
-#include "d3d12/D3D12WindowsDevice.hpp"
 #include "d3d12/D3D12CommandQueue.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12Resource.hpp"
@@ -14,6 +13,7 @@
 #include "Graphics/View.hpp"
 #include "Graphics/GraphicsContext.hpp"
 #include "Graphics/Viewport.hpp"
+#include "Windows/d3d12/WindowsD3D12Device.hpp"
 #include "Windows/WindowsOutputDevice.hpp"
 
 namespace Eternal
@@ -45,7 +45,7 @@ namespace Eternal
 			SwapChainDesc.BufferCount							= _BackBuffersCount;
 			SwapChainDesc.OutputWindow							= InOutputDevice.GetWindowHandler();
 			SwapChainDesc.Windowed								= InOutputDevice.GetWindowed() ? TRUE : FALSE;
-			SwapChainDesc.SwapEffect							= DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+			SwapChainDesc.SwapEffect							= DXGI_SWAP_EFFECT_FLIP_DISCARD;
 			SwapChainDesc.Flags									= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT
 																| (InOutputDevice.GetVSync() ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : DXGI_SWAP_CHAIN_FLAG(0));
 

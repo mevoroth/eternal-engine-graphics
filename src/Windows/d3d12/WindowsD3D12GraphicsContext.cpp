@@ -1,6 +1,6 @@
 #if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
 
-#include "d3d12/D3D12WindowsGraphicsContext.hpp"
+#include "Windows/d3d12/WindowsD3D12GraphicsContext.hpp"
 
 namespace Eternal
 {
