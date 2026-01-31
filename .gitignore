@@ -188,3 +188,6 @@ FakesAssemblies/
 *.sln
 *.vcxproj
 *.vcxproj.filters
+
+# Sharpmake output
+output/
