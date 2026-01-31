@@ -16,7 +16,7 @@ namespace Eternal
 	{
 		CommandQueue* CreateCommandQueue(_In_ Device& InDevice, _In_ const CommandType& InType)
 		{
-			LogWrite(LogInfo, LogGraphics, "[Graphics::CreateDevice]Creating Command Queue");
+			LogWrite(LogInfo, LogGraphics, "[Graphics::CreateCommandQueue]Creating Command Queue");
 
 			switch (InDevice.GetDeviceType())
 			{

@@ -17,7 +17,7 @@ namespace Eternal
 	{
 		SwapChain* CreateSwapChain(_In_ GraphicsContext& InContext)
 		{
-			LogWrite(LogInfo, LogGraphics, "[Graphics::CreateDevice]Creating SwapChain");
+			LogWrite(LogInfo, LogGraphics, "[Graphics::CreateSwapChain]Creating SwapChain");
 			switch (InContext.GetDevice().GetDeviceType())
 			{
 			case DeviceType::DEVICE_TYPE_NULL:

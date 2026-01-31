@@ -21,9 +21,9 @@ namespace Eternal
 #if ETERNAL_ENABLE_D3D12 && ETERNAL_PLATFORM_WINDOWS
 			if (InDeviceType == DeviceType::DEVICE_TYPE_D3D12)
 			{
-				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Initializing D3D12Shader");
+				LogWrite(LogInfo, LogEngine, "[Graphics::PreInitializeDevice]Initializing D3D12Shader");
 				D3D12Shader::Initialize(InOutContext);
-				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Initializing DXGI Factory");
+				LogWrite(LogInfo, LogEngine, "[Graphics::PreInitializeDevice]Initializing DXGI Factory");
 				D3D12WindowsDevice::Initialize();
 			}
 #endif
