@@ -14,9 +14,9 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& Context, _In_ const RenderPassCreateInformation& CreateInformation)
-			: RenderPass(CreateInformation)
-			, _Device(static_cast<VulkanDevice&>(Context.GetDevice()))
+		VulkanRenderPass::VulkanRenderPass(_In_ GraphicsContext& InContext, _In_ const RenderPassCreateInformation& InCreateInformation)
+			: RenderPass(InCreateInformation)
+			, _Device(static_cast<VulkanDevice&>(InContext.GetDevice()))
 		{
 			using namespace Eternal::Graphics::Vulkan;
 
@@ -25,9 +25,9 @@ namespace Eternal
 			vector<vk::AttachmentDescription> VulkanAttachments;
 			vector<vk::AttachmentReference> VulkanAttachmentReferences;
 			vector<vk::ImageView> AttachmentViews;
-			VulkanAttachments.resize(CreateInformation.RenderTargets.size() + (CreateInformation.DepthStencilRenderTarget ? 1 : 0));
-			VulkanAttachmentReferences.resize(CreateInformation.RenderTargets.size());
-			AttachmentViews.resize(CreateInformation.RenderTargets.size() + (CreateInformation.DepthStencilRenderTarget ? 1 : 0));
+			VulkanAttachments.resize(InCreateInformation.RenderTargets.size() + (InCreateInformation.DepthStencilRenderTarget ? 1 : 0));
+			VulkanAttachmentReferences.resize(InCreateInformation.RenderTargets.size());
+			AttachmentViews.resize(InCreateInformation.RenderTargets.size() + (InCreateInformation.DepthStencilRenderTarget ? 1 : 0));
 			
 			uint32_t RenderTargetIndex = 0;
 			for (; RenderTargetIndex < GetRenderTargets().size(); ++RenderTargetIndex)
@@ -54,7 +54,7 @@ namespace Eternal
 			}
 
 			vk::AttachmentReference DepthStencilAttachmentReference;
-			View* InDepthStencilRenderTarget = CreateInformation.DepthStencilRenderTarget;
+			View* InDepthStencilRenderTarget = InCreateInformation.DepthStencilRenderTarget;
 			if (InDepthStencilRenderTarget)
 			{
 				DepthStencilAttachmentReference			= vk::AttachmentReference(RenderTargetIndex, vk::ImageLayout::eDepthStencilAttachmentOptimal);
@@ -62,8 +62,8 @@ namespace Eternal
 					vk::AttachmentDescriptionFlagBits(),
 					ConvertFormatToVulkanFormat(InDepthStencilRenderTarget->GetViewFormat()).Format,
 					vk::SampleCountFlagBits::e1,
-					ConvertLoadOperatorToVulkanAttachmentLoadOperator(CreateInformation.DepthStencilOperator.Load),
-					ConvertStoreOperatorToVulkanAttachmentStoreOperator(CreateInformation.DepthStencilOperator.Store),
+					ConvertLoadOperatorToVulkanAttachmentLoadOperator(InCreateInformation.DepthStencilOperator.Load),
+					ConvertStoreOperatorToVulkanAttachmentStoreOperator(InCreateInformation.DepthStencilOperator.Store),
 					vk::AttachmentLoadOp::eDontCare,
 					vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eDepthStencilAttachmentOptimal,
@@ -100,8 +100,8 @@ namespace Eternal
 				_RenderPass,
 				static_cast<uint32_t>(AttachmentViews.size()),
 				AttachmentViews.data(),
-				CreateInformation.Viewport.GetWidth(),
-				CreateInformation.Viewport.GetHeight(),
+				InCreateInformation.Viewport.GetWidth(),
+				InCreateInformation.Viewport.GetHeight(),
 				1
 			);
 	
