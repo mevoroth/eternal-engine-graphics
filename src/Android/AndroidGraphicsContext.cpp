@@ -10,11 +10,17 @@ namespace Eternal
 			: _AndroidOutputDeviceCreateInformation(
 				InGraphicsContextCreateInformation.Settings.Width,
 				InGraphicsContextCreateInformation.Settings.Height,
+				InGraphicsContextCreateInformation.NativeWindow,
 				InGraphicsContextCreateInformation.Settings.IsVSync,
 				InGraphicsContextCreateInformation.Settings.IsWindowed
 			)
 			, _AndroidOutputDevice(_AndroidOutputDeviceCreateInformation)
 		{
+		}
+
+		ANativeWindow* AndroidGraphicsContext::GetAndroidNativeWindow()
+		{
+			return _AndroidOutputDevice.GetAndroidNativeWindow();
 		}
 
 		void DestroyGraphicsContextCreateInformation(_Inout_ GraphicsContextCreateInformation*& InOutGraphicsContextCreateInformation)

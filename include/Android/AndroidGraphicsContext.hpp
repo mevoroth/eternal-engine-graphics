@@ -4,6 +4,8 @@
 
 #include "Android/AndroidOutputDevice.hpp"
 
+struct ANativeWindow;
+
 namespace Eternal
 {
 	namespace Graphics
@@ -14,6 +16,8 @@ namespace Eternal
 				: GraphicsContextCreateInformation(InSettings)
 			{
 			}
+
+			ANativeWindow* NativeWindow = nullptr;
 		};
 
 		class AndroidGraphicsContext
@@ -21,6 +25,8 @@ namespace Eternal
 		public:
 
 			AndroidGraphicsContext(_In_ const AndroidGraphicsContextCreateInformation& InGraphicsContextCreateInformation);
+
+			ANativeWindow* GetAndroidNativeWindow();
 
 		protected:
 

@@ -4,6 +4,8 @@
 
 #include "OutputDevice/OutputDevice.hpp"
 
+struct ANativeWindow;
+
 namespace Eternal
 {
 	namespace Graphics
@@ -15,6 +17,7 @@ namespace Eternal
 			AndroidOutputDeviceCreateInformation(
 				_In_ int InWidth,
 				_In_ int InHeight,
+				_In_ ANativeWindow* InNativeWindow,
 				_In_ bool InVSync = false,
 				_In_ bool InWindowed = true
 			)
@@ -24,8 +27,11 @@ namespace Eternal
 					InVSync,
 					InWindowed
 				)
+				, NativeWindow(InNativeWindow)
 			{
 			}
+
+			ANativeWindow* NativeWindow = nullptr;
 		};
 
 
@@ -34,6 +40,12 @@ namespace Eternal
 		public:
 
 			AndroidOutputDevice(_In_ AndroidOutputDeviceCreateInformation& InOutputDeviceCreateInformation);
+
+			ANativeWindow* GetAndroidNativeWindow();
+
+		private:
+
+			ANativeWindow* NativeWindow = nullptr;
 
 		};
 	}
