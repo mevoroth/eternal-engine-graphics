@@ -5,13 +5,13 @@
 #include "Windows/WindowsOutputDevice.hpp"
 #include "Graphics/RenderPassFactory.hpp"
 #include "Graphics/GraphicsContext.hpp"
-#include "Vulkan/VulkanUtils.hpp"
-#include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanCommandQueue.hpp"
+#include "Vulkan/VulkanDevice.hpp"
+#include "Vulkan/VulkanFormat.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Vulkan/VulkanResource.hpp"
+#include "Vulkan/VulkanUtils.hpp"
 #include "Vulkan/VulkanView.hpp"
-#include "Graphics/Format.hpp"
 
 namespace Eternal
 {
@@ -120,6 +120,19 @@ namespace Eternal
 			ETERNAL_ASSERT(HasValidMode);
 #endif
 
+			vk::CompositeAlphaFlagBitsKHR CompositeAlphaMode = [&SurfaceCapabilities]() -> vk::CompositeAlphaFlagBitsKHR
+			{
+				uint32_t LastCompositeFlagIndex = Math::Log2Fast(static_cast<uint32_t>(vk::CompositeAlphaFlagBitsKHR::eInherit));
+
+				for (uint32_t CompositeAlphaFlagIndex = 0; CompositeAlphaFlagIndex <= LastCompositeFlagIndex; ++CompositeAlphaFlagIndex)
+				{
+					vk::CompositeAlphaFlagBitsKHR CurrentCompositeAlphaFlagBit = static_cast<vk::CompositeAlphaFlagBitsKHR>(1 << CompositeAlphaFlagIndex);
+					if (SurfaceCapabilities.supportedCompositeAlpha & CurrentCompositeAlphaFlagBit)
+						return CurrentCompositeAlphaFlagBit;
+				}
+				return vk::CompositeAlphaFlagBitsKHR();
+			}();
+
 			vk::SwapchainCreateInfoKHR SwapChainInfo(
 				vk::SwapchainCreateFlagBitsKHR(),
 				_Surface,
@@ -132,7 +145,7 @@ namespace Eternal
 				vk::SharingMode::eExclusive,
 				0, nullptr,
 				vk::SurfaceTransformFlagBitsKHR::eIdentity,
-				vk::CompositeAlphaFlagBitsKHR::eOpaque,
+				CompositeAlphaMode,
 				InContext.GetOutputDevice().GetVSync() ? vk::PresentModeKHR::eFifo : vk::PresentModeKHR::eMailbox,
 				true
 			);
@@ -146,6 +159,8 @@ namespace Eternal
 			VerifySuccess(VulkanDevice.getSwapchainImagesKHR(_SwapChain, &BackBuffersCount, static_cast<vk::Image*>(nullptr)));
 
 			ETERNAL_ASSERT(BackBuffersCount == GraphicsContext::FrameBufferingCount);
+
+			BackBuffersCount = GraphicsContext::FrameBufferingCount;
 
 			_BackBuffers.resize(BackBuffersCount);
 			_BackBufferRenderTargetViews.resize(BackBuffersCount);
@@ -172,7 +187,7 @@ namespace Eternal
 						InContext,
 						_BackBuffers[BackBufferIndex],
 						MetaData,
-						Format::FORMAT_BGRA8888_UNORM,
+						ConvertVulkanFormatToFormat(Formats[0].format),
 						ViewRenderTargetType::VIEW_RENDER_TARGET_TEXTURE_2D
 					);
 
