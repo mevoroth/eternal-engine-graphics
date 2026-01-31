@@ -34,6 +34,17 @@ namespace Eternal
 			return VULKAN_FORMATS[static_cast<int32_t>(InFormat)];
 		}
 
+		Format ConvertVulkanFormatToFormat(_In_ const vk::Format& InFormat)
+		{
+			for (uint32_t FormatIndex = 0; FormatIndex < static_cast<uint32_t>(Format::FORMAT_COUNT); ++FormatIndex)
+			{
+				if (InFormat == VULKAN_FORMATS[FormatIndex].Format)
+					return static_cast<Format>(FormatIndex);
+			}
+
+			return Format::FORMAT_UNKNOWN;
+		}
+
 		bool IsVulkanDepthStencilFormat(const Format& InFormat)
 		{
 			switch (InFormat)

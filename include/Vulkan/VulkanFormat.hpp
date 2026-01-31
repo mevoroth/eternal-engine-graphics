@@ -22,6 +22,7 @@ namespace Eternal
 		};
 
 		const VulkanFormat& ConvertFormatToVulkanFormat(_In_ const Format& InFormat);
+		Format ConvertVulkanFormatToFormat(_In_ const vk::Format& InFormat);
 		bool IsVulkanDepthStencilFormat(const Format& InFormat);
 	}
 }
