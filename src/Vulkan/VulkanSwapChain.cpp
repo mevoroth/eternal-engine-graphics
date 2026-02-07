@@ -8,6 +8,7 @@
 #include "Vulkan/VulkanCommandQueue.hpp"
 #include "Vulkan/VulkanDevice.hpp"
 #include "Vulkan/VulkanFormat.hpp"
+#include "Vulkan/VulkanFence.hpp"
 #include "Vulkan/VulkanGraphicsContext.hpp"
 #include "Vulkan/VulkanResource.hpp"
 #include "Vulkan/VulkanUtils.hpp"
@@ -198,41 +199,39 @@ namespace Eternal
 
 		void VulkanSwapChain::Acquire(GraphicsContext& InContext)
 		{
-			VulkanGraphicsContext& GfxContext = Vulkan::VulkanGraphicsContextCast(InContext);
+			VulkanGraphicsContext& InVulkanGraphicsContext = Vulkan::VulkanGraphicsContextCast(InContext);
+
+			VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(InContext.GetGraphicsQueue());
 
 			Vulkan::VerifySuccess(
 				static_cast<VulkanDevice&>(InContext.GetDevice()).GetVulkanDevice().acquireNextImageKHR(
 					GetSwapChain(),
 					UINT64_MAX,
-					GfxContext.GetNextFrameSemaphore(),
+					InVulkanGraphicsContext.GetNextFrameSemaphore(),
 					nullptr,
-					&InContext.GetCurrentFrameIndex()
+					&InVulkanGraphicsContext.GetVulkanSwapChainIndex()
 				)
 			);
+
+			InContext.GetCurrentFrameIndex() = (InContext.GetCurrentFrameIndex() + 1) % GraphicsContext::FrameBufferingCount;
 		}
 
 		void VulkanSwapChain::Present(GraphicsContext& InContext)
 		{
-			VulkanGraphicsContext& GfxContext = Vulkan::VulkanGraphicsContextCast(InContext);
+			VulkanGraphicsContext& InVulkanGraphicsContext = Vulkan::VulkanGraphicsContextCast(InContext);
 
 			VulkanCommandQueue& VkCommandQueue = static_cast<VulkanCommandQueue&>(InContext.GetGraphicsQueue());
 
-			vector<vk::Semaphore> SubmitCompletionSemaphores;
-			VkCommandQueue.AcquireSubmitCompletionSemaphores(SubmitCompletionSemaphores);
-
 			vk::PresentInfoKHR PresentInfo(
-				static_cast<uint32_t>(SubmitCompletionSemaphores.size()), SubmitCompletionSemaphores.data(),
-				1, &GetSwapChain(),
-				&InContext.GetCurrentFrameIndex()
+				1u, &InVulkanGraphicsContext.GetCurrentSubmitSemaphore(),
+				1u, &GetSwapChain(),
+				&InVulkanGraphicsContext.GetVulkanSwapChainIndex()
 			);
 			Vulkan::VerifySuccess(
 				static_cast<VulkanCommandQueue&>(InContext.GetGraphicsQueue()).GetVulkanCommandQueue().presentKHR(
 					&PresentInfo
 				)
 			);
-
-			VkCommandQueue.ReleaseSubmitCompletionSemaphores(std::move(_SubmitCompletionSemaphores));
-			_SubmitCompletionSemaphores = std::move(SubmitCompletionSemaphores);
 		}
 	}
 }

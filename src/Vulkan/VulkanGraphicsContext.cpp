@@ -26,6 +26,12 @@ namespace Eternal
 					VkDevice.createSemaphore(&SemaphoreInfo, nullptr, &_AcquireFrameSemaphores[AcquireSemaphoreIndex])
 				);
 			}
+			for (int32_t SubmitSemaphoreIndex = 0; SubmitSemaphoreIndex < _SubmitSemaphores.size(); ++SubmitSemaphoreIndex)
+			{
+				VerifySuccess(
+					VkDevice.createSemaphore(&SemaphoreInfo, nullptr, &_SubmitSemaphores[SubmitSemaphoreIndex])
+				);
+			}
 
 			vk::DescriptorPoolSize PoolSizes[] =
 			{
@@ -58,10 +64,12 @@ namespace Eternal
 			_GraphicsContext.WaitForAllFences();
 
 			vk::Device& VkDevice = static_cast<VulkanDevice&>(_GraphicsContext.GetDevice()).GetVulkanDevice();
+			
 			for (int32_t AcquireSemaphoreIndex = 0; AcquireSemaphoreIndex < _AcquireFrameSemaphores.size(); ++AcquireSemaphoreIndex)
-			{
 				VkDevice.destroySemaphore(_AcquireFrameSemaphores[AcquireSemaphoreIndex]);
-			}
+
+			for (int32_t SubmitSemaphoreIndex = 0; SubmitSemaphoreIndex < _SubmitSemaphores.size(); ++SubmitSemaphoreIndex)
+				VkDevice.destroySemaphore(_SubmitSemaphores[SubmitSemaphoreIndex]);
 		}
 
 		Device& VulkanGraphicsContext::GetDevice()

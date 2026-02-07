@@ -58,6 +58,12 @@ namespace Eternal
 			vk::Semaphore& GetCurrentFrameSemaphore() { return _AcquireFrameSemaphores[_GraphicsContext.GetCurrentFrameIndex()]; }
 			vk::Semaphore& GetNextFrameSemaphore() { return _AcquireFrameSemaphores[(_GraphicsContext.GetCurrentFrameIndex() + 1) % _AcquireFrameSemaphores.size()]; }
 
+			vk::Semaphore& GetCurrentSubmitSemaphore() { return _SubmitSemaphores[GetVulkanSwapChainIndex()]; }
+
+			vk::Semaphore& GetVulkanSwapChainImageIndexSemaphore() { return _AcquireFrameSemaphores[GetVulkanSwapChainIndex()]; }
+
+			uint32_t& GetVulkanSwapChainIndex() { return _CurrentVulkanSwapChainIndex; }
+
 		protected:
 
 			void InternalResetFrameStates();
@@ -67,9 +73,11 @@ namespace Eternal
 			GraphicsContext&												_GraphicsContext;
 
 			std::array<vk::Semaphore, GraphicsContext::FrameBufferingCount>	_AcquireFrameSemaphores;
+			std::array<vk::Semaphore, GraphicsContext::FrameBufferingCount>	_SubmitSemaphores;
 			DynamicHandlePool<>												_ConstantHandles;
 			vk::DescriptorPool												_DescriptorPool;
 			std::vector<VulkanDescriptorTable*>								_DescriptorTables;
+			uint32_t														_CurrentVulkanSwapChainIndex = ~0u;
 		};
 	}
 }
