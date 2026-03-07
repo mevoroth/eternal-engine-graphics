@@ -29,7 +29,7 @@ namespace Eternal
 
 		struct AccelerationStructureInstance
 		{
-			Matrix3x4 InstanceToWorld										= Matrix3x4::Identity;
+			Matrix3x4 InstanceToWorld										= Matrix3x4::Identity();
 			AccelerationStructure* BottomLevelAccelerationStructureBuffer	= nullptr;
 		};
 
