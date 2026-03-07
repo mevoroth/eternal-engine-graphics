@@ -308,10 +308,13 @@ namespace Eternal
 			ViewMetaData			MetaData;
 			Format					GraphicsFormat					= Format::FORMAT_INVALID;
 			ViewType				ResourceViewType				= ViewType::VIEW_UNKNOWN;
-			ViewShaderResourceType	ResourceViewShaderResourceType	= ViewShaderResourceType::VIEW_SHADER_RESOURCE_UNKNOWN;
-			ViewUnorderedAccessType	ResourceViewUnorderedAccessType	= ViewUnorderedAccessType::VIEW_UNORDERED_ACCESS_UNKNOWN;
-			ViewRenderTargetType	ResourceViewRenderTargetType	= ViewRenderTargetType::VIEW_RENDER_TARGET_UNKNOWN;
-			ViewDepthStencilType	ResourceViewDepthStencilType	= ViewDepthStencilType::VIEW_DEPTH_STENCIL_UNKNOWN;
+			union
+			{
+				ViewShaderResourceType	ResourceViewShaderResourceType;
+				ViewUnorderedAccessType	ResourceViewUnorderedAccessType;
+				ViewRenderTargetType	ResourceViewRenderTargetType;
+				ViewDepthStencilType	ResourceViewDepthStencilType;
+			};
 
 		protected:
 			ViewCreateInformation(
