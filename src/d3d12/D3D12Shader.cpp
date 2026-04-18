@@ -136,9 +136,9 @@ namespace Eternal
 
 			virtual STDMETHODIMP Open(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes) override
 			{
-				string IncludeSource = pFileName;
+				FileSystemPath IncludeSource(pFileName);
 
-				string IncludeFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
+				FileSystemPath IncludeFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
 				FilePath::NormalizePath(IncludeFullPathSource);
 
 				Context.GetPipelineLibrary().RegisterShaderDependency(CurrentShader, IncludeFullPathSource);
@@ -180,7 +180,7 @@ namespace Eternal
 				IDxcBlobEncoding* Encoding = nullptr;
 				wstring IncludeSourceUTF8(pFilename);
 				string IncludeSource = std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(IncludeSourceUTF8);
-				string IncludeFullPathSource = FilePath::Find(IncludeSource, FileType::FILE_TYPE_SHADERS);
+				FileSystemPath IncludeFullPathSource = FilePath::Find(FileSystemPath(IncludeSource), FileType::FILE_TYPE_SHADERS);
 				FilePath::NormalizePath(IncludeFullPathSource);
 
 				if (!FileSystem::FileExists(IncludeFullPathSource))
@@ -350,7 +350,7 @@ namespace Eternal
 
 			ETERNAL_ASSERT(!(InDefines.size() % 2)); // Force value for defines
 
-			string FullPathSource = FilePath::Find(InFileName, FileType::FILE_TYPE_SHADERS);
+			FileSystemPath FullPathSource = FilePath::Find(FileSystemPath(InFileName), FileType::FILE_TYPE_SHADERS);
 			FileContent ShaderSourceCode = LoadFileToMemory(FullPathSource);
 
 			string ShaderFileContent = R"HLSLINCLUDE(
@@ -569,7 +569,7 @@ namespace Eternal
 					size_t StringLength = OutputName->GetStringLength();
 					LPCWSTR StringPointer = OutputName->GetStringPointer();
 					wcstombs_s(nullptr, PDBName, StringPointer, 256);
-					string PDBPath = FilePath::FindOrCreate(PDBName, FileType::FILE_TYPE_SHADERS_PDB);
+					FileSystemPath PDBPath = FilePath::FindOrCreate(FileSystemPath(PDBName), FileType::FILE_TYPE_SHADERS_PDB);
 					File* PDBFile = CreateFileHandle(PDBPath);
 					PDBFile->Open(FileOpenMode::FILE_OPEN_MODE_WRITE);
 					PDBFile->Write(reinterpret_cast<uint8_t*>(PDBBlob->GetBufferPointer()), PDBBlob->GetBufferSize());

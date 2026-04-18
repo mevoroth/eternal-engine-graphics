@@ -513,21 +513,21 @@ namespace Eternal
 			char PipelineFileName[256];
 			sprintf_s(PipelineFileName, "pipelines.%s.library", DeviceTypeString.c_str());
 
-			string PipelinesLibraryFileName = [&InPipelineSerializationMode, &PipelineFileName]() -> string
+			FileSystemPath PipelinesLibraryFilePath = [&InPipelineSerializationMode, &PipelineFileName]() -> FileSystemPath
 			{
 				if (InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_WRITE)
-					return FilePath::FindOrCreate(PipelineFileName, FileType::FILE_TYPE_CACHED_PIPELINES);
+					return FilePath::FindOrCreate(FileSystemPath(PipelineFileName), FileType::FILE_TYPE_CACHED_PIPELINES);
 				else
-					return FilePath::Find(PipelineFileName, FileType::FILE_TYPE_CACHED_PIPELINES);
+					return FilePath::Find(FileSystemPath(PipelineFileName), FileType::FILE_TYPE_CACHED_PIPELINES);
 			}();
 
 			if (InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_READ)
 			{
-				if (PipelinesLibraryFileName.length() == 0)
+				if (!PipelinesLibraryFilePath.IsValid())
 					return;
 			}
 
-			File* PipelinesLibraryFile = CreateFileHandle(PipelinesLibraryFileName);
+			File* PipelinesLibraryFile = CreateFileHandle(PipelinesLibraryFilePath);
 			PipelinesLibraryFile->Open(InPipelineSerializationMode == PipelineSerializationMode::PIPELINE_SERIALIZATION_MODE_WRITE ? FileOpenMode::FILE_OPEN_MODE_WRITE : FileOpenMode::FILE_OPEN_MODE_READ);
 
 			_PipelineLibrary.SerializePipelineLibrary(*this, PipelinesLibraryFile);

@@ -70,7 +70,7 @@ namespace Eternal
 			VulkanPrivate::VulkanShaderUserData& UserData = *reinterpret_cast<VulkanPrivate::VulkanShaderUserData*>(InUserData);
 
 			FileContent* ShaderSourceCode = new FileContent();
-			string FullPathSource = FilePath::Find(InRequestedSource, FileType::FILE_TYPE_SHADERS);
+			FileSystemPath FullPathSource = FilePath::Find(FileSystemPath(InRequestedSource), FileType::FILE_TYPE_SHADERS);
 			*ShaderSourceCode = LoadFileToMemory(FullPathSource);
 
 			shaderc_include_result* ShaderIncludeResult = new shaderc_include_result;
@@ -117,7 +117,7 @@ namespace Eternal
 			Device& InDevice				= InOutContext.GetDevice();
 			const uint32_t VulkanVersion	= static_cast<VulkanDevice&>(InDevice).GetVulkanVersion();
 
-			string FullPathSource			= FilePath::Find(InFileName, FileType::FILE_TYPE_SHADERS);
+			FileSystemPath FullPathSource	= FilePath::Find(FileSystemPath(InFileName), FileType::FILE_TYPE_SHADERS);
 			FileContent ShaderSourceCode	= LoadFileToMemory(FullPathSource);
 
 			string ShaderFileContent		= R"HLSLINCLUDE(
@@ -234,7 +234,7 @@ namespace Eternal
 				reinterpret_cast<const char*>(ShaderFileContent.c_str()),
 				ShaderFileContent.size(),
 				SHADER_KINDS[static_cast<int32_t>(InStage)],
-				FullPathSource.c_str(),
+				FullPathSource.Path.c_str(),
 				SHADER_ENTRY_POINTS[static_cast<int32_t>(InStage)],
 				CompilerOptions
 			);
@@ -244,7 +244,7 @@ namespace Eternal
 				reinterpret_cast<const char*>(ShaderFileContent.c_str()),
 				ShaderFileContent.size(),
 				SHADER_KINDS[static_cast<int32_t>(InStage)],
-				FullPathSource.c_str(),
+				FullPathSource.Path.c_str(),
 				SHADER_ENTRY_POINTS[static_cast<int32_t>(InStage)],
 				CompilerOptions
 			);
@@ -265,7 +265,7 @@ namespace Eternal
 					ShaderFileContent.c_str(),
 					ShaderFileContent.size(),
 					SHADER_KINDS[static_cast<int32_t>(InStage)],
-					FullPathSource.c_str(),
+					FullPathSource.Path.c_str(),
 					SHADER_ENTRY_POINTS[static_cast<int32_t>(InStage)],
 					CompilerOptions
 				);

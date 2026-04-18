@@ -17,7 +17,7 @@ namespace Eternal
 		{
 			using namespace Eternal::FileSystem;
 
-			string ShaderFullPathSource = FilePath::Find(_ShaderCreateInformation.FileName, FileType::FILE_TYPE_SHADERS);
+			FileSystemPath ShaderFullPathSource = FilePath::Find(FileSystemPath(_ShaderCreateInformation.FileName), FileType::FILE_TYPE_SHADERS);
 			FilePath::NormalizePath(ShaderFullPathSource);
 			InOutContext.GetPipelineLibrary().RegisterShaderDependency(this, ShaderFullPathSource);
 		}
