@@ -47,7 +47,7 @@ namespace Eternal
 			case DeviceType::DEVICE_TYPE_D3D12:
 			{
 				LogWrite(LogInfo, LogEngine, "[Graphics::CreateDevice]Creating Direct3D 12 Device");
-				return new D3D12WindowsDevice(0);
+				return new D3D12WindowsDevice();
 			}
 #endif
 #if ETERNAL_ENABLE_VULKAN

@@ -25,6 +25,7 @@ namespace Eternal
 			CommandQueueDesc.NodeMask	= InD3D12Device.GetDeviceMask();
 
 			D3D12::VerifySuccess(
+				InDevice,
 				InD3D12Device.GetD3D12Device()->CreateCommandQueue(
 					&CommandQueueDesc,
 					__uuidof(ID3D12CommandQueue),

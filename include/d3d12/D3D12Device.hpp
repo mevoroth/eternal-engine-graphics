@@ -50,7 +50,7 @@ namespace Eternal
 
 		protected:
 
-			D3D12Device(_In_ uint32_t InDeviceIndex);
+			D3D12Device();
 
 			ID3D12Device*	_Device			= nullptr;
 			ID3D12Device5*	_Device5		= nullptr;

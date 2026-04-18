@@ -6,8 +6,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		D3D12Device::D3D12Device(_In_ uint32_t InDeviceIndex)
-			: _DeviceMask(1 << InDeviceIndex)
+		D3D12Device::D3D12Device()
 		{
 		}
 

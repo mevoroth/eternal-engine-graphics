@@ -181,19 +181,61 @@ namespace Eternal
 			return _DXGIFactory;
 		}
 
-		D3D12WindowsDevice::D3D12WindowsDevice(_In_ uint32_t InDeviceIndex)
-			: D3D12Device(InDeviceIndex)
+		D3D12WindowsDevice::D3D12WindowsDevice()
+			: D3D12Device()
 		{
 #if ETERNAL_USE_NVIDIA_AFTERMATH
 			_NVIDIANsightAftermath.InitializeGpuCrashTracker();
 #endif
 
-			ETERNAL_ASSERT(_DXGIFactory);
-			HRESULT HResult = _DXGIFactory->EnumAdapters1(InDeviceIndex, &_DXGIAdapter1);
+			_DeviceMask = 0u;
 
-			if (HResult == DXGI_ERROR_NOT_FOUND)
+			uint32_t DeviceIndex = 0xFFFFFFFFu;
+			HRESULT HResult = S_OK;
+
+			ETERNAL_ASSERT(_DXGIFactory);
+
+			std::vector<IDXGIAdapter1*> Adapters;
+			Adapters.reserve(4);
+
+			IDXGIAdapter1* CurrentAdapter = nullptr;
+
+			uint32_t AdapterIndex = 0;
+			while (_DXGIFactory->EnumAdapters1(AdapterIndex, &CurrentAdapter) != DXGI_ERROR_NOT_FOUND)
+			{
+				Adapters.push_back(CurrentAdapter);
+				++AdapterIndex;
+			}
+
+			if (Adapters.size() == 0)
 			{
 				// No GPU at this index
+				ETERNAL_BREAK();
+				return;
+			}
+
+			SIZE_T CurrentDedicatedVideoMemory = 0ull;
+			for (uint32_t AdapterIndex = 0u; AdapterIndex < Adapters.size(); ++AdapterIndex)
+			{
+				DXGI_ADAPTER_DESC1 AdapterDescription = {};
+				VerifySuccess(
+					Adapters[AdapterIndex]->GetDesc1(&AdapterDescription)
+				);
+				if (AdapterDescription.DedicatedVideoMemory > CurrentDedicatedVideoMemory)
+				{
+					if (_DXGIAdapter1)
+						_DXGIAdapter1->Release();
+
+					_DXGIAdapter1 = Adapters[AdapterIndex];
+					CurrentDedicatedVideoMemory = AdapterDescription.DedicatedVideoMemory;
+				}
+				else
+					Adapters[AdapterIndex]->Release();
+			}
+
+			if (!_DXGIAdapter1)
+			{
+				// No valid GPU found
 				ETERNAL_BREAK();
 				return;
 			}
@@ -226,7 +268,7 @@ namespace Eternal
 
 			/*VerifySuccess*/(
 				HResult = _Device5->QueryInterface(__uuidof(ID3D12InfoQueue), reinterpret_cast<void**>(&_D3D12InfoQueue))
-				);
+			);
 			if (HResult == S_OK)
 			{
 				/*VerifySuccess*/(
@@ -272,7 +314,7 @@ namespace Eternal
 			);
 
 			D3D12_FEATURE_DATA_ARCHITECTURE FeatureArchitecture;
-			FeatureArchitecture.NodeIndex = InDeviceIndex;
+			FeatureArchitecture.NodeIndex = 0;
 			VerifySuccess(
 				_Device->CheckFeatureSupport(D3D12_FEATURE_ARCHITECTURE, &FeatureArchitecture, sizeof(D3D12_FEATURE_DATA_ARCHITECTURE))
 			);

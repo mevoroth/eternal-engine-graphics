@@ -16,7 +16,7 @@ namespace Eternal
 			static void Destroy();
 			static IDXGIFactory4* GetDXGIFactory();
 
-			D3D12WindowsDevice(_In_ uint32_t InDeviceIndex);
+			D3D12WindowsDevice();
 			~D3D12WindowsDevice();
 
 #if ETERNAL_USE_NVIDIA_AFTERMATH
