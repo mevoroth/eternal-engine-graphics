@@ -7,24 +7,32 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		TransitionFlags operator|(const TransitionFlags& InLeftTransitionFlags, const TransitionFlags& InRightTransitionFlags)
+		TransitionFlags operator|(_In_ const TransitionFlags& InLeftTransitionFlags, _In_ const TransitionFlags& InRightTransitionFlags)
 		{
 			return static_cast<TransitionFlags>(
 				static_cast<uint32_t>(InLeftTransitionFlags) | static_cast<uint32_t>(InRightTransitionFlags)
 			);
 		}
 
-		TransitionFlags operator&(const TransitionFlags& InLeftTransitionFlags, const TransitionFlags& InRightTransitionFlags)
+		TransitionFlags operator&(_In_ const TransitionFlags& InLeftTransitionFlags, _In_ const TransitionFlags& InRightTransitionFlags)
 		{
 			return static_cast<TransitionFlags>(
 				static_cast<uint32_t>(InLeftTransitionFlags) & static_cast<uint32_t>(InRightTransitionFlags)
 			);
 		}
 
-		TransitionFlags& operator&=(TransitionFlags& InOutTransitionFlags, const TransitionFlags& InOtherTransitionFlags)
+		TransitionFlags& operator&=(_Inout_ TransitionFlags& InOutTransitionFlags, _In_ const TransitionFlags& InOtherTransitionFlags)
 		{
 			InOutTransitionFlags = static_cast<TransitionFlags>(
 				static_cast<uint32_t>(InOutTransitionFlags) & static_cast<uint32_t>(InOtherTransitionFlags)
+			);
+			return InOutTransitionFlags;
+		}
+
+		TransitionFlags& operator|=(_Inout_ TransitionFlags& InOutTransitionFlags, _In_ const TransitionFlags& InOtherTransitionFlags)
+		{
+			InOutTransitionFlags = static_cast<TransitionFlags>(
+				static_cast<uint32_t>(InOutTransitionFlags) | static_cast<uint32_t>(InOtherTransitionFlags)
 			);
 			return InOutTransitionFlags;
 		}

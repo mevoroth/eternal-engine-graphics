@@ -106,10 +106,11 @@ namespace Eternal
 			);
 		}
 
-		TransitionFlags operator|(const TransitionFlags& InLeftTransitionFlags, const TransitionFlags& InRightTransitionFlags);
-		TransitionFlags operator&(const TransitionFlags& InLeftTransitionFlags, const TransitionFlags& InRightTransitionFlags);
-		TransitionFlags& operator&=(TransitionFlags& InOutTransitionFlags, const TransitionFlags& InOtherTransitionFlags);
-		TransitionFlags operator~(const TransitionFlags& InTransitionFlags);
+		TransitionFlags operator|(_In_ const TransitionFlags& InLeftTransitionFlags, _In_ const TransitionFlags& InRightTransitionFlags);
+		TransitionFlags operator&(_In_ const TransitionFlags& InLeftTransitionFlags, _In_ const TransitionFlags& InRightTransitionFlags);
+		TransitionFlags& operator&=(_Inout_ TransitionFlags& InOutTransitionFlags, _In_ const TransitionFlags& InOtherTransitionFlags);
+		TransitionFlags& operator|=(_Inout_ TransitionFlags& InOutTransitionFlags, _In_ const TransitionFlags& InOtherTransitionFlags);
+		TransitionFlags operator~(_In_ const TransitionFlags& InTransitionFlags);
 		constexpr TextureResourceUsage operator|(_In_ const TextureResourceUsage& InLeftResourceUsage, _In_ const TextureResourceUsage& InRightResourceUsage)
 		{
 			return static_cast<TextureResourceUsage>(
