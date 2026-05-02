@@ -106,7 +106,7 @@ namespace Eternal
 			const vector<RenderTargetInformation>& InRenderTargets = InRenderPass.GetRenderTargets();
 			for (uint32_t RenderTargetIndex = 0; RenderTargetIndex < InRenderTargets.size(); ++RenderTargetIndex)
 			{
-				memcpy(ClearColorValues[RenderTargetIndex].float32.data(), InRenderTargets[RenderTargetIndex].RenderTarget->GetResource().GetClearValue(), sizeof(float) * ClearColorValues[RenderTargetIndex].float32.size());
+				memcpy(ClearColorValues[RenderTargetIndex].float32.data(), InRenderTargets[RenderTargetIndex].RenderTarget->GetResource().GetClearValue().Color, sizeof(float) * ClearColorValues[RenderTargetIndex].float32.size());
 				
 				ClearValues[RenderTargetIndex] = vk::ClearValue(
 					ClearColorValues[RenderTargetIndex]
@@ -116,7 +116,7 @@ namespace Eternal
 			if (InRenderPass.GetDepthStencilRenderTarget())
 			{
 				uint32_t DepthStencilSlot = static_cast<uint32_t>(InRenderTargets.size());
-				memcpy(ClearColorValues[DepthStencilSlot].float32.data(), InRenderPass.GetDepthStencilRenderTarget()->GetResource().GetClearValue(), sizeof(float) * ClearColorValues[DepthStencilSlot].float32.size());
+				memcpy(ClearColorValues[DepthStencilSlot].float32.data(), InRenderPass.GetDepthStencilRenderTarget()->GetResource().GetClearValue().Color, sizeof(float) * ClearColorValues[DepthStencilSlot].float32.size());
 				
 				ClearValues[DepthStencilSlot] = vk::ClearValue(
 					ClearColorValues[DepthStencilSlot]

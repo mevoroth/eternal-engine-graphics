@@ -4,10 +4,62 @@ namespace Eternal
 {
 	namespace Graphics
 	{
-		constexpr uint32_t TextureCreateInformation::ComponentCount;
-		constexpr float TextureCreateInformation::DefaultClearValueZero[ComponentCount];
-		constexpr float TextureCreateInformation::DefaultClearValueOne[ComponentCount];
-		constexpr float TextureCreateInformation::DefaultClearValueDepth[ComponentCount];
+		constexpr uint32_t ClearValue::ComponentCount;
+		constexpr uint8_t ClearValue::DefaultClearValueStencil;
+		std::vector<ClearValue> ClearValue::ClearValues;
+
+		//////////////////////////////////////////////////////////////////////////
+
+		ClearValue ClearValue::DefaultClearValueZero()
+		{
+			return ClearValue(0.0f, 0.0f, 0.0f, 0.0f);
+		}
+
+		ClearValue ClearValue::DefaultClearValueOne()
+		{
+			return ClearValue(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+
+		ClearValue ClearValue::DefaultClearValueDepth()
+		{
+			return ETERNAL_USE_REVERSED_Z ? ClearValue(0.0f) : ClearValue(1.0f);
+		}
+
+		void ClearValue::InitializeClearValues()
+		{
+			ClearValues.reserve(ClearValuesPoolSize);
+
+			ClearValues.push_back(DefaultClearValueZero());
+			ClearValues.push_back(DefaultClearValueOne());
+		}
+
+		uint8_t ClearValue::FindOrAddClearValue(_In_ const ClearValue& InClearValue)
+		{
+			for (uint8_t ClearValueIndex = 0; ClearValueIndex < ClearValues.size(); ++ClearValueIndex)
+			{
+				const ClearValue& CurrentClearValue = ClearValues[ClearValueIndex];
+				if (CurrentClearValue == InClearValue)
+					return ClearValueIndex;
+			}
+			ETERNAL_ASSERT(ClearValues.size() < ClearValuesPoolSize);
+			ClearValues.push_back(InClearValue);
+			return static_cast<uint8_t>(ClearValues.size() - 1);
+		}
+
+		bool ClearValue::operator==(const ClearValue& InOther) const
+		{
+			for (uint32_t ComponentIndex = 0; ComponentIndex < ComponentCount; ++ComponentIndex)
+			{
+				if (RawClearValue[ComponentIndex] != InOther.RawClearValue[ComponentIndex])
+					return false;
+			}
+			return true;
+		}
+
+		bool ClearValue::operator!=(const ClearValue& InOther) const
+		{
+			return !(*this == InOther);
+		}
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -33,6 +85,16 @@ namespace Eternal
 			: _ResourceType(InResourceType)
 			, _ResourceCreateInformation(InResourceCreateInformation)
 		{
+			const TextureCreateInformation& InTextureInformation = InResourceCreateInformation.TextureInformation;
+
+			if ((GetResourceType() & ResourceType::RESOURCE_TYPE_TEXTURE) == ResourceType::RESOURCE_TYPE_TEXTURE)
+			{
+				uint32_t SubResourcesCount = GetMIPLevels() * InTextureInformation.DepthOrArraySize;
+				GetSubResourceStates().resize(SubResourcesCount);
+				for (uint32_t SubResourceIndex = 0; SubResourceIndex < SubResourcesCount; ++SubResourceIndex)
+					GetSubResourceStates()[SubResourceIndex] = GetResourceState();
+			}
+
 			ETERNAL_ASSERT(_ResourceCreateInformation.Name.size() > 0);
 			ResourceHistory.insert(this);
 		}
@@ -50,16 +112,10 @@ namespace Eternal
 			return FundamentalType;
 		} 
 
-		const float* Resource::GetClearValue() const
+		const ClearValue& Resource::GetClearValue() const
 		{
 			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
-			return _ResourceCreateInformation.TextureInformation.ClearValue;
-		}
-
-		uint8_t Resource::GetStencilClearValue() const
-		{
-			ETERNAL_ASSERT(GetResourceType() == ResourceType::RESOURCE_TYPE_TEXTURE);
-			return _ResourceCreateInformation.TextureInformation.StencilClearValue;
+			return ClearValue::ClearValues[_ResourceCreateInformation.TextureInformation.ClearValueIndex];
 		}
 
 		void Resource::SetResourceState(_In_ const TransitionState& InTransitionState)
@@ -73,12 +129,18 @@ namespace Eternal
 		{
 			ETERNAL_ASSERT(InSubResourceIndex < _SubResourceStates.size());
 			_SubResourceStates[InSubResourceIndex] = InTransitionState;
+			_IsSubResourceStatesDirty = true;
 		}
 
 		const TransitionState& Resource::GetResourceState(_In_ uint32_t InSubResourceIndex) const
 		{
 			ETERNAL_ASSERT(InSubResourceIndex < _SubResourceStates.size());
 			return _SubResourceStates[InSubResourceIndex];
+		}
+
+		uint32_t Resource::GetSubResourceStatesCount() const
+		{
+			return _SubResourceStates.size();
 		}
 
 		const ResourceDimension& Resource::GetResourceDimension() const

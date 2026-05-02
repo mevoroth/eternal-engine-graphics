@@ -31,7 +31,8 @@ namespace Eternal
 			TEXTURE_RESOURCE_USAGE_UNORDERED_ACCESS	= 0x4,
 			TEXTURE_RESOURCE_USAGE_SHADER_RESOURCE	= 0x8,
 			TEXTURE_RESOURCE_USAGE_COPY_READ		= 0x10,
-			TEXTURE_RESOURCE_USAGE_COPY_WRITE		= 0x20
+			TEXTURE_RESOURCE_USAGE_COPY_WRITE		= 0x20,
+			TEXTURE_RESOURCE_USAGE_COUNT			= (TEXTURE_RESOURCE_USAGE_COPY_WRITE << 1)
 		};
 		static constexpr TextureResourceUsage TextureResourceUsageRenderTargetDepthStencil = TextureResourceUsage::TEXTURE_RESOURCE_USAGE_RENDER_TARGET | TextureResourceUsage::TEXTURE_RESOURCE_USAGE_DEPTH_STENCIL;
 
@@ -73,7 +74,57 @@ namespace Eternal
 			RESOURCE_TYPE_BACK_BUFFER		= 0x4 | RESOURCE_TYPE_TEXTURE,
 			RESOURCE_TYPE_CONSTANT_BUFFER	= 0x8 | RESOURCE_TYPE_BUFFER
 		};
-		
+
+		struct ClearValue
+		{
+			static constexpr uint32_t ClearValuesPoolSize		= 32u;
+			static constexpr uint32_t ComponentCount			= 4;
+			static constexpr uint8_t DefaultClearValueStencil	= 0x0u;
+
+			static std::vector<ClearValue> ClearValues;
+
+			static ClearValue DefaultClearValueZero();
+			static ClearValue DefaultClearValueOne();
+			static ClearValue DefaultClearValueDepth();
+
+			static void InitializeClearValues();
+			static uint8_t FindOrAddClearValue(_In_ const ClearValue& InClearValue);
+
+			ClearValue(_In_ float InX, _In_ float InY, _In_ float InZ, _In_ float InW)
+			{
+				Color[0] = InX;
+				Color[1] = InY;
+				Color[2] = InZ;
+				Color[3] = InW;
+			}
+
+			ClearValue(_In_ float InDepth, _In_ uint8_t InStencil = DefaultClearValueStencil)
+			{
+				DepthStencil.Depth = InDepth;
+				DepthStencil.Stencil = InStencil;
+			}
+
+			ClearValue()
+			{
+				for (uint32_t ValueIndex = 0; ValueIndex < ComponentCount; ++ValueIndex)
+					RawClearValue[ValueIndex] = 0;
+			}
+
+			bool operator==(const ClearValue& Other) const;
+			bool operator!=(const ClearValue& Other) const;
+
+			union
+			{
+				uint32_t RawClearValue[ComponentCount] = {};
+				float Color[ComponentCount];
+				struct
+				{
+					float Depth;
+					uint8_t Stencil;
+				} DepthStencil;
+			};
+		};
+
 		struct MapRange
 		{
 			MapRange(_In_ uint32_t InMapSize, _In_ uint32_t InMapOffset = 0, _In_ uint32_t InMIPIndex = 0, _In_ uint32_t InPlaneSlice = 0, _In_ uint32_t InArraySlice = 0)
@@ -95,58 +146,69 @@ namespace Eternal
 		// TODO: Add multisample resource
 		struct TextureCreateInformation
 		{
-			static constexpr uint32_t ComponentCount						= 4;
-			static constexpr float DefaultClearValueZero[ComponentCount]	= { 0.0f };
-			static constexpr float DefaultClearValueOne[ComponentCount]		= { 1.0f, 1.0f, 1.0f, 1.0f };
-#if ETERNAL_USE_REVERSED_Z
-			static constexpr float DefaultClearValueDepth[ComponentCount]	= { DefaultClearValueZero[0], DefaultClearValueZero[1], DefaultClearValueZero[2], DefaultClearValueZero[3] };
-#else
-			static constexpr float DefaultClearValueDepth[ComponentCount]	= { DefaultClearValueOne[0], DefaultClearValueOne[1], DefaultClearValueOne[2], DefaultClearValueOne[3] };
-#endif
-			static constexpr uint8_t DefaultStencilClearValue				= 0x0u;
+			static constexpr uint32_t ResourceDimensionBitCount		= 4u;
+			static constexpr uint32_t TextureResourceUsageBitCount	= 6u;
 
-			TextureCreateInformation() {}
 			TextureCreateInformation(
-				_In_ const ResourceDimension& InResourceDimension,
-				_In_ const Format& InFormat,
-				_In_ const TextureResourceUsage& InResourceUsage,
-				_In_ uint32_t InWidth,
-				_In_ uint32_t InHeight = 1,
-				_In_ uint32_t InDepthOrArraySize = 1,
-				_In_ uint32_t InMIPLevels = 1,
-				_In_ const float InClearValue[ComponentCount] = DefaultClearValueZero,
-				_In_ uint8_t InStencilClearValue = DefaultStencilClearValue
+				_In_ const ResourceDimension& InResourceDimension = ResourceDimension::RESOURCE_DIMENSION_UNKNOWN,
+				_In_ const Format& InFormat = Format::FORMAT_INVALID,
+				_In_ const TextureResourceUsage& InResourceUsage = TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE,
+				_In_ uint16_t InWidth = 1,
+				_In_ uint16_t InHeight = 1,
+				_In_ uint8_t InDepthOrArraySize = 1,
+				_In_ uint8_t InMIPLevels = 1,
+				_In_ const ClearValue& InClearValue = ClearValue::DefaultClearValueZero()
 			)
-				: StencilClearValue(InStencilClearValue)
-				, Dimension(InResourceDimension)
-				, ResourceFormat(InFormat)
-				, Usage(InResourceUsage)
-				, Width(InWidth)
+				: Width(InWidth)
 				, Height(InHeight)
 				, DepthOrArraySize(InDepthOrArraySize)
 				, MIPLevels(InMIPLevels)
+				, Dimension(InResourceDimension)
+				, ResourceFormat(InFormat)
+				, Usage(InResourceUsage)
 			{
-				ETERNAL_ASSERT(InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_UNKNOWN);
-				ETERNAL_ASSERT(InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_BUFFER);
+				if (InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_UNKNOWN ||
+					InFormat != Format::FORMAT_INVALID ||
+					InResourceUsage != TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE ||
+					InWidth != 1 ||
+					InHeight != 1 ||
+					InDepthOrArraySize != 1 ||
+					InMIPLevels != 1 ||
+					InClearValue != ClearValue::DefaultClearValueZero())
+				{
+					ETERNAL_ASSERT(InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_UNKNOWN);
+					ETERNAL_ASSERT(InResourceDimension != ResourceDimension::RESOURCE_DIMENSION_BUFFER);
+				}
 
-				for (int32_t ValueIndex = 0; ValueIndex < ComponentCount; ++ValueIndex)
-					ClearValue[ValueIndex] = InClearValue[ValueIndex];
+				ClearValueIndex = ClearValue::FindOrAddClearValue(InClearValue);
 			}
 
-			float ClearValue[ComponentCount]	= { 0.0f };
-			uint8_t StencilClearValue			= 0x0u;
-			ResourceDimension Dimension			= ResourceDimension::RESOURCE_DIMENSION_UNKNOWN;
-			Format ResourceFormat				= Format::FORMAT_INVALID;
-			TextureResourceUsage Usage			= TextureResourceUsage::TEXTURE_RESOURCE_USAGE_NONE;
-			uint32_t Width						= 1;
-			uint32_t Height						= 1;
-			uint32_t DepthOrArraySize			= 1;
-			uint32_t MIPLevels					= 1;
+			uint16_t Width						= 1;
+			uint16_t Height						= 1;
+			uint8_t DepthOrArraySize			= 1;
+			uint8_t MIPLevels					= 1;
+			uint8_t ClearValueIndex				= 0;
+			ResourceDimension Dimension	: ResourceDimensionBitCount;
+			Format ResourceFormat		: FormatBitCount;
+			TextureResourceUsage Usage	: TextureResourceUsageBitCount;
 		};
 		
 		struct BufferCreateInformation
 		{
-			BufferCreateInformation() {}
+			static constexpr uint32_t BufferResourceUsageBitCount	= 10u;
+			static constexpr uint32_t MaxBufferStrideBitCount		= 16u;
+			static constexpr uint32_t MaxBufferStride				= (1u << MaxBufferStrideBitCount) - 1u;
+
+			ETERNAL_STATIC_ASSERT(sizeof(BufferResourceUsage) <= BufferResourceUsageBitCount, "BufferResourceUsage must fit in 10 bits");
+
+			BufferCreateInformation()
+				: ResourceFormat(Format::FORMAT_INVALID)
+				, Usage(BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE)
+				, Stride(0u)
+				, ElementCount(1u)
+			{
+			}
+
 			BufferCreateInformation(
 				_In_ const Format& InFormat,
 				_In_ const BufferResourceUsage& InResourceUsage,
@@ -161,13 +223,14 @@ namespace Eternal
 				if (InFormat == Format::FORMAT_UNKNOWN)
 				{
 					ETERNAL_ASSERT(InStride > 0);
+					ETERNAL_ASSERT(InStride <= MaxBufferStride);
 				}
 			}
 
-			Format ResourceFormat		= Format::FORMAT_INVALID;
-			BufferResourceUsage Usage	= BufferResourceUsage::BUFFER_RESOURCE_USAGE_NONE;
-			uint32_t Stride				= 0;
-			uint32_t ElementCount		= 1;
+			Format ResourceFormat		: FormatBitCount;
+			BufferResourceUsage Usage	: BufferResourceUsageBitCount;
+			uint32_t Stride				: MaxBufferStrideBitCount;
+			uint32_t ElementCount;
 		};
 
 		struct VertexBufferCreateInformation : public BufferCreateInformation
@@ -210,6 +273,7 @@ namespace Eternal
 				: BufferCreateInformation(
 					Format::FORMAT_UNKNOWN,
 					BufferResourceUsage::BUFFER_RESOURCE_USAGE_RAYTRACING_ACCELERATION_STRUCTURE_BUFFER,
+					1u,
 					InSize
 				)
 			{
@@ -323,6 +387,9 @@ namespace Eternal
 			inline bool IsMultisample() const { return _Multisample; }
 			inline const TransitionState& GetResourceState() const { return _ResourceCreateInformation.ResourceState; }
 			const TransitionState& GetResourceState(_In_ uint32_t InSubResourceIndex) const;
+			uint32_t GetSubResourceStatesCount() const;
+			bool IsSubResourceStatesDirty() const { return _IsSubResourceStatesDirty; }
+			void ClearSubResourceStatesDirty() { _IsSubResourceStatesDirty = false; }
 			const ResourceDimension& GetResourceDimension() const;
 			uint32_t GetWidth() const;
 			uint32_t GetHeight() const;
@@ -335,8 +402,7 @@ namespace Eternal
 			uint32_t GetElementCount() const;
 			ResourceType GetResourceType() const;
 			const ResourceType& GetResourceTypeRaw() const { return _ResourceType; }
-			const float* GetClearValue() const;
-			uint8_t GetStencilClearValue() const;
+			const ClearValue& GetClearValue() const;
 			const Format& GetFormat() const;
 			const std::string& GetResourceName() const;
 			bool IsBackBuffer() const;
@@ -351,10 +417,11 @@ namespace Eternal
 			std::vector<TransitionState>& GetSubResourceStates() { return _SubResourceStates; }
 
 		private:
-			ResourceType					_ResourceType = ResourceType::RESOURCE_TYPE_UNKNOWN; // Used to track down type of resource
 			ResourceCreateInformation		_ResourceCreateInformation;
 			std::vector<TransitionState>	_SubResourceStates;
-			bool							_Multisample = false;
+			ResourceType					_ResourceType				= ResourceType::RESOURCE_TYPE_UNKNOWN; // Used to track down type of resource
+			bool							_Multisample				= false;
+			bool							_IsSubResourceStatesDirty	= false;
 		};
 
 		template<typename ResourceStructureType = uint8_t>

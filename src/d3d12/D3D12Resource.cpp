@@ -45,11 +45,6 @@ namespace Eternal
 		{
 			const TextureCreateInformation& InTextureInformation = InResourceCreateInformation.TextureInformation;
 
-			uint32_t SubResourcesCount = GetMIPLevels() * InTextureInformation.DepthOrArraySize;
-			GetSubResourceStates().resize(SubResourcesCount);
-			for (uint32_t SubResourceIndex = 0; SubResourceIndex < SubResourcesCount; ++SubResourceIndex)
-				GetSubResourceStates()[SubResourceIndex] = GetResourceState();
-
 			if (InResourceCreateInformation.MemoryType == ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY)
 			{
 				ETERNAL_ASSERT(InResourceCreateInformation.ResourceState != TransitionState::TRANSITION_UNDEFINED)
@@ -98,7 +93,7 @@ namespace Eternal
 
 			D3D12_CLEAR_VALUE ClearValue;
 			ClearValue.Format	= D3D12ResourceDesc.Format;
-			memcpy(ClearValue.Color, GetClearValue(), sizeof(float) * ETERNAL_ARRAYSIZE(ClearValue.Color));
+			memcpy(ClearValue.Color, GetClearValue().Color, sizeof(float) * ETERNAL_ARRAYSIZE(ClearValue.Color));
 
 			VerifySuccess(
 				InD3DDevice,
@@ -166,6 +161,9 @@ namespace Eternal
 			case ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_UPLOAD:
 				GetResourceCreateInformation().ResourceState = TransitionState::TRANSITION_GENERIC_READ;
 				break;
+
+			default:
+				GetResourceCreateInformation().ResourceState = TransitionState::TRANSITION_UNDEFINED;
 			}
 
 			D3D12_RESOURCE_STATES InitialStates = ConvertTransitionStateToD3D12ResourceStates(GetResourceCreateInformation().ResourceState);

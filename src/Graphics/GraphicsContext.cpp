@@ -76,6 +76,8 @@ namespace Eternal
 			: _GraphicsContextCreateInformation(InGraphicsContextCreateInformation)
 			, _OutputDevice(InOutputDevice)
 		{
+			ClearValue::InitializeClearValues();
+
 			static constexpr uint32_t ResourcesToClearInitialCount = 256;
 
 			_Device							= CreateDevice(*this, InGraphicsContextCreateInformation.Settings.Driver);

@@ -17,6 +17,7 @@
 #include "d3d12/D3D12ShaderTable.hpp"
 #include "d3d12/D3D12Utils.hpp"
 #include "d3d12/D3D12View.hpp"
+#include "Log/Log.hpp"
 #include <array>
 #include <string>
 
@@ -157,8 +158,8 @@ namespace Eternal
 					RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Format	= ConvertFormatToD3D12Format(CurrentRenderTarget.RenderTarget->GetViewFormat()).Format;
 					memcpy(
 						RenderPassRenderTargetsDescs[RenderTargetIndex].BeginningAccess.Clear.ClearValue.Color,
-						CurrentRenderTarget.RenderTarget->GetResource().GetClearValue(),
-						sizeof(float) * TextureCreateInformation::ComponentCount
+						CurrentRenderTarget.RenderTarget->GetResource().GetClearValue().Color,
+						sizeof(float) * ClearValue::ComponentCount
 					);
 				}
 
@@ -183,15 +184,15 @@ namespace Eternal
 				if (DepthStencilLoadOperator == LoadOperator::CLEAR)
 				{
 					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.Format					= ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format;
-					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Depth		= DepthStencilView->GetResource().GetClearValue()[0];
-					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= DepthStencilView->GetResource().GetStencilClearValue();
+					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Depth		= DepthStencilView->GetResource().GetClearValue().DepthStencil.Depth;
+					RenderPassDepthStencilDesc.DepthBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= DepthStencilView->GetResource().GetClearValue().DepthStencil.Stencil;
 				}
 				RenderPassDepthStencilDesc.StencilBeginningAccess.Type	= ConvertLoadOperatorToD3D12RenderPassBeginningAccessType(DepthStencilLoadOperator);
 				if (DepthStencilLoadOperator == LoadOperator::CLEAR)
 				{
 					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.Format				= ConvertFormatToD3D12Format(DepthStencilView->GetViewFormat()).Format;
-					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Depth	= DepthStencilView->GetResource().GetClearValue()[0];
-					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= DepthStencilView->GetResource().GetStencilClearValue();
+					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Depth	= DepthStencilView->GetResource().GetClearValue().DepthStencil.Depth;
+					RenderPassDepthStencilDesc.StencilBeginningAccess.Clear.ClearValue.DepthStencil.Stencil	= DepthStencilView->GetResource().GetClearValue().DepthStencil.Stencil;
 				}
 				RenderPassDepthStencilDesc.DepthEndingAccess.Type		= ConvertStoreOperatorToD3D12RenderPassEndingAccessType(InRenderPass.GetDepthStencilOperator().Store);
 				if (DepthStencilStoreOperator == StoreOperator::RESOLVE)
@@ -237,39 +238,77 @@ namespace Eternal
 
 				bool IsWhole = CurrentResourceTransition.SubResource.IsWhole();
 
-				UINT SubResource = [&D3DResource, &CurrentResourceTransition]() -> UINT
+				auto CalcSubResource = [&D3DResource](_In_ const ResourceSubResource& InSubResource)
 				{
 					if (D3DResource.GetResourceType() != ResourceType::RESOURCE_TYPE_TEXTURE)
-						return ~0u;
+						return D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 
 					return D3D12CalcSubresource(
-						CurrentResourceTransition.SubResource.MipSlice,
-						CurrentResourceTransition.SubResource.ArraySlice,
-						static_cast<UINT>(CurrentResourceTransition.SubResource.Plane),
-						CurrentResourceTransition.SubResource.MipLevelsNeedsResolve() ? D3DResource.GetMIPLevels() : CurrentResourceTransition.SubResource.MipLevels,
-						CurrentResourceTransition.SubResource.ArraySizeNeedsResolve() ? D3DResource.GetDepthOrArraySize() : CurrentResourceTransition.SubResource.ArraySize
+						InSubResource.MipSlice,
+						InSubResource.ArraySlice,
+						static_cast<UINT>(InSubResource.Plane),
+						InSubResource.MipLevelsNeedsResolve() ? D3DResource.GetMIPLevels() : InSubResource.MipLevels,
+						InSubResource.ArraySizeNeedsResolve() ? D3DResource.GetDepthOrArraySize() : InSubResource.ArraySize
 					);
-				}();
+				};
 
-				const TransitionState& Before	= IsWhole ? CurrentResourceTransition.GetBefore() : CurrentResourceTransition.GetBefore(SubResource);
-				const TransitionState& After	= CurrentResourceTransition.GetAfter();
+				auto AddResourceBarrier = [&ResourceBarriers, &EffectiveTransitionsCount, &CalcSubResource, &CurrentResourceTransition, &D3DResource](_In_ const ResourceSubResource& InCurrentSubResource, _In_ bool IsWhole)
+				{
+					UINT SubResource = CalcSubResource(InCurrentSubResource);
 
-				if ((Before & After) == After)
-					continue;
+					const TransitionState& Before	= IsWhole ? CurrentResourceTransition.GetBefore() : CurrentResourceTransition.GetBefore(SubResource);
+					const TransitionState& After	= CurrentResourceTransition.GetAfter();
 
-				ResourceBarriers[EffectiveTransitionsCount].Type					= D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-				ResourceBarriers[EffectiveTransitionsCount].Flags					= D3D12_RESOURCE_BARRIER_FLAG_NONE;
-				ResourceBarriers[EffectiveTransitionsCount].Transition.pResource	= D3DResource.GetD3D12Resource();
-				ResourceBarriers[EffectiveTransitionsCount].Transition.Subresource	= IsWhole ? D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES : SubResource;
-				ResourceBarriers[EffectiveTransitionsCount].Transition.StateBefore	= ConvertTransitionStateToD3D12ResourceStates(Before);
-				ResourceBarriers[EffectiveTransitionsCount].Transition.StateAfter	= ConvertTransitionStateToD3D12ResourceStates(After);
+					if ((Before & After) == After)
+						return;
 
-				if (IsWhole)
-					D3DResource.SetResourceState(After);
+					D3D12_RESOURCE_BARRIER& CurrentResourceBarrier = ResourceBarriers[EffectiveTransitionsCount++];
+
+					CurrentResourceBarrier.Type						= D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+					CurrentResourceBarrier.Flags					= D3D12_RESOURCE_BARRIER_FLAG_NONE;
+					CurrentResourceBarrier.Transition.pResource		= D3DResource.GetD3D12Resource();
+					CurrentResourceBarrier.Transition.Subresource	= IsWhole ? D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES : SubResource;
+					CurrentResourceBarrier.Transition.StateBefore	= ConvertTransitionStateToD3D12ResourceStates(Before);
+					CurrentResourceBarrier.Transition.StateAfter	= ConvertTransitionStateToD3D12ResourceStates(After);
+
+					//LogWrite(
+					//	LogInfo, LogGraphics,
+					//	"Transitioning resource: %s from state: 0x%x (0x%x) to state: 0x%x (0x%x) - %d",
+					//	D3DResource.GetResourceName().c_str(),
+					//	Before, CurrentResourceBarrier.Transition.StateBefore,
+					//	After, CurrentResourceBarrier.Transition.StateAfter,
+					//	IsWhole ? 0xFFFFFFFF : SubResource
+					//);
+
+					if (IsWhole)
+						D3DResource.SetResourceState(After);
+					else
+						D3DResource.SetSubResourceState(SubResource, After);
+				};
+
+				if (IsWhole && D3DResource.IsSubResourceStatesDirty())
+				{
+					uint32_t MipLevels = D3DResource.GetMIPLevels();
+					uint32_t ArraySize = D3DResource.GetDepthOrArraySize();
+
+					for (uint32_t MipLevel = 0; MipLevel < MipLevels; ++MipLevel)
+					{
+						for (uint32_t ArrayIndex = 0; ArrayIndex < ArraySize; ++ArrayIndex)
+						{
+							AddResourceBarrier(
+								ResourceSubResource(ArrayIndex, MipLevel),
+								/*IsWhole=*/ false
+							);
+						}
+					}
+
+					D3DResource.SetResourceState(CurrentResourceTransition.GetAfter());
+					D3DResource.ClearSubResourceStatesDirty();
+				}
 				else
-					D3DResource.SetSubResourceState(SubResource, After);
-
-				++EffectiveTransitionsCount;
+				{
+					AddResourceBarrier(CurrentResourceTransition.SubResource, IsWhole);
+				}
 			}
 
 			if (EffectiveTransitionsCount > 0)
