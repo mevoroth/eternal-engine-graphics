@@ -163,6 +163,7 @@ namespace Eternal
 			static constexpr uint8_t InvalidMipLevel = static_cast<uint8_t>(~0);
 			static constexpr uint64_t InvalidArraySlice = static_cast<uint16_t>(~0);
 
+			ResourceSubResource(_In_ uint8_t InMipSlice);
 			ResourceSubResource(_In_ uint16_t InArraySlice, _In_ uint8_t InMipSlice);
 			ResourceSubResource() {}
 

@@ -47,6 +47,12 @@ namespace Eternal
 		//////////////////////////////////////////////////////////////////////////
 		// ResourceSubResource
 
+		ResourceSubResource::ResourceSubResource(_In_ uint8_t InMipSlice)
+			: ArraySlice(0u)
+			, MipSlice(InMipSlice)
+		{
+		}
+
 		ResourceSubResource::ResourceSubResource(_In_ uint16_t InArraySlice, _In_ uint8_t InMipSlice)
 			: ArraySlice(InArraySlice)
 			, MipSlice(InMipSlice)
