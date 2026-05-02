@@ -102,20 +102,35 @@ namespace Eternal
 
 					for (uint32_t CategoryIndex = DXGI_INFO_QUEUE_MESSAGE_CATEGORY_UNKNOWN; CategoryIndex <= DXGI_INFO_QUEUE_MESSAGE_CATEGORY_SHADER; ++CategoryIndex)
 					{
-						HResult = _DXGIInfoQueue->SetBreakOnCategory(DebugID, (DXGI_INFO_QUEUE_MESSAGE_CATEGORY)CategoryIndex, TRUE);
-						ETERNAL_ASSERT(HResult == S_OK);
+						VerifySuccess(
+							_DXGIInfoQueue->SetBreakOnCategory(
+								DebugID,
+								static_cast<DXGI_INFO_QUEUE_MESSAGE_CATEGORY>(CategoryIndex),
+								TRUE
+							)
+						);
 					}
 
 					for (uint32_t SeverityIndex = DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION; SeverityIndex <= DXGI_INFO_QUEUE_MESSAGE_SEVERITY_WARNING; ++SeverityIndex)
 					{
-						HResult = _DXGIInfoQueue->SetBreakOnSeverity(DebugID, (DXGI_INFO_QUEUE_MESSAGE_SEVERITY)SeverityIndex, TRUE);
-						ETERNAL_ASSERT(HResult == S_OK);
+						VerifySuccess(
+							_DXGIInfoQueue->SetBreakOnSeverity(
+								DebugID,
+								static_cast<DXGI_INFO_QUEUE_MESSAGE_SEVERITY>(SeverityIndex),
+								TRUE
+							)
+						);
 					}
 
-					for (uint32_t MessageId = D3D12_MESSAGE_ID_UNKNOWN; MessageId <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageId)
+					for (uint32_t MessageIdIndex = D3D12_MESSAGE_ID_UNKNOWN; MessageIdIndex <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageIdIndex)
 					{
-						HResult = _DXGIInfoQueue->SetBreakOnID(DXGI_DEBUG_DXGI, (DXGI_INFO_QUEUE_MESSAGE_ID)MessageId, TRUE);
-						ETERNAL_ASSERT(HResult == S_OK);
+						VerifySuccess(
+							_DXGIInfoQueue->SetBreakOnID(
+								DXGI_DEBUG_DXGI,
+								static_cast<DXGI_INFO_QUEUE_MESSAGE_ID>(MessageIdIndex),
+								TRUE
+							)
+						);
 					}
 				}
 			}
@@ -271,9 +286,40 @@ namespace Eternal
 			);
 			if (HResult == S_OK)
 			{
+				for (uint32_t CategoryIndex = D3D12_MESSAGE_CATEGORY_APPLICATION_DEFINED; CategoryIndex <= D3D12_MESSAGE_CATEGORY_SHADER; ++CategoryIndex)
+				{
+					VerifySuccess(
+						_D3D12InfoQueue->SetBreakOnCategory(
+							static_cast<D3D12_MESSAGE_CATEGORY>(CategoryIndex),
+							TRUE
+						)
+					);
+				}
+
+				for (uint32_t SeverityIndex = D3D12_MESSAGE_SEVERITY_CORRUPTION; SeverityIndex <= D3D12_MESSAGE_SEVERITY_WARNING; ++SeverityIndex)
+				{
+					VerifySuccess(
+						_D3D12InfoQueue->SetBreakOnSeverity(
+							static_cast<D3D12_MESSAGE_SEVERITY>(SeverityIndex),
+							TRUE
+						)
+					);
+				}
+
+				for (uint32_t MessageIdIndex = D3D12_MESSAGE_ID_UNKNOWN; MessageIdIndex <= D3D12_MESSAGE_ID_D3D12_MESSAGES_END; ++MessageIdIndex)
+				{
+					VerifySuccess(
+						_D3D12InfoQueue->SetBreakOnID(
+							static_cast<D3D12_MESSAGE_ID>(MessageIdIndex),
+							TRUE
+						)
+					);
+				}
+
 				/*VerifySuccess*/(
 					HResult = _D3D12InfoQueue->QueryInterface(__uuidof(ID3D12InfoQueue1), reinterpret_cast<void**>(&_D3D12InfoQueue1))
-					);
+				);
+
 
 				if (HResult == S_OK)
 				{
