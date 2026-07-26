@@ -75,6 +75,21 @@ namespace Eternal
 			RESOURCE_TYPE_CONSTANT_BUFFER	= 0x8 | RESOURCE_TYPE_BUFFER
 		};
 
+		static constexpr const char* ResourceDimensionString[] =
+		{
+			"RESOURCE_DIMENSION_UNKNOWN",
+			"RESOURCE_DIMENSION_BUFFER",
+			"RESOURCE_DIMENSION_TEXTURE_1D",
+			"RESOURCE_DIMENSION_TEXTURE_1D_ARRAY",
+			"RESOURCE_DIMENSION_TEXTURE_2D",
+			"RESOURCE_DIMENSION_TEXTURE_2D_ARRAY",
+			"RESOURCE_DIMENSION_TEXTURE_3D",
+			"RESOURCE_DIMENSION_TEXTURE_CUBE",
+			"RESOURCE_DIMENSION_TEXTURE_CUBE_ARRAY"
+		};
+
+		ETERNAL_STATIC_ASSERT(ETERNAL_ARRAYSIZE(ResourceDimensionString) == static_cast<uint32_t>(ResourceDimension::RESOURCE_DIMENSION_COUNT), "ResourceDimensionString count needs to be equals to ResourceDimension::RESOURCE_DIMENSION_COUNT");
+
 		struct ClearValue
 		{
 			static constexpr uint32_t ClearValuesPoolSize		= 32u;
@@ -428,6 +443,12 @@ namespace Eternal
 		class MapScope
 		{
 		public:
+			MapScope(_In_ Resource& InResource, _In_ uint32_t InMapSize, _In_ uint32_t InMapOffset = 0, _In_ uint32_t InMIPIndex = 0, _In_ uint32_t InPlaneSlice = 0, _In_ uint32_t InArraySlice = 0)
+				: _Resource(InResource)
+				, _Range(InMapSize, InMapOffset, InMIPIndex, InPlaneSlice, InArraySlice)
+				, _DataPointer(InResource.Map<uint8_t>(_Range))
+			{
+			}
 			MapScope(_In_ Resource& InResource, _In_ const MapRange& InRange)
 				: _Resource(InResource)
 				, _Range(InRange)
@@ -436,7 +457,7 @@ namespace Eternal
 			}
 			MapScope(_In_ Resource& InResource)
 				: _Resource(InResource)
-				, _Range(InResource.GetBufferStride())
+				, _Range(InResource.GetBufferSize())
 				, _DataPointer(InResource.Map<uint8_t>(_Range))
 			{
 			}

@@ -98,8 +98,7 @@ namespace Eternal
 			);
 
 			{
-				MapRange ShaderTableMapRange(TableSize);
-				MapScope<> ShaderTableMapScope(*_ShaderTable, ShaderTableMapRange);
+				MapScope<> ShaderTableMapScope(*_ShaderTable, TableSize);
 				uint8_t* ShaderTablePointer = ShaderTableMapScope.GetDataPointer();
 				for (uint32_t TableIndex = 0; TableIndex < ETERNAL_ARRAYSIZE(ShaderRecords); ++TableIndex)
 				{
