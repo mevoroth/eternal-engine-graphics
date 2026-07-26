@@ -72,6 +72,17 @@ namespace Eternal
 			);
 		}
 
+		//////////////////////////////////////////////////////////////////////////
+
+		ScreenRenderTargetTextureCreateInformation::ScreenRenderTargetTextureCreateInformation(_In_ GraphicsContext& InContext, _In_ const char* InName, _In_ const Format& InFormat)
+			: Context(InContext)
+			, TextureFormat(InFormat)
+			, Name(InName)
+		{
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+
 		RenderTargetTexture::RenderTargetTexture(_In_ GraphicsContext& InContext, _In_ const TextureResourceCreateInformation& InTextureResourceCreateInformation, _In_ const RenderTargetTextureFlags& InFlags)
 			: Texture(InContext, InTextureResourceCreateInformation)
 		{
@@ -188,6 +199,27 @@ namespace Eternal
 				);
 				_UnorderedAccessView = CreateUnorderedAccessView(TextureUnorderedAccessViewCreateInformation);
 			}
+		}
+
+		RenderTargetTexture::RenderTargetTexture(_In_ const ScreenRenderTargetTextureCreateInformation& InCreateInformation)
+			: RenderTargetTexture(
+				InCreateInformation.Context,
+				TextureResourceCreateInformation(
+					InCreateInformation.Context.GetDevice(),
+					InCreateInformation.Name,
+					TextureCreateInformation(
+						ResourceDimension::RESOURCE_DIMENSION_TEXTURE_2D,
+						InCreateInformation.TextureFormat,
+						TextureResourceUsage::TEXTURE_RESOURCE_USAGE_SHADER_RESOURCE | TextureResourceUsage::TEXTURE_RESOURCE_USAGE_RENDER_TARGET,
+						InCreateInformation.Context.GetOutputDevice().GetWidth(),
+						InCreateInformation.Context.GetOutputDevice().GetHeight()
+					),
+					ResourceMemoryType::RESOURCE_MEMORY_TYPE_GPU_MEMORY,
+					TransitionState::TRANSITION_RENDER_TARGET
+				),
+				RenderTargetTextureFlags::RENDER_TARGET_TEXTURE_FLAGS_GRAPHICS
+			)
+		{
 		}
 
 		RenderTargetTexture::~RenderTargetTexture()

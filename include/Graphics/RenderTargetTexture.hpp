@@ -6,6 +6,7 @@ namespace Eternal
 {
 	namespace Graphics
 	{
+		enum class Format;
 		class GraphicsContext;
 		class Resource;
 		class View;
@@ -24,11 +25,23 @@ namespace Eternal
 
 		RenderTargetTextureFlags operator&(_In_ const RenderTargetTextureFlags& InRenderTargetTextureFlagsLeft, _In_ const RenderTargetTextureFlags& InRenderTargetTextureFlagsRight);
 
+		struct ScreenRenderTargetTextureCreateInformation
+		{
+			ScreenRenderTargetTextureCreateInformation(_In_ GraphicsContext& InContext, _In_ const char* InName, _In_ const Format& InFormat);
+
+			GraphicsContext&	Context;
+			const Format&		TextureFormat;
+			const char*			Name			= nullptr;
+		};
+
+		//////////////////////////////////////////////////////////////////////////
+
 		class RenderTargetTexture : public Texture
 		{
 		public:
 
 			RenderTargetTexture(_In_ GraphicsContext& InContext, _In_ const TextureResourceCreateInformation& InTextureResourceCreateInformation, _In_ const RenderTargetTextureFlags& InFlags);
+			RenderTargetTexture(_In_ const ScreenRenderTargetTextureCreateInformation& InCreateInformation);
 			~RenderTargetTexture();
 
 			View*		GetRenderTargetDepthStencilView() { return _RenderTargetDepthView; }
